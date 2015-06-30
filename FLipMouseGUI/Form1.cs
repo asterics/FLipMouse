@@ -20,6 +20,8 @@ namespace MouseApp2
 {
     public partial class FLipMouseGUI : Form
     {
+        const string VERSION_STRING = "1.0";
+
         const int CMD_NOACTION     = 0;
         const int CMD_NEXT         = 1;
         const int CMD_CLICK_LEFT   = 2;
@@ -83,6 +85,8 @@ namespace MouseApp2
         {
 
             InitializeComponent();
+
+            Text += " "+ VERSION_STRING;
             foreach (string str in commands)
             {
                 Button1FunctionBox.Items.Add(str);
@@ -934,6 +938,5 @@ namespace MouseApp2
             }
             
         }
-
     }
 }

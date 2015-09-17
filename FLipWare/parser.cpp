@@ -1,6 +1,14 @@
 
 #include "fabi.h"
 
+uint8_t readstate=0;
+extern void init_CIM_frame (void);
+extern void parse_CIM_protocol(int actbyte);
+extern uint8_t CimParserActive;
+
+static char cmdstring[MAX_CMDLEN];
+
+
 uint8_t get_uint(char * str, int16_t * result)
 {
     int num=0;
@@ -105,44 +113,36 @@ void parseCommand (char * cmdstr)
 }
 
 
-extern void init_CIM_frame (void);
-extern void parse_CIM_protocol(int actbyte);
-extern uint8_t CimMode;
-
-static char cmdstring[MAX_CMDLEN];
 
 void parseByte (int newByte)  // parse an incoming commandbyte from serial interface, perform command if valid
 {
-   static uint8_t state=0;
    static uint8_t cmdlen=0;
   
-   if (CimMode==1)
-          parse_CIM_protocol(newByte);   // handle AsTeRICS CIM protocal messages !
+   if (CimParserActive)
+          parse_CIM_protocol(newByte);   // handle AsTeRICS CIM protocol messages !
    else
    {
-      switch (state) {
+      switch (readstate) {
         case 0: 
-                if ((newByte=='A') || (newByte=='a')) state++;
-                else if (newByte=='@') { 
-                    init_CIM_frame ();
-                }
+                if ((newByte=='A') || (newByte=='a')) readstate++;
+                if (newByte=='@') { readstate++; CimParserActive=1; }  // switch to AsTeRICS CIM protocol parser
              break;
         case 1: 
-                if ((newByte=='T') || (newByte=='t')) state++; else state=0;
+                if ((newByte=='T') || (newByte=='t')) readstate++; else readstate=0;
             break;
         case 2: 
                 if ((newByte==13) || (newByte==10))
-                {  Serial.println("OK");  state=0; }
-                else if (newByte==' ') { cmdlen=0; state++; } 
+                {  Serial.println("OK");  readstate=0; }
+                else if (newByte==' ') { cmdlen=0; readstate++; } 
                 else goto err;
             break;
         case 3: 
                 if ((newByte==13) || (newByte==10) || (cmdlen>=MAX_CMDLEN-1))
                 {  cmdstring[cmdlen]=0;  parseCommand(cmdstring); 
-                  state=0; }
+                  readstate=0; }
                 else cmdstring[cmdlen++]=newByte;
             break;   
-        default: err: Serial.println("?");state=0;
+        default: err: Serial.println("?");readstate=0;
       }
    }
 }

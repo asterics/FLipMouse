@@ -208,7 +208,9 @@ void UpdateLeds();
 void initDebouncers();
 
 extern void handleCimMode(void);
-extern uint8_t CimMode;
+extern void init_CIM_frame(void);
+extern uint8_t CimParserActive;
+extern uint8_t StandAloneMode;
 
 // extern void init_CIM_frame (void);
 
@@ -250,6 +252,8 @@ void setup() {
       buttons[i].keystring[0]=0;
    }
    
+   init_CIM_frame();  // for AsTeRICS CIM protocol compatibility
+   
    buttons[0].mode=CMD_SW;            // befault for button 1: switch alternative / mouse cursur control mode
    buttons[1].mode=CMD_MOUSE_WHEEL_UP;
    buttons[2].mode=CMD_MOUSE_WHEEL_DOWN;
@@ -262,7 +266,7 @@ void setup() {
    buttons[9].mode=CMD_MOUSE_CLICK_RIGHT;                          
    buttons[10].mode=CMD_CA;                               // calibrate    
    
-  // readFromEEPROM(0);  // read button modes from first EEPROM slot if available !  
+   readFromEEPROM(0);  // read slot from first EEPROM slot if available !  
 
    blinkCount=10;  blinkStartTime=25;
    
@@ -289,122 +293,119 @@ void loop() {
           parseByte (inByte);      // implemented in parser.cpp
         }
 
-        if (CimMode) {
-          digitalWrite(LED_PIN,HIGH); 
-          handleCimMode();
-        }
-        else 
-        {
-          digitalWrite(LED_PIN,LOW); 
-
-        currentTime = millis();
-        timeDifference = currentTime - previousTime;
-        previousTime = currentTime;
-        accelFactor= timeDifference / 10000.0f;      
+        if (StandAloneMode)  {
+          currentTime = millis();
+          timeDifference = currentTime - previousTime;
+          previousTime = currentTime;
+          accelFactor= timeDifference / 10000.0f;      
   
-        if (DebugOutput==DEBUG_LIVEREPORTS)   { 
-          if (cnt++ > 10) {                    // report raw values !
-            Serial.print("AT RR ");Serial.print(pressure);Serial.print(",");
-            Serial.print(up);Serial.print(",");Serial.print(down);Serial.print(",");
-            Serial.print(left);Serial.print(",");Serial.println(right);
-            cnt=0;
-          }
-        }
-            
-        for (int i=0;i<NUMBER_OF_PHYSICAL_BUTTONS;i++)    // update button press / release events
-            handleButton(i, -1, digitalRead(input_map[i]) == LOW ? 1 : 0);
-  
-        handleButton(SIP_BUTTON, LONGSIP_BUTTON, pressure < settings.ts ? 1 : 0); 
-        handleButton(PUFF_BUTTON, LONGPUFF_BUTTON, pressure > settings.tp ? 1 : 0);
-      
-          
-        // handle mouse movement
-        if (calib_now == 0)  {
-            x = (left-right) - x_offset;
-            y = (up-down) - y_offset;
-        }
-        else  {
-            calib_now--;           // wait for calibration
-            if (calib_now ==0) {   // calibrate now !!
-               x_offset = (left-right);                                                   
-               y_offset = (up-down);
+          if (DebugOutput==DEBUG_LIVEREPORTS)   { 
+            if (cnt++ > 10) {                    // report raw values !
+              Serial.print("AT RR ");Serial.print(pressure);Serial.print(",");
+              Serial.print(up);Serial.print(",");Serial.print(down);Serial.print(",");
+              Serial.print(left);Serial.print(",");Serial.println(right);
+              cnt=0;
             }
-         }    
-        
-        if (abs(x)< settings.dx) x=0;
-        if (abs(y)< settings.dy) y=0;
-        
-        if (settings.mouseOn == 1) {
-          if (y>settings.dy)
-             accumYpos += (float)(((int32_t)y-settings.dy)*settings.ay) * accelFactor; 
-          else if (y<-settings.dy)
-             accumYpos += (float)(((int32_t)y+settings.dy)*settings.ay) * accelFactor; 
-  
-          if (x>settings.dx)
-             accumXpos += (float)(((int32_t)x-settings.dx)*settings.ax) * accelFactor; 
-          else if (x<-settings.dx)
-             accumXpos += (float)(((int32_t)x+settings.dx)*settings.ax) * accelFactor; 
-        
-          int xMove = (int)accumXpos;
-          int yMove = (int)accumYpos;
-          Mouse.move(xMove, yMove);
-          accumXpos -= xMove;
-          accumYpos -= yMove;
-        }
-        else  { // handle alternative joystick actions
-          handleButton(UP_BUTTON, -1, y<-settings.dy ? 1 : 0);
-          handleButton(DOWN_BUTTON, -1, y>settings.dy ? 1 : 0);
-          handleButton(LEFT_BUTTON, -1, x<-settings.dx ? 1 : 0);
-          handleButton(RIGHT_BUTTON, -1, x>settings.dx ? 1 : 0);
-        }
-  
-        if ((moveX!=0) || (moveY!=0))   // movement induced by button actions  
-        {
-          if (cnt2++%4==0)
-            Mouse.move(moveX, moveY);
-        }
-  
-        // handle running clicks or double clicks
-        if (leftClickRunning)
-            if (--leftClickRunning==0)  leftMouseButton=0; 
-        
-        if (rightClickRunning)
-            if (--rightClickRunning==0)  rightMouseButton=0; 
-     
-        if (middleClickRunning)
-            if (--middleClickRunning==0)  middleMouseButton=0; 
+          }
+            
+          for (int i=0;i<NUMBER_OF_PHYSICAL_BUTTONS;i++)    // update button press / release events
+              handleButton(i, -1, digitalRead(input_map[i]) == LOW ? 1 : 0);
     
-        if (doubleClickRunning)
-        {
-            doubleClickRunning--;
-            if (doubleClickRunning==clickTime*2)  leftMouseButton=0; 
-            else if (doubleClickRunning==clickTime)    leftMouseButton=1; 
-            else if (doubleClickRunning==0)    leftMouseButton=0; 
-        }
-   
-        // if any changes were made, update the Mouse buttons
-        if(leftMouseButton!=old_leftMouseButton) {
-           if (leftMouseButton) Mouse.press(MOUSE_LEFT); else Mouse.release(MOUSE_LEFT);
-           old_leftMouseButton=leftMouseButton;
-        }
-        if  (middleMouseButton!=old_middleMouseButton) {
-           if (middleMouseButton) Mouse.press(MOUSE_MIDDLE); else Mouse.release(MOUSE_MIDDLE);
-           old_middleMouseButton=middleMouseButton;
-        }
-        if  (rightMouseButton!=old_rightMouseButton)  {
-           if (rightMouseButton) Mouse.press(MOUSE_RIGHT); else Mouse.release(MOUSE_RIGHT);
-           old_rightMouseButton=rightMouseButton;
-       }
+          handleButton(SIP_BUTTON, LONGSIP_BUTTON, pressure < settings.ts ? 1 : 0); 
+          handleButton(PUFF_BUTTON, LONGPUFF_BUTTON, pressure > settings.tp ? 1 : 0);
+        
+            
+          // handle mouse movement
+          if (calib_now == 0)  {
+              x = (left-right) - x_offset;
+              y = (up-down) - y_offset;
+          }
+          else  {
+              calib_now--;           // wait for calibration
+              if (calib_now ==0) {   // calibrate now !!
+                 x_offset = (left-right);                                                   
+                 y_offset = (up-down);
+              }
+          }    
+          
+          if (abs(x)< settings.dx) x=0;
+          if (abs(y)< settings.dy) y=0;
+          
+          if (settings.mouseOn == 1) {
+            if (y>settings.dy)
+               accumYpos += (float)(((int32_t)y-settings.dy)*settings.ay) * accelFactor; 
+            else if (y<-settings.dy)
+               accumYpos += (float)(((int32_t)y+settings.dy)*settings.ay) * accelFactor; 
+    
+            if (x>settings.dx)
+               accumXpos += (float)(((int32_t)x-settings.dx)*settings.ax) * accelFactor; 
+            else if (x<-settings.dx)
+               accumXpos += (float)(((int32_t)x+settings.dx)*settings.ax) * accelFactor; 
+          
+            int xMove = (int)accumXpos;
+            int yMove = (int)accumYpos;
+            Mouse.move(xMove, yMove);
+            accumXpos -= xMove;
+            accumYpos -= yMove;
+          }
+          else  { // handle alternative joystick actions
+            handleButton(UP_BUTTON, -1, y<-settings.dy ? 1 : 0);
+            handleButton(DOWN_BUTTON, -1, y>settings.dy ? 1 : 0);
+            handleButton(LEFT_BUTTON, -1, x<-settings.dx ? 1 : 0);
+            handleButton(RIGHT_BUTTON, -1, x>settings.dx ? 1 : 0);
+          }
+    
+          if ((moveX!=0) || (moveY!=0))   // movement induced by button actions  
+          {
+            if (cnt2++%4==0)
+              Mouse.move(moveX, moveY);
+          }
+    
+          // handle running clicks or double clicks
+          if (leftClickRunning)
+              if (--leftClickRunning==0)  leftMouseButton=0; 
+          
+          if (rightClickRunning)
+              if (--rightClickRunning==0)  rightMouseButton=0; 
+       
+          if (middleClickRunning)
+              if (--middleClickRunning==0)  middleMouseButton=0; 
       
-       // handle Keyboard output (single key press/release is done seperately via setKeyValues() ) 
-       if (writeKeystring) {
-          Keyboard.print(writeKeystring);
-          writeKeystring=0;
-      }    
-         
-      UpdateLeds();
-      delay(waitTime);  // to limit move movement speed. TBD: remove delay, use millis() !
+          if (doubleClickRunning)
+          {
+              doubleClickRunning--;
+              if (doubleClickRunning==clickTime*2)  leftMouseButton=0; 
+              else if (doubleClickRunning==clickTime)    leftMouseButton=1; 
+              else if (doubleClickRunning==0)    leftMouseButton=0; 
+          }
+     
+          // if any changes were made, update the Mouse buttons
+          if(leftMouseButton!=old_leftMouseButton) {
+             if (leftMouseButton) Mouse.press(MOUSE_LEFT); else Mouse.release(MOUSE_LEFT);
+             old_leftMouseButton=leftMouseButton;
+          }
+          if  (middleMouseButton!=old_middleMouseButton) {
+             if (middleMouseButton) Mouse.press(MOUSE_MIDDLE); else Mouse.release(MOUSE_MIDDLE);
+             old_middleMouseButton=middleMouseButton;
+          }
+          if  (rightMouseButton!=old_rightMouseButton)  {
+             if (rightMouseButton) Mouse.press(MOUSE_RIGHT); else Mouse.release(MOUSE_RIGHT);
+             old_rightMouseButton=rightMouseButton;
+         }
+        
+         // handle Keyboard output (single key press/release is done seperately via setKeyValues() ) 
+         if (writeKeystring) {
+            Keyboard.print(writeKeystring);
+            writeKeystring=0;
+        }    
+           
+        delay(waitTime);  // to limit move movement speed. TBD: remove delay, use millis() !
+    }  // standAloneMode
+    else
+    {
+        handleCimMode();   // create periodic reports if running in AsTeRICS CIM compatibility mode
     }
+    UpdateLeds();
 }
 
 
@@ -737,23 +738,29 @@ void performCommand (uint8_t cmd, int16_t par1, char * keystring, int8_t periodi
 
 void UpdateLeds()
 {  
-  if (blinkCount==0) {
-   if (actSlot & 1) digitalWrite (led_map[0],LOW); else digitalWrite (led_map[0],HIGH); 
-   if (actSlot & 2) digitalWrite (led_map[1],LOW); else digitalWrite (led_map[1],HIGH); 
-   if (actSlot & 4) digitalWrite (led_map[2],LOW); else digitalWrite (led_map[2],HIGH); 
-  }
-  else {
-    if (blinkTime==0)
-    {
-       blinkTime=blinkStartTime;
-       blinkCount--;
-       if (blinkCount%2) { 
-           digitalWrite (led_map[0],LOW); digitalWrite (led_map[1],LOW); digitalWrite (led_map[2],LOW); }
-        else { 
-           digitalWrite (led_map[0],HIGH); digitalWrite (led_map[1],HIGH); digitalWrite (led_map[2],HIGH); }
-    } else blinkTime--;
-  }
+  if (StandAloneMode)
+  {
+       digitalWrite(LED_PIN,LOW); 
        
+       if (blinkCount==0) {
+         if (actSlot & 1) digitalWrite (led_map[0],LOW); else digitalWrite (led_map[0],HIGH); 
+         if (actSlot & 2) digitalWrite (led_map[1],LOW); else digitalWrite (led_map[1],HIGH); 
+         if (actSlot & 4) digitalWrite (led_map[2],LOW); else digitalWrite (led_map[2],HIGH); 
+        }
+        else {
+          if (blinkTime==0)
+          {
+             blinkTime=blinkStartTime;
+             blinkCount--;
+             if (blinkCount%2) { 
+                 digitalWrite (led_map[0],LOW); digitalWrite (led_map[1],LOW); digitalWrite (led_map[2],LOW); }
+              else { 
+                 digitalWrite (led_map[0],HIGH); digitalWrite (led_map[1],HIGH); digitalWrite (led_map[2],HIGH); }
+          } else blinkTime--;
+       }
+  }
+  else
+     digitalWrite(LED_PIN,HIGH);       
 }
 
 

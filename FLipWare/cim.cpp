@@ -56,14 +56,14 @@ const char LIPMOUSE_CIM_FEATURELIST[]=
 
 } ;
 
-volatile uint8_t CimMode=0;
+extern uint8_t readstate;
+volatile uint8_t CimParserActive=0;
+volatile uint8_t StandAloneMode=1;
 
 struct ARE_frame_t ARE_frame;
 struct CIM_frame_t CIM_frame;
 
 uint8_t buttonval;
-
-unsigned char readstate=0;
 unsigned int  datapos=0;
 uint8_t first_packet=1;
 uint8_t reports_running=0;
@@ -80,8 +80,6 @@ void init_CIM_frame (void)
 {
 	CIM_frame.packet_id=CIM_FRAME_START;  // '@','T': Packet-ID/sync bytes
 	CIM_frame.cim_id=CIM_ID_LIPMOUSE;    
-        CimMode=1; 
-        readstate=1;
 }
 
 
@@ -120,15 +118,14 @@ uint8_t process_ARE_frame(uint8_t status_code)
 		  	case CMD_REQUEST_START_CIM:
 			        if (data_size==0) {
 					 // enable_timer_ISR();
-                                        reports_running=1;
+                                         StandAloneMode=0;
 					} else status_code |= CIM_ERROR_INVALID_FEATURE;
 					break;
 		  	case CMD_REQUEST_STOP_CIM:
 			       if (data_size==0) {
 				         first_packet=1;  // reset first frame indicator etc.
 					 //disable_timer_ISR();
-                                         reports_running=0;
-                                         CimMode=0;
+                                         StandAloneMode=1;
 					} else status_code |= CIM_ERROR_INVALID_FEATURE;
 				  break;
 
@@ -288,6 +285,8 @@ void parse_CIM_protocol(int actbyte)
 	  {
 		  case 0: // first sync byte
 		  		  if (actbyte=='@') { readstate++; }
+                                  if ((actbyte=='A') || (actbyte=='a')) 
+                                  { readstate++; CimParserActive=0; StandAloneMode=1;}  // switch to normal AT-command mode
 				  break;
 		  case 1: // second sync byte
 		  		  if (actbyte=='T')  readstate++;
@@ -409,31 +408,28 @@ uint8_t autoreply_num=0x80;   // sequential number for automatic replies, 0x80-0
 
 void handleCimMode(void)
 {
-        if (reports_running==1)
-        {        
-	    if ( ADC_updatetime>0)   
+     if ( ADC_updatetime>0)   
+     {
+	    autoreply_num++; 
+	    if (autoreply_num==0) autoreply_num=0x80;
+
+	    CIM_frame.cim_feature=LIPMOUSE_CIM_FEATURE_ADCREPORT;
+	    CIM_frame.serial_number=autoreply_num;
+	    CIM_frame.reply_code=CMD_EVENT_REPLY;
+  	    generate_ADCFrame();
+	    reply_DataFrame();
+
+	    if (update_Buttonval())  // if buttonstate has changed 
 	    {
-		    autoreply_num++; 
-		    if (autoreply_num==0) autoreply_num=0x80;
+	        autoreply_num++; 
+	        if (autoreply_num==0) autoreply_num=0x80;
 
-		    CIM_frame.cim_feature=LIPMOUSE_CIM_FEATURE_ADCREPORT;
-		    CIM_frame.serial_number=autoreply_num;
-		    CIM_frame.reply_code=CMD_EVENT_REPLY;
-			generate_ADCFrame();
-			reply_DataFrame();
-
-		    if (update_Buttonval())  // if buttonstate has changed 
-			{
-			    autoreply_num++; 
-			    if (autoreply_num==0) autoreply_num=0x80;
-
-			    CIM_frame.cim_feature=LIPMOUSE_CIM_FEATURE_BUTTONREPORT;
-			    CIM_frame.serial_number=autoreply_num;
-			    CIM_frame.reply_code=CMD_EVENT_REPLY;
-				generate_ButtonFrame();  // send new buttonframe
-				reply_DataFrame();
-			}
-	    }              
-            delay(ADC_updatetime);  // to limit move movement speed. TBD: remove delay, use millis() !
-       }
+	        CIM_frame.cim_feature=LIPMOUSE_CIM_FEATURE_BUTTONREPORT;
+	        CIM_frame.serial_number=autoreply_num;
+	        CIM_frame.reply_code=CMD_EVENT_REPLY;
+	    	generate_ButtonFrame();  // send new buttonframe
+		reply_DataFrame();
+    	    }
+      }              
+      delay(ADC_updatetime);  // to limit move movement speed. TBD: remove delay, use millis() !
 }

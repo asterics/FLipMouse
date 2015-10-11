@@ -22,6 +22,12 @@ namespace MouseApp2
     {
         const string VERSION_STRING = "1.0";
 
+        const int SPEED_CHANGE_STEP = 2;
+        const int DEADZONE_CHANGE_STEP = 10;
+        const int TIME_CHANGE_STEP = 50;
+        const int PRESSURE_CHANGE_STEP = 1;
+        const int GAIN_CHANGE_STEP = 2;
+
         const int CMD_NOACTION     = 0;
         const int CMD_NEXT         = 1;
         const int CMD_CLICK_LEFT   = 2;
@@ -81,10 +87,18 @@ namespace MouseApp2
         public delegate void StoreValuesDelegate(string newValues);
         public StoreValuesDelegate storeValuesDelegate;
 
+        public delegate void ClickDelegate(object sender, EventArgs e);
+        ClickDelegate functionPointer;
+
+        System.Windows.Forms.Timer clickTimer = new System.Windows.Forms.Timer();
+
         public FLipMouseGUI()
         {
 
             InitializeComponent();
+
+            clickTimer.Interval = 500; // specify interval time as you want
+            clickTimer.Tick += new EventHandler(timer_Tick);
 
             Text += " "+ VERSION_STRING;
             foreach (string str in commands)
@@ -724,71 +738,71 @@ namespace MouseApp2
 
         // update visibility of parameter fields:
 
-        private void updateVisibility(int selectedFunction, TextBox tb, NumericUpDown nud, ComboBox cb, Label la)
+        private void updateVisibility(int selectedFunction, TextBox tb, NumericUpDown nud, ComboBox cb, Label la, Button bu)
         {
             switch (selectedFunction)
             {
                 case CMD_MOVE_X:
-                case CMD_MOVE_Y:     la.Visible = true; la.Text = "   Speed:"; nud.Visible = true; tb.Visible = false; cb.Visible = false; break;
-                case CMD_WRITE_TEXT: la.Visible = true; la.Text = "    Text:"; nud.Visible = false; tb.Enabled = true; tb.ReadOnly = false; tb.Visible = true; tb.Text = ""; cb.Visible = false; break;
-                case CMD_PRESS_KEYS: la.Visible = true; la.Text = "KeyCodes:"; nud.Visible = false; tb.Visible = true; tb.Text = ""; tb.ReadOnly = true; cb.Visible = true; break; // tb.Enabled = false; 
-                default: la.Visible = false;  nud.Visible = false; tb.Visible = false; cb.Visible = false; break;
+                case CMD_MOVE_Y: la.Visible = true; la.Text = "   Speed:"; nud.Visible = true; tb.Visible = false; cb.Visible = false; bu.Visible = false; bu.Enabled = false; break;
+                case CMD_WRITE_TEXT: la.Visible = true; la.Text = "    Text:"; nud.Visible = false; tb.Enabled = true; tb.ReadOnly = false; tb.Visible = true; tb.Text = ""; cb.Visible = false; bu.Visible = true; bu.Enabled = true; break;
+                case CMD_PRESS_KEYS: la.Visible = true; la.Text = "KeyCodes:"; nud.Visible = false; tb.Visible = true; tb.Text = ""; tb.ReadOnly = true; cb.Visible = true; bu.Visible = true; bu.Enabled = true; break;
+                default: la.Visible = false; nud.Visible = false; tb.Visible = false; cb.Visible = false; bu.Visible = false; bu.Enabled = false; break;
             }
         }
 
         private void Button1FunctionBox_SelectedIndexChanged_1(object sender, EventArgs e)
         {
-            updateVisibility(Button1FunctionBox.SelectedIndex, Button1ParameterText, Button1NumericParameter, Button1ComboBox, Button1Label);
+            updateVisibility(Button1FunctionBox.SelectedIndex, Button1ParameterText, Button1NumericParameter, Button1ComboBox, Button1Label, clearButton1);
         }
 
         private void Button2FunctionBox_SelectedIndexChanged_1(object sender, EventArgs e)
         {
-            updateVisibility(Button2FunctionBox.SelectedIndex, Button2ParameterText, Button2NumericParameter, Button2ComboBox, Button2Label);
+            updateVisibility(Button2FunctionBox.SelectedIndex, Button2ParameterText, Button2NumericParameter, Button2ComboBox, Button2Label, clearButton2);
         }
 
         private void Button3FunctionBox_SelectedIndexChanged_1(object sender, EventArgs e)
         {
-            updateVisibility(Button3FunctionBox.SelectedIndex, Button3ParameterText, Button3NumericParameter, Button3ComboBox, Button3Label);
+            updateVisibility(Button3FunctionBox.SelectedIndex, Button3ParameterText, Button3NumericParameter, Button3ComboBox, Button3Label, clearButton3);
         }
 
         private void UpFunctionMenu_SelectedIndexChanged(object sender, EventArgs e)
         {
-            updateVisibility(UpFunctionMenu.SelectedIndex, UpParameterText, UpNumericParameter, UpComboBox, UpLabel);
+            updateVisibility(UpFunctionMenu.SelectedIndex, UpParameterText, UpNumericParameter, UpComboBox, UpLabel, clearButtonUp);
         }
 
         private void DownFunctionMenu_SelectedIndexChanged(object sender, EventArgs e)
         {
-            updateVisibility(DownFunctionMenu.SelectedIndex, DownParameterText, DownNumericParameter, DownComboBox, DownLabel);
+            updateVisibility(DownFunctionMenu.SelectedIndex, DownParameterText, DownNumericParameter, DownComboBox, DownLabel, clearButtonDown);
         }
 
         private void LeftFunctionMenu_SelectedIndexChanged(object sender, EventArgs e)
         {
-            updateVisibility(LeftFunctionMenu.SelectedIndex, LeftParameterText, LeftNumericParameter, LeftComboBox, LeftLabel);
+            updateVisibility(LeftFunctionMenu.SelectedIndex, LeftParameterText, LeftNumericParameter, LeftComboBox, LeftLabel, clearButtonLeft);
         }
 
         private void RightFunctionMenu_SelectedIndexChanged(object sender, EventArgs e)
         {
-            updateVisibility(RightFunctionMenu.SelectedIndex, RightParameterText, RightNumericParameter, RightComboBox, RightLabel);
+            updateVisibility(RightFunctionMenu.SelectedIndex, RightParameterText, RightNumericParameter, RightComboBox, RightLabel, clearButtonRight);
         }
 
         private void SipFunctionMenu_SelectedIndexChanged(object sender, EventArgs e)
         {
-            updateVisibility(SipFunctionMenu.SelectedIndex, SipParameterText, SipNumericParameter, SipComboBox, SipParameterLabel);
+            updateVisibility(SipFunctionMenu.SelectedIndex, SipParameterText, SipNumericParameter, SipComboBox, SipParameterLabel, clearButtonSip);
         }
 
         private void LongSipFunctionMenu_SelectedIndexChanged(object sender, EventArgs e)
         {
-            updateVisibility(LongSipFunctionMenu.SelectedIndex, LongSipParameterText, LongSipNumericParameter, LongSipComboBox, LongSipParameterLabel);
+            updateVisibility(LongSipFunctionMenu.SelectedIndex, LongSipParameterText, LongSipNumericParameter, LongSipComboBox, LongSipParameterLabel, clearButtonLongSip);
         }
 
         private void PuffFunctionMenu_SelectedIndexChanged(object sender, EventArgs e)
         {
-            updateVisibility(PuffFunctionMenu.SelectedIndex, PuffParameterText, PuffNumericParameter, PuffComboBox, PuffParameterLabel);
+            updateVisibility(PuffFunctionMenu.SelectedIndex, PuffParameterText, PuffNumericParameter, PuffComboBox, PuffParameterLabel, clearButtonPuff);
         }
 
         private void LongPuffFunctionMenu_SelectedIndexChanged(object sender, EventArgs e)
         {
-            updateVisibility(LongPuffFunctionMenu.SelectedIndex, LongPuffParameterText, LongPuffNumericParameter, LongPuffComboBox, LongPuffParameterLabel);
+            updateVisibility(LongPuffFunctionMenu.SelectedIndex, LongPuffParameterText, LongPuffNumericParameter, LongPuffComboBox, LongPuffParameterLabel, clearButtonLongPuff);
         }
 
         // update the keycode parameters:
@@ -809,55 +823,101 @@ namespace MouseApp2
         {
             updateKeyCodeParameter(Button1ComboBox,Button1ParameterText);
         }
+        private void clearButton1_Click(object sender, EventArgs e)
+        {
+            Button1ParameterText.Text = "";
+        }
+
 
         private void Button2ComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
             updateKeyCodeParameter(Button2ComboBox, Button2ParameterText);
+        }
+        private void clearButton2_Click(object sender, EventArgs e)
+        {
+            Button2ParameterText.Text = "";
         }
 
         private void Button3ComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
             updateKeyCodeParameter(Button3ComboBox, Button3ParameterText);
         }
+        private void clearButton3_Click(object sender, EventArgs e)
+        {
+            Button3ParameterText.Text = "";
+        }
 
         private void UpComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
             updateKeyCodeParameter(UpComboBox, UpParameterText);
+        }
+        private void clearButtonUp_Click(object sender, EventArgs e)
+        {
+            UpParameterText.Text = "";
         }
 
         private void DownComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
             updateKeyCodeParameter(DownComboBox, DownParameterText);
         }
+        private void clearButtonDown_Click(object sender, EventArgs e)
+        {
+            DownParameterText.Text = "";
+        }
 
         private void LeftComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
             updateKeyCodeParameter(LeftComboBox, LeftParameterText);
+        }
+        private void clearButtonLeft_Click(object sender, EventArgs e)
+        {
+            LeftParameterText.Text = "";
         }
 
         private void RightComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
             updateKeyCodeParameter(RightComboBox, RightParameterText);
         }
+        private void clearButtonRight_Click(object sender, EventArgs e)
+        {
+            RightParameterText.Text = "";
+        }
+
 
         private void SipComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
             updateKeyCodeParameter(SipComboBox, SipParameterText);
+        }
+        private void clearButtonSip_Click(object sender, EventArgs e)
+        {
+            SipParameterText.Text = "";
         }
 
         private void LongSipComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
             updateKeyCodeParameter(LongSipComboBox, LongSipParameterText);
         }
+        private void clearButtonLongSip_Click(object sender, EventArgs e)
+        {
+            LongSipParameterText.Text = "";
+        }
 
         private void PuffComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
             updateKeyCodeParameter(PuffComboBox, PuffParameterText);
         }
+        private void clearButtonPuff_Click(object sender, EventArgs e)
+        {
+            PuffParameterText.Text = "";
+        }
 
         private void LongPuffComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
             updateKeyCodeParameter(LongPuffComboBox, LongPuffParameterText);
+        }
+        private void clearButtonLongPuff_Click(object sender, EventArgs e)
+        {
+            LongPuffParameterText.Text = "";
         }
 
         // draw live values on panels 
@@ -872,8 +932,8 @@ namespace MouseApp2
             String[] values = newValues.Split(',');
             if (values.Length == 5)
             {
-                pressureLabel.Text = values[0];
-                Int32 value = 1023-Convert.ToInt32(values[0]);
+                Int32 value = Convert.ToInt32(values[0]); //1023-Convert.ToInt32(values[0]);
+                pressureLabel.Text = value.ToString();
                 Graphics g = panel1.CreateGraphics();
                 Brush brush = new SolidBrush(Color.Green);
                 Brush brush2 = new SolidBrush(Color.White);
@@ -882,29 +942,30 @@ namespace MouseApp2
                 g.FillRectangle(brush2, 0, 0, 30, panel1.Height - value);
 
                 brush = new SolidBrush(Color.Orange);
-                upSensorLabel.Text = values[1];
-                value = 1023 - Convert.ToInt32(values[1]);
+
+                value = Convert.ToInt32(values[2]);
+                upSensorLabel.Text = value.ToString();
                 g = upPanel.CreateGraphics();
                 value = value * upPanel.Height / 1024;
                 g.FillRectangle(brush, 0, upPanel.Height - value, upPanel.Width, value);
                 g.FillRectangle(brush2, 0, 0, upPanel.Width, upPanel.Height - value);
 
-                downSensorLabel.Text = values[2];
-                value = 1023 - Convert.ToInt32(values[2]);
+                value = Convert.ToInt32(values[1]);
+                downSensorLabel.Text = value.ToString();
                 g = downPanel.CreateGraphics();
                 value = value * downPanel.Height / 1024;
                 g.FillRectangle(brush, 0, 0, downPanel.Width, value);
                 g.FillRectangle(brush2, 0, value, downPanel.Width, downPanel.Height - value);
 
-                leftSensorLabel.Text = values[3];
-                value = 1023 - Convert.ToInt32(values[3]);
+                value = Convert.ToInt32(values[4]);
+                leftSensorLabel.Text = value.ToString();
                 g = leftPanel.CreateGraphics();
                 value = value * leftPanel.Width / 1024;
                 g.FillRectangle(brush, leftPanel.Width - value,0, value, leftPanel.Height);
                 g.FillRectangle(brush2, 0, 0, leftPanel.Width - value, leftPanel.Height);
 
-                rightSensorLabel.Text = values[4];
-                value = 1023 - Convert.ToInt32(values[4]);
+                value = Convert.ToInt32(values[3]);
+                rightSensorLabel.Text = value.ToString();
                 g = rightPanel.CreateGraphics();
                 value = value * rightPanel.Width/ 1024;
                 g.FillRectangle(brush, 0, 0, value, rightPanel.Height);
@@ -916,10 +977,10 @@ namespace MouseApp2
         {
             if (splitXYBox.Checked)
             {
-                speedXBar.Width = 265; speedXLabel.Left = 270;
+                speedXBar.Width = 200; speedXLabel.Left = 270;
                 speedYBar.Enabled = true; speedYBar.Visible = true;
                 speedYLabel.Enabled = true; speedYLabel.Visible = true;
-                deadzoneXBar.Width = 265; deadzoneXLabel.Left = 270;
+                deadzoneXBar.Width = 200; deadzoneXLabel.Left = 270;
                 deadzoneYBar.Enabled = true; deadzoneYBar.Visible = true;
                 deadzoneYLabel.Enabled = true; deadzoneYLabel.Visible = true;
                 DeadzoneXNameLabel.Text = "Deadzone-X"; DeadzoneYNameLabel.Visible = true;
@@ -938,5 +999,272 @@ namespace MouseApp2
             }
             
         }
+
+        private void decSpeedX_Click(object sender, EventArgs e)
+        {
+            if (speedXBar.Value >= speedXBar.Minimum + SPEED_CHANGE_STEP)
+                speedXBar.Value -= SPEED_CHANGE_STEP;
+            speedXLabel.Text = speedXBar.Value.ToString();
+        }
+        private void decSpeedX_MouseHover(object sender, EventArgs e)
+        {
+            functionPointer = new ClickDelegate(decSpeedX_Click);
+            clickTimer.Start();
+        }
+
+        private void incSpeedY_Click(object sender, EventArgs e)
+        {
+            if (speedXBar.Value <= speedXBar.Maximum - SPEED_CHANGE_STEP)
+                speedXBar.Value += SPEED_CHANGE_STEP;
+            speedXLabel.Text = speedXBar.Value.ToString();
+
+        }
+        private void incSpeedY_MouseHover(object sender, EventArgs e)
+        {
+            functionPointer = new ClickDelegate(incSpeedY_Click);
+            clickTimer.Start();
+        }
+
+        private void decDeadzoneX_Click(object sender, EventArgs e)
+        {
+            if (deadzoneXBar.Value >= deadzoneXBar.Minimum + DEADZONE_CHANGE_STEP)
+                deadzoneXBar.Value -= DEADZONE_CHANGE_STEP;
+            deadzoneXLabel.Text = deadzoneXBar.Value.ToString();
+        }
+        private void decDeadzoneX_MouseHover(object sender, EventArgs e)
+        {
+            functionPointer = new ClickDelegate(decDeadzoneX_Click);
+            clickTimer.Start();
+        }
+
+        private void incDeadzoneY_Click(object sender, EventArgs e)
+        {
+            if (deadzoneXBar.Value <= deadzoneXBar.Maximum - DEADZONE_CHANGE_STEP)
+                deadzoneXBar.Value += DEADZONE_CHANGE_STEP;
+            deadzoneXLabel.Text = deadzoneXBar.Value.ToString();
+        }
+        private void incDeadzoneY_MouseHover(object sender, EventArgs e)
+        {
+            functionPointer = new ClickDelegate(incDeadzoneY_Click);
+            clickTimer.Start();
+        }
+
+        private void decPuffThreshold_Click(object sender, EventArgs e)
+        {
+            if (puffThresholdBar.Value >= puffThresholdBar.Minimum + PRESSURE_CHANGE_STEP)
+                puffThresholdBar.Value -= PRESSURE_CHANGE_STEP;
+            puffThresholdLabel.Text = puffThresholdBar.Value.ToString();
+
+        }
+        private void decPuffThreshold_MouseHover(object sender, EventArgs e)
+        {
+            functionPointer = new ClickDelegate(decPuffThreshold_Click);
+            clickTimer.Start();
+        }
+
+        private void incPuffThreshold_Click(object sender, EventArgs e)
+        {
+            if (puffThresholdBar.Value <= puffThresholdBar.Maximum - PRESSURE_CHANGE_STEP)
+                puffThresholdBar.Value += PRESSURE_CHANGE_STEP;
+            puffThresholdLabel.Text = puffThresholdBar.Value.ToString();
+        }
+        private void incPuffThreshold_MouseHover(object sender, EventArgs e)
+        {
+            functionPointer = new ClickDelegate(incPuffThreshold_Click);
+            clickTimer.Start();
+        }
+
+        private void decSipThreshold_Click(object sender, EventArgs e)
+        {
+            if (sipThresholdBar.Value >= sipThresholdBar.Minimum + PRESSURE_CHANGE_STEP)
+                sipThresholdBar.Value -= PRESSURE_CHANGE_STEP;
+            sipThresholdLabel.Text = sipThresholdBar.Value.ToString();
+
+        }
+        private void decSipThreshold_MouseHover(object sender, EventArgs e)
+        {
+            functionPointer = new ClickDelegate(decSipThreshold_Click);
+            clickTimer.Start();
+        }
+
+        private void incSipThreshold_Click(object sender, EventArgs e)
+        {
+            if (sipThresholdBar.Value <= sipThresholdBar.Maximum - PRESSURE_CHANGE_STEP)
+                sipThresholdBar.Value += PRESSURE_CHANGE_STEP;
+            sipThresholdLabel.Text = sipThresholdBar.Value.ToString();
+
+        }
+        private void incSipThreshold_MouseHover(object sender, EventArgs e)
+        {
+            functionPointer = new ClickDelegate(incSipThreshold_Click);
+            clickTimer.Start();
+        }
+
+        private void decTimeThreshold_Click(object sender, EventArgs e)
+        {
+            if (timeThresholdBar.Value >= timeThresholdBar.Minimum + TIME_CHANGE_STEP)
+                timeThresholdBar.Value -= TIME_CHANGE_STEP;
+            timeThresholdLabel.Text = timeThresholdBar.Value.ToString();
+
+        }
+        private void decTimeThreshold_MouseHover(object sender, EventArgs e)
+        {
+            functionPointer = new ClickDelegate(decTimeThreshold_Click);
+            clickTimer.Start();
+        }
+
+        private void incTimeThreshold_Click(object sender, EventArgs e)
+        {
+            if (timeThresholdBar.Value <= timeThresholdBar.Maximum - TIME_CHANGE_STEP)
+                timeThresholdBar.Value += TIME_CHANGE_STEP;
+            timeThresholdLabel.Text = timeThresholdBar.Value.ToString();
+
+        }
+        private void incTimeThreshold_MouseHover(object sender, EventArgs e)
+        {
+            functionPointer = new ClickDelegate(incTimeThreshold_Click);
+            clickTimer.Start();
+        }
+
+        private void upGainBar_Scroll(object sender, EventArgs e)
+        {
+            upGainLabel.Text = upGainBar.Value.ToString();
+
+        }
+
+        private void incUpGain_Click(object sender, EventArgs e)
+        {
+            if (upGainBar.Value <= upGainBar.Maximum - GAIN_CHANGE_STEP)
+                upGainBar.Value += GAIN_CHANGE_STEP;
+            upGainLabel.Text = upGainBar.Value.ToString();
+
+        }
+        private void incUpGain_MouseHover(object sender, EventArgs e)
+        {
+            functionPointer = new ClickDelegate(incUpGain_Click);
+            clickTimer.Start();
+        }
+
+        private void decUpGain_Click(object sender, EventArgs e)
+        {
+            if (upGainBar.Value >= upGainBar.Minimum + GAIN_CHANGE_STEP)
+                upGainBar.Value -= GAIN_CHANGE_STEP;
+            upGainLabel.Text = upGainBar.Value.ToString();
+
+        }
+        private void decUpGain_MouseHover(object sender, EventArgs e)
+        {
+            functionPointer = new ClickDelegate(decUpGain_Click);
+            clickTimer.Start();
+        }
+
+        private void downGainBar_Scroll(object sender, EventArgs e)
+        {
+            downGainLabel.Text = (100-downGainBar.Value).ToString();
+
+        }
+
+        private void incDownGain_Click(object sender, EventArgs e)
+        {
+            if (downGainBar.Value >= downGainBar.Minimum + GAIN_CHANGE_STEP)
+                downGainBar.Value -= GAIN_CHANGE_STEP;
+            downGainLabel.Text = (100-downGainBar.Value).ToString();
+
+        }
+        private void incDownGain_MouseHover(object sender, EventArgs e)
+        {
+            functionPointer = new ClickDelegate(incDownGain_Click);
+            clickTimer.Start();
+        }
+
+        private void decDownGain_Click(object sender, EventArgs e)
+        {
+            if (downGainBar.Value <= downGainBar.Maximum - GAIN_CHANGE_STEP)
+                downGainBar.Value += GAIN_CHANGE_STEP;
+            downGainLabel.Text = (100-downGainBar.Value).ToString();
+
+        }
+        private void decDownGain_MouseHover(object sender, EventArgs e)
+        {
+            functionPointer = new ClickDelegate(decDownGain_Click);
+            clickTimer.Start();
+        }
+
+        private void leftGainBar_Scroll(object sender, EventArgs e)
+        {
+            leftGainLabel.Text = leftGainBar.Value.ToString();
+
+        }
+
+        private void incLeftGain_Click(object sender, EventArgs e)
+        {
+            if (leftGainBar.Value <= leftGainBar.Maximum - GAIN_CHANGE_STEP)
+                leftGainBar.Value += GAIN_CHANGE_STEP;
+            leftGainLabel.Text = leftGainBar.Value.ToString();
+
+        }
+        private void incLeftGain_MouseHover(object sender, EventArgs e)
+        {
+            functionPointer = new ClickDelegate(incLeftGain_Click);
+            clickTimer.Start();
+        }
+
+        private void decLeftGain_Click(object sender, EventArgs e)
+        {
+            if (leftGainBar.Value >= leftGainBar.Minimum + GAIN_CHANGE_STEP)
+                leftGainBar.Value -= GAIN_CHANGE_STEP;
+            leftGainLabel.Text = leftGainBar.Value.ToString();
+
+        }
+        private void decLeftGain_MouseHover(object sender, EventArgs e)
+        {
+            functionPointer = new ClickDelegate(decLeftGain_Click);
+            clickTimer.Start();
+        }
+
+        
+        private void rightGainBar_Scroll(object sender, EventArgs e)
+        {
+            rightGainLabel.Text = rightGainBar.Value.ToString();
+
+        }
+
+        private void incRightGain_Click(object sender, EventArgs e)
+        {
+            if (rightGainBar.Value <= rightGainBar.Maximum - GAIN_CHANGE_STEP)
+                rightGainBar.Value += GAIN_CHANGE_STEP;
+            rightGainLabel.Text = rightGainBar.Value.ToString();
+
+        }
+        private void incRightGain_MouseHover(object sender, EventArgs e)
+        {
+            functionPointer = new ClickDelegate(incRightGain_Click);
+            clickTimer.Start();
+        }
+
+        private void decRightGain_Click(object sender, EventArgs e)
+        {
+            if (rightGainBar.Value >= rightGainBar.Minimum + GAIN_CHANGE_STEP)
+                rightGainBar.Value -= GAIN_CHANGE_STEP;
+            rightGainLabel.Text = rightGainBar.Value.ToString();
+
+        }
+        private void decRightGain_MouseHover(object sender, EventArgs e)
+        {
+            functionPointer = new ClickDelegate(decRightGain_Click);
+            clickTimer.Start();
+        }
+
+        void timer_Tick(object sender, EventArgs e)
+        {
+             Console.Write("*");
+             functionPointer(this, null);
+        }
+
+        private void stop_ClickTimer(object sender, EventArgs e)
+        {
+            clickTimer.Stop();
+        }
+
     }
 }

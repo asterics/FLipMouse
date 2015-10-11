@@ -59,6 +59,10 @@
 #define CMD_SR                      25
 #define CMD_ER                      26
 #define CMD_TT                      27
+#define CMD_GU                      28
+#define CMD_GD                      29
+#define CMD_GL                      30
+#define CMD_GR                      31
 
 #define CMD_KEY_RELEASE             50
 #define CMD_RELEASE_ALL             51
@@ -85,6 +89,12 @@ struct settingsType {
   uint16_t tp;     // threshold puff 
   uint8_t  ws;     // wheel stepsize  
   uint16_t tt;     // threshold time 
+  uint8_t  gu;     // gain up 
+  uint8_t  gd;     // gain down 
+  uint8_t  gl;     // gain left 
+  uint8_t  gr;     // gain right 
+  int16_t  cx;     // calib x
+  int16_t  cy;     // calib y
 };
 
 

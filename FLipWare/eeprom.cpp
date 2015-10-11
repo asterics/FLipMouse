@@ -57,6 +57,10 @@ void printCurrentSlot()
         Serial.print(settings.tp); Serial.print(TOKEN_SEPERATOR);
         Serial.print(settings.ws); Serial.print(TOKEN_SEPERATOR);
         Serial.print(settings.tt); Serial.print(TOKEN_SEPERATOR);
+        Serial.print(settings.gu); Serial.print(TOKEN_SEPERATOR);
+        Serial.print(settings.gd); Serial.print(TOKEN_SEPERATOR);
+        Serial.print(settings.gl); Serial.print(TOKEN_SEPERATOR);
+        Serial.print(settings.gr); Serial.print(TOKEN_SEPERATOR);
         for (int i=0;i<NUMBER_OF_BUTTONS;i++) 
         {
            Serial.print(buttons[i].mode); Serial.print(TOKEN_SEPERATOR);

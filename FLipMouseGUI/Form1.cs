@@ -327,41 +327,45 @@ namespace MouseApp2
                     case 6: sipThresholdBar.Value = Int32.Parse(actToken); break;  // threshold sip
                     case 7: puffThresholdBar.Value = Int32.Parse(actToken); break;  // threshold puff
                     case 8: break;  // mouse wheel stepsize, currently not used
-                    case 9: timeThresholdBar.Value = Int32.Parse(actToken); break;  // time threshold for longpress, currently not used
+                    case 9: timeThresholdBar.Value = Int32.Parse(actToken); break;  // time threshold for longpress
+                    case 10: upGainBar.Value = Int32.Parse(actToken); upGainLabel.Text = upGainBar.Value.ToString(); break;    // up gain 
+                    case 11: downGainBar.Value = Int32.Parse(actToken); downGainLabel.Text = downGainBar.Value.ToString(); break;  // down gain
+                    case 12: leftGainBar.Value = Int32.Parse(actToken); leftGainLabel.Text = leftGainBar.Value.ToString(); break;  // left gain
+                    case 13: rightGainBar.Value = Int32.Parse(actToken); rightGainLabel.Text = rightGainBar.Value.ToString(); break;  // right gain
                     
-                    case 10: Button1FunctionBox.SelectedIndex = Int32.Parse(actToken); break;
-                    case 11: Button1NumericParameter.Value = Int32.Parse(actToken); break;
-                    case 12: Button1ParameterText.Text = actToken; break;
-                    case 13: Button2FunctionBox.SelectedIndex = Int32.Parse(actToken); break;
-                    case 14: Button2NumericParameter.Value = Int32.Parse(actToken); break;
-                    case 15: Button2ParameterText.Text = actToken; break;
-                    case 16: Button3FunctionBox.SelectedIndex = Int32.Parse(actToken); break;
-                    case 17: Button3NumericParameter.Value = Int32.Parse(actToken); break;
-                    case 18: Button3ParameterText.Text = actToken; break;
-                    case 19: UpFunctionMenu.SelectedIndex = Int32.Parse(actToken); break;
-                    case 20: UpNumericParameter.Value = Int32.Parse(actToken); break;
-                    case 21: UpParameterText.Text = actToken; break;
-                    case 22: DownFunctionMenu.SelectedIndex = Int32.Parse(actToken); break;
-                    case 23: DownNumericParameter.Value = Int32.Parse(actToken); break;
-                    case 24: DownParameterText.Text = actToken; break;
-                    case 25: LeftFunctionMenu.SelectedIndex = Int32.Parse(actToken); break;
-                    case 26: LeftNumericParameter.Value = Int32.Parse(actToken); break;
-                    case 27: LeftParameterText.Text = actToken; break;
-                    case 28: RightFunctionMenu.SelectedIndex = Int32.Parse(actToken); break;
-                    case 29: RightNumericParameter.Value = Int32.Parse(actToken); break;
-                    case 30: RightParameterText.Text = actToken; break;
-                    case 31: SipFunctionMenu.SelectedIndex = Int32.Parse(actToken); break;
-                    case 32: SipNumericParameter.Value = Int32.Parse(actToken); break;
-                    case 33: SipParameterText.Text = actToken; break;
-                    case 34: LongSipFunctionMenu.SelectedIndex = Int32.Parse(actToken); break;
-                    case 35: LongSipNumericParameter.Value = Int32.Parse(actToken); break;
-                    case 36: LongSipParameterText.Text = actToken; break;
-                    case 37: PuffFunctionMenu.SelectedIndex = Int32.Parse(actToken); break;
-                    case 38: PuffNumericParameter.Value = Int32.Parse(actToken); break;
-                    case 39: PuffParameterText.Text = actToken; break;
-                    case 40: LongPuffFunctionMenu.SelectedIndex = Int32.Parse(actToken); break;
-                    case 41: LongPuffNumericParameter.Value = Int32.Parse(actToken); break;
-                    case 42: LongPuffParameterText.Text = actToken; break;
+                    case 14: Button1FunctionBox.SelectedIndex = Int32.Parse(actToken); break;
+                    case 15: Button1NumericParameter.Value = Int32.Parse(actToken); break;
+                    case 16: Button1ParameterText.Text = actToken; break;
+                    case 17: Button2FunctionBox.SelectedIndex = Int32.Parse(actToken); break;
+                    case 18: Button2NumericParameter.Value = Int32.Parse(actToken); break;
+                    case 19: Button2ParameterText.Text = actToken; break;
+                    case 20: Button3FunctionBox.SelectedIndex = Int32.Parse(actToken); break;
+                    case 21: Button3NumericParameter.Value = Int32.Parse(actToken); break;
+                    case 22: Button3ParameterText.Text = actToken; break;
+                    case 23: UpFunctionMenu.SelectedIndex = Int32.Parse(actToken); break;
+                    case 24: UpNumericParameter.Value = Int32.Parse(actToken); break;
+                    case 25: UpParameterText.Text = actToken; break;
+                    case 26: DownFunctionMenu.SelectedIndex = Int32.Parse(actToken); break;
+                    case 27: DownNumericParameter.Value = Int32.Parse(actToken); break;
+                    case 28: DownParameterText.Text = actToken; break;
+                    case 29: LeftFunctionMenu.SelectedIndex = Int32.Parse(actToken); break;
+                    case 30: LeftNumericParameter.Value = Int32.Parse(actToken); break;
+                    case 31: LeftParameterText.Text = actToken; break;
+                    case 32: RightFunctionMenu.SelectedIndex = Int32.Parse(actToken); break;
+                    case 33: RightNumericParameter.Value = Int32.Parse(actToken); break;
+                    case 34: RightParameterText.Text = actToken; break;
+                    case 35: SipFunctionMenu.SelectedIndex = Int32.Parse(actToken); break;
+                    case 36: SipNumericParameter.Value = Int32.Parse(actToken); break;
+                    case 37: SipParameterText.Text = actToken; break;
+                    case 38: LongSipFunctionMenu.SelectedIndex = Int32.Parse(actToken); break;
+                    case 39: LongSipNumericParameter.Value = Int32.Parse(actToken); break;
+                    case 40: LongSipParameterText.Text = actToken; break;
+                    case 41: PuffFunctionMenu.SelectedIndex = Int32.Parse(actToken); break;
+                    case 42: PuffNumericParameter.Value = Int32.Parse(actToken); break;
+                    case 43: PuffParameterText.Text = actToken; break;
+                    case 44: LongPuffFunctionMenu.SelectedIndex = Int32.Parse(actToken); break;
+                    case 45: LongPuffNumericParameter.Value = Int32.Parse(actToken); break;
+                    case 46: LongPuffParameterText.Text = actToken; break;
 
                     default: done = true; break;
                 }
@@ -597,7 +601,7 @@ namespace MouseApp2
             if (serialPort1.IsOpen)
             {
                 sendCmd("AT CA");
-                addToLog("Your device has been calibrated. ");
+                addToLog("Calibration started. ");
             }
             else addToLog("Could not send to device - please connect COM port!");
         }
@@ -616,6 +620,10 @@ namespace MouseApp2
                 sendCmd("AT TS " + sipThresholdLabel.Text);
                 sendCmd("AT TP " + puffThresholdLabel.Text);
                 sendCmd("AT TT " + timeThresholdLabel.Text);
+                sendCmd("AT GU " + upGainLabel.Text);
+                sendCmd("AT GD " + downGainLabel.Text);
+                sendCmd("AT GL " + leftGainLabel.Text);
+                sendCmd("AT GR " + rightGainLabel.Text);
                 if (useAlternativeFunctions) sendCmd("AT AF"); 
                 else sendCmd("AT MM");
 
@@ -634,13 +642,15 @@ namespace MouseApp2
 
                 addToLog("The selected settings have been applied.");
                 sendCmd("AT SR");
+                sendCmd("AT CA");
+
             }
             else addToLog("Please connect a device before applying configuration changes.");
         }
 
         private void saveSettings_Click(object sender, EventArgs e) //button to save options to EEPROM
         {
-            slotNames.Text=slotNames.Text.Replace(" ","");
+            slotNames.Text = slotNames.Text.Replace(" ","");
             slotNames.Text = slotNames.Text.Replace("\n", "");
             slotNames.Text = slotNames.Text.Replace("\r", "");
             addToLog("Saving Slot: " + slotNames.Text);

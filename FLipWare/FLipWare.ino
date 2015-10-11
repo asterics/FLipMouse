@@ -144,7 +144,9 @@
 struct settingsType settings = {         // type definition see fabi.h
     "empty",
     1,                                   //  Mouse cursor movement active (not the alternative functions )
-    40, 40, 60, 60, 500, 525, 3, 2500    // accx, accy, deadzone x, deadzone y, threshold sip, threshold puff, wheel step, threshold time (short/longpress)
+    40, 40, 60, 60, 500, 525, 3, 2500,   // accx, accy, deadzone x, deadzone y, threshold sip, threshold puff, wheel step, threshold time (short/longpress)
+    50, 50, 50, 50 ,                     // gain up / down / left / right
+    0, 0                                 // offset x / y
 }; 
 
 struct buttonType buttons [NUMBER_OF_BUTTONS];                     // array for all buttons - type definition see fabi.h 
@@ -176,8 +178,6 @@ float accumYpos = 0.f;
 float accelFactor;
 int x;
 int y;
-int x_offset;
-int y_offset;
 
 int8_t moveX=0;       
 int8_t moveY=0;       
@@ -257,10 +257,10 @@ void setup() {
    buttons[0].mode=CMD_SW;            // befault for button 1: switch alternative / mouse cursur control mode
    buttons[1].mode=CMD_MOUSE_WHEEL_UP;
    buttons[2].mode=CMD_MOUSE_WHEEL_DOWN;
-   buttons[3].mode=CMD_KEY_PRESS; strcpy(buttons[4].keystring,"KEY_UP ");
+   buttons[3].mode=CMD_KEY_PRESS; strcpy(buttons[3].keystring,"KEY_UP ");
    buttons[4].mode=CMD_KEY_PRESS; strcpy(buttons[4].keystring,"KEY_DOWN ");
-   buttons[5].mode=CMD_KEY_PRESS; strcpy(buttons[4].keystring,"KEY_LEFT ");
-   buttons[6].mode=CMD_KEY_PRESS; strcpy(buttons[4].keystring,"KEY_RIGHT ");
+   buttons[5].mode=CMD_KEY_PRESS; strcpy(buttons[5].keystring,"KEY_LEFT ");
+   buttons[6].mode=CMD_KEY_PRESS; strcpy(buttons[6].keystring,"KEY_RIGHT ");
    buttons[7].mode=CMD_MOUSE_PRESS_LEFT;
    buttons[8].mode=CMD_IDLE;    
    buttons[9].mode=CMD_MOUSE_CLICK_RIGHT;                          
@@ -279,13 +279,14 @@ void setup() {
 // Loop: the main program loop
 ///////////////////////////////
 
-void loop() {  
+void loop() { 
   
         pressure = analogRead(PRESSURE_SENSOR_PIN);
-        up = analogRead(UP_SENSOR_PIN);
-        down = analogRead(DOWN_SENSOR_PIN);
-        left = analogRead(LEFT_SENSOR_PIN);
-        right = analogRead(RIGHT_SENSOR_PIN);
+
+        up =       (uint16_t)((uint32_t)analogRead(UP_SENSOR_PIN)  * settings.gd/50); if (up>1023) up=1023; if (up<0) up=0;
+        down =     (uint16_t)((uint32_t)analogRead(DOWN_SENSOR_PIN) * settings.gu/50); if (down>1023) down=1023; if (down<0) down=0;
+        left =     (uint16_t)((uint32_t)analogRead(LEFT_SENSOR_PIN) * settings.gr/50); if (left>1023) left=1023; if (left<0) left=0;
+        right =    (uint16_t)((uint32_t)analogRead(RIGHT_SENSOR_PIN) * settings.gl/50); if (right>1023) right=1023; if (right<0) right=0;
   
         while (Serial.available() > 0) {
           // get incoming byte:
@@ -314,36 +315,43 @@ void loop() {
           handleButton(SIP_BUTTON, LONGSIP_BUTTON, pressure < settings.ts ? 1 : 0); 
           handleButton(PUFF_BUTTON, LONGPUFF_BUTTON, pressure > settings.tp ? 1 : 0);
         
-            
           // handle mouse movement
           if (calib_now == 0)  {
-              x = (left-right) - x_offset;
-              y = (up-down) - y_offset;
+              x = (left-right) - settings.cx;
+              y = (up-down) - settings.cy;
           }
           else  {
               calib_now--;           // wait for calibration
               if (calib_now ==0) {   // calibrate now !!
-                 x_offset = (left-right);                                                   
-                 y_offset = (up-down);
+                 settings.cx = (left-right);                                                   
+                 settings.cy = (up-down);
               }
           }    
           
-          if (abs(x)< settings.dx) x=0;
-          if (abs(y)< settings.dy) y=0;
+          if (abs(x)<= settings.dx) x=0;
+          if (abs(y)<= settings.dy) y=0;
           
           if (settings.mouseOn == 1) {
             if (y>settings.dy)
-               accumYpos += (float)(((int32_t)y-settings.dy)*settings.ay) * accelFactor; 
+            { 
+               accumYpos += ((float)(y-settings.dy)*settings.ay) * accelFactor;
+            } 
             else if (y<-settings.dy)
-               accumYpos += (float)(((int32_t)y+settings.dy)*settings.ay) * accelFactor; 
-    
+            {
+               accumYpos +=  ((float)(y+settings.dy)*settings.ay) * accelFactor; 
+            }
             if (x>settings.dx)
-               accumXpos += (float)(((int32_t)x-settings.dx)*settings.ax) * accelFactor; 
+            {
+               accumXpos += ((float)(x-settings.dx)*settings.ax) * accelFactor; 
+            }
             else if (x<-settings.dx)
-               accumXpos += (float)(((int32_t)x+settings.dx)*settings.ax) * accelFactor; 
+            {
+               accumXpos += ((float)(x+settings.dx)*settings.ax) * accelFactor; 
+            }
           
             int xMove = (int)accumXpos;
             int yMove = (int)accumYpos;
+            
             Mouse.move(xMove, yMove);
             accumXpos -= xMove;
             accumYpos -= yMove;
@@ -731,6 +739,26 @@ void performCommand (uint8_t cmd, int16_t par1, char * keystring, int8_t periodi
              if (DebugOutput==DEBUG_FULLOUTPUT)  
                Serial.println("set time threshold");
              settings.tt=par1;
+          break;
+      case CMD_GU:
+             if (DebugOutput==DEBUG_FULLOUTPUT)  
+               Serial.println("set up gain");
+             settings.gu=par1;
+          break;
+      case CMD_GD:
+             if (DebugOutput==DEBUG_FULLOUTPUT)  
+               Serial.println("set down gain");
+             settings.gd=par1;
+          break;
+      case CMD_GL:
+             if (DebugOutput==DEBUG_FULLOUTPUT)  
+               Serial.println("set left gain");
+             settings.gl=par1;
+          break;
+      case CMD_GR:
+             if (DebugOutput==DEBUG_FULLOUTPUT)  
+               Serial.println("set right gain");
+             settings.gr=par1;
           break;
   }
 }

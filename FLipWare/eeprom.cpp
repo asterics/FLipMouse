@@ -176,6 +176,10 @@ void readFromEEPROM(char * slotname)
       numSlots++;
    }
    
+   #ifdef TEENSY
+     tone(16, 2000+200*actSlot, 200);
+   #endif
+
    EmptySlotAddress=address;
    if (tmpSlotAddress) nextSlotAddress=tmpSlotAddress;
    if (nextSlotAddress==EmptySlotAddress) nextSlotAddress=0;

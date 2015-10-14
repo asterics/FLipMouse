@@ -434,6 +434,19 @@ void handleRelease (int buttonIndex)    // a button was released
    }
 }
 
+uint8_t inHoldMode (int i)
+{
+   if ((buttons[i].mode == CMD_MOUSE_PRESS_LEFT) ||
+       (buttons[i].mode == CMD_MOUSE_PRESS_RIGHT) || 
+       (buttons[i].mode == CMD_MOUSE_PRESS_MIDDLE) || 
+       (buttons[i].mode == CMD_MOUSE_MOVEX) || 
+       (buttons[i].mode == CMD_MOUSE_MOVEY) || 
+       (buttons[i].mode == CMD_KEY_PRESS))
+   return(1);
+   else return(0); 
+}
+  
+
 void handleButton(int i, int l, uint8_t state)    // button debouncing and longpress detection  
 {                                                 //   (if button i is pressed long and index l>=0, virtual button l is activated !)
    if ( buttonDebouncers[i].bounceState == state) {
@@ -443,30 +456,37 @@ void handleButton(int i, int l, uint8_t state)    // button debouncing and longp
           if (state != buttonDebouncers[i].stableState)
           { 
             buttonDebouncers[i].stableState=state;
-            if (state == 1) { 
-              handlePress(i); 
-              buttonDebouncers[i].timestamp=millis();
+            if (state == 1) {      // new stable state: pressed !
+              if (inHoldMode(i)) 
+                handlePress(i); 
+              buttonDebouncers[i].timestamp=millis();   // start measureing time
             }
-            else {
+            else {   // new stable state: released !
               if (buttonDebouncers[i].longPressed)
               {
+                 handlePress(l);
                  buttonDebouncers[i].longPressed=0;
                  handleRelease(l);
               }
-              else handleRelease(i);  
+              else 
+              {
+                 handlePress(i); 
+                 handleRelease(i);  
+              }
             }
           }
        }
      }
-     else { 
-       if ((millis()-buttonDebouncers[i].timestamp > settings.tt ) && (l>=0))
-       {
-            if ((state == 1) && (buttonDebouncers[i].longPressed==0) && (buttons[l].mode!=CMD_IDLE)) {
-           buttonDebouncers[i].longPressed=1; 
-           handleRelease(i);
-           handlePress(l);
+     else {  // in stable state: check if long or short press !
+       if (!inHoldMode(i))  // only if not a sticky button mode (hold)
+         if ((millis()-buttonDebouncers[i].timestamp > settings.tt ) && (l>=0))
+         {
+           if ((state == 1) && (buttonDebouncers[i].longPressed==0) && (buttons[l].mode!=CMD_IDLE)) {
+             buttonDebouncers[i].longPressed=1; 
+             //handleRelease(i);
+             //handlePress(l);
           }
-       }
+         }
      }
    }
    else {
@@ -667,7 +687,7 @@ void performCommand (uint8_t cmd, int16_t par1, char * keystring, int8_t periodi
              // blinkCount=10;  blinkStartTime=15;  
              release_all();
              readFromEEPROM(0);
-          break;
+             break;
       case CMD_DELETE_SLOTS:
              if (DebugOutput==DEBUG_FULLOUTPUT)  
                Serial.println("delete slots"); 
@@ -689,15 +709,23 @@ void performCommand (uint8_t cmd, int16_t par1, char * keystring, int8_t periodi
       case CMD_SW:
              if (DebugOutput==DEBUG_FULLOUTPUT)  
                Serial.println("switch mouse / alternative function");
-             blinkCount=6                                  ;  blinkStartTime=15;
-             if (settings.mouseOn==0) settings.mouseOn=1;
-             else settings.mouseOn=0;
+             blinkCount=6;  blinkStartTime=15;
+             if (settings.mouseOn==0) 
+             {
+               settings.mouseOn=1;
+             }
+             else {
+               settings.mouseOn=0;
+             }
           break;
       case CMD_CA:
              if (DebugOutput==DEBUG_FULLOUTPUT)  
                Serial.println("start calibration");
-             blinkCount=10;  blinkStartTime=30;
-             calib_now=300;
+             blinkCount=10;  blinkStartTime=20;
+             calib_now=100;
+             #ifdef TEENSY
+               tone(16, 12000, 200);
+             #endif
           break;
       case CMD_AX:
              if (DebugOutput==DEBUG_FULLOUTPUT)  

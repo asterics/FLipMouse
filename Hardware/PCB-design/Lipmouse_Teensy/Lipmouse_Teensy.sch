@@ -8,20 +8,20 @@
 </settings>
 <grid distance="0.1" unitdist="inch" unit="inch" style="lines" multiple="1" display="no" altdistance="0.01" altunitdist="inch" altunit="inch"/>
 <layers>
-<layer number="1" name="Top" color="4" fill="1" visible="yes" active="no"/>
-<layer number="16" name="Bottom" color="1" fill="1" visible="yes" active="no"/>
-<layer number="17" name="Pads" color="2" fill="1" visible="yes" active="no"/>
-<layer number="18" name="Vias" color="2" fill="1" visible="yes" active="no"/>
-<layer number="19" name="Unrouted" color="6" fill="1" visible="yes" active="no"/>
-<layer number="20" name="Dimension" color="15" fill="1" visible="yes" active="no"/>
-<layer number="21" name="tPlace" color="7" fill="1" visible="yes" active="no"/>
-<layer number="22" name="bPlace" color="7" fill="1" visible="yes" active="no"/>
-<layer number="23" name="tOrigins" color="15" fill="1" visible="yes" active="no"/>
-<layer number="24" name="bOrigins" color="15" fill="1" visible="yes" active="no"/>
-<layer number="25" name="tNames" color="7" fill="1" visible="yes" active="no"/>
-<layer number="26" name="bNames" color="7" fill="1" visible="yes" active="no"/>
-<layer number="27" name="tValues" color="7" fill="1" visible="yes" active="no"/>
-<layer number="28" name="bValues" color="7" fill="1" visible="yes" active="no"/>
+<layer number="1" name="Top" color="4" fill="1" visible="no" active="no"/>
+<layer number="16" name="Bottom" color="1" fill="1" visible="no" active="no"/>
+<layer number="17" name="Pads" color="2" fill="1" visible="no" active="no"/>
+<layer number="18" name="Vias" color="2" fill="1" visible="no" active="no"/>
+<layer number="19" name="Unrouted" color="6" fill="1" visible="no" active="no"/>
+<layer number="20" name="Dimension" color="15" fill="1" visible="no" active="no"/>
+<layer number="21" name="tPlace" color="7" fill="1" visible="no" active="no"/>
+<layer number="22" name="bPlace" color="7" fill="1" visible="no" active="no"/>
+<layer number="23" name="tOrigins" color="15" fill="1" visible="no" active="no"/>
+<layer number="24" name="bOrigins" color="15" fill="1" visible="no" active="no"/>
+<layer number="25" name="tNames" color="7" fill="1" visible="no" active="no"/>
+<layer number="26" name="bNames" color="7" fill="1" visible="no" active="no"/>
+<layer number="27" name="tValues" color="7" fill="1" visible="no" active="no"/>
+<layer number="28" name="bValues" color="7" fill="1" visible="no" active="no"/>
 <layer number="29" name="tStop" color="7" fill="3" visible="no" active="no"/>
 <layer number="30" name="bStop" color="7" fill="6" visible="no" active="no"/>
 <layer number="31" name="tCream" color="7" fill="4" visible="no" active="no"/>
@@ -30,8 +30,8 @@
 <layer number="34" name="bFinish" color="6" fill="6" visible="no" active="no"/>
 <layer number="35" name="tGlue" color="7" fill="4" visible="no" active="no"/>
 <layer number="36" name="bGlue" color="7" fill="5" visible="no" active="no"/>
-<layer number="37" name="tTest" color="7" fill="1" visible="yes" active="no"/>
-<layer number="38" name="bTest" color="7" fill="1" visible="yes" active="no"/>
+<layer number="37" name="tTest" color="7" fill="1" visible="no" active="no"/>
+<layer number="38" name="bTest" color="7" fill="1" visible="no" active="no"/>
 <layer number="39" name="tKeepout" color="4" fill="11" visible="no" active="no"/>
 <layer number="40" name="bKeepout" color="1" fill="11" visible="no" active="no"/>
 <layer number="41" name="tRestrict" color="4" fill="10" visible="no" active="no"/>
@@ -39,18 +39,18 @@
 <layer number="43" name="vRestrict" color="2" fill="10" visible="no" active="no"/>
 <layer number="44" name="Drills" color="7" fill="1" visible="no" active="no"/>
 <layer number="45" name="Holes" color="7" fill="1" visible="no" active="no"/>
-<layer number="46" name="Milling" color="3" fill="1" visible="yes" active="no"/>
-<layer number="47" name="Measures" color="7" fill="1" visible="yes" active="no"/>
-<layer number="48" name="Document" color="7" fill="1" visible="yes" active="no"/>
-<layer number="49" name="Reference" color="7" fill="1" visible="yes" active="no"/>
-<layer number="50" name="dxf" color="7" fill="1" visible="yes" active="no"/>
-<layer number="51" name="tDocu" color="7" fill="1" visible="yes" active="no"/>
-<layer number="52" name="bDocu" color="7" fill="1" visible="yes" active="no"/>
-<layer number="53" name="tGND_GNDA" color="7" fill="9" visible="yes" active="no"/>
-<layer number="54" name="bGND_GNDA" color="1" fill="9" visible="yes" active="no"/>
-<layer number="56" name="wert" color="7" fill="1" visible="yes" active="no"/>
-<layer number="57" name="tCAD" color="7" fill="1" visible="yes" active="no"/>
-<layer number="60" name="Board" color="7" fill="1" visible="yes" active="no"/>
+<layer number="46" name="Milling" color="3" fill="1" visible="no" active="no"/>
+<layer number="47" name="Measures" color="7" fill="1" visible="no" active="no"/>
+<layer number="48" name="Document" color="7" fill="1" visible="no" active="no"/>
+<layer number="49" name="Reference" color="7" fill="1" visible="no" active="no"/>
+<layer number="50" name="dxf" color="7" fill="1" visible="no" active="no"/>
+<layer number="51" name="tDocu" color="7" fill="1" visible="no" active="no"/>
+<layer number="52" name="bDocu" color="7" fill="1" visible="no" active="no"/>
+<layer number="53" name="tGND_GNDA" color="7" fill="9" visible="no" active="no"/>
+<layer number="54" name="bGND_GNDA" color="1" fill="9" visible="no" active="no"/>
+<layer number="56" name="wert" color="7" fill="1" visible="no" active="no"/>
+<layer number="57" name="tCAD" color="7" fill="1" visible="no" active="no"/>
+<layer number="60" name="Board" color="7" fill="1" visible="no" active="no"/>
 <layer number="91" name="Nets" color="2" fill="1" visible="yes" active="yes"/>
 <layer number="92" name="Busses" color="1" fill="1" visible="yes" active="yes"/>
 <layer number="93" name="Pins" color="2" fill="1" visible="no" active="yes"/>
@@ -10145,7 +10145,7 @@ W = angled&lt;p&gt;
 <part name="LED2" library="adafruit" deviceset="LED" device="3MM"/>
 <part name="LED3" library="adafruit" deviceset="LED" device="3MM"/>
 <part name="P+2" library="supply1" deviceset="VCC" device=""/>
-<part name="U$2" library="libMP3V7007GP" deviceset="MP3V7007GP" device=""/>
+<part name="U2" library="libMP3V7007GP" deviceset="MP3V7007GP" device=""/>
 <part name="P+4" library="supply1" deviceset="VCC" device=""/>
 <part name="GND8" library="supply1" deviceset="GND" device=""/>
 <part name="P+5" library="supply1" deviceset="VCC" device=""/>
@@ -10166,7 +10166,7 @@ W = angled&lt;p&gt;
 <part name="R11" library="resistor" deviceset="R-EU_" device="0309/V" value="120R"/>
 <part name="Q1" library="transistor-small-signal" deviceset="BS170" device=""/>
 <part name="IC1" library="microchip" deviceset="24*" device="P" technology="LC256" value="24FC1025-I/P"/>
-<part name="U$1" library="Teensy_3_Series_Board_v1.0" deviceset="TEENSY_3.1_BASIC" device=""/>
+<part name="U1" library="Teensy_3_Series_Board_v1.0" deviceset="TEENSY_3.1_BASIC" device=""/>
 <part name="R12" library="resistor" deviceset="R-EU_" device="0309/V" value="22R"/>
 <part name="GND13" library="supply1" deviceset="GND" device=""/>
 <part name="GND2" library="supply1" deviceset="GND" device=""/>
@@ -10237,7 +10237,7 @@ External Buttons</text>
 <instance part="LED2" gate="G$1" x="241.3" y="116.84"/>
 <instance part="LED3" gate="G$1" x="248.92" y="116.84"/>
 <instance part="P+2" gate="VCC" x="213.36" y="129.54" rot="R90"/>
-<instance part="U$2" gate="G$1" x="43.18" y="25.4"/>
+<instance part="U2" gate="G$1" x="43.18" y="25.4"/>
 <instance part="P+4" gate="VCC" x="20.32" y="33.02" rot="R90"/>
 <instance part="GND8" gate="1" x="20.32" y="17.78" rot="R270"/>
 <instance part="P+5" gate="VCC" x="241.3" y="45.72" rot="R180"/>
@@ -10269,7 +10269,7 @@ External Buttons</text>
 <instance part="R11" gate="G$1" x="50.8" y="144.78"/>
 <instance part="Q1" gate="1" x="60.96" y="144.78"/>
 <instance part="IC1" gate="G$1" x="121.92" y="20.32"/>
-<instance part="U$1" gate="G$1" x="139.7" y="121.92"/>
+<instance part="U1" gate="G$1" x="139.7" y="121.92"/>
 <instance part="R12" gate="G$1" x="63.5" y="154.94" rot="R90"/>
 <instance part="GND13" gate="1" x="213.36" y="68.58"/>
 <instance part="GND2" gate="1" x="129.54" y="5.08"/>
@@ -10292,7 +10292,7 @@ External Buttons</text>
 <net name="GND" class="0">
 <segment>
 <pinref part="GND8" gate="1" pin="GND"/>
-<pinref part="U$2" gate="G$1" pin="GND"/>
+<pinref part="U2" gate="G$1" pin="GND"/>
 <wire x1="22.86" y1="17.78" x2="25.4" y2="17.78" width="0.1524" layer="91"/>
 </segment>
 <segment>
@@ -10391,7 +10391,7 @@ External Buttons</text>
 <label x="228.6" y="78.74" size="1.778" layer="95" rot="R90"/>
 </segment>
 <segment>
-<pinref part="U$1" gate="G$1" pin="20/A6/PWM"/>
+<pinref part="U1" gate="G$1" pin="20/A6/PWM"/>
 <wire x1="116.84" y1="99.06" x2="104.14" y2="99.06" width="0.1524" layer="91"/>
 <label x="104.14" y="99.06" size="1.778" layer="95"/>
 </segment>
@@ -10408,7 +10408,7 @@ External Buttons</text>
 <label x="233.68" y="78.74" size="1.778" layer="95" rot="R90"/>
 </segment>
 <segment>
-<pinref part="U$1" gate="G$1" pin="21/A7/PWM"/>
+<pinref part="U1" gate="G$1" pin="21/A7/PWM"/>
 <wire x1="116.84" y1="96.52" x2="104.14" y2="96.52" width="0.1524" layer="91"/>
 <label x="104.14" y="96.52" size="1.778" layer="95"/>
 </segment>
@@ -10427,7 +10427,7 @@ External Buttons</text>
 <label x="238.76" y="78.74" size="1.778" layer="95" rot="R90"/>
 </segment>
 <segment>
-<pinref part="U$1" gate="G$1" pin="22/A8/T/PWM"/>
+<pinref part="U1" gate="G$1" pin="22/A8/T/PWM"/>
 <wire x1="116.84" y1="93.98" x2="104.14" y2="93.98" width="0.1524" layer="91"/>
 <label x="104.14" y="93.98" size="1.778" layer="95"/>
 </segment>
@@ -10446,7 +10446,7 @@ External Buttons</text>
 <label x="243.84" y="78.74" size="1.778" layer="95" rot="R90"/>
 </segment>
 <segment>
-<pinref part="U$1" gate="G$1" pin="23/A9/T/PWM"/>
+<pinref part="U1" gate="G$1" pin="23/A9/T/PWM"/>
 <wire x1="116.84" y1="91.44" x2="104.14" y2="91.44" width="0.1524" layer="91"/>
 <label x="104.14" y="91.44" size="1.778" layer="95"/>
 </segment>
@@ -10463,7 +10463,7 @@ External Buttons</text>
 <net name="VCC" class="0">
 <segment>
 <pinref part="P+4" gate="VCC" pin="VCC"/>
-<pinref part="U$2" gate="G$1" pin="VCC"/>
+<pinref part="U2" gate="G$1" pin="VCC"/>
 <wire x1="22.86" y1="33.02" x2="25.4" y2="33.02" width="0.1524" layer="91"/>
 </segment>
 <segment>
@@ -10506,7 +10506,7 @@ External Buttons</text>
 <pinref part="P+8" gate="VCC" pin="VCC"/>
 </segment>
 <segment>
-<pinref part="U$1" gate="G$1" pin="3.3V"/>
+<pinref part="U1" gate="G$1" pin="3.3V"/>
 <wire x1="162.56" y1="147.32" x2="170.18" y2="147.32" width="0.1524" layer="91"/>
 <label x="165.1" y="147.32" size="1.778" layer="95"/>
 </segment>
@@ -10518,22 +10518,22 @@ External Buttons</text>
 <label x="20.32" y="157.48" size="1.778" layer="95"/>
 </segment>
 <segment>
-<pinref part="U$1" gate="G$1" pin="4/CAN-RX-PWM"/>
+<pinref part="U1" gate="G$1" pin="4/CAN-RX-PWM"/>
 <wire x1="116.84" y1="139.7" x2="104.14" y2="139.7" width="0.1524" layer="91"/>
 <label x="104.14" y="139.7" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="N$14" class="0">
 <segment>
-<pinref part="U$2" gate="G$1" pin="NC_3"/>
+<pinref part="U2" gate="G$1" pin="NC_3"/>
 <wire x1="60.96" y1="27.94" x2="66.04" y2="27.94" width="0.1524" layer="91"/>
 <wire x1="66.04" y1="27.94" x2="66.04" y2="22.86" width="0.1524" layer="91"/>
-<pinref part="U$2" gate="G$1" pin="NC_5"/>
+<pinref part="U2" gate="G$1" pin="NC_5"/>
 <wire x1="66.04" y1="22.86" x2="66.04" y2="17.78" width="0.1524" layer="91"/>
 <wire x1="66.04" y1="17.78" x2="60.96" y2="17.78" width="0.1524" layer="91"/>
-<pinref part="U$2" gate="G$1" pin="NC_4"/>
+<pinref part="U2" gate="G$1" pin="NC_4"/>
 <wire x1="60.96" y1="22.86" x2="66.04" y2="22.86" width="0.1524" layer="91"/>
-<pinref part="U$2" gate="G$1" pin="NC_2"/>
+<pinref part="U2" gate="G$1" pin="NC_2"/>
 <wire x1="25.4" y1="22.86" x2="12.7" y2="22.86" width="0.1524" layer="91"/>
 <wire x1="12.7" y1="22.86" x2="12.7" y2="10.16" width="0.1524" layer="91"/>
 <wire x1="12.7" y1="10.16" x2="66.04" y2="10.16" width="0.1524" layer="91"/>
@@ -10568,7 +10568,7 @@ External Buttons</text>
 <label x="83.82" y="25.4" size="1.778" layer="95"/>
 </segment>
 <segment>
-<pinref part="U$1" gate="G$1" pin="19/A5/T/SCL0"/>
+<pinref part="U1" gate="G$1" pin="19/A5/T/SCL0"/>
 <wire x1="116.84" y1="101.6" x2="104.14" y2="101.6" width="0.1524" layer="91"/>
 <label x="104.14" y="101.6" size="1.778" layer="95"/>
 </segment>
@@ -10589,7 +10589,7 @@ External Buttons</text>
 <label x="139.7" y="17.78" size="1.778" layer="95"/>
 </segment>
 <segment>
-<pinref part="U$1" gate="G$1" pin="18/A4/T/SDA0"/>
+<pinref part="U1" gate="G$1" pin="18/A4/T/SDA0"/>
 <wire x1="116.84" y1="104.14" x2="104.14" y2="104.14" width="0.1524" layer="91"/>
 <label x="104.14" y="104.14" size="1.778" layer="95"/>
 </segment>
@@ -10606,13 +10606,13 @@ External Buttons</text>
 </net>
 <net name="PRESSURE" class="0">
 <segment>
-<pinref part="U$2" gate="G$1" pin="VOUT"/>
+<pinref part="U2" gate="G$1" pin="VOUT"/>
 <wire x1="60.96" y1="33.02" x2="66.04" y2="33.02" width="0.1524" layer="91"/>
 <wire x1="66.04" y1="33.02" x2="66.04" y2="40.64" width="0.1524" layer="91"/>
 <label x="68.58" y="33.02" size="1.778" layer="95" rot="R90"/>
 </segment>
 <segment>
-<pinref part="U$1" gate="G$1" pin="14/A0"/>
+<pinref part="U1" gate="G$1" pin="14/A0"/>
 <wire x1="116.84" y1="114.3" x2="104.14" y2="114.3" width="0.1524" layer="91"/>
 <label x="104.14" y="114.3" size="1.778" layer="95"/>
 </segment>
@@ -10624,7 +10624,7 @@ External Buttons</text>
 <label x="35.56" y="144.78" size="1.778" layer="95"/>
 </segment>
 <segment>
-<pinref part="U$1" gate="G$1" pin="6/PWM"/>
+<pinref part="U1" gate="G$1" pin="6/PWM"/>
 <wire x1="116.84" y1="134.62" x2="104.14" y2="134.62" width="0.1524" layer="91"/>
 <label x="104.14" y="134.62" size="1.778" layer="95"/>
 </segment>
@@ -10636,7 +10636,7 @@ External Buttons</text>
 <label x="17.78" y="116.84" size="1.778" layer="95"/>
 </segment>
 <segment>
-<pinref part="U$1" gate="G$1" pin="0/RX1/T"/>
+<pinref part="U1" gate="G$1" pin="0/RX1/T"/>
 <wire x1="116.84" y1="149.86" x2="104.14" y2="149.86" width="0.1524" layer="91"/>
 <label x="104.14" y="149.86" size="1.778" layer="95"/>
 </segment>
@@ -10648,7 +10648,7 @@ External Buttons</text>
 <label x="55.88" y="78.74" size="1.778" layer="95"/>
 </segment>
 <segment>
-<pinref part="U$1" gate="G$1" pin="2"/>
+<pinref part="U1" gate="G$1" pin="2"/>
 <wire x1="116.84" y1="144.78" x2="104.14" y2="144.78" width="0.1524" layer="91"/>
 <label x="104.14" y="144.78" size="1.778" layer="95"/>
 </segment>
@@ -10660,7 +10660,7 @@ External Buttons</text>
 <label x="55.88" y="106.68" size="1.778" layer="95"/>
 </segment>
 <segment>
-<pinref part="U$1" gate="G$1" pin="1/TX1/T"/>
+<pinref part="U1" gate="G$1" pin="1/TX1/T"/>
 <wire x1="116.84" y1="147.32" x2="104.14" y2="147.32" width="0.1524" layer="91"/>
 <label x="104.14" y="147.32" size="1.778" layer="95"/>
 </segment>
@@ -10672,7 +10672,7 @@ External Buttons</text>
 <label x="248.92" y="101.6" size="1.778" layer="95" rot="R90"/>
 </segment>
 <segment>
-<pinref part="U$1" gate="G$1" pin="17/A3/T"/>
+<pinref part="U1" gate="G$1" pin="17/A3/T"/>
 <wire x1="116.84" y1="106.68" x2="104.14" y2="106.68" width="0.1524" layer="91"/>
 <label x="104.14" y="106.68" size="1.778" layer="95"/>
 </segment>
@@ -10684,7 +10684,7 @@ External Buttons</text>
 <label x="241.3" y="101.6" size="1.778" layer="95" rot="R90"/>
 </segment>
 <segment>
-<pinref part="U$1" gate="G$1" pin="16/A2/T"/>
+<pinref part="U1" gate="G$1" pin="16/A2/T"/>
 <wire x1="116.84" y1="109.22" x2="104.14" y2="109.22" width="0.1524" layer="91"/>
 <label x="104.14" y="109.22" size="1.778" layer="95"/>
 </segment>
@@ -10696,7 +10696,7 @@ External Buttons</text>
 <label x="233.68" y="101.6" size="1.778" layer="95" rot="R90"/>
 </segment>
 <segment>
-<pinref part="U$1" gate="G$1" pin="5/PWM"/>
+<pinref part="U1" gate="G$1" pin="5/PWM"/>
 <wire x1="116.84" y1="137.16" x2="104.14" y2="137.16" width="0.1524" layer="91"/>
 <label x="104.14" y="137.16" size="1.778" layer="95"/>
 </segment>
@@ -10708,7 +10708,7 @@ External Buttons</text>
 <label x="238.76" y="157.48" size="1.778" layer="95"/>
 </segment>
 <segment>
-<pinref part="U$1" gate="G$1" pin="13/SCK/LED"/>
+<pinref part="U1" gate="G$1" pin="13/SCK/LED"/>
 <wire x1="116.84" y1="116.84" x2="104.14" y2="116.84" width="0.1524" layer="91"/>
 <label x="104.14" y="116.84" size="1.778" layer="95"/>
 </segment>
@@ -10720,7 +10720,7 @@ External Buttons</text>
 <label x="238.76" y="160.02" size="1.778" layer="95"/>
 </segment>
 <segment>
-<pinref part="U$1" gate="G$1" pin="10/TX2/PWM"/>
+<pinref part="U1" gate="G$1" pin="10/TX2/PWM"/>
 <wire x1="116.84" y1="124.46" x2="104.14" y2="124.46" width="0.1524" layer="91"/>
 <label x="104.14" y="124.46" size="1.778" layer="95"/>
 </segment>
@@ -10732,7 +10732,7 @@ External Buttons</text>
 <label x="213.36" y="157.48" size="1.778" layer="95"/>
 </segment>
 <segment>
-<pinref part="U$1" gate="G$1" pin="11/MOSI"/>
+<pinref part="U1" gate="G$1" pin="11/MOSI"/>
 <wire x1="116.84" y1="121.92" x2="104.14" y2="121.92" width="0.1524" layer="91"/>
 <label x="104.14" y="121.92" size="1.778" layer="95"/>
 </segment>
@@ -10744,7 +10744,7 @@ External Buttons</text>
 <label x="213.36" y="162.56" size="1.778" layer="95"/>
 </segment>
 <segment>
-<pinref part="U$1" gate="G$1" pin="8/TX3"/>
+<pinref part="U1" gate="G$1" pin="8/TX3"/>
 <wire x1="116.84" y1="129.54" x2="104.14" y2="129.54" width="0.1524" layer="91"/>
 <label x="104.14" y="129.54" size="1.778" layer="95"/>
 </segment>
@@ -10756,7 +10756,7 @@ External Buttons</text>
 <label x="238.76" y="162.56" size="1.778" layer="95"/>
 </segment>
 <segment>
-<pinref part="U$1" gate="G$1" pin="7/RX3"/>
+<pinref part="U1" gate="G$1" pin="7/RX3"/>
 <wire x1="116.84" y1="132.08" x2="104.14" y2="132.08" width="0.1524" layer="91"/>
 <label x="104.14" y="132.08" size="1.778" layer="95"/>
 </segment>
@@ -10768,7 +10768,7 @@ External Buttons</text>
 <label x="238.76" y="154.94" size="1.778" layer="95"/>
 </segment>
 <segment>
-<pinref part="U$1" gate="G$1" pin="12/MISO"/>
+<pinref part="U1" gate="G$1" pin="12/MISO"/>
 <wire x1="116.84" y1="119.38" x2="104.14" y2="119.38" width="0.1524" layer="91"/>
 <label x="104.14" y="119.38" size="1.778" layer="95"/>
 </segment>
@@ -10785,14 +10785,14 @@ External Buttons</text>
 <label x="238.76" y="165.1" size="1.778" layer="95"/>
 </segment>
 <segment>
-<pinref part="U$1" gate="G$1" pin="VIN"/>
+<pinref part="U1" gate="G$1" pin="VIN"/>
 <wire x1="162.56" y1="149.86" x2="170.18" y2="149.86" width="0.1524" layer="91"/>
 <label x="165.1" y="149.86" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="PROGRAM" class="0">
 <segment>
-<pinref part="U$1" gate="G$1" pin="PGM"/>
+<pinref part="U1" gate="G$1" pin="PGM"/>
 <wire x1="162.56" y1="137.16" x2="170.18" y2="137.16" width="0.1524" layer="91"/>
 <label x="165.1" y="137.16" size="1.778" layer="95"/>
 </segment>

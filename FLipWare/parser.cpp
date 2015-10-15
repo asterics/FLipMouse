@@ -102,6 +102,10 @@ void parseCommand (char * cmdstr)
         if (!strcmp(actpos,"TS"))  { actpos=strtok(NULL," "); if (get_uint(actpos, &num)) cmd=CMD_TS;}
         if (!strcmp(actpos,"TP"))  { actpos=strtok(NULL," "); if (get_uint(actpos, &num)) cmd=CMD_TP;}
         if (!strcmp(actpos,"TT"))  { actpos=strtok(NULL," "); if (get_uint(actpos, &num)) cmd=CMD_TT;}
+        if (!strcmp(actpos,"GU"))  { actpos=strtok(NULL," "); if (get_uint(actpos, &num)) cmd=CMD_GU;}
+        if (!strcmp(actpos,"GD"))  { actpos=strtok(NULL," "); if (get_uint(actpos, &num)) cmd=CMD_GD;}
+        if (!strcmp(actpos,"GL"))  { actpos=strtok(NULL," "); if (get_uint(actpos, &num)) cmd=CMD_GL;}
+        if (!strcmp(actpos,"GR"))  { actpos=strtok(NULL," "); if (get_uint(actpos, &num)) cmd=CMD_GR;}
     }
     if (cmd>-1)
     {

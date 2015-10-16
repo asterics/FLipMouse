@@ -24,7 +24,7 @@ namespace MouseApp2
 
         const int SPEED_CHANGE_STEP = 2;
         const int DEADZONE_CHANGE_STEP = 10;
-        const int TIME_CHANGE_STEP = 50;
+        const int TIME_CHANGE_STEP = 5;
         const int PRESSURE_CHANGE_STEP = 1;
         const int GAIN_CHANGE_STEP = 2;
 
@@ -310,8 +310,9 @@ namespace MouseApp2
             bool done = false;
             while (!done)
             {
+                Console.WriteLine("act string = " + newValues);
                 actToken = newValues.Substring(0, newValues.IndexOf("-,-"));
-                // Console.WriteLine("Found Token " + i + " " + actToken);
+                Console.WriteLine("Found Token " + i + " " + actToken);
                 switch (i)
                 {
                     case 0: slotNames.Text = actToken; break;  // slotname
@@ -370,7 +371,10 @@ namespace MouseApp2
                     default: done = true; break;
                 }
                 newValues = newValues.Substring(actToken.Length + 3);
-                if (newValues.ToUpper().StartsWith("END")) done = true;
+                if (newValues.ToUpper().StartsWith("END"))
+                {
+                    done = true;
+                }
                 else i++;
             }
         }
@@ -465,6 +469,7 @@ namespace MouseApp2
                         sendCmd("AT LIST");
                         sendCmd("AT LOAD");
                         sendCmd("AT SR");   // start reporting raw values !
+
                     }
                 }
             }
@@ -479,7 +484,7 @@ namespace MouseApp2
                 {
                     try  {
                         receivedString = serialPort1.ReadLine();
-                        //Console.Write("received:" + receivedString);
+                        Console.Write("received:" + receivedString);
                         if (receivedString.ToUpper().StartsWith("AT RR "))  // raw report found ?
                         {
                             BeginInvoke(this.rawValuesDelegate, new Object[] { receivedString.Substring(6) });

@@ -193,6 +193,8 @@ uint8_t blinkCount=0;
 uint8_t blinkTime=0;
 uint8_t blinkStartTime=0;
 
+uint8_t specialMode =0;
+
 int inByte=0;
 char * keystring=0;
 char * writeKeystring=0;
@@ -202,8 +204,7 @@ uint8_t cnt =0,cnt2=0;
 // function declarations 
 void handlePress (int buttonIndex);      // a button was pressed
 void handleRelease (int buttonIndex);    // a button was released
-void handleButton(int i, int l, uint8_t state);    // button debouncing and longpress detection  
-// uint32_t handleButton(int i, uint8_t b);  // button debouncing
+uint8_t handleButton(int i, uint8_t state);    // button debouncing and longpress detection  
 void UpdateLeds();
 void initDebouncers();
 
@@ -282,7 +283,7 @@ void setup() {
 void loop() { 
   
         pressure = analogRead(PRESSURE_SENSOR_PIN);
-
+        
         up =       (uint16_t)((uint32_t)analogRead(UP_SENSOR_PIN)  * settings.gd/50); if (up>1023) up=1023; if (up<0) up=0;
         down =     (uint16_t)((uint32_t)analogRead(DOWN_SENSOR_PIN) * settings.gu/50); if (down>1023) down=1023; if (down<0) down=0;
         left =     (uint16_t)((uint32_t)analogRead(LEFT_SENSOR_PIN) * settings.gr/50); if (left>1023) left=1023; if (left<0) left=0;
@@ -308,14 +309,7 @@ void loop() {
               cnt=0;
             }
           }
-            
-          for (int i=0;i<NUMBER_OF_PHYSICAL_BUTTONS;i++)    // update button press / release events
-              handleButton(i, -1, digitalRead(input_map[i]) == LOW ? 1 : 0);
-    
-          handleButton(SIP_BUTTON, LONGSIP_BUTTON, pressure < settings.ts ? 1 : 0); 
-          handleButton(PUFF_BUTTON, LONGPUFF_BUTTON, pressure > settings.tp ? 1 : 0);
-        
-          // handle mouse movement
+
           if (calib_now == 0)  {
               x = (left-right) - settings.cx;
               y = (up-down) - settings.cy;
@@ -330,45 +324,93 @@ void loop() {
           
           if (abs(x)<= settings.dx) x=0;
           if (abs(y)<= settings.dy) y=0;
+
+
+         
+         switch (specialMode)  {
+            case 0: 
+               if (pressure > settings.tt) { 
+                   specialMode++;
+                   #ifdef TEENSY
+                     tone(16, 4000, 200);
+                   #endif
+                   initDebouncers();
+                   release_all();
+                   }
+                   break;
+            case 1:             
+                if (pressure < 530)  
+                    specialMode++;
+                  break; 
+            case 2:
+               if (handleButton(0, (y<-350) ? 1 : 0)) specialMode=3;
+               else if (handleButton(1, (x<-350) ? 1 : 0)) specialMode=3;
+               else if (handleButton(2, (x>350) ? 1 : 0)) specialMode=3;
+               else if (handleButton(LONGSIP_BUTTON, pressure < settings.ts  ? 1 : 0)) specialMode=3;
+               else if (handleButton(LONGPUFF_BUTTON, pressure > settings.tp  ? 1 : 0)) specialMode=3;
+
+                /*
+               if (pressure > 650) { 
+                   specialMode=3;
+                   #ifdef TEENSY
+                     tone(16, 4000, 200);
+                   #endif
+                   }
+                   */
+               break;
+            case 3:             
+                if (pressure < 530)
+                 {  
+                    specialMode=0;
+                    initDebouncers();
+                 }
+                 break; 
+          }
+
+          if (specialMode==0)
+          {  
+                for (int i=0;i<NUMBER_OF_PHYSICAL_BUTTONS;i++)    // update button press / release events
+                    handleButton(i, digitalRead(input_map[i]) == LOW ? 1 : 0);
           
-          if (settings.mouseOn == 1) {
-            if (y>settings.dy)
-            { 
-               accumYpos += ((float)(y-settings.dy)*settings.ay) * accelFactor;
-            } 
-            else if (y<-settings.dy)
-            {
-               accumYpos +=  ((float)(y+settings.dy)*settings.ay) * accelFactor; 
-            }
-            if (x>settings.dx)
-            {
-               accumXpos += ((float)(x-settings.dx)*settings.ax) * accelFactor; 
-            }
-            else if (x<-settings.dx)
-            {
-               accumXpos += ((float)(x+settings.dx)*settings.ax) * accelFactor; 
-            }
+                handleButton(SIP_BUTTON, pressure < settings.ts ? 1 : 0); 
+                handleButton(PUFF_BUTTON, pressure > settings.tp ? 1 : 0);
+              
+                
+                if (settings.mouseOn == 1) {
+                  if (y>settings.dy) { 
+                     accumYpos += ((float)(y-settings.dy)*settings.ay) * accelFactor;
+                  } 
+                  else if (y<-settings.dy) {
+                     accumYpos +=  ((float)(y+settings.dy)*settings.ay) * accelFactor; 
+                  }
+                  if (x>settings.dx) {
+                     accumXpos += ((float)(x-settings.dx)*settings.ax) * accelFactor; 
+                  }
+                  else if (x<-settings.dx) {
+                     accumXpos += ((float)(x+settings.dx)*settings.ax) * accelFactor; 
+                  }
+                
+                  int xMove = (int)accumXpos;
+                  int yMove = (int)accumYpos;
+                  
+                  Mouse.move(xMove, yMove);
+                  accumXpos -= xMove;
+                  accumYpos -= yMove;
+                }
+                else  { // handle alternative joystick actions
+                  handleButton(UP_BUTTON,  y<-settings.dy ? 1 : 0);
+                  handleButton(DOWN_BUTTON,  y>settings.dy ? 1 : 0);
+                  handleButton(LEFT_BUTTON,  x<-settings.dx ? 1 : 0);
+                  handleButton(RIGHT_BUTTON,  x>settings.dx ? 1 : 0);
+                }
           
-            int xMove = (int)accumXpos;
-            int yMove = (int)accumYpos;
-            
-            Mouse.move(xMove, yMove);
-            accumXpos -= xMove;
-            accumYpos -= yMove;
+                if ((moveX!=0) || (moveY!=0))   // movement induced by button actions  
+                {
+                  if (cnt2++%4==0)
+                    Mouse.move(moveX, moveY);
+                }
+          
           }
-          else  { // handle alternative joystick actions
-            handleButton(UP_BUTTON, -1, y<-settings.dy ? 1 : 0);
-            handleButton(DOWN_BUTTON, -1, y>settings.dy ? 1 : 0);
-            handleButton(LEFT_BUTTON, -1, x<-settings.dx ? 1 : 0);
-            handleButton(RIGHT_BUTTON, -1, x>settings.dx ? 1 : 0);
-          }
-    
-          if ((moveX!=0) || (moveY!=0))   // movement induced by button actions  
-          {
-            if (cnt2++%4==0)
-              Mouse.move(moveX, moveY);
-          }
-    
           // handle running clicks or double clicks
           if (leftClickRunning)
               if (--leftClickRunning==0)  leftMouseButton=0; 
@@ -447,7 +489,7 @@ uint8_t inHoldMode (int i)
 }
   
 
-void handleButton(int i, int l, uint8_t state)    // button debouncing and longpress detection  
+uint8_t handleButton(int i, uint8_t state)    // button debouncing and longpress detection  
 {                                                 //   (if button i is pressed long and index l>=0, virtual button l is activated !)
    if ( buttonDebouncers[i].bounceState == state) {
      if (buttonDebouncers[i].bounceCount < DEFAULT_DEBOUNCING_TIME) {
@@ -459,40 +501,25 @@ void handleButton(int i, int l, uint8_t state)    // button debouncing and longp
             if (state == 1) {      // new stable state: pressed !
               if (inHoldMode(i)) 
                 handlePress(i); 
-              buttonDebouncers[i].timestamp=millis();   // start measureing time
+              buttonDebouncers[i].timestamp=millis();   // start measuring time
             }
             else {   // new stable state: released !
-              if (buttonDebouncers[i].longPressed)
-              {
-                 handlePress(l);
-                 buttonDebouncers[i].longPressed=0;
-                 handleRelease(l);
-              }
-              else 
-              {
-                 handlePress(i); 
-                 handleRelease(i);  
-              }
+                 if (!inHoldMode(i)) 
+                   handlePress(i); 
+                 handleRelease(i);
+                 return(1);  
             }
           }
        }
      }
-     else {  // in stable state: check if long or short press !
-       if (!inHoldMode(i))  // only if not a sticky button mode (hold)
-         if ((millis()-buttonDebouncers[i].timestamp > settings.tt ) && (l>=0))
-         {
-           if ((state == 1) && (buttonDebouncers[i].longPressed==0) && (buttons[l].mode!=CMD_IDLE)) {
-             buttonDebouncers[i].longPressed=1; 
-             //handleRelease(i);
-             //handlePress(l);
-          }
-         }
+     else {  // in stable state
      }
    }
    else {
      buttonDebouncers[i].bounceState = state;
      buttonDebouncers[i].bounceCount=0;     
    }
+   return(0);
 }   
 
 
@@ -724,7 +751,7 @@ void performCommand (uint8_t cmd, int16_t par1, char * keystring, int8_t periodi
              blinkCount=10;  blinkStartTime=20;
              calib_now=100;
              #ifdef TEENSY
-               tone(16, 12000, 200);
+               tone(16, 100, 200);
              #endif
           break;
       case CMD_AX:

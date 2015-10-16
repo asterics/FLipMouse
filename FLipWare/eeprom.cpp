@@ -46,6 +46,9 @@ byte readEEPROM(unsigned int eeaddress )
 
 void printCurrentSlot()
 {
+  static int count=0;   // skip first report of load values
+  if (count++>0)
+  {
         Serial.print("loading:");
         Serial.print(settings.slotname); Serial.print(TOKEN_SEPERATOR);
         Serial.print(settings.mouseOn); Serial.print(TOKEN_SEPERATOR);
@@ -68,6 +71,7 @@ void printCurrentSlot()
            Serial.print(buttons[i].keystring);Serial.print(TOKEN_SEPERATOR);
         }
         Serial.println("END");
+   }
 }
 
 void saveToEEPROM(char * slotname)

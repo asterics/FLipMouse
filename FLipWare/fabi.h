@@ -27,6 +27,12 @@
 
 #define TOKEN_SEPERATOR "-,-"
 
+#define TONE_ENTERSPECIAL 0
+#define TONE_CALIB        1
+#define TONE_CHANGESLOT   2
+#define TONE_HOLD         3
+#define TONE_EXITSPECIAL  4
+
 
 // command identifiers
 
@@ -114,6 +120,8 @@ struct buttonDebouncerType {              // holds working data for button debou
 
 extern uint8_t DebugOutput;
 extern uint8_t actSlot;
+extern uint8_t reportSlotParameters;
+extern uint8_t reportRawValues;
 extern struct settingsType settings;
 extern int EmptySlotAddress;
 extern struct buttonType buttons[NUMBER_OF_BUTTONS];
@@ -125,6 +133,8 @@ void readFromEEPROM(char * slotname);
 void deleteSlots();
 void listSlots();
 void printCurrentSlot();
+void makeTone(uint8_t kind, uint8_t param);
+
 
 void BlinkLed();
 int freeRam ();

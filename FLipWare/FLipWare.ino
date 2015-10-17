@@ -158,6 +158,8 @@ int clickTime=DEFAULT_CLICK_TIME;
 int waitTime=DEFAULT_WAIT_TIME;
 
 int EmptySlotAddress = 0;
+uint8_t reportSlotParameters = 0;
+uint8_t reportRawValues = 0;
 
 unsigned long currentTime;
 unsigned long previousTime = 0;
@@ -168,16 +170,19 @@ unsigned long time=0;
 uint8_t actButton=0;
 uint8_t actSlot=0;
 
-int pressure;
 int down;
 int left;
 int up;
 int right;
+
+int x, holdX;
+int y, holdY;
+int pressure, holdPressure;
+
+
 float accumXpos = 0.f;
 float accumYpos = 0.f;
 float accelFactor;
-int x;
-int y;
 
 int8_t moveX=0;       
 int8_t moveY=0;       
@@ -193,7 +198,13 @@ uint8_t blinkCount=0;
 uint8_t blinkTime=0;
 uint8_t blinkStartTime=0;
 
+#define HOLD_IDLE 0
+#define HOLD_X    1
+#define HOLD_Y    2
+#define HOLD_PRESSURE 3
+
 uint8_t specialMode =0;
+uint8_t holdMode =HOLD_IDLE;
 
 int inByte=0;
 char * keystring=0;
@@ -214,6 +225,7 @@ extern uint8_t CimParserActive;
 extern uint8_t StandAloneMode;
 
 // extern void init_CIM_frame (void);
+
 
 ////////////////////////////////////////
 // Setup: program execution starts here
@@ -301,7 +313,7 @@ void loop() {
           previousTime = currentTime;
           accelFactor= timeDifference / 10000.0f;      
   
-          if (DebugOutput==DEBUG_LIVEREPORTS)   { 
+          if (reportRawValues)   { 
             if (cnt++ > 10) {                    // report raw values !
               Serial.print("AT RR ");Serial.print(pressure);Serial.print(",");
               Serial.print(up);Serial.print(",");Serial.print(down);Serial.print(",");
@@ -310,9 +322,12 @@ void loop() {
             }
           }
 
+              
           if (calib_now == 0)  {
               x = (left-right) - settings.cx;
               y = (up-down) - settings.cy;
+              if (holdMode == HOLD_X) x=holdX;
+              if (holdMode == HOLD_Y) y=holdY;
           }
           else  {
               calib_now--;           // wait for calibration
@@ -326,54 +341,21 @@ void loop() {
           if (abs(y)<= settings.dy) y=0;
 
 
-         
-         switch (specialMode)  {
-            case 0: 
-               if (pressure > settings.tt) { 
-                   specialMode++;
-                   #ifdef TEENSY
-                     tone(16, 4000, 200);
-                   #endif
-                   initDebouncers();
-                   release_all();
-                   }
-                   break;
-            case 1:             
-                if (pressure < 530)  
-                    specialMode++;
-                  break; 
-            case 2:
-               if (handleButton(0, (y<-350) ? 1 : 0)) specialMode=3;
-               else if (handleButton(1, (x<-350) ? 1 : 0)) specialMode=3;
-               else if (handleButton(2, (x>350) ? 1 : 0)) specialMode=3;
-               else if (handleButton(LONGSIP_BUTTON, pressure < settings.ts  ? 1 : 0)) specialMode=3;
-               else if (handleButton(LONGPUFF_BUTTON, pressure > settings.tp  ? 1 : 0)) specialMode=3;
-
-                /*
-               if (pressure > 650) { 
-                   specialMode=3;
-                   #ifdef TEENSY
-                     tone(16, 4000, 200);
-                   #endif
-                   }
-                   */
-               break;
-            case 3:             
-                if (pressure < 530)
-                 {  
-                    specialMode=0;
-                    initDebouncers();
-                 }
-                 break; 
-          }
-
+          handleSpecialMode();
+          
           if (specialMode==0)
           {  
                 for (int i=0;i<NUMBER_OF_PHYSICAL_BUTTONS;i++)    // update button press / release events
                     handleButton(i, digitalRead(input_map[i]) == LOW ? 1 : 0);
           
-                handleButton(SIP_BUTTON, pressure < settings.ts ? 1 : 0); 
-                handleButton(PUFF_BUTTON, pressure > settings.tp ? 1 : 0);
+                if (holdMode == HOLD_PRESSURE)   {
+                   handleButton(SIP_BUTTON, holdPressure < settings.ts ? 1 : 0); 
+                   handleButton(PUFF_BUTTON, holdPressure > settings.tp ? 1 : 0);
+                }
+                else  {
+                   handleButton(SIP_BUTTON, pressure < settings.ts ? 1 : 0); 
+                   handleButton(PUFF_BUTTON, pressure > settings.tp ? 1 : 0);
+                }
               
                 
                 if (settings.mouseOn == 1) {
@@ -459,6 +441,89 @@ void loop() {
 }
 
 
+#define SPECIALMODE_XY_THRESHOLD 350
+#define SPECIALMODE_PUFF_RELEASE 530
+#define SPECIALMODE_SIP_RELEASE  505
+#define SPECIALMODE_STABLETIME   20
+#define SPECIALMODE_STABLEEXIT   250
+
+void handleSpecialMode()
+{         
+    static int waitStable=0;
+    
+         switch (specialMode)  {
+            case 0:   // IDLE
+               if (pressure > settings.tt) { 
+                   specialMode=1;
+                   makeTone(TONE_ENTERSPECIAL,0 );             
+                   initDebouncers();
+                   release_all();
+                   }
+               if (pressure < 1024-settings.tt ) { 
+                   if (holdMode==HOLD_IDLE)
+                   {
+                     specialMode=10;       // enter hold mode detection
+                     makeTone(TONE_HOLD,0 );             
+                     initDebouncers();
+                     release_all();
+                   } 
+                   else  
+                   {
+                     specialMode=13;   // exit hold mode
+                     makeTone(TONE_HOLD,2 );             
+                   } 
+                 }
+                 break;
+            case 1:   // puffed, wait for release          
+                if (pressure < SPECIALMODE_PUFF_RELEASE)
+                   waitStable++;
+                else waitStable=0;
+                if (waitStable>=SPECIALMODE_STABLETIME)
+                    specialMode=2;
+                  break; 
+            case 2:  // specialmode active
+               if (handleButton(0, (y<-SPECIALMODE_XY_THRESHOLD) ? 1 : 0)) specialMode=99;
+               else if (handleButton(1, (x<-SPECIALMODE_XY_THRESHOLD) ? 1 : 0)) specialMode=99;
+               else if (handleButton(2, (x>SPECIALMODE_XY_THRESHOLD) ? 1 : 0)) specialMode=99;
+               else if (handleButton(LONGSIP_BUTTON, pressure < settings.ts  ? 1 : 0)) specialMode=99;
+               else if (handleButton(LONGPUFF_BUTTON, pressure > settings.tp  ? 1 : 0)) specialMode=99;
+               else { waitStable++; if (waitStable>SPECIALMODE_STABLEEXIT) { waitStable=0; specialMode=13; makeTone(TONE_EXITSPECIAL,0 ); } }
+               break;
+
+            case 10:   // sipped, wait for release to enter detect hold state          
+                if (pressure > SPECIALMODE_SIP_RELEASE)
+                   waitStable++;
+                else waitStable=0;
+                if (waitStable>=SPECIALMODE_STABLETIME)
+                    specialMode=11;
+                 break; 
+            case 11:  // detect hold state
+               if ((y<-settings.dy) || (y>settings.dy)) {holdMode=HOLD_Y; holdY=y; specialMode=12; }
+               else if ((x<-settings.dx) || (x>settings.dx)) {holdMode=HOLD_X; holdX=x; specialMode=12; }
+               else if ((pressure<settings.ts) || (pressure>settings.tp)) {holdMode=HOLD_PRESSURE; holdPressure=pressure; specialMode=12; }
+               else { waitStable++; if (waitStable>SPECIALMODE_STABLEEXIT) { waitStable=0; specialMode=13; makeTone(TONE_HOLD,2 ); } }
+               break;
+
+            case 12:   // hold mode selected          
+                    makeTone(TONE_HOLD,1 );             
+                    specialMode=99;
+                break; 
+            case 13:   // sipped, wait for release to exit hold mode          
+                if (pressure > SPECIALMODE_SIP_RELEASE)  
+                {
+                    holdMode=HOLD_IDLE;
+                    specialMode=99;
+                }
+                break; 
+
+            default:  // end special mode, enter idle again           
+                    initDebouncers();
+                    release_all();
+                    specialMode=0;
+                 break; 
+          }
+}
+
 void handlePress (int buttonIndex)   // a button was pressed
 {   
     performCommand(buttons[buttonIndex].mode,buttons[buttonIndex].value,buttons[buttonIndex].keystring,1);
@@ -507,7 +572,7 @@ uint8_t handleButton(int i, uint8_t state)    // button debouncing and longpress
                  if (!inHoldMode(i)) 
                    handlePress(i); 
                  handleRelease(i);
-                 return(1);  
+                 return(1);         // indicate that button action has been performed !
             }
           }
        }
@@ -575,7 +640,7 @@ void performCommand (uint8_t cmd, int16_t par1, char * keystring, int8_t periodi
              release_all();
              if (DebugOutput==DEBUG_FULLOUTPUT)  
                Serial.print("set mode for button "); Serial.println(par1);
-             if ((par1>0) && (par1<=NUMBER_OF_BUTTONS))
+             if ((par1>=0) && (par1<=NUMBER_OF_BUTTONS))
                  actButton=par1;
              else  Serial.println("?");
           break;
@@ -654,31 +719,31 @@ void performCommand (uint8_t cmd, int16_t par1, char * keystring, int8_t periodi
              settings.ws=par1;
           break;
       case CMD_MOUSE_MOVEX:
-             if (DebugOutput==DEBUG_FULLOUTPUT)  
-               Serial.print("mouse move x "); Serial.println(par1);
+             if (DebugOutput==DEBUG_FULLOUTPUT) 
+             {  Serial.print("mouse move x "); Serial.println(par1); }
              Mouse.move(par1, 0);
              if (periodicMouseMovement) moveX=par1;
           break;
       case CMD_MOUSE_MOVEY:
              if (DebugOutput==DEBUG_FULLOUTPUT)  
-               Serial.print("mouse move y "); Serial.println(par1);
+             {  Serial.print("mouse move y "); Serial.println(par1); }
              Mouse.move(0, par1);
              if (periodicMouseMovement) moveY=par1;
           break;
       case CMD_KEY_WRITE:
              if (DebugOutput==DEBUG_FULLOUTPUT)  
-               Serial.print("keyboard write: "); Serial.println(keystring);
+             {  Serial.print("keyboard write: "); Serial.println(keystring); }
              writeKeystring=keystring;
              break;
       case CMD_KEY_PRESS:
              if (DebugOutput==DEBUG_FULLOUTPUT)  
-               Serial.print("key press: "); Serial.println(keystring);
+             {  Serial.print("key press: "); Serial.println(keystring); }
              if (keystring[strlen(keystring)-1] != ' ') strcat(keystring," ");
              setKeyValues(keystring);
              break;
       case CMD_KEY_RELEASE:
              if (DebugOutput==DEBUG_FULLOUTPUT)  
-               Serial.print("key release: ");  Serial.println(keystring);
+             {  Serial.print("key release: ");  Serial.println(keystring); }
              strcat(keystring," ");
              releaseKeys(keystring);             
              break;
@@ -690,13 +755,13 @@ void performCommand (uint8_t cmd, int16_t par1, char * keystring, int8_t periodi
             
       case CMD_SAVE_SLOT:
              if (DebugOutput==DEBUG_FULLOUTPUT)  
-               Serial.print("save slot ");  Serial.println(keystring);
+             {  Serial.print("save slot ");  Serial.println(keystring); }
              release_all();
              saveToEEPROM(keystring); 
           break;
       case CMD_LOAD_SLOT:
              if (DebugOutput==DEBUG_FULLOUTPUT)  
-               Serial.print("load slot: "); Serial.println(keystring);
+             {  Serial.print("load slot: "); Serial.println(keystring); }
              release_all();
              if (keystring)
                 readFromEEPROM(keystring);
@@ -706,6 +771,7 @@ void performCommand (uint8_t cmd, int16_t par1, char * keystring, int8_t periodi
              if (DebugOutput==DEBUG_FULLOUTPUT)  
                Serial.println("list slots: ");
              release_all();
+             reportSlotParameters=1;   // connection to host: start reporting slot parameters !
              listSlots();
           break;
       case CMD_NEXT_SLOT:
@@ -750,9 +816,7 @@ void performCommand (uint8_t cmd, int16_t par1, char * keystring, int8_t periodi
                Serial.println("start calibration");
              blinkCount=10;  blinkStartTime=20;
              calib_now=100;
-             #ifdef TEENSY
-               tone(16, 100, 200);
-             #endif
+             makeTone(TONE_CALIB,0);
           break;
       case CMD_AX:
              if (DebugOutput==DEBUG_FULLOUTPUT)  
@@ -785,10 +849,10 @@ void performCommand (uint8_t cmd, int16_t par1, char * keystring, int8_t periodi
              settings.tp=par1;
           break;
       case CMD_SR:
-            DebugOutput=DEBUG_LIVEREPORTS;
+            reportRawValues=1;
           break;
       case CMD_ER:
-            DebugOutput=DEBUG_NOOUTPUT;
+            reportRawValues=0;
           break;
       case CMD_TT:
              if (DebugOutput==DEBUG_FULLOUTPUT)  
@@ -845,6 +909,35 @@ void UpdateLeds()
   else
      digitalWrite(LED_PIN,HIGH);       
 }
+
+
+void makeTone(uint8_t kind, uint8_t param)
+{
+  #ifdef TEENSY
+   switch (kind) {
+    case TONE_ENTERSPECIAL: 
+               tone(16, 4000, 200);
+             break;
+    case TONE_EXITSPECIAL: 
+               tone(16, 4000, 100);
+             break;
+    case TONE_CALIB: 
+               tone(16, 100, 600);
+             break;
+    case TONE_CHANGESLOT:
+              tone(16, 2000+200*param, 200);
+             break;
+    case TONE_HOLD:
+              switch (param) {
+               case 0: tone(16, 3000, 500); break;
+               case 1: tone(16, 3500, 100); break;
+               case 2: tone(16, 3000, 100); break;
+               }
+             break;
+     }
+  #endif
+}
+
 
 
 int freeRam ()

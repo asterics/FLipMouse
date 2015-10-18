@@ -65,7 +65,7 @@
           AT DY <num>     deadzone y-axis
           AT TS <num>     treshold sip action
           AT TP <num>     treshold puff action
-          AT TT <num>     treshold short/long sip or puff (milliseconds)
+          AT TT <num>     treshold special mode / hold mode
 
    supported key identifiers for key press command (AT KP):
  
@@ -144,7 +144,7 @@
 struct settingsType settings = {         // type definition see fabi.h
     "empty",
     1,                                   //  Mouse cursor movement active (not the alternative functions )
-    40, 40, 60, 60, 500, 525, 3, 2500,   // accx, accy, deadzone x, deadzone y, threshold sip, threshold puff, wheel step, threshold time (short/longpress)
+    40, 40, 60, 60, 500, 525, 3, 620,    // accx, accy, deadzone x, deadzone y, threshold sip, threshold puff, wheel step, threshold special/hold mode
     50, 50, 50, 50 ,                     // gain up / down / left / right
     0, 0                                 // offset x / y
 }; 
@@ -441,7 +441,7 @@ void loop() {
 }
 
 
-#define SPECIALMODE_XY_THRESHOLD 350
+#define SPECIALMODE_XY_THRESHOLD 450
 #define SPECIALMODE_PUFF_RELEASE 530
 #define SPECIALMODE_SIP_RELEASE  505
 #define SPECIALMODE_STABLETIME   20
@@ -856,7 +856,7 @@ void performCommand (uint8_t cmd, int16_t par1, char * keystring, int8_t periodi
           break;
       case CMD_TT:
              if (DebugOutput==DEBUG_FULLOUTPUT)  
-               Serial.println("set time threshold");
+               Serial.println("set special threshold");
              settings.tt=par1;
           break;
       case CMD_GU:

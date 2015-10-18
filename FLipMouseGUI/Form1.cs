@@ -24,7 +24,7 @@ namespace MouseApp2
 
         const int SPEED_CHANGE_STEP = 2;
         const int DEADZONE_CHANGE_STEP = 10;
-        const int TIME_CHANGE_STEP = 5;
+        const int SPECIALMODE_CHANGE_STEP = 5;
         const int PRESSURE_CHANGE_STEP = 1;
         const int GAIN_CHANGE_STEP = 2;
 
@@ -111,9 +111,9 @@ namespace MouseApp2
                 LeftFunctionMenu.Items.Add(str);
                 RightFunctionMenu.Items.Add(str);
                 SipFunctionMenu.Items.Add(str);
-                LongSipFunctionMenu.Items.Add(str);
+                SpecialSipFunctionMenu.Items.Add(str);
                 PuffFunctionMenu.Items.Add(str);
-                LongPuffFunctionMenu.Items.Add(str);
+                SpecialPuffFunctionMenu.Items.Add(str);
             }
 
             Button1FunctionBox.SelectedIndex = CMD_NEXT;
@@ -124,9 +124,9 @@ namespace MouseApp2
             LeftFunctionMenu.SelectedIndex = CMD_PRESS_KEYS; LeftParameterText.Text = "KEY_LEFT ";
             RightFunctionMenu.SelectedIndex = CMD_PRESS_KEYS; RightParameterText.Text = "KEY_RIGHT ";
             SipFunctionMenu.SelectedIndex = CMD_PRESS_LEFT;
-            LongSipFunctionMenu.SelectedIndex = CMD_NOACTION;
+            SpecialSipFunctionMenu.SelectedIndex = CMD_NOACTION;
             PuffFunctionMenu.SelectedIndex = CMD_CLICK_RIGHT;
-            LongPuffFunctionMenu.SelectedIndex = CMD_CALIBRATE;
+            SpecialPuffFunctionMenu.SelectedIndex = CMD_CALIBRATE;
 
             foreach (string str in keyOptions)
             {
@@ -138,9 +138,9 @@ namespace MouseApp2
                 LeftComboBox.Items.Add(str);
                 RightComboBox.Items.Add(str);
                 SipComboBox.Items.Add(str);
-                LongSipComboBox.Items.Add(str);
+                SpecialSipComboBox.Items.Add(str);
                 PuffComboBox.Items.Add(str);
-                LongPuffComboBox.Items.Add(str);
+                SpecialPuffComboBox.Items.Add(str);
             }
 
             updateComPorts();
@@ -328,7 +328,7 @@ namespace MouseApp2
                     case 6: sipThresholdBar.Value = Int32.Parse(actToken); break;  // threshold sip
                     case 7: puffThresholdBar.Value = Int32.Parse(actToken); break;  // threshold puff
                     case 8: break;  // mouse wheel stepsize, currently not used
-                    case 9: timeThresholdBar.Value = Int32.Parse(actToken); break;  // time threshold for longpress
+                    case 9: specialThresholdBar.Value = Int32.Parse(actToken); specialThresholdLabel.Text = specialThresholdBar.Value.ToString() +" / "+(1024-specialThresholdBar.Value).ToString(); break;  // threshold special/hold functions
                     case 10: upGainBar.Value = Int32.Parse(actToken); upGainLabel.Text = upGainBar.Value.ToString(); break;    // up gain 
                     case 11: downGainBar.Value = Int32.Parse(actToken); downGainLabel.Text = downGainBar.Value.ToString(); break;  // down gain
                     case 12: leftGainBar.Value = Int32.Parse(actToken); leftGainLabel.Text = leftGainBar.Value.ToString(); break;  // left gain
@@ -358,15 +358,15 @@ namespace MouseApp2
                     case 35: SipFunctionMenu.SelectedIndex = Int32.Parse(actToken); break;
                     case 36: SipNumericParameter.Value = Int32.Parse(actToken); break;
                     case 37: SipParameterText.Text = actToken; break;
-                    case 38: LongSipFunctionMenu.SelectedIndex = Int32.Parse(actToken); break;
-                    case 39: LongSipNumericParameter.Value = Int32.Parse(actToken); break;
-                    case 40: LongSipParameterText.Text = actToken; break;
+                    case 38: SpecialSipFunctionMenu.SelectedIndex = Int32.Parse(actToken); break;
+                    case 39: SpecialSipNumericParameter.Value = Int32.Parse(actToken); break;
+                    case 40: SpecialSipParameterText.Text = actToken; break;
                     case 41: PuffFunctionMenu.SelectedIndex = Int32.Parse(actToken); break;
                     case 42: PuffNumericParameter.Value = Int32.Parse(actToken); break;
                     case 43: PuffParameterText.Text = actToken; break;
-                    case 44: LongPuffFunctionMenu.SelectedIndex = Int32.Parse(actToken); break;
-                    case 45: LongPuffNumericParameter.Value = Int32.Parse(actToken); break;
-                    case 46: LongPuffParameterText.Text = actToken; break;
+                    case 44: SpecialPuffFunctionMenu.SelectedIndex = Int32.Parse(actToken); break;
+                    case 45: SpecialPuffNumericParameter.Value = Int32.Parse(actToken); break;
+                    case 46: SpecialPuffParameterText.Text = actToken; break;
 
                     default: done = true; break;
                 }
@@ -624,7 +624,7 @@ namespace MouseApp2
                 sendCmd("AT DY " + deadzoneYLabel.Text);
                 sendCmd("AT TS " + sipThresholdLabel.Text);
                 sendCmd("AT TP " + puffThresholdLabel.Text);
-                sendCmd("AT TT " + timeThresholdLabel.Text);
+                sendCmd("AT TT " + specialThresholdLabel.Text);
                 sendCmd("AT GU " + upGainLabel.Text);
                 sendCmd("AT GD " + downGainLabel.Text);
                 sendCmd("AT GL " + leftGainLabel.Text);
@@ -641,9 +641,9 @@ namespace MouseApp2
                 updateOneButton(6, LeftFunctionMenu.SelectedIndex, LeftParameterText.Text, LeftNumericParameter.Value.ToString());
                 updateOneButton(7, RightFunctionMenu.SelectedIndex, RightParameterText.Text, RightNumericParameter.Value.ToString());
                 updateOneButton(8, SipFunctionMenu.SelectedIndex, SipParameterText.Text, SipNumericParameter.Value.ToString());
-                updateOneButton(9, LongSipFunctionMenu.SelectedIndex, LongSipParameterText.Text, LongSipNumericParameter.Value.ToString());
+                updateOneButton(9, SpecialSipFunctionMenu.SelectedIndex, SpecialSipParameterText.Text, SpecialSipNumericParameter.Value.ToString());
                 updateOneButton(10, PuffFunctionMenu.SelectedIndex, PuffParameterText.Text, PuffNumericParameter.Value.ToString());
-                updateOneButton(11, LongPuffFunctionMenu.SelectedIndex, LongPuffParameterText.Text, LongPuffNumericParameter.Value.ToString());
+                updateOneButton(11, SpecialPuffFunctionMenu.SelectedIndex, SpecialPuffParameterText.Text, SpecialPuffNumericParameter.Value.ToString());
 
                 addToLog("The selected settings have been applied.");
                 sendCmd("AT SR");
@@ -745,9 +745,10 @@ namespace MouseApp2
             puffThresholdLabel.Text = puffThresholdBar.Value.ToString();
         }
 
-        private void timeThresholdBar_Scroll(object sender, EventArgs e)
+        private void specialThresholdBar_Scroll(object sender, EventArgs e)
         {
-            timeThresholdLabel.Text = timeThresholdBar.Value.ToString();
+            specialThresholdLabel.Text = 
+            specialThresholdBar.Value.ToString() + " / " + (1024 - specialThresholdBar.Value).ToString();
         }
 
 
@@ -805,9 +806,9 @@ namespace MouseApp2
             updateVisibility(SipFunctionMenu.SelectedIndex, SipParameterText, SipNumericParameter, SipComboBox, SipParameterLabel, clearButtonSip);
         }
 
-        private void LongSipFunctionMenu_SelectedIndexChanged(object sender, EventArgs e)
+        private void SpecialSipFunctionMenu_SelectedIndexChanged(object sender, EventArgs e)
         {
-            updateVisibility(LongSipFunctionMenu.SelectedIndex, LongSipParameterText, LongSipNumericParameter, LongSipComboBox, LongSipParameterLabel, clearButtonLongSip);
+            updateVisibility(SpecialSipFunctionMenu.SelectedIndex, SpecialSipParameterText, SpecialSipNumericParameter, SpecialSipComboBox, SpecialSipParameterLabel, clearButtonSpecialSip);
         }
 
         private void PuffFunctionMenu_SelectedIndexChanged(object sender, EventArgs e)
@@ -815,9 +816,9 @@ namespace MouseApp2
             updateVisibility(PuffFunctionMenu.SelectedIndex, PuffParameterText, PuffNumericParameter, PuffComboBox, PuffParameterLabel, clearButtonPuff);
         }
 
-        private void LongPuffFunctionMenu_SelectedIndexChanged(object sender, EventArgs e)
+        private void SpecialPuffFunctionMenu_SelectedIndexChanged(object sender, EventArgs e)
         {
-            updateVisibility(LongPuffFunctionMenu.SelectedIndex, LongPuffParameterText, LongPuffNumericParameter, LongPuffComboBox, LongPuffParameterLabel, clearButtonLongPuff);
+            updateVisibility(SpecialPuffFunctionMenu.SelectedIndex, SpecialPuffParameterText, SpecialPuffNumericParameter, SpecialPuffComboBox, SpecialPuffParameterLabel, clearButtonSpecialPuff);
         }
 
         // update the keycode parameters:
@@ -908,13 +909,13 @@ namespace MouseApp2
             SipParameterText.Text = "";
         }
 
-        private void LongSipComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        private void SpecialSipComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
-            updateKeyCodeParameter(LongSipComboBox, LongSipParameterText);
+            updateKeyCodeParameter(SpecialSipComboBox, SpecialSipParameterText);
         }
-        private void clearButtonLongSip_Click(object sender, EventArgs e)
+        private void clearButtonSpecialSip_Click(object sender, EventArgs e)
         {
-            LongSipParameterText.Text = "";
+            SpecialSipParameterText.Text = "";
         }
 
         private void PuffComboBox_SelectedIndexChanged(object sender, EventArgs e)
@@ -926,13 +927,13 @@ namespace MouseApp2
             PuffParameterText.Text = "";
         }
 
-        private void LongPuffComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        private void SpecialPuffComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
-            updateKeyCodeParameter(LongPuffComboBox, LongPuffParameterText);
+            updateKeyCodeParameter(SpecialPuffComboBox, SpecialPuffParameterText);
         }
-        private void clearButtonLongPuff_Click(object sender, EventArgs e)
+        private void clearButtonSpecialPuff_Click(object sender, EventArgs e)
         {
-            LongPuffParameterText.Text = "";
+            SpecialPuffParameterText.Text = "";
         }
 
         // draw live values on panels 
@@ -1115,29 +1116,29 @@ namespace MouseApp2
             clickTimer.Start();
         }
 
-        private void decTimeThreshold_Click(object sender, EventArgs e)
+        private void decSpecialThreshold_Click(object sender, EventArgs e)
         {
-            if (timeThresholdBar.Value >= timeThresholdBar.Minimum + TIME_CHANGE_STEP)
-                timeThresholdBar.Value -= TIME_CHANGE_STEP;
-            timeThresholdLabel.Text = timeThresholdBar.Value.ToString();
+            if (specialThresholdBar.Value >= specialThresholdBar.Minimum + SPECIALMODE_CHANGE_STEP)
+                specialThresholdBar.Value -= SPECIALMODE_CHANGE_STEP;
+            specialThresholdLabel.Text = specialThresholdBar.Value.ToString() + " / " + (1024 - specialThresholdBar.Value).ToString();
 
         }
-        private void decTimeThreshold_MouseHover(object sender, EventArgs e)
+        private void decSpecialThreshold_MouseHover(object sender, EventArgs e)
         {
-            functionPointer = new ClickDelegate(decTimeThreshold_Click);
+            functionPointer = new ClickDelegate(decSpecialThreshold_Click);
             clickTimer.Start();
         }
 
-        private void incTimeThreshold_Click(object sender, EventArgs e)
+        private void incSpecialThreshold_Click(object sender, EventArgs e)
         {
-            if (timeThresholdBar.Value <= timeThresholdBar.Maximum - TIME_CHANGE_STEP)
-                timeThresholdBar.Value += TIME_CHANGE_STEP;
-            timeThresholdLabel.Text = timeThresholdBar.Value.ToString();
+            if (specialThresholdBar.Value <= specialThresholdBar.Maximum - SPECIALMODE_CHANGE_STEP)
+                specialThresholdBar.Value += SPECIALMODE_CHANGE_STEP;
+            specialThresholdLabel.Text = specialThresholdBar.Value.ToString() + " / " + (1024 - specialThresholdBar.Value).ToString();
 
         }
-        private void incTimeThreshold_MouseHover(object sender, EventArgs e)
+        private void incSpecialThreshold_MouseHover(object sender, EventArgs e)
         {
-            functionPointer = new ClickDelegate(incTimeThreshold_Click);
+            functionPointer = new ClickDelegate(incSpecialThreshold_Click);
             clickTimer.Start();
         }
 

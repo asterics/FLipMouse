@@ -1,21 +1,30 @@
-There are different file versions, depending on the Lipmouse design (especially the mouth piece and mounting construction):
+There are different file versions, depending on the manufacturing process and different versions:
 
-###earlier versions:
+### lipmouse_case_lasercut.cdr
 
-There were earlier versions of the case design, but they are not hosted in this repository.
+Process: Lasercut
+Software: Corel Draw, Version X5 minimum
 
-
-###lipmouse_case_lasercut_v2.5_backmount.cdr
-
-Improved case design: top plate mounting parts are moved inside the housing, making a smaller outline;
-closed a small gap at the backplane (improves stability and design)
-contains a part for testing and productive laser cutting.
-Future versions will have 2 housings on a 250mmx250mm acrylic glass.
-Added the settings file lipsy_v2.4.sgx for the laser cutter software (Spirit GX). These settings are valid for all future versions of the CDR files, except there is a SGX file with a higher version number
+This is the current case design for the FLipmouse.
+It contains only one FLipmouse case on a 250mmx250mm acrylic glass.
 
 
-###lipmouse_case_lasercut_v2.6.cdr
+### lipmouse_case_lasercut_with_1button.cdr
 
-Modified for the new PCB design (including outlets for the jackplugs, LEDs and buttons).
-No need for sidemounts, so the suffix is removed.
-SGX file is still valid
+Same FLipmouse case as in lipmouse_case_lasercut, an additional button case is added.
+This button case can be used for 30mm core drill buttons.
+
+
+### FLipmouse_Lasercut.sgx
+
+Process: Lasercut
+Software: SpiritGX lasercutter printer driver
+
+This file contains the necessary settings for the lasercutter driver.
+Optimized for following parameters (Happylab in Vienna):
+
+60W laser power
+transparent orange acrylic glass
+
+
+

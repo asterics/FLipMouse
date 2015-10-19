@@ -46,6 +46,8 @@ byte readEEPROM(unsigned int eeaddress )
 
 void printCurrentSlot()
 {
+  if (reportSlotParameters)
+  {
         Serial.print("loading:");
         Serial.print(settings.slotname); Serial.print(TOKEN_SEPERATOR);
         Serial.print(settings.mouseOn); Serial.print(TOKEN_SEPERATOR);
@@ -68,6 +70,7 @@ void printCurrentSlot()
            Serial.print(buttons[i].keystring);Serial.print(TOKEN_SEPERATOR);
         }
         Serial.println("END");
+   }
 }
 
 void saveToEEPROM(char * slotname)
@@ -149,7 +152,7 @@ void readFromEEPROM(char * slotname)
       while ((act_slotname[i++]=readEEPROM(address++)) != 0) ; 
  
       if (DebugOutput==DEBUG_FULLOUTPUT)  
-        Serial.print("found slotname "); Serial.println(act_slotname);
+      {  Serial.print("found slotname "); Serial.println(act_slotname); }
      
       if (slotname)  {
         if (!strcmp(act_slotname, slotname)) found=1;  
@@ -176,9 +179,7 @@ void readFromEEPROM(char * slotname)
       numSlots++;
    }
    
-   #ifdef TEENSY
-     tone(16, 2000+200*actSlot, 200);
-   #endif
+   makeTone (TONE_CHANGESLOT,actSlot);
 
    EmptySlotAddress=address;
    if (tmpSlotAddress) nextSlotAddress=tmpSlotAddress;

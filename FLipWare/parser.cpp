@@ -135,7 +135,7 @@ void parseByte (int newByte)  // parse an incoming commandbyte from serial inter
                 if ((newByte=='T') || (newByte=='t')) readstate++; else readstate=0;
             break;
         case 2: 
-                if ((newByte==13) || (newByte==10))
+                if ((newByte==13) || (newByte==10))  // AT reply: "OK"
                 {  Serial.println("OK");  readstate=0; }
                 else if (newByte==' ') { cmdlen=0; readstate++; } 
                 else goto err;

@@ -115,12 +115,12 @@ void saveToEEPROM(char * slotname)
          
    // write general settings 
    p = (uint8_t*) &settings;
-   for (int t=0;t<sizeof(settingsType);t++)
+   for (unsigned int t=0;t<sizeof(settingsType);t++)
       writeEEPROM(address++,*p++);
 
    // write all buttons
    p = (uint8_t*) buttons;
-   for (int i=0;i<NUMBER_OF_BUTTONS*sizeof(buttonType);i++)
+   for (unsigned int i=0;i<NUMBER_OF_BUTTONS*sizeof(buttonType);i++)
         writeEEPROM(address++,*p++);
 
    if (EmptySlotAddress<=address) {
@@ -136,7 +136,7 @@ void readFromEEPROM(char * slotname)
    int address=0;
    int tmpSlotAddress=0;
    int tmpStartAddress=0;
-   uint8_t done;
+   //uint8_t done;
    uint8_t numSlots=0;
    uint8_t* p;
    
@@ -162,12 +162,12 @@ void readFromEEPROM(char * slotname)
       if (found)  {
            
         p = (uint8_t*) &settings;
-        for (int t=0;t<sizeof(settingsType);t++)
+        for (unsigned int t=0;t<sizeof(settingsType);t++)
             *p++=readEEPROM(address++);
         
         
         p = (uint8_t*) buttons;
-        for (int i=0;i<NUMBER_OF_BUTTONS*sizeof(buttonType);i++) 
+        for (unsigned int i=0;i<NUMBER_OF_BUTTONS*sizeof(buttonType);i++) 
            *p++=readEEPROM(address++);
            
         printCurrentSlot();

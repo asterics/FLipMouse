@@ -106,11 +106,14 @@
 // global variables
 
 #ifdef TEENSY
+  //Analog input pins (4FSRs + 1 pressure sensor)
   #define PRESSURE_SENSOR_PIN A0
   #define DOWN_SENSOR_PIN     A7
   #define LEFT_SENSOR_PIN     A5
   #define UP_SENSOR_PIN       A6
   #define RIGHT_SENSOR_PIN    A4
+  //Piezo Pin (for tone generation)  
+  #define TONE_PIN  16
 
   int8_t  input_map[NUMBER_OF_PHYSICAL_BUTTONS]={13,2,3};  //  maps physical button pins to button index 0,1,2  
   int8_t  led_map[NUMBER_OF_LEDS]={18,19,20};              //  maps leds pins   
@@ -118,27 +121,18 @@
 #endif
 
 #ifdef TEENSY_LC
+  //Analog input pins (4FSRs + 1 pressure sensor)
   #define PRESSURE_SENSOR_PIN A0
-  #define DOWN_SENSOR_PIN     A0
-  #define LEFT_SENSOR_PIN     A0
-  #define UP_SENSOR_PIN       A0
-  #define RIGHT_SENSOR_PIN    A0
+  #define DOWN_SENSOR_PIN     A6
+  #define LEFT_SENSOR_PIN     A9
+  #define UP_SENSOR_PIN       A7
+  #define RIGHT_SENSOR_PIN    A8
+  //Piezo Pin (for tone generation), TBD: change PCB
+  #define TONE_PIN  9
 
-  int8_t  input_map[NUMBER_OF_PHYSICAL_BUTTONS]={2,3,4};  //  maps physical button pins to button index 0,1,2  
-  int8_t  led_map[NUMBER_OF_LEDS]={16,17,21};              //  maps leds pins   
-  uint8_t LED_PIN = 13;                                     //  Led output pin
-#endif
-
-#ifdef ARDUINO_PRO_MICRO
-  #define PRESSURE_SENSOR_PIN A10
-  #define DOWN_SENSOR_PIN     A0
-  #define LEFT_SENSOR_PIN     A1
-  #define UP_SENSOR_PIN       A2
-  #define RIGHT_SENSOR_PIN    A3
-
-  int8_t  input_map[NUMBER_OF_PHYSICAL_BUTTONS]={2,3,4};
-  int8_t  led_map[NUMBER_OF_LEDS]={8,9,10};            
-  uint8_t LED_PIN = 17;
+  int8_t  input_map[NUMBER_OF_PHYSICAL_BUTTONS]={0,1,2};  //  maps physical button pins to button index 0,1,2  
+  int8_t  led_map[NUMBER_OF_LEDS]={5,16,17};              //  maps leds pins   
+  uint8_t LED_PIN = 13;                                     //  Led output pin, ATTENTION: if SPI (AUX header) is used, this pin is also SCK!!!
 #endif
 
 struct settingsType settings = {         // type definition see fabi.h
@@ -218,6 +212,7 @@ void handleRelease (int buttonIndex);    // a button was released
 uint8_t handleButton(int i, uint8_t state);    // button debouncing and longpress detection  
 void UpdateLeds();
 void initDebouncers();
+void handleSpecialMode();
 
 extern void handleCimMode(void);
 extern void init_CIM_frame(void);
@@ -238,12 +233,6 @@ void setup() {
    if (DebugOutput==DEBUG_FULLOUTPUT)  
      Serial.println("FLipMouse started, Flexible Assistive Button Interface ready !");
 
-   #ifdef ARDUINO_PRO_MICRO   // only needed for Arduino, automatically done for Teensy(duino)
-     Mouse.begin();
-     Keyboard.begin();
-     TXLED1;
-   #endif  
-   
    #ifdef TEENSY_LC
      Wire.begin();
    #endif
@@ -318,6 +307,15 @@ void loop() {
               Serial.print("AT RR ");Serial.print(pressure);Serial.print(",");
               Serial.print(up);Serial.print(",");Serial.print(down);Serial.print(",");
               Serial.print(left);Serial.print(",");Serial.println(right);
+
+              Serial.print("AnalogRAW:");
+              Serial.print(analogRead(UP_SENSOR_PIN));
+              Serial.print(",");
+              Serial.print(analogRead(DOWN_SENSOR_PIN));
+              Serial.print(",");
+              Serial.print(analogRead(LEFT_SENSOR_PIN));
+              Serial.print(",");
+              Serial.println(analogRead(RIGHT_SENSOR_PIN));
               cnt=0;
             }
           }
@@ -916,22 +914,22 @@ void makeTone(uint8_t kind, uint8_t param)
   #ifdef TEENSY
    switch (kind) {
     case TONE_ENTERSPECIAL: 
-               tone(16, 4000, 200);
+               tone(TONE_PIN, 4000, 200);
              break;
     case TONE_EXITSPECIAL: 
-               tone(16, 4000, 100);
+               tone(TONE_PIN, 4000, 100);
              break;
     case TONE_CALIB: 
-               tone(16, 100, 600);
+               tone(TONE_PIN, 100, 600);
              break;
     case TONE_CHANGESLOT:
-              tone(16, 2000+200*param, 200);
+              tone(TONE_PIN, 2000+200*param, 200);
              break;
     case TONE_HOLD:
               switch (param) {
-               case 0: tone(16, 3000, 500); break;
-               case 1: tone(16, 3500, 100); break;
-               case 2: tone(16, 3000, 100); break;
+               case 0: tone(TONE_PIN, 3000, 500); break;
+               case 1: tone(TONE_PIN, 3500, 100); break;
+               case 2: tone(TONE_PIN, 3000, 100); break;
                }
              break;
      }

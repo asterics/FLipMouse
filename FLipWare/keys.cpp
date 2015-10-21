@@ -73,7 +73,7 @@ void releaseKeys (char * text)
 void setKeyValues(char* text)
 {
   char * acttoken;
-  int modifiers=0;
+  //int modifiers=0;
 
   strcpy(tmptxt, text); 
   acttoken = strtok(tmptxt," ");

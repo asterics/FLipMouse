@@ -7,9 +7,15 @@
 #include <stdint.h>
 
 
-#define TEENSY               //  if Teensy2.0++ controller is used
-//#define TEENSY_LC              //  if Teensy LC controller is used
-// #define ARDUINO_PRO_MICRO   //  if Arduino Leonardo or Arduino Pro Micro is used 
+//#define TEENSY               //  if Teensy2.0++ controller is used (FLipmouse V1)
+#define TEENSY_LC              //  if Teensy LC controller is used (FLipmouse V2)
+
+
+#ifndef TEENSY
+#ifndef TEENSY_LC
+  #error "NO CHIP SELECTED, EITHER TEENSY OR TEENSY LC ARE SUPPORTED"
+#endif
+#endif
 
 #define NUMBER_OF_BUTTONS 11          // number of connected or virtual switches
 #define NUMBER_OF_PHYSICAL_BUTTONS 3  // number of connected switches

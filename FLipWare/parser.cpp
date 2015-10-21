@@ -1,4 +1,3 @@
-
 #include "fabi.h"
 
 uint8_t readstate=0;

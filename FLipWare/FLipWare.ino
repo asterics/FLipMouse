@@ -4,18 +4,34 @@
       allows control of HID functions via FLipmouse module and/or AT-commands  
    
 
-   requirements:  USB HID capable Arduino (Leonardo / Micro / Pro Micro)
-                  or Teensy 2.0++ with Teensyduino AddOn setup as USB composite device (Mouse + Keyboard + Serial)
-       optional:  Momentary switches connected to GPIO pins / force sensors connected to ADC pins
+   requirements:  Teensy 2.0++ or TeensyLC with external EEPROM
+                  Teensyduino AddOn for Arduino IDE
+                  board USB type set to USB composite device (Serial + Keyboard + Mouse + Joystick)
+        sensors:  3 momentary switches connected to GPIO pins / 4 force sensors + 1 pressure sensor connected to ADC pins 
        
    
    Supported AT-commands:  
    (sent via serial interface, use spaces between parameters and Enter (<cr>, ASCII-code 0x0d) to finish a command)
    
           AT                returns "OK"
-          AT ID             identification string will be returned (e.g. "FLipMouse V2.0")
-          AT BM <num>       button mode setting for a button (e.g. AT BM 2 -> next command defines the new function for button 2)
+          AT ID             returns identification string (e.g. "FLipMouse V2.0")
+          AT BM <num>       puts button <num> into programming mode (e.g. AT BM 2 -> next AT-command defines the new function for button 2)
+                            for the FLipmouse, there are 11 buttons available (3 physical buttons, 8 virtual functions): 
 
+                              1: internal button1 / Special UP
+                              2: external button2 / Special LEFT 
+                              3: external button3 / Special RIGHT 
+                              4: alternative UP 
+                              5: alternative DOWN 
+                              6: alternative LEFT 
+                              7: alternative RIGHT
+                              8: SIP (pressure lower than sip threshold)
+                              9: Special SIP
+                              10: PUFF (pressure bigger than puff threshold)
+                              11: Special PUFF
+
+    USB HID commands:
+      
           AT CL             click left mouse button  
           AT CR             click right mouse button  
           AT CD             click double with left mouse button
@@ -44,6 +60,8 @@
           AT KR <text>      key release: releases all keys identified in text    
           AT RA             release all: releases all currently pressed keys and buttons    
           
+    Housekeeping commands:
+
           AT SAVE <name>    save settings and current button modes to next free eeprom slot under given name (e.g. AT SAVE mouse1)
           AT LOAD <name>    load button modes from eeprom slot (e.g. AT LOAD mouse1 -> loads profile named "mouse1")
           AT LIST           list all saved mode names 
@@ -51,7 +69,7 @@
           AT CLEAR          clear EEPROM content (delete all stored slots)
           AT IDLE           idle command (no operation)
           
-    FLipMouse-specific commands:
+    FLipMouse-specific settings and commands:
 
           AT MM           mouse movements on, alternative functions off
           AT AF           alternative functions on, mouse movements off 
@@ -59,13 +77,17 @@
           AT SR           start reporting raw values
           AT ER           end reporting raw values
           AT CA           calibration of zeropoint
-          AT AX <num>     acceleration x-axis 
-          AT AY <num>     acceleration y-axis 
-          AT DX <num>     deadzone x-axis 
-          AT DY <num>     deadzone y-axis
-          AT TS <num>     treshold sip action
-          AT TP <num>     treshold puff action
-          AT TT <num>     treshold special mode / hold mode
+          AT AX <num>     acceleration x-axis  (0-100)
+          AT AY <num>     acceleration y-axis  (0-100)
+          AT DX <num>     deadzone x-axis  (0-1000)
+          AT DY <num>     deadzone y-axis  (0-1000)
+          AT TS <num>     treshold sip action  (0-512)
+          AT TP <num>     treshold puff action (512-1023)
+          AT TT <num>     treshold special mode / hold mode (512-1023)
+          AT GU <num>     gain for up sensor (0-100)
+          AT GD <num>     gain for down sensor (0-100)
+          AT GL <num>     gain for left sensor (0-100)
+          AT GR <num>     gain for right sensor (0-100)
 
    supported key identifiers for key press command (AT KP):
  
@@ -81,26 +103,25 @@
     
 */
 
-#include "fabi.h"        //  Bounce library used for button debouncing
+#include "fabi.h"        //  FABI command definitions
 #include <EEPROM.h>
-#include <Wire.h>
+#include <Wire.h>        // for the external EEPROM
 
 // Constants and Macro definitions
-
 
 #define DEFAULT_WAIT_TIME       5   // wait time for one loop interation in milliseconds
 #define DEFAULT_CLICK_TIME      8    // time for mouse click (loop iterations from press to release)
 #define DOUBLECLICK_MULTIPLIER  5    // CLICK_TIME factor for double clicks
 #define DEFAULT_DEBOUNCING_TIME 7   // debouncing interval for button-press / release
 
-#define UP_BUTTON       3     // index numbers of the virtual buttons (not pin numbers)
+#define UP_BUTTON       3     // index numbers of the virtual buttons (not pin numbers in this case !)
 #define DOWN_BUTTON     4
 #define LEFT_BUTTON     5
 #define RIGHT_BUTTON    6
 #define SIP_BUTTON      7
-#define LONGSIP_BUTTON  8
-#define PUFF_BUTTON     9
-#define LONGPUFF_BUTTON 10
+#define SPECIAL_SIP_BUTTON  8
+#define PUFF_BUTTON         9
+#define SPECIAL_PUFF_BUTTON 10
 
 
 // global variables
@@ -135,7 +156,7 @@
   uint8_t LED_PIN = 13;                                     //  Led output pin, ATTENTION: if SPI (AUX header) is used, this pin is also SCK!!!
 #endif
 
-struct settingsType settings = {         // type definition see fabi.h
+struct settingsType settings = {         // default settings valus, for type definition see fabi.h
     "empty",
     1,                                   //  Mouse cursor movement active (not the alternative functions )
     40, 40, 60, 60, 500, 525, 3, 620,    // accx, accy, deadzone x, deadzone y, threshold sip, threshold puff, wheel step, threshold special/hold mode
@@ -146,8 +167,8 @@ struct settingsType settings = {         // type definition see fabi.h
 struct buttonType buttons [NUMBER_OF_BUTTONS];                     // array for all buttons - type definition see fabi.h 
 struct buttonDebouncerType buttonDebouncers [NUMBER_OF_BUTTONS];   // array for all buttonsDebouncers - type definition see fabi.h 
 
-uint16_t calib_now = 1;                           // calibrate zeropoint right at startup !
-uint8_t DebugOutput = DEFAULT_DEBUGLEVEL;        // default: very chatty at the serial interface ...
+uint16_t calib_now = 1;                       // calibrate zeropoint right at startup !
+uint8_t DebugOutput = DEBUG_NOOUTPUT;         // for chatty serial interface use: DEBUG_FULLOUTPUT
 int clickTime=DEFAULT_CLICK_TIME;
 int waitTime=DEFAULT_WAIT_TIME;
 
@@ -256,7 +277,7 @@ void setup() {
    
    init_CIM_frame();  // for AsTeRICS CIM protocol compatibility
    
-   buttons[0].mode=CMD_SW;            // befault for button 1: switch alternative / mouse cursur control mode
+   buttons[0].mode=CMD_TOGGLE_ALTERNATIVE;            // default for button 1: switch alternative / mouse cursur control mode
    buttons[1].mode=CMD_MOUSE_WHEEL_UP;
    buttons[2].mode=CMD_MOUSE_WHEEL_DOWN;
    buttons[3].mode=CMD_KEY_PRESS; strcpy(buttons[3].keystring,"KEY_UP ");
@@ -266,7 +287,7 @@ void setup() {
    buttons[7].mode=CMD_MOUSE_PRESS_LEFT;
    buttons[8].mode=CMD_IDLE;    
    buttons[9].mode=CMD_MOUSE_CLICK_RIGHT;                          
-   buttons[10].mode=CMD_CA;                               // calibrate    
+   buttons[10].mode=CMD_CALIBRATE;          // calibrate    
    
    readFromEEPROM(0);  // read slot from first EEPROM slot if available !  
 
@@ -307,7 +328,7 @@ void loop() {
               Serial.print("AT RR ");Serial.print(pressure);Serial.print(",");
               Serial.print(up);Serial.print(",");Serial.print(down);Serial.print(",");
               Serial.print(left);Serial.print(",");Serial.println(right);
-
+              /*
               Serial.print("AnalogRAW:");
               Serial.print(analogRead(UP_SENSOR_PIN));
               Serial.print(",");
@@ -316,6 +337,7 @@ void loop() {
               Serial.print(analogRead(LEFT_SENSOR_PIN));
               Serial.print(",");
               Serial.println(analogRead(RIGHT_SENSOR_PIN));
+              */
               cnt=0;
             }
           }
@@ -483,8 +505,8 @@ void handleSpecialMode()
                if (handleButton(0, (y<-SPECIALMODE_XY_THRESHOLD) ? 1 : 0)) specialMode=99;
                else if (handleButton(1, (x<-SPECIALMODE_XY_THRESHOLD) ? 1 : 0)) specialMode=99;
                else if (handleButton(2, (x>SPECIALMODE_XY_THRESHOLD) ? 1 : 0)) specialMode=99;
-               else if (handleButton(LONGSIP_BUTTON, pressure < settings.ts  ? 1 : 0)) specialMode=99;
-               else if (handleButton(LONGPUFF_BUTTON, pressure > settings.tp  ? 1 : 0)) specialMode=99;
+               else if (handleButton(SPECIAL_SIP_BUTTON, pressure < settings.ts  ? 1 : 0)) specialMode=99;
+               else if (handleButton(SPECIAL_PUFF_BUTTON, pressure > settings.tp  ? 1 : 0)) specialMode=99;
                else { waitStable++; if (waitStable>SPECIALMODE_STABLEEXIT) { waitStable=0; specialMode=13; makeTone(TONE_EXITSPECIAL,0 ); } }
                break;
 
@@ -615,269 +637,269 @@ void release_all()  // releases all previously pressed keys
 //   periodicMouseMovement: if true, mouse will continue moving - if false: only one movement
 void performCommand (uint8_t cmd, int16_t par1, char * keystring, int8_t periodicMouseMovement)
 {
-  if (actButton != 0)
-  {
-      if (DebugOutput==DEBUG_FULLOUTPUT)
-      {  
-        Serial.print("got new mode for button "); Serial.print(actButton);Serial.print(":");
-        Serial.print(cmd);Serial.print(",");Serial.print(par1);Serial.print(",");Serial.println(keystring);
-      }
-      buttons[actButton-1].mode=cmd;
-      buttons[actButton-1].value=par1;
-      if (keystring==0) buttons[actButton-1].keystring[0]=0;
-      else strcpy(buttons[actButton-1].keystring,keystring);
-      actButton=0;
-      return;
-  }
-  
-  switch(cmd) {
-      case CMD_PRINT_ID:
-             Serial.println("FLipMouse V2.0"); 
-          break;
-      case CMD_BUTTON_MODE:
-             release_all();
-             if (DebugOutput==DEBUG_FULLOUTPUT)  
-               Serial.print("set mode for button "); Serial.println(par1);
-             if ((par1>=0) && (par1<=NUMBER_OF_BUTTONS))
-                 actButton=par1;
-             else  Serial.println("?");
-          break;
-      
-      case CMD_MOUSE_CLICK_LEFT:
-             if (DebugOutput==DEBUG_FULLOUTPUT)  
-               Serial.println("click left");
-             leftMouseButton=1;  leftClickRunning=clickTime;
-             break;
-      case CMD_MOUSE_CLICK_RIGHT:
-             if (DebugOutput==DEBUG_FULLOUTPUT)  
-               Serial.println("click right");
-             rightMouseButton=1; rightClickRunning=clickTime;
-             break;
-      case CMD_MOUSE_CLICK_DOUBLE:
-             if (DebugOutput==DEBUG_FULLOUTPUT)  
-               Serial.println("click double");
-             leftMouseButton=1;  doubleClickRunning=clickTime*DOUBLECLICK_MULTIPLIER;
-             break;
-      case CMD_MOUSE_CLICK_MIDDLE:
-             if (DebugOutput==DEBUG_FULLOUTPUT)  
-               Serial.println("click middle");
-             middleMouseButton=1; middleClickRunning=clickTime;
+    if (actButton != 0)  // if last command was BM (set buttonmode): store current command for this button !!
+    {
+        if (DebugOutput==DEBUG_FULLOUTPUT)
+        {  
+          Serial.print("got new mode for button "); Serial.print(actButton);Serial.print(":");
+          Serial.print(cmd);Serial.print(",");Serial.print(par1);Serial.print(",");Serial.println(keystring);
+        }
+        buttons[actButton-1].mode=cmd;
+        buttons[actButton-1].value=par1;
+        if (keystring==0) buttons[actButton-1].keystring[0]=0;
+        else strcpy(buttons[actButton-1].keystring,keystring);
+        actButton=0;
+        return;  // do not actually execute the command (just store it)
+    }
+    
+    switch(cmd) {
+        case CMD_PRINT_ID:
+               Serial.println(VERSION_STRING); 
             break;
-      case CMD_MOUSE_PRESS_LEFT:
-             if (DebugOutput==DEBUG_FULLOUTPUT)  
-               Serial.println("press left");
-             leftMouseButton=1; 
-             break;
-      case CMD_MOUSE_PRESS_RIGHT:
-             if (DebugOutput==DEBUG_FULLOUTPUT)  
-               Serial.println("press right");
-             rightMouseButton=1; 
-             break;
-      case CMD_MOUSE_PRESS_MIDDLE:
-             if (DebugOutput==DEBUG_FULLOUTPUT)  
-               Serial.println("press middle");
-             middleMouseButton=1; 
-             break;
-      case CMD_MOUSE_RELEASE_LEFT:
-             if (DebugOutput==DEBUG_FULLOUTPUT)  
-               Serial.println("release left");
-             leftMouseButton=0;
-             break; 
-      case CMD_MOUSE_RELEASE_RIGHT:
-             if (DebugOutput==DEBUG_FULLOUTPUT)  
-               Serial.println("release right");
-             rightMouseButton=0;
-             break; 
-      case CMD_MOUSE_RELEASE_MIDDLE:
-             if (DebugOutput==DEBUG_FULLOUTPUT)  
-               Serial.println("release middle");
-             middleMouseButton=0;
-             break; 
-      case CMD_MOUSE_WHEEL_UP:
-             if (DebugOutput==DEBUG_FULLOUTPUT)  
-               Serial.println("wheel up");
-             #ifndef ARDUINO_PRO_MICRO
-               Mouse.scroll(-settings.ws); 
-             #else
-               Mouse.move (0,0,-settings.ws); 
-             #endif
-          break;
-      case CMD_MOUSE_WHEEL_DOWN:
-             if (DebugOutput==DEBUG_FULLOUTPUT)  
-               Serial.println("wheel down");
-             #ifndef ARDUINO_PRO_MICRO
-               Mouse.scroll(settings.ws); 
-             #else
-               Mouse.move (0,0,settings.ws); 
-             #endif
-          break;
-      case CMD_MOUSE_WHEEL_STEP:
-             if (DebugOutput==DEBUG_FULLOUTPUT)  
-               Serial.println("wheel step");
-             settings.ws=par1;
-          break;
-      case CMD_MOUSE_MOVEX:
-             if (DebugOutput==DEBUG_FULLOUTPUT) 
-             {  Serial.print("mouse move x "); Serial.println(par1); }
-             Mouse.move(par1, 0);
-             if (periodicMouseMovement) moveX=par1;
-          break;
-      case CMD_MOUSE_MOVEY:
-             if (DebugOutput==DEBUG_FULLOUTPUT)  
-             {  Serial.print("mouse move y "); Serial.println(par1); }
-             Mouse.move(0, par1);
-             if (periodicMouseMovement) moveY=par1;
-          break;
-      case CMD_KEY_WRITE:
-             if (DebugOutput==DEBUG_FULLOUTPUT)  
-             {  Serial.print("keyboard write: "); Serial.println(keystring); }
-             writeKeystring=keystring;
-             break;
-      case CMD_KEY_PRESS:
-             if (DebugOutput==DEBUG_FULLOUTPUT)  
-             {  Serial.print("key press: "); Serial.println(keystring); }
-             if (keystring[strlen(keystring)-1] != ' ') strcat(keystring," ");
-             setKeyValues(keystring);
-             break;
-      case CMD_KEY_RELEASE:
-             if (DebugOutput==DEBUG_FULLOUTPUT)  
-             {  Serial.print("key release: ");  Serial.println(keystring); }
-             strcat(keystring," ");
-             releaseKeys(keystring);             
-             break;
-      case CMD_RELEASE_ALL:
-             if (DebugOutput==DEBUG_FULLOUTPUT)  
-               Serial.print("release all");
-             release_all();             
-             break;
-            
-      case CMD_SAVE_SLOT:
-             if (DebugOutput==DEBUG_FULLOUTPUT)  
-             {  Serial.print("save slot ");  Serial.println(keystring); }
-             release_all();
-             saveToEEPROM(keystring); 
-          break;
-      case CMD_LOAD_SLOT:
-             if (DebugOutput==DEBUG_FULLOUTPUT)  
-             {  Serial.print("load slot: "); Serial.println(keystring); }
-             release_all();
-             if (keystring)
-                readFromEEPROM(keystring);
-             else printCurrentSlot();
-          break;
-      case CMD_LIST_SLOTS:
-             if (DebugOutput==DEBUG_FULLOUTPUT)  
-               Serial.println("list slots: ");
-             release_all();
-             reportSlotParameters=1;   // connection to host: start reporting slot parameters !
-             listSlots();
-          break;
-      case CMD_NEXT_SLOT:
-             if (DebugOutput==DEBUG_FULLOUTPUT)  
-               Serial.print("load next slot");
-             // blinkCount=10;  blinkStartTime=15;  
-             release_all();
-             readFromEEPROM(0);
-             break;
-      case CMD_DELETE_SLOTS:
-             if (DebugOutput==DEBUG_FULLOUTPUT)  
-               Serial.println("delete slots"); 
-             release_all();
-             deleteSlots(); 
-          break;
-
-
-      case CMD_MM:
-             if (DebugOutput==DEBUG_FULLOUTPUT)  
-               Serial.println("mouse function on");
-             settings.mouseOn=1;
-          break;
-      case CMD_AF:
-             if (DebugOutput==DEBUG_FULLOUTPUT)  
-               Serial.println("alternative functions on");
-             settings.mouseOn=0;
-          break;
-      case CMD_SW:
-             if (DebugOutput==DEBUG_FULLOUTPUT)  
-               Serial.println("switch mouse / alternative function");
-             blinkCount=6;  blinkStartTime=15;
-             if (settings.mouseOn==0) 
-             {
+        case CMD_BUTTON_MODE:
+               release_all();
+               if (DebugOutput==DEBUG_FULLOUTPUT)  
+                 Serial.print("set mode for button "); Serial.println(par1);
+               if ((par1>=0) && (par1<=NUMBER_OF_BUTTONS))
+                   actButton=par1;
+               else  Serial.println("?");
+            break;
+        
+        case CMD_MOUSE_CLICK_LEFT:
+               if (DebugOutput==DEBUG_FULLOUTPUT)  
+                 Serial.println("click left");
+               leftMouseButton=1;  leftClickRunning=clickTime;
+               break;
+        case CMD_MOUSE_CLICK_RIGHT:
+               if (DebugOutput==DEBUG_FULLOUTPUT)  
+                 Serial.println("click right");
+               rightMouseButton=1; rightClickRunning=clickTime;
+               break;
+        case CMD_MOUSE_CLICK_DOUBLE:
+               if (DebugOutput==DEBUG_FULLOUTPUT)  
+                 Serial.println("click double");
+               leftMouseButton=1;  doubleClickRunning=clickTime*DOUBLECLICK_MULTIPLIER;
+               break;
+        case CMD_MOUSE_CLICK_MIDDLE:
+               if (DebugOutput==DEBUG_FULLOUTPUT)  
+                 Serial.println("click middle");
+               middleMouseButton=1; middleClickRunning=clickTime;
+              break;
+        case CMD_MOUSE_PRESS_LEFT:
+               if (DebugOutput==DEBUG_FULLOUTPUT)  
+                 Serial.println("press left");
+               leftMouseButton=1; 
+               break;
+        case CMD_MOUSE_PRESS_RIGHT:
+               if (DebugOutput==DEBUG_FULLOUTPUT)  
+                 Serial.println("press right");
+               rightMouseButton=1; 
+               break;
+        case CMD_MOUSE_PRESS_MIDDLE:
+               if (DebugOutput==DEBUG_FULLOUTPUT)  
+                 Serial.println("press middle");
+               middleMouseButton=1; 
+               break;
+        case CMD_MOUSE_RELEASE_LEFT:
+               if (DebugOutput==DEBUG_FULLOUTPUT)  
+                 Serial.println("release left");
+               leftMouseButton=0;
+               break; 
+        case CMD_MOUSE_RELEASE_RIGHT:
+               if (DebugOutput==DEBUG_FULLOUTPUT)  
+                 Serial.println("release right");
+               rightMouseButton=0;
+               break; 
+        case CMD_MOUSE_RELEASE_MIDDLE:
+               if (DebugOutput==DEBUG_FULLOUTPUT)  
+                 Serial.println("release middle");
+               middleMouseButton=0;
+               break; 
+        case CMD_MOUSE_WHEEL_UP:
+               if (DebugOutput==DEBUG_FULLOUTPUT)  
+                 Serial.println("wheel up");
+               #ifndef ARDUINO_PRO_MICRO
+                 Mouse.scroll(-settings.ws); 
+               #else
+                 Mouse.move (0,0,-settings.ws); 
+               #endif
+            break;
+        case CMD_MOUSE_WHEEL_DOWN:
+               if (DebugOutput==DEBUG_FULLOUTPUT)  
+                 Serial.println("wheel down");
+               #ifndef ARDUINO_PRO_MICRO
+                 Mouse.scroll(settings.ws); 
+               #else
+                 Mouse.move (0,0,settings.ws); 
+               #endif
+            break;
+        case CMD_MOUSE_WHEEL_STEP:
+               if (DebugOutput==DEBUG_FULLOUTPUT)  
+                 Serial.println("wheel step");
+               settings.ws=par1;
+            break;
+        case CMD_MOUSE_MOVEX:
+               if (DebugOutput==DEBUG_FULLOUTPUT) 
+               {  Serial.print("mouse move x "); Serial.println(par1); }
+               Mouse.move(par1, 0);
+               if (periodicMouseMovement) moveX=par1;
+            break;
+        case CMD_MOUSE_MOVEY:
+               if (DebugOutput==DEBUG_FULLOUTPUT)  
+               {  Serial.print("mouse move y "); Serial.println(par1); }
+               Mouse.move(0, par1);
+               if (periodicMouseMovement) moveY=par1;
+            break;
+        case CMD_KEY_WRITE:
+               if (DebugOutput==DEBUG_FULLOUTPUT)  
+               {  Serial.print("keyboard write: "); Serial.println(keystring); }
+               writeKeystring=keystring;
+               break;
+        case CMD_KEY_PRESS:
+               if (DebugOutput==DEBUG_FULLOUTPUT)  
+               {  Serial.print("key press: "); Serial.println(keystring); }
+               if (keystring[strlen(keystring)-1] != ' ') strcat(keystring," ");
+               setKeyValues(keystring);
+               break;
+        case CMD_KEY_RELEASE:
+               if (DebugOutput==DEBUG_FULLOUTPUT)  
+               {  Serial.print("key release: ");  Serial.println(keystring); }
+               strcat(keystring," ");
+               releaseKeys(keystring);             
+               break;
+        case CMD_RELEASE_ALL:
+               if (DebugOutput==DEBUG_FULLOUTPUT)  
+                 Serial.print("release all");
+               release_all();             
+               break;
+              
+        case CMD_SAVE_SLOT:
+               if (DebugOutput==DEBUG_FULLOUTPUT)  
+               {  Serial.print("save slot ");  Serial.println(keystring); }
+               release_all();
+               saveToEEPROM(keystring); 
+            break;
+        case CMD_LOAD_SLOT:
+               if (DebugOutput==DEBUG_FULLOUTPUT)  
+               {  Serial.print("load slot: "); Serial.println(keystring); }
+               release_all();
+               if (keystring)
+                  readFromEEPROM(keystring);
+               else printCurrentSlot();
+            break;
+        case CMD_LIST_SLOTS:
+               if (DebugOutput==DEBUG_FULLOUTPUT)  
+                 Serial.println("list slots: ");
+               release_all();
+               reportSlotParameters=1;   // connection to host: start reporting slot parameters !
+               listSlots();
+            break;
+        case CMD_NEXT_SLOT:
+               if (DebugOutput==DEBUG_FULLOUTPUT)  
+                 Serial.print("load next slot");
+               // blinkCount=10;  blinkStartTime=15;  
+               release_all();
+               readFromEEPROM(0);
+               break;
+        case CMD_DELETE_SLOTS:
+               if (DebugOutput==DEBUG_FULLOUTPUT)  
+                 Serial.println("delete slots"); 
+               release_all();
+               deleteSlots(); 
+            break;
+  
+  
+        case CMD_MM:
+               if (DebugOutput==DEBUG_FULLOUTPUT)  
+                 Serial.println("mouse function on");
                settings.mouseOn=1;
-             }
-             else {
+            break;
+        case CMD_AF:
+               if (DebugOutput==DEBUG_FULLOUTPUT)  
+                 Serial.println("alternative functions on");
                settings.mouseOn=0;
-             }
-          break;
-      case CMD_CA:
-             if (DebugOutput==DEBUG_FULLOUTPUT)  
-               Serial.println("start calibration");
-             blinkCount=10;  blinkStartTime=20;
-             calib_now=100;
-             makeTone(TONE_CALIB,0);
-          break;
-      case CMD_AX:
-             if (DebugOutput==DEBUG_FULLOUTPUT)  
-               Serial.println("set acc x");
-             settings.ax=par1;
-          break;
-      case CMD_AY:
-             if (DebugOutput==DEBUG_FULLOUTPUT)  
-               Serial.println("set acc y");
-             settings.ay=par1;
-          break;
-      case CMD_DX:
-             if (DebugOutput==DEBUG_FULLOUTPUT)  
-               Serial.println("set deadzone x");
-             settings.dx=par1;
-          break;
-      case CMD_DY:
-             if (DebugOutput==DEBUG_FULLOUTPUT)  
-               Serial.println("set deadzone y");
-             settings.dy=par1;
-          break;
-      case CMD_TS:
-             if (DebugOutput==DEBUG_FULLOUTPUT)  
-               Serial.println("set threshold sip");
-             settings.ts=par1;
-          break;
-      case CMD_TP:
-             if (DebugOutput==DEBUG_FULLOUTPUT)  
-               Serial.println("set threshold puff");
-             settings.tp=par1;
-          break;
-      case CMD_SR:
-            reportRawValues=1;
-          break;
-      case CMD_ER:
-            reportRawValues=0;
-          break;
-      case CMD_TT:
-             if (DebugOutput==DEBUG_FULLOUTPUT)  
-               Serial.println("set special threshold");
-             settings.tt=par1;
-          break;
-      case CMD_GU:
-             if (DebugOutput==DEBUG_FULLOUTPUT)  
-               Serial.println("set up gain");
-             settings.gu=par1;
-          break;
-      case CMD_GD:
-             if (DebugOutput==DEBUG_FULLOUTPUT)  
-               Serial.println("set down gain");
-             settings.gd=par1;
-          break;
-      case CMD_GL:
-             if (DebugOutput==DEBUG_FULLOUTPUT)  
-               Serial.println("set left gain");
-             settings.gl=par1;
-          break;
-      case CMD_GR:
-             if (DebugOutput==DEBUG_FULLOUTPUT)  
-               Serial.println("set right gain");
-             settings.gr=par1;
-          break;
-  }
+            break;
+        case CMD_TOGGLE_ALTERNATIVE:
+               if (DebugOutput==DEBUG_FULLOUTPUT)  
+                 Serial.println("switch mouse / alternative function");
+               blinkCount=6;  blinkStartTime=15;
+               if (settings.mouseOn==0) 
+               {
+                 settings.mouseOn=1;
+               }
+               else {
+                 settings.mouseOn=0;
+               }
+            break;
+        case CMD_CALIBRATE:
+               if (DebugOutput==DEBUG_FULLOUTPUT)  
+                 Serial.println("start calibration");
+               blinkCount=10;  blinkStartTime=20;
+               calib_now=100;
+               makeTone(TONE_CALIB,0);
+            break;
+        case CMD_AX:
+               if (DebugOutput==DEBUG_FULLOUTPUT)  
+                 Serial.println("set acc x");
+               settings.ax=par1;
+            break;
+        case CMD_AY:
+               if (DebugOutput==DEBUG_FULLOUTPUT)  
+                 Serial.println("set acc y");
+               settings.ay=par1;
+            break;
+        case CMD_DX:
+               if (DebugOutput==DEBUG_FULLOUTPUT)  
+                 Serial.println("set deadzone x");
+               settings.dx=par1;
+            break;
+        case CMD_DY:
+               if (DebugOutput==DEBUG_FULLOUTPUT)  
+                 Serial.println("set deadzone y");
+               settings.dy=par1;
+            break;
+        case CMD_TS:
+               if (DebugOutput==DEBUG_FULLOUTPUT)  
+                 Serial.println("set threshold sip");
+               settings.ts=par1;
+            break;
+        case CMD_TP:
+               if (DebugOutput==DEBUG_FULLOUTPUT)  
+                 Serial.println("set threshold puff");
+               settings.tp=par1;
+            break;
+        case CMD_SR:
+              reportRawValues=1;
+            break;
+        case CMD_ER:
+              reportRawValues=0;
+            break;
+        case CMD_TT:
+               if (DebugOutput==DEBUG_FULLOUTPUT)  
+                 Serial.println("set special threshold");
+               settings.tt=par1;
+            break;
+        case CMD_GU:
+               if (DebugOutput==DEBUG_FULLOUTPUT)  
+                 Serial.println("set up gain");
+               settings.gu=par1;
+            break;
+        case CMD_GD:
+               if (DebugOutput==DEBUG_FULLOUTPUT)  
+                 Serial.println("set down gain");
+               settings.gd=par1;
+            break;
+        case CMD_GL:
+               if (DebugOutput==DEBUG_FULLOUTPUT)  
+                 Serial.println("set left gain");
+               settings.gl=par1;
+            break;
+        case CMD_GR:
+               if (DebugOutput==DEBUG_FULLOUTPUT)  
+                 Serial.println("set right gain");
+               settings.gr=par1;
+            break;
+    }
 }
 
 

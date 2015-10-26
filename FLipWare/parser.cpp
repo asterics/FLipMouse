@@ -90,10 +90,10 @@ void parseCommand (char * cmdstr)
         
         if (!strcmp(actpos,"MM"))  cmd=CMD_MM;
         if (!strcmp(actpos,"AF"))  cmd=CMD_AF;
-        if (!strcmp(actpos,"SW"))  cmd=CMD_SW;
+        if (!strcmp(actpos,"SW"))  cmd=CMD_TOGGLE_ALTERNATIVE;
         if (!strcmp(actpos,"SR"))  cmd=CMD_SR;
         if (!strcmp(actpos,"ER"))  cmd=CMD_ER;
-        if (!strcmp(actpos,"CA"))  cmd=CMD_CA;
+        if (!strcmp(actpos,"CA"))  cmd=CMD_CALIBRATE;
         if (!strcmp(actpos,"AX"))  { actpos=strtok(NULL," "); if (get_uint(actpos, &num)) cmd=CMD_AX;}
         if (!strcmp(actpos,"AY"))  { actpos=strtok(NULL," "); if (get_uint(actpos, &num)) cmd=CMD_AY;}
         if (!strcmp(actpos,"DX"))  { actpos=strtok(NULL," "); if (get_uint(actpos, &num)) cmd=CMD_DX;}
@@ -134,7 +134,7 @@ void parseByte (int newByte)  // parse an incoming commandbyte from serial inter
                 if ((newByte=='T') || (newByte=='t')) readstate++; else readstate=0;
             break;
         case 2: 
-                if ((newByte==13) || (newByte==10))  // AT reply: "OK"
+                if ((newByte==13) || (newByte==10))  // AT reply: "OK" 
                 {  Serial.println("OK");  readstate=0; }
                 else if (newByte==' ') { cmdlen=0; readstate++; } 
                 else goto err;

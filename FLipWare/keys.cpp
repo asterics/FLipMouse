@@ -1,51 +1,6 @@
 
 #include "fabi.h"
 
- #ifdef ARDUINO_PRO_MICRO
-      #define KEY_UP    KEY_UP_ARROW
-      #define KEY_DOWN  KEY_DOWN_ARROW
-      #define KEY_LEFT  KEY_LEFT_ARROW
-      #define KEY_RIGHT KEY_RIGHT_ARROW
-      #define KEY_ENTER KEY_RETURN  
-      #define KEY_SPACE ' '
-      #define KEY_A 'a'
-      #define KEY_B 'b'
-      #define KEY_C 'c'
-      #define KEY_D 'd'
-      #define KEY_E 'e' 
-      #define KEY_F 'f'
-      #define KEY_G 'g'
-      #define KEY_H 'h'
-      #define KEY_I 'i'
-      #define KEY_J 'j'
-      #define KEY_K 'k'
-      #define KEY_L 'l'
-      #define KEY_M 'm'
-      #define KEY_N 'n'
-      #define KEY_O 'o'
-      #define KEY_P 'p'
-      #define KEY_Q 'q'
-      #define KEY_R 'r'
-      #define KEY_S 's'
-      #define KEY_T 't'
-      #define KEY_U 'u'
-      #define KEY_V 'v'
-      #define KEY_W 'w'
-      #define KEY_X 'x'
-      #define KEY_Y 'y'
-      #define KEY_Z 'z'
-      #define KEY_0 '0'
-      #define KEY_1 '1'
-      #define KEY_2 '2'
-      #define KEY_3 '3'
-      #define KEY_4 '4'
-      #define KEY_5 '5'
-      #define KEY_6 '6'
-      #define KEY_7 '7'
-      #define KEY_8 '8'
-      #define KEY_9 '9'
-#endif
-
 #define KEY_ADD     0
 #define KEY_RELEASE 1
 
@@ -152,12 +107,10 @@ void setKeyValues(char* text)
     if (!strcmp(acttoken,"KEY_9")) updateKey(KEY_9);
     if (!strcmp(acttoken,"KEY_0")) updateKey(KEY_0);
     
-    #ifndef ARDUINO_PRO_MICRO     // for Teensy2.0++  or TeensyLC
-      if (!strcmp(acttoken,"KEY_SCROLL_LOCK")) updateKey(KEY_SCROLL_LOCK);
-      if (!strcmp(acttoken,"KEY_PAUSE")) updateKey(KEY_PAUSE);
-      if (!strcmp(acttoken,"KEY_NUM_LOCK")) updateKey(KEY_NUM_LOCK);
-      if (!strcmp(acttoken,"KEY_PRINTSCREEN")) updateKey(KEY_PRINTSCREEN);
-    #endif
+    if (!strcmp(acttoken,"KEY_SCROLL_LOCK")) updateKey(KEY_SCROLL_LOCK);
+    if (!strcmp(acttoken,"KEY_PAUSE")) updateKey(KEY_PAUSE);
+    if (!strcmp(acttoken,"KEY_NUM_LOCK")) updateKey(KEY_NUM_LOCK);
+    if (!strcmp(acttoken,"KEY_PRINTSCREEN")) updateKey(KEY_PRINTSCREEN);
 
     acttoken = strtok(NULL," ");
   }

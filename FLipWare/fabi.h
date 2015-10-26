@@ -6,9 +6,10 @@
 #include <string.h>
 #include <stdint.h>
 
+#define VERSION_STRING "Flipmouse v2.0"
 
-//#define TEENSY               //  if Teensy2.0++ controller is used (FLipmouse V1)
-#define TEENSY_LC              //  if Teensy LC controller is used (FLipmouse V2)
+#define TEENSY               //  if Teensy2.0++ controller is used (FLipmouse V1)
+//#define TEENSY_LC              //  if Teensy LC controller is used (FLipmouse V2)
 
 
 #ifndef TEENSY
@@ -28,8 +29,6 @@
 
 #define DEBUG_NOOUTPUT 0
 #define DEBUG_FULLOUTPUT 1
-#define DEBUG_LIVEREPORTS 2
-#define DEFAULT_DEBUGLEVEL DEBUG_NOOUTPUT
 
 #define TOKEN_SEPERATOR "-,-"
 
@@ -42,7 +41,7 @@
 
 // command identifiers
 
-#define CMD_IDLE                     0
+#define CMD_IDLE                     0 
 #define CMD_NEXT_SLOT                1
 #define CMD_MOUSE_CLICK_LEFT         2
 #define CMD_MOUSE_CLICK_RIGHT        3
@@ -57,8 +56,8 @@
 #define CMD_MOUSE_MOVEY             12
 #define CMD_KEY_WRITE               13
 #define CMD_KEY_PRESS               14
-#define CMD_CA                      15
-#define CMD_SW                      16
+#define CMD_CALIBRATE               15
+#define CMD_TOGGLE_ALTERNATIVE      16
 
 #define CMD_MM                      17
 #define CMD_AF                      18

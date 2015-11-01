@@ -1,4 +1,15 @@
 ﻿
+
+/* 
+     FLipMouseGUI - Graphical user Interface for FlipMouse / FlipWare firmware
+       built upon Assistive Button Interface (FABI) Version 2.0  - AsTeRICS Academy 2015 - http://www.asterics-academy.net
+   
+     for a list of supported AT commands, see commands.cs
+   
+*/
+
+
+
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -407,10 +418,10 @@ namespace MouseApp2
             storeSlot(actSlot);            
             if (serialPort1.IsOpen)
             {
-                sendEndReporting();
+                sendEndReportingCommand();
                 sendApplyCommands();
                 sendCalibrationCommand();
-                sendStartReporting();
+                sendStartReportingCommand();
                 addToLog("The selected settings have been applied to the FLipmouse");
 
             }

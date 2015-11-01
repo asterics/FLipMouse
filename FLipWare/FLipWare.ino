@@ -15,7 +15,7 @@
  */
  
 
-#include "fabi.h"        //  FABI command definitions
+#include "FlipWare.h"        //  FABI command definitions
 #include <EEPROM.h>
 #include <Wire.h>        // for the external EEPROM
 

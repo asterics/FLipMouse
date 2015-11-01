@@ -23,6 +23,12 @@ namespace MouseApp2
         const int GUITYPE_SLIDER    = 4;
         const int GUITYPE_BOOLEAN   = 5;
 
+        const string PREFIX_FLIPMOUSE_VERSION = "FLIPMOUSE ";
+        const string PREFIX_REPORT_VALUES = "VALUES:";
+        const string PREFIX_SLOT_NAME = "SLOT:";
+        const string PREFIX_AT_COMMAND = "AT ";
+        const string PREFIX_END_OF_SLOTS = "END";
+
         public class Command
         {
             public String cmd;
@@ -193,6 +199,7 @@ namespace MouseApp2
             allCommands.add(new Command("AT RA", PARTYPE_NONE, "Release All", COMBOENTRY_NO, GUITYPE_STANDARD));
             allCommands.add(new Command("AT SA", PARTYPE_STRING, "Save Slot", COMBOENTRY_NO, GUITYPE_STANDARD));
             allCommands.add(new Command("AT LO", PARTYPE_STRING, "Load Slot", COMBOENTRY_NO, GUITYPE_STANDARD));
+            allCommands.add(new Command("AT LA", PARTYPE_NONE, "Load All", COMBOENTRY_NO, GUITYPE_STANDARD));
             allCommands.add(new Command("AT LI", PARTYPE_NONE, "List Slots", COMBOENTRY_NO, GUITYPE_STANDARD));
             allCommands.add(new Command("AT NE", PARTYPE_NONE, "Switch to next configuration", COMBOENTRY_YES, GUITYPE_STANDARD));
             allCommands.add(new Command("AT DE", PARTYPE_NONE, "Delete all configurations", COMBOENTRY_NO, GUITYPE_STANDARD));
@@ -208,11 +215,16 @@ namespace MouseApp2
             allCommands.add(new Command("AT DY", PARTYPE_UINT, "Deadzone Y", COMBOENTRY_NO, GUITYPE_SLIDER));
             allCommands.add(new Command("AT TS", PARTYPE_UINT, "Theshold Sip", COMBOENTRY_NO, GUITYPE_SLIDER));
             allCommands.add(new Command("AT TP", PARTYPE_UINT, "Theshold Puff", COMBOENTRY_NO, GUITYPE_SLIDER));
-            allCommands.add(new Command("AT TT", PARTYPE_UINT, "Threshold Special Mode", COMBOENTRY_NO, GUITYPE_SLIDER));
+            allCommands.add(new Command("AT SM", PARTYPE_UINT, "Threshold Special Mode", COMBOENTRY_NO, GUITYPE_SLIDER));
+            allCommands.add(new Command("AT HM", PARTYPE_UINT, "Threshold Hold Mode", COMBOENTRY_NO, GUITYPE_SLIDER));
             allCommands.add(new Command("AT GU", PARTYPE_UINT, "Gain for Up Sensor", COMBOENTRY_NO, GUITYPE_SLIDER));
             allCommands.add(new Command("AT GD", PARTYPE_UINT, "Gain for Down Sensor", COMBOENTRY_NO, GUITYPE_SLIDER));
             allCommands.add(new Command("AT GL", PARTYPE_UINT, "Gain for Left Sensor", COMBOENTRY_NO, GUITYPE_SLIDER));
             allCommands.add(new Command("AT GR", PARTYPE_UINT, "Gain for Right Sensor", COMBOENTRY_NO, GUITYPE_SLIDER));
+            allCommands.add(new Command("AT IR", PARTYPE_STRING,"Record Infrared Command", COMBOENTRY_YES, GUITYPE_TEXTFIELD));
+            allCommands.add(new Command("AT IP", PARTYPE_STRING,"Play Infrared Command", COMBOENTRY_YES, GUITYPE_TEXTFIELD));
+            allCommands.add(new Command("AT IC", PARTYPE_STRING,"Clear Infrared Command", COMBOENTRY_YES, GUITYPE_TEXTFIELD));
+            allCommands.add(new Command("AT IL", PARTYPE_NONE,  "List Infrared Commands", COMBOENTRY_YES, GUITYPE_STANDARD));
 
         }
 
@@ -227,7 +239,8 @@ namespace MouseApp2
             commandGuiLinks.add(new CommandGuiLink("AT DY", deadzoneYBar, deadzoneYLabel));
             commandGuiLinks.add(new CommandGuiLink("AT TS", sipThresholdBar, sipThresholdLabel));
             commandGuiLinks.add(new CommandGuiLink("AT TP", puffThresholdBar, puffThresholdLabel));
-            commandGuiLinks.add(new CommandGuiLink("AT TT", specialThresholdBar, specialThresholdLabel));
+            commandGuiLinks.add(new CommandGuiLink("AT SM", specialThresholdBar, specialThresholdLabel));
+            commandGuiLinks.add(new CommandGuiLink("AT HM", holdThresholdBar, holdThresholdLabel));
             commandGuiLinks.add(new CommandGuiLink("AT GU", upGainBar, upGainLabel));
             commandGuiLinks.add(new CommandGuiLink("AT GD", downGainBar, downGainLabel));
             commandGuiLinks.add(new CommandGuiLink("AT GL", leftGainBar, leftGainLabel));
@@ -253,13 +266,13 @@ namespace MouseApp2
             public Slot()
             {
                 slotName = "default";
-                settingStrings.Add("AT AX 70"); settingStrings.Add("AT AY 60");
-                settingStrings.Add("AT DX 20"); settingStrings.Add("AT DY 20");
+                settingStrings.Add("AT AX 70");  settingStrings.Add("AT AY 60");
+                settingStrings.Add("AT DX 20");  settingStrings.Add("AT DY 20");
                 settingStrings.Add("AT TS 500"); settingStrings.Add("AT TP 525");
-                settingStrings.Add("AT WS 3"); settingStrings.Add("AT TT 611");
-                settingStrings.Add("AT GU 50"); settingStrings.Add("AT GD 50");
-                settingStrings.Add("AT GL 50"); settingStrings.Add("AT GR 50");
-                settingStrings.Add("AT MM 1");
+                settingStrings.Add("AT WS 3");   settingStrings.Add("AT MM 1"); 
+                settingStrings.Add("AT GU 50");  settingStrings.Add("AT GD 50");
+                settingStrings.Add("AT GL 50");  settingStrings.Add("AT GR 50");
+                settingStrings.Add("AT SM 700"); settingStrings.Add("AT HM 300");
 
                 settingStrings.Add("AT BM 01"); settingStrings.Add("AT NE");
                 settingStrings.Add("AT BM 02"); settingStrings.Add("AT KP KEY_ESC ");
@@ -289,6 +302,16 @@ namespace MouseApp2
             return (str);
         }
 
+        public void sendGetID()
+        {
+            sendCmd("AT ID");
+        }
+
+        public void sendLoadAll()
+        {
+            sendCmd("AT LA");
+        }
+
         public void sendEndReporting()
         {
             sendCmd("AT ER");
@@ -307,7 +330,8 @@ namespace MouseApp2
             sendCmd("AT DY " + deadzoneYLabel.Text);
             sendCmd("AT TS " + sipThresholdLabel.Text);
             sendCmd("AT TP " + puffThresholdLabel.Text);
-            sendCmd("AT TT " + specialThresholdLabel.Text);
+            sendCmd("AT SM " + specialThresholdLabel.Text);
+            sendCmd("AT HM " + holdThresholdLabel.Text);
             sendCmd("AT GU " + upGainLabel.Text);
             sendCmd("AT GD " + downGainLabel.Text);
             sendCmd("AT GL " + leftGainLabel.Text);
@@ -339,7 +363,6 @@ namespace MouseApp2
             sendCmd(buildCommandString(PuffFunctionMenu.Text, PuffParameterText.Text, (int)PuffNumericParameter.Value));
             sendCmd("AT BM 11");
             sendCmd(buildCommandString(SpecialPuffFunctionMenu.Text, SpecialPuffParameterText.Text, (int)SpecialPuffNumericParameter.Value));
-
         }
 
         public void sendCalibrationCommand()
@@ -357,15 +380,11 @@ namespace MouseApp2
             ApplyButton_Click(this, null);
             sendCmd("AT SA " + slotname);
             addToLog("The settings were saved");
-            //slotNames.Items.Clear();
-            //sendCmd("AT LI");
         }
 
         public void sendClearCommand()
         {
             sendCmd("AT DE");
         }
-
-
     }
 }

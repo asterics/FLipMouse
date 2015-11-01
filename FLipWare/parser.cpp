@@ -62,7 +62,7 @@ void parseCommand (char * cmdstr)
             switch (pgm_read_byte_near(&(atCommands[i].partype))) 
             {
                case PARTYPE_UINT: actpos=strtok(NULL," "); if (get_uint(actpos, &num)) cmd=i ; break;
-               case PARTYPE_INT:  actpos=strtok(NULL," ");  if (get_uint(actpos, &num)) cmd=i ; break;
+               case PARTYPE_INT:  actpos=strtok(NULL," ");  if (get_int(actpos, &num)) cmd=i ; break;
                case PARTYPE_STRING: actpos=strtok(NULL," "); cmd=i ; break;
                default: cmd=i; actpos=0; break;
             }
@@ -70,13 +70,7 @@ void parseCommand (char * cmdstr)
         }          
     }
     
-    
-    if (cmd>-1)
-    {
-        // if (cmd==CMD_LOAD_SLOT){ Serial.print("cmd parser found:");Serial.print(cmd); Serial.print(", "); Serial.print(num); 
-        // if (actpos) {Serial.print(", "); Serial.println(actpos);} else Serial.println();  } 
-        performCommand(cmd,num,actpos,0);        
-    }
+    if (cmd>-1)  performCommand(cmd,num,actpos,0);        
     else   Serial.println("?");              
 }
 

@@ -69,7 +69,7 @@ namespace MouseApp2
         {
             String receivedString = "";
 
-            sendCmd("AT ID");   // start (after connect): request ID String from Lipmouse; receive ID before timeout ! (else close port)
+            sendGetID();   // start (after connect): request ID String from Lipmouse; receive ID before timeout ! (else close port)
             
             try
             {
@@ -105,23 +105,23 @@ namespace MouseApp2
 
         public void stringReceived(String newLine)
         {
-            if (newLine.ToUpper().StartsWith("FLIPMOUSE "))  // read flipmouse ID 
+            if (newLine.ToUpper().StartsWith(PREFIX_FLIPMOUSE_VERSION))  // read flipmouse ID 
             {
                 gotID(newLine);
             } 
-            else if (newLine.ToUpper().StartsWith("AT RR "))  // read raw report (ADC values)
+            else if (newLine.ToUpper().StartsWith(PREFIX_REPORT_VALUES))  // read raw report (ADC values)
             {
-                drawRawValues(newLine.Substring(6));
+                drawRawValues(newLine.Substring(PREFIX_REPORT_VALUES.Length));
             }
-            else if (newLine.ToUpper().StartsWith("SLOT"))  // read next slot name 
+            else if (newLine.ToUpper().StartsWith(PREFIX_SLOT_NAME))  // read next slot name 
             {
-                gotSlotNames(newLine.Substring(6));
+                gotSlotNames(newLine.Substring(PREFIX_SLOT_NAME.Length));
             }
-            else if (newLine.ToUpper().StartsWith("AT "))  // read setting for a slot 
+            else if (newLine.ToUpper().StartsWith(PREFIX_AT_COMMAND))  // read setting for a slot 
             {
                 gotAT(newLine);
             }
-            else if (newLine.ToUpper().StartsWith("END"))  // end of slot 
+            else if (newLine.ToUpper().StartsWith(PREFIX_END_OF_SLOTS))  // end of slot 
             {
                 gotEnd();
             }
@@ -137,7 +137,7 @@ namespace MouseApp2
               displaySlot(actSlot);
 
               addToLog("The settings were loaded from FLipMouse device!");
-              sendCmd("AT SR");          
+              sendStartReporting();          
         }
 
         public void gotID(String newLine)
@@ -145,7 +145,7 @@ namespace MouseApp2
             addToLog("Flipmouse detected:" + newLine);
             flipMouseOnline = 1;
             slotNames.Items.Clear();
-            sendCmd("AT SR");   // start reporting raw values !
+            sendStartReporting();   // start reporting raw values !
         }
 
         public void gotSlotNames(String newSlotName)
@@ -173,7 +173,7 @@ namespace MouseApp2
             readDone = true;
             if (serialPort1.IsOpen)
             {
-                sendCmd("AT ER");  // end reporting raw values !
+                sendEndReporting();  // end reporting raw values !
 
                 portStatus.Text = "Disconnected";
                 addToLog("Port " + portComboBox.Text + " is now disconnected");
@@ -198,8 +198,8 @@ namespace MouseApp2
         {
             if (serialPort1.IsOpen)
             {
-                sendCmd("AT ER");
-                sendCmd("AT DE");  // delete all slots on FlipMouse
+                sendEndReporting();
+                sendClearCommand();  // delete all slots on FlipMouse
 
                 slotCounter = 0;
                 for (slotCounter = 0; slotCounter < slots.Count; slotCounter++)
@@ -211,7 +211,7 @@ namespace MouseApp2
 
                 }
                 addToLog("The settings were stored!");
-                sendCmd("AT SR");
+                sendStartReporting();
             }
 
         }
@@ -220,11 +220,11 @@ namespace MouseApp2
         {
             if (serialPort1.IsOpen)
             {
-                sendCmd("AT ER");
+                sendEndReporting();
                 slotNames.Items.Clear();
                 slots.Clear();
                 actSlot = -1;
-                sendCmd("AT LA");
+                sendLoadAll();
             }
         }
     }

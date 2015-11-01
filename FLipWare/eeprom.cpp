@@ -44,42 +44,6 @@ byte readEEPROM(unsigned int eeaddress )
 
 
 
-void printCurrentSlot()
-{
-        Serial.print("Slot :"); Serial.println(settings.slotname);
-        Serial.print("AT AX "); Serial.println(settings.ax); 
-        Serial.print("AT AY "); Serial.println(settings.ay);
-        Serial.print("AT DX "); Serial.println(settings.dx);
-        Serial.print("AT DY "); Serial.println(settings.dy);
-        Serial.print("AT TS "); Serial.println(settings.ts);
-        Serial.print("AT TP "); Serial.println(settings.tp);
-        Serial.print("AT WS "); Serial.println(settings.ws);
-        Serial.print("AT TT "); Serial.println(settings.tt);
-        Serial.print("AT MM "); Serial.println(settings.mouseOn);
-        Serial.print("AT GU "); Serial.println(settings.gu);
-        Serial.print("AT GD "); Serial.println(settings.gd);
-        Serial.print("AT GL "); Serial.println(settings.gl);
-        Serial.print("AT GR "); Serial.println(settings.gr);
-        for (int i=0;i<NUMBER_OF_BUTTONS;i++) 
-        {
-           Serial.print("AT BM "); 
-           if (i<9) Serial.print("0");
-           Serial.println(i+1); 
-           Serial.print("AT "); 
-           int actCmd = buttons[i].mode;
-           char cmdStr[4];
-           strcpy_PF(cmdStr,(uint_farptr_t)atCommands[actCmd].atCmd);
-           Serial.print(cmdStr);
-            switch (pgm_read_byte_near(&(atCommands[actCmd].partype))) 
-            {
-               case PARTYPE_UINT: 
-               case PARTYPE_INT:  Serial.print(" ");Serial.print(buttons[i].value); break;
-               case PARTYPE_STRING: Serial.print(" ");Serial.print(buttons[i].keystring); break;
-            }
-            Serial.println("");
-        }
-}
-
 void saveToEEPROM(char * slotname)
 {
    char act_slotname[MAX_SLOTNAME_LEN];
@@ -201,7 +165,7 @@ void readFromEEPROM(char * slotname)
        Serial.print(address); Serial.println(" bytes.");
    }
    if (reportSlotParameters) 
-       Serial.println("END");
+       Serial.println("END");   // important: end marker for slot parameter list (command "load all" - AT LA)
 
 }
 

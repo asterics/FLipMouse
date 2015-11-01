@@ -22,12 +22,12 @@ namespace MouseApp2
             {
                 Int32 value = Convert.ToInt32(values[0]); //1023-Convert.ToInt32(values[0]);
                 pressureLabel.Text = value.ToString();
-                Graphics g = panel1.CreateGraphics();
+                Graphics g = pressureDrawPanel.CreateGraphics();
                 Brush brush = new SolidBrush(Color.Green);
                 Brush brush2 = new SolidBrush(Color.White);
-                value = value * panel1.Height / 1024;
-                g.FillRectangle(brush, 0, panel1.Height - value, 30, value);
-                g.FillRectangle(brush2, 0, 0, 30, panel1.Height - value);
+                value = value * pressureDrawPanel.Height / 1024;
+                g.FillRectangle(brush, 0, pressureDrawPanel.Height - value, pressureDrawPanel.Width-1, value);
+                g.FillRectangle(brush2, 0, 0, pressureDrawPanel.Width-1, pressureDrawPanel.Height - value);
 
                 brush = new SolidBrush(Color.Orange);
 

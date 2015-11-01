@@ -57,7 +57,7 @@ namespace MouseApp2
         System.Windows.Forms.Timer IdTimer = new System.Windows.Forms.Timer();
 
 
-        const int MAX_SLOTS = 7;
+        const int MAX_SLOTS = 5;
         public List<Slot> slots = new List<Slot>();
 
         public void initSlots()
@@ -297,13 +297,13 @@ namespace MouseApp2
         private void LipmouseGUI_Load(object sender, EventArgs e)
         {
             this.stringReceivedDelegate = new StringReceivedDelegate(stringReceived);
-            BeginInvoke(this.stringReceivedDelegate, new Object[] { "AT RR 512,512,512,512,512" });
+            BeginInvoke(this.stringReceivedDelegate, new Object[] { "VALUES:512,512,512,512,512" });
         }
 
         // update paint areas if tabs are changed
         private void tabControl_SelectedIndexChanged(object sender, EventArgs e)
         {
-            BeginInvoke(this.stringReceivedDelegate, new Object[] { "AT RR 512,512,512,512,512" });
+            BeginInvoke(this.stringReceivedDelegate, new Object[] { "VALUES:512,512,512,512,512" });
         }
 
 
@@ -375,11 +375,15 @@ namespace MouseApp2
 
         private void newSlotButton_Click(object sender, EventArgs e)
         {
-            storeSlot(actSlot);
-            slots.Add(new Slot());
-            slotNames.Items.Add("default");
-            actSlot = slots.Count - 1;
-            displaySlot(actSlot);
+            if (slots.Count < MAX_SLOTS) 
+            {
+                storeSlot(actSlot);
+                slots.Add(new Slot());
+                slotNames.Items.Add("default");
+                actSlot = slots.Count - 1;
+                displaySlot(actSlot);
+            }
+            else MessageBox.Show("Maximum number of slots reached !");
         }
 
         private void deleteSlotButton_Click(object sender, EventArgs e)
@@ -392,6 +396,7 @@ namespace MouseApp2
                 if (actSlot > 0) actSlot--;
                 displaySlot(actSlot);
             }
+            else MessageBox.Show("One slot must stay active !");
         }
 
 
@@ -694,6 +699,12 @@ namespace MouseApp2
             if (speedXBar.Value >= speedXBar.Minimum + SPEED_CHANGE_STEP)
                 speedXBar.Value -= SPEED_CHANGE_STEP;
             speedXLabel.Text = speedXBar.Value.ToString();
+            if (splitXYBox.Checked == false)
+            {
+                speedYBar.Value = speedXBar.Value;
+                speedYLabel.Text = speedYBar.Value.ToString();
+            }
+
         }
         private void decSpeedX_MouseHover(object sender, EventArgs e)
         {
@@ -706,7 +717,11 @@ namespace MouseApp2
             if (speedXBar.Value <= speedXBar.Maximum - SPEED_CHANGE_STEP)
                 speedXBar.Value += SPEED_CHANGE_STEP;
             speedXLabel.Text = speedXBar.Value.ToString();
-
+            if (splitXYBox.Checked == false)
+            {
+                speedYBar.Value = speedXBar.Value;
+                speedYLabel.Text = speedYBar.Value.ToString();
+            }
         }
         private void incSpeedX_MouseHover(object sender, EventArgs e)
         {
@@ -759,6 +774,11 @@ namespace MouseApp2
             if (deadzoneXBar.Value >= deadzoneXBar.Minimum + DEADZONE_CHANGE_STEP)
                 deadzoneXBar.Value -= DEADZONE_CHANGE_STEP;
             deadzoneXLabel.Text = deadzoneXBar.Value.ToString();
+            if (splitXYBox.Checked == false)
+            {
+                deadzoneYBar.Value = deadzoneXBar.Value;
+                deadzoneYLabel.Text = deadzoneXBar.Value.ToString();
+            }
         }
         private void decDeadzoneX_MouseHover(object sender, EventArgs e)
         {
@@ -771,6 +791,11 @@ namespace MouseApp2
             if (deadzoneXBar.Value <= deadzoneXBar.Maximum - DEADZONE_CHANGE_STEP)
                 deadzoneXBar.Value += DEADZONE_CHANGE_STEP;
             deadzoneXLabel.Text = deadzoneXBar.Value.ToString();
+            if (splitXYBox.Checked == false)
+            {
+                deadzoneYBar.Value = deadzoneXBar.Value;
+                deadzoneYLabel.Text = deadzoneXBar.Value.ToString();
+            }
         }
         private void incDeadzoneX_MouseHover(object sender, EventArgs e)
         {
@@ -873,15 +898,13 @@ namespace MouseApp2
 
         private void specialThresholdBar_Scroll(object sender, EventArgs e)
         {
-            specialThresholdLabel.Text =
-            specialThresholdBar.Value.ToString() + " / " + (1024 - specialThresholdBar.Value).ToString();
+            specialThresholdLabel.Text =  specialThresholdBar.Value.ToString();
         }
         private void decSpecialThreshold_Click(object sender, EventArgs e)
         {
             if (specialThresholdBar.Value >= specialThresholdBar.Minimum + SPECIALMODE_CHANGE_STEP)
                 specialThresholdBar.Value -= SPECIALMODE_CHANGE_STEP;
-            specialThresholdLabel.Text = specialThresholdBar.Value.ToString() + " / " + (1024 - specialThresholdBar.Value).ToString();
-
+            specialThresholdLabel.Text = specialThresholdBar.Value.ToString();
         }
         private void decSpecialThreshold_MouseHover(object sender, EventArgs e)
         {
@@ -893,12 +916,44 @@ namespace MouseApp2
         {
             if (specialThresholdBar.Value <= specialThresholdBar.Maximum - SPECIALMODE_CHANGE_STEP)
                 specialThresholdBar.Value += SPECIALMODE_CHANGE_STEP;
-            specialThresholdLabel.Text = specialThresholdBar.Value.ToString() + " / " + (1024 - specialThresholdBar.Value).ToString();
-
+            specialThresholdLabel.Text = specialThresholdBar.Value.ToString();
         }
         private void incSpecialThreshold_MouseHover(object sender, EventArgs e)
         {
             functionPointer = new ClickDelegate(incSpecialThreshold_Click);
+            clickTimer.Start();
+        }
+
+        private void holdThresholdBar_Scroll(object sender, EventArgs e)
+        {
+            holdThresholdLabel.Text = holdThresholdBar.Value.ToString();
+        }
+
+
+        private void incHoldThreshold_Click(object sender, EventArgs e)
+        {
+            if (holdThresholdBar.Value <= holdThresholdBar.Maximum - SPECIALMODE_CHANGE_STEP)
+                holdThresholdBar.Value += SPECIALMODE_CHANGE_STEP;
+            holdThresholdLabel.Text = holdThresholdBar.Value.ToString();
+        }
+
+        private void incHoldThreshold_MouseHover(object sender, EventArgs e)
+        {
+            functionPointer = new ClickDelegate(incHoldThreshold_Click);
+            clickTimer.Start();
+        }
+
+        private void decHoldThreshold_Click(object sender, EventArgs e)
+        {
+            if (holdThresholdBar.Value >= holdThresholdBar.Minimum + SPECIALMODE_CHANGE_STEP)
+                holdThresholdBar.Value -= SPECIALMODE_CHANGE_STEP;
+            holdThresholdLabel.Text = holdThresholdBar.Value.ToString();
+
+        }
+
+        private void decHoldThreshold_MouseHover(object sender, EventArgs e)
+        {
+            functionPointer = new ClickDelegate(decHoldThreshold_Click);
             clickTimer.Start();
         }
 
@@ -1041,7 +1096,6 @@ namespace MouseApp2
             displaySlot(actSlot);
 
         }
-
 
     }
 }

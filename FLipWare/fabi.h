@@ -41,8 +41,8 @@
 
 // command identifiers
 
-#define CMD_IDLE                     0 
-#define CMD_NEXT_SLOT                1
+#define CMD_PRINT_ID                 0
+#define CMD_BUTTON_MODE              1
 #define CMD_MOUSE_CLICK_LEFT         2
 #define CMD_MOUSE_CLICK_RIGHT        3
 #define CMD_MOUSE_CLICK_MIDDLE       4
@@ -50,43 +50,43 @@
 #define CMD_MOUSE_PRESS_LEFT         6
 #define CMD_MOUSE_PRESS_RIGHT        7
 #define CMD_MOUSE_PRESS_MIDDLE       8
-#define CMD_MOUSE_WHEEL_UP           9
-#define CMD_MOUSE_WHEEL_DOWN        10
-#define CMD_MOUSE_MOVEX             11
-#define CMD_MOUSE_MOVEY             12
-#define CMD_KEY_WRITE               13
-#define CMD_KEY_PRESS               14
-#define CMD_CALIBRATE               15
-#define CMD_TOGGLE_ALTERNATIVE      16
+#define CMD_MOUSE_RELEASE_LEFT       9
+#define CMD_MOUSE_RELEASE_RIGHT     10
+#define CMD_MOUSE_RELEASE_MIDDLE    11
+#define CMD_MOUSE_WHEEL_UP          12
+#define CMD_MOUSE_WHEEL_DOWN        13
+#define CMD_MOUSE_WHEEL_STEP        14
+#define CMD_MOUSE_MOVEX             15
+#define CMD_MOUSE_MOVEY             16
+#define CMD_KEY_WRITE               17
+#define CMD_KEY_PRESS               18
+#define CMD_KEY_RELEASE             19
+#define CMD_RELEASE_ALL             20
+#define CMD_SAVE_SLOT               21
+#define CMD_LOAD_SLOT               22
+#define CMD_LIST_SLOTS              23
+#define CMD_NEXT_SLOT               24
+#define CMD_DELETE_SLOTS            25
+#define CMD_IDLE                    26 
+#define CMD_MM                      27
+#define CMD_LA                      28
+#define CMD_TOGGLE_ALTERNATIVE      29
+#define CMD_SR                      30
+#define CMD_ER                      31
+#define CMD_CALIBRATE               32
+#define CMD_AX                      33
+#define CMD_AY                      34
+#define CMD_DX                      35
+#define CMD_DY                      36
+#define CMD_TS                      37
+#define CMD_TP                      38
+#define CMD_TT                      39
+#define CMD_GU                      40
+#define CMD_GD                      41
+#define CMD_GL                      42
+#define CMD_GR                      43
 
-#define CMD_MM                      17
-#define CMD_AF                      18
-#define CMD_AX                      19
-#define CMD_AY                      20
-#define CMD_DX                      21
-#define CMD_DY                      22
-#define CMD_TS                      23
-#define CMD_TP                      24
-#define CMD_SR                      25
-#define CMD_ER                      26
-#define CMD_TT                      27
-#define CMD_GU                      28
-#define CMD_GD                      29
-#define CMD_GL                      30
-#define CMD_GR                      31
-
-#define CMD_KEY_RELEASE             50
-#define CMD_RELEASE_ALL             51
-#define CMD_MOUSE_RELEASE_LEFT      52
-#define CMD_MOUSE_RELEASE_RIGHT     53
-#define CMD_MOUSE_RELEASE_MIDDLE    54
-#define CMD_MOUSE_WHEEL_STEP        55
-#define CMD_SAVE_SLOT               56
-#define CMD_LOAD_SLOT               57
-#define CMD_LIST_SLOTS              58
-#define CMD_DELETE_SLOTS            59
-#define CMD_PRINT_ID                60
-#define CMD_BUTTON_MODE             61
+#define NUM_COMMANDS                44 
 
 
 struct settingsType {
@@ -99,7 +99,7 @@ struct settingsType {
   uint16_t ts;     // threshold sip
   uint16_t tp;     // threshold puff 
   uint8_t  ws;     // wheel stepsize  
-  uint16_t tt;     // threshold time 
+  uint16_t tt;     // threshold special/hold 
   uint8_t  gu;     // gain up 
   uint8_t  gd;     // gain down 
   uint8_t  gl;     // gain left 
@@ -108,6 +108,16 @@ struct settingsType {
   int16_t  cy;     // calib y
 };
 
+
+#define PARTYPE_NONE 0
+#define PARTYPE_UINT  1
+#define PARTYPE_INT   2
+#define PARTYPE_STRING  3
+
+struct atCommandType {                      // holds settings for a button function 
+  char atCmd[3];
+  uint8_t  partype;
+};
 
 struct buttonType {                      // holds settings for a button function 
   int mode;
@@ -131,6 +141,7 @@ extern struct settingsType settings;
 extern int EmptySlotAddress;
 extern struct buttonType buttons[NUMBER_OF_BUTTONS];
 extern struct buttonDebouncerType buttonDebouncers[NUMBER_OF_BUTTONS];
+extern const struct atCommandType atCommands[];
 
 void performCommand (uint8_t cmd, int16_t par1, char * keystring, int8_t periodicMouseMovement);
 void saveToEEPROM(char * slotname);

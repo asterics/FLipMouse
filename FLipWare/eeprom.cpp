@@ -46,31 +46,38 @@ byte readEEPROM(unsigned int eeaddress )
 
 void printCurrentSlot()
 {
-  if (reportSlotParameters)
-  {
-        Serial.print("loading:");
-        Serial.print(settings.slotname); Serial.print(TOKEN_SEPERATOR);
-        Serial.print(settings.mouseOn); Serial.print(TOKEN_SEPERATOR);
-        Serial.print(settings.ax); Serial.print(TOKEN_SEPERATOR);
-        Serial.print(settings.ay); Serial.print(TOKEN_SEPERATOR);
-        Serial.print(settings.dx); Serial.print(TOKEN_SEPERATOR);
-        Serial.print(settings.dy); Serial.print(TOKEN_SEPERATOR);
-        Serial.print(settings.ts); Serial.print(TOKEN_SEPERATOR);
-        Serial.print(settings.tp); Serial.print(TOKEN_SEPERATOR);
-        Serial.print(settings.ws); Serial.print(TOKEN_SEPERATOR);
-        Serial.print(settings.tt); Serial.print(TOKEN_SEPERATOR);
-        Serial.print(settings.gu); Serial.print(TOKEN_SEPERATOR);
-        Serial.print(settings.gd); Serial.print(TOKEN_SEPERATOR);
-        Serial.print(settings.gl); Serial.print(TOKEN_SEPERATOR);
-        Serial.print(settings.gr); Serial.print(TOKEN_SEPERATOR);
+        Serial.print("Slot :"); Serial.println(settings.slotname);
+        Serial.print("AT AX "); Serial.println(settings.ax); 
+        Serial.print("AT AY "); Serial.println(settings.ay);
+        Serial.print("AT DX "); Serial.println(settings.dx);
+        Serial.print("AT DY "); Serial.println(settings.dy);
+        Serial.print("AT TS "); Serial.println(settings.ts);
+        Serial.print("AT TP "); Serial.println(settings.tp);
+        Serial.print("AT WS "); Serial.println(settings.ws);
+        Serial.print("AT TT "); Serial.println(settings.tt);
+        Serial.print("AT MM "); Serial.println(settings.mouseOn);
+        Serial.print("AT GU "); Serial.println(settings.gu);
+        Serial.print("AT GD "); Serial.println(settings.gd);
+        Serial.print("AT GL "); Serial.println(settings.gl);
+        Serial.print("AT GR "); Serial.println(settings.gr);
         for (int i=0;i<NUMBER_OF_BUTTONS;i++) 
         {
-           Serial.print(buttons[i].mode); Serial.print(TOKEN_SEPERATOR);
-           Serial.print(buttons[i].value); Serial.print(TOKEN_SEPERATOR);
-           Serial.print(buttons[i].keystring);Serial.print(TOKEN_SEPERATOR);
+           Serial.print("AT BM "); 
+           if (i<9) Serial.print("0");
+           Serial.println(i+1); 
+           Serial.print("AT "); 
+           int actCmd = buttons[i].mode;
+           char cmdStr[4];
+           strcpy_PF(cmdStr,(uint_farptr_t)atCommands[actCmd].atCmd);
+           Serial.print(cmdStr);
+            switch (pgm_read_byte_near(&(atCommands[actCmd].partype))) 
+            {
+               case PARTYPE_UINT: 
+               case PARTYPE_INT:  Serial.print(" ");Serial.print(buttons[i].value); break;
+               case PARTYPE_STRING: Serial.print(" ");Serial.print(buttons[i].keystring); break;
+            }
+            Serial.println("");
         }
-        Serial.println("END");
-   }
 }
 
 void saveToEEPROM(char * slotname)
@@ -140,10 +147,12 @@ void readFromEEPROM(char * slotname)
    uint8_t numSlots=0;
    uint8_t* p;
    
+   
    while (readEEPROM(address)==SLOT_VALID)  // indicates valid eeprom content !
    {
       uint8_t found=0;
      
+      if (reportSlotParameters) found=1;
       if ((!slotname) && (address==nextSlotAddress)) found=1;
       address++;
 
@@ -169,8 +178,9 @@ void readFromEEPROM(char * slotname)
         p = (uint8_t*) buttons;
         for (unsigned int i=0;i<NUMBER_OF_BUTTONS*sizeof(buttonType);i++) 
            *p++=readEEPROM(address++);
-           
-        printCurrentSlot();
+        
+        if (reportSlotParameters)   
+           printCurrentSlot();
 
         actSlot=numSlots+1; 
         tmpSlotAddress=address;
@@ -190,6 +200,9 @@ void readFromEEPROM(char * slotname)
        Serial.print(numSlots); Serial.print(" slots were found in EEPROM, occupying ");
        Serial.print(address); Serial.println(" bytes.");
    }
+   if (reportSlotParameters) 
+       Serial.println("END");
+
 }
 
 void deleteSlots()

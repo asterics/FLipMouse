@@ -6,12 +6,12 @@
 
    requirements:  Teensy 2.0++ or TeensyLC with external EEPROM
                   Teensyduino AddOn for Arduino IDE
-                  board USB type set to USB composite device (Serial + Keyboard + Mouse + Joystick)
+                  USB type set to USB composite device (Serial + Keyboard + Mouse + Joystick)
         sensors:  3 momentary switches connected to GPIO pins / 4 force sensors + 1 pressure sensor connected to ADC pins 
        
    
    Supported AT-commands:  
-   (sent via serial interface, use spaces between parameters and Enter (<cr>, ASCII-code 0x0d) to finish a command)
+   (sent via serial interface, 115200 baud, using spaces between parameters.  Enter (<cr>, ASCII-code 0x0d) finishes a command)
    
           AT                returns "OK"
           AT ID             returns identification string (e.g. "FLipMouse V2.0")
@@ -34,8 +34,8 @@
       
           AT CL             click left mouse button  
           AT CR             click right mouse button  
-          AT CD             click double with left mouse button
           AT CM             click middle mouse button  
+          AT CD             click double with left mouse button
 
           AT PL             press/hold the left mouse button  
           AT PR             press/hold the right mouse button
@@ -62,18 +62,18 @@
           
     Housekeeping commands:
 
-          AT SAVE <name>    save settings and current button modes to next free eeprom slot under given name (e.g. AT SAVE mouse1)
-          AT LOAD <name>    load button modes from eeprom slot (e.g. AT LOAD mouse1 -> loads profile named "mouse1")
-          AT LIST           list all saved mode names 
-          AT NEXT           next mode will be loaded (wrap around after last slot)
-          AT CLEAR          clear EEPROM content (delete all stored slots)
-          AT IDLE           idle command (no operation)
+          AT SA <name>    save settings and current button modes to next free eeprom slot under given name (e.g. AT SAVE mouse1)
+          AT LO <name>    load button modes from eeprom slot (e.g. AT LOAD mouse1 -> loads profile named "mouse1")
+          AT LA           load all slots (displays names and settings of all stored slots) 
+          AT LI           list all saved mode names 
+          AT NE           next mode will be loaded (wrap around after last slot)
+          AT DE           delete EEPROM content (delete all stored slots)
+          AT NC           no command (idle operation)
           
     FLipMouse-specific settings and commands:
 
-          AT MM           mouse movements on, alternative functions off
-          AT AF           alternative functions on, mouse movements off 
-          AT SW           switch between mouse movement and alternative functions
+          AT MM <num>     mouse mode: cursor on (num=1) or alternative functions on (num=0)
+          AT SW           switch between mouse cursor and alternative functions
           AT SR           start reporting raw values
           AT ER           end reporting raw values
           AT CA           calibration of zeropoint
@@ -88,7 +88,7 @@
           AT GD <num>     gain for down sensor (0-100)
           AT GL <num>     gain for left sensor (0-100)
           AT GR <num>     gain for right sensor (0-100)
-
+  
    supported key identifiers for key press command (AT KP):
  
     KEY_A   KEY_B   KEY_C   KEY_D    KEY_E   KEY_F   KEY_G   KEY_H   KEY_I   KEY_J    KEY_K    KEY_L
@@ -159,10 +159,26 @@
 struct settingsType settings = {         // default settings valus, for type definition see fabi.h
     "empty",
     1,                                   //  Mouse cursor movement active (not the alternative functions )
-    40, 40, 60, 60, 500, 525, 3, 620,    // accx, accy, deadzone x, deadzone y, threshold sip, threshold puff, wheel step, threshold special/hold mode
+    60, 60, 20, 20, 500, 525, 3, 620,    // accx, accy, deadzone x, deadzone y, threshold sip, threshold puff, wheel step, threshold special/hold mode
     50, 50, 50, 50 ,                     // gain up / down / left / right
     0, 0                                 // offset x / y
 }; 
+
+
+const struct atCommandType atCommands[] PROGMEM = {
+    {"ID"  , PARTYPE_NONE },  {"BM"  , PARTYPE_UINT }, {"CL"  , PARTYPE_NONE }, {"CR"  , PARTYPE_NONE },
+    {"CM"  , PARTYPE_NONE },  {"CD"  , PARTYPE_NONE }, {"PL"  , PARTYPE_NONE }, {"PR"  , PARTYPE_NONE },
+    {"PM"  , PARTYPE_NONE },  {"RL"  , PARTYPE_NONE }, {"RR"  , PARTYPE_NONE }, {"RM"  , PARTYPE_NONE },
+    {"WU"  , PARTYPE_NONE },  {"WD"  , PARTYPE_NONE }, {"WS"  , PARTYPE_UINT }, {"MX"  , PARTYPE_INT  },
+    {"MY"  , PARTYPE_INT  },  {"KW"  , PARTYPE_STRING},{"KP"  , PARTYPE_STRING},{"KR"  , PARTYPE_STRING},
+    {"RA"  , PARTYPE_NONE },  {"SA"  , PARTYPE_STRING},{"LO"  , PARTYPE_STRING},{"LI"  , PARTYPE_NONE },
+    {"NE"  , PARTYPE_NONE },  {"DE"  , PARTYPE_NONE }, {"NC"  , PARTYPE_NONE }, {"MM"  , PARTYPE_UINT },
+    {"LA"  , PARTYPE_NONE },  {"SW"  , PARTYPE_NONE }, {"SR"  , PARTYPE_NONE }, {"ER"  , PARTYPE_NONE },
+    {"CA"  , PARTYPE_NONE },  {"AX"  , PARTYPE_UINT }, {"AY"  , PARTYPE_UINT }, {"DX"  , PARTYPE_UINT  },
+    {"DY"  , PARTYPE_UINT },  {"TS"  , PARTYPE_UINT }, {"TP"  , PARTYPE_UINT }, {"TT"  , PARTYPE_UINT  },
+    {"GU"  , PARTYPE_UINT },  {"GD"  , PARTYPE_UINT }, {"GL"  , PARTYPE_UINT }, {"GR"  , PARTYPE_UINT  }
+};
+
 
 struct buttonType buttons [NUMBER_OF_BUTTONS];                     // array for all buttons - type definition see fabi.h 
 struct buttonDebouncerType buttonDebouncers [NUMBER_OF_BUTTONS];   // array for all buttonsDebouncers - type definition see fabi.h 
@@ -277,9 +293,9 @@ void setup() {
    
    init_CIM_frame();  // for AsTeRICS CIM protocol compatibility
    
-   buttons[0].mode=CMD_TOGGLE_ALTERNATIVE;            // default for button 1: switch alternative / mouse cursur control mode
-   buttons[1].mode=CMD_MOUSE_WHEEL_UP;
-   buttons[2].mode=CMD_MOUSE_WHEEL_DOWN;
+   buttons[0].mode=CMD_NEXT_SLOT;         // default for button 1: switch to next slot
+   buttons[1].mode=CMD_KEY_PRESS; strcpy(buttons[1].keystring,"KEY_ESC ");;
+   buttons[2].mode=CMD_IDLE;
    buttons[3].mode=CMD_KEY_PRESS; strcpy(buttons[3].keystring,"KEY_UP ");
    buttons[4].mode=CMD_KEY_PRESS; strcpy(buttons[4].keystring,"KEY_DOWN ");
    buttons[5].mode=CMD_KEY_PRESS; strcpy(buttons[5].keystring,"KEY_LEFT ");
@@ -658,9 +674,9 @@ void performCommand (uint8_t cmd, int16_t par1, char * keystring, int8_t periodi
             break;
         case CMD_BUTTON_MODE:
                release_all();
-               if (DebugOutput==DEBUG_FULLOUTPUT)  
+               //if (DebugOutput==DEBUG_FULLOUTPUT)  
                  Serial.print("set mode for button "); Serial.println(par1);
-               if ((par1>=0) && (par1<=NUMBER_OF_BUTTONS))
+               if ((par1>0) && (par1<=NUMBER_OF_BUTTONS))
                    actButton=par1;
                else  Serial.println("?");
             break;
@@ -782,10 +798,10 @@ void performCommand (uint8_t cmd, int16_t par1, char * keystring, int8_t periodi
         case CMD_LOAD_SLOT:
                if (DebugOutput==DEBUG_FULLOUTPUT)  
                {  Serial.print("load slot: "); Serial.println(keystring); }
-               release_all();
-               if (keystring)
-                  readFromEEPROM(keystring);
-               else printCurrentSlot();
+               if (keystring) {
+                 release_all();
+                 readFromEEPROM(keystring);
+               }
             break;
         case CMD_LIST_SLOTS:
                if (DebugOutput==DEBUG_FULLOUTPUT)  
@@ -797,7 +813,6 @@ void performCommand (uint8_t cmd, int16_t par1, char * keystring, int8_t periodi
         case CMD_NEXT_SLOT:
                if (DebugOutput==DEBUG_FULLOUTPUT)  
                  Serial.print("load next slot");
-               // blinkCount=10;  blinkStartTime=15;  
                release_all();
                readFromEEPROM(0);
                break;
@@ -807,29 +822,31 @@ void performCommand (uint8_t cmd, int16_t par1, char * keystring, int8_t periodi
                release_all();
                deleteSlots(); 
             break;
-  
-  
+    
         case CMD_MM:
-               if (DebugOutput==DEBUG_FULLOUTPUT)  
-                 Serial.println("mouse function on");
-               settings.mouseOn=1;
+               settings.mouseOn=par1;
+               if (DebugOutput==DEBUG_FULLOUTPUT)
+               {  
+                 if (settings.mouseOn)
+                   Serial.println("mouse function on");
+                   else Serial.println("alternative functions on");
+               }
             break;
-        case CMD_AF:
+        case CMD_LA:
                if (DebugOutput==DEBUG_FULLOUTPUT)  
-                 Serial.println("alternative functions on");
-               settings.mouseOn=0;
+                 Serial.println("laod all slots");
+               release_all();
+               reportSlotParameters=1;
+               readFromEEPROM(keystring);
+               reportSlotParameters=0;
+               readFromEEPROM(0);
             break;
         case CMD_TOGGLE_ALTERNATIVE:
                if (DebugOutput==DEBUG_FULLOUTPUT)  
                  Serial.println("switch mouse / alternative function");
                blinkCount=6;  blinkStartTime=15;
-               if (settings.mouseOn==0) 
-               {
-                 settings.mouseOn=1;
-               }
-               else {
-                 settings.mouseOn=0;
-               }
+               if (settings.mouseOn==0)  settings.mouseOn=1;
+               else settings.mouseOn=0;
             break;
         case CMD_CALIBRATE:
                if (DebugOutput==DEBUG_FULLOUTPUT)  
@@ -849,8 +866,8 @@ void performCommand (uint8_t cmd, int16_t par1, char * keystring, int8_t periodi
                settings.ay=par1;
             break;
         case CMD_DX:
-               if (DebugOutput==DEBUG_FULLOUTPUT)  
-                 Serial.println("set deadzone x");
+              if (DebugOutput==DEBUG_FULLOUTPUT)  
+                 Serial.print("set deadzone x");
                settings.dx=par1;
             break;
         case CMD_DY:

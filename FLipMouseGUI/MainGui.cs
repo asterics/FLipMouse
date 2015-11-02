@@ -631,55 +631,21 @@ namespace MouseApp2
         {
             if (splitXYBox.Checked)
             {
-                SpeedXNameLabel.Text = "Speed-X"; SpeedXNameLabel.Left-= 30; 
-                SpeedYNameLabel.Visible = true;
-                speedXBar.Width = 200; speedXLabel.Left -= 240;
-                speedXBar.Left-=30; decSpeedX.Left -= 30;
-                incSpeedX.Left -= 255;
+                incDeadzoneX.Enabled = true; incDeadzoneX.Visible = true;
+                decDeadzoneY.Enabled = true; decDeadzoneY.Visible = true;
 
-                speedYBar.Enabled = true; speedYBar.Visible = true;
-                speedYLabel.Enabled = true; speedYLabel.Visible = true;
-                incSpeedY.Visible = true; incSpeedY.Enabled = true;
-                decSpeedY.Visible = true; decSpeedY.Enabled = true;
-
-                DeadzoneXNameLabel.Text = "Deadzone-X";  DeadzoneXNameLabel.Left -= 30;
-                DeadzoneYNameLabel.Visible = true;
-                deadzoneXBar.Width = 200; deadzoneXLabel.Left -= 240;
-                deadzoneXBar.Left -= 30; decDeadzoneX.Left -= 30;
-                incDeadzoneX.Left -= 255;
-
-                deadzoneYBar.Enabled = true; deadzoneYBar.Visible = true;
-                deadzoneYLabel.Enabled = true; deadzoneYLabel.Visible = true;
-                incDeadzoneY.Visible = true; incDeadzoneY.Enabled = true;
-                decDeadzoneY.Visible = true; decDeadzoneY.Enabled = true;
-
+                incSpeedX.Enabled = true; incSpeedX.Visible = true;
+                decSpeedY.Enabled = true; decSpeedY.Visible = true;
             }
             else
             {
-                SpeedXNameLabel.Text = "Speed"; SpeedXNameLabel.Left += 30;
-                SpeedYNameLabel.Visible = false;
-                speedXBar.Width = 420; speedXLabel.Left += 240;
-                speedXBar.Left += 30; decSpeedX.Left += 30;
-                incSpeedX.Left += 255;
+                incDeadzoneX.Enabled = false; incDeadzoneX.Visible = false;
+                decDeadzoneY.Enabled = false; decDeadzoneY.Visible = false;
 
-                speedYBar.Enabled = false; speedYBar.Visible = false;
-                speedYLabel.Enabled = false; speedYLabel.Visible = false;
-                incSpeedY.Visible = false; incSpeedY.Enabled = false;
-                decSpeedY.Visible = false; decSpeedY.Enabled = false;
-
-                DeadzoneXNameLabel.Text = "Deadzone"; DeadzoneXNameLabel.Left += 30;
-                DeadzoneYNameLabel.Visible = false;
-                deadzoneXBar.Width = 420; deadzoneXLabel.Left += 240;
-                deadzoneXBar.Left += 30; decDeadzoneX.Left += 30;
-                incDeadzoneX.Left += 255;
-
-                deadzoneYBar.Enabled = false; deadzoneYBar.Visible = false;
-                deadzoneYLabel.Enabled = false; deadzoneYLabel.Visible = false;
-                incDeadzoneY.Visible = false; incDeadzoneY.Enabled = false;
-                decDeadzoneY.Visible = false; decDeadzoneY.Enabled = false;
-
+                incSpeedX.Enabled = false; incSpeedX.Visible = false;
+                decSpeedY.Enabled = false; decSpeedY.Visible = false;
             }
-            
+
         }
 
 
@@ -734,6 +700,11 @@ namespace MouseApp2
         private void speedYBar_Scroll(object sender, EventArgs e)
         {
             speedYLabel.Text = speedYBar.Value.ToString();
+            if (splitXYBox.Checked == false)
+            {
+                speedXBar.Value = speedYBar.Value;
+                speedXLabel.Text = speedXBar.Value.ToString();
+            }
         }
 
         private void decSpeedY_Click(object sender, EventArgs e)
@@ -741,6 +712,11 @@ namespace MouseApp2
             if (speedYBar.Value >= speedYBar.Minimum + SPEED_CHANGE_STEP)
                 speedYBar.Value -= SPEED_CHANGE_STEP;
             speedYLabel.Text = speedYBar.Value.ToString();
+            if (splitXYBox.Checked == false)
+            {
+                speedXBar.Value = speedYBar.Value;
+                speedXLabel.Text = speedXBar.Value.ToString();
+            }
         }
         private void decSpeedY_MouseHover(object sender, EventArgs e)
         {
@@ -753,6 +729,11 @@ namespace MouseApp2
             if (speedYBar.Value <= speedYBar.Maximum - SPEED_CHANGE_STEP)
                 speedYBar.Value += SPEED_CHANGE_STEP;
             speedYLabel.Text = speedYBar.Value.ToString();
+            if (splitXYBox.Checked == false)
+            {
+                speedXBar.Value = speedYBar.Value;
+                speedXLabel.Text = speedXBar.Value.ToString();
+            }
         }
         private void incSpeedY_MouseHover(object sender, EventArgs e)
         {
@@ -807,7 +788,11 @@ namespace MouseApp2
         private void deadzoneYBar_Scroll(object sender, EventArgs e)
         {
             deadzoneYLabel.Text = deadzoneYBar.Value.ToString();
-
+            if (splitXYBox.Checked == false)
+            {
+                deadzoneXBar.Value = deadzoneYBar.Value;
+                deadzoneXLabel.Text = deadzoneXBar.Value.ToString();
+            }
         }
 
         private void decDeadzoneY_Click(object sender, EventArgs e)
@@ -815,6 +800,11 @@ namespace MouseApp2
             if (deadzoneYBar.Value >= deadzoneYBar.Minimum + DEADZONE_CHANGE_STEP)
                 deadzoneYBar.Value -= DEADZONE_CHANGE_STEP;
             deadzoneYLabel.Text = deadzoneYBar.Value.ToString();
+            if (splitXYBox.Checked == false)
+            {
+                deadzoneXBar.Value = deadzoneYBar.Value;
+                deadzoneXLabel.Text = deadzoneXBar.Value.ToString();
+            }
         }
         private void decDeadzoneY_MouseHover(object sender, EventArgs e)
         {
@@ -827,6 +817,11 @@ namespace MouseApp2
             if (deadzoneYBar.Value <= deadzoneYBar.Maximum - DEADZONE_CHANGE_STEP)
                 deadzoneYBar.Value += DEADZONE_CHANGE_STEP;
             deadzoneYLabel.Text = deadzoneYBar.Value.ToString();
+            if (splitXYBox.Checked == false)
+            {
+                deadzoneXBar.Value = deadzoneYBar.Value;
+                deadzoneXLabel.Text = deadzoneXBar.Value.ToString();
+            }
         }
         private void incDeadzoneY_MouseHover(object sender, EventArgs e)
         {

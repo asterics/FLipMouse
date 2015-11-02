@@ -69,7 +69,7 @@ namespace MouseApp2
         {
             String receivedString = "";
 
-            sendGetIDCommand();   // start (after connect): request ID String from Lipmouse; receive ID before timeout ! (else close port)
+            sendIDCommand();   // start (after connect): request ID String from Lipmouse; receive ID before timeout ! (else close port)
             
             try
             {
@@ -207,6 +207,7 @@ namespace MouseApp2
                     displaySlot(slotCounter);
                     sendApplyCommands();
                     sendSaveSlotCommands(slots[slotCounter].slotName);
+                    addToLog("Slot " + slots[slotCounter].slotName + " was stored into FLipmouse.");
                 }
                 addToLog("The settings were stored!");
                 sendNextCommand();

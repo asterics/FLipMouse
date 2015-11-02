@@ -128,6 +128,7 @@ namespace MouseApp2
         const int GUITYPE_KEYSELECT = 3;
         const int GUITYPE_SLIDER    = 4;
         const int GUITYPE_BOOLEAN   = 5;
+        const int GUITYPE_GENERIC   = 6;
 
         const string PREFIX_FLIPMOUSE_VERSION = "FLIPMOUSE ";
         const string PREFIX_REPORT_VALUES = "VALUES:";
@@ -192,35 +193,92 @@ namespace MouseApp2
         }
 
 
-        public CommandGuiLinks commandGuiLinks = new CommandGuiLinks();
+        static public List<CommandGuiLink> commandGuiLinks = new List<CommandGuiLink>();
 
         public void initCommandGuiLinks()
         {
-            commandGuiLinks.add(new CommandGuiLink("AT AX", speedXBar, speedXLabel));
-            commandGuiLinks.add(new CommandGuiLink("AT AY", speedYBar, speedYLabel));
-            commandGuiLinks.add(new CommandGuiLink("AT DX", deadzoneXBar, deadzoneXLabel));
-            commandGuiLinks.add(new CommandGuiLink("AT DY", deadzoneYBar, deadzoneYLabel));
-            commandGuiLinks.add(new CommandGuiLink("AT TS", sipThresholdBar, sipThresholdLabel));
-            commandGuiLinks.add(new CommandGuiLink("AT TP", puffThresholdBar, puffThresholdLabel));
-            commandGuiLinks.add(new CommandGuiLink("AT SM", specialThresholdBar, specialThresholdLabel));
-            commandGuiLinks.add(new CommandGuiLink("AT HM", holdThresholdBar, holdThresholdLabel));
-            commandGuiLinks.add(new CommandGuiLink("AT GU", upGainBar, upGainLabel));
-            commandGuiLinks.add(new CommandGuiLink("AT GD", downGainBar, downGainLabel));
-            commandGuiLinks.add(new CommandGuiLink("AT GL", leftGainBar, leftGainLabel));
-            commandGuiLinks.add(new CommandGuiLink("AT GR", rightGainBar, rightGainLabel));
-            commandGuiLinks.add(new CommandGuiLink("AT MM", selectStick, selectAlternative));
-            commandGuiLinks.add(new CommandGuiLink("AT BM 01", Button1FunctionBox, Button1ParameterText, Button1NumericParameter));
-            commandGuiLinks.add(new CommandGuiLink("AT BM 02", Button2FunctionBox, Button2ParameterText, Button2NumericParameter));
-            commandGuiLinks.add(new CommandGuiLink("AT BM 03", Button3FunctionBox, Button3ParameterText, Button3NumericParameter));
-            commandGuiLinks.add(new CommandGuiLink("AT BM 04", UpFunctionMenu, UpParameterText, UpNumericParameter));
-            commandGuiLinks.add(new CommandGuiLink("AT BM 05", DownFunctionMenu, DownParameterText, DownNumericParameter));
-            commandGuiLinks.add(new CommandGuiLink("AT BM 06", LeftFunctionMenu, LeftParameterText, LeftNumericParameter));
-            commandGuiLinks.add(new CommandGuiLink("AT BM 07", RightFunctionMenu, RightParameterText, RightNumericParameter));
-            commandGuiLinks.add(new CommandGuiLink("AT BM 08", SipFunctionMenu, SipParameterText, SipNumericParameter));
-            commandGuiLinks.add(new CommandGuiLink("AT BM 09", SpecialSipFunctionMenu, SpecialSipParameterText, SpecialSipNumericParameter));
-            commandGuiLinks.add(new CommandGuiLink("AT BM 10", PuffFunctionMenu, PuffParameterText, PuffNumericParameter));
-            commandGuiLinks.add(new CommandGuiLink("AT BM 11", SpecialPuffFunctionMenu, SpecialPuffParameterText, SpecialPuffNumericParameter));
+            commandGuiLinks.Add(new CommandGuiLink("AT AX", speedXBar, speedXLabel, "70"));
+            commandGuiLinks.Add(new CommandGuiLink("AT AY", speedYBar, speedYLabel, "60"));
+            commandGuiLinks.Add(new CommandGuiLink("AT DX", deadzoneXBar, deadzoneXLabel, "20"));
+            commandGuiLinks.Add(new CommandGuiLink("AT DY", deadzoneYBar, deadzoneYLabel, "20"));
+            commandGuiLinks.Add(new CommandGuiLink("AT TS", sipThresholdBar, sipThresholdLabel, "500"));
+            commandGuiLinks.Add(new CommandGuiLink("AT TP", puffThresholdBar, puffThresholdLabel, "525"));
+            commandGuiLinks.Add(new CommandGuiLink("AT SM", specialThresholdBar, specialThresholdLabel, "700"));
+            commandGuiLinks.Add(new CommandGuiLink("AT HM", holdThresholdBar, holdThresholdLabel , "300"));
+            commandGuiLinks.Add(new CommandGuiLink("AT GU", upGainBar, upGainLabel, "50"));
+            commandGuiLinks.Add(new CommandGuiLink("AT GD", downGainBar, downGainLabel, "50"));
+            commandGuiLinks.Add(new CommandGuiLink("AT GL", leftGainBar, leftGainLabel, "50"));
+            commandGuiLinks.Add(new CommandGuiLink("AT GR", rightGainBar, rightGainLabel, "50"));
+            commandGuiLinks.Add(new CommandGuiLink("AT MM", selectStick, selectAlternative, "1"));
+            commandGuiLinks.Add(new CommandGuiLink("AT BM 01", Button1FunctionBox, Button1ParameterText, Button1NumericParameter, "AT NE"));
+            commandGuiLinks.Add(new CommandGuiLink("AT BM 02", Button2FunctionBox, Button2ParameterText, Button2NumericParameter, "AT KP KEY_ESC "));
+            commandGuiLinks.Add(new CommandGuiLink("AT BM 03", Button3FunctionBox, Button3ParameterText, Button3NumericParameter, "AT NC" ));
+            commandGuiLinks.Add(new CommandGuiLink("AT BM 04", UpFunctionMenu, UpParameterText, UpNumericParameter, "AT KP KEY_UP "));
+            commandGuiLinks.Add(new CommandGuiLink("AT BM 05", DownFunctionMenu, DownParameterText, DownNumericParameter, "AT KP KEY_DOWN "));
+            commandGuiLinks.Add(new CommandGuiLink("AT BM 06", LeftFunctionMenu, LeftParameterText, LeftNumericParameter, "AT KP KEY_LEFT "));
+            commandGuiLinks.Add(new CommandGuiLink("AT BM 07", RightFunctionMenu, RightParameterText, RightNumericParameter, "AT KP KEY_RIGHT "));
+            commandGuiLinks.Add(new CommandGuiLink("AT BM 08", SipFunctionMenu, SipParameterText, SipNumericParameter, "AT PL"));
+            commandGuiLinks.Add(new CommandGuiLink("AT BM 09", SpecialSipFunctionMenu, SpecialSipParameterText, SpecialSipNumericParameter, "AT NC"));
+            commandGuiLinks.Add(new CommandGuiLink("AT BM 10", PuffFunctionMenu, PuffParameterText, PuffNumericParameter, "AT CR"));
+            commandGuiLinks.Add(new CommandGuiLink("AT BM 11", SpecialPuffFunctionMenu, SpecialPuffParameterText, SpecialPuffNumericParameter, "AT CA"));
         }
+
+        String[] keyOptions = {    "Clear Keycodes!", "KEY_A","KEY_B","KEY_C","KEY_D","KEY_E","KEY_F","KEY_G","KEY_H","KEY_I","KEY_J","KEY_K","KEY_L",
+                                   "KEY_M","KEY_N","KEY_O","KEY_P","KEY_Q","KEY_R","KEY_S","KEY_T","KEY_U","KEY_V","KEY_W","KEY_X",
+                                   "KEY_Y","KEY_Z","KEY_1","KEY_2","KEY_3","KEY_4","KEY_5","KEY_6","KEY_7","KEY_8","KEY_9","KEY_0",
+                                   "KEY_F1","KEY_F2","KEY_F3","KEY_F4","KEY_F5","KEY_F6","KEY_F7","KEY_F8","KEY_F9","KEY_F10","KEY_F11","KEY_F12",	
+                                   "KEY_UP","KEY_DOWN","KEY_LEFT","KEY_RIGHT","KEY_SPACE","KEY_ENTER",
+                                   "KEY_ALT","KEY_BACKSPACE","KEY_CAPS_LOCK","KEY_CTRL","KEY_DELETE","KEY_END","KEY_ESC","KEY_GUI",
+                                   "KEY_HOME","KEY_INSERT","KEY_NUM_LOCK","KEY_PAGE_DOWN","KEY_PAGE_UP","KEY_PAUSE","KEY_RIGHT_ALT",
+                                   "KEY_RIGHT_GUI","KEY_SCROLL_LOCK","KEY_SHIFT","KEY_TAB"
+                              };
+
+        public void sendIDCommand()
+        {
+            sendCmd("AT ID");
+        }
+
+        public void sendNextCommand()
+        {
+            sendCmd("AT NE");
+        }
+
+        public void sendLoadAllCommand()
+        {
+            sendCmd("AT LA");
+        }
+
+        public void sendEndReportingCommand()
+        {
+            sendCmd("AT ER");
+        }
+
+        public void sendStartReportingCommand()
+        {
+            sendCmd("AT SR");
+        }
+
+        public void sendCalibrationCommand()
+        {
+            sendCmd("AT CA");
+        }
+
+        public void sendLoadSlotCommands(String slotname)
+        {
+            sendCmd("AT LO " + slotname);
+        }
+
+        public void sendSaveSlotCommands(String slotname)
+        {
+            sendCmd("AT SA " + slotname);
+        }
+
+        public void sendClearCommand()
+        {
+            sendCmd("AT DE");
+        }
+
+
 
         public class Slot
         {
@@ -228,28 +286,66 @@ namespace MouseApp2
             public List<String> settingStrings = new List<String>();
             public Slot()
             {
-                slotName = "default";
-                settingStrings.Add("AT AX 70"); settingStrings.Add("AT AY 60");
-                settingStrings.Add("AT DX 20"); settingStrings.Add("AT DY 20");
-                settingStrings.Add("AT TS 500"); settingStrings.Add("AT TP 525");
-                settingStrings.Add("AT WS 3"); settingStrings.Add("AT MM 1");
-                settingStrings.Add("AT GU 50"); settingStrings.Add("AT GD 50");
-                settingStrings.Add("AT GL 50"); settingStrings.Add("AT GR 50");
-                settingStrings.Add("AT SM 700"); settingStrings.Add("AT HM 300");
-
-                settingStrings.Add("AT BM 01"); settingStrings.Add("AT NE");
-                settingStrings.Add("AT BM 02"); settingStrings.Add("AT KP KEY_ESC ");
-                settingStrings.Add("AT BM 03"); settingStrings.Add("AT NC");
-                settingStrings.Add("AT BM 04"); settingStrings.Add("AT KP KEY_UP ");
-                settingStrings.Add("AT BM 05"); settingStrings.Add("AT KP KEY_DOWN ");
-                settingStrings.Add("AT BM 06"); settingStrings.Add("AT KP KEY_LEFT ");
-                settingStrings.Add("AT BM 07"); settingStrings.Add("AT KP KEY_RIGHT ");
-                settingStrings.Add("AT BM 08"); settingStrings.Add("AT PL");
-                settingStrings.Add("AT BM 09"); settingStrings.Add("AT NC");
-                settingStrings.Add("AT BM 10"); settingStrings.Add("AT CR");
-                settingStrings.Add("AT BM 11"); settingStrings.Add("AT CA");
+                this.slotName = "default";
+                init();
+            }
+            public Slot(String slotName)
+            {
+                this.slotName = slotName;
+                init();
+            }
+            void init() {
+                foreach (CommandGuiLink cgl in commandGuiLinks)
+                {
+                    switch (cgl.type)
+                    {
+                        case GUITYPE_GENERIC:
+                            settingStrings.Add(cgl.cmd); settingStrings.Add(cgl.def);
+                            break;
+                        case GUITYPE_BOOLEAN:
+                        case GUITYPE_SLIDER:
+                            settingStrings.Add(cgl.cmd + " " + cgl.def);
+                            break;
+                    }
+                }
             }
         };
+
+        private String buildCommandString(String cmdDescription, String stringParam, int intParam)
+        {
+            String str = allCommands.getCommand(cmdDescription);
+            switch (allCommands.getParameterType(cmdDescription))
+            {
+                case PARTYPE_UINT:
+                case PARTYPE_INT: str += " " + intParam; break;
+                case PARTYPE_STRING: str += " " + stringParam; break;
+            }
+            return (str);
+        }
+
+
+        public void sendApplyCommands()
+        {
+
+            foreach (CommandGuiLink cgl in commandGuiLinks)
+            {
+                switch (cgl.type)
+                {
+                    case GUITYPE_GENERIC:
+                        sendCmd(cgl.cmd);
+                        sendCmd(buildCommandString(cgl.cb.Text, cgl.tb.Text, (int)cgl.nud.Value));
+                        break;
+                    case GUITYPE_SLIDER:
+                        sendCmd(cgl.cmd + " " + cgl.tl.Text);
+                        break;
+                    case GUITYPE_BOOLEAN:
+                        if (cgl.rb1.Checked)
+                            sendCmd(cgl.cmd + " 1");
+                        else sendCmd(cgl.cmd + " 0");
+                        break;
+                }
+            }
+        }
 
 
         public class Command
@@ -354,7 +450,9 @@ namespace MouseApp2
 
         public class CommandGuiLink
         {
+            public int type;
             public String cmd;
+            public String def;
 
             public ComboBox cb;
             public TextBox tb;
@@ -364,139 +462,33 @@ namespace MouseApp2
             public RadioButton rb1;
             public RadioButton rb2;
 
-            public CommandGuiLink(String cmd, ComboBox cb, TextBox tb, NumericUpDown nud)
+            public CommandGuiLink(String cmd, ComboBox cb, TextBox tb, NumericUpDown nud, String def)
             {
+                this.type = GUITYPE_GENERIC;
                 this.cmd = cmd;
                 this.cb = cb;
                 this.tb = tb;
                 this.nud = nud;
+                this.def = def;
             }
 
-            public CommandGuiLink(String cmd, TrackBar tr, Label tl)
+            public CommandGuiLink(String cmd, TrackBar tr, Label tl, String def)
             {
+                this.type = GUITYPE_SLIDER;
                 this.cmd = cmd;
                 this.tr = tr;
                 this.tl = tl;
+                this.def = def;
             }
-            public CommandGuiLink(String cmd, RadioButton rb1, RadioButton rb2)
+            public CommandGuiLink(String cmd, RadioButton rb1, RadioButton rb2, String def)
             {
+                this.type = GUITYPE_BOOLEAN;
                 this.cmd = cmd;
                 this.rb1 = rb1;
                 this.rb2 = rb2;
+                this.def = def;
             }
         };
 
-        public class CommandGuiLinks
-        {
-            public List<CommandGuiLink> guiLinks = new List<CommandGuiLink>();
-
-            public void add(CommandGuiLink cgl)
-            {
-                guiLinks.Add(cgl);
-            }
-        };
-
-
-        private String buildCommandString(String cmdDescription, String stringParam, int intParam)
-        {
-            String str = allCommands.getCommand(cmdDescription);
-            switch (allCommands.getParameterType(cmdDescription))
-            {
-                case PARTYPE_UINT:
-                case PARTYPE_INT: str += " " + intParam; break;
-                case PARTYPE_STRING: str += " " + stringParam; break;
-            }
-            return (str);
-        }
-
-
-        public void sendApplyCommands()
-        {
-            sendCmd("AT AX " + speedXLabel.Text);
-            sendCmd("AT AY " + speedYLabel.Text);
-            sendCmd("AT DX " + deadzoneXLabel.Text);
-            sendCmd("AT DY " + deadzoneYLabel.Text);
-            sendCmd("AT TS " + sipThresholdLabel.Text);
-            sendCmd("AT TP " + puffThresholdLabel.Text);
-            sendCmd("AT SM " + specialThresholdLabel.Text);
-            sendCmd("AT HM " + holdThresholdLabel.Text);
-            sendCmd("AT GU " + upGainLabel.Text);
-            sendCmd("AT GD " + downGainLabel.Text);
-            sendCmd("AT GL " + leftGainLabel.Text);
-            sendCmd("AT GR " + rightGainLabel.Text);
-            if (useAlternativeFunctions)
-                sendCmd("AT MM 0");
-            else sendCmd("AT MM 1");
-
-            // update the 11 button functions (starting with the 3 physical buttons)
-            sendCmd("AT BM 1");
-            sendCmd(buildCommandString(Button1FunctionBox.Text, Button1ParameterText.Text, (int)Button1NumericParameter.Value));
-            sendCmd("AT BM 2");
-            sendCmd(buildCommandString(Button2FunctionBox.Text, Button2ParameterText.Text, (int)Button2NumericParameter.Value));
-            sendCmd("AT BM 3");
-            sendCmd(buildCommandString(Button3FunctionBox.Text, Button3ParameterText.Text, (int)Button3NumericParameter.Value));
-            sendCmd("AT BM 4");
-            sendCmd(buildCommandString(UpFunctionMenu.Text, UpParameterText.Text, (int)UpNumericParameter.Value));
-            sendCmd("AT BM 5");
-            sendCmd(buildCommandString(DownFunctionMenu.Text, DownParameterText.Text, (int)DownNumericParameter.Value));
-            sendCmd("AT BM 6");
-            sendCmd(buildCommandString(LeftFunctionMenu.Text, LeftParameterText.Text, (int)LeftNumericParameter.Value));
-            sendCmd("AT BM 7");
-            sendCmd(buildCommandString(RightFunctionMenu.Text, RightParameterText.Text, (int)RightNumericParameter.Value));
-            sendCmd("AT BM 8");
-            sendCmd(buildCommandString(SipFunctionMenu.Text, SipParameterText.Text, (int)SipNumericParameter.Value));
-            sendCmd("AT BM 9");
-            sendCmd(buildCommandString(SpecialSipFunctionMenu.Text, SpecialSipParameterText.Text, (int)SpecialSipNumericParameter.Value));
-            sendCmd("AT BM 10");
-            sendCmd(buildCommandString(PuffFunctionMenu.Text, PuffParameterText.Text, (int)PuffNumericParameter.Value));
-            sendCmd("AT BM 11");
-            sendCmd(buildCommandString(SpecialPuffFunctionMenu.Text, SpecialPuffParameterText.Text, (int)SpecialPuffNumericParameter.Value));
-        }
-
-        public void sendGetIDCommand()
-        {
-            sendCmd("AT ID");
-        }
-
-        public void sendNextCommand()
-        {
-            sendCmd("AT NE");
-        }
-
-        public void sendLoadAllCommand()
-        {
-            sendCmd("AT LA");
-        }
-
-        public void sendEndReportingCommand()
-        {
-            sendCmd("AT ER");
-        }
-
-        public void sendStartReportingCommand()
-        {
-            sendCmd("AT SR");
-        }
-
-        public void sendCalibrationCommand()
-        {
-           sendCmd("AT CA");
-        }
-
-        public void sendLoadSlotCommands(String slotname)
-        {
-            sendCmd("AT LO " + slotname);
-        }
-
-        public void sendSaveSlotCommands(String slotname)
-        {
-            sendCmd("AT SA " + slotname);
-            addToLog("Slot " + slotname + " was stored into FLipmouse.");
-        }
-
-        public void sendClearCommand()
-        {
-            sendCmd("AT DE");
-        }
     }
 }

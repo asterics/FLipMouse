@@ -117,6 +117,7 @@
             this.label6 = new System.Windows.Forms.Label();
             this.Button1FunctionBox = new System.Windows.Forms.ComboBox();
             this.SipPuffTab = new System.Windows.Forms.TabPage();
+            this.label32 = new System.Windows.Forms.Label();
             this.clearButtonSpecialPuff = new System.Windows.Forms.Button();
             this.clearButtonPuff = new System.Windows.Forms.Button();
             this.clearButtonSpecialSip = new System.Windows.Forms.Button();
@@ -146,6 +147,8 @@
             this.PuffParameterText = new System.Windows.Forms.TextBox();
             this.SpecialPuffParameterText = new System.Windows.Forms.TextBox();
             this.SipPuffLevelsTab = new System.Windows.Forms.TabPage();
+            this.label30 = new System.Windows.Forms.Label();
+            this.label29 = new System.Windows.Forms.Label();
             this.decHoldThreshold = new System.Windows.Forms.Button();
             this.incHoldThreshold = new System.Windows.Forms.Button();
             this.holdThresholdLabel = new System.Windows.Forms.Label();
@@ -203,6 +206,7 @@
             this.downGainBar = new System.Windows.Forms.TrackBar();
             this.upGainBar = new System.Windows.Forms.TrackBar();
             this.IRTab = new System.Windows.Forms.TabPage();
+            this.label31 = new System.Windows.Forms.Label();
             this.button2 = new System.Windows.Forms.Button();
             this.label27 = new System.Windows.Forms.Label();
             this.textBox2 = new System.Windows.Forms.TextBox();
@@ -226,10 +230,6 @@
             this.newSlotButton = new System.Windows.Forms.Button();
             this.deleteSlotButton = new System.Windows.Forms.Button();
             this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
-            this.label29 = new System.Windows.Forms.Label();
-            this.label30 = new System.Windows.Forms.Label();
-            this.label31 = new System.Windows.Forms.Label();
-            this.label32 = new System.Windows.Forms.Label();
             this.tabControl.SuspendLayout();
             this.LipmouseTab.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.deadzoneYBar)).BeginInit();
@@ -616,7 +616,7 @@
             this.selectAlternative.TabIndex = 23;
             this.selectAlternative.Text = "Use Stick for Alternative Actions";
             this.selectAlternative.UseVisualStyleBackColor = true;
-            this.selectAlternative.CheckedChanged += new System.EventHandler(this.selectAlternative_CheckedChanged);
+            this.selectAlternative.CheckedChanged += new System.EventHandler(this.selectAlternative_Checked);
             // 
             // selectStick
             // 
@@ -630,7 +630,7 @@
             this.selectStick.TabStop = true;
             this.selectStick.Text = "Use Stick for Cursor Movement";
             this.selectStick.UseVisualStyleBackColor = true;
-            this.selectStick.CheckedChanged += new System.EventHandler(this.selectMouse_CheckedChanged);
+            this.selectStick.CheckedChanged += new System.EventHandler(this.selectStick_Checked);
             // 
             // deadzoneXLabel
             // 
@@ -1428,6 +1428,16 @@
             this.SipPuffTab.TabIndex = 2;
             this.SipPuffTab.Text = "Sip/Puff Actions";
             // 
+            // label32
+            // 
+            this.label32.AutoSize = true;
+            this.label32.Location = new System.Drawing.Point(213, 31);
+            this.label32.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label32.Name = "label32";
+            this.label32.Size = new System.Drawing.Size(229, 20);
+            this.label32.TabIndex = 141;
+            this.label32.Text = "Select Actions for Sip and Puff:";
+            // 
             // clearButtonSpecialPuff
             // 
             this.clearButtonSpecialPuff.Enabled = false;
@@ -1778,6 +1788,26 @@
             this.SipPuffLevelsTab.Size = new System.Drawing.Size(878, 455);
             this.SipPuffLevelsTab.TabIndex = 5;
             this.SipPuffLevelsTab.Text = "Sip/Puff Levels";
+            // 
+            // label30
+            // 
+            this.label30.AutoSize = true;
+            this.label30.Location = new System.Drawing.Point(63, 74);
+            this.label30.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label30.Name = "label30";
+            this.label30.Size = new System.Drawing.Size(182, 20);
+            this.label30.TabIndex = 141;
+            this.label30.Text = "  for sip and puff actions:";
+            // 
+            // label29
+            // 
+            this.label29.AutoSize = true;
+            this.label29.Location = new System.Drawing.Point(63, 50);
+            this.label29.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label29.Name = "label29";
+            this.label29.Size = new System.Drawing.Size(167, 20);
+            this.label29.TabIndex = 140;
+            this.label29.Text = "Select threshold levels";
             // 
             // decHoldThreshold
             // 
@@ -2514,6 +2544,16 @@
             this.IRTab.TabIndex = 6;
             this.IRTab.Text = "IR-Remote";
             // 
+            // label31
+            // 
+            this.label31.AutoSize = true;
+            this.label31.Location = new System.Drawing.Point(40, 45);
+            this.label31.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label31.Name = "label31";
+            this.label31.Size = new System.Drawing.Size(255, 20);
+            this.label31.TabIndex = 141;
+            this.label31.Text = "Record or play infrared commands:";
+            // 
             // button2
             // 
             this.button2.Enabled = false;
@@ -2604,6 +2644,7 @@
             // 
             // slotNames
             // 
+            this.slotNames.CausesValidation = false;
             this.slotNames.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.slotNames.ForeColor = System.Drawing.SystemColors.MenuHighlight;
             this.slotNames.Location = new System.Drawing.Point(381, 636);
@@ -2739,46 +2780,6 @@
             this.deleteSlotButton.Text = "Delete Slot";
             this.deleteSlotButton.UseVisualStyleBackColor = true;
             this.deleteSlotButton.Click += new System.EventHandler(this.deleteSlotButton_Click);
-            // 
-            // label29
-            // 
-            this.label29.AutoSize = true;
-            this.label29.Location = new System.Drawing.Point(63, 50);
-            this.label29.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.label29.Name = "label29";
-            this.label29.Size = new System.Drawing.Size(167, 20);
-            this.label29.TabIndex = 140;
-            this.label29.Text = "Select threshold levels";
-            // 
-            // label30
-            // 
-            this.label30.AutoSize = true;
-            this.label30.Location = new System.Drawing.Point(63, 74);
-            this.label30.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.label30.Name = "label30";
-            this.label30.Size = new System.Drawing.Size(182, 20);
-            this.label30.TabIndex = 141;
-            this.label30.Text = "  for sip and puff actions:";
-            // 
-            // label31
-            // 
-            this.label31.AutoSize = true;
-            this.label31.Location = new System.Drawing.Point(40, 45);
-            this.label31.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.label31.Name = "label31";
-            this.label31.Size = new System.Drawing.Size(255, 20);
-            this.label31.TabIndex = 141;
-            this.label31.Text = "Record or play infrared commands:";
-            // 
-            // label32
-            // 
-            this.label32.AutoSize = true;
-            this.label32.Location = new System.Drawing.Point(213, 31);
-            this.label32.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.label32.Name = "label32";
-            this.label32.Size = new System.Drawing.Size(229, 20);
-            this.label32.TabIndex = 141;
-            this.label32.Text = "Select Actions for Sip and Puff:";
             // 
             // FLipMouseGUI
             // 

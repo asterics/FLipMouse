@@ -37,22 +37,6 @@ namespace MouseApp2
         const int PRESSURE_CHANGE_STEP = 1;
         const int GAIN_CHANGE_STEP = 1;
 
-
-
-        const String TOKEN_SEPERATOR = "-,-";
-
-        String[] keyOptions = {    "Clear Keycodes!", "KEY_A","KEY_B","KEY_C","KEY_D","KEY_E","KEY_F","KEY_G","KEY_H","KEY_I","KEY_J","KEY_K","KEY_L",
-                                   "KEY_M","KEY_N","KEY_O","KEY_P","KEY_Q","KEY_R","KEY_S","KEY_T","KEY_U","KEY_V","KEY_W","KEY_X",
-                                   "KEY_Y","KEY_Z","KEY_1","KEY_2","KEY_3","KEY_4","KEY_5","KEY_6","KEY_7","KEY_8","KEY_9","KEY_0",
-                                   "KEY_F1","KEY_F2","KEY_F3","KEY_F4","KEY_F5","KEY_F6","KEY_F7","KEY_F8","KEY_F9","KEY_F10","KEY_F11","KEY_F12",	
-                                   "KEY_UP","KEY_DOWN","KEY_LEFT","KEY_RIGHT","KEY_SPACE","KEY_ENTER",
-                                   "KEY_ALT","KEY_BACKSPACE","KEY_CAPS_LOCK","KEY_CTRL","KEY_DELETE","KEY_END","KEY_ESC","KEY_GUI",
-                                   "KEY_HOME","KEY_INSERT","KEY_NUM_LOCK","KEY_PAGE_DOWN","KEY_PAGE_UP","KEY_PAUSE","KEY_RIGHT_ALT",
-                                   "KEY_RIGHT_GUI","KEY_SCROLL_LOCK","KEY_SHIFT","KEY_TAB"
-                              };
-
-        
-        Boolean useAlternativeFunctions = false;
         Boolean readDone = false;
         static int slotCounter = 0;
         static int actSlot = 0;
@@ -87,7 +71,7 @@ namespace MouseApp2
             foreach (Slot s in slots) slotNames.Items.Add(s.slotName); 
 
 
-            foreach (CommandGuiLink guiLink in commandGuiLinks.guiLinks)
+            foreach (CommandGuiLink guiLink in commandGuiLinks)
             {
                 String actSettingString =guiLink.cmd;
                 if (actSettingString.StartsWith("AT BM "))
@@ -139,7 +123,7 @@ namespace MouseApp2
                     actButtonLink = null;
                 }
 
-                else foreach (CommandGuiLink guiLink in commandGuiLinks.guiLinks)
+                else foreach (CommandGuiLink guiLink in commandGuiLinks)
                 {
                     if (settingString.StartsWith(guiLink.cmd))  // improve this !
                     {
@@ -354,19 +338,13 @@ namespace MouseApp2
             activityLogTextbox.AppendText("\n");
         }
 
-        private void selectMouse_CheckedChanged(object sender, EventArgs e)
+        private void selectStick_Checked(object sender, EventArgs e)
         {
-            // Console.WriteLine("stick selected");
-            useAlternativeFunctions = false;
         }
 
-        private void selectAlternative_CheckedChanged(object sender, EventArgs e)
+        private void selectAlternative_Checked(object sender, EventArgs e)
         {
-            // Console.WriteLine("alternative selected");
-            useAlternativeFunctions = true;
-
         }
-
 
         private void prevSlotButton_Click(object sender, EventArgs e)
         {
@@ -388,9 +366,21 @@ namespace MouseApp2
         {
             if (slots.Count < MAX_SLOTS) 
             {
+                int cnt=1;
+                Boolean exists;
+                String newSlotName;
+
                 storeSlot(actSlot);
-                slots.Add(new Slot());
-                slotNames.Items.Add("default");
+                do
+                {
+                    newSlotName = "Slot" + cnt++;
+                    exists = false;
+                    foreach (Slot s in slots)
+                        if (s.slotName.Equals(newSlotName)) exists = true;
+                } while (exists == true);
+
+                slotNames.Items.Add(newSlotName);
+                slots.Add(new Slot(newSlotName));
                 actSlot = slots.Count - 1;
                 displaySlot(actSlot);
             }

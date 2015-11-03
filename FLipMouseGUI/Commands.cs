@@ -20,6 +20,8 @@
                              9: Special SIP
                              10: PUFF (pressure bigger than puff threshold)
                              11: Special PUFF
+                             12: Special DOWN
+
 
    USB HID commands:
       
@@ -165,7 +167,7 @@ namespace MouseApp2
             allCommands.add(new Command("AT LO", PARTYPE_STRING, "Load Slot", COMBOENTRY_NO, GUITYPE_STANDARD));
             allCommands.add(new Command("AT LA", PARTYPE_NONE, "Load All", COMBOENTRY_NO, GUITYPE_STANDARD));
             allCommands.add(new Command("AT LI", PARTYPE_NONE, "List Slots", COMBOENTRY_NO, GUITYPE_STANDARD));
-            allCommands.add(new Command("AT NE", PARTYPE_NONE, "Switch to next configuration", COMBOENTRY_YES, GUITYPE_STANDARD));
+            allCommands.add(new Command("AT NE", PARTYPE_NONE, "Switch to next configuration slot", COMBOENTRY_YES, GUITYPE_STANDARD));
             allCommands.add(new Command("AT DE", PARTYPE_NONE, "Delete all configurations", COMBOENTRY_NO, GUITYPE_STANDARD));
             allCommands.add(new Command("AT NC", PARTYPE_NONE, "No Command", COMBOENTRY_YES, GUITYPE_STANDARD));
             allCommands.add(new Command("AT MM", PARTYPE_UINT, "Mouse Mode (1) or Alternative (0)", COMBOENTRY_NO, GUITYPE_BOOLEAN));
@@ -188,7 +190,8 @@ namespace MouseApp2
             allCommands.add(new Command("AT IR", PARTYPE_STRING, "Record Infrared Command", COMBOENTRY_YES, GUITYPE_TEXTFIELD));
             allCommands.add(new Command("AT IP", PARTYPE_STRING, "Play Infrared Command", COMBOENTRY_YES, GUITYPE_TEXTFIELD));
             allCommands.add(new Command("AT IC", PARTYPE_STRING, "Clear Infrared Command", COMBOENTRY_YES, GUITYPE_TEXTFIELD));
-            allCommands.add(new Command("AT IL", PARTYPE_NONE, "List Infrared Commands", COMBOENTRY_YES, GUITYPE_STANDARD));
+            allCommands.add(new Command("AT IL", PARTYPE_NONE,   "List Infrared Commands", COMBOENTRY_YES, GUITYPE_STANDARD));
+            allCommands.add(new Command("AT SC", PARTYPE_STRING, "Switch to configuration slot (by name)", COMBOENTRY_YES, GUITYPE_TEXTFIELD));
 
         }
 
@@ -221,6 +224,7 @@ namespace MouseApp2
             commandGuiLinks.Add(new CommandGuiLink("AT BM 09", SpecialSipFunctionMenu, SpecialSipParameterText, SpecialSipNumericParameter, "AT NC"));
             commandGuiLinks.Add(new CommandGuiLink("AT BM 10", PuffFunctionMenu, PuffParameterText, PuffNumericParameter, "AT CR"));
             commandGuiLinks.Add(new CommandGuiLink("AT BM 11", SpecialPuffFunctionMenu, SpecialPuffParameterText, SpecialPuffNumericParameter, "AT CA"));
+            commandGuiLinks.Add(new CommandGuiLink("AT BM 12", Button4FunctionBox, Button4ParameterText, Button4NumericParameter, "AT NC"));
         }
 
         String[] keyOptions = {    "Clear Keycodes!", "KEY_A","KEY_B","KEY_C","KEY_D","KEY_E","KEY_F","KEY_G","KEY_H","KEY_I","KEY_J","KEY_K","KEY_L",

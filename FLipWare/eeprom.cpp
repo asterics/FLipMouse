@@ -1,4 +1,4 @@
-#include "fabi.h"
+#include "FlipWare.h"
 #include <Wire.h>
 #include <EEPROM.h>
 
@@ -43,35 +43,6 @@ byte readEEPROM(unsigned int eeaddress )
 }
 
 
-
-void printCurrentSlot()
-{
-  if (reportSlotParameters)
-  {
-        Serial.print("loading:");
-        Serial.print(settings.slotname); Serial.print(TOKEN_SEPERATOR);
-        Serial.print(settings.mouseOn); Serial.print(TOKEN_SEPERATOR);
-        Serial.print(settings.ax); Serial.print(TOKEN_SEPERATOR);
-        Serial.print(settings.ay); Serial.print(TOKEN_SEPERATOR);
-        Serial.print(settings.dx); Serial.print(TOKEN_SEPERATOR);
-        Serial.print(settings.dy); Serial.print(TOKEN_SEPERATOR);
-        Serial.print(settings.ts); Serial.print(TOKEN_SEPERATOR);
-        Serial.print(settings.tp); Serial.print(TOKEN_SEPERATOR);
-        Serial.print(settings.ws); Serial.print(TOKEN_SEPERATOR);
-        Serial.print(settings.tt); Serial.print(TOKEN_SEPERATOR);
-        Serial.print(settings.gu); Serial.print(TOKEN_SEPERATOR);
-        Serial.print(settings.gd); Serial.print(TOKEN_SEPERATOR);
-        Serial.print(settings.gl); Serial.print(TOKEN_SEPERATOR);
-        Serial.print(settings.gr); Serial.print(TOKEN_SEPERATOR);
-        for (int i=0;i<NUMBER_OF_BUTTONS;i++) 
-        {
-           Serial.print(buttons[i].mode); Serial.print(TOKEN_SEPERATOR);
-           Serial.print(buttons[i].value); Serial.print(TOKEN_SEPERATOR);
-           Serial.print(buttons[i].keystring);Serial.print(TOKEN_SEPERATOR);
-        }
-        Serial.println("END");
-   }
-}
 
 void saveToEEPROM(char * slotname)
 {
@@ -140,10 +111,12 @@ void readFromEEPROM(char * slotname)
    uint8_t numSlots=0;
    uint8_t* p;
    
+   
    while (readEEPROM(address)==SLOT_VALID)  // indicates valid eeprom content !
    {
       uint8_t found=0;
      
+      if (reportSlotParameters) found=1;
       if ((!slotname) && (address==nextSlotAddress)) found=1;
       address++;
 
@@ -169,8 +142,9 @@ void readFromEEPROM(char * slotname)
         p = (uint8_t*) buttons;
         for (unsigned int i=0;i<NUMBER_OF_BUTTONS*sizeof(buttonType);i++) 
            *p++=readEEPROM(address++);
-           
-        printCurrentSlot();
+        
+        if (reportSlotParameters)   
+           printCurrentSlot();
 
         actSlot=numSlots+1; 
         tmpSlotAddress=address;
@@ -190,6 +164,9 @@ void readFromEEPROM(char * slotname)
        Serial.print(numSlots); Serial.print(" slots were found in EEPROM, occupying ");
        Serial.print(address); Serial.println(" bytes.");
    }
+   if (reportSlotParameters) 
+       Serial.println("END");   // important: end marker for slot parameter list (command "load all" - AT LA)
+
 }
 
 void deleteSlots()

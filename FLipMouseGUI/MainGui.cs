@@ -162,6 +162,17 @@ namespace MouseApp2
                     }
                 }
             }
+            speedBar.Value=speedXBar.Value;
+            speedLabel.Text = speedBar.Value.ToString();
+            deadzoneBar.Value = deadzoneXBar.Value;
+            deadzoneLabel.Text = deadzoneBar.Value.ToString();
+
+            if ((speedXBar.Value != speedYBar.Value) ||
+                (deadzoneXBar.Value != deadzoneYBar.Value))
+                splitXYBox.Checked = true;
+            else splitXYBox.Checked = false;
+
+            splitXYBox_CheckedChanged(this, null);
         }
 
 
@@ -217,6 +228,7 @@ namespace MouseApp2
                 Button1ComboBox.Items.Add(str);
                 Button2ComboBox.Items.Add(str);
                 Button3ComboBox.Items.Add(str);
+                Button4ComboBox.Items.Add(str);
                 UpComboBox.Items.Add(str);
                 DownComboBox.Items.Add(str);
                 LeftComboBox.Items.Add(str);
@@ -225,6 +237,7 @@ namespace MouseApp2
                 SpecialSipComboBox.Items.Add(str);
                 PuffComboBox.Items.Add(str);
                 SpecialPuffComboBox.Items.Add(str);
+
             }
 
             displaySlot(0);

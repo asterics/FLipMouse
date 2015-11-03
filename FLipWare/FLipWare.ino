@@ -32,6 +32,7 @@
 #define SPECIAL_SIP_BUTTON  8
 #define PUFF_BUTTON         9
 #define SPECIAL_PUFF_BUTTON 10
+#define SPECIAL_DOWN_BUTTON 11
 
 
 // global variables
@@ -406,6 +407,7 @@ void handleSpecialMode()
                if (handleButton(0, (y<-SPECIALMODE_XY_THRESHOLD) ? 1 : 0)) specialMode=99;
                else if (handleButton(1, (x<-SPECIALMODE_XY_THRESHOLD) ? 1 : 0)) specialMode=99;
                else if (handleButton(2, (x>SPECIALMODE_XY_THRESHOLD) ? 1 : 0)) specialMode=99;
+               else if (handleButton(SPECIAL_DOWN_BUTTON, (y>SPECIALMODE_XY_THRESHOLD) ? 1 : 0)) specialMode=99;
                else if (handleButton(SPECIAL_SIP_BUTTON, pressure < settings.ts  ? 1 : 0)) specialMode=99;
                else if (handleButton(SPECIAL_PUFF_BUTTON, pressure > settings.tp  ? 1 : 0)) specialMode=99;
                else { waitStable++; if (waitStable>SPECIALMODE_STABLEEXIT) { waitStable=0; specialMode=13; makeTone(TONE_EXITSPECIAL,0 ); } }

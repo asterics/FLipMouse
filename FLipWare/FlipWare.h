@@ -37,7 +37,7 @@
 #endif
 
 #define MAX_SLOTS          5          // maximum number of EEPROM memory slots
-#define NUMBER_OF_BUTTONS 11          // number of connected or virtual switches
+#define NUMBER_OF_BUTTONS  12         // number of connected or virtual switches
 #define NUMBER_OF_PHYSICAL_BUTTONS 3  // number of connected switches
 #define NUMBER_OF_LEDS     3          // number of connected leds
 
@@ -45,7 +45,7 @@
 #define MAX_SLOTNAME_LEN  15          // maximum length for a slotname
 #define MAX_CMDLEN MAX_KEYSTRING_LEN+3
 
-#define PARTYPE_NONE 0
+#define PARTYPE_NONE  0
 #define PARTYPE_UINT  1
 #define PARTYPE_INT   2
 #define PARTYPE_STRING  3

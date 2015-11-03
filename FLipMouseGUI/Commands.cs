@@ -164,7 +164,7 @@ namespace MouseApp2
             allCommands.add(new Command("AT KR", PARTYPE_STRING, "Release Keys", COMBOENTRY_NO, GUITYPE_STANDARD));
             allCommands.add(new Command("AT RA", PARTYPE_NONE, "Release All", COMBOENTRY_NO, GUITYPE_STANDARD));
             allCommands.add(new Command("AT SA", PARTYPE_STRING, "Save Slot", COMBOENTRY_NO, GUITYPE_STANDARD));
-            allCommands.add(new Command("AT LO", PARTYPE_STRING, "Load Slot", COMBOENTRY_NO, GUITYPE_STANDARD));
+            allCommands.add(new Command("AT LO", PARTYPE_STRING, "Load Slot", COMBOENTRY_YES, GUITYPE_TEXTFIELD));
             allCommands.add(new Command("AT LA", PARTYPE_NONE, "Load All", COMBOENTRY_NO, GUITYPE_STANDARD));
             allCommands.add(new Command("AT LI", PARTYPE_NONE, "List Slots", COMBOENTRY_NO, GUITYPE_STANDARD));
             allCommands.add(new Command("AT NE", PARTYPE_NONE, "Switch to next configuration slot", COMBOENTRY_YES, GUITYPE_STANDARD));
@@ -191,7 +191,6 @@ namespace MouseApp2
             allCommands.add(new Command("AT IP", PARTYPE_STRING, "Play Infrared Command", COMBOENTRY_YES, GUITYPE_TEXTFIELD));
             allCommands.add(new Command("AT IC", PARTYPE_STRING, "Clear Infrared Command", COMBOENTRY_YES, GUITYPE_TEXTFIELD));
             allCommands.add(new Command("AT IL", PARTYPE_NONE,   "List Infrared Commands", COMBOENTRY_YES, GUITYPE_STANDARD));
-            allCommands.add(new Command("AT SC", PARTYPE_STRING, "Switch to configuration slot (by name)", COMBOENTRY_YES, GUITYPE_TEXTFIELD));
 
         }
 
@@ -200,7 +199,7 @@ namespace MouseApp2
 
         public void initCommandGuiLinks()
         {
-            commandGuiLinks.Add(new CommandGuiLink("AT AX", speedXBar, speedXLabel, "70"));
+            commandGuiLinks.Add(new CommandGuiLink("AT AX", speedXBar, speedXLabel, "60"));
             commandGuiLinks.Add(new CommandGuiLink("AT AY", speedYBar, speedYLabel, "60"));
             commandGuiLinks.Add(new CommandGuiLink("AT DX", deadzoneXBar, deadzoneXLabel, "20"));
             commandGuiLinks.Add(new CommandGuiLink("AT DY", deadzoneYBar, deadzoneYLabel, "20"));
@@ -267,11 +266,6 @@ namespace MouseApp2
             sendCmd("AT CA");
         }
 
-        public void sendLoadSlotCommands(String slotname)
-        {
-            sendCmd("AT LO " + slotname);
-        }
-
         public void sendSaveSlotCommands(String slotname)
         {
             sendCmd("AT SA " + slotname);
@@ -281,7 +275,6 @@ namespace MouseApp2
         {
             sendCmd("AT DE");
         }
-
 
 
         public class Slot

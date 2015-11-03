@@ -9,8 +9,8 @@ This device is originally designed for people with motor disablities, which can 
 Our goal is to provide a affordable solution for anybody who is not able to use a PC in the usual way.
 
 
-![Front view of 3 FLipmice in different colors (black, pink and transparent orange)](/FLipmouse1.jpg)
-![Full euqipped FLipmouse with 2 external buttons attached. Mounted on Manfrotto mount](/FLipmouse2.jpg)
+![Front view of 3 FLipmice in different colors (black, pink and transparent orange)](/img/FLipmouse1.jpg)
+![Full euqipped FLipmouse with 2 external buttons attached. Mounted on Manfrotto mount](/img/FLipmouse2.jpg)
 
 
 
@@ -28,7 +28,7 @@ The FLipMouse is built upon a TeensyLC controller (ARM CortexM0+) in the current
 Movements of the mouthpiece are measured via FSRs (Force Sensing Resistors), which are able to detect small changes of the applied force (biased via springs) on the mouthpiece.
 The sip/puff actions are detected by a pressure sensor.
 
-In addition to the PCB and its hardware, the surrounding case is built upon acryllic glass, which is processed with a LaserCutter to have a fully customized case.
+In addition to the PCB and its hardware, the surrounding case is built upon acrylic glass, which is processed with a LaserCutter to have a fully customized case.
 
 
 # The firmware

@@ -1,5 +1,8 @@
 # FLipMouse
 
+![Front view of 3 FLipmice in different colors (black, pink and transparent orange)](/FLipmouse1.jpg)
+![Full euqipped FLipmouse with 2 external buttons attached. Mounted on Manfrotto mount](/FLipmouse2.jpg)
+
 
 The FLipMouse (Finger- and Lipmouse) is a device, which is intended to be a replacement for a normal PC mouse.
 Instead of moving the mouse device with your hand and clicking with your fingers, you move the mouse cursor by applying very low forces to the mouthpiece.

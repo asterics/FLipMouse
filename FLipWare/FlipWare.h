@@ -144,5 +144,17 @@ void setKeyValues(char* text); // presses individual keys
 void releaseKeys(char* text);  // releases individual keys
 void release_all();            // releases all previously pressed keys and buttons
 
+//set the correct strcpy/strcmp functions (either for AVR or ARM)
+#ifdef TEENSY
+    #define strcpy_FM   strcpy_PF
+    #define strcmp_FM   strcmp_PF
+    typedef uint_farptr_t uint_farptr_t_FM;
+#endif
+
+#ifdef TEENSY_LC
+    #define strcpy_FM   strcpy
+    #define strcmp_FM   strcmp
+    typedef char* uint_farptr_t_FM;
+#endif
 
 #endif

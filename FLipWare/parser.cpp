@@ -57,7 +57,7 @@ void parseCommand (char * cmdstr)
         
         for (i=0;(i<NUM_COMMANDS)&&(cmd==-1);i++)
         {
-          if (!strcmp_PF(actpos,(uint_farptr_t)atCommands[i].atCmd))  {
+          if (!strcmp_FM(actpos,(uint_farptr_t_FM)atCommands[i].atCmd))  {
             // Serial.print ("partype="); Serial.println (pgm_read_byte_near(&(atCommands[i].partype)));
             switch (pgm_read_byte_near(&(atCommands[i].partype))) 
             {

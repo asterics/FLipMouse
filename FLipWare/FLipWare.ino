@@ -569,7 +569,6 @@ void UpdateLeds()
 
 void makeTone(uint8_t kind, uint8_t param)
 {
-  #ifdef TEENSY
    switch (kind) {
     case TONE_ENTERSPECIAL: 
                tone(TONE_PIN, 4000, 200);
@@ -591,7 +590,6 @@ void makeTone(uint8_t kind, uint8_t param)
                }
              break;
      }
-  #endif
 }
 
 

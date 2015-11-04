@@ -58,7 +58,7 @@
   #define LEFT_SENSOR_PIN     A9
   #define UP_SENSOR_PIN       A7
   #define RIGHT_SENSOR_PIN    A8
-  //Piezo Pin (for tone generation), TBD: change PCB
+  //Piezo Pin (for tone generation)
   #define TONE_PIN  9
 
   int8_t  input_map[NUMBER_OF_PHYSICAL_BUTTONS]={0,1,2};  //  maps physical button pins to button index 0,1,2  

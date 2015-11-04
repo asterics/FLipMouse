@@ -32,6 +32,7 @@ void initButtons() {
      buttons[8].mode=CMD_NC;   // no command 
      buttons[9].mode=CMD_CR;   // click right                        
      buttons[10].mode=CMD_CA;  // calibrate      
+     buttons[11].mode=CMD_NC;  // no command      
 }
 
 

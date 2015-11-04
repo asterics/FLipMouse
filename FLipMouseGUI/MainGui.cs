@@ -162,6 +162,17 @@ namespace MouseApp2
                     }
                 }
             }
+            speedBar.Value=speedXBar.Value;
+            speedLabel.Text = speedBar.Value.ToString();
+            deadzoneBar.Value = deadzoneXBar.Value;
+            deadzoneLabel.Text = deadzoneBar.Value.ToString();
+
+            if ((speedXBar.Value != speedYBar.Value) ||
+                (deadzoneXBar.Value != deadzoneYBar.Value))
+                splitXYBox.Checked = true;
+            else splitXYBox.Checked = false;
+
+            splitXYBox_CheckedChanged(this, null);
         }
 
 
@@ -188,6 +199,7 @@ namespace MouseApp2
                     Button1FunctionBox.Items.Add(str);
                     Button2FunctionBox.Items.Add(str);
                     Button3FunctionBox.Items.Add(str);
+                    Button4FunctionBox.Items.Add(str);
                     UpFunctionMenu.Items.Add(str);
                     DownFunctionMenu.Items.Add(str);
                     LeftFunctionMenu.Items.Add(str);
@@ -216,6 +228,7 @@ namespace MouseApp2
                 Button1ComboBox.Items.Add(str);
                 Button2ComboBox.Items.Add(str);
                 Button3ComboBox.Items.Add(str);
+                Button4ComboBox.Items.Add(str);
                 UpComboBox.Items.Add(str);
                 DownComboBox.Items.Add(str);
                 LeftComboBox.Items.Add(str);
@@ -224,6 +237,7 @@ namespace MouseApp2
                 SpecialSipComboBox.Items.Add(str);
                 PuffComboBox.Items.Add(str);
                 SpecialPuffComboBox.Items.Add(str);
+
             }
 
             displaySlot(0);
@@ -472,6 +486,11 @@ namespace MouseApp2
             updateVisibility(Button3FunctionBox.Text, Button3ParameterText, Button3NumericParameter, Button3ComboBox, Button3Label, clearButton3);
         }
 
+        private void Button4FunctionBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            updateVisibility(Button4FunctionBox.Text, Button4ParameterText, Button4NumericParameter, Button4ComboBox, Button4Label, clearButton4);
+        }
+
         private void UpFunctionMenu_SelectedIndexChanged(object sender, EventArgs e)
         {
             updateVisibility(UpFunctionMenu.Text, UpParameterText, UpNumericParameter, UpComboBox, UpLabel, clearButtonUp);
@@ -553,6 +572,16 @@ namespace MouseApp2
             Button3ParameterText.Text = "";
         }
 
+        private void Button4ComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            updateKeyCodeParameter(Button4ComboBox, Button4ParameterText);
+        }
+        private void clearButton4_Click(object sender, EventArgs e)
+        {
+            Button4ParameterText.Text = "";
+        }
+
+
         private void UpComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
             updateKeyCodeParameter(UpComboBox, UpParameterText);
@@ -631,19 +660,17 @@ namespace MouseApp2
         {
             if (splitXYBox.Checked)
             {
-                incDeadzoneX.Enabled = true; incDeadzoneX.Visible = true;
-                decDeadzoneY.Enabled = true; decDeadzoneY.Visible = true;
-
-                incSpeedX.Enabled = true; incSpeedX.Visible = true;
-                decSpeedY.Enabled = true; decSpeedY.Visible = true;
+                splitPanel.Visible = true;
+                splitPanel.Enabled = true;
+                singlePanel.Visible = false;
+                singlePanel.Enabled = false;
             }
             else
             {
-                incDeadzoneX.Enabled = false; incDeadzoneX.Visible = false;
-                decDeadzoneY.Enabled = false; decDeadzoneY.Visible = false;
-
-                incSpeedX.Enabled = false; incSpeedX.Visible = false;
-                decSpeedY.Enabled = false; decSpeedY.Visible = false;
+                splitPanel.Visible = false;
+                splitPanel.Enabled = false;
+                singlePanel.Visible = true;
+                singlePanel.Enabled = true;
             }
 
         }
@@ -651,44 +678,99 @@ namespace MouseApp2
 
         // update scroll bars and dedicated +/- buttons
 
+        private void updateGangBars()
+        {
+            speedXBar.Value = speedBar.Value;
+            speedXLabel.Text = speedBar.Value.ToString();
+            speedYBar.Value = speedBar.Value;
+            speedYLabel.Text = speedBar.Value.ToString();
+            
+            deadzoneXBar.Value = deadzoneBar.Value;
+            deadzoneXLabel.Text = deadzoneBar.Value.ToString();
+            deadzoneYBar.Value = deadzoneBar.Value;
+            deadzoneYLabel.Text = deadzoneBar.Value.ToString();
+        }
+
+        private void speedBar_Scroll(object sender, EventArgs e)
+        {
+            speedLabel.Text  = speedBar.Value.ToString();
+            updateGangBars();
+        }
+        private void decSpeed_Click(object sender, EventArgs e)
+        {
+            if (speedBar.Value >= speedBar.Minimum + SPEED_CHANGE_STEP)
+                speedBar.Value -= SPEED_CHANGE_STEP;
+            speedLabel.Text = speedBar.Value.ToString();
+            updateGangBars();
+        }
+        private void decSpeed_MouseHover(object sender, EventArgs e)
+        {
+            functionPointer = new ClickDelegate(decSpeed_Click);
+            clickTimer.Start();
+        }
+        private void incSpeed_Click(object sender, EventArgs e)
+        {
+            if (speedBar.Value <= speedBar.Maximum - SPEED_CHANGE_STEP)
+                speedBar.Value += SPEED_CHANGE_STEP;
+            speedLabel.Text = speedBar.Value.ToString();
+            updateGangBars();
+        }
+        private void incSpeed_MouseHover(object sender, EventArgs e)
+        {
+            functionPointer = new ClickDelegate(incSpeed_Click);
+            clickTimer.Start();
+        }
+
+        private void deadzoneBar_Scroll(object sender, EventArgs e)
+        {
+            deadzoneLabel.Text  = deadzoneBar.Value.ToString();
+            updateGangBars();
+        }
+        private void decDeadzone_Click(object sender, EventArgs e)
+        {
+            if (deadzoneBar.Value >= deadzoneBar.Minimum + DEADZONE_CHANGE_STEP)
+                deadzoneBar.Value -= DEADZONE_CHANGE_STEP;
+            deadzoneLabel.Text = deadzoneBar.Value.ToString();
+            updateGangBars();
+        }
+        private void decDeadzone_MouseHover(object sender, EventArgs e)
+        {
+            functionPointer = new ClickDelegate(decDeadzone_Click);
+            clickTimer.Start();
+        }
+        private void incDeadzone_Click(object sender, EventArgs e)
+        {
+            if (deadzoneBar.Value <= deadzoneBar.Maximum - DEADZONE_CHANGE_STEP)
+                deadzoneBar.Value += DEADZONE_CHANGE_STEP;
+            deadzoneLabel.Text = deadzoneBar.Value.ToString();
+            updateGangBars();
+        }
+        private void incDeadzone_MouseHover(object sender, EventArgs e)
+        {
+            functionPointer = new ClickDelegate(incDeadzone_Click);
+            clickTimer.Start();
+        }
+
         private void speedXBar_Scroll(object sender, EventArgs e)
         {
             speedXLabel.Text = speedXBar.Value.ToString();
-            if (splitXYBox.Checked == false)
-            {
-                speedYBar.Value = speedXBar.Value;
-                speedYLabel.Text = speedYBar.Value.ToString();
-            }
         }
-
         private void decSpeedX_Click(object sender, EventArgs e)
         {
             if (speedXBar.Value >= speedXBar.Minimum + SPEED_CHANGE_STEP)
                 speedXBar.Value -= SPEED_CHANGE_STEP;
             speedXLabel.Text = speedXBar.Value.ToString();
-            if (splitXYBox.Checked == false)
-            {
-                speedYBar.Value = speedXBar.Value;
-                speedYLabel.Text = speedYBar.Value.ToString();
-            }
-
         }
         private void decSpeedX_MouseHover(object sender, EventArgs e)
         {
             functionPointer = new ClickDelegate(decSpeedX_Click);
             clickTimer.Start();
         }
-        
         private void incSpeedX_Click(object sender, EventArgs e)
         {
             if (speedXBar.Value <= speedXBar.Maximum - SPEED_CHANGE_STEP)
                 speedXBar.Value += SPEED_CHANGE_STEP;
             speedXLabel.Text = speedXBar.Value.ToString();
-            if (splitXYBox.Checked == false)
-            {
-                speedYBar.Value = speedXBar.Value;
-                speedYLabel.Text = speedYBar.Value.ToString();
-            }
         }
         private void incSpeedX_MouseHover(object sender, EventArgs e)
         {
@@ -700,40 +782,23 @@ namespace MouseApp2
         private void speedYBar_Scroll(object sender, EventArgs e)
         {
             speedYLabel.Text = speedYBar.Value.ToString();
-            if (splitXYBox.Checked == false)
-            {
-                speedXBar.Value = speedYBar.Value;
-                speedXLabel.Text = speedXBar.Value.ToString();
-            }
         }
-
         private void decSpeedY_Click(object sender, EventArgs e)
         {
             if (speedYBar.Value >= speedYBar.Minimum + SPEED_CHANGE_STEP)
                 speedYBar.Value -= SPEED_CHANGE_STEP;
             speedYLabel.Text = speedYBar.Value.ToString();
-            if (splitXYBox.Checked == false)
-            {
-                speedXBar.Value = speedYBar.Value;
-                speedXLabel.Text = speedXBar.Value.ToString();
-            }
         }
         private void decSpeedY_MouseHover(object sender, EventArgs e)
         {
             functionPointer = new ClickDelegate(decSpeedY_Click);
             clickTimer.Start();
         }
-
         private void incSpeedY_Click(object sender, EventArgs e)
         {
             if (speedYBar.Value <= speedYBar.Maximum - SPEED_CHANGE_STEP)
                 speedYBar.Value += SPEED_CHANGE_STEP;
             speedYLabel.Text = speedYBar.Value.ToString();
-            if (splitXYBox.Checked == false)
-            {
-                speedXBar.Value = speedYBar.Value;
-                speedXLabel.Text = speedXBar.Value.ToString();
-            }
         }
         private void incSpeedY_MouseHover(object sender, EventArgs e)
         {
@@ -741,43 +806,26 @@ namespace MouseApp2
             clickTimer.Start();
         }
 
-
         private void deadzoneX_Scroll(object sender, EventArgs e)
         {
             deadzoneXLabel.Text = deadzoneXBar.Value.ToString();
-            if (splitXYBox.Checked == false)
-            {
-                deadzoneYBar.Value = deadzoneXBar.Value;
-                deadzoneYLabel.Text = deadzoneYBar.Value.ToString();
-            }
         }
         private void decDeadzoneX_Click(object sender, EventArgs e)
         {
             if (deadzoneXBar.Value >= deadzoneXBar.Minimum + DEADZONE_CHANGE_STEP)
                 deadzoneXBar.Value -= DEADZONE_CHANGE_STEP;
             deadzoneXLabel.Text = deadzoneXBar.Value.ToString();
-            if (splitXYBox.Checked == false)
-            {
-                deadzoneYBar.Value = deadzoneXBar.Value;
-                deadzoneYLabel.Text = deadzoneXBar.Value.ToString();
-            }
         }
         private void decDeadzoneX_MouseHover(object sender, EventArgs e)
         {
             functionPointer = new ClickDelegate(decDeadzoneX_Click);
             clickTimer.Start();
         }
-
         private void incDeadzoneX_Click(object sender, EventArgs e)
         {
             if (deadzoneXBar.Value <= deadzoneXBar.Maximum - DEADZONE_CHANGE_STEP)
                 deadzoneXBar.Value += DEADZONE_CHANGE_STEP;
             deadzoneXLabel.Text = deadzoneXBar.Value.ToString();
-            if (splitXYBox.Checked == false)
-            {
-                deadzoneYBar.Value = deadzoneXBar.Value;
-                deadzoneYLabel.Text = deadzoneXBar.Value.ToString();
-            }
         }
         private void incDeadzoneX_MouseHover(object sender, EventArgs e)
         {
@@ -794,7 +842,6 @@ namespace MouseApp2
                 deadzoneXLabel.Text = deadzoneXBar.Value.ToString();
             }
         }
-
         private void decDeadzoneY_Click(object sender, EventArgs e)
         {
             if (deadzoneYBar.Value >= deadzoneYBar.Minimum + DEADZONE_CHANGE_STEP)
@@ -811,7 +858,6 @@ namespace MouseApp2
             functionPointer = new ClickDelegate(decDeadzoneY_Click);
             clickTimer.Start();
         }
-
         private void incDeadzoneY_Click(object sender, EventArgs e)
         {
             if (deadzoneYBar.Value <= deadzoneYBar.Maximum - DEADZONE_CHANGE_STEP)
@@ -834,7 +880,6 @@ namespace MouseApp2
         {
             puffThresholdLabel.Text = puffThresholdBar.Value.ToString();
         }
-
         private void decPuffThreshold_Click(object sender, EventArgs e)
         {
             if (puffThresholdBar.Value >= puffThresholdBar.Minimum + PRESSURE_CHANGE_STEP)
@@ -847,7 +892,6 @@ namespace MouseApp2
             functionPointer = new ClickDelegate(decPuffThreshold_Click);
             clickTimer.Start();
         }
-
         private void incPuffThreshold_Click(object sender, EventArgs e)
         {
             if (puffThresholdBar.Value <= puffThresholdBar.Maximum - PRESSURE_CHANGE_STEP)
@@ -860,12 +904,10 @@ namespace MouseApp2
             clickTimer.Start();
         }
 
-
         private void sipThresholdBar_Scroll(object sender, EventArgs e)
         {
             sipThresholdLabel.Text = sipThresholdBar.Value.ToString();
         }
-
         private void decSipThreshold_Click(object sender, EventArgs e)
         {
             if (sipThresholdBar.Value >= sipThresholdBar.Minimum + PRESSURE_CHANGE_STEP)
@@ -878,7 +920,6 @@ namespace MouseApp2
             functionPointer = new ClickDelegate(decSipThreshold_Click);
             clickTimer.Start();
         }
-
         private void incSipThreshold_Click(object sender, EventArgs e)
         {
             if (sipThresholdBar.Value <= sipThresholdBar.Maximum - PRESSURE_CHANGE_STEP)
@@ -907,7 +948,6 @@ namespace MouseApp2
             functionPointer = new ClickDelegate(decSpecialThreshold_Click);
             clickTimer.Start();
         }
-
         private void incSpecialThreshold_Click(object sender, EventArgs e)
         {
             if (specialThresholdBar.Value <= specialThresholdBar.Maximum - SPECIALMODE_CHANGE_STEP)
@@ -924,21 +964,17 @@ namespace MouseApp2
         {
             holdThresholdLabel.Text = holdThresholdBar.Value.ToString();
         }
-
-
         private void incHoldThreshold_Click(object sender, EventArgs e)
         {
             if (holdThresholdBar.Value <= holdThresholdBar.Maximum - SPECIALMODE_CHANGE_STEP)
                 holdThresholdBar.Value += SPECIALMODE_CHANGE_STEP;
             holdThresholdLabel.Text = holdThresholdBar.Value.ToString();
         }
-
         private void incHoldThreshold_MouseHover(object sender, EventArgs e)
         {
             functionPointer = new ClickDelegate(incHoldThreshold_Click);
             clickTimer.Start();
         }
-
         private void decHoldThreshold_Click(object sender, EventArgs e)
         {
             if (holdThresholdBar.Value >= holdThresholdBar.Minimum + SPECIALMODE_CHANGE_STEP)
@@ -946,32 +982,27 @@ namespace MouseApp2
             holdThresholdLabel.Text = holdThresholdBar.Value.ToString();
 
         }
-
         private void decHoldThreshold_MouseHover(object sender, EventArgs e)
         {
             functionPointer = new ClickDelegate(decHoldThreshold_Click);
             clickTimer.Start();
         }
 
-
         private void upGainBar_Scroll(object sender, EventArgs e)
         {
             upGainLabel.Text = upGainBar.Value.ToString();
         }
-
         private void incUpGain_Click(object sender, EventArgs e)
         {
             if (upGainBar.Value <= upGainBar.Maximum - GAIN_CHANGE_STEP)
                 upGainBar.Value += GAIN_CHANGE_STEP;
             upGainLabel.Text = upGainBar.Value.ToString();
-
         }
         private void incUpGain_MouseHover(object sender, EventArgs e)
         {
             functionPointer = new ClickDelegate(incUpGain_Click);
             clickTimer.Start();
         }
-
         private void decUpGain_Click(object sender, EventArgs e)
         {
             if (upGainBar.Value >= upGainBar.Minimum + GAIN_CHANGE_STEP)
@@ -989,20 +1020,17 @@ namespace MouseApp2
             downGainLabel.Text = (100-downGainBar.Value).ToString();
 
         }
-
         private void incDownGain_Click(object sender, EventArgs e)
         {
             if (downGainBar.Value >= downGainBar.Minimum + GAIN_CHANGE_STEP)
                 downGainBar.Value -= GAIN_CHANGE_STEP;
             downGainLabel.Text = (100-downGainBar.Value).ToString();
-
         }
         private void incDownGain_MouseHover(object sender, EventArgs e)
         {
             functionPointer = new ClickDelegate(incDownGain_Click);
             clickTimer.Start();
         }
-
         private void decDownGain_Click(object sender, EventArgs e)
         {
             if (downGainBar.Value <= downGainBar.Maximum - GAIN_CHANGE_STEP)
@@ -1019,7 +1047,6 @@ namespace MouseApp2
         {
             leftGainLabel.Text = leftGainBar.Value.ToString();
         }
-
         private void incLeftGain_Click(object sender, EventArgs e)
         {
             if (leftGainBar.Value <= leftGainBar.Maximum - GAIN_CHANGE_STEP)
@@ -1031,26 +1058,22 @@ namespace MouseApp2
             functionPointer = new ClickDelegate(incLeftGain_Click);
             clickTimer.Start();
         }
-
         private void decLeftGain_Click(object sender, EventArgs e)
         {
             if (leftGainBar.Value >= leftGainBar.Minimum + GAIN_CHANGE_STEP)
                 leftGainBar.Value -= GAIN_CHANGE_STEP;
             leftGainLabel.Text = leftGainBar.Value.ToString();
-
         }
         private void decLeftGain_MouseHover(object sender, EventArgs e)
         {
             functionPointer = new ClickDelegate(decLeftGain_Click);
             clickTimer.Start();
         }
-
         
         private void rightGainBar_Scroll(object sender, EventArgs e)
         {
             rightGainLabel.Text = rightGainBar.Value.ToString();
         }
-
         private void incRightGain_Click(object sender, EventArgs e)
         {
             if (rightGainBar.Value <= rightGainBar.Maximum - GAIN_CHANGE_STEP)
@@ -1062,7 +1085,6 @@ namespace MouseApp2
             functionPointer = new ClickDelegate(incRightGain_Click);
             clickTimer.Start();
         }
-
         private void decRightGain_Click(object sender, EventArgs e)
         {
             if (rightGainBar.Value >= rightGainBar.Minimum + GAIN_CHANGE_STEP)
@@ -1092,6 +1114,5 @@ namespace MouseApp2
             displaySlot(actSlot);
 
         }
-
     }
 }

@@ -104,8 +104,10 @@ int right;
 
 int x, holdX;
 int y, holdY;
-int pressure, holdPressure;
+int pressure, holdPressure, previousPressure=512;
+uint8_t pressureRising=0, pressureFalling=0;
 
+int16_t  cx=0,cy=0;
 
 float accumXpos = 0.f;
 float accumYpos = 0.f;
@@ -130,7 +132,7 @@ uint8_t blinkStartTime=0;
 #define HOLD_Y    2
 #define HOLD_PRESSURE 3
 
-uint8_t specialMode =0;
+uint8_t modeState =0;
 uint8_t holdMode =HOLD_IDLE;
 
 int inByte=0;
@@ -144,7 +146,7 @@ void handleRelease (int buttonIndex);    // a button was released
 uint8_t handleButton(int i, uint8_t state);    // button debouncing and longpress detection  
 void UpdateLeds();
 void initDebouncers();
-void handleSpecialMode();
+void handleModeState();
 
 extern void handleCimMode(void);
 extern void init_CIM_frame(void);
@@ -207,6 +209,9 @@ void loop() {
   static uint8_t valueReportCount =0, mouseMoveCount=0;
 
         pressure = analogRead(PRESSURE_SENSOR_PIN);
+        if (pressure>previousPressure) pressureRising=1; else pressureRising=0;
+        if (pressure<previousPressure) pressureFalling=1; else pressureFalling=0;
+        previousPressure=pressure;
         
         up =       (uint16_t)((uint32_t)analogRead(UP_SENSOR_PIN)  * settings.gd/50); if (up>1023) up=1023; if (up<0) up=0;
         down =     (uint16_t)((uint32_t)analogRead(DOWN_SENSOR_PIN) * settings.gu/50); if (down>1023) down=1023; if (down<0) down=0;
@@ -246,8 +251,9 @@ void loop() {
 
               
           if (calib_now == 0)  {
-              x = (left-right) - settings.cx;
-              y = (up-down) - settings.cy;
+              x = (left-right) - cx;
+              y = (up-down) - cy;
+
               if (holdMode == HOLD_X) x=holdX;
               if (holdMode == HOLD_Y) y=holdY;
           }
@@ -256,6 +262,8 @@ void loop() {
               if (calib_now ==0) {   // calibrate now !!
                  settings.cx = (left-right);                                                   
                  settings.cy = (up-down);
+                 cx=settings.cx;
+                 cy=settings.cy;
               }
           }    
           
@@ -263,9 +271,9 @@ void loop() {
           if (abs(y)<= settings.dy) y=0;
 
 
-          handleSpecialMode();
+          handleModeState();
           
-          if (specialMode==0)
+          if (modeState==0)
           {  
                 for (int i=0;i<NUMBER_OF_PHYSICAL_BUTTONS;i++)    // update button press / release events
                     handleButton(i, digitalRead(input_map[i]) == LOW ? 1 : 0);
@@ -275,9 +283,18 @@ void loop() {
                    handleButton(PUFF_BUTTON, holdPressure > settings.tp ? 1 : 0);
                 }
                 else  {
-                   handleButton(SIP_BUTTON, pressure < settings.ts ? 1 : 0); 
-                   handleButton(PUFF_BUTTON, pressure > settings.tp ? 1 : 0);
-                }
+                   if (pressure > settings.tp) 
+                   {  
+                      if (!pressureRising)
+                        handleButton(PUFF_BUTTON, 1);
+                   } else handleButton(PUFF_BUTTON, 0);
+
+                   if (pressure < settings.ts) 
+                   {  
+                      if (!pressureFalling)
+                       handleButton(SIP_BUTTON, 1); 
+                   } else handleButton(SIP_BUTTON, 0);
+               }
               
                 
                 if (settings.mouseOn == 1) {
@@ -369,14 +386,24 @@ void loop() {
 #define SPECIALMODE_STABLETIME   20
 #define SPECIALMODE_STABLEEXIT   250
 
-void handleSpecialMode()
+#define MODESTATE_IDLE 0
+#define MODESTATE_ENTER_SPECIALMODE   1
+#define MODESTATE_SPECIALMODE_ACTIVE  2
+#define MODESTATE_ENTER_HOLDMODE     10
+#define MODESTATE_DETECT_HOLDSTATE   11
+#define MODESTATE_HOLDMODE_ACTIVE    12
+#define MODESTATE_RELEASE            13
+#define MODESTATE_RETURN_TO_ILDE     99
+
+void handleModeState()
 {         
     static int waitStable=0;
+    static uint8_t rememberMouseOn; 
     
-         switch (specialMode)  {
-            case 0:   // IDLE
+         switch (modeState)  {
+            case MODESTATE_IDLE:   // IDLE
                if (pressure > settings.sm) { 
-                   specialMode=1;
+                   modeState=MODESTATE_ENTER_SPECIALMODE;
                    makeTone(TONE_ENTERSPECIAL,0 );             
                    initDebouncers();
                    release_all();
@@ -384,65 +411,67 @@ void handleSpecialMode()
                if (pressure < settings.hm ) { 
                    if (holdMode==HOLD_IDLE)
                    {
-                     specialMode=10;       // enter hold mode detection
+                     modeState=MODESTATE_ENTER_HOLDMODE;       // enter hold mode detection
                      makeTone(TONE_HOLD,0 );             
                      initDebouncers();
                      release_all();
                    } 
                    else  
                    {
-                     specialMode=13;   // exit hold mode
+                     settings.mouseOn=rememberMouseOn;
+                     modeState=MODESTATE_RELEASE;   // exit hold mode
                      makeTone(TONE_HOLD,2 );             
                    } 
                  }
                  break;
-            case 1:   // puffed, wait for release          
+            case MODESTATE_ENTER_SPECIALMODE:   // puffed, wait for release          
                 if (pressure < SPECIALMODE_PUFF_RELEASE)
                    waitStable++;
                 else waitStable=0;
                 if (waitStable>=SPECIALMODE_STABLETIME)
-                    specialMode=2;
+                    modeState=MODESTATE_SPECIALMODE_ACTIVE;
                   break; 
-            case 2:  // specialmode active
-               if (handleButton(0, (y<-SPECIALMODE_XY_THRESHOLD) ? 1 : 0)) specialMode=99;
-               else if (handleButton(1, (x<-SPECIALMODE_XY_THRESHOLD) ? 1 : 0)) specialMode=99;
-               else if (handleButton(2, (x>SPECIALMODE_XY_THRESHOLD) ? 1 : 0)) specialMode=99;
-               else if (handleButton(SPECIAL_DOWN_BUTTON, (y>SPECIALMODE_XY_THRESHOLD) ? 1 : 0)) specialMode=99;
-               else if (handleButton(SPECIAL_SIP_BUTTON, pressure < settings.ts  ? 1 : 0)) specialMode=99;
-               else if (handleButton(SPECIAL_PUFF_BUTTON, pressure > settings.tp  ? 1 : 0)) specialMode=99;
-               else { waitStable++; if (waitStable>SPECIALMODE_STABLEEXIT) { waitStable=0; specialMode=13; makeTone(TONE_EXITSPECIAL,0 ); } }
+            case MODESTATE_SPECIALMODE_ACTIVE:  // specialmode active
+               if (handleButton(0, (y<-SPECIALMODE_XY_THRESHOLD) ? 1 : 0)) modeState=MODESTATE_RETURN_TO_ILDE;
+               else if (handleButton(1, (x<-SPECIALMODE_XY_THRESHOLD) ? 1 : 0)) modeState=MODESTATE_RETURN_TO_ILDE;
+               else if (handleButton(2, (x>SPECIALMODE_XY_THRESHOLD) ? 1 : 0)) modeState=MODESTATE_RETURN_TO_ILDE;
+               else if (handleButton(SPECIAL_DOWN_BUTTON, (y>SPECIALMODE_XY_THRESHOLD) ? 1 : 0)) modeState=MODESTATE_RETURN_TO_ILDE;
+               else if (handleButton(SPECIAL_SIP_BUTTON, pressure < settings.ts  ? 1 : 0)) modeState=MODESTATE_RETURN_TO_ILDE;
+               else if (handleButton(SPECIAL_PUFF_BUTTON, pressure > settings.tp  ? 1 : 0)) modeState=MODESTATE_RETURN_TO_ILDE;
+               else { waitStable++; if (waitStable>SPECIALMODE_STABLEEXIT) { waitStable=0; modeState=MODESTATE_RELEASE; makeTone(TONE_EXITSPECIAL,0 ); } }
                break;
 
-            case 10:   // sipped, wait for release to enter detect hold state          
+            case MODESTATE_ENTER_HOLDMODE:   // sipped, wait for release to enter detect hold state          
                 if (pressure > SPECIALMODE_SIP_RELEASE)
                    waitStable++;
                 else waitStable=0;
                 if (waitStable>=SPECIALMODE_STABLETIME)
-                    specialMode=11;
+                    modeState=MODESTATE_DETECT_HOLDSTATE;
                  break; 
-            case 11:  // detect hold state
-               if ((y<-settings.dy) || (y>settings.dy)) {holdMode=HOLD_Y; holdY=y; specialMode=12; }
-               else if ((x<-settings.dx) || (x>settings.dx)) {holdMode=HOLD_X; holdX=x; specialMode=12; }
-               else if ((pressure<settings.ts) || (pressure>settings.tp)) {holdMode=HOLD_PRESSURE; holdPressure=pressure; specialMode=12; }
-               else { waitStable++; if (waitStable>SPECIALMODE_STABLEEXIT) { waitStable=0; specialMode=13; makeTone(TONE_HOLD,2 ); } }
+            case MODESTATE_DETECT_HOLDSTATE:  // detect hold state
+               rememberMouseOn=settings.mouseOn;
+               if ((y<-settings.dy) || (y>settings.dy)) {holdMode=HOLD_Y; holdY=y; settings.mouseOn=0; modeState=MODESTATE_HOLDMODE_ACTIVE; }
+               else if ((x<-settings.dx) || (x>settings.dx)) {holdMode=HOLD_X; holdX=x; settings.mouseOn=0; modeState=MODESTATE_HOLDMODE_ACTIVE; }
+               else if ((pressure<settings.ts) || (pressure>settings.tp)) {holdMode=HOLD_PRESSURE; holdPressure=pressure; modeState=MODESTATE_HOLDMODE_ACTIVE; }
+               else { waitStable++; if (waitStable>SPECIALMODE_STABLEEXIT) { waitStable=0; modeState=MODESTATE_RELEASE; makeTone(TONE_HOLD,2 ); } }
                break;
 
-            case 12:   // hold mode selected          
+            case MODESTATE_HOLDMODE_ACTIVE:   // hold mode selected          
                     makeTone(TONE_HOLD,1 );             
-                    specialMode=99;
+                    modeState=MODESTATE_RETURN_TO_ILDE;
                 break; 
-            case 13:   // sipped, wait for release to exit hold mode          
+            case MODESTATE_RELEASE:   // wait for release to exit hold mode          
                 if (pressure > SPECIALMODE_SIP_RELEASE)  
                 {
                     holdMode=HOLD_IDLE;
-                    specialMode=99;
+                    modeState=MODESTATE_RETURN_TO_ILDE;
                 }
                 break; 
 
             default:  // end special mode, enter idle again           
                     initDebouncers();
                     release_all();
-                    specialMode=0;
+                    modeState=MODESTATE_IDLE;
                  break; 
           }
 }

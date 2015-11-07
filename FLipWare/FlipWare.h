@@ -27,8 +27,8 @@
 
 #define VERSION_STRING "Flipmouse v2.0"
 
-//#define TEENSY               //  if Teensy2.0++ controller is used (FLipmouse V1)
-#define TEENSY_LC            //  if Teensy LC controller is used (FLipmouse V2)
+#define TEENSY               //  if Teensy2.0++ controller is used (FLipmouse V1)
+//#define TEENSY_LC            //  if Teensy LC controller is used (FLipmouse V2)
 
 #ifndef TEENSY
 #ifndef TEENSY_LC
@@ -114,6 +114,8 @@ extern struct buttonDebouncerType buttonDebouncers[NUMBER_OF_BUTTONS];
 extern const struct atCommandType atCommands[];
 
 extern uint16_t calib_now;
+extern int16_t  cx;
+extern int16_t  cy;
 extern uint8_t leftMouseButton;
 extern uint8_t middleMouseButton;
 extern uint8_t rightMouseButton;

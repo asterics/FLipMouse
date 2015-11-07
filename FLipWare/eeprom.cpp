@@ -138,7 +138,6 @@ void readFromEEPROM(char * slotname)
         for (unsigned int t=0;t<sizeof(settingsType);t++)
             *p++=readEEPROM(address++);
         
-        
         p = (uint8_t*) buttons;
         for (unsigned int i=0;i<NUMBER_OF_BUTTONS*sizeof(buttonType);i++) 
            *p++=readEEPROM(address++);

@@ -222,6 +222,8 @@ void performCommand (uint8_t cmd, int16_t par1, char * keystring, int8_t periodi
                if (keystring) {
                  release_all();
                  readFromEEPROM(keystring);
+                 if ((settings.gu!=50)||(settings.gd!=50)||(settings.gl!=50)||(settings.gr!=50))
+                 { cx=settings.cx; cy=settings.cy; }                   
                }
             break;
         case CMD_LA:

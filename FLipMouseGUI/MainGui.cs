@@ -211,18 +211,6 @@ namespace MouseApp2
                 }
             }
          
-            Button1FunctionBox.SelectedIndex = 0;
-            Button2FunctionBox.SelectedIndex = 0;
-            Button3FunctionBox.SelectedIndex = 0;
-            UpFunctionMenu.SelectedIndex = 0;
-            DownFunctionMenu.SelectedIndex = 0;
-            LeftFunctionMenu.SelectedIndex = 0;
-            RightFunctionMenu.SelectedIndex = 0;
-            SipFunctionMenu.SelectedIndex = 0;
-            SpecialSipFunctionMenu.SelectedIndex = 0;
-            PuffFunctionMenu.SelectedIndex = 0;
-            SpecialPuffFunctionMenu.SelectedIndex = 0;
-
             foreach (string str in keyOptions)
             {
                 Button1ComboBox.Items.Add(str);
@@ -392,9 +380,13 @@ namespace MouseApp2
                     foreach (Slot s in slots)
                         if (s.slotName.Equals(newSlotName)) exists = true;
                 } while (exists == true);
-
+                
                 slotNames.Items.Add(newSlotName);
                 slots.Add(new Slot(newSlotName));
+
+                slots[slots.Count - 1].settingStrings.Clear();
+                foreach (string s in slots[actSlot].settingStrings)
+                    slots[slots.Count - 1].settingStrings.Add(s);
                 actSlot = slots.Count - 1;
                 displaySlot(actSlot);
             }

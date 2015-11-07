@@ -229,26 +229,6 @@ void loop() {
           timeDifference = currentTime - previousTime;
           previousTime = currentTime;
           accelFactor= timeDifference / 10000.0f;      
-  
-          if (reportRawValues)   { 
-            if (valueReportCount++ > 10) {                    // report raw values !
-              Serial.print("VALUES:");Serial.print(pressure);Serial.print(",");
-              Serial.print(up);Serial.print(",");Serial.print(down);Serial.print(",");
-              Serial.print(left);Serial.print(",");Serial.println(right);
-              /*
-              Serial.print("AnalogRAW:");
-              Serial.print(analogRead(UP_SENSOR_PIN));
-              Serial.print(",");
-              Serial.print(analogRead(DOWN_SENSOR_PIN));
-              Serial.print(",");
-              Serial.print(analogRead(LEFT_SENSOR_PIN));
-              Serial.print(",");
-              Serial.println(analogRead(RIGHT_SENSOR_PIN));
-              */
-              valueReportCount=0;
-            }
-          }
-
               
           if (calib_now == 0)  {
               x = (left-right) - cx;
@@ -266,9 +246,30 @@ void loop() {
                  cy=settings.cy;
               }
           }    
+
+          if (reportRawValues)   { 
+            if (valueReportCount++ > 10) {                    // report raw values !
+              Serial.print("VALUES:");Serial.print(pressure);Serial.print(",");
+              Serial.print(up);Serial.print(",");Serial.print(down);Serial.print(",");
+              Serial.print(left);Serial.print(",");Serial.print(right);Serial.print(",");
+              Serial.print(x);Serial.print(",");Serial.println(y);
+              /*
+              Serial.print("AnalogRAW:");
+              Serial.print(analogRead(UP_SENSOR_PIN));
+              Serial.print(",");
+              Serial.print(analogRead(DOWN_SENSOR_PIN));
+              Serial.print(",");
+              Serial.print(analogRead(LEFT_SENSOR_PIN));
+              Serial.print(",");
+              Serial.println(analogRead(RIGHT_SENSOR_PIN));
+              */
+              valueReportCount=0;
+            }
+          }
           
           if (abs(x)<= settings.dx) x=0;
           if (abs(y)<= settings.dy) y=0;
+
 
 
           handleModeState();

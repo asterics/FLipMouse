@@ -60,7 +60,7 @@ namespace MouseApp2
             slots.Clear();
             slots.Add(new Slot());
             slotNames.Items.Clear();
-            slotNames.Items.Add("default");
+            slotNames.Items.Add("mouse");
         }
 
         public void storeSlot(int slotNumber)
@@ -1105,6 +1105,11 @@ namespace MouseApp2
             actSlot = slotNames.SelectedIndex;
             displaySlot(actSlot);
 
+        }
+
+        private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show("FLipMouse V2.0 - AsTeRICS Academy\nFor more information see: http://www.asterics-academy.net");
         }
 
     }

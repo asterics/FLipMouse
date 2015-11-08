@@ -164,10 +164,10 @@ namespace MouseApp2
             allCommands.add(new Command("AT KR", PARTYPE_STRING, "Release Keys", COMBOENTRY_NO, GUITYPE_STANDARD));
             allCommands.add(new Command("AT RA", PARTYPE_NONE, "Release All", COMBOENTRY_NO, GUITYPE_STANDARD));
             allCommands.add(new Command("AT SA", PARTYPE_STRING, "Save Slot", COMBOENTRY_NO, GUITYPE_STANDARD));
-            allCommands.add(new Command("AT LO", PARTYPE_STRING, "Load Slot", COMBOENTRY_YES, GUITYPE_TEXTFIELD));
+            allCommands.add(new Command("AT LO", PARTYPE_STRING, "Load Slot by Name", COMBOENTRY_YES, GUITYPE_TEXTFIELD));
             allCommands.add(new Command("AT LA", PARTYPE_NONE, "Load All", COMBOENTRY_NO, GUITYPE_STANDARD));
             allCommands.add(new Command("AT LI", PARTYPE_NONE, "List Slots", COMBOENTRY_NO, GUITYPE_STANDARD));
-            allCommands.add(new Command("AT NE", PARTYPE_NONE, "Switch to next configuration slot", COMBOENTRY_YES, GUITYPE_STANDARD));
+            allCommands.add(new Command("AT NE", PARTYPE_NONE, "Load Next Slot", COMBOENTRY_YES, GUITYPE_STANDARD));
             allCommands.add(new Command("AT DE", PARTYPE_NONE, "Delete all configurations", COMBOENTRY_NO, GUITYPE_STANDARD));
             allCommands.add(new Command("AT NC", PARTYPE_NONE, "No Command", COMBOENTRY_YES, GUITYPE_STANDARD));
             allCommands.add(new Command("AT MM", PARTYPE_UINT, "Mouse Mode (1) or Alternative (0)", COMBOENTRY_NO, GUITYPE_BOOLEAN));
@@ -283,7 +283,7 @@ namespace MouseApp2
             public List<String> settingStrings = new List<String>();
             public Slot()
             {
-                this.slotName = "default";
+                this.slotName = "mouse";
                 init();
             }
             public Slot(String slotName)

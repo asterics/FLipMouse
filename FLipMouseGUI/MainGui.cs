@@ -439,8 +439,8 @@ namespace MouseApp2
 
         private void storeSlotSettingsMenuItem_Click(object sender, EventArgs e)
         {
+            storeSlot(actSlot);   
             storeSettingsToFLipmouse();
-
         }
 
         private void loadSlotSettingsMenuItem_Click(object sender, EventArgs e)

@@ -103,6 +103,7 @@ namespace MouseApp2
             slotNames.Text = slots[slotNumber].slotName;
             foreach (String settingString in slots[slotNumber].settingStrings)
             {
+                if (settingString == null) { Console.WriteLine("null value detected **** SlotNr."+slotNumber); break; }
                 if (actButtonLink != null)
                 {
                     String cmd = settingString.Substring(0, 5);
@@ -188,6 +189,8 @@ namespace MouseApp2
             clickTimer.Interval = 500; // specify interval time as you want
             clickTimer.Tick += new EventHandler(timer_Tick);
 
+            IdTimer.Tick += new EventHandler(IdTimer_Tick);
+
             Text += " "+ VERSION_STRING;
 
 
@@ -266,7 +269,6 @@ namespace MouseApp2
                         connectComButton.Enabled = false;
 
                         IdTimer.Interval = 1500;
-                        IdTimer.Tick += new EventHandler(IdTimer_Tick);
                         IdTimer.Start();
                         Console.WriteLine("IdTimer started!");
 

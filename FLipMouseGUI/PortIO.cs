@@ -25,8 +25,8 @@ namespace MouseApp2
                 serialPort1.Parity = Parity.None;
                 serialPort1.Handshake = Handshake.None;
                 serialPort1.DtrEnable = true;
-                serialPort1.ReadTimeout = 2500;
-                serialPort1.WriteTimeout = 2500;
+                serialPort1.ReadTimeout = 10000;
+                serialPort1.WriteTimeout = 10000;
                 serialPort1.NewLine = "\n";
 
                 try
@@ -59,7 +59,8 @@ namespace MouseApp2
                 }
                 catch (Exception ex)
                 {
-                    addToLog("Could not write to COM port");
+                    Console.WriteLine("Could not write to COM port:" + ex.ToString());
+                    addToLog("Could not write to COM port:" + ex.ToString());
                 }
             }
         }
@@ -69,6 +70,7 @@ namespace MouseApp2
         {
             String receivedString = "";
 
+            Console.WriteLine("sending ID request ..");
             sendIDCommand();   // start (after connect): request ID String from Lipmouse; receive ID before timeout ! (else close port)
             
             try
@@ -78,12 +80,13 @@ namespace MouseApp2
                     try
                     {
                         receivedString = serialPort1.ReadLine();
-                        // Console.Write("received:" + receivedString);
+                        if (!receivedString.Contains("VALUES"))
+                           Console.Write("received:" + receivedString);
                         BeginInvoke(this.stringReceivedDelegate, new Object[] { receivedString });
                     }
                     catch (Exception ex)
                     {
-                        // addToLog("Could not read from COM port...");
+                        Console.WriteLine("Could not read from COM port: "+ex.ToString());
                     }
                 }
             }
@@ -95,6 +98,7 @@ namespace MouseApp2
         void IdTimer_Tick(object sender, EventArgs e)
         {
             IdTimer.Stop();
+            
             if (flipMouseOnline == 0)
             {
                 addToLog("ID-Timeout ! No Flipmouse module found !");
@@ -105,7 +109,7 @@ namespace MouseApp2
 
         public void stringReceived(String newLine)
         {
-            if (newLine.ToUpper().StartsWith(PREFIX_FLIPMOUSE_VERSION))  // read flipmouse ID 
+            if (newLine.ToUpper().Contains(PREFIX_FLIPMOUSE_VERSION))  // read flipmouse ID 
             {
                 gotID(newLine);
             } 
@@ -146,6 +150,12 @@ namespace MouseApp2
             flipMouseOnline = 1;
             slotNames.Items.Clear();
             sendStartReportingCommand();   // start reporting raw values !
+
+            DialogResult dialogResult = MessageBox.Show("Do you want to load the slots and settings which are stored in the FLipMouse device ?", "Load Settings ?", MessageBoxButtons.YesNo);
+            if (dialogResult == DialogResult.Yes)
+            {
+                loadSettingsFromFLipmouse();
+            }
         }
 
         public void gotSlotNames(String newSlotName)
@@ -198,6 +208,7 @@ namespace MouseApp2
         {
             if (serialPort1.IsOpen)
             {
+                Cursor.Current = Cursors.WaitCursor;
                 sendEndReportingCommand();
                 sendClearCommand();  // delete all slots on FlipMouse
 
@@ -207,11 +218,13 @@ namespace MouseApp2
                     displaySlot(slotCounter);
                     sendApplyCommands();
                     sendSaveSlotCommands(slots[slotCounter].slotName);
-                    addToLog("Slot " + slots[slotCounter].slotName + " was stored into FLipmouse.");
+                    addToLog("Slot " + slots[slotCounter].slotName + " is stored into FLipmouse.");
                 }
                 addToLog("The settings were stored!");
                 sendNextCommand();
                 sendStartReportingCommand();
+                Thread.Sleep(3000);  // time to activate config in flipmouse
+                Cursor.Current = Cursors.Default;
             }
 
         }

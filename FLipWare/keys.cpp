@@ -30,6 +30,8 @@ void setKeyValues(char* text)
   char * acttoken;
   //int modifiers=0;
 
+  //Serial.print("setKeyValues: "); Serial.println(text);
+
   strcpy(tmptxt, text); 
   acttoken = strtok(tmptxt," ");
   

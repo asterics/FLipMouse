@@ -50,6 +50,10 @@
 #define PARTYPE_INT   2
 #define PARTYPE_STRING  3
 
+#define REPORT_NONE  0  
+#define REPORT_ONE_SLOT  1
+#define REPORT_ALL_SLOTS 2
+
 #define TONE_ENTERSPECIAL 0
 #define TONE_CALIB        1
 #define TONE_CHANGESLOT   2

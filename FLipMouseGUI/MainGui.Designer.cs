@@ -418,7 +418,7 @@
             this.singlePanel.Controls.Add(this.speedLabel);
             this.singlePanel.Controls.Add(this.speedBar);
             this.singlePanel.Controls.Add(this.label36);
-            this.singlePanel.Location = new System.Drawing.Point(23, 64);
+            this.singlePanel.Location = new System.Drawing.Point(18, 62);
             this.singlePanel.Name = "singlePanel";
             this.singlePanel.Size = new System.Drawing.Size(724, 203);
             this.singlePanel.TabIndex = 65;
@@ -625,7 +625,7 @@
             this.incSpeedY.UseVisualStyleBackColor = true;
             this.incSpeedY.Click += new System.EventHandler(this.incSpeedY_Click);
             this.incSpeedY.MouseLeave += new System.EventHandler(this.stop_ClickTimer);
-            this.incSpeedY.MouseHover += new System.EventHandler(this.incSpeedX_MouseHover);
+            this.incSpeedY.MouseHover += new System.EventHandler(this.incSpeedY_MouseHover);
             // 
             // decSpeedY
             // 
@@ -1514,7 +1514,7 @@
             this.incPuffThreshold.UseVisualStyleBackColor = true;
             this.incPuffThreshold.Click += new System.EventHandler(this.incPuffThreshold_Click);
             this.incPuffThreshold.MouseLeave += new System.EventHandler(this.stop_ClickTimer);
-            this.incPuffThreshold.MouseHover += new System.EventHandler(this.decPuffThreshold_MouseHover);
+            this.incPuffThreshold.MouseHover += new System.EventHandler(this.incPuffThreshold_MouseHover);
             // 
             // decPuffThreshold
             // 

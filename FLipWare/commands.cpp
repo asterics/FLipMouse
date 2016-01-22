@@ -12,12 +12,12 @@ const struct atCommandType atCommands[] PROGMEM = {
     {"MY"  , PARTYPE_INT  },  {"KW"  , PARTYPE_STRING},{"KP"  , PARTYPE_STRING},{"KR"  , PARTYPE_STRING},
     {"RA"  , PARTYPE_NONE },  {"SA"  , PARTYPE_STRING},{"LO"  , PARTYPE_STRING},{"LA"  , PARTYPE_NONE },
     {"LI"  , PARTYPE_NONE },  {"NE"  , PARTYPE_NONE }, {"DE"  , PARTYPE_NONE }, {"NC"  , PARTYPE_NONE }, 
-    {"MM"  , PARTYPE_UINT },  {"SW"  , PARTYPE_NONE }, {"SR"  , PARTYPE_NONE }, {"ER"  , PARTYPE_NONE },
-    {"CA"  , PARTYPE_NONE },  {"AX"  , PARTYPE_UINT }, {"AY"  , PARTYPE_UINT }, {"DX"  , PARTYPE_UINT },
-    {"DY"  , PARTYPE_UINT },  {"TS"  , PARTYPE_UINT }, {"TP"  , PARTYPE_UINT }, {"SM"  , PARTYPE_UINT },
-    {"HM"  , PARTYPE_UINT },  {"GU"  , PARTYPE_UINT }, {"GD"  , PARTYPE_UINT }, {"GL"  , PARTYPE_UINT },
-    {"GR"  , PARTYPE_UINT },  {"IR"  , PARTYPE_STRING},{"IP"  , PARTYPE_STRING},{"IC"  , PARTYPE_STRING},
-    {"IL"  , PARTYPE_NONE }
+    {"E1"  , PARTYPE_NONE },  {"E0"  , PARTYPE_NONE }, {"MM"  , PARTYPE_UINT }, {"SW"  , PARTYPE_NONE }, 
+    {"SR"  , PARTYPE_NONE },  {"ER"  , PARTYPE_NONE }, {"CA"  , PARTYPE_NONE }, {"AX"  , PARTYPE_UINT }, 
+    {"AY"  , PARTYPE_UINT },  {"DX"  , PARTYPE_UINT }, {"DY"  , PARTYPE_UINT }, {"TS"  , PARTYPE_UINT }, 
+    {"TP"  , PARTYPE_UINT },  {"SM"  , PARTYPE_UINT }, {"HM"  , PARTYPE_UINT }, {"GU"  , PARTYPE_UINT }, 
+    {"GD"  , PARTYPE_UINT },  {"GL"  , PARTYPE_UINT }, {"GR"  , PARTYPE_UINT }, {"IR"  , PARTYPE_STRING},
+    {"IP"  , PARTYPE_STRING}, {"IC"  , PARTYPE_STRING},{"IL"  , PARTYPE_NONE }
 };
 
 void initButtons() {
@@ -103,8 +103,8 @@ void performCommand (uint8_t cmd, int16_t par1, char * keystring, int8_t periodi
             break;
         case CMD_BM:
                release_all();
-               //if (DebugOutput==DEBUG_FULLOUTPUT)  
-                 Serial.print("set mode for button "); Serial.println(par1);
+               if (DebugOutput==DEBUG_FULLOUTPUT)  
+               {  Serial.print("set mode for button "); Serial.println(par1); }
                if ((par1>0) && (par1<=NUMBER_OF_BUTTONS))
                    actButton=par1;
                else  Serial.println("?");
@@ -221,32 +221,36 @@ void performCommand (uint8_t cmd, int16_t par1, char * keystring, int8_t periodi
                {  Serial.print("load slot: "); Serial.println(keystring); }
                if (keystring) {
                  release_all();
+                 reportSlotParameters=REPORT_ONE_SLOT;
                  readFromEEPROM(keystring);
-                 if ((settings.gu!=50)||(settings.gd!=50)||(settings.gl!=50)||(settings.gr!=50))
-                 { cx=settings.cx; cy=settings.cy; }                   
+                 reportSlotParameters=REPORT_NONE;
+                 if ((settings.gu!=50)||(settings.gd!=50)||(settings.gl!=50)||(settings.gr!=50)) // TBD: improve ! 
+                 { cx=settings.cx; cy=settings.cy; }   // update calibration settings if gain settings are not default 
                }
             break;
         case CMD_LA:
                if (DebugOutput==DEBUG_FULLOUTPUT)  
                  Serial.println("laod all slots");
                release_all();
-               reportSlotParameters=1;
+               reportSlotParameters=REPORT_ALL_SLOTS;
                readFromEEPROM(keystring);
-               reportSlotParameters=0;
+               reportSlotParameters=REPORT_NONE;
                readFromEEPROM(0);
             break;
         case CMD_LI:
                if (DebugOutput==DEBUG_FULLOUTPUT)  
                  Serial.println("list slots: ");
                release_all();
-               reportSlotParameters=1;   // connection to host: start reporting slot parameters !
                listSlots();
             break;
         case CMD_NE:
-               if (DebugOutput==DEBUG_FULLOUTPUT)  
+               if (DebugOutput==DEBUG_FULLOUTPUT)  {
                  Serial.print("load next slot");
+                 reportSlotParameters=REPORT_ONE_SLOT;
+               }
                release_all();
                readFromEEPROM(0);
+               reportSlotParameters=REPORT_NONE;
                break;
         case CMD_DE:
                if (DebugOutput==DEBUG_FULLOUTPUT)  
@@ -368,7 +372,14 @@ void performCommand (uint8_t cmd, int16_t par1, char * keystring, int8_t periodi
                  Serial.println("delete IR command");
                 // TBD
             break;
-    }
+        case CMD_E1:
+               DebugOutput=DEBUG_FULLOUTPUT; 
+               Serial.println("echo on"); 
+            break;
+        case CMD_E0:
+               DebugOutput=DEBUG_NOOUTPUT; 
+            break;
+     }
 }
 
 

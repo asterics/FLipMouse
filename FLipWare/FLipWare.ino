@@ -50,6 +50,7 @@
   int8_t  input_map[NUMBER_OF_PHYSICAL_BUTTONS]={13,2,3};  //  maps physical button pins to button index 0,1,2  
   int8_t  led_map[NUMBER_OF_LEDS]={18,19,20};              //  maps leds pins   
   uint8_t LED_PIN = 6;                                     //  Led output pin
+  uint8_t IR_LED_PIN = 7;                                  //  IR-Led output pin
 #endif
 
 #ifdef TEENSY_LC
@@ -64,7 +65,9 @@
 
   int8_t  input_map[NUMBER_OF_PHYSICAL_BUTTONS]={0,1,2};  //  maps physical button pins to button index 0,1,2  
   int8_t  led_map[NUMBER_OF_LEDS]={5,16,17};              //  maps leds pins   
-  uint8_t LED_PIN = 13;                                     //  Led output pin, ATTENTION: if SPI (AUX header) is used, this pin is also SCK!!!
+  uint8_t LED_PIN = 13;                                   //  Led output pin, ATTENTION: if SPI (AUX header) is used, this pin is also SCK!!!
+  uint8_t IR_LED_PIN = 6;                                 //  IR-Led output pin
+
 #endif
 
 struct settingsType settings = {      // default settings valus, for type definition see fabi.h
@@ -82,11 +85,11 @@ struct buttonType buttons [NUMBER_OF_BUTTONS];                     // array for 
 struct buttonDebouncerType buttonDebouncers [NUMBER_OF_BUTTONS];   // array for all buttonsDebouncers - type definition see fabi.h 
 
 uint16_t calib_now = 1;                       // calibrate zeropoint right at startup !
-uint8_t DebugOutput = DEBUG_NOOUTPUT;         // for chatty serial interface use: DEBUG_FULLOUTPUT
+uint8_t DebugOutput = DEBUG_NOOUTPUT;         // for chatty serial interface use: DEBUG_FULLOUTPUT (attention: not GUI compatible ..)
 int waitTime=DEFAULT_WAIT_TIME;
 
 int EmptySlotAddress = 0;
-uint8_t reportSlotParameters = 0;
+uint8_t reportSlotParameters = REPORT_NONE;
 uint8_t reportRawValues = 0;
 
 unsigned long currentTime;
@@ -172,6 +175,9 @@ void setup() {
    #endif
 
    pinMode(LED_PIN,OUTPUT);
+   digitalWrite(LED_PIN,LOW);
+
+   pinMode(IR_LED_PIN,OUTPUT);
    digitalWrite(LED_PIN,LOW);
 
    for (int i=0; i<NUMBER_OF_PHYSICAL_BUTTONS; i++)   // initialize physical buttons and bouncers

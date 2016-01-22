@@ -48,10 +48,12 @@ void parseCommand (char * cmdstr)
     int8_t cmd=-1;
     int16_t num=0;
     
-     // Serial.print("parseCommand:"); Serial.println(cmdstr);
+    // Serial.print("parseCommand:"); Serial.println(cmdstr);
     char * actpos = strtok(cmdstr," ");   // see a nice explaination of strtok here:  http://www.reddit.com/r/arduino/comments/2h9l1l/using_the_strtok_function/
+    
     if (actpos) 
     {
+        Serial.print("actpos:"); Serial.println(actpos);
         int i;
         strup(actpos);
         
@@ -61,15 +63,15 @@ void parseCommand (char * cmdstr)
             // Serial.print ("partype="); Serial.println (pgm_read_byte_near(&(atCommands[i].partype)));
             switch (pgm_read_byte_near(&(atCommands[i].partype))) 
             {
-               case PARTYPE_UINT: actpos=strtok(NULL," "); if (get_uint(actpos, &num)) cmd=i ; break;
+               case PARTYPE_UINT: actpos=strtok(NULL," ");  if (get_uint(actpos, &num)) cmd=i ; break;
                case PARTYPE_INT:  actpos=strtok(NULL," ");  if (get_int(actpos, &num)) cmd=i ; break;
-               case PARTYPE_STRING: actpos=strtok(NULL," "); cmd=i ; break;
+               case PARTYPE_STRING: actpos+=3; if (*actpos) cmd=i; break;
                default: cmd=i; actpos=0; break;
             }
           }
         }          
     }
-    
+
     if (cmd>-1)  performCommand(cmd,num,actpos,0);        
     else   Serial.println("?");              
 }

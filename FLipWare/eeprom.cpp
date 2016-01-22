@@ -116,7 +116,6 @@ void readFromEEPROM(char * slotname)
    {
       uint8_t found=0;
      
-      if (reportSlotParameters) found=1;
       if ((!slotname) && (address==nextSlotAddress)) found=1;
       address++;
 
@@ -132,7 +131,7 @@ void readFromEEPROM(char * slotname)
       }
       
       address=tmpStartAddress;
-      if (found)  {
+      if ((found) || (reportSlotParameters==REPORT_ALL_SLOTS))  {      
            
         p = (uint8_t*) &settings;
         for (unsigned int t=0;t<sizeof(settingsType);t++)
@@ -142,7 +141,7 @@ void readFromEEPROM(char * slotname)
         for (unsigned int i=0;i<NUMBER_OF_BUTTONS*sizeof(buttonType);i++) 
            *p++=readEEPROM(address++);
         
-        if (reportSlotParameters)   
+         if (reportSlotParameters!=REPORT_NONE)  
            printCurrentSlot();
 
         actSlot=numSlots+1; 

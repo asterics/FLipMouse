@@ -256,9 +256,9 @@ uint8_t update_Buttonval()
 {
 	uint8_t actval=0;
 
-	if (!(PINC & (1<<3))) actval|=1; 
-	if (!(PIND & (1<<2))) actval|=2; 
-	if (!(PIND & (1<<3))) actval|=4; 
+	if (digitalRead(input_map[0])==LOW) actval|=1; 
+	if (digitalRead(input_map[1])==LOW) actval|=2; 
+	if (digitalRead(input_map[2])==LOW) actval|=4; 
 
     if (actval != buttonval)
 	{

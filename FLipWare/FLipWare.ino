@@ -63,7 +63,7 @@
   //Piezo Pin (for tone generation)
   #define TONE_PIN  9
 
-  int8_t  input_map[NUMBER_OF_PHYSICAL_BUTTONS]={0,1,2};  //  maps physical button pins to button index 0,1,2  
+  int8_t  input_map[NUMBER_OF_PHYSICAL_BUTTONS]={0,2,1};  //  maps physical button pins to button index 0,1,2  
   int8_t  led_map[NUMBER_OF_LEDS]={5,16,17};              //  maps leds pins   
   uint8_t LED_PIN = 13;                                   //  Led output pin, ATTENTION: if SPI (AUX header) is used, this pin is also SCK!!!
   uint8_t IR_LED_PIN = 6;                                 //  IR-Led output pin

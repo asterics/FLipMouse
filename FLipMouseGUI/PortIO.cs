@@ -28,6 +28,8 @@ namespace MouseApp2
                 serialPort1.ReadTimeout = 10000;
                 serialPort1.WriteTimeout = 10000;
                 serialPort1.NewLine = "\n";
+                serialPort1.Encoding = System.Text.Encoding.Default;
+
 
                 try
                 {

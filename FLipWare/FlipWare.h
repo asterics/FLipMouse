@@ -116,6 +116,7 @@ extern int EmptySlotAddress;
 extern struct buttonType buttons[NUMBER_OF_BUTTONS];
 extern struct buttonDebouncerType buttonDebouncers[NUMBER_OF_BUTTONS];
 extern const struct atCommandType atCommands[];
+extern int8_t  input_map[NUMBER_OF_PHYSICAL_BUTTONS];
 
 extern uint16_t calib_now;
 extern int16_t  cx;

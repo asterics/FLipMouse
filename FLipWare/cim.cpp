@@ -202,26 +202,31 @@ uint8_t process_ARE_frame(uint8_t status_code)
 void reply_FeatureList(void)
 {
   
-	Serial.write ( (uint8_t *)&CIM_frame, CIM_HEADER_LEN);
+  Serial.write ((uint8_t *) &CIM_frame, 7);    // attention : byte alignment in struct not possible for Cortex M0 !
+  Serial.write ((uint8_t *) &(CIM_frame.cim_feature), 4);
 	Serial.write  ( (uint8_t *)&LIPMOUSE_CIM_FEATURELIST, CIM_frame.data_size);
 }
 
 void reply_UniqueNumber(void)
 {
 	CIM_frame.data_size=4;    // lenght of unique number
-	Serial.write ((uint8_t *) &CIM_frame, CIM_HEADER_LEN);
+  Serial.write ((uint8_t *) &CIM_frame, 7);    // attention : byte alignment in struct not possible for Cortex M0 !
+  Serial.write ((uint8_t *) &(CIM_frame.cim_feature), 4);
 	Serial.write ((uint8_t *) &LIPMOUSE_CIM_UNIQUE_NUMBER, CIM_frame.data_size);
 }
 
 void reply_Acknowledge(void)
 {
-        CIM_frame.data_size=0;     // no data in ack frame
-	Serial.write ((uint8_t *) &CIM_frame, CIM_HEADER_LEN);
+  CIM_frame.data_size=0;     // no data in ack frame
+  Serial.write ((uint8_t *) &CIM_frame, 7);    // attention : byte alignment in struct not possible for Cortex M0 !
+  Serial.write ((uint8_t *) &(CIM_frame.cim_feature), 4);
 }
 
 void reply_DataFrame(void)
 {
-	Serial.write ((uint8_t *) &CIM_frame, CIM_HEADER_LEN);
+	Serial.write ((uint8_t *) &CIM_frame, 7);    // attention : byte alignment in struct not possible for Cortex M0 !
+  Serial.write ((uint8_t *) &(CIM_frame.cim_feature), 4);
+  
 	Serial.write ((uint8_t *) CIM_frame.data, CIM_frame.data_size);
 }
 
@@ -251,9 +256,9 @@ uint8_t update_Buttonval()
 {
 	uint8_t actval=0;
 
-	if (!(PINC & (1<<3))) actval|=1; 
-	if (!(PIND & (1<<2))) actval|=2; 
-	if (!(PIND & (1<<3))) actval|=4; 
+	if (digitalRead(input_map[0])==LOW) actval|=1; 
+	if (digitalRead(input_map[1])==LOW) actval|=2; 
+	if (digitalRead(input_map[2])==LOW) actval|=4; 
 
     if (actval != buttonval)
 	{

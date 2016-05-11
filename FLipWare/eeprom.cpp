@@ -1,13 +1,34 @@
-#include "FlipWare.h"
-#include <Wire.h>
-#include <EEPROM.h>
+/*
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+ * MA 02110-1301, USA.
+ * 
+ */
 
-#define SLOT_VALID 123
+#include "eeprom.h"
+
+/** Device address of the EEPROM **/
 #define deviceaddress 0x50
 
-int nextSlotAddress=0;
+/**
+ * Local copy of all slot and ir command start adresses
+ * */
+struct storageHeader slotAdresses;
 
-
+/**
+ * Write one byte to the EEPROM
+ * */
 void writeEEPROM(unsigned int eeaddress, byte data ) 
 {
   #ifdef TEENSY_LC
@@ -22,6 +43,10 @@ void writeEEPROM(unsigned int eeaddress, byte data )
   #endif
 }
  
+/**
+ * Read one byte from the EEPROM
+ * TODO: add another read function for more than one byte
+ * */
 byte readEEPROM(unsigned int eeaddress ) 
 {
 
@@ -46,6 +71,8 @@ byte readEEPROM(unsigned int eeaddress )
 
 void saveToEEPROM(char * slotname)
 {
+} 
+/*
    char act_slotname[MAX_SLOTNAME_LEN];
    int address = 0;
    int tmpStartAddress=0;
@@ -99,10 +126,91 @@ void saveToEEPROM(char * slotname)
      EmptySlotAddress=address;
   
   }
-}
+}*/
 
 void readFromEEPROM(char * slotname)
 {
+	uint16_t address; //current EEPROM address
+	uint8_t matches = 1;
+
+	//pre-load all starting adresses from the memory
+	bootstrapSlotAddresses();
+	
+	//iterate all possible slots
+	for(uint8_t i = 0; i < EEPROM_COUNT_SLOTS; i++)
+	{
+		//load the base address for the current slot
+		address = slotAdresses.startSlotAddress[i];
+		//check both bytes of the magicnumber, indicating a valid slot
+		if(readEEPROM(address++) != (EEPROM_MAGIC_NUMBER_SLOT & 0x00FF)) continue;
+		if(readEEPROM(address++) != (EEPROM_MAGIC_NUMBER_SLOT & 0xFF00)>>8) continue;
+		
+		
+		//skip the general settings, we only need the slot names
+		address += sizeof(slotGeneralSettings);
+
+		//compare the slotname
+		for (unsigned int t=0;t<MAX_SLOTNAME_LEN;t++)
+		{
+			//compare byte for byte
+			if(*(slotname + t) != readEEPROM(address + t))
+			{
+				//if one byte doesn't match, reset match flag and break the for loop
+				matches = 0;
+				break;
+			}
+			//if the end of the string is reached, break the for loop
+			if(*(slotname + t) == '\0') break;
+		}
+		
+		//if it matches, load all remaining settings & buttons
+		if(matches)
+		{
+			//call the method which loads the data
+			readFromEEPROMSlotNumber(i);
+			return;
+		}
+	}
+}
+
+/**
+ * Read one slot data from the EEPROM to the global variables
+ * The slot is identified by the slot number
+ * ATTENTION: if this method is not called from another function (e.g. readFromEEPROM()),
+ * it is necessary to preload the start adresses via bootstrapSlotAddresses()!!!
+ * */
+void readFromEEPROMSlotNumber(uint8_t nr)
+{
+	uint8_t* p = (uint8_t *)&settings;
+	uint16_t address = slotAdresses.startSlotAddress[nr];
+	
+	//check both bytes of the magicnumber, indicating a valid slot
+	if(readEEPROM(address++) != (EEPROM_MAGIC_NUMBER_SLOT & 0x00FF)) Serial.println(F("Error: no slot found at given slotnr"));
+	if(readEEPROM(address++) != (EEPROM_MAGIC_NUMBER_SLOT & 0xFF00)>>8) Serial.println(F("Error: no slot found at given slotnr"));
+	
+	//save the general settings to the global settings struct
+	for (unsigned int t=0;t<sizeof(slotGeneralSettings);t++) *p++=readEEPROM(address++);
+	
+	//skip '\0' seperator
+	address++;
+	
+	//skip the slotname
+	while(readEEPROM(address++) != '\0');
+	
+	//load all button settings
+	for(uint8_t i = 0; i < NUMBER_OF_BUTTONS; i++)
+	{
+		//TODO: TBD....
+	}
+}
+	
+	
+	
+	
+/*
+	
+	
+	
    char act_slotname[MAX_SLOTNAME_LEN];
    int address=0;
    int tmpSlotAddress=0;
@@ -151,11 +259,8 @@ void readFromEEPROM(char * slotname)
       numSlots++;
    }
    
-   makeTone (TONE_CHANGESLOT,actSlot);
+   makeTone(TONE_CHANGESLOT,actSlot);
 
-   EmptySlotAddress=address;
-   if (tmpSlotAddress) nextSlotAddress=tmpSlotAddress;
-   if (nextSlotAddress==EmptySlotAddress) nextSlotAddress=0;
    
    if (DebugOutput==DEBUG_FULLOUTPUT)  
    {
@@ -165,33 +270,73 @@ void readFromEEPROM(char * slotname)
    if (reportSlotParameters) 
        Serial.println("END");   // important: end marker for slot parameter list (command "load all" - AT LA)
 
-}
+}*/
 
+/**
+ * This function deletes all slots by deleting the magic number (reset to 0xFF)
+ * */
 void deleteSlots()
 {
-   EmptySlotAddress=0;
-   nextSlotAddress=0;
-   writeEEPROM(0,0);
+   for(uint8_t i = 0; i < EEPROM_COUNT_SLOTS; i++) 
+   {
+	   writeEEPROM(slotAdresses.startSlotAddress[i],0xFF);
+	   writeEEPROM(slotAdresses.startSlotAddress[i]+1,0xFF);
+   }
 }
 
+/**
+ * This function deletes all IR commands by deleting the magic number (reset to 0xFF)
+ * */
+void deleteIRCommand()
+{
+	for(uint8_t i = 0; i < EEPROM_COUNT_IRCOMMAND; i++) 
+   {
+	   writeEEPROM(slotAdresses.startIRAddress[i],0xFF);
+	   writeEEPROM(slotAdresses.startIRAddress[i]+1,0xFF);
+   }
+}
+
+/**
+ * Load the EEPROM header, which contains all start addresses of the
+ * slots and IR commands
+ * */
+void bootstrapSlotAddresses()
+{
+	for(uint16_t i = 0; i < sizeof(storageHeader); i++)
+	{
+		*((uint8_t *)&slotAdresses + 1) = readEEPROM(i);
+	}
+}
+
+/**
+ * Print out all slotnames to the serial interface
+ * Used by the PC-GUI to load all available slot names
+ * */
 void listSlots()
 {
-   int address=0,tmpStartAddress=0;
-   uint8_t numSlots=0;
-   uint8_t b;
-   
-   while (readEEPROM(address)==SLOT_VALID)  // indicates valid eeprom content !
-   {
-     numSlots++;
-     address++;
-     tmpStartAddress=address;
-     Serial.print("Slot"); Serial.print(numSlots); Serial.print(":"); 
-     while ((b=readEEPROM(address++)) != 0)   // print slot name
-         Serial.write(b);
-     Serial.println();
-     
-     address=tmpStartAddress+sizeof(settingsType)+NUMBER_OF_BUTTONS*sizeof(buttonType);         
-   }
+	uint16_t address; //current EEPROM address
+	uint8_t b;
+
+	//pre-load all starting adresses from the memory
+	bootstrapSlotAddresses();
+	
+	//iterate all possible slots
+	for(uint8_t i = 0; i < EEPROM_COUNT_SLOTS; i++)
+	{
+		//load the base address for the current slot
+		address = slotAdresses.startSlotAddress[i];
+		//check both bytes of the magicnumber, indicating a valid slot
+		if(readEEPROM(address++) != (EEPROM_MAGIC_NUMBER_SLOT & 0x00FF)) continue;
+		if(readEEPROM(address++) != (EEPROM_MAGIC_NUMBER_SLOT & 0xFF00)>>8) continue;
+		
+		//skip the general settings, we only need the slot names
+		address += sizeof(slotGeneralSettings);
+		
+		//print out the slot name
+		Serial.print("Slot"); Serial.print(i); Serial.print(":"); 
+		while ((b=readEEPROM(address++)) != 0) Serial.write(b); // print slot name 
+		Serial.println();
+	}
 }
 
 

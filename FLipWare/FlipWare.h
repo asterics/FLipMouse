@@ -87,6 +87,11 @@ struct settingsType {
   int16_t  cy;     // calib y
 };
 
+/*struct IRcommand {
+  char slotname[MAX_SLOTNAME_LEN];
+  uint8_t		edges;		//number of recorded edge timings
+  uint8_t[70]	timings;	//edge timing values
+};*/
 
 struct atCommandType {                      // holds settings for a button function 
   char atCmd[3];
@@ -150,6 +155,9 @@ void parseByte (int newByte);
 void setKeyValues(char* text); // presses individual keys
 void releaseKeys(char* text);  // releases individual keys
 void release_all();            // releases all previously pressed keys and buttons
+
+void record_IR_command();
+void play_IR_command();
 
 //set the correct strcpy/strcmp functions (either for AVR or ARM)
 #ifdef TEENSY

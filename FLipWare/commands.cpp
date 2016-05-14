@@ -355,11 +355,15 @@ void performCommand (uint8_t cmd, int16_t par1, char * keystring, int8_t periodi
         case CMD_IR:
                if (DebugOutput==DEBUG_FULLOUTPUT)  
                  Serial.println("record IR command");
+				
+				record_IR_command();
                 // TBD
             break;
         case CMD_IP:
                if (DebugOutput==DEBUG_FULLOUTPUT)  
                  Serial.println("play IR command");
+				 
+				 play_IR_command();
                 // TBD
             break;
         case CMD_IL:

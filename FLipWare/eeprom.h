@@ -92,8 +92,8 @@ struct slotGeneralSettings {
 };
 
 struct slotButtonSettings {
-	int mode;
-	int value;
+	uint16_t mode;
+	uint16_t value;
 };
 
 

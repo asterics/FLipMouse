@@ -177,7 +177,7 @@ void readFromEEPROM(char * slotname)
  * Read one slot data from the EEPROM to the global variables
  * The slot is identified by the slot number
  * ATTENTION: if this method is not called from another function (e.g. readFromEEPROM()),
- * it is necessary to preload the start adresses via bootstrapSlotAddresses()!!!
+ * it is necessary to preload the start adresses via bootstrapSlotAddresses()!
  * */
 void readFromEEPROMSlotNumber(uint8_t nr)
 {
@@ -189,7 +189,7 @@ void readFromEEPROMSlotNumber(uint8_t nr)
 	if(readEEPROM(address++) != (EEPROM_MAGIC_NUMBER_SLOT & 0xFF00)>>8) Serial.println(F("Error: no slot found at given slotnr"));
 	
 	//save the general settings to the global settings struct
-	for (unsigned int t=0;t<sizeof(slotGeneralSettings);t++) *p++=readEEPROM(address++);
+	for (uint16_t t=0;t<sizeof(slotGeneralSettings);t++) *p++=readEEPROM(address++);
 	
 	//skip '\0' seperator
 	address++;
@@ -200,7 +200,19 @@ void readFromEEPROMSlotNumber(uint8_t nr)
 	//load all button settings
 	for(uint8_t i = 0; i < NUMBER_OF_BUTTONS; i++)
 	{
-		//TODO: TBD....
+		//load struct slotButtonSettings
+		p = (uint8_t *)&buttons[i];
+		for (uint16_t t=0;t<sizeof(slotButtonSettings);t++) *p++=readEEPROM(address++);
+		
+		//skip '\0' seperator
+		if(readEEPROM(address++) != '\0') Serial.println(F("Error: seperator problem"));
+		
+		//check for additional payload
+		if(readEEPROM(address++) != '\0') {
+			//load additional payload
+			//TODO:
+			//TBD
+		}	
 	}
 }
 	

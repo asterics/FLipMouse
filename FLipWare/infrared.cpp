@@ -1,8 +1,11 @@
 #include "FlipWare.h"
 
-//Maximium timeout, 
+//Time until the record command will be canceled
 #define IR_USER_TIMEOUT_MS 10000
+//Timeout for the infrared command itself
 #define IR_EDGE_TIMEOUT_US 10000
+//Maximum count of edges for one command
+//Note: this value may be increased if your recorded command exceeds this value
 #define IR_EDGE_REC_MAX 70
 
 extern uint8_t IR_SENSOR_PIN;

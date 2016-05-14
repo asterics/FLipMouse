@@ -168,46 +168,6 @@ void readFromEEPROM(char * slotname)
 
 }
 
-/*void saveIRcommandToEEPROM(char * slotname)
-{
-   char act_slotname[MAX_SLOTNAME_LEN];
-   int address = 0;
-   int tmpStartAddress=0;
-   uint8_t found=0;
-   uint8_t * p;
-
-	address=EmptySlotAddress;
-
-
-   if (DebugOutput==DEBUG_FULLOUTPUT)  {
-     Serial.print("Writing slot "); if (slotname) Serial.print(slotname);
-     Serial.print(" starting from EEPROM address "); Serial.println(address);
-   }
-   
-   // start with new slot 
-   writeEEPROM(address++,SLOT_VALID);  
-
-   // update slotname
-   if (!slotname) settings.slotname[0]=0;
-   else strcpy(settings.slotname,slotname);
-         
-   // write general settings 
-   p = (uint8_t*) &IRcommand;
-   for (unsigned int t=0;t<sizeof(settingsType);t++)
-      writeEEPROM(address++,*p++);
-
-   // write all buttons
-   p = (uint8_t*) buttons;
-   for (unsigned int i=0;i<NUMBER_OF_BUTTONS*sizeof(buttonType);i++)
-        writeEEPROM(address++,*p++);
-
-   if (EmptySlotAddress<=address) {
-     writeEEPROM(address,0);
-     EmptySlotAddress=address;
-  
-  }
-}*/
-
 void deleteSlots()
 {
    EmptySlotAddress=0;

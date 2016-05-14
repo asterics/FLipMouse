@@ -64,7 +64,7 @@
 #define DOUBLECLICK_MULTIPLIER  5    // CLICK_TIME factor for double clicks
 
 #define DEBUG_NOOUTPUT 0
-#define DEBUG_FULLOUTPUT 1
+#define DEBUG_FULLOUTPUT 0
 
 
 struct settingsType {
@@ -87,11 +87,7 @@ struct settingsType {
   int16_t  cy;     // calib y
 };
 
-/*struct IRcommand {
-  char slotname[MAX_SLOTNAME_LEN];
-  uint8_t		edges;		//number of recorded edge timings
-  uint8_t[70]	timings;	//edge timing values
-};*/
+
 
 struct atCommandType {                      // holds settings for a button function 
   char atCmd[3];

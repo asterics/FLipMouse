@@ -1,5 +1,6 @@
 #include "FlipWare.h"
 
+//Maximium timeout, 
 #define IR_USER_TIMEOUT_MS 10000
 #define IR_EDGE_TIMEOUT_US 10000
 #define IR_EDGE_REC_MAX 70
@@ -8,9 +9,16 @@ extern uint8_t IR_SENSOR_PIN;
 extern uint8_t IR_LED_PIN;
 
 uint8_t edges;
-uint8_t timings[70];
+uint8_t timings[IR_EDGE_REC_MAX];
 
-void record_IR_command()
+/**
+ * Record an infrared remote command with a given name.
+ * 
+ * This method records one infrared command to the EEPROM
+ * memory. It blocks either until a command is received or
+ * the user defined timeout (IR_USER_TIMEOUT_MS) occurs.
+ * */
+void record_IR_command(char * name)
 {
 	unsigned long now = 0;
 	unsigned long prev = 0;
@@ -27,12 +35,12 @@ void record_IR_command()
 		duration = now - prev;
 		if(duration >= IR_USER_TIMEOUT_MS) 
 		{
-			Serial.print("User timeout\n");
+			Serial.println(F("IR_TIMEOUT: User timeout"));
 			wait = 0;
 		}
 		else if(!digitalRead(IR_SENSOR_PIN))
 		{
-			Serial.print("Start condition\n");
+			Serial.println(F("IR: Start condition"));
 			wait = 0;
 		}
 	}
@@ -47,7 +55,7 @@ void record_IR_command()
 			duration = now - prev;
 			if(duration >= IR_EDGE_TIMEOUT_US) 
 			{
-				Serial.print("Edge timeout\n");
+				Serial.println(F("IR_TIMEOUT: Edge timeout"));
 				wait = 0;
 				edges = i;
 				i = IR_EDGE_REC_MAX;
@@ -58,22 +66,39 @@ void record_IR_command()
 			}
 		}	
 		timings[i] = (now - prev) / 37;
-		Serial.print(timings[i]);
-		Serial.print("\n");
 		toggle = !toggle;
 	}
-	Serial.print(edges);
-	Serial.print("..........\n");
+	//saveIRToEEPROM(name,timings,edges);
+	Serial.print(F("IR: Found edges: "));
+	Serial.println(edges);
 }
 
-void play_IR_command()
+/**
+ * list all available (stored) IR commands, also parsed by the GUI
+ * */
+void list_IR_commands() 
+{ 
+	//TBD
+}
+
+/**
+ * Delete one IR command identified by a given name.
+ * If you want to clear all IR commands, use '\0' as name
+ * */
+void delete_IR_command(char * name)
+{
+	//TBD
+}
+
+/**
+ * Play a previously recorded infrared remote command with a given name.
+ *
+ * */
+void play_IR_command(char * name)
 {
 	uint32_t edge_now = 0;
 	uint32_t edge_prev = 0;	
-	uint32_t burst_now = 0;
-	uint32_t burst_prev = 0;
 	uint32_t duration = 0;
-	int test = 0;
 	uint8_t i;
 	uint8_t j;
 	uint32_t state_time;
@@ -82,6 +107,9 @@ void play_IR_command()
 	uint32_t time1, time2;
 	
 	time1 = millis();
+	
+	//edges = readIRFromEEPROM(name,timings,IR_EDGE_REC_MAX);
+	
 	for(i=0; i<edges; i++)
 	{
 		state_time = timings[i] * 37;
@@ -92,7 +120,6 @@ void play_IR_command()
 			{
 				digitalWrite(IR_LED_PIN,output);
 				output = !output;
-				burst_prev = micros();
 				
 				for(j=0; j<= 74; j++)
 				{
@@ -121,7 +148,7 @@ void play_IR_command()
 	time2 = millis();
 	time1 = time2 - time1;	
 	
-	Serial.print(time1);
-	Serial.print("\n");
+	Serial.print(F("IR: play "));
+	Serial.println(name);
 	digitalWrite(IR_LED_PIN,LOW);
 }

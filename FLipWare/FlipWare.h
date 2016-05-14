@@ -156,8 +156,10 @@ void setKeyValues(char* text); // presses individual keys
 void releaseKeys(char* text);  // releases individual keys
 void release_all();            // releases all previously pressed keys and buttons
 
-void record_IR_command();
-void play_IR_command();
+void record_IR_command(char * name);
+void play_IR_command(char * name);
+void list_IR_commands();
+void delete_IR_command(char * name);
 
 //set the correct strcpy/strcmp functions (either for AVR or ARM)
 #ifdef TEENSY

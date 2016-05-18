@@ -233,6 +233,8 @@ void performCommand (uint8_t cmd, int16_t par1, char * keystring, int8_t periodi
                  Serial.println("load all slots");
                release_all();
                reportSlotParameters=REPORT_ALL_SLOTS;
+               //necessary, because we load via slot numbers
+               bootstrapSlotAddresses();
                for(uint8_t i = 0; i<EEPROM_COUNT_SLOTS; i++)
                {
 					readFromEEPROMSlotNumber(i,false);

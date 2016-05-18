@@ -70,8 +70,7 @@
 
 #endif
 
-struct settingsType settings = {      // default settings valus, for type definition see fabi.h
-    "empty",
+struct slotGeneralSettings settings = {      // default settings valus, for type definition see fabi.h
     1,                                //  Mouse cursor movement active (not the alternative functions )
     60, 60, 20, 20, 500, 525, 3,      // accx, accy, deadzone x, deadzone y, threshold sip, threshold puff, wheel step,
     700, 300,                         // threshold special mode ´, threshold hold mode
@@ -79,13 +78,15 @@ struct settingsType settings = {      // default settings valus, for type defini
     0, 0                              // offset x / y
 }; 
 
+char slotName[MAX_SLOTNAME_LEN] = "empty";
 
 
-struct buttonType buttons [NUMBER_OF_BUTTONS];                     // array for all buttons - type definition see fabi.h 
+struct slotButtonSettings buttons [NUMBER_OF_BUTTONS];                     // array for all buttons - type definition see fabi.h 
+char keystringButton[NUMBER_OF_BUTTONS][MAX_KEYSTRING_LEN] = {"","","","","","","","","","","",""};
 struct buttonDebouncerType buttonDebouncers [NUMBER_OF_BUTTONS];   // array for all buttonsDebouncers - type definition see fabi.h 
 
 uint16_t calib_now = 1;                       // calibrate zeropoint right at startup !
-uint8_t DebugOutput = DEBUG_NOOUTPUT;         // for chatty serial interface use: DEBUG_FULLOUTPUT (attention: not GUI compatible ..)
+uint8_t DebugOutput = DEBUG_FULLOUTPUT;         // for chatty serial interface use: DEBUG_FULLOUTPUT (attention: not GUI compatible ..)
 int waitTime=DEFAULT_WAIT_TIME;
 
 int EmptySlotAddress = 0;
@@ -191,13 +192,13 @@ void setup() {
    for (int i=0; i<NUMBER_OF_BUTTONS; i++)   // initialize button array
    {
       buttons[i].value=0;
-      buttons[i].keystring[0]=0;
+      keystringButton[i][0]=0;
    }
    
    init_CIM_frame();  // for AsTeRICS CIM protocol compatibility
    initButtons();
       
-   readFromEEPROM(0);  // read slot from first EEPROM slot if available !  
+   readFromEEPROMSlotNumber(0);  // read slot from first EEPROM slot if available !  
 
    blinkCount=10;  blinkStartTime=25;
    
@@ -409,7 +410,10 @@ void handleModeState()
     
          switch (modeState)  {
             case MODESTATE_IDLE:   // IDLE
-               if (pressure > settings.sm) { 
+               if (pressure > settings.sm) {
+				   Serial.print(settings.sm) ;
+				   Serial.print(";"); 
+				   Serial.println(pressure);
                    modeState=MODESTATE_ENTER_SPECIALMODE;
                    makeTone(TONE_ENTERSPECIAL,0 );             
                    initDebouncers();
@@ -485,7 +489,7 @@ void handleModeState()
 
 void handlePress (int buttonIndex)   // a button was pressed
 {   
-    performCommand(buttons[buttonIndex].mode,buttons[buttonIndex].value,buttons[buttonIndex].keystring,1);
+    performCommand(buttons[buttonIndex].mode,buttons[buttonIndex].value,keystringButton[buttonIndex],1);
 }
 
 void handleRelease (int buttonIndex)    // a button was released: deal with "sticky"-functions
@@ -496,7 +500,7 @@ void handleRelease (int buttonIndex)    // a button was released: deal with "sti
      case CMD_PM: middleMouseButton=0; break;
      case CMD_MX: moveX=0; break;      
      case CMD_MY: moveY=0; break;      
-     case CMD_KP: releaseKeys(buttons[buttonIndex].keystring); break; 
+     case CMD_KP: releaseKeys(keystringButton[buttonIndex]); break; 
    }
 }
 
@@ -605,27 +609,27 @@ void UpdateLeds()
 
 void makeTone(uint8_t kind, uint8_t param)
 {
-   switch (kind) {
-    case TONE_ENTERSPECIAL: 
-               tone(TONE_PIN, 4000, 200);
+   /*switch (kind) {
+		case TONE_ENTERSPECIAL: 
+			tone(TONE_PIN, 4000, 200);
              break;
-    case TONE_EXITSPECIAL: 
-               tone(TONE_PIN, 4000, 100);
-             break;
-    case TONE_CALIB: 
-               tone(TONE_PIN, 100, 600);
-             break;
-    case TONE_CHANGESLOT:
-              tone(TONE_PIN, 2000+200*param, 200);
-             break;
-    case TONE_HOLD:
-              switch (param) {
-               case 0: tone(TONE_PIN, 3000, 500); break;
-               case 1: tone(TONE_PIN, 3500, 100); break;
-               case 2: tone(TONE_PIN, 3000, 100); break;
-               }
-             break;
-     }
+		case TONE_EXITSPECIAL: 
+			tone(TONE_PIN, 4000, 100);
+            break;
+		case TONE_CALIB: 
+			tone(TONE_PIN, 100, 600);
+            break;
+		case TONE_CHANGESLOT:
+            tone(TONE_PIN, 2000+200*param, 200);
+            break;
+		case TONE_HOLD:
+			switch (param) {
+				case 0: tone(TONE_PIN, 3000, 500); break;
+				case 1: tone(TONE_PIN, 3500, 100); break;
+				case 2: tone(TONE_PIN, 3000, 100); break;
+			}
+			break;
+     }*/
 }
 
 

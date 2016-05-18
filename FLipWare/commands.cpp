@@ -22,12 +22,12 @@ const struct atCommandType atCommands[] PROGMEM = {
 
 void initButtons() {
      buttons[0].mode=CMD_NE;  // default function for first button: switch to next slot
-     buttons[1].mode=CMD_KP; strcpy(buttons[1].keystring,"KEY_ESC ");;
+     buttons[1].mode=CMD_KP; strcpy(keystringButton[1],"KEY_ESC ");;
      buttons[2].mode=CMD_NC;  // no command
-     buttons[3].mode=CMD_KP; strcpy(buttons[3].keystring,"KEY_UP ");
-     buttons[4].mode=CMD_KP; strcpy(buttons[4].keystring,"KEY_DOWN ");
-     buttons[5].mode=CMD_KP; strcpy(buttons[5].keystring,"KEY_LEFT ");
-     buttons[6].mode=CMD_KP; strcpy(buttons[6].keystring,"KEY_RIGHT ");
+     buttons[3].mode=CMD_KP; strcpy(keystringButton[3],"KEY_UP ");
+     buttons[4].mode=CMD_KP; strcpy(keystringButton[4],"KEY_DOWN ");
+     buttons[5].mode=CMD_KP; strcpy(keystringButton[5],"KEY_LEFT ");
+     buttons[6].mode=CMD_KP; strcpy(keystringButton[6],"KEY_RIGHT ");
      buttons[7].mode=CMD_PL;   // press left mouse button
      buttons[8].mode=CMD_NC;   // no command 
      buttons[9].mode=CMD_CR;   // click right                        
@@ -38,7 +38,7 @@ void initButtons() {
 
 void printCurrentSlot()
 {
-        Serial.print("Slot:");  Serial.println(settings.slotname);
+        Serial.print("Slot:");  Serial.println(slotName);
         Serial.print("AT AX "); Serial.println(settings.ax); 
         Serial.print("AT AY "); Serial.println(settings.ay);
         Serial.print("AT DX "); Serial.println(settings.dx);
@@ -67,7 +67,7 @@ void printCurrentSlot()
             {
                case PARTYPE_UINT: 
                case PARTYPE_INT:  Serial.print(" ");Serial.print(buttons[i].value); break;
-               case PARTYPE_STRING: Serial.print(" ");Serial.print(buttons[i].keystring); break;
+               case PARTYPE_STRING: Serial.print(" ");Serial.print(keystringButton[i]); break;
             }
             Serial.println("");
         }
@@ -91,8 +91,8 @@ void performCommand (uint8_t cmd, int16_t par1, char * keystring, int8_t periodi
         }
         buttons[actButton-1].mode=cmd;
         buttons[actButton-1].value=par1;
-        if (keystring==0) buttons[actButton-1].keystring[0]=0;
-        else strcpy(buttons[actButton-1].keystring,keystring);
+        if (keystring==0) keystringButton[actButton-1][0]=0;
+        else strcpy(keystringButton[actButton-1],keystring);
         actButton=0;
         return;  // do not actually execute the command (just store it)
     }
@@ -230,12 +230,15 @@ void performCommand (uint8_t cmd, int16_t par1, char * keystring, int8_t periodi
             break;
         case CMD_LA:
                if (DebugOutput==DEBUG_FULLOUTPUT)  
-                 Serial.println("laod all slots");
+                 Serial.println("load all slots");
                release_all();
                reportSlotParameters=REPORT_ALL_SLOTS;
-               readFromEEPROM(keystring);
+               for(uint8_t i = 0; i<EEPROM_COUNT_SLOTS; i++)
+               {
+					readFromEEPROMSlotNumber(i);
+				}
                reportSlotParameters=REPORT_NONE;
-               readFromEEPROM(0);
+               readFromEEPROMSlotNumber(0);
             break;
         case CMD_LI:
                if (DebugOutput==DEBUG_FULLOUTPUT)  

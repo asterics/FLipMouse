@@ -50,7 +50,7 @@
   int8_t  input_map[NUMBER_OF_PHYSICAL_BUTTONS]={13,2,3};  //  maps physical button pins to button index 0,1,2  
   int8_t  led_map[NUMBER_OF_LEDS]={18,19,20};              //  maps leds pins   
   uint8_t LED_PIN = 6;                                     //  Led output pin
-  uint8_t IR_LED_PIN = 7;                                  //  IR-Led output pin
+  uint8_t IR_LED_PIN = 6;                                  //  IR-Led output pin
 #endif
 
 #ifdef TEENSY_LC
@@ -63,7 +63,8 @@
   //Piezo Pin (for tone generation)
   #define TONE_PIN  9
 
-  int8_t  input_map[NUMBER_OF_PHYSICAL_BUTTONS]={0,2,1};  //  maps physical button pins to button index 0,1,2  
+  int8_t  input_map[NUMBER_OF_PHYSICAL_BUTTONS]={0,2,1};  //  maps physical button pins to button index 0,1,2
+  uint8_t IR_SENSOR_PIN = 4;
   int8_t  led_map[NUMBER_OF_LEDS]={5,16,17};              //  maps leds pins   
   uint8_t LED_PIN = 13;                                   //  Led output pin, ATTENTION: if SPI (AUX header) is used, this pin is also SCK!!!
   uint8_t IR_LED_PIN = 6;                                 //  IR-Led output pin
@@ -79,13 +80,17 @@ struct settingsType settings = {      // default settings valus, for type defini
     0, 0                              // offset x / y
 }; 
 
-
+/*struct IRcommand = {      // default IRcommand values
+    "empty",
+    0,                             // number of recorded edge timings
+    0                              // edge timing values
+};*/ 
 
 struct buttonType buttons [NUMBER_OF_BUTTONS];                     // array for all buttons - type definition see fabi.h 
 struct buttonDebouncerType buttonDebouncers [NUMBER_OF_BUTTONS];   // array for all buttonsDebouncers - type definition see fabi.h 
 
 uint16_t calib_now = 1;                       // calibrate zeropoint right at startup !
-uint8_t DebugOutput = DEBUG_NOOUTPUT;         // for chatty serial interface use: DEBUG_FULLOUTPUT (attention: not GUI compatible ..)
+uint8_t DebugOutput = DEBUG_FULLOUTPUT;         // for chatty serial interface use: DEBUG_FULLOUTPUT (attention: not GUI compatible ..) xx
 int waitTime=DEFAULT_WAIT_TIME;
 
 int EmptySlotAddress = 0;
@@ -96,7 +101,7 @@ unsigned long currentTime;
 unsigned long previousTime = 0;
 float timeDifference;
 uint32_t timeStamp = 0;
-unsigned long time=0;
+//unsigned long time=0;
 
 uint8_t actSlot=0;
 
@@ -173,7 +178,9 @@ void setup() {
    #ifdef TEENSY_LC
      Wire.begin();
    #endif
-
+   
+   pinMode(IR_SENSOR_PIN,INPUT);
+   
    pinMode(LED_PIN,OUTPUT);
    digitalWrite(LED_PIN,LOW);
 
@@ -637,3 +644,4 @@ int freeRam ()
 //    return (int) &v - (__brkval == 0 ? (int) &__heap_start : (int) __brkval);
 return(1);
 }
+

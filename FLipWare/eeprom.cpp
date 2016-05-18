@@ -101,6 +101,7 @@ void saveToEEPROM(char * slotname)
   }
 }
 
+
 void readFromEEPROM(char * slotname)
 {
    char act_slotname[MAX_SLOTNAME_LEN];

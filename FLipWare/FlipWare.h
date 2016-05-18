@@ -23,7 +23,7 @@
 #include <string.h>
 #include <stdint.h>
 #include "commands.h"
-
+#include "eeprom.h"
 
 #define VERSION_STRING "Flipmouse v2.0"
 
@@ -97,7 +97,6 @@ struct atCommandType {                      // holds settings for a button funct
 struct buttonType {                      // holds settings for a button function 
   int mode;
   int value;
-  char keystring[MAX_KEYSTRING_LEN];
 };
 
 struct buttonDebouncerType {              // holds working data for button debouncing and longpress detection 
@@ -112,9 +111,11 @@ extern uint8_t DebugOutput;
 extern uint8_t actSlot;
 extern uint8_t reportSlotParameters;
 extern uint8_t reportRawValues;
-extern struct settingsType settings;
+extern struct slotGeneralSettings settings;
+extern char slotName[MAX_SLOTNAME_LEN];
 extern int EmptySlotAddress;
-extern struct buttonType buttons[NUMBER_OF_BUTTONS];
+extern struct slotButtonSettings buttons[NUMBER_OF_BUTTONS];
+extern char keystringButton[NUMBER_OF_BUTTONS][MAX_KEYSTRING_LEN];
 extern struct buttonDebouncerType buttonDebouncers[NUMBER_OF_BUTTONS];
 extern const struct atCommandType atCommands[];
 extern int8_t  input_map[NUMBER_OF_PHYSICAL_BUTTONS];

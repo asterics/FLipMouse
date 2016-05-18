@@ -71,8 +71,7 @@
 
 #endif
 
-struct settingsType settings = {      // default settings valus, for type definition see fabi.h
-    "empty",
+struct slotGeneralSettings settings = {      // default settings valus, for type definition see fabi.h
     1,                                //  Mouse cursor movement active (not the alternative functions )
     60, 60, 20, 20, 500, 525, 3,      // accx, accy, deadzone x, deadzone y, threshold sip, threshold puff, wheel step,
     700, 300,                         // threshold special mode ´, threshold hold mode
@@ -80,17 +79,15 @@ struct settingsType settings = {      // default settings valus, for type defini
     0, 0                              // offset x / y
 }; 
 
-/*struct IRcommand = {      // default IRcommand values
-    "empty",
-    0,                             // number of recorded edge timings
-    0                              // edge timing values
-};*/ 
+char slotName[MAX_SLOTNAME_LEN] = "empty";
 
-struct buttonType buttons [NUMBER_OF_BUTTONS];                     // array for all buttons - type definition see fabi.h 
+
+struct slotButtonSettings buttons [NUMBER_OF_BUTTONS];                     // array for all buttons - type definition see fabi.h 
+char keystringButton[NUMBER_OF_BUTTONS][MAX_KEYSTRING_LEN] = {"","","","","","","","","","","",""};
 struct buttonDebouncerType buttonDebouncers [NUMBER_OF_BUTTONS];   // array for all buttonsDebouncers - type definition see fabi.h 
 
 uint16_t calib_now = 1;                       // calibrate zeropoint right at startup !
-uint8_t DebugOutput = DEBUG_FULLOUTPUT;         // for chatty serial interface use: DEBUG_FULLOUTPUT (attention: not GUI compatible ..) xx
+uint8_t DebugOutput = DEBUG_NOOUTPUT;         // for chatty serial interface use: DEBUG_FULLOUTPUT (attention: not GUI compatible ..)
 int waitTime=DEFAULT_WAIT_TIME;
 
 int EmptySlotAddress = 0;
@@ -101,7 +98,7 @@ unsigned long currentTime;
 unsigned long previousTime = 0;
 float timeDifference;
 uint32_t timeStamp = 0;
-//unsigned long time=0;
+unsigned long time=0;
 
 uint8_t actSlot=0;
 
@@ -178,9 +175,7 @@ void setup() {
    #ifdef TEENSY_LC
      Wire.begin();
    #endif
-   
-   pinMode(IR_SENSOR_PIN,INPUT);
-   
+
    pinMode(LED_PIN,OUTPUT);
    digitalWrite(LED_PIN,LOW);
 
@@ -198,13 +193,13 @@ void setup() {
    for (int i=0; i<NUMBER_OF_BUTTONS; i++)   // initialize button array
    {
       buttons[i].value=0;
-      buttons[i].keystring[0]=0;
+      keystringButton[i][0]=0;
    }
    
    init_CIM_frame();  // for AsTeRICS CIM protocol compatibility
    initButtons();
       
-   readFromEEPROM(0);  // read slot from first EEPROM slot if available !  
+   readFromEEPROMSlotNumber(0,true);  // read slot from first EEPROM slot if available !  
 
    blinkCount=10;  blinkStartTime=25;
    
@@ -492,7 +487,7 @@ void handleModeState()
 
 void handlePress (int buttonIndex)   // a button was pressed
 {   
-    performCommand(buttons[buttonIndex].mode,buttons[buttonIndex].value,buttons[buttonIndex].keystring,1);
+    performCommand(buttons[buttonIndex].mode,buttons[buttonIndex].value,keystringButton[buttonIndex],1);
 }
 
 void handleRelease (int buttonIndex)    // a button was released: deal with "sticky"-functions
@@ -503,7 +498,7 @@ void handleRelease (int buttonIndex)    // a button was released: deal with "sti
      case CMD_PM: middleMouseButton=0; break;
      case CMD_MX: moveX=0; break;      
      case CMD_MY: moveY=0; break;      
-     case CMD_KP: releaseKeys(buttons[buttonIndex].keystring); break; 
+     case CMD_KP: releaseKeys(keystringButton[buttonIndex]); break; 
    }
 }
 
@@ -588,9 +583,9 @@ void UpdateLeds()
        digitalWrite(LED_PIN,LOW); 
        
        if (blinkCount==0) {
-         if (actSlot & 1) digitalWrite (led_map[0],LOW); else digitalWrite (led_map[0],HIGH); 
-         if (actSlot & 2) digitalWrite (led_map[1],LOW); else digitalWrite (led_map[1],HIGH); 
-         if (actSlot & 4) digitalWrite (led_map[2],LOW); else digitalWrite (led_map[2],HIGH); 
+         if ((actSlot+1) & 1) digitalWrite (led_map[0],LOW); else digitalWrite (led_map[0],HIGH); 
+         if ((actSlot+1) & 2) digitalWrite (led_map[1],LOW); else digitalWrite (led_map[1],HIGH); 
+         if ((actSlot+1) & 4) digitalWrite (led_map[2],LOW); else digitalWrite (led_map[2],HIGH); 
         }
         else {
           if (blinkTime==0)
@@ -613,25 +608,25 @@ void UpdateLeds()
 void makeTone(uint8_t kind, uint8_t param)
 {
    switch (kind) {
-    case TONE_ENTERSPECIAL: 
-               tone(TONE_PIN, 4000, 200);
+		case TONE_ENTERSPECIAL: 
+			tone(TONE_PIN, 4000, 200);
              break;
-    case TONE_EXITSPECIAL: 
-               tone(TONE_PIN, 4000, 100);
-             break;
-    case TONE_CALIB: 
-               tone(TONE_PIN, 100, 600);
-             break;
-    case TONE_CHANGESLOT:
-              tone(TONE_PIN, 2000+200*param, 200);
-             break;
-    case TONE_HOLD:
-              switch (param) {
-               case 0: tone(TONE_PIN, 3000, 500); break;
-               case 1: tone(TONE_PIN, 3500, 100); break;
-               case 2: tone(TONE_PIN, 3000, 100); break;
-               }
-             break;
+		case TONE_EXITSPECIAL: 
+			tone(TONE_PIN, 4000, 100);
+            break;
+		case TONE_CALIB: 
+			tone(TONE_PIN, 100, 600);
+            break;
+		case TONE_CHANGESLOT:
+            tone(TONE_PIN, 2000+200*param, 200);
+            break;
+		case TONE_HOLD:
+			switch (param) {
+				case 0: tone(TONE_PIN, 3000, 500); break;
+				case 1: tone(TONE_PIN, 3500, 100); break;
+				case 2: tone(TONE_PIN, 3000, 100); break;
+			}
+			break;
      }
 }
 
@@ -644,4 +639,3 @@ int freeRam ()
 //    return (int) &v - (__brkval == 0 ? (int) &__heap_start : (int) __brkval);
 return(1);
 }
-

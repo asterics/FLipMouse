@@ -60,8 +60,12 @@
 #define EEPROM_MAGIC_NUMBER_SLOT 	0xAA55
 #define EEPROM_MAGIC_NUMBER_IR		0xBB66
 
-//#define EEPROM_FULL_DEBUG
-//#define EEPROM_EEPROM_RW_DEBUG
+
+#define EEPROM_FULL_DEBUG 2
+#define EEPROM_BASIC_DEBUG 1
+#define EEPROM_NO_DEBUG 0
+
+extern uint8_t eepromDebugLevel;
 
 /**
  * Describing the header structure of memory, starting at 0x00.
@@ -148,13 +152,13 @@ void listIRCommands();
  * ATTENTION: if this method is not called from another function (e.g. readIRFromEEPROM()),
  * it is necessary to preload the start adresses via bootstrapSlotAddresses()!!!
  * */
-void readIRFromEEPROMSlotNumber(uint8_t slotNr,uint8_t *timings,uint8_t maxEdges);
+uint16_t readIRFromEEPROMSlotNumber(uint8_t slotNr,uint8_t *timings,uint8_t maxEdges);
 
 /**
  * Replay one IR command from the EEPROM.
  * The slot is identified by the slot name
  * */
-void readIRFromEEPROM(char * name,uint8_t *timings,uint8_t maxEdges);
+uint16_t readIRFromEEPROM(char * name,uint8_t *timings,uint8_t maxEdges);
 
 /**
  * This function deletes all slots by deleting the magic number (reset to 0xFF)
@@ -171,11 +175,13 @@ void listSlots();
 
 /**
  * Read one slot data from the EEPROM to the global variables
- * The slot is identified by the slot number
+ * The slot is identified by the slot number.
+ * If the search flag is set, this function loads the next possible slot, if
+ * the current one is not valid
  * ATTENTION: if this method is not called from another function (e.g. readFromEEPROM()),
- * it is necessary to preload the start adresses via bootstrapSlotAddresses()!!!
+ * it is necessary to preload the start adresses via bootstrapSlotAddresses()!
  * */
-void readFromEEPROMSlotNumber(uint8_t nr);
+void readFromEEPROMSlotNumber(uint8_t nr, bool search);
 
 /**
  * Read one slot data from the EEPROM to the global variables

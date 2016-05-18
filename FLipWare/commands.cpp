@@ -17,7 +17,7 @@ const struct atCommandType atCommands[] PROGMEM = {
     {"AY"  , PARTYPE_UINT },  {"DX"  , PARTYPE_UINT }, {"DY"  , PARTYPE_UINT }, {"TS"  , PARTYPE_UINT }, 
     {"TP"  , PARTYPE_UINT },  {"SM"  , PARTYPE_UINT }, {"HM"  , PARTYPE_UINT }, {"GU"  , PARTYPE_UINT }, 
     {"GD"  , PARTYPE_UINT },  {"GL"  , PARTYPE_UINT }, {"GR"  , PARTYPE_UINT }, {"IR"  , PARTYPE_STRING},
-    {"IP"  , PARTYPE_STRING}, {"IC"  , PARTYPE_STRING},{"IL"  , PARTYPE_NONE }
+    {"IP"  , PARTYPE_STRING}, {"IC"  , PARTYPE_STRING},{"IL"  , PARTYPE_NONE }, {"E2"  , PARTYPE_NONE }
 };
 
 void initButtons() {
@@ -235,10 +235,10 @@ void performCommand (uint8_t cmd, int16_t par1, char * keystring, int8_t periodi
                reportSlotParameters=REPORT_ALL_SLOTS;
                for(uint8_t i = 0; i<EEPROM_COUNT_SLOTS; i++)
                {
-					readFromEEPROMSlotNumber(i);
+					readFromEEPROMSlotNumber(i,false);
 				}
                reportSlotParameters=REPORT_NONE;
-               readFromEEPROMSlotNumber(0);
+               readFromEEPROMSlotNumber(0,true);
             break;
         case CMD_LI:
                if (DebugOutput==DEBUG_FULLOUTPUT)  
@@ -375,12 +375,19 @@ void performCommand (uint8_t cmd, int16_t par1, char * keystring, int8_t periodi
                  Serial.println("delete IR command");
                 // TBD
             break;
+        case CMD_E2:
+			DebugOutput=DEBUG_FULLOUTPUT; 
+			eepromDebugLevel = EEPROM_FULL_DEBUG;
+            Serial.println("extended debug echo on"); 
+			break;
         case CMD_E1:
-               DebugOutput=DEBUG_FULLOUTPUT; 
-               Serial.println("echo on"); 
+            DebugOutput=DEBUG_FULLOUTPUT; 
+            eepromDebugLevel = EEPROM_BASIC_DEBUG;
+            Serial.println("echo on"); 
             break;
         case CMD_E0:
-               DebugOutput=DEBUG_NOOUTPUT; 
+            DebugOutput=DEBUG_NOOUTPUT; 
+            eepromDebugLevel = EEPROM_NO_DEBUG;
             break;
      }
 }

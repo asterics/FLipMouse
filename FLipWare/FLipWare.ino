@@ -86,7 +86,7 @@ char keystringButton[NUMBER_OF_BUTTONS][MAX_KEYSTRING_LEN] = {"","","","","","",
 struct buttonDebouncerType buttonDebouncers [NUMBER_OF_BUTTONS];   // array for all buttonsDebouncers - type definition see fabi.h 
 
 uint16_t calib_now = 1;                       // calibrate zeropoint right at startup !
-uint8_t DebugOutput = DEBUG_FULLOUTPUT;         // for chatty serial interface use: DEBUG_FULLOUTPUT (attention: not GUI compatible ..)
+uint8_t DebugOutput = DEBUG_NOOUTPUT;         // for chatty serial interface use: DEBUG_FULLOUTPUT (attention: not GUI compatible ..)
 int waitTime=DEFAULT_WAIT_TIME;
 
 int EmptySlotAddress = 0;
@@ -198,7 +198,7 @@ void setup() {
    init_CIM_frame();  // for AsTeRICS CIM protocol compatibility
    initButtons();
       
-   readFromEEPROMSlotNumber(0);  // read slot from first EEPROM slot if available !  
+   readFromEEPROMSlotNumber(0,true);  // read slot from first EEPROM slot if available !  
 
    blinkCount=10;  blinkStartTime=25;
    
@@ -585,9 +585,9 @@ void UpdateLeds()
        digitalWrite(LED_PIN,LOW); 
        
        if (blinkCount==0) {
-         if (actSlot & 1) digitalWrite (led_map[0],LOW); else digitalWrite (led_map[0],HIGH); 
-         if (actSlot & 2) digitalWrite (led_map[1],LOW); else digitalWrite (led_map[1],HIGH); 
-         if (actSlot & 4) digitalWrite (led_map[2],LOW); else digitalWrite (led_map[2],HIGH); 
+         if ((actSlot+1) & 1) digitalWrite (led_map[0],LOW); else digitalWrite (led_map[0],HIGH); 
+         if ((actSlot+1) & 2) digitalWrite (led_map[1],LOW); else digitalWrite (led_map[1],HIGH); 
+         if ((actSlot+1) & 4) digitalWrite (led_map[2],LOW); else digitalWrite (led_map[2],HIGH); 
         }
         else {
           if (blinkTime==0)
@@ -609,7 +609,7 @@ void UpdateLeds()
 
 void makeTone(uint8_t kind, uint8_t param)
 {
-   /*switch (kind) {
+   switch (kind) {
 		case TONE_ENTERSPECIAL: 
 			tone(TONE_PIN, 4000, 200);
              break;
@@ -629,7 +629,7 @@ void makeTone(uint8_t kind, uint8_t param)
 				case 2: tone(TONE_PIN, 3000, 100); break;
 			}
 			break;
-     }*/
+     }
 }
 
 

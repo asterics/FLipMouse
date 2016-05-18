@@ -50,7 +50,7 @@
   int8_t  input_map[NUMBER_OF_PHYSICAL_BUTTONS]={13,2,3};  //  maps physical button pins to button index 0,1,2  
   int8_t  led_map[NUMBER_OF_LEDS]={18,19,20};              //  maps leds pins   
   uint8_t LED_PIN = 6;                                     //  Led output pin
-  uint8_t IR_LED_PIN = 7;                                  //  IR-Led output pin
+  uint8_t IR_LED_PIN = 6;                                  //  IR-Led output pin
 #endif
 
 #ifdef TEENSY_LC
@@ -63,7 +63,8 @@
   //Piezo Pin (for tone generation)
   #define TONE_PIN  9
 
-  int8_t  input_map[NUMBER_OF_PHYSICAL_BUTTONS]={0,2,1};  //  maps physical button pins to button index 0,1,2  
+  int8_t  input_map[NUMBER_OF_PHYSICAL_BUTTONS]={0,2,1};  //  maps physical button pins to button index 0,1,2
+  uint8_t IR_SENSOR_PIN = 4;
   int8_t  led_map[NUMBER_OF_LEDS]={5,16,17};              //  maps leds pins   
   uint8_t LED_PIN = 13;                                   //  Led output pin, ATTENTION: if SPI (AUX header) is used, this pin is also SCK!!!
   uint8_t IR_LED_PIN = 6;                                 //  IR-Led output pin
@@ -410,10 +411,7 @@ void handleModeState()
     
          switch (modeState)  {
             case MODESTATE_IDLE:   // IDLE
-               if (pressure > settings.sm) {
-				   Serial.print(settings.sm) ;
-				   Serial.print(";"); 
-				   Serial.println(pressure);
+               if (pressure > settings.sm) { 
                    modeState=MODESTATE_ENTER_SPECIALMODE;
                    makeTone(TONE_ENTERSPECIAL,0 );             
                    initDebouncers();

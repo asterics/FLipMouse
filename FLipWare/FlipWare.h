@@ -64,7 +64,7 @@
 #define DOUBLECLICK_MULTIPLIER  5    // CLICK_TIME factor for double clicks
 
 #define DEBUG_NOOUTPUT 0
-#define DEBUG_FULLOUTPUT 1
+#define DEBUG_FULLOUTPUT 0
 
 
 struct settingsType {
@@ -86,6 +86,7 @@ struct settingsType {
   int16_t  cx;     // calib x
   int16_t  cy;     // calib y
 };
+
 
 
 struct atCommandType {                      // holds settings for a button function 
@@ -151,6 +152,11 @@ void parseByte (int newByte);
 void setKeyValues(char* text); // presses individual keys
 void releaseKeys(char* text);  // releases individual keys
 void release_all();            // releases all previously pressed keys and buttons
+
+void record_IR_command(char * name);
+void play_IR_command(char * name);
+void list_IR_commands();
+void delete_IR_command(char * name);
 
 //set the correct strcpy/strcmp functions (either for AVR or ARM)
 #ifdef TEENSY

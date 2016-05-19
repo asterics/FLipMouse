@@ -10,8 +10,10 @@
 
 extern uint8_t IR_SENSOR_PIN;
 extern uint8_t IR_LED_PIN;
+extern uint8_t DebugOutput;
 
 uint8_t edges;
+
 uint8_t timings[IR_EDGE_REC_MAX];
 
 /**
@@ -39,11 +41,11 @@ void record_IR_command(char * name)
 		if(duration >= IR_USER_TIMEOUT_MS) 
 		{
 			Serial.println(F("IR_TIMEOUT: User timeout"));
-			wait = 0;
+			return;
 		}
 		else if(!digitalRead(IR_SENSOR_PIN))
 		{
-			Serial.println(F("IR: Start condition"));
+			if(DebugOutput == DEBUG_FULLOUTPUT) { Serial.println(F("IR: Start condition")); }
 			wait = 0;
 		}
 	}
@@ -58,7 +60,7 @@ void record_IR_command(char * name)
 			duration = now - prev;
 			if(duration >= IR_EDGE_TIMEOUT_US) 
 			{
-				Serial.println(F("IR_TIMEOUT: Edge timeout"));
+				if(DebugOutput == DEBUG_FULLOUTPUT) { Serial.println(F("IR_TIMEOUT: Edge timeout")); }
 				wait = 0;
 				edges = i;
 				i = IR_EDGE_REC_MAX;
@@ -71,9 +73,15 @@ void record_IR_command(char * name)
 		timings[i] = (now - prev) / 37;
 		toggle = !toggle;
 	}
-	//saveIRToEEPROM(name,timings,edges);
-	Serial.print(F("IR: Found edges: "));
-	Serial.println(edges);
+	
+	//save the recorded command to the EEPROM storage
+	saveIRToEEPROM(name,timings,edges);
+	
+	if(DebugOutput == DEBUG_FULLOUTPUT)
+	{
+		Serial.print(F("IR: Found edges: "));
+		Serial.println(edges);
+	}
 }
 
 /**
@@ -81,7 +89,7 @@ void record_IR_command(char * name)
  * */
 void list_IR_commands() 
 { 
-	//TBD
+	listIRCommands();
 }
 
 /**
@@ -90,7 +98,7 @@ void list_IR_commands()
  * */
 void delete_IR_command(char * name)
 {
-	//TBD
+	deleteIRCommand(name);
 }
 
 /**
@@ -111,7 +119,13 @@ void play_IR_command(char * name)
 	
 	time1 = millis();
 	
-	//edges = readIRFromEEPROM(name,timings,IR_EDGE_REC_MAX);
+	edges = readIRFromEEPROM(name,timings,IR_EDGE_REC_MAX);
+	
+	if(edges == 0)
+	{
+		if(DebugOutput == DEBUG_FULLOUTPUT) Serial.println(F("No IR command found"));
+		return;
+	}
 	
 	for(i=0; i<edges; i++)
 	{
@@ -151,7 +165,12 @@ void play_IR_command(char * name)
 	time2 = millis();
 	time1 = time2 - time1;	
 	
-	Serial.print(F("IR: play "));
-	Serial.println(name);
+	if(DebugOutput == DEBUG_FULLOUTPUT) 
+	{
+		Serial.print(F("IR: play "));
+		Serial.print(name);
+		Serial.print("/");
+		Serial.println(IRName);
+	}
 	digitalWrite(IR_LED_PIN,LOW);
 }

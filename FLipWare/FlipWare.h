@@ -64,7 +64,7 @@
 #define DOUBLECLICK_MULTIPLIER  5    // CLICK_TIME factor for double clicks
 
 #define DEBUG_NOOUTPUT 0
-#define DEBUG_FULLOUTPUT 0
+#define DEBUG_FULLOUTPUT 1
 
 
 struct settingsType {
@@ -113,6 +113,7 @@ extern uint8_t reportSlotParameters;
 extern uint8_t reportRawValues;
 extern struct slotGeneralSettings settings;
 extern char slotName[MAX_SLOTNAME_LEN];
+extern char IRName[MAX_SLOTNAME_LEN];
 extern int EmptySlotAddress;
 extern struct slotButtonSettings buttons[NUMBER_OF_BUTTONS];
 extern char keystringButton[NUMBER_OF_BUTTONS][MAX_KEYSTRING_LEN];

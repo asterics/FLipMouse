@@ -63,11 +63,11 @@
   //Piezo Pin (for tone generation)
   #define TONE_PIN  9
 
-  int8_t  input_map[NUMBER_OF_PHYSICAL_BUTTONS]={0,2,1};  //  maps physical button pins to button index 0,1,2
-  uint8_t IR_SENSOR_PIN = 4;
-  int8_t  led_map[NUMBER_OF_LEDS]={5,16,17};              //  maps leds pins   
-  uint8_t LED_PIN = 13;                                   //  Led output pin, ATTENTION: if SPI (AUX header) is used, this pin is also SCK!!!
-  uint8_t IR_LED_PIN = 6;                                 //  IR-Led output pin
+  int8_t  input_map[NUMBER_OF_PHYSICAL_BUTTONS]={0,2,1};  	//  maps physical button pins to button index 0,1,2
+  uint8_t IR_SENSOR_PIN = 4;								//  input pin of the TSOP IR receiver
+  int8_t  led_map[NUMBER_OF_LEDS]={5,16,17};              	//  maps leds pins   
+  uint8_t LED_PIN = 13;                                   	//  Led output pin, ATTENTION: if SPI (AUX header) is used, this pin is also SCK!!!
+  uint8_t IR_LED_PIN = 6;                                 	//  IR-Led output pin
 
 #endif
 
@@ -80,7 +80,7 @@ struct slotGeneralSettings settings = {      // default settings valus, for type
 }; 
 
 char slotName[MAX_SLOTNAME_LEN] = "empty";
-
+char IRName[MAX_SLOTNAME_LEN];
 
 struct slotButtonSettings buttons [NUMBER_OF_BUTTONS];                     // array for all buttons - type definition see fabi.h 
 char keystringButton[NUMBER_OF_BUTTONS][MAX_KEYSTRING_LEN] = {"","","","","","","","","","","",""};
@@ -175,6 +175,8 @@ void setup() {
    #ifdef TEENSY_LC
      Wire.begin();
    #endif
+   
+   pinMode(IR_SENSOR_PIN,INPUT);
 
    pinMode(LED_PIN,OUTPUT);
    digitalWrite(LED_PIN,LOW);

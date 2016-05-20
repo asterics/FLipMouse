@@ -21,12 +21,6 @@ This step was necessary, because Epilog lasercutter software does not allow a se
 The lasercut settings are the same as previous, except the order and the colors of cutting (blue, red, green).
 
 
-### lipmouse_case_lasercut_with_1button.cdr
-
-Same FLipmouse case as in lipmouse_case_lasercut, an additional button case is added.
-This button case can be used for 30mm core drill buttons.
-
-
 ### FLipmouse_Lasercut.sgx
 
 Process: Lasercut

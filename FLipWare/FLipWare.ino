@@ -180,6 +180,7 @@ void setup() {
 
    pinMode(LED_PIN,OUTPUT);
    digitalWrite(LED_PIN,LOW);
+   analogWriteFrequency(IR_LED_PIN, 40000);
 
    pinMode(IR_LED_PIN,OUTPUT);
    digitalWrite(LED_PIN,LOW);

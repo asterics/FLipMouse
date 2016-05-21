@@ -77,11 +77,12 @@ void record_IR_command(char * name)
 	//save the recorded command to the EEPROM storage
 	saveIRToEEPROM(name,timings,edges);
 	
-	if(DebugOutput == DEBUG_FULLOUTPUT)
-	{
-		Serial.print(F("IR: Found edges: "));
-		Serial.println(edges);
-	}
+	//return the recorded command name and the edge count
+	Serial.print(F("IR: recorded "));
+	Serial.print(name);
+	Serial.print("/");
+	Serial.println(edges);
+	
 }
 
 /**
@@ -133,20 +134,14 @@ void play_IR_command(char * name)
 		edge_prev = micros();
 		if(output_state == HIGH)
 		{
+			analogWrite(IR_LED_PIN, 128);	//activate burst (PWM with 50% duty cycle)
 			do
 			{
-				digitalWrite(IR_LED_PIN,output);
-				output = !output;
-				
-				for(j=0; j<= 74; j++)
-				{
-					__asm__("nop\n\t");
-				}
-				
 				edge_now = micros();
 				duration = edge_now - edge_prev;
 			}
 			while(duration <= state_time);
+			analogWrite(IR_LED_PIN, 0);		//deactivate PWM
 			output_state = LOW;
 		}
 		else
@@ -172,5 +167,5 @@ void play_IR_command(char * name)
 		Serial.print("/");
 		Serial.println(IRName);
 	}
-	digitalWrite(IR_LED_PIN,LOW);
+	digitalWrite(IR_LED_PIN,LOW);	//infrared LED must be turned of after this function
 }

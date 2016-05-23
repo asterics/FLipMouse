@@ -59,6 +59,7 @@
 #define TONE_CHANGESLOT   2
 #define TONE_HOLD         3
 #define TONE_EXITSPECIAL  4
+#define TONE_IR			  5
 
 #define DEFAULT_CLICK_TIME      8    // time for mouse click (loop iterations from press to release)
 #define DOUBLECLICK_MULTIPLIER  5    // CLICK_TIME factor for double clicks

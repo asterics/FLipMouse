@@ -630,6 +630,9 @@ void makeTone(uint8_t kind, uint8_t param)
 				case 2: tone(TONE_PIN, 3000, 100); break;
 			}
 			break;
+		case TONE_IR:
+			tone(TONE_PIN, 500, 600);
+			break;
      }
 }
 

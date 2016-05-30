@@ -3,12 +3,13 @@
 //Time until the record command will be canceled
 #define IR_USER_TIMEOUT_MS 10000
 //Timeout for the infrared command itself
-#define IR_EDGE_TIMEOUT_US 10000
+//Limited by the compression factor of 37 * 255 (uint8_t)
+#define IR_EDGE_TIMEOUT_US 9435
 //Maximum count of edges for one command
 //Note: this value may be increased if your recorded command exceeds this value
-#define IR_EDGE_REC_MAX 70
+#define IR_EDGE_REC_MAX 80
 //minimum count of signal edges which are necessary to accept a command
-#define IR_EDGE_REC_MIN 5
+#define IR_EDGE_REC_MIN 10
 //maximum number of retries, if a signal record fails (edges < IR_EDGE_REC_MIN)
 #define IR_MAX_RETRIES 3
 
@@ -53,7 +54,7 @@ void record_IR_command(char * name)
 			
 			//if it took longer than the user timeout (a few seconds)
 			//cancel the record
-			if(duration >= IR_USER_TIMEOUT_MS) //
+			if(duration >= IR_USER_TIMEOUT_MS)
 			{
 				Serial.println(F("IR_TIMEOUT: User timeout"));
 				return;
@@ -100,7 +101,8 @@ void record_IR_command(char * name)
 					wait = 0;
 				}
 			}	
-			//"compress" the timings by dividing
+			//"compress" the timings by dividing, check if it is in the uint8_t range
+			if((now - prev) > (37*255)) Serial.println("IR: Error, compression out of range");
 			timings[i] = (now - prev) / 37;
 			//new edge detection
 			toggle = !toggle;
@@ -122,12 +124,22 @@ void record_IR_command(char * name)
 	//play a feedback tone
 	makeTone(TONE_IR,0);
 	
+	//full edge feedback, if full debug is enabled
+	if(DebugOutput == DEBUG_FULLOUTPUT)
+	{
+		Serial.println("START IR ----------");
+		for(uint8_t i = 0; i<edges; i++)
+		{
+			Serial.println(timings[i]);
+		}
+		Serial.println("END ----------");
+	}
+	
 	//return the recorded command name and the edge count
 	Serial.print(F("IR: recorded "));
 	Serial.print(name);
 	Serial.print("/");
 	Serial.println(edges);
-	
 }
 
 /**
@@ -168,6 +180,17 @@ void play_IR_command(char * name)
 	{
 		if(DebugOutput == DEBUG_FULLOUTPUT) Serial.println(F("No IR command found"));
 		return;
+	}
+	
+	//full edge feedback, if full debug is enabled
+	if(DebugOutput == DEBUG_FULLOUTPUT)
+	{
+		Serial.println("START IR ----------");
+		for(uint8_t i = 0; i<edges; i++)
+		{
+			Serial.println(timings[i]);
+		}
+		Serial.println("END ----------");
 	}
 	
 	//iterate all edges

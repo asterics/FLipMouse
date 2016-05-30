@@ -261,8 +261,8 @@ void performCommand (uint8_t cmd, int16_t par1, char * keystring, int8_t periodi
                if (DebugOutput==DEBUG_FULLOUTPUT)  
                  Serial.println("delete slots"); 
                release_all();
-               deleteSlots();
                deleteIRCommand(0);
+               deleteSlots();
             break;
         case CMD_NC:
                if (DebugOutput==DEBUG_FULLOUTPUT)  

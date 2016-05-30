@@ -595,10 +595,7 @@ void deleteSlots()
 			writeEEPROM(slotAdresses.startSlotAddress[i],0x00);
 			writeEEPROM(slotAdresses.startSlotAddress[i]+1,0x00);
 		}
-		//TODO: is it better to set it 0 or not?
-		//yes: we lose the start adress of this slot
-		//no: we depend on the magic bytes to determine slots...
-		//slotAdresses.startSlotAddress[i] = 0;
+		slotAdresses.startSlotAddress[i] = 0;
 	}
 	//store the storageheader permanently to the EEPROM
 	//bootstrap is not necessary, already updated previously
@@ -610,7 +607,11 @@ void deleteSlots()
 
 /**
  * This function deletes one IR command by deleting the magic number (reset to 0xFF)
- * If the "name" parameter is set to \0, all IR commands will be deleted
+ * If the "name" parameter is set to \0, all IR commands will be deleted.
+ * ATTENTION: if you call this command with \0 as parameter, all slots
+ * will be deleted, BUT: the changes of the storage header is not 
+ * permanently stored to the EEPROM (save write access), so use it with
+ * another command that writes it (e.g. deleteSlots())!
  * */
 void deleteIRCommand(char * name)
 {
@@ -642,6 +643,7 @@ void deleteIRCommand(char * name)
 				writeEEPROM(slotAdresses.startIRAddress[i],0xFF);
 				writeEEPROM(slotAdresses.startIRAddress[i]-1,0xFF);
 			}
+			slotAdresses.startIRAddress[i] = 0;
 		}
 	}
 }

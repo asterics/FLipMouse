@@ -201,7 +201,8 @@ void setup() {
    
    init_CIM_frame();  // for AsTeRICS CIM protocol compatibility
    initButtons();
-      
+   
+   bootstrapSlotAddresses();
    readFromEEPROMSlotNumber(0,true);  // read slot from first EEPROM slot if available !  
 
    blinkCount=10;  blinkStartTime=25;

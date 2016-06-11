@@ -1,27 +1,31 @@
-
 /*
-     AsTeRICS LipMouse CIM Firmware
+     FLipWare - AsTeRICS Academy 2016
+     For more info please visit: http://www.asterics-academy.net
 
-	 file: CimProtocol.h
-	 Version: 0.1
-	 Author: Chris Veigl (FHTW)
-	 Date: 04/09/2010
+     Module: cim.h - header file for AsTeRICS LipMouse CIM Firmware using Teensy controller
 
-
+   This program is free software; you can redistribute it and/or modify
+   it under the terms of the GNU General Public License as published by
+   the Free Software Foundation.
+  
+   This program is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; See the GNU General Public License: 
+   http://www.gnu.org/licenses/gpl-3.0.en.html
+ 
 
    AsTeRICS CIM Protocol Packet Frame:
    ===================================
 
- 	Packet ID				2 bytes	"@T" (0x4054 )
- 	ARE ID / CIM ID			2 bytes	
-	Data Size				2 bytes	0x0000-0x0800
-	Packet serial number	1 byte	0x00-0x7f (0x80-0xff for event-replies from CIM )
-	CIM-Feature address		2 bytes	
-	Request / Reply code	2 bytes	
-	-------------------------------------------> 11 bytes = minimum frame length
-	Optional data			0-2048 bytes	
-	Optional CRC checksum	0 or 4 bytes CRC32
-	-------------------------------------------> 2063 bytes = maximum frame length  
+   Packet ID       2 bytes "@T" (0x4054 )
+  ARE ID / CIM ID     2 bytes 
+  Data Size       2 bytes 0x0000-0x0800
+  Packet serial number  1 byte  0x00-0x7f (0x80-0xff for event-replies from CIM )
+  CIM-Feature address   2 bytes 
+  Request / Reply code  2 bytes 
+  -------------------------------------------> 11 bytes = minimum frame length
+  Optional data     0-2048 bytes  
+  Optional CRC checksum 0 or 4 bytes CRC32
+  -------------------------------------------> 2063 bytes = maximum frame length  
 
 */
 

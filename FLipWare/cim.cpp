@@ -1,16 +1,17 @@
-
-
 /*
-     AsTeRICS LipMouse CIM Firmware
-	 using Teensy 2.0++ Controller board
+     FLipWare - AsTeRICS Academy 2016
+     For more info please visit: http://www.asterics-academy.net
 
+     Module: cim.cpp - AsTeRICS LipMouse CIM Firmware using Teensy controller
 
-	 file: CimProtocol.c
-	 Version: 0.1
-	 Author: Chris Veigl (FHTW), changes added by Alberto Ibáñez (07/01/2014)
-	 Date: 04/09/2010
-
-
+   This program is free software; you can redistribute it and/or modify
+   it under the terms of the GNU General Public License as published by
+   the Free Software Foundation.
+  
+   This program is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; See the GNU General Public License: 
+   http://www.gnu.org/licenses/gpl-3.0.en.html
+ 
 
    AsTeRICS CIM Protocol Packet Frame:
    ===================================

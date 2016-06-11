@@ -1,17 +1,29 @@
   
 /* 
-     FLipWare - built upon Assistive Button Interface (FABI) Version 2.0  - AsTeRICS Academy 2015 - http://www.asterics-academy.net
-      allows control of HID functions via FLipmouse module and/or AT-commands  
-   
+     FLipWare - AsTeRICS Academy 2016
+     For more info please visit: http://www.asterics-academy.net
 
-   requirements:  Teensy 2.0++ or TeensyLC with external EEPROM
-                  Teensyduino AddOn for Arduino IDE
-                  USB type set to USB composite device (Serial + Keyboard + Mouse + Joystick)
-        sensors:  3 momentary switches connected to GPIO pins / 4 force sensors + 1 pressure sensor connected to ADC pins 
-       
-   
-   for a list of supported AT commands, see commands.h / commands.cpp
-   
+     Module: FLipWare.ino  (main module)
+     
+        This firmware allows control of HID functions via FLipmouse module and/or AT-commands
+        For a description of the supported commands see: commands.h
+
+        requirements:  Teensy 2.0++ or TeensyLC with external EEPROM
+                       Teensyduino AddOn for Arduino IDE
+                       USB-type set to USB composite device (Serial + Keyboard + Mouse + Joystick)
+        sensors:  3 momentary switches connected to GPIO pins / 4 force sensors
+                  1 pressure sensor connected to ADC pins 
+          
+   For a list of supported AT commands, see commands.h / commands.cpp
+
+   This program is free software; you can redistribute it and/or modify
+   it under the terms of the GNU General Public License as published by
+   the Free Software Foundation.
+  
+   This program is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; See the GNU General Public License: 
+   http://www.gnu.org/licenses/gpl-3.0.en.html
+ 
  */
  
 

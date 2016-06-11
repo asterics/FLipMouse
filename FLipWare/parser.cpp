@@ -1,3 +1,20 @@
+/*
+     FLipWare - AsTeRICS Academy 2016
+     For more info please visit: http://www.asterics-academy.net
+
+     Module: parser.cpp - implementation of the command parser
+
+   This program is free software; you can redistribute it and/or modify
+   it under the terms of the GNU General Public License as published by
+   the Free Software Foundation.
+  
+   This program is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; See the GNU General Public License: 
+   http://www.gnu.org/licenses/gpl-3.0.en.html
+
+*/
+
+
 #include "FlipWare.h"
 
 uint8_t readstate=0;

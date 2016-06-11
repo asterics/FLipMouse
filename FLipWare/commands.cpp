@@ -1,3 +1,19 @@
+/*
+     FLipWare - AsTeRICS Academy 2016
+     For more info please visit: http://www.asterics-academy.net
+
+     Module: commands.cpp - implementation of the AT-commands
+     For a description of the supported commands see: commands.h
+
+   This program is free software; you can redistribute it and/or modify
+   it under the terms of the GNU General Public License as published by
+   the Free Software Foundation.
+  
+   This program is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; See the GNU General Public License: 
+   http://www.gnu.org/licenses/gpl-3.0.en.html
+
+*/
 
 #include "FlipWare.h"
 
@@ -261,7 +277,7 @@ void performCommand (uint8_t cmd, int16_t par1, char * keystring, int8_t periodi
                if (DebugOutput==DEBUG_FULLOUTPUT)  
                  Serial.println("delete slots"); 
                release_all();
-               deleteIRCommand(0);
+               // deleteIRCommand(0);      // removed to keep IR commands !
                deleteSlots();
             break;
         case CMD_NC:

@@ -229,13 +229,13 @@
             this.downGainBar = new System.Windows.Forms.TrackBar();
             this.upGainBar = new System.Windows.Forms.TrackBar();
             this.IRTab = new System.Windows.Forms.TabPage();
+            this.irCommandBox = new System.Windows.Forms.ComboBox();
+            this.deleteIRButton = new System.Windows.Forms.Button();
+            this.getIRButton = new System.Windows.Forms.Button();
             this.label31 = new System.Windows.Forms.Label();
-            this.button2 = new System.Windows.Forms.Button();
-            this.label27 = new System.Windows.Forms.Label();
-            this.textBox2 = new System.Windows.Forms.TextBox();
-            this.button1 = new System.Windows.Forms.Button();
+            this.playIRButton = new System.Windows.Forms.Button();
+            this.recordIRButton = new System.Windows.Forms.Button();
             this.label24 = new System.Windows.Forms.Label();
-            this.textBox1 = new System.Windows.Forms.TextBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.activityLogTextbox = new System.Windows.Forms.RichTextBox();
             this.slotNames = new System.Windows.Forms.ComboBox();
@@ -2854,13 +2854,13 @@
             // IRTab
             // 
             this.IRTab.BackColor = System.Drawing.SystemColors.ButtonFace;
+            this.IRTab.Controls.Add(this.irCommandBox);
+            this.IRTab.Controls.Add(this.deleteIRButton);
+            this.IRTab.Controls.Add(this.getIRButton);
             this.IRTab.Controls.Add(this.label31);
-            this.IRTab.Controls.Add(this.button2);
-            this.IRTab.Controls.Add(this.label27);
-            this.IRTab.Controls.Add(this.textBox2);
-            this.IRTab.Controls.Add(this.button1);
+            this.IRTab.Controls.Add(this.playIRButton);
+            this.IRTab.Controls.Add(this.recordIRButton);
             this.IRTab.Controls.Add(this.label24);
-            this.IRTab.Controls.Add(this.textBox1);
             this.IRTab.Location = new System.Drawing.Point(4, 25);
             this.IRTab.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.IRTab.Name = "IRTab";
@@ -2868,59 +2868,76 @@
             this.IRTab.TabIndex = 6;
             this.IRTab.Text = "IR-Remote";
             // 
+            // irCommandBox
+            // 
+            this.irCommandBox.FormattingEnabled = true;
+            this.irCommandBox.Location = new System.Drawing.Point(155, 140);
+            this.irCommandBox.Margin = new System.Windows.Forms.Padding(4);
+            this.irCommandBox.Name = "irCommandBox";
+            this.irCommandBox.Size = new System.Drawing.Size(411, 24);
+            this.irCommandBox.TabIndex = 144;
+            // 
+            // deleteIRButton
+            // 
+            this.deleteIRButton.Enabled = false;
+            this.deleteIRButton.ForeColor = System.Drawing.Color.Black;
+            this.deleteIRButton.Location = new System.Drawing.Point(441, 203);
+            this.deleteIRButton.Margin = new System.Windows.Forms.Padding(4);
+            this.deleteIRButton.Name = "deleteIRButton";
+            this.deleteIRButton.Size = new System.Drawing.Size(125, 40);
+            this.deleteIRButton.TabIndex = 143;
+            this.deleteIRButton.Text = "Delete !";
+            this.deleteIRButton.UseVisualStyleBackColor = true;
+            this.deleteIRButton.Click += new System.EventHandler(this.deleteIRButton_Click);
+            // 
+            // getIRButton
+            // 
+            this.getIRButton.Enabled = false;
+            this.getIRButton.ForeColor = System.Drawing.Color.Black;
+            this.getIRButton.Location = new System.Drawing.Point(484, 60);
+            this.getIRButton.Margin = new System.Windows.Forms.Padding(4);
+            this.getIRButton.Name = "getIRButton";
+            this.getIRButton.Size = new System.Drawing.Size(202, 40);
+            this.getIRButton.TabIndex = 142;
+            this.getIRButton.Text = "Get stored Commands";
+            this.getIRButton.UseVisualStyleBackColor = true;
+            this.getIRButton.Click += new System.EventHandler(this.getIRButton_Click);
+            // 
             // label31
             // 
             this.label31.AutoSize = true;
             this.label31.Location = new System.Drawing.Point(36, 36);
             this.label31.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label31.Name = "label31";
-            this.label31.Size = new System.Drawing.Size(230, 17);
+            this.label31.Size = new System.Drawing.Size(236, 17);
             this.label31.TabIndex = 141;
-            this.label31.Text = "Record or play infrared commands:";
+            this.label31.Text = "Manage infrared remote commands:";
             // 
-            // button2
+            // playIRButton
             // 
-            this.button2.Enabled = false;
-            this.button2.ForeColor = System.Drawing.Color.Black;
-            this.button2.Location = new System.Drawing.Point(506, 214);
-            this.button2.Margin = new System.Windows.Forms.Padding(4);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(125, 40);
-            this.button2.TabIndex = 119;
-            this.button2.Text = "Play !";
-            this.button2.UseVisualStyleBackColor = true;
+            this.playIRButton.Enabled = false;
+            this.playIRButton.ForeColor = System.Drawing.Color.Black;
+            this.playIRButton.Location = new System.Drawing.Point(293, 203);
+            this.playIRButton.Margin = new System.Windows.Forms.Padding(4);
+            this.playIRButton.Name = "playIRButton";
+            this.playIRButton.Size = new System.Drawing.Size(125, 40);
+            this.playIRButton.TabIndex = 119;
+            this.playIRButton.Text = "Play !";
+            this.playIRButton.UseVisualStyleBackColor = true;
+            this.playIRButton.Click += new System.EventHandler(this.playIRButton_Click);
             // 
-            // label27
+            // recordIRButton
             // 
-            this.label27.AutoSize = true;
-            this.label27.Location = new System.Drawing.Point(148, 209);
-            this.label27.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.label27.Name = "label27";
-            this.label27.Size = new System.Drawing.Size(272, 17);
-            this.label27.TabIndex = 117;
-            this.label27.Text = "Play IR-Command from Internal Database:";
-            // 
-            // textBox2
-            // 
-            this.textBox2.Enabled = false;
-            this.textBox2.Location = new System.Drawing.Point(155, 234);
-            this.textBox2.Margin = new System.Windows.Forms.Padding(4);
-            this.textBox2.Name = "textBox2";
-            this.textBox2.ReadOnly = true;
-            this.textBox2.Size = new System.Drawing.Size(312, 22);
-            this.textBox2.TabIndex = 118;
-            // 
-            // button1
-            // 
-            this.button1.Enabled = false;
-            this.button1.ForeColor = System.Drawing.Color.Black;
-            this.button1.Location = new System.Drawing.Point(506, 116);
-            this.button1.Margin = new System.Windows.Forms.Padding(4);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(125, 40);
-            this.button1.TabIndex = 116;
-            this.button1.Text = "Record Now !";
-            this.button1.UseVisualStyleBackColor = true;
+            this.recordIRButton.Enabled = false;
+            this.recordIRButton.ForeColor = System.Drawing.Color.Black;
+            this.recordIRButton.Location = new System.Drawing.Point(155, 203);
+            this.recordIRButton.Margin = new System.Windows.Forms.Padding(4);
+            this.recordIRButton.Name = "recordIRButton";
+            this.recordIRButton.Size = new System.Drawing.Size(125, 40);
+            this.recordIRButton.TabIndex = 116;
+            this.recordIRButton.Text = "Record Now !";
+            this.recordIRButton.UseVisualStyleBackColor = true;
+            this.recordIRButton.Click += new System.EventHandler(this.recordIRButton_Click);
             // 
             // label24
             // 
@@ -2928,19 +2945,9 @@
             this.label24.Location = new System.Drawing.Point(148, 110);
             this.label24.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label24.Name = "label24";
-            this.label24.Size = new System.Drawing.Size(304, 17);
+            this.label24.Size = new System.Drawing.Size(132, 17);
             this.label24.TabIndex = 114;
-            this.label24.Text = "Record new IR-Command to Internal Database:";
-            // 
-            // textBox1
-            // 
-            this.textBox1.Enabled = false;
-            this.textBox1.Location = new System.Drawing.Point(155, 135);
-            this.textBox1.Margin = new System.Windows.Forms.Padding(4);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.ReadOnly = true;
-            this.textBox1.Size = new System.Drawing.Size(312, 22);
-            this.textBox1.TabIndex = 115;
+            this.label24.Text = "IR-Command name:";
             // 
             // groupBox1
             // 
@@ -3245,7 +3252,7 @@
             this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "FLipMouseGUI";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "FLipMouse Settings Manager";
+            this.Text = "FLipMouse Settings Manager V";
             this.Load += new System.EventHandler(this.LipmouseGUI_Load);
             this.tabControl.ResumeLayout(false);
             this.LipmouseTab.ResumeLayout(false);
@@ -3474,12 +3481,9 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.TrackBar holdThresholdBar;
         private System.Windows.Forms.TabPage IRTab;
-        private System.Windows.Forms.Button button2;
-        private System.Windows.Forms.Label label27;
-        private System.Windows.Forms.TextBox textBox2;
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button playIRButton;
+        private System.Windows.Forms.Button recordIRButton;
         private System.Windows.Forms.Label label24;
-        private System.Windows.Forms.TextBox textBox1;
         private System.Windows.Forms.Label label30;
         private System.Windows.Forms.Label label29;
         private System.Windows.Forms.Label label31;
@@ -3537,6 +3541,9 @@
         private System.Windows.Forms.Label label37;
         private System.Windows.Forms.Label label33;
         private System.Windows.Forms.ToolStripMenuItem aboutToolStripMenuItem;
+        private System.Windows.Forms.Button getIRButton;
+        private System.Windows.Forms.Button deleteIRButton;
+        private System.Windows.Forms.ComboBox irCommandBox;
     }
 }
 

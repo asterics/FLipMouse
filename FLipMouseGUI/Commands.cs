@@ -137,6 +137,9 @@ namespace MouseApp2
         const string PREFIX_SLOT_NAME = "SLOT:";
         const string PREFIX_AT_COMMAND = "AT ";
         const string PREFIX_END_OF_SLOTS = "END";
+        const string PREFIX_IRCOMMAND_NAME = "IRCOMMAND";
+        const string PREFIX_IRCOMMAND_RECORDED = "IR: RECORDED ";
+        const string PREFIX_IRCOMMAND_TIMEOUT = "IR_TIMEOUT:";
 
 
         public AllCommands allCommands = new AllCommands();
@@ -246,6 +249,11 @@ namespace MouseApp2
             sendCmd("AT NE");
         }
 
+        public void sendLoadSlotCommand(String slotname)
+        {
+            sendCmd("AT LO "+slotname);
+        }
+
         public void sendLoadAllCommand()
         {
             sendCmd("AT LA");
@@ -274,6 +282,26 @@ namespace MouseApp2
         public void sendClearCommand()
         {
             sendCmd("AT DE");
+        }
+
+        public void sendListIRCommand()
+        {
+            sendCmd("AT IL ");
+        }
+
+        public void sendRecordIRCommand(String commandName)
+        {
+            sendCmd("AT IR " + commandName);
+        }
+
+        public void sendPlayIRCommand(String commandName)
+        {
+            sendCmd("AT IP " + commandName);
+        }
+
+        public void sendClearIRCommand(String commandName)
+        {
+            sendCmd("AT IC " + commandName);
         }
 
 

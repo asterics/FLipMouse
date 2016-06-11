@@ -131,6 +131,18 @@ namespace MouseApp2
             {
                 gotEnd();
             }
+            else if (newLine.ToUpper().StartsWith(PREFIX_IRCOMMAND_NAME))  // ir command name received 
+            {
+                gotIRCommandName(newLine);
+            }
+            else if (newLine.ToUpper().StartsWith(PREFIX_IRCOMMAND_RECORDED))  // ir recording sucessful 
+            {
+                gotIRCommandRecorded(newLine);
+            }
+            else if (newLine.ToUpper().StartsWith(PREFIX_IRCOMMAND_TIMEOUT))  // ir recording sucessful 
+            {
+                gotIRCommandTimeout(newLine);
+            }
 
         }
 
@@ -179,6 +191,27 @@ namespace MouseApp2
             slots[actSlot].settingStrings.Add(newATCommand);
         }
 
+        public void gotIRCommandName(String newIRCommandName)
+        {
+            slots.Add(new Slot());
+            newIRCommandName = newIRCommandName.Replace("\r", ""); newIRCommandName = newIRCommandName.Replace("\n", "");
+            newIRCommandName = newIRCommandName.Substring(newIRCommandName.IndexOf(":")+1);
+            Console.WriteLine("adding IRCommand:" + newIRCommandName);
+            irCommandBox.Items.Add(newIRCommandName);
+            addToLog("Found IR Command: " + newIRCommandName);
+
+        }
+
+        public void gotIRCommandRecorded(String newIRCommandName)
+        {
+            addToLog("IR Command recorded!" + newIRCommandName);
+        }
+
+        public void gotIRCommandTimeout(String newIRCommandName)
+        {
+            addToLog("Timeout ! No IR Command recorded ..." + newIRCommandName);
+        }
+
 
         private void disconnect()
         {
@@ -223,7 +256,8 @@ namespace MouseApp2
                     addToLog("Slot " + slots[slotCounter].slotName + " is stored into FLipmouse.");
                 }
                 addToLog("The settings were stored!");
-                sendNextCommand();
+                displaySlot(0);
+                sendLoadSlotCommand(slots[0].slotName);
                 sendStartReportingCommand();
                 Thread.Sleep(3000);  // time to activate config in flipmouse
                 Cursor.Current = Cursors.Default;

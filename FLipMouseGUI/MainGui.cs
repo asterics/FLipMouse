@@ -29,7 +29,7 @@ namespace MouseApp2
 {
     public partial class FLipMouseGUI : Form
     {
-        const string VERSION_STRING = "2.0";
+        const string VERSION_STRING = "2.2";
 
         const int SPEED_CHANGE_STEP = 2;
         const int DEADZONE_CHANGE_STEP = 2;
@@ -65,6 +65,7 @@ namespace MouseApp2
 
         public void storeSlot(int slotNumber)
         {
+            if (slotNumber < 0) return;
             slots[slotNumber].settingStrings.Clear();
             slots[slotNumber].slotName = slotNames.Text;
             slotNames.Items.Clear();
@@ -191,7 +192,7 @@ namespace MouseApp2
 
             IdTimer.Tick += new EventHandler(IdTimer_Tick);
 
-            Text += " "+ VERSION_STRING;
+            Text += VERSION_STRING;
 
 
             for (int i = 0; i < allCommands.length(); i++)
@@ -266,6 +267,10 @@ namespace MouseApp2
                         loadSlotSettingsMenuItem.Enabled = true;
                         storeSlotSettingsMenuItem.Enabled = true;
                         ApplyButton.Enabled = true;
+                        getIRButton.Enabled = true;
+                        playIRButton.Enabled = true;
+                        recordIRButton.Enabled = true;
+                        deleteIRButton.Enabled = true;
                         connectComButton.Enabled = false;
 
                         IdTimer.Interval = 1500;
@@ -289,6 +294,10 @@ namespace MouseApp2
             loadSlotSettingsMenuItem.Enabled = false;
             storeSlotSettingsMenuItem.Enabled = false;
             ApplyButton.Enabled = false;
+            getIRButton.Enabled = false;
+            playIRButton.Enabled = false;
+            recordIRButton.Enabled = false;
+            deleteIRButton.Enabled = false;
             connectComButton.Enabled = true;
         }
 
@@ -1111,8 +1120,40 @@ namespace MouseApp2
 
         private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("FLipMouse V2.0 - AsTeRICS Academy\nFor more information see: http://www.asterics-academy.net");
+            MessageBox.Show( "FLipMouse V"+VERSION_STRING +" - AsTeRICS Academy\nFor more information see: http://www.asterics-academy.net");
         }
+
+        private void getIRButton_Click(object sender, EventArgs e)
+        {
+            addToLog("Fetching IR Command Names");
+
+            irCommandBox.Items.Clear();
+            sendListIRCommand();
+        }
+
+        private void recordIRButton_Click(object sender, EventArgs e)
+        {
+            if (irCommandBox.Text.Length == 0) return;
+            addToLog("Trying to Record IR Command " + irCommandBox.Text);
+            sendRecordIRCommand(irCommandBox.Text);
+        }
+
+        private void playIRButton_Click(object sender, EventArgs e)
+        {
+            if (irCommandBox.Text.Length == 0) return;
+            addToLog("Playing IR Command " + irCommandBox.Text);
+            sendPlayIRCommand(irCommandBox.Text);
+            
+        }
+
+        private void deleteIRButton_Click(object sender, EventArgs e)
+        {
+            if (irCommandBox.Text.Length == 0) return;
+            addToLog("Deleting IR Command " + irCommandBox.Text);
+            sendClearIRCommand(irCommandBox.Text);
+
+        }
+
 
     }
 }

@@ -88,7 +88,7 @@
 
           AT IR <string>  record new infrared code and store it under given name (e.g. "AT IR vol_up")
           AT IP <string>  play  infrared code with given name (e.g. "AT IP vol_up")
-          AT IC <string>  clear infrared code with given name (e.g. "AT ID vol_up")
+          AT IC <string>  clear infrared code with given name (e.g. "AT IC vol_up")
           AT IL           lists all stored infrared command names
 
    supported key identifiers for key press command (AT KP):

@@ -25,7 +25,12 @@
 #include "commands.h"
 #include "eeprom.h"
 
-#define VERSION_STRING "Flipmouse v2.0"
+#define VERSION_STRING "Flipmouse v2.2"   
+
+//  V2.2: added new EEPROM handling and IR-Command support
+//  V2.0: extended AT command set, TeensyLC support, external EEPROM
+//  V1.0: extended AT command set, GUI compatibility
+
 
 //#define TEENSY               //  if Teensy2.0++ controller is used (FLipmouse V1)
 #define TEENSY_LC            //  if Teensy LC controller is used (FLipmouse V2)

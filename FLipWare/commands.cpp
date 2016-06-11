@@ -221,7 +221,7 @@ void performCommand (uint8_t cmd, int16_t par1, char * keystring, int8_t periodi
                {  Serial.print("load slot: "); Serial.println(keystring); }
                if (keystring) {
                  release_all();
-                 reportSlotParameters=REPORT_ONE_SLOT;
+                 // reportSlotParameters=REPORT_ONE_SLOT;
                  readFromEEPROM(keystring);
                  reportSlotParameters=REPORT_NONE;
                  if ((settings.gu!=50)||(settings.gd!=50)||(settings.gl!=50)||(settings.gr!=50)) // TBD: improve ! 
@@ -237,8 +237,8 @@ void performCommand (uint8_t cmd, int16_t par1, char * keystring, int8_t periodi
                bootstrapSlotAddresses();
                for(uint8_t i = 0; i<EEPROM_COUNT_SLOTS; i++)
                {
-					readFromEEPROMSlotNumber(i,false);
-				}
+        					readFromEEPROMSlotNumber(i,false);
+				       }
                reportSlotParameters=REPORT_NONE;
                readFromEEPROMSlotNumber(0,true);
             break;
@@ -359,26 +359,26 @@ void performCommand (uint8_t cmd, int16_t par1, char * keystring, int8_t periodi
                settings.gr=par1;
             break;
         case CMD_IR:
-				if (DebugOutput==DEBUG_FULLOUTPUT) Serial.println("record IR command");
-				record_IR_command(keystring);
+    				if (DebugOutput==DEBUG_FULLOUTPUT) Serial.println("record IR command");
+    				record_IR_command(keystring);
             break;
         case CMD_IP:
-				if (DebugOutput==DEBUG_FULLOUTPUT) Serial.println("play IR command");
-				play_IR_command(keystring);
+    				if (DebugOutput==DEBUG_FULLOUTPUT) Serial.println("play IR command");
+    				play_IR_command(keystring);
             break;
         case CMD_IL:
-				if (DebugOutput==DEBUG_FULLOUTPUT) Serial.println("list IR commands");
-				list_IR_commands();
+    				if (DebugOutput==DEBUG_FULLOUTPUT) Serial.println("list IR commands");
+    				list_IR_commands();
             break;
         case CMD_IC:
-				if (DebugOutput==DEBUG_FULLOUTPUT) Serial.println("delete IR command");
-				delete_IR_command(keystring);
+    				if (DebugOutput==DEBUG_FULLOUTPUT) Serial.println("delete IR command");
+    				delete_IR_command(keystring);
             break;
         case CMD_E2:
-			DebugOutput=DEBUG_FULLOUTPUT; 
-			eepromDebugLevel = EEPROM_FULL_DEBUG;
+      			DebugOutput=DEBUG_FULLOUTPUT; 
+	      		eepromDebugLevel = EEPROM_FULL_DEBUG;
             Serial.println("extended debug echo on"); 
-			break;
+      			break;
         case CMD_E1:
             DebugOutput=DEBUG_FULLOUTPUT; 
             eepromDebugLevel = EEPROM_BASIC_DEBUG;

@@ -33,7 +33,9 @@ const struct atCommandType atCommands[] PROGMEM = {
     {"AY"  , PARTYPE_UINT },  {"DX"  , PARTYPE_UINT }, {"DY"  , PARTYPE_UINT }, {"TS"  , PARTYPE_UINT }, 
     {"TP"  , PARTYPE_UINT },  {"SM"  , PARTYPE_UINT }, {"HM"  , PARTYPE_UINT }, {"GU"  , PARTYPE_UINT }, 
     {"GD"  , PARTYPE_UINT },  {"GL"  , PARTYPE_UINT }, {"GR"  , PARTYPE_UINT }, {"IR"  , PARTYPE_STRING},
-    {"IP"  , PARTYPE_STRING}, {"IC"  , PARTYPE_STRING},{"IL"  , PARTYPE_NONE }, {"E2"  , PARTYPE_NONE }
+    {"IP"  , PARTYPE_STRING}, {"IC"  , PARTYPE_STRING},{"IL"  , PARTYPE_NONE }, {"E2"  , PARTYPE_NONE },
+    {"JX"  , PARTYPE_INT  },  {"JY"  , PARTYPE_INT  }, {"JZ"  , PARTYPE_INT  }, {"JT"  , PARTYPE_INT  },
+    {"JS"  , PARTYPE_INT  },  {"JP"  , PARTYPE_INT  }, {"JR"  , PARTYPE_INT  }, {"JH"  , PARTYPE_INT  } 
 };
 
 void initButtons() {
@@ -203,6 +205,47 @@ void performCommand (uint8_t cmd, int16_t par1, char * keystring, int8_t periodi
                Mouse.move(0, par1);
                if (periodicMouseMovement) moveY=par1;
             break;
+        case CMD_JX:
+               if (DebugOutput==DEBUG_FULLOUTPUT) 
+               {  Serial.print("set joystick x axis to "); Serial.println(par1); }
+               Joystick.X(par1);
+            break;
+        case CMD_JY:
+               if (DebugOutput==DEBUG_FULLOUTPUT) 
+               {  Serial.print("set joystick y axis to "); Serial.println(par1); }
+               Joystick.Y(par1);
+            break;
+        case CMD_JZ:
+               if (DebugOutput==DEBUG_FULLOUTPUT) 
+               {  Serial.print("set joystick z axis to "); Serial.println(par1); }
+               Joystick.Z(par1);
+            break;
+        case CMD_JT:
+               if (DebugOutput==DEBUG_FULLOUTPUT) 
+               {  Serial.print("set joystick z turn rotation to "); Serial.println(par1); }
+               Joystick.Zrotate(par1);
+            break;
+        case CMD_JS:
+               if (DebugOutput==DEBUG_FULLOUTPUT) 
+               {  Serial.print("set joystick slider to "); Serial.println(par1); }
+               Joystick.sliderLeft(par1);
+            break;
+        case CMD_JP:
+               if (DebugOutput==DEBUG_FULLOUTPUT) 
+               {  Serial.print("press joystick button "); Serial.println(par1); }
+               Joystick.button(par1,1);
+            break;
+        case CMD_JR:
+               if (DebugOutput==DEBUG_FULLOUTPUT) 
+               {  Serial.print("release joystick button "); Serial.println(par1); }
+               Joystick.button(par1,0);
+            break;
+        case CMD_JH:
+               if (DebugOutput==DEBUG_FULLOUTPUT) 
+               {  Serial.print("set joystick hat position to "); Serial.println(par1); }
+               Joystick.hat(par1);
+            break;
+        
         case CMD_KW:
                if (DebugOutput==DEBUG_FULLOUTPUT)  
                {  Serial.print("keyboard write: "); Serial.println(keystring); }
@@ -284,14 +327,16 @@ void performCommand (uint8_t cmd, int16_t par1, char * keystring, int8_t periodi
                if (DebugOutput==DEBUG_FULLOUTPUT)  
                  Serial.println("no command"); 
             break;
-    
+
         case CMD_MM:
                settings.mouseOn=par1;
                if (DebugOutput==DEBUG_FULLOUTPUT)
                {  
-                 if (settings.mouseOn)
-                   Serial.println("mouse function on");
-                   else Serial.println("alternative functions on");
+                 if (settings.mouseOn==1)
+                   Serial.println("mouse function activated");
+                 else if(settings.mouseOn==2) 
+                   Serial.println("joystick function activated");
+                 else Serial.println("alternative functions activated");
                }
             break;
         case CMD_SW:

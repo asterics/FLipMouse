@@ -87,9 +87,11 @@ namespace MouseApp2
                     case GUITYPE_KEYSELECT:
                     case GUITYPE_TEXTFIELD: actSettingString+=(" "+guiLink.tb.Text); break;
                     case GUITYPE_SLIDER: actSettingString += (" " + guiLink.tr.Value); break;
-                    case GUITYPE_BOOLEAN: if (guiLink.rb1.Checked) actSettingString += (" 1"); 
-                                          else actSettingString += (" 0");
-                                          break;
+                    case GUITYPE_3RADIOBUTTONS: 
+                        if (guiLink.rb1.Checked) actSettingString += (" 1"); 
+                        else if (guiLink.rb3.Checked) actSettingString += (" 0"); 
+                        else if (guiLink.rb2.Checked) actSettingString += (" "+(joyModeBox.SelectedIndex +2));
+                        break;
                     case GUITYPE_STANDARD: break;
                 }
                 slots[slotNumber].settingStrings.Add(actSettingString);
@@ -148,14 +150,24 @@ namespace MouseApp2
                                     strValue = settingString.Substring(guiLink.cmd.Length + 1);
                                     guiLink.tr.Value = Int32.Parse(strValue);
                                     guiLink.tl.Text = strValue; break;
-                                case GUITYPE_BOOLEAN: 
+                                case GUITYPE_3RADIOBUTTONS: 
                                     strValue = settingString.Substring(guiLink.cmd.Length + 1);
                                     int value= Int32.Parse(strValue);
-                                    if (value == 1)  {
-                                        guiLink.rb1.Checked = true; guiLink.rb2.Checked = false;
-                                    }
-                                    else {
-                                        guiLink.rb1.Checked = false; guiLink.rb2.Checked = true;
+                                    switch (value) {
+                                        case 0: guiLink.rb1.Checked = false; 
+                                                guiLink.rb2.Checked = false;
+                                                guiLink.rb3.Checked = true;
+                                                break;
+                                        case 1: guiLink.rb1.Checked = true; 
+                                                guiLink.rb2.Checked = false;
+                                                guiLink.rb3.Checked = false;
+                                                break;
+                                        case 2: case 3: case 4 :
+                                                guiLink.rb1.Checked = false; 
+                                                guiLink.rb2.Checked = true;
+                                                guiLink.rb3.Checked = false;
+                                                joyModeBox.SelectedIndex = value - 2;
+                                                break;
                                     }
                                     break;
 
@@ -232,6 +244,11 @@ namespace MouseApp2
 
             }
 
+            joyModeBox.Items.Add("X/Y-Axis");
+            joyModeBox.Items.Add("Z/Rotation-Axis");
+            joyModeBox.Items.Add("Slider1/Slider2");
+            joyModeBox.SelectedIndex = 0;
+
             displaySlot(0);
 
             updateComPorts();
@@ -267,7 +284,7 @@ namespace MouseApp2
                         loadSlotSettingsMenuItem.Enabled = true;
                         storeSlotSettingsMenuItem.Enabled = true;
                         ApplyButton.Enabled = true;
-                        getIRButton.Enabled = true;
+                        StoreButton.Enabled = true;
                         playIRButton.Enabled = true;
                         recordIRButton.Enabled = true;
                         deleteIRButton.Enabled = true;
@@ -294,7 +311,7 @@ namespace MouseApp2
             loadSlotSettingsMenuItem.Enabled = false;
             storeSlotSettingsMenuItem.Enabled = false;
             ApplyButton.Enabled = false;
-            getIRButton.Enabled = false;
+            StoreButton.Enabled = false;
             playIRButton.Enabled = false;
             recordIRButton.Enabled = false;
             deleteIRButton.Enabled = false;
@@ -353,10 +370,21 @@ namespace MouseApp2
 
         private void selectStick_Checked(object sender, EventArgs e)
         {
+            joyModeBox.Visible = false;
+            joyModeLabel.Visible = false;
+        }
+
+        private void selectJoystick_CheckedChanged(object sender, EventArgs e)
+        {
+            joyModeBox.Visible = true;
+            joyModeLabel.Visible = true;
+
         }
 
         private void selectAlternative_Checked(object sender, EventArgs e)
         {
+            joyModeBox.Visible = false;
+            joyModeLabel.Visible = false;
         }
 
         private void prevSlotButton_Click(object sender, EventArgs e)
@@ -1123,13 +1151,6 @@ namespace MouseApp2
             MessageBox.Show( "FLipMouse V"+VERSION_STRING +" - AsTeRICS Academy\nFor more information see: http://www.asterics-academy.net");
         }
 
-        private void getIRButton_Click(object sender, EventArgs e)
-        {
-            addToLog("Fetching IR Command Names");
-
-            irCommandBox.Items.Clear();
-            sendListIRCommand();
-        }
 
         private void recordIRButton_Click(object sender, EventArgs e)
         {
@@ -1152,8 +1173,14 @@ namespace MouseApp2
             addToLog("Deleting IR Command " + irCommandBox.Text);
             sendClearIRCommand(irCommandBox.Text);
 
+            irCommandBox.Items.Clear();
+            sendListIRCommand();
         }
 
-
+        private void StoreButton_Click(object sender, EventArgs e)
+        {
+            storeSlot(actSlot);
+            storeSettingsToFLipmouse();
+        }
     }
 }

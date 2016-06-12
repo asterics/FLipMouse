@@ -47,6 +47,16 @@
           AT MX <int>       move mouse in x direction (e.g. "AT MX 4" moves cursor 4 pixels to the right)  
           AT MY <int>       move mouse in y direction (e.g. "AT MY -10" moves cursor 10 pixels up)  
 
+          AT JX <int>       set joystick x axis (e.g. "AT JX 512" sets the x-axis to middle position)  
+          AT JY <int>       set joystick y axis (e.g. "AT JY 1023" sets the y-axis to full up position)  
+          AT JZ <int>       set joystick z axis (e.g. "AT JZ 0" sets the z-axis to lowest position)  
+          AT JT <int>       set joystick z turn axis (e.g. "AT JR 512" sets the rotation to middle position)  
+          AT JS <int>       set joystick slider position (e.g. "AT JS 512" sets the slider to middle position)  
+          AT JP <int>       press joystick button (e.g. "AT JP 1" presses joystick button 1)  
+          AT JR <int>       release joystick button (e.g. "AT JP 2" releases joystick button 2)  
+          AT JH <int>       set joystick hat position (e.g. "AT JH 45" sets joystick hat to 45 degrees)
+                            possible values are: 0, 45, 90, 135, 180, 225, 270, 315 and -1 to set center position)   
+
           AT KW <string>    keyboard write string (e.g." AT KW Hello!" writes "Hello!")    
           AT KP <string>    key press: press/hold keys identifier 
                             (e.g. "AT KP KEY_UP" presses the "Cursor-Up" key, "AT KP KEY_CTRL KEY_ALT KEY_DELETE" presses all three keys)
@@ -129,7 +139,7 @@ enum atCommands {
   CMD_WU, CMD_WD, CMD_WS, CMD_MX, CMD_MY, CMD_KW, CMD_KP, CMD_KR, CMD_RA, CMD_SA, CMD_LO, CMD_LA,
   CMD_LI, CMD_NE, CMD_DE, CMD_NC, CMD_E1, CMD_E0, CMD_MM, CMD_SW, CMD_SR, CMD_ER, CMD_CA, CMD_AX,
   CMD_AY, CMD_DX, CMD_DY, CMD_TS, CMD_TP, CMD_SM, CMD_HM, CMD_GU, CMD_GD, CMD_GL, CMD_GR, CMD_IR,
-  CMD_IP, CMD_IC, CMD_IL, CMD_E2,
+  CMD_IP, CMD_IC, CMD_IL, CMD_E2, CMD_JX, CMD_JY, CMD_JZ, CMD_JT, CMD_JS, CMD_JP, CMD_JR, CMD_JH,
   NUM_COMMANDS
 };
 

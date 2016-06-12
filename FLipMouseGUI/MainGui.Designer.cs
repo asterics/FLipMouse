@@ -35,10 +35,13 @@
             this.label3 = new System.Windows.Forms.Label();
             this.connectComButton = new System.Windows.Forms.Button();
             this.disconnectComButton = new System.Windows.Forms.Button();
-            this.label1 = new System.Windows.Forms.Label();
             this.portStatus = new System.Windows.Forms.Label();
             this.tabControl = new System.Windows.Forms.TabControl();
             this.LipmouseTab = new System.Windows.Forms.TabPage();
+            this.joyModeLabel = new System.Windows.Forms.Label();
+            this.joyModeBox = new System.Windows.Forms.ComboBox();
+            this.label27 = new System.Windows.Forms.Label();
+            this.selectJoystick = new System.Windows.Forms.RadioButton();
             this.singlePanel = new System.Windows.Forms.Panel();
             this.incSpeed = new System.Windows.Forms.Button();
             this.decSpeed = new System.Windows.Forms.Button();
@@ -231,7 +234,6 @@
             this.IRTab = new System.Windows.Forms.TabPage();
             this.irCommandBox = new System.Windows.Forms.ComboBox();
             this.deleteIRButton = new System.Windows.Forms.Button();
-            this.getIRButton = new System.Windows.Forms.Button();
             this.label31 = new System.Windows.Forms.Label();
             this.playIRButton = new System.Windows.Forms.Button();
             this.recordIRButton = new System.Windows.Forms.Button();
@@ -263,6 +265,7 @@
             this.label38 = new System.Windows.Forms.Label();
             this.label37 = new System.Windows.Forms.Label();
             this.label33 = new System.Windows.Forms.Label();
+            this.StoreButton = new System.Windows.Forms.Button();
             this.tabControl.SuspendLayout();
             this.LipmouseTab.SuspendLayout();
             this.singlePanel.SuspendLayout();
@@ -310,7 +313,7 @@
             // 
             // portComboBox
             // 
-            this.portComboBox.Location = new System.Drawing.Point(162, 54);
+            this.portComboBox.Location = new System.Drawing.Point(166, 54);
             this.portComboBox.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.portComboBox.Name = "portComboBox";
             this.portComboBox.Size = new System.Drawing.Size(119, 24);
@@ -320,16 +323,16 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(46, 56);
+            this.label3.Location = new System.Drawing.Point(51, 57);
             this.label3.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(111, 17);
+            this.label3.Size = new System.Drawing.Size(112, 17);
             this.label3.TabIndex = 7;
-            this.label3.Text = "FLipMouse Port:";
+            this.label3.Text = "FLipMouse-Port:";
             // 
             // connectComButton
             // 
-            this.connectComButton.Location = new System.Drawing.Point(290, 51);
+            this.connectComButton.Location = new System.Drawing.Point(394, 51);
             this.connectComButton.Margin = new System.Windows.Forms.Padding(4);
             this.connectComButton.Name = "connectComButton";
             this.connectComButton.Size = new System.Drawing.Size(83, 28);
@@ -342,7 +345,7 @@
             // 
             this.disconnectComButton.Enabled = false;
             this.disconnectComButton.ForeColor = System.Drawing.Color.Black;
-            this.disconnectComButton.Location = new System.Drawing.Point(379, 51);
+            this.disconnectComButton.Location = new System.Drawing.Point(485, 51);
             this.disconnectComButton.Margin = new System.Windows.Forms.Padding(4);
             this.disconnectComButton.Name = "disconnectComButton";
             this.disconnectComButton.Size = new System.Drawing.Size(93, 28);
@@ -351,21 +354,11 @@
             this.disconnectComButton.UseVisualStyleBackColor = true;
             this.disconnectComButton.Click += new System.EventHandler(this.disconnnectComButton_Click);
             // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(652, 58);
-            this.label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(82, 17);
-            this.label1.TabIndex = 11;
-            this.label1.Text = "Port Status:";
-            // 
             // portStatus
             // 
             this.portStatus.AutoSize = true;
             this.portStatus.ForeColor = System.Drawing.Color.SlateGray;
-            this.portStatus.Location = new System.Drawing.Point(739, 58);
+            this.portStatus.Location = new System.Drawing.Point(292, 57);
             this.portStatus.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.portStatus.Name = "portStatus";
             this.portStatus.Size = new System.Drawing.Size(94, 17);
@@ -392,6 +385,10 @@
             // LipmouseTab
             // 
             this.LipmouseTab.BackColor = System.Drawing.SystemColors.ButtonFace;
+            this.LipmouseTab.Controls.Add(this.joyModeLabel);
+            this.LipmouseTab.Controls.Add(this.joyModeBox);
+            this.LipmouseTab.Controls.Add(this.label27);
+            this.LipmouseTab.Controls.Add(this.selectJoystick);
             this.LipmouseTab.Controls.Add(this.singlePanel);
             this.LipmouseTab.Controls.Add(this.splitPanel);
             this.LipmouseTab.Controls.Add(this.splitXYBox);
@@ -404,7 +401,50 @@
             this.LipmouseTab.Padding = new System.Windows.Forms.Padding(4);
             this.LipmouseTab.Size = new System.Drawing.Size(780, 361);
             this.LipmouseTab.TabIndex = 0;
-            this.LipmouseTab.Text = "Cursor Movement";
+            this.LipmouseTab.Text = "Stick Actions";
+            // 
+            // joyModeLabel
+            // 
+            this.joyModeLabel.AutoSize = true;
+            this.joyModeLabel.Location = new System.Drawing.Point(55, 283);
+            this.joyModeLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.joyModeLabel.Name = "joyModeLabel";
+            this.joyModeLabel.Size = new System.Drawing.Size(134, 17);
+            this.joyModeLabel.TabIndex = 132;
+            this.joyModeLabel.Text = "Select Joystick Axis:";
+            this.joyModeLabel.Visible = false;
+            // 
+            // joyModeBox
+            // 
+            this.joyModeBox.FormattingEnabled = true;
+            this.joyModeBox.Location = new System.Drawing.Point(56, 305);
+            this.joyModeBox.Margin = new System.Windows.Forms.Padding(4);
+            this.joyModeBox.Name = "joyModeBox";
+            this.joyModeBox.Size = new System.Drawing.Size(144, 24);
+            this.joyModeBox.TabIndex = 131;
+            this.joyModeBox.Visible = false;
+            // 
+            // label27
+            // 
+            this.label27.AutoSize = true;
+            this.label27.Location = new System.Drawing.Point(62, 30);
+            this.label27.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label27.Name = "label27";
+            this.label27.Size = new System.Drawing.Size(92, 17);
+            this.label27.TabIndex = 83;
+            this.label27.Text = "Use Stick for:";
+            // 
+            // selectJoystick
+            // 
+            this.selectJoystick.AutoSize = true;
+            this.selectJoystick.Location = new System.Drawing.Point(390, 31);
+            this.selectJoystick.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.selectJoystick.Name = "selectJoystick";
+            this.selectJoystick.Size = new System.Drawing.Size(148, 21);
+            this.selectJoystick.TabIndex = 23;
+            this.selectJoystick.Text = "Joystick Movement";
+            this.selectJoystick.UseVisualStyleBackColor = true;
+            this.selectJoystick.CheckedChanged += new System.EventHandler(this.selectJoystick_CheckedChanged);
             // 
             // singlePanel
             // 
@@ -844,7 +884,7 @@
             // splitXYBox
             // 
             this.splitXYBox.AutoSize = true;
-            this.splitXYBox.Location = new System.Drawing.Point(619, 304);
+            this.splitXYBox.Location = new System.Drawing.Point(605, 304);
             this.splitXYBox.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.splitXYBox.Name = "splitXYBox";
             this.splitXYBox.Size = new System.Drawing.Size(81, 21);
@@ -856,12 +896,12 @@
             // selectAlternative
             // 
             this.selectAlternative.AutoSize = true;
-            this.selectAlternative.Location = new System.Drawing.Point(428, 38);
+            this.selectAlternative.Location = new System.Drawing.Point(559, 32);
             this.selectAlternative.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.selectAlternative.Name = "selectAlternative";
-            this.selectAlternative.Size = new System.Drawing.Size(230, 21);
-            this.selectAlternative.TabIndex = 23;
-            this.selectAlternative.Text = "Use Stick for Alternative Actions";
+            this.selectAlternative.Size = new System.Drawing.Size(146, 21);
+            this.selectAlternative.TabIndex = 24;
+            this.selectAlternative.Text = "Alternative Actions";
             this.selectAlternative.UseVisualStyleBackColor = true;
             this.selectAlternative.CheckedChanged += new System.EventHandler(this.selectAlternative_Checked);
             // 
@@ -869,13 +909,13 @@
             // 
             this.selectStick.AutoSize = true;
             this.selectStick.Checked = true;
-            this.selectStick.Location = new System.Drawing.Point(131, 38);
+            this.selectStick.Location = new System.Drawing.Point(188, 30);
             this.selectStick.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.selectStick.Name = "selectStick";
-            this.selectStick.Size = new System.Drawing.Size(224, 21);
+            this.selectStick.Size = new System.Drawing.Size(182, 21);
             this.selectStick.TabIndex = 22;
             this.selectStick.TabStop = true;
-            this.selectStick.Text = "Use Stick for Cursor Movement";
+            this.selectStick.Text = "MouseCursor Movement";
             this.selectStick.UseVisualStyleBackColor = true;
             this.selectStick.CheckedChanged += new System.EventHandler(this.selectStick_Checked);
             // 
@@ -1408,7 +1448,7 @@
             // holdThresholdLabel
             // 
             this.holdThresholdLabel.AutoSize = true;
-            this.holdThresholdLabel.Location = new System.Drawing.Point(108, 170);
+            this.holdThresholdLabel.Location = new System.Drawing.Point(121, 170);
             this.holdThresholdLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.holdThresholdLabel.Name = "holdThresholdLabel";
             this.holdThresholdLabel.Size = new System.Drawing.Size(32, 17);
@@ -1418,12 +1458,12 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(97, 151);
+            this.label2.Location = new System.Drawing.Point(82, 151);
             this.label2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(75, 17);
+            this.label2.Size = new System.Drawing.Size(108, 17);
             this.label2.TabIndex = 132;
-            this.label2.Text = "Hold Level";
+            this.label2.Text = "StrongSip Level";
             // 
             // holdThresholdBar
             // 
@@ -1555,12 +1595,12 @@
             // label16
             // 
             this.label16.AutoSize = true;
-            this.label16.Location = new System.Drawing.Point(618, 219);
+            this.label16.Location = new System.Drawing.Point(600, 219);
             this.label16.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label16.Name = "label16";
-            this.label16.Size = new System.Drawing.Size(92, 17);
+            this.label16.Size = new System.Drawing.Size(113, 17);
             this.label16.TabIndex = 122;
-            this.label16.Text = "Special Level";
+            this.label16.Text = "StrongPuff Level";
             // 
             // specialThresholdBar
             // 
@@ -1643,7 +1683,7 @@
             // sipThresholdLabel
             // 
             this.sipThresholdLabel.AutoSize = true;
-            this.sipThresholdLabel.Location = new System.Drawing.Point(270, 170);
+            this.sipThresholdLabel.Location = new System.Drawing.Point(261, 170);
             this.sipThresholdLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.sipThresholdLabel.Name = "sipThresholdLabel";
             this.sipThresholdLabel.Size = new System.Drawing.Size(32, 17);
@@ -1668,7 +1708,7 @@
             // thresholdLabelForSip
             // 
             this.thresholdLabelForSip.AutoSize = true;
-            this.thresholdLabelForSip.Location = new System.Drawing.Point(255, 151);
+            this.thresholdLabelForSip.Location = new System.Drawing.Point(243, 151);
             this.thresholdLabelForSip.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.thresholdLabelForSip.Name = "thresholdLabelForSip";
             this.thresholdLabelForSip.Size = new System.Drawing.Size(66, 17);
@@ -1818,12 +1858,12 @@
             // label14
             // 
             this.label14.AutoSize = true;
-            this.label14.Location = new System.Drawing.Point(78, 286);
+            this.label14.Location = new System.Drawing.Point(56, 286);
             this.label14.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label14.Name = "label14";
-            this.label14.Size = new System.Drawing.Size(95, 17);
+            this.label14.Size = new System.Drawing.Size(116, 17);
             this.label14.TabIndex = 98;
-            this.label14.Text = "Special + Puff";
+            this.label14.Text = "StrongPuff + Puff";
             // 
             // SpecialPuffFunctionMenu
             // 
@@ -1873,12 +1913,12 @@
             // label9
             // 
             this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(84, 132);
+            this.label9.Location = new System.Drawing.Point(63, 132);
             this.label9.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(90, 17);
+            this.label9.Size = new System.Drawing.Size(111, 17);
             this.label9.TabIndex = 92;
-            this.label9.Text = "Special + Sip";
+            this.label9.Text = "StrongPuff + Sip";
             // 
             // SpecialSipFunctionMenu
             // 
@@ -1963,7 +2003,7 @@
             // label20
             // 
             this.label20.AutoSize = true;
-            this.label20.Location = new System.Drawing.Point(79, 220);
+            this.label20.Location = new System.Drawing.Point(82, 220);
             this.label20.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label20.Name = "label20";
             this.label20.Size = new System.Drawing.Size(91, 17);
@@ -2146,12 +2186,12 @@
             // label35
             // 
             this.label35.AutoSize = true;
-            this.label35.Location = new System.Drawing.Point(115, 277);
+            this.label35.Location = new System.Drawing.Point(94, 277);
             this.label35.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label35.Name = "label35";
-            this.label35.Size = new System.Drawing.Size(109, 17);
+            this.label35.Size = new System.Drawing.Size(130, 17);
             this.label35.TabIndex = 144;
-            this.label35.Text = "Special + Down:";
+            this.label35.Text = "StrongPuff + Down:";
             // 
             // Button4FunctionBox
             // 
@@ -2211,9 +2251,9 @@
             this.label21.Location = new System.Drawing.Point(228, 28);
             this.label21.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label21.Name = "label21";
-            this.label21.Size = new System.Drawing.Size(331, 17);
+            this.label21.Size = new System.Drawing.Size(321, 17);
             this.label21.TabIndex = 140;
-            this.label21.Text = "Select Actions for Buttons or Special-Mode Actions:";
+            this.label21.Text = "Select Actions for Buttons or StrongPuff Activities:";
             // 
             // Button3ComboBox
             // 
@@ -2366,12 +2406,12 @@
             // label8
             // 
             this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(54, 206);
+            this.label8.Location = new System.Drawing.Point(36, 206);
             this.label8.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(168, 17);
+            this.label8.Size = new System.Drawing.Size(189, 17);
             this.label8.TabIndex = 92;
-            this.label8.Text = "Button3 / Special + Right:";
+            this.label8.Text = "Button3 / StrongPuff + Right:";
             // 
             // Button3FunctionBox
             // 
@@ -2386,12 +2426,12 @@
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(63, 136);
+            this.label7.Location = new System.Drawing.Point(45, 136);
             this.label7.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(159, 17);
+            this.label7.Size = new System.Drawing.Size(180, 17);
             this.label7.TabIndex = 90;
-            this.label7.Text = "Button2 / Special + Left:";
+            this.label7.Text = "Button2 / StrongPuff + Left:";
             // 
             // Button2FunctionBox
             // 
@@ -2406,12 +2446,12 @@
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(67, 66);
+            this.label6.Location = new System.Drawing.Point(48, 66);
             this.label6.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(157, 17);
+            this.label6.Size = new System.Drawing.Size(178, 17);
             this.label6.TabIndex = 88;
-            this.label6.Text = " Button1 / Special + Up:";
+            this.label6.Text = " Button1 / StrongPuff + Up:";
             // 
             // Button1FunctionBox
             // 
@@ -2856,7 +2896,6 @@
             this.IRTab.BackColor = System.Drawing.SystemColors.ButtonFace;
             this.IRTab.Controls.Add(this.irCommandBox);
             this.IRTab.Controls.Add(this.deleteIRButton);
-            this.IRTab.Controls.Add(this.getIRButton);
             this.IRTab.Controls.Add(this.label31);
             this.IRTab.Controls.Add(this.playIRButton);
             this.IRTab.Controls.Add(this.recordIRButton);
@@ -2871,7 +2910,7 @@
             // irCommandBox
             // 
             this.irCommandBox.FormattingEnabled = true;
-            this.irCommandBox.Location = new System.Drawing.Point(155, 140);
+            this.irCommandBox.Location = new System.Drawing.Point(155, 134);
             this.irCommandBox.Margin = new System.Windows.Forms.Padding(4);
             this.irCommandBox.Name = "irCommandBox";
             this.irCommandBox.Size = new System.Drawing.Size(411, 24);
@@ -2881,27 +2920,14 @@
             // 
             this.deleteIRButton.Enabled = false;
             this.deleteIRButton.ForeColor = System.Drawing.Color.Black;
-            this.deleteIRButton.Location = new System.Drawing.Point(441, 203);
+            this.deleteIRButton.Location = new System.Drawing.Point(379, 250);
             this.deleteIRButton.Margin = new System.Windows.Forms.Padding(4);
             this.deleteIRButton.Name = "deleteIRButton";
-            this.deleteIRButton.Size = new System.Drawing.Size(125, 40);
+            this.deleteIRButton.Size = new System.Drawing.Size(187, 40);
             this.deleteIRButton.TabIndex = 143;
-            this.deleteIRButton.Text = "Delete !";
+            this.deleteIRButton.Text = "Delete this command";
             this.deleteIRButton.UseVisualStyleBackColor = true;
             this.deleteIRButton.Click += new System.EventHandler(this.deleteIRButton_Click);
-            // 
-            // getIRButton
-            // 
-            this.getIRButton.Enabled = false;
-            this.getIRButton.ForeColor = System.Drawing.Color.Black;
-            this.getIRButton.Location = new System.Drawing.Point(484, 60);
-            this.getIRButton.Margin = new System.Windows.Forms.Padding(4);
-            this.getIRButton.Name = "getIRButton";
-            this.getIRButton.Size = new System.Drawing.Size(202, 40);
-            this.getIRButton.TabIndex = 142;
-            this.getIRButton.Text = "Get stored Commands";
-            this.getIRButton.UseVisualStyleBackColor = true;
-            this.getIRButton.Click += new System.EventHandler(this.getIRButton_Click);
             // 
             // label31
             // 
@@ -2917,12 +2943,12 @@
             // 
             this.playIRButton.Enabled = false;
             this.playIRButton.ForeColor = System.Drawing.Color.Black;
-            this.playIRButton.Location = new System.Drawing.Point(293, 203);
+            this.playIRButton.Location = new System.Drawing.Point(155, 250);
             this.playIRButton.Margin = new System.Windows.Forms.Padding(4);
             this.playIRButton.Name = "playIRButton";
-            this.playIRButton.Size = new System.Drawing.Size(125, 40);
+            this.playIRButton.Size = new System.Drawing.Size(189, 40);
             this.playIRButton.TabIndex = 119;
-            this.playIRButton.Text = "Play !";
+            this.playIRButton.Text = "Play this command ";
             this.playIRButton.UseVisualStyleBackColor = true;
             this.playIRButton.Click += new System.EventHandler(this.playIRButton_Click);
             // 
@@ -2930,24 +2956,24 @@
             // 
             this.recordIRButton.Enabled = false;
             this.recordIRButton.ForeColor = System.Drawing.Color.Black;
-            this.recordIRButton.Location = new System.Drawing.Point(155, 203);
+            this.recordIRButton.Location = new System.Drawing.Point(155, 184);
             this.recordIRButton.Margin = new System.Windows.Forms.Padding(4);
             this.recordIRButton.Name = "recordIRButton";
-            this.recordIRButton.Size = new System.Drawing.Size(125, 40);
+            this.recordIRButton.Size = new System.Drawing.Size(411, 40);
             this.recordIRButton.TabIndex = 116;
-            this.recordIRButton.Text = "Record Now !";
+            this.recordIRButton.Text = "Record new command now !";
             this.recordIRButton.UseVisualStyleBackColor = true;
             this.recordIRButton.Click += new System.EventHandler(this.recordIRButton_Click);
             // 
             // label24
             // 
             this.label24.AutoSize = true;
-            this.label24.Location = new System.Drawing.Point(148, 110);
+            this.label24.Location = new System.Drawing.Point(152, 104);
             this.label24.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label24.Name = "label24";
-            this.label24.Size = new System.Drawing.Size(132, 17);
+            this.label24.Size = new System.Drawing.Size(365, 17);
             this.label24.TabIndex = 114;
-            this.label24.Text = "IR-Command name:";
+            this.label24.Text = "Infrared command name (enter new name for recording):";
             // 
             // groupBox1
             // 
@@ -3089,12 +3115,12 @@
             // 
             this.ApplyButton.Enabled = false;
             this.ApplyButton.ForeColor = System.Drawing.Color.Black;
-            this.ApplyButton.Location = new System.Drawing.Point(480, 51);
+            this.ApplyButton.Location = new System.Drawing.Point(601, 51);
             this.ApplyButton.Margin = new System.Windows.Forms.Padding(4);
             this.ApplyButton.Name = "ApplyButton";
-            this.ApplyButton.Size = new System.Drawing.Size(118, 28);
+            this.ApplyButton.Size = new System.Drawing.Size(107, 28);
             this.ApplyButton.TabIndex = 36;
-            this.ApplyButton.Text = "Apply settings";
+            this.ApplyButton.Text = "Test settings";
             this.ApplyButton.UseVisualStyleBackColor = true;
             this.ApplyButton.Click += new System.EventHandler(this.ApplyButton_Click);
             // 
@@ -3222,6 +3248,19 @@
             this.label33.TabIndex = 75;
             this.label33.Text = "up";
             // 
+            // StoreButton
+            // 
+            this.StoreButton.Enabled = false;
+            this.StoreButton.ForeColor = System.Drawing.Color.Black;
+            this.StoreButton.Location = new System.Drawing.Point(716, 51);
+            this.StoreButton.Margin = new System.Windows.Forms.Padding(4);
+            this.StoreButton.Name = "StoreButton";
+            this.StoreButton.Size = new System.Drawing.Size(118, 28);
+            this.StoreButton.TabIndex = 83;
+            this.StoreButton.Text = "Store settings";
+            this.StoreButton.UseVisualStyleBackColor = true;
+            this.StoreButton.Click += new System.EventHandler(this.StoreButton_Click);
+            // 
             // FLipMouseGUI
             // 
             this.AccessibleDescription = "FlipMouseGUI";
@@ -3231,6 +3270,7 @@
             this.AutoScroll = true;
             this.AutoSize = true;
             this.ClientSize = new System.Drawing.Size(885, 732);
+            this.Controls.Add(this.StoreButton);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.deleteSlotButton);
             this.Controls.Add(this.newSlotButton);
@@ -3239,7 +3279,6 @@
             this.Controls.Add(this.slotNames);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.tabControl);
-            this.Controls.Add(this.label1);
             this.Controls.Add(this.portStatus);
             this.Controls.Add(this.ApplyButton);
             this.Controls.Add(this.disconnectComButton);
@@ -3316,7 +3355,6 @@
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Button connectComButton;
         private System.Windows.Forms.Button disconnectComButton;
-        private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label portStatus;
         private System.Windows.Forms.TabControl tabControl;
         private System.Windows.Forms.TabPage LipmouseTab;
@@ -3403,8 +3441,6 @@
         private System.Windows.Forms.Label label17;
         private System.Windows.Forms.Label rightSensorLabel;
         private System.Windows.Forms.Label upSensorLabel;
-        private System.Windows.Forms.RadioButton selectAlternative;
-        private System.Windows.Forms.RadioButton selectStick;
         private System.Windows.Forms.ComboBox slotNames;
         private System.Windows.Forms.CheckBox splitXYBox;
         private System.Windows.Forms.Label label18;
@@ -3541,9 +3577,15 @@
         private System.Windows.Forms.Label label37;
         private System.Windows.Forms.Label label33;
         private System.Windows.Forms.ToolStripMenuItem aboutToolStripMenuItem;
-        private System.Windows.Forms.Button getIRButton;
         private System.Windows.Forms.Button deleteIRButton;
         private System.Windows.Forms.ComboBox irCommandBox;
+        private System.Windows.Forms.Label label27;
+        private System.Windows.Forms.ComboBox joyModeBox;
+        private System.Windows.Forms.RadioButton selectJoystick;
+        private System.Windows.Forms.RadioButton selectAlternative;
+        private System.Windows.Forms.RadioButton selectStick;
+        private System.Windows.Forms.Label joyModeLabel;
+        private System.Windows.Forms.Button StoreButton;
     }
 }
 

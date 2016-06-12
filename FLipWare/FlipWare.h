@@ -52,7 +52,7 @@
 #endif
 #endif
 
-#define MAX_SLOTS          5          // maximum number of EEPROM memory slots
+#define MAX_SLOTS          7          // maximum number of EEPROM memory slots
 #define NUMBER_OF_BUTTONS  12         // number of connected or virtual switches
 #define NUMBER_OF_PHYSICAL_BUTTONS 3  // number of connected switches
 #define NUMBER_OF_LEDS     3          // number of connected leds

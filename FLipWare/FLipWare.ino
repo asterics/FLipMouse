@@ -322,7 +322,7 @@ void loop() {
                }
               
                 
-                if (settings.mouseOn == 1) {
+                if (settings.mouseOn == 1) {   // handle mouse mode
                   if (y>settings.dy) { 
                      accumYpos += ((float)(y-settings.dy)*settings.ay) * accelFactor;
                   } 
@@ -343,11 +343,42 @@ void loop() {
                   accumXpos -= xMove;
                   accumYpos -= yMove;
                 }
-                else  { // handle alternative joystick actions
+                else if (settings.mouseOn==0){ // handle alternative actions mode
                   handleButton(UP_BUTTON,  y<-settings.dy ? 1 : 0);
                   handleButton(DOWN_BUTTON,  y>settings.dy ? 1 : 0);
                   handleButton(LEFT_BUTTON,  x<-settings.dx ? 1 : 0);
                   handleButton(RIGHT_BUTTON,  x>settings.dx ? 1 : 0);
+                }
+                else  {  // handle joystick modes 2,3 and 4
+                  if (y>settings.dy) { 
+                     accumYpos = 512+((float)(y-settings.dy)*settings.ay/50.0f);
+                  } else if (y<-settings.dy)  {  
+                     accumYpos = 512+((float)(y+settings.dy)*settings.ay/50.0f);
+                  } else accumYpos = 512;
+
+                  if (x>settings.dx) { 
+                     accumXpos = 512+((float)(x-settings.dx)*settings.ax/50.0f);
+                  } else if (x<-settings.dx)  {  
+                     accumXpos = 512+((float)(x+settings.dx)*settings.ax/50.0f);
+                  } else accumXpos = 512;
+
+                  if (accumXpos<0) accumXpos=0; if (accumXpos>1023) accumXpos=1023;
+                  if (accumYpos<0) accumYpos=0; if (accumYpos>1023) accumYpos=1023;
+                  
+                  switch (settings.mouseOn) {
+                    case 2:
+                      Joystick.X (accumXpos);
+                      Joystick.Y (accumYpos);
+                      break;
+                    case 3:
+                      Joystick.Z (accumXpos);
+                      Joystick.Zrotate (accumYpos);
+                      break;
+                    case 4:
+                      Joystick.sliderLeft (accumXpos);
+                      Joystick.sliderRight (accumYpos);
+                      break;
+                    }
                 }
           
                 if ((moveX!=0) || (moveY!=0))   // movement induced by button actions  

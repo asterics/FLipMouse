@@ -163,13 +163,17 @@ namespace MouseApp2
             addToLog("Flipmouse detected:" + newLine);
             flipMouseOnline = 1;
             slotNames.Items.Clear();
-            sendStartReportingCommand();   // start reporting raw values !
 
             DialogResult dialogResult = MessageBox.Show("Do you want to load the slots and settings which are stored in the FLipMouse device ?", "Load Settings ?", MessageBoxButtons.YesNo);
             if (dialogResult == DialogResult.Yes)
             {
                 loadSettingsFromFLipmouse();
             }
+            
+            irCommandBox.Items.Clear();
+            sendListIRCommand();
+            sendStartReportingCommand();   // start reporting raw values !
+
         }
 
         public void gotSlotNames(String newSlotName)
@@ -196,15 +200,17 @@ namespace MouseApp2
             slots.Add(new Slot());
             newIRCommandName = newIRCommandName.Replace("\r", ""); newIRCommandName = newIRCommandName.Replace("\n", "");
             newIRCommandName = newIRCommandName.Substring(newIRCommandName.IndexOf(":")+1);
-            Console.WriteLine("adding IRCommand:" + newIRCommandName);
+            Console.WriteLine("found IRCommand:" + newIRCommandName);
             irCommandBox.Items.Add(newIRCommandName);
-            addToLog("Found IR Command: " + newIRCommandName);
-
+            //irCommandBox.SelectedIndex=0;
+            irCommandBox.Text = newIRCommandName;
         }
 
         public void gotIRCommandRecorded(String newIRCommandName)
         {
             addToLog("IR Command recorded!" + newIRCommandName);
+            irCommandBox.Items.Clear();
+            sendListIRCommand();
         }
 
         public void gotIRCommandTimeout(String newIRCommandName)

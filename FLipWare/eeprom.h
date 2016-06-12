@@ -50,7 +50,7 @@
 #include <Wire.h>
 #include <EEPROM.h>
 
-#define EEPROM_COUNT_SLOTS 4
+#define EEPROM_COUNT_SLOTS 7
 #define EEPROM_COUNT_IRCOMMAND 64
 #define EEPROM_MAX_ADDRESS 0x7FFF
 

@@ -9,18 +9,18 @@
          AT BM <uint>      puts button into programming mode (e.g. "AT BM 2" -> next AT-command defines the new function for button 2)
                            for the FLipmouse, there are 11 buttons available (3 physical buttons, 8 virtual functions): 
 
-                             1: internal button1 / Special UP
-                             2: external button2 / Special LEFT 
-                             3: external button3 / Special RIGHT 
+                             1: internal button1 / StrongPuff + UP
+                             2: external button2 / StrongPuff + LEFT 
+                             3: external button3 / StrongPuff + RIGHT 
                              4: alternative UP 
                              5: alternative DOWN 
                              6: alternative LEFT 
                              7: alternative RIGHT
                              8: SIP (pressure lower than sip threshold)
-                             9: Special SIP
+                             9: StrongSIP
                              10: PUFF (pressure bigger than puff threshold)
-                             11: Special PUFF
-                             12: Special DOWN
+                             11: StrongPuff
+                             12: StrongPuff + DOWN
 
 
    USB HID commands:
@@ -129,7 +129,7 @@ namespace MouseApp2
         const int GUITYPE_TEXTFIELD = 2;
         const int GUITYPE_KEYSELECT = 3;
         const int GUITYPE_SLIDER    = 4;
-        const int GUITYPE_BOOLEAN   = 5;
+        const int GUITYPE_3RADIOBUTTONS   = 5;
         const int GUITYPE_GENERIC   = 6;
 
         const string PREFIX_FLIPMOUSE_VERSION = "FLIPMOUSE ";
@@ -162,6 +162,14 @@ namespace MouseApp2
             allCommands.add(new Command("AT WS", PARTYPE_UINT, "Mouse Wheel Step Size", COMBOENTRY_NO, GUITYPE_STANDARD));
             allCommands.add(new Command("AT MX", PARTYPE_INT, "Move Mouse X", COMBOENTRY_YES, GUITYPE_INTFIELD));
             allCommands.add(new Command("AT MY", PARTYPE_INT, "Move Mouse Y", COMBOENTRY_YES, GUITYPE_INTFIELD));
+            allCommands.add(new Command("AT JX", PARTYPE_INT, "Joystick X-Axis", COMBOENTRY_YES, GUITYPE_INTFIELD));
+            allCommands.add(new Command("AT JY", PARTYPE_INT, "Joystick Y-Axis", COMBOENTRY_YES, GUITYPE_INTFIELD));
+            allCommands.add(new Command("AT JZ", PARTYPE_INT, "Joystick Z-Axis", COMBOENTRY_YES, GUITYPE_INTFIELD));
+            allCommands.add(new Command("AT JT", PARTYPE_INT, "Joystick Z Turn", COMBOENTRY_YES, GUITYPE_INTFIELD));
+            allCommands.add(new Command("AT JS", PARTYPE_INT, "Joystick Slider", COMBOENTRY_YES, GUITYPE_INTFIELD));
+            allCommands.add(new Command("AT JP", PARTYPE_INT, "Press Joystick Button", COMBOENTRY_YES, GUITYPE_INTFIELD));
+            allCommands.add(new Command("AT JR", PARTYPE_INT, "Release Joystick Button", COMBOENTRY_NO, GUITYPE_STANDARD));
+            allCommands.add(new Command("AT JH", PARTYPE_INT, "Joystick Hat position", COMBOENTRY_YES, GUITYPE_INTFIELD));
             allCommands.add(new Command("AT KW", PARTYPE_STRING, "Write Text", COMBOENTRY_YES, GUITYPE_TEXTFIELD));
             allCommands.add(new Command("AT KP", PARTYPE_STRING, "Press Keys", COMBOENTRY_YES, GUITYPE_KEYSELECT));
             allCommands.add(new Command("AT KR", PARTYPE_STRING, "Release Keys", COMBOENTRY_NO, GUITYPE_STANDARD));
@@ -173,8 +181,8 @@ namespace MouseApp2
             allCommands.add(new Command("AT NE", PARTYPE_NONE, "Load Next Slot", COMBOENTRY_YES, GUITYPE_STANDARD));
             allCommands.add(new Command("AT DE", PARTYPE_NONE, "Delete all configurations", COMBOENTRY_NO, GUITYPE_STANDARD));
             allCommands.add(new Command("AT NC", PARTYPE_NONE, "No Command", COMBOENTRY_YES, GUITYPE_STANDARD));
-            allCommands.add(new Command("AT MM", PARTYPE_UINT, "Mouse Mode (1) or Alternative (0)", COMBOENTRY_NO, GUITYPE_BOOLEAN));
-            allCommands.add(new Command("AT SW", PARTYPE_NONE, "Switch Mouse/Alternative", COMBOENTRY_YES, GUITYPE_STANDARD));
+            allCommands.add(new Command("AT MM", PARTYPE_UINT, "Mouse Mode (1) or Joystick (2) or Alternative (0)", COMBOENTRY_NO, GUITYPE_3RADIOBUTTONS));
+            allCommands.add(new Command("AT SW", PARTYPE_NONE, "Switch Mouse/Joystick/Alternative", COMBOENTRY_YES, GUITYPE_STANDARD));
             allCommands.add(new Command("AT SR", PARTYPE_NONE, "Start Rawvalue reports", COMBOENTRY_NO, GUITYPE_STANDARD));
             allCommands.add(new Command("AT ER", PARTYPE_NONE, "End Rawvalue reports", COMBOENTRY_NO, GUITYPE_STANDARD));
             allCommands.add(new Command("AT CA", PARTYPE_NONE, "Calibrate Middle Position", COMBOENTRY_YES, GUITYPE_STANDARD));
@@ -214,7 +222,7 @@ namespace MouseApp2
             commandGuiLinks.Add(new CommandGuiLink("AT GD", downGainBar, downGainLabel, "50"));
             commandGuiLinks.Add(new CommandGuiLink("AT GL", leftGainBar, leftGainLabel, "50"));
             commandGuiLinks.Add(new CommandGuiLink("AT GR", rightGainBar, rightGainLabel, "50"));
-            commandGuiLinks.Add(new CommandGuiLink("AT MM", selectStick, selectAlternative, "1"));
+            commandGuiLinks.Add(new CommandGuiLink("AT MM", selectStick, selectJoystick, selectAlternative, "1"));
             commandGuiLinks.Add(new CommandGuiLink("AT BM 01", Button1FunctionBox, Button1ParameterText, Button1NumericParameter, "AT NE"));
             commandGuiLinks.Add(new CommandGuiLink("AT BM 02", Button2FunctionBox, Button2ParameterText, Button2NumericParameter, "AT KP KEY_ESC "));
             commandGuiLinks.Add(new CommandGuiLink("AT BM 03", Button3FunctionBox, Button3ParameterText, Button3NumericParameter, "AT NC" ));
@@ -327,7 +335,7 @@ namespace MouseApp2
                         case GUITYPE_GENERIC:
                             settingStrings.Add(cgl.cmd); settingStrings.Add(cgl.def);
                             break;
-                        case GUITYPE_BOOLEAN:
+                        case GUITYPE_3RADIOBUTTONS:
                         case GUITYPE_SLIDER:
                             settingStrings.Add(cgl.cmd + " " + cgl.def);
                             break;
@@ -363,10 +371,11 @@ namespace MouseApp2
                     case GUITYPE_SLIDER:
                         sendCmd(cgl.cmd + " " + cgl.tl.Text);
                         break;
-                    case GUITYPE_BOOLEAN:
+                    case GUITYPE_3RADIOBUTTONS:
                         if (cgl.rb1.Checked)
                             sendCmd(cgl.cmd + " 1");
-                        else sendCmd(cgl.cmd + " 0");
+                        else if (cgl.rb2.Checked) sendCmd(cgl.cmd + " " + (joyModeBox.SelectedIndex+2));  // sorry for this hack ;)    TBD: improve ! 
+                        else if (cgl.rb3.Checked) sendCmd(cgl.cmd + " 0");
                         break;
                 }
             }
@@ -486,6 +495,7 @@ namespace MouseApp2
             public Label tl;
             public RadioButton rb1;
             public RadioButton rb2;
+            public RadioButton rb3;
 
             public CommandGuiLink(String cmd, ComboBox cb, TextBox tb, NumericUpDown nud, String def)
             {
@@ -505,12 +515,13 @@ namespace MouseApp2
                 this.tl = tl;
                 this.def = def;
             }
-            public CommandGuiLink(String cmd, RadioButton rb1, RadioButton rb2, String def)
+            public CommandGuiLink(String cmd, RadioButton rb1, RadioButton rb2, RadioButton rb3, String def)
             {
-                this.type = GUITYPE_BOOLEAN;
+                this.type = GUITYPE_3RADIOBUTTONS;
                 this.cmd = cmd;
                 this.rb1 = rb1;
                 this.rb2 = rb2;
+                this.rb3 = rb3;
                 this.def = def;
             }
         };

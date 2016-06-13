@@ -154,7 +154,6 @@ namespace MouseApp2
               actSlot = 0;
               displaySlot(actSlot);
 
-              addToLog("The settings were loaded from FLipMouse device!");
               sendStartReportingCommand();          
         }
 
@@ -181,6 +180,8 @@ namespace MouseApp2
             slots.Add(new Slot());
             newSlotName = newSlotName.Replace("\r",""); newSlotName = newSlotName.Replace("\n", "");
             Console.WriteLine("Slotname:" + newSlotName);
+            addToLog("Loading slot " + newSlotName +" from FLipMouse device.");
+
             slotNames.Items.Add(newSlotName);
             actSlot = slots.Count - 1;
             slots[actSlot].settingStrings.Clear();
@@ -197,7 +198,6 @@ namespace MouseApp2
 
         public void gotIRCommandName(String newIRCommandName)
         {
-            slots.Add(new Slot());
             newIRCommandName = newIRCommandName.Replace("\r", ""); newIRCommandName = newIRCommandName.Replace("\n", "");
             newIRCommandName = newIRCommandName.Substring(newIRCommandName.IndexOf(":")+1);
             Console.WriteLine("found IRCommand:" + newIRCommandName);

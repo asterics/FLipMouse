@@ -334,7 +334,7 @@ void performCommand (uint8_t cmd, int16_t par1, char * keystring, int8_t periodi
                {  
                  if (settings.mouseOn==1)
                    Serial.println("mouse function activated");
-                 else if(settings.mouseOn==2) 
+                 else if(settings.mouseOn>=2) 
                    Serial.println("joystick function activated");
                  else Serial.println("alternative functions activated");
                }

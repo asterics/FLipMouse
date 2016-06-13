@@ -543,6 +543,7 @@ void handleRelease (int buttonIndex)    // a button was released: deal with "sti
      case CMD_PL: leftMouseButton=0; break;
      case CMD_PR: rightMouseButton=0; break;
      case CMD_PM: middleMouseButton=0; break;
+     case CMD_JP: Joystick.button(buttons[buttonIndex].value,0); break;
      case CMD_MX: moveX=0; break;      
      case CMD_MY: moveY=0; break;      
      case CMD_KP: releaseKeys(keystringButton[buttonIndex]); break; 
@@ -554,6 +555,7 @@ uint8_t inHoldMode (int i)
    if ((buttons[i].mode == CMD_PL) ||
        (buttons[i].mode == CMD_PR) || 
        (buttons[i].mode == CMD_PM) || 
+       (buttons[i].mode == CMD_JP) || 
        (buttons[i].mode == CMD_MX) || 
        (buttons[i].mode == CMD_MY) || 
        (buttons[i].mode == CMD_KP))

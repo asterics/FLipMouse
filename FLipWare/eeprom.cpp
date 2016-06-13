@@ -654,7 +654,7 @@ void deleteIRCommand(char * name)
  * is provided by cntEdges.
  * The name is also provided as parameter
  * */ 
-void saveIRToEEPROM(char * name,uint8_t *timings,uint8_t cntEdges)
+void saveIRToEEPROM(char * name,uint16_t *timings,uint8_t cntEdges)
 {
 	int8_t nr = slotnameIRToNumber(name);
 	uint16_t addr;
@@ -697,7 +697,7 @@ void saveIRToEEPROM(char * name,uint8_t *timings,uint8_t cntEdges)
  * is provided by cntEdges.
  * The name is also provided as parameter
  * */ 
-void saveIRToEEPROMSlotNumber(uint8_t nr, char * name, uint8_t *timings,uint8_t cntEdges)
+void saveIRToEEPROMSlotNumber(uint8_t nr, char * name, uint16_t *timings,uint8_t cntEdges)
 {
 	uint16_t size = 2; //magic number
 	uint16_t addr = 0; //address pointer 1
@@ -717,7 +717,7 @@ void saveIRToEEPROMSlotNumber(uint8_t nr, char * name, uint8_t *timings,uint8_t 
 	}
 	
 	//if this is the last slot, don't move other slots
-	//TBD: defragmentation, currently not necessary (all slots are deleted before saving)
+	//TBD: defragmentation 
 	
 	/** save this slot **/
 	//first slot, start right after the storage header
@@ -749,7 +749,8 @@ void saveIRToEEPROMSlotNumber(uint8_t nr, char * name, uint8_t *timings,uint8_t 
 	//write all edges
 	for(uint8_t i = 0; i < cntEdges; i++)
 	{
-		writeEEPROM(addr--,*(timings+i));
+		writeEEPROM(addr--, (uint8_t) ((*(timings+i)) & 0xff));
+    writeEEPROM(addr--, (uint8_t) ((*(timings+i)) >> 8));
 	}
 	
 	/** update the slotAdresses table */
@@ -811,7 +812,7 @@ void listIRCommands()
  * ATTENTION: if this method is not called from another function (e.g. readIRFromEEPROM()),
  * it is necessary to preload the start adresses via bootstrapSlotAddresses()!!!
  * */
-uint16_t readIRFromEEPROMSlotNumber(uint8_t slotNr,uint8_t *timings,uint8_t maxEdges)
+uint16_t readIRFromEEPROMSlotNumber(uint8_t slotNr,uint16_t *timings,uint8_t maxEdges)
 {
 	uint8_t* p;
 	uint8_t slotEdges = 0;
@@ -844,7 +845,8 @@ uint16_t readIRFromEEPROMSlotNumber(uint8_t slotNr,uint8_t *timings,uint8_t maxE
 	for(uint8_t i = 0; i < maxEdges; i++)
 	{
 		if(i==slotEdges) break;
-		*(timings+i) = readEEPROM(address--);
+		*(timings+i) = (uint16_t) readEEPROM(address--);
+    *(timings+i) +=  ((uint16_t)readEEPROM(address--)) << 8;
 	}
 	
 	//return the count of available edges (used by the IR parser)
@@ -855,7 +857,7 @@ uint16_t readIRFromEEPROMSlotNumber(uint8_t slotNr,uint8_t *timings,uint8_t maxE
  * Replay one IR command from the EEPROM.
  * The slot is identified by the slot name
  * */
-uint16_t readIRFromEEPROM(char * name,uint8_t *timings,uint8_t maxEdges)
+uint16_t readIRFromEEPROM(char * name,uint16_t *timings,uint8_t maxEdges)
 {
 	int8_t nr = slotnameIRToNumber(name);
 	#ifdef EEPROM_FULL_DEBUG

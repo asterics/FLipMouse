@@ -23,12 +23,12 @@
 #define IR_USER_TIMEOUT_MS 10000
 //Timeout for the infrared command itself
 //Limited by the compression factor of 37 * 255 (uint8_t)
-#define IR_EDGE_TIMEOUT_US 9435
+#define IR_EDGE_TIMEOUT_US 200000UL
 //Maximum count of edges for one command
 //Note: this value may be increased if your recorded command exceeds this value
-#define IR_EDGE_REC_MAX 80
+#define IR_EDGE_REC_MAX 250
 //minimum count of signal edges which are necessary to accept a command
-#define IR_EDGE_REC_MIN 10
+#define IR_EDGE_REC_MIN 5
 //maximum number of retries, if a signal record fails (edges < IR_EDGE_REC_MIN)
 #define IR_MAX_RETRIES 3
 
@@ -39,7 +39,7 @@ extern uint8_t DebugOutput;
 //current edge count
 uint8_t edges;
 //array of the time difference between the edges
-uint8_t timings[IR_EDGE_REC_MAX];
+uint16_t timings[IR_EDGE_REC_MAX];
 
 /**
  * Record an infrared remote command with a given name.
@@ -50,10 +50,10 @@ uint8_t timings[IR_EDGE_REC_MAX];
  * */
 void record_IR_command(char * name)
 {
-	unsigned long now = 0;
-	unsigned long prev = 0;
+	uint32_t now = 0;
+	uint32_t prev = 0;
 	
-	int duration;
+	uint32_t duration;
 	uint8_t i;
 	uint8_t toggle = 1;
 	uint8_t wait = 1;
@@ -61,6 +61,8 @@ void record_IR_command(char * name)
 	//retry loop, it is ended at the last statement
 	for(uint8_t retry=IR_MAX_RETRIES; retry>=0; retry--)
 	{
+
+    Serial.println(F("next retry"));
 		toggle = 1;
 		//activate wait flag
 		wait = 1;
@@ -120,12 +122,15 @@ void record_IR_command(char * name)
 					wait = 0;
 				}
 			}	
+
 			//"compress" the timings by dividing, check if it is in the uint8_t range
-			if((now - prev) > (37*255)) Serial.println("IR: Error, compression out of range");
-			timings[i] = (now - prev) / 37;
+			//if((now - prev) > (37*255)) Serial.println("IR: Error, compression out of range");
+			if (i<IR_EDGE_REC_MAX) 
+			   timings[i] = (uint16_t)(now - prev);   //  / 37;
 			//new edge detection
 			toggle = !toggle;
 		}
+
 		//if there are enough edges, break the retry loop
 		if(edges > IR_EDGE_REC_MIN) break;
 		//do we reach the last retry?
@@ -216,7 +221,7 @@ void play_IR_command(char * name)
 	for(i=0; i<edges; i++)
 	{
 		//"decompress" the timings
-		state_time = timings[i] * 37;
+		state_time = timings[i]; // * 37;
 		//save the current micros time
 		edge_prev = micros();
 		//toggle the output state

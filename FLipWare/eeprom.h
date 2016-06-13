@@ -127,7 +127,7 @@ void deleteIRCommand(char * name);
  * is provided by cntEdges.
  * The name is also provided as parameter
  * */ 
-void saveIRToEEPROM(char * name,uint8_t *timings,uint8_t cntEdges);
+void saveIRToEEPROM(char * name,uint16_t *timings,uint8_t cntEdges);
 
 
 /**
@@ -136,7 +136,7 @@ void saveIRToEEPROM(char * name,uint8_t *timings,uint8_t cntEdges);
  * is provided by cntEdges.
  * The name is also provided as parameter
  * */ 
-void saveIRToEEPROMSlotNumber(uint8_t nr, char * name, uint8_t *timings,uint8_t cntEdges);
+void saveIRToEEPROMSlotNumber(uint8_t nr, char * name, uint16_t *timings,uint8_t cntEdges);
 
 /**
  * Print out all slotnames to the serial interface
@@ -150,13 +150,13 @@ void listIRCommands();
  * ATTENTION: if this method is not called from another function (e.g. readIRFromEEPROM()),
  * it is necessary to preload the start adresses via bootstrapSlotAddresses()!!!
  * */
-uint16_t readIRFromEEPROMSlotNumber(uint8_t slotNr,uint8_t *timings,uint8_t maxEdges);
+uint16_t readIRFromEEPROMSlotNumber(uint8_t slotNr,uint16_t *timings,uint8_t maxEdges);
 
 /**
  * Replay one IR command from the EEPROM.
  * The slot is identified by the slot name
  * */
-uint16_t readIRFromEEPROM(char * name,uint8_t *timings,uint8_t maxEdges);
+uint16_t readIRFromEEPROM(char * name,uint16_t *timings,uint8_t maxEdges);
 
 /**
  * This function deletes all slots by deleting the magic number (reset to 0xFF)

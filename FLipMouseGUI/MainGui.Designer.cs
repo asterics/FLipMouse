@@ -266,6 +266,8 @@
             this.label37 = new System.Windows.Forms.Label();
             this.label33 = new System.Windows.Forms.Label();
             this.StoreButton = new System.Windows.Forms.Button();
+            this.irTimeoutBox = new System.Windows.Forms.TextBox();
+            this.label1 = new System.Windows.Forms.Label();
             this.tabControl.SuspendLayout();
             this.LipmouseTab.SuspendLayout();
             this.singlePanel.SuspendLayout();
@@ -2894,6 +2896,8 @@
             // IRTab
             // 
             this.IRTab.BackColor = System.Drawing.SystemColors.ButtonFace;
+            this.IRTab.Controls.Add(this.label1);
+            this.IRTab.Controls.Add(this.irTimeoutBox);
             this.IRTab.Controls.Add(this.irCommandBox);
             this.IRTab.Controls.Add(this.deleteIRButton);
             this.IRTab.Controls.Add(this.label31);
@@ -2910,7 +2914,7 @@
             // irCommandBox
             // 
             this.irCommandBox.FormattingEnabled = true;
-            this.irCommandBox.Location = new System.Drawing.Point(155, 134);
+            this.irCommandBox.Location = new System.Drawing.Point(196, 117);
             this.irCommandBox.Margin = new System.Windows.Forms.Padding(4);
             this.irCommandBox.Name = "irCommandBox";
             this.irCommandBox.Size = new System.Drawing.Size(411, 24);
@@ -2920,7 +2924,7 @@
             // 
             this.deleteIRButton.Enabled = false;
             this.deleteIRButton.ForeColor = System.Drawing.Color.Black;
-            this.deleteIRButton.Location = new System.Drawing.Point(379, 250);
+            this.deleteIRButton.Location = new System.Drawing.Point(420, 167);
             this.deleteIRButton.Margin = new System.Windows.Forms.Padding(4);
             this.deleteIRButton.Name = "deleteIRButton";
             this.deleteIRButton.Size = new System.Drawing.Size(187, 40);
@@ -2943,7 +2947,7 @@
             // 
             this.playIRButton.Enabled = false;
             this.playIRButton.ForeColor = System.Drawing.Color.Black;
-            this.playIRButton.Location = new System.Drawing.Point(155, 250);
+            this.playIRButton.Location = new System.Drawing.Point(196, 167);
             this.playIRButton.Margin = new System.Windows.Forms.Padding(4);
             this.playIRButton.Name = "playIRButton";
             this.playIRButton.Size = new System.Drawing.Size(189, 40);
@@ -2956,7 +2960,7 @@
             // 
             this.recordIRButton.Enabled = false;
             this.recordIRButton.ForeColor = System.Drawing.Color.Black;
-            this.recordIRButton.Location = new System.Drawing.Point(155, 184);
+            this.recordIRButton.Location = new System.Drawing.Point(196, 280);
             this.recordIRButton.Margin = new System.Windows.Forms.Padding(4);
             this.recordIRButton.Name = "recordIRButton";
             this.recordIRButton.Size = new System.Drawing.Size(411, 40);
@@ -2968,7 +2972,7 @@
             // label24
             // 
             this.label24.AutoSize = true;
-            this.label24.Location = new System.Drawing.Point(152, 104);
+            this.label24.Location = new System.Drawing.Point(193, 87);
             this.label24.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label24.Name = "label24";
             this.label24.Size = new System.Drawing.Size(365, 17);
@@ -3260,6 +3264,25 @@
             this.StoreButton.Text = "Store settings";
             this.StoreButton.UseVisualStyleBackColor = true;
             this.StoreButton.Click += new System.EventHandler(this.StoreButton_Click);
+            // 
+            // irTimeoutBox
+            // 
+            this.irTimeoutBox.Location = new System.Drawing.Point(497, 245);
+            this.irTimeoutBox.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.irTimeoutBox.Name = "irTimeoutBox";
+            this.irTimeoutBox.Size = new System.Drawing.Size(110, 22);
+            this.irTimeoutBox.TabIndex = 145;
+            this.irTimeoutBox.Text = "10";
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(193, 247);
+            this.label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(288, 17);
+            this.label1.TabIndex = 146;
+            this.label1.Text = "IR-Code timeout for recording (milliseconds):";
             // 
             // FLipMouseGUI
             // 
@@ -3586,6 +3609,8 @@
         private System.Windows.Forms.RadioButton selectStick;
         private System.Windows.Forms.Label joyModeLabel;
         private System.Windows.Forms.Button StoreButton;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.TextBox irTimeoutBox;
     }
 }
 

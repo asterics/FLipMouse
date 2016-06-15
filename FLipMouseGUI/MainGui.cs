@@ -1155,7 +1155,12 @@ namespace MouseApp2
         private void recordIRButton_Click(object sender, EventArgs e)
         {
             if (irCommandBox.Text.Length == 0) return;
-            addToLog("Trying to Record IR Command " + irCommandBox.Text);
+
+            int timeout = Int32.Parse(irTimeoutBox.Text);
+            if ((timeout < 1) || (timeout > 10000)) return;
+
+            addToLog("Trying to Record IR Command " + irCommandBox.Text + " with edge timeout " + irTimeoutBox.Text);
+            sendCmd("AT IT " + irTimeoutBox.Text);
             sendRecordIRCommand(irCommandBox.Text);
         }
 

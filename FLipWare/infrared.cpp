@@ -21,9 +21,6 @@
 
 //Time until the record command will be canceled
 #define IR_USER_TIMEOUT_MS 10000
-//Timeout for the infrared command itself
-//Limited by the compression factor of 37 * 255 (uint8_t)
-#define IR_EDGE_TIMEOUT_US 200000UL
 //Maximum count of edges for one command
 //Note: this value may be increased if your recorded command exceeds this value
 #define IR_EDGE_REC_MAX 250
@@ -35,6 +32,8 @@
 extern uint8_t IR_SENSOR_PIN;
 extern uint8_t IR_LED_PIN;
 extern uint8_t DebugOutput;
+
+uint32_t edge_timeout = 10000UL;  // timeout for IR code edge length in microseconds
 
 //current edge count
 uint8_t edges;
@@ -106,7 +105,7 @@ void record_IR_command(char * name)
 				duration = now - prev;
 				
 				//is the edge timeout over?
-				if(duration >= IR_EDGE_TIMEOUT_US) 
+				if(duration >= edge_timeout) 
 				{
 					if(DebugOutput == DEBUG_FULLOUTPUT) { Serial.println(F("IR_TIMEOUT: Edge timeout")); }
 					//cancel the wait loop
@@ -271,3 +270,11 @@ void play_IR_command(char * name)
 	//infrared LED must be turned of after this function
 	digitalWrite(IR_LED_PIN,LOW);	
 }
+
+
+void set_IR_timeout(uint16_t tout_ms)
+{
+   edge_timeout = (uint32_t)tout_ms * 1000;
+}
+
+

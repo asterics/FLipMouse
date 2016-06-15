@@ -28,14 +28,15 @@ const struct atCommandType atCommands[] PROGMEM = {
     {"MY"  , PARTYPE_INT  },  {"KW"  , PARTYPE_STRING},{"KP"  , PARTYPE_STRING},{"KR"  , PARTYPE_STRING},
     {"RA"  , PARTYPE_NONE },  {"SA"  , PARTYPE_STRING},{"LO"  , PARTYPE_STRING},{"LA"  , PARTYPE_NONE },
     {"LI"  , PARTYPE_NONE },  {"NE"  , PARTYPE_NONE }, {"DE"  , PARTYPE_NONE }, {"NC"  , PARTYPE_NONE }, 
-    {"E1"  , PARTYPE_NONE },  {"E0"  , PARTYPE_NONE }, {"MM"  , PARTYPE_UINT }, {"SW"  , PARTYPE_NONE }, 
-    {"SR"  , PARTYPE_NONE },  {"ER"  , PARTYPE_NONE }, {"CA"  , PARTYPE_NONE }, {"AX"  , PARTYPE_UINT }, 
-    {"AY"  , PARTYPE_UINT },  {"DX"  , PARTYPE_UINT }, {"DY"  , PARTYPE_UINT }, {"TS"  , PARTYPE_UINT }, 
-    {"TP"  , PARTYPE_UINT },  {"SM"  , PARTYPE_UINT }, {"HM"  , PARTYPE_UINT }, {"GU"  , PARTYPE_UINT }, 
-    {"GD"  , PARTYPE_UINT },  {"GL"  , PARTYPE_UINT }, {"GR"  , PARTYPE_UINT }, {"IR"  , PARTYPE_STRING},
-    {"IP"  , PARTYPE_STRING}, {"IC"  , PARTYPE_STRING},{"IL"  , PARTYPE_NONE }, {"E2"  , PARTYPE_NONE },
-    {"JX"  , PARTYPE_INT  },  {"JY"  , PARTYPE_INT  }, {"JZ"  , PARTYPE_INT  }, {"JT"  , PARTYPE_INT  },
-    {"JS"  , PARTYPE_INT  },  {"JP"  , PARTYPE_INT  }, {"JR"  , PARTYPE_INT  }, {"JH"  , PARTYPE_INT  } 
+    {"E1"  , PARTYPE_NONE }, {"E0"  , PARTYPE_NONE }, {"MM"  , PARTYPE_UINT },  
+    {"SW"  , PARTYPE_NONE },  {"SR"  , PARTYPE_NONE }, {"ER"  , PARTYPE_NONE }, {"CA"  , PARTYPE_NONE },  
+    {"AX"  , PARTYPE_UINT },  {"AY"  , PARTYPE_UINT }, {"DX"  , PARTYPE_UINT }, {"DY"  , PARTYPE_UINT },  
+    {"TS"  , PARTYPE_UINT },  {"TP"  , PARTYPE_UINT }, {"SM"  , PARTYPE_UINT }, {"HM"  , PARTYPE_UINT },  
+    {"GU"  , PARTYPE_UINT },  {"GD"  , PARTYPE_UINT }, {"GL"  , PARTYPE_UINT }, {"GR"  , PARTYPE_UINT },
+    {"IR"  , PARTYPE_STRING}, {"IP"  , PARTYPE_STRING},{"IC"  , PARTYPE_STRING},{"IL"  , PARTYPE_NONE },
+    {"E2"  , PARTYPE_NONE },   {"JX"  , PARTYPE_INT  }, {"JY"  , PARTYPE_INT  }, {"JZ"  , PARTYPE_INT  }, 
+    {"JT"  , PARTYPE_INT  },  {"JS"  , PARTYPE_INT  }, {"JP"  , PARTYPE_INT  }, {"JR"  , PARTYPE_INT  },
+    {"JH"  , PARTYPE_INT  }, {"IT"  , PARTYPE_UINT  }, 
 };
 
 void initButtons() {
@@ -434,6 +435,10 @@ void performCommand (uint8_t cmd, int16_t par1, char * keystring, int8_t periodi
         case CMD_IC:
     				if (DebugOutput==DEBUG_FULLOUTPUT) Serial.println("delete IR command");
     				delete_IR_command(keystring);
+            break;
+        case CMD_IT:
+            if (DebugOutput==DEBUG_FULLOUTPUT) Serial.println("set IR timeout");
+            set_IR_timeout(par1);
             break;
         case CMD_E2:
       			DebugOutput=DEBUG_FULLOUTPUT; 

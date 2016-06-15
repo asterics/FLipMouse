@@ -175,6 +175,7 @@ void record_IR_command(char * name);
 void play_IR_command(char * name);
 void list_IR_commands();
 void delete_IR_command(char * name);
+void set_IR_timeout(uint16_t ms);
 
 //set the correct strcpy/strcmp functions (either for AVR or ARM)
 #ifdef TEENSY

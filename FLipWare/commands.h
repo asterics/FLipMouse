@@ -13,17 +13,24 @@
           AT BM <uint>      puts button into programming mode (e.g. "AT BM 2" -> next AT-command defines the new function for button 2)
                             for the FLipmouse, there are 11 buttons available (3 physical buttons, 8 virtual functions): 
 
-                              1: internal button1 / Special UP
-                              2: external button2 / Special LEFT 
-                              3: external button3 / Special RIGHT 
+                              1: internal button1 / Strong Puff + UP
+                              2: external button2 / Strong Puff + LEFT 
+                              3: external button3 / Strong Puff + RIGHT 
                               4: alternative UP 
                               5: alternative DOWN 
                               6: alternative LEFT 
                               7: alternative RIGHT
-                              8: SIP (pressure lower than sip threshold)
-                              9: Special SIP
-                              10: PUFF (pressure bigger than puff threshold)
-                              11: Special PUFF
+                              8: Sip (pressure lower than sip threshold)
+                              9: Strong Sip
+                              10: Puff (pressure bigger than puff threshold)
+                              11: StrongSip + Up
+                              12: StrongSip + Down
+                              13: StrongSip + Left
+                              14: StrongSip + Right
+                              15: StrongPuff + Up
+                              16: StrongPuff + Down
+                              17: StrongPuff + Left
+                              18: StrongPuff + Right
 
     USB HID commands:
       
@@ -60,6 +67,8 @@
           AT KW <string>    keyboard write string (e.g." AT KW Hello!" writes "Hello!")    
           AT KP <string>    key press: press/hold keys identifier 
                             (e.g. "AT KP KEY_UP" presses the "Cursor-Up" key, "AT KP KEY_CTRL KEY_ALT KEY_DELETE" presses all three keys)
+          AT KH <string>    key hold: sticky hold keys (key will be pressed until next button press or "AT KH" command) 
+                            (e.g. "AT KH KEY_A" presses the "A" key until  "AT KH KEY_A" is called again)
                             for a list of supported key idientifier strings see below ! 
                             
           AT KR <string>    key release: releases all keys identified in the string    
@@ -91,8 +100,8 @@
           AT DY <uint>    deadzone y-axis  (0-1000)
           AT TS <uint>    treshold for sip action  (0-512)
           AT TP <uint>    treshold for puff action (512-1023)
-          AT SM <uint>    treshold for special mode (512-1023)
-          AT HM <uint>    treshold for hold mode (0-512)
+          AT SP <uint>    treshold for strong puff (512-1023)
+          AT SS <uint>    treshold for strong sip (0-512)
           AT GU <uint>    gain for up sensor (0-100)
           AT GD <uint>    gain for down sensor (0-100)
           AT GL <uint>    gain for left sensor (0-100)
@@ -139,12 +148,10 @@ enum atCommands {
   CMD_ID, CMD_BM, CMD_CL, CMD_CR, CMD_CM, CMD_CD, CMD_PL, CMD_PR, CMD_PM, CMD_RL, CMD_RR, CMD_RM,
   CMD_WU, CMD_WD, CMD_WS, CMD_MX, CMD_MY, CMD_KW, CMD_KP, CMD_KR, CMD_RA, CMD_SA, CMD_LO, CMD_LA,
   CMD_LI, CMD_NE, CMD_DE, CMD_NC, CMD_E1, CMD_E0, CMD_MM, CMD_SW, CMD_SR, CMD_ER, CMD_CA, CMD_AX,
-  CMD_AY, CMD_DX, CMD_DY, CMD_TS, CMD_TP, CMD_SM, CMD_HM, CMD_GU, CMD_GD, CMD_GL, CMD_GR, CMD_IR,
+  CMD_AY, CMD_DX, CMD_DY, CMD_TS, CMD_TP, CMD_SP, CMD_SS, CMD_GU, CMD_GD, CMD_GL, CMD_GR, CMD_IR,
   CMD_IP, CMD_IC, CMD_IL, CMD_E2, CMD_JX, CMD_JY, CMD_JZ, CMD_JT, CMD_JS, CMD_JP, CMD_JR, CMD_JH,
-  CMD_IT,
+  CMD_IT, CMD_KH,
   NUM_COMMANDS
 };
-
-
 
 #endif

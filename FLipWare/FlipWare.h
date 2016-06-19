@@ -35,6 +35,8 @@
 #include <stdint.h>
 #include "commands.h"
 #include "eeprom.h"
+#include "buttons.h"
+#include "modes.h"
 
 #define VERSION_STRING "Flipmouse v2.2"   
 
@@ -50,12 +52,9 @@
 #ifndef TEENSY_LC
   #error "NO CHIP SELECTED, EITHER TEENSY OR TEENSY LC ARE SUPPORTED"
 #endif
-#endif
+#endif 
 
 #define MAX_SLOTS          7          // maximum number of EEPROM memory slots
-#define NUMBER_OF_BUTTONS  12         // number of connected or virtual switches
-#define NUMBER_OF_PHYSICAL_BUTTONS 3  // number of connected switches
-#define NUMBER_OF_LEDS     3          // number of connected leds
 
 #define MAX_KEYSTRING_LEN 30          // maximum length for key identifiers / keyboard text
 #define MAX_SLOTNAME_LEN  15          // maximum length for a slotname
@@ -70,12 +69,12 @@
 #define REPORT_ONE_SLOT  1
 #define REPORT_ALL_SLOTS 2
 
-#define TONE_ENTERSPECIAL 0
-#define TONE_CALIB        1
-#define TONE_CHANGESLOT   2
-#define TONE_HOLD         3
-#define TONE_EXITSPECIAL  4
-#define TONE_IR			  5
+#define TONE_ENTER_STRONGPUFF 0
+#define TONE_CALIB            1
+#define TONE_CHANGESLOT       2
+#define TONE_STRONGSIP        3
+#define TONE_EXIT_STRONGPUFF  4
+#define TONE_IR			          5
 
 #define DEFAULT_CLICK_TIME      8    // time for mouse click (loop iterations from press to release)
 #define DOUBLECLICK_MULTIPLIER  5    // CLICK_TIME factor for double clicks
@@ -84,9 +83,9 @@
 #define DEBUG_FULLOUTPUT 1
 
 
-struct settingsType {
-  char slotname[MAX_SLOTNAME_LEN];     // EEPROM data is stored only until ths string's end
-  uint8_t  mouseOn;// mouse or alternative functions 
+
+struct slotGeneralSettings {
+  uint8_t  stickMode;  // alternative (0) mouse (1) or joystick (2,3,4) mode
   uint8_t  ax;     // acceleration x
   uint8_t  ay;     // acceleration y
   int16_t  dx;     // deadzone x
@@ -94,8 +93,8 @@ struct settingsType {
   uint16_t ts;     // threshold sip
   uint16_t tp;     // threshold puff 
   uint8_t  ws;     // wheel stepsize  
-  uint16_t sm;     // threshold special mode 
-  uint16_t hm;     // threshold hold mode 
+  uint16_t sp;     // threshold strong puff 
+  uint16_t ss;     // threshold strong sip 
   uint8_t  gu;     // gain up 
   uint8_t  gd;     // gain down 
   uint8_t  gl;     // gain left 
@@ -110,19 +109,6 @@ struct atCommandType {                      // holds settings for a button funct
   char atCmd[3];
   uint8_t  partype;
 };
-
-struct buttonType {                      // holds settings for a button function 
-  int mode;
-  int value;
-};
-
-struct buttonDebouncerType {              // holds working data for button debouncing and longpress detection 
-  uint8_t bounceCount;
-  uint8_t bounceState;
-  uint8_t stableState;
-  uint8_t longPressed;
-  uint32_t timestamp;
-} ; 
 
 extern uint8_t DebugOutput;
 extern uint8_t actSlot;
@@ -167,8 +153,10 @@ void BlinkLed();
 int freeRam ();
 void parseByte (int newByte);
 
-void setKeyValues(char* text); // presses individual keys
+void pressKeys(char* text); // presses individual keys
+void holdKeys(char* text); // presses individual keys
 void releaseKeys(char* text);  // releases individual keys
+void release_all_keys();       // releases all previously pressed keys
 void release_all();            // releases all previously pressed keys and buttons
 
 void record_IR_command(char * name);

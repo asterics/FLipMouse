@@ -28,32 +28,16 @@ const struct atCommandType atCommands[] PROGMEM = {
     {"MY"  , PARTYPE_INT  },  {"KW"  , PARTYPE_STRING},{"KP"  , PARTYPE_STRING},{"KR"  , PARTYPE_STRING},
     {"RA"  , PARTYPE_NONE },  {"SA"  , PARTYPE_STRING},{"LO"  , PARTYPE_STRING},{"LA"  , PARTYPE_NONE },
     {"LI"  , PARTYPE_NONE },  {"NE"  , PARTYPE_NONE }, {"DE"  , PARTYPE_NONE }, {"NC"  , PARTYPE_NONE }, 
-    {"E1"  , PARTYPE_NONE }, {"E0"  , PARTYPE_NONE }, {"MM"  , PARTYPE_UINT },  
+    {"E1"  , PARTYPE_NONE },  {"E0"  , PARTYPE_NONE }, {"MM"  , PARTYPE_UINT },  
     {"SW"  , PARTYPE_NONE },  {"SR"  , PARTYPE_NONE }, {"ER"  , PARTYPE_NONE }, {"CA"  , PARTYPE_NONE },  
     {"AX"  , PARTYPE_UINT },  {"AY"  , PARTYPE_UINT }, {"DX"  , PARTYPE_UINT }, {"DY"  , PARTYPE_UINT },  
-    {"TS"  , PARTYPE_UINT },  {"TP"  , PARTYPE_UINT }, {"SM"  , PARTYPE_UINT }, {"HM"  , PARTYPE_UINT },  
+    {"TS"  , PARTYPE_UINT },  {"TP"  , PARTYPE_UINT }, {"SP"  , PARTYPE_UINT }, {"SS"  , PARTYPE_UINT },  
     {"GU"  , PARTYPE_UINT },  {"GD"  , PARTYPE_UINT }, {"GL"  , PARTYPE_UINT }, {"GR"  , PARTYPE_UINT },
     {"IR"  , PARTYPE_STRING}, {"IP"  , PARTYPE_STRING},{"IC"  , PARTYPE_STRING},{"IL"  , PARTYPE_NONE },
-    {"E2"  , PARTYPE_NONE },   {"JX"  , PARTYPE_INT  }, {"JY"  , PARTYPE_INT  }, {"JZ"  , PARTYPE_INT  }, 
+    {"E2"  , PARTYPE_NONE },  {"JX"  , PARTYPE_INT  }, {"JY"  , PARTYPE_INT  }, {"JZ"  , PARTYPE_INT  }, 
     {"JT"  , PARTYPE_INT  },  {"JS"  , PARTYPE_INT  }, {"JP"  , PARTYPE_INT  }, {"JR"  , PARTYPE_INT  },
-    {"JH"  , PARTYPE_INT  }, {"IT"  , PARTYPE_UINT  }, 
+    {"JH"  , PARTYPE_INT  },  {"IT"  , PARTYPE_UINT  }, {"KH", PARTYPE_STRING}, 
 };
-
-void initButtons() {
-     buttons[0].mode=CMD_NE;  // default function for first button: switch to next slot
-     buttons[1].mode=CMD_KP; strcpy(keystringButton[1],"KEY_ESC ");;
-     buttons[2].mode=CMD_NC;  // no command
-     buttons[3].mode=CMD_KP; strcpy(keystringButton[3],"KEY_UP ");
-     buttons[4].mode=CMD_KP; strcpy(keystringButton[4],"KEY_DOWN ");
-     buttons[5].mode=CMD_KP; strcpy(keystringButton[5],"KEY_LEFT ");
-     buttons[6].mode=CMD_KP; strcpy(keystringButton[6],"KEY_RIGHT ");
-     buttons[7].mode=CMD_PL;   // press left mouse button
-     buttons[8].mode=CMD_NC;   // no command 
-     buttons[9].mode=CMD_CR;   // click right                        
-     buttons[10].mode=CMD_CA;  // calibrate      
-     buttons[11].mode=CMD_NC;  // no command      
-}
-
 
 void printCurrentSlot()
 {
@@ -65,9 +49,9 @@ void printCurrentSlot()
         Serial.print("AT TS "); Serial.println(settings.ts);
         Serial.print("AT TP "); Serial.println(settings.tp);
         Serial.print("AT WS "); Serial.println(settings.ws);
-        Serial.print("AT SM "); Serial.println(settings.sm);
-        Serial.print("AT HM "); Serial.println(settings.hm);
-        Serial.print("AT MM "); Serial.println(settings.mouseOn);
+        Serial.print("AT SP "); Serial.println(settings.sp);
+        Serial.print("AT SS "); Serial.println(settings.ss);
+        Serial.print("AT MM "); Serial.println(settings.stickMode);
         Serial.print("AT GU "); Serial.println(settings.gu);
         Serial.print("AT GD "); Serial.println(settings.gd);
         Serial.print("AT GL "); Serial.println(settings.gl);
@@ -256,7 +240,13 @@ void performCommand (uint8_t cmd, int16_t par1, char * keystring, int8_t periodi
                if (DebugOutput==DEBUG_FULLOUTPUT)  
                {  Serial.print("key press: "); Serial.println(keystring); }
                if (keystring[strlen(keystring)-1] != ' ') strcat(keystring," ");
-               setKeyValues(keystring);
+               pressKeys(keystring);
+               break;
+        case CMD_KH:
+               if (DebugOutput==DEBUG_FULLOUTPUT)  
+               {  Serial.print("hold key: "); Serial.println(keystring); }
+               if (keystring[strlen(keystring)-1] != ' ') strcat(keystring," ");
+               holdKeys(keystring);
                break;
         case CMD_KR:
                if (DebugOutput==DEBUG_FULLOUTPUT)  
@@ -330,12 +320,12 @@ void performCommand (uint8_t cmd, int16_t par1, char * keystring, int8_t periodi
             break;
 
         case CMD_MM:
-               settings.mouseOn=par1;
+               settings.stickMode=par1;
                if (DebugOutput==DEBUG_FULLOUTPUT)
                {  
-                 if (settings.mouseOn==1)
+                 if (settings.stickMode==STICKMODE_MOUSE)
                    Serial.println("mouse function activated");
-                 else if(settings.mouseOn>=2) 
+                 else if(settings.stickMode>=STICKMODE_JOYSTICK_XY) 
                    Serial.println("joystick function activated");
                  else Serial.println("alternative functions activated");
                }
@@ -344,8 +334,8 @@ void performCommand (uint8_t cmd, int16_t par1, char * keystring, int8_t periodi
                if (DebugOutput==DEBUG_FULLOUTPUT)  
                  Serial.println("switch mouse / alternative function");
                initBlink(6,15);
-               if (settings.mouseOn==0)  settings.mouseOn=1;
-               else settings.mouseOn=0;
+               if (settings.stickMode==STICKMODE_ALTERNATIVE)  settings.stickMode=STICKMODE_MOUSE;
+               else settings.stickMode=STICKMODE_ALTERNATIVE; 
             break;
         case CMD_SR:
               reportRawValues=1;
@@ -390,15 +380,15 @@ void performCommand (uint8_t cmd, int16_t par1, char * keystring, int8_t periodi
                  Serial.println("set threshold puff");
                settings.tp=par1;
             break;
-        case CMD_SM:
+        case CMD_SP:
                if (DebugOutput==DEBUG_FULLOUTPUT)  
-                 Serial.println("set special threshold");
-               settings.sm=par1;
+                 Serial.println("set strong puff threshold");
+               settings.sp=par1;
             break;
-        case CMD_HM:
+        case CMD_SS:
                if (DebugOutput==DEBUG_FULLOUTPUT)  
-                 Serial.println("set hold threshold");
-               settings.hm=par1;
+                 Serial.println("set strong sip threshold");
+               settings.ss=par1;
             break;
         case CMD_GU:
                if (DebugOutput==DEBUG_FULLOUTPUT)  

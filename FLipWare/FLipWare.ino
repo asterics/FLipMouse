@@ -34,17 +34,6 @@
 // Constants and Macro definitions
 
 #define DEFAULT_WAIT_TIME       5   // wait time for one loop interation in milliseconds
-#define DEFAULT_DEBOUNCING_TIME 7   // debouncing interval for button-press / release
-
-#define UP_BUTTON       3     // index numbers of the virtual buttons (not pin numbers in this case !)
-#define DOWN_BUTTON     4
-#define LEFT_BUTTON     5
-#define RIGHT_BUTTON    6
-#define SIP_BUTTON      7
-#define SPECIAL_SIP_BUTTON  8
-#define PUFF_BUTTON         9
-#define SPECIAL_PUFF_BUTTON 10
-#define SPECIAL_DOWN_BUTTON 11
 
 
 // global variables
@@ -84,54 +73,31 @@
 #endif
 
 struct slotGeneralSettings settings = {      // default settings valus, for type definition see fabi.h
-    1,                                //  Mouse cursor movement active (not the alternative functions )
+    1,                                // stickMode: Mouse cursor movement active
     60, 60, 20, 20, 500, 525, 3,      // accx, accy, deadzone x, deadzone y, threshold sip, threshold puff, wheel step,
-    700, 300,                         // threshold special mode ´, threshold hold mode
+    800, 10,                          // threshold strong puff, threshold strong sip
     50, 50, 50, 50 ,                  // gain up / down / left / right
     0, 0                              // offset x / y
 }; 
 
-char slotName[MAX_SLOTNAME_LEN] = "empty";
 char IRName[MAX_SLOTNAME_LEN];
-
-struct slotButtonSettings buttons [NUMBER_OF_BUTTONS];                     // array for all buttons - type definition see fabi.h 
-char keystringButton[NUMBER_OF_BUTTONS][MAX_KEYSTRING_LEN] = {"","","","","","","","","","","",""};
-struct buttonDebouncerType buttonDebouncers [NUMBER_OF_BUTTONS];   // array for all buttonsDebouncers - type definition see fabi.h 
+char slotName[MAX_SLOTNAME_LEN] = "empty";
+int EmptySlotAddress = 0;
+uint8_t reportSlotParameters = REPORT_NONE;
+uint8_t reportRawValues = 0;
+uint8_t actSlot=0;
 
 uint16_t calib_now = 1;                       // calibrate zeropoint right at startup !
 uint8_t DebugOutput = DEBUG_NOOUTPUT;         // for chatty serial interface use: DEBUG_FULLOUTPUT (attention: not GUI compatible ..)
 int waitTime=DEFAULT_WAIT_TIME;
 
-int EmptySlotAddress = 0;
-uint8_t reportSlotParameters = REPORT_NONE;
-uint8_t reportRawValues = 0;
 
-unsigned long currentTime;
-unsigned long previousTime = 0;
-float timeDifference;
-uint32_t timeStamp = 0;
-unsigned long time=0;
-
-uint8_t actSlot=0;
-
-int down;
-int left;
-int up;
-int right;
-
-int x, holdX;
-int y, holdY;
-int pressure, holdPressure, previousPressure=512;
-uint8_t pressureRising=0, pressureFalling=0;
+int up,down,left,right;
+int x,y;
+int pressure;
 
 int16_t  cx=0,cy=0;
 
-float accumXpos = 0.f;
-float accumYpos = 0.f;
-float accelFactor;
-
-int8_t moveX=0;       
-int8_t moveY=0;
 uint8_t leftMouseButton=0,old_leftMouseButton=0;
 uint8_t middleMouseButton=0,old_middleMouseButton=0;
 uint8_t rightMouseButton=0,old_rightMouseButton=0;
@@ -144,33 +110,19 @@ uint8_t blinkCount=0;
 uint8_t blinkTime=0;
 uint8_t blinkStartTime=0;
 
-#define HOLD_IDLE 0
-#define HOLD_X    1
-#define HOLD_Y    2
-#define HOLD_PRESSURE 3
-
-uint8_t modeState =0;
-uint8_t holdMode =HOLD_IDLE;
-
 int inByte=0;
 char * keystring=0;
 char * writeKeystring=0;
 
 
 // function declarations 
-void handlePress (int buttonIndex);      // a button was pressed
-void handleRelease (int buttonIndex);    // a button was released
-uint8_t handleButton(int i, uint8_t state);    // button debouncing and longpress detection  
 void UpdateLeds();
-void initDebouncers();
-void handleModeState();
+void handleMouseClicks();
+void reportValues();
 
 extern void handleCimMode(void);
 extern void init_CIM_frame(void);
-extern uint8_t CimParserActive;
 extern uint8_t StandAloneMode;
-
-// extern void init_CIM_frame (void);
 
 
 ////////////////////////////////////////
@@ -203,7 +155,7 @@ void setup() {
    for (int i=0; i<NUMBER_OF_LEDS; i++)   // initialize physical buttons and bouncers
       pinMode (led_map[i], OUTPUT);   // configure the pins for input mode with pullup resistors
 
-
+   release_all();
    initDebouncers();
    for (int i=0; i<NUMBER_OF_BUTTONS; i++)   // initialize button array
    {
@@ -229,41 +181,28 @@ void setup() {
 ///////////////////////////////
 
 void loop() { 
-  
-  static uint8_t valueReportCount =0, mouseMoveCount=0;
+ 
+    pressure = analogRead(PRESSURE_SENSOR_PIN);
+    
+    up =       (uint16_t)((uint32_t)analogRead(UP_SENSOR_PIN)  * settings.gd/50); if (up>1023) up=1023; if (up<0) up=0;
+    down =     (uint16_t)((uint32_t)analogRead(DOWN_SENSOR_PIN) * settings.gu/50); if (down>1023) down=1023; if (down<0) down=0;
+    left =     (uint16_t)((uint32_t)analogRead(LEFT_SENSOR_PIN) * settings.gr/50); if (left>1023) left=1023; if (left<0) left=0;
+    right =    (uint16_t)((uint32_t)analogRead(RIGHT_SENSOR_PIN) * settings.gl/50); if (right>1023) right=1023; if (right<0) right=0;
 
-        pressure = analogRead(PRESSURE_SENSOR_PIN);
-        if (pressure>previousPressure) pressureRising=1; else pressureRising=0;
-        if (pressure<previousPressure) pressureFalling=1; else pressureFalling=0;
-        previousPressure=pressure;
-        
-        up =       (uint16_t)((uint32_t)analogRead(UP_SENSOR_PIN)  * settings.gd/50); if (up>1023) up=1023; if (up<0) up=0;
-        down =     (uint16_t)((uint32_t)analogRead(DOWN_SENSOR_PIN) * settings.gu/50); if (down>1023) down=1023; if (down<0) down=0;
-        left =     (uint16_t)((uint32_t)analogRead(LEFT_SENSOR_PIN) * settings.gr/50); if (left>1023) left=1023; if (left<0) left=0;
-        right =    (uint16_t)((uint32_t)analogRead(RIGHT_SENSOR_PIN) * settings.gl/50); if (right>1023) right=1023; if (right<0) right=0;
-  
-        while (Serial.available() > 0) {
-          // get incoming byte:
-          inByte = Serial.read();
-          parseByte (inByte);      // implemented in parser.cpp
-        }
+    while (Serial.available() > 0) {
+      // get incoming byte:
+      inByte = Serial.read();
+      parseByte (inByte);      // implemented in parser.cpp
+    }
 
-        if (StandAloneMode)  {
-          currentTime = millis();
-          timeDifference = currentTime - previousTime;
-          previousTime = currentTime;
-          accelFactor= timeDifference / 10000.0f;      
-              
-          if (calib_now == 0)  {
+    if (StandAloneMode)  {              
+          if (calib_now == 0)  {      // no calibration, use current values for x and y offset !
               x = (left-right) - cx;
               y = (up-down) - cy;
-
-              if (holdMode == HOLD_X) x=holdX;
-              if (holdMode == HOLD_Y) y=holdY;
           }
           else  {
               calib_now--;           // wait for calibration
-              if (calib_now ==0) {   // calibrate now !!
+              if (calib_now ==0) {   // calibrate now !! get new offset values
                  settings.cx = (left-right);                                                   
                  settings.cy = (up-down);
                  cx=settings.cx;
@@ -271,347 +210,91 @@ void loop() {
               }
           }    
 
-          if (reportRawValues)   { 
-            if (valueReportCount++ > 10) {                    // report raw values !
-              Serial.print("VALUES:");Serial.print(pressure);Serial.print(",");
-              Serial.print(up);Serial.print(",");Serial.print(down);Serial.print(",");
-              Serial.print(left);Serial.print(",");Serial.print(right);Serial.print(",");
-              Serial.print(x);Serial.print(",");Serial.println(y);
-              /*
-              Serial.print("AnalogRAW:");
-              Serial.print(analogRead(UP_SENSOR_PIN));
-              Serial.print(",");
-              Serial.print(analogRead(DOWN_SENSOR_PIN));
-              Serial.print(",");
-              Serial.print(analogRead(LEFT_SENSOR_PIN));
-              Serial.print(",");
-              Serial.println(analogRead(RIGHT_SENSOR_PIN));
-              */
-              valueReportCount=0;
-            }
-          }
+          reportValues();     // send live data to serial 
           
-          if (abs(x)<= settings.dx) x=0;
+          if (abs(x)<= settings.dx) x=0;  // apply deadzone values
           if (abs(y)<= settings.dy) y=0;
 
-
-
-          handleModeState();
-          
-          if (modeState==0)
-          {  
-                for (int i=0;i<NUMBER_OF_PHYSICAL_BUTTONS;i++)    // update button press / release events
-                    handleButton(i, digitalRead(input_map[i]) == LOW ? 1 : 0);
-          
-                if (holdMode == HOLD_PRESSURE)   {
-                   handleButton(SIP_BUTTON, holdPressure < settings.ts ? 1 : 0); 
-                   handleButton(PUFF_BUTTON, holdPressure > settings.tp ? 1 : 0);
-                }
-                else  {
-                   if (pressure > settings.tp) 
-                   {  
-                      if (!pressureRising)
-                        handleButton(PUFF_BUTTON, 1);
-                   } else handleButton(PUFF_BUTTON, 0);
-
-                   if (pressure < settings.ts) 
-                   {  
-                      if (!pressureFalling)
-                       handleButton(SIP_BUTTON, 1); 
-                   } else handleButton(SIP_BUTTON, 0);
-               }
-              
-                
-                if (settings.mouseOn == 1) {   // handle mouse mode
-                  if (y>settings.dy) { 
-                     accumYpos += ((float)(y-settings.dy)*settings.ay) * accelFactor;
-                  } 
-                  else if (y<-settings.dy) {
-                     accumYpos +=  ((float)(y+settings.dy)*settings.ay) * accelFactor; 
-                  }
-                  if (x>settings.dx) {
-                     accumXpos += ((float)(x-settings.dx)*settings.ax) * accelFactor; 
-                  }
-                  else if (x<-settings.dx) {
-                     accumXpos += ((float)(x+settings.dx)*settings.ax) * accelFactor; 
-                  }
-                
-                  int xMove = (int)accumXpos;
-                  int yMove = (int)accumYpos;
-                  
-                  Mouse.move(xMove, yMove);
-                  accumXpos -= xMove;
-                  accumYpos -= yMove;
-                }
-                else if (settings.mouseOn==0){ // handle alternative actions mode
-                  handleButton(UP_BUTTON,  y<-settings.dy ? 1 : 0);
-                  handleButton(DOWN_BUTTON,  y>settings.dy ? 1 : 0);
-                  handleButton(LEFT_BUTTON,  x<-settings.dx ? 1 : 0);
-                  handleButton(RIGHT_BUTTON,  x>settings.dx ? 1 : 0);
-                }
-                else  {  // handle joystick modes 2,3 and 4
-                  if (y>settings.dy) { 
-                     accumYpos = 512+((float)(y-settings.dy)*settings.ay/50.0f);
-                  } else if (y<-settings.dy)  {  
-                     accumYpos = 512+((float)(y+settings.dy)*settings.ay/50.0f);
-                  } else accumYpos = 512;
-
-                  if (x>settings.dx) { 
-                     accumXpos = 512+((float)(x-settings.dx)*settings.ax/50.0f);
-                  } else if (x<-settings.dx)  {  
-                     accumXpos = 512+((float)(x+settings.dx)*settings.ax/50.0f);
-                  } else accumXpos = 512;
-
-                  if (accumXpos<0) accumXpos=0; if (accumXpos>1023) accumXpos=1023;
-                  if (accumYpos<0) accumYpos=0; if (accumYpos>1023) accumYpos=1023;
-                  
-                  switch (settings.mouseOn) {
-                    case 2:
-                      Joystick.X (accumXpos);
-                      Joystick.Y (accumYpos);
-                      break;
-                    case 3:
-                      Joystick.Z (accumXpos);
-                      Joystick.Zrotate (accumYpos);
-                      break;
-                    case 4:
-                      Joystick.sliderLeft (accumXpos);
-                      Joystick.sliderRight (accumYpos);
-                      break;
-                    }
-                }
-          
-                if ((moveX!=0) || (moveY!=0))   // movement induced by button actions  
-                {
-                  if (mouseMoveCount++%4==0)
-                    Mouse.move(moveX, moveY);
-                }
-          
-          }
-          // handle running clicks or double clicks
-          if (leftClickRunning)
-              if (--leftClickRunning==0)  leftMouseButton=0; 
-          
-          if (rightClickRunning)
-              if (--rightClickRunning==0)  rightMouseButton=0; 
-       
-          if (middleClickRunning)
-              if (--middleClickRunning==0)  middleMouseButton=0; 
-      
-          if (doubleClickRunning)
-          {
-              doubleClickRunning--;
-              if (doubleClickRunning==DEFAULT_CLICK_TIME*2)  leftMouseButton=0; 
-              else if (doubleClickRunning==DEFAULT_CLICK_TIME)    leftMouseButton=1; 
-              else if (doubleClickRunning==0)    leftMouseButton=0; 
-          }
-     
-          // if any changes were made, update the Mouse buttons
-          if(leftMouseButton!=old_leftMouseButton) {
-             if (leftMouseButton) Mouse.press(MOUSE_LEFT); else Mouse.release(MOUSE_LEFT);
-             old_leftMouseButton=leftMouseButton;
-          }
-          if  (middleMouseButton!=old_middleMouseButton) {
-             if (middleMouseButton) Mouse.press(MOUSE_MIDDLE); else Mouse.release(MOUSE_MIDDLE);
-             old_middleMouseButton=middleMouseButton;
-          }
-          if  (rightMouseButton!=old_rightMouseButton)  {
-             if (rightMouseButton) Mouse.press(MOUSE_RIGHT); else Mouse.release(MOUSE_RIGHT);
-             old_rightMouseButton=rightMouseButton;
-         }
+          handleModeState(x, y, pressure);  // handle all mouse / joystick / button activities
+          handleMouseClicks();              // update mouse click activities
         
-         // handle Keyboard output (single key press/release is done seperately via setKeyValues() ) 
-         if (writeKeystring) {
+          // handle Keyboard output (single key press/release is done seperately via setKeyValues() ) 
+          if (writeKeystring) {
             Keyboard.print(writeKeystring);
             writeKeystring=0;
-        }    
+          }    
            
-        delay(waitTime);  // to limit move movement speed. TBD: remove delay, use millis() !
-    }  // standAloneMode
-    else
-    {
-        handleCimMode();   // create periodic reports if running in AsTeRICS CIM compatibility mode
-    }
+          delay(waitTime);  // to limit move movement speed. TBD: remove delay, use millis() !
+    }  
+    else 
+       handleCimMode();   // create periodic reports if running in AsTeRICS CIM compatibility mode
+
     UpdateLeds();
 }
 
-
-#define SPECIALMODE_XY_THRESHOLD 200
-#define SPECIALMODE_PUFF_RELEASE 530
-#define SPECIALMODE_SIP_RELEASE  505
-#define SPECIALMODE_STABLETIME   20
-#define SPECIALMODE_STABLEEXIT   250
-
-#define MODESTATE_IDLE 0
-#define MODESTATE_ENTER_SPECIALMODE   1
-#define MODESTATE_SPECIALMODE_ACTIVE  2
-#define MODESTATE_ENTER_HOLDMODE     10
-#define MODESTATE_DETECT_HOLDSTATE   11
-#define MODESTATE_HOLDMODE_ACTIVE    12
-#define MODESTATE_RELEASE            13
-#define MODESTATE_RETURN_TO_ILDE     99
-
-void handleModeState()
-{         
-    static int waitStable=0;
-    static uint8_t rememberMouseOn; 
-    
-         switch (modeState)  {
-            case MODESTATE_IDLE:   // IDLE
-               if (pressure > settings.sm) { 
-                   modeState=MODESTATE_ENTER_SPECIALMODE;
-                   makeTone(TONE_ENTERSPECIAL,0 );             
-                   initDebouncers();
-                   release_all();
-                   }
-               if (pressure < settings.hm ) { 
-                   if (holdMode==HOLD_IDLE)
-                   {
-                     modeState=MODESTATE_ENTER_HOLDMODE;       // enter hold mode detection
-                     makeTone(TONE_HOLD,0 );             
-                     initDebouncers();
-                     release_all();
-                   } 
-                   else  
-                   {
-                     settings.mouseOn=rememberMouseOn;
-                     modeState=MODESTATE_RELEASE;   // exit hold mode
-                     makeTone(TONE_HOLD,2 );             
-                   } 
-                 }
-                 break;
-            case MODESTATE_ENTER_SPECIALMODE:   // puffed, wait for release          
-                if (pressure < SPECIALMODE_PUFF_RELEASE)
-                   waitStable++;
-                else waitStable=0;
-                if (waitStable>=SPECIALMODE_STABLETIME)
-                    modeState=MODESTATE_SPECIALMODE_ACTIVE;
-                  break; 
-            case MODESTATE_SPECIALMODE_ACTIVE:  // specialmode active
-               if (handleButton(0, (y<-SPECIALMODE_XY_THRESHOLD) ? 1 : 0)) modeState=MODESTATE_RETURN_TO_ILDE;
-               else if (handleButton(1, (x<-SPECIALMODE_XY_THRESHOLD) ? 1 : 0)) modeState=MODESTATE_RETURN_TO_ILDE;
-               else if (handleButton(2, (x>SPECIALMODE_XY_THRESHOLD) ? 1 : 0)) modeState=MODESTATE_RETURN_TO_ILDE;
-               else if (handleButton(SPECIAL_DOWN_BUTTON, (y>SPECIALMODE_XY_THRESHOLD) ? 1 : 0)) modeState=MODESTATE_RETURN_TO_ILDE;
-               else if (handleButton(SPECIAL_SIP_BUTTON, pressure < settings.ts  ? 1 : 0)) modeState=MODESTATE_RETURN_TO_ILDE;
-               else if (handleButton(SPECIAL_PUFF_BUTTON, pressure > settings.tp  ? 1 : 0)) modeState=MODESTATE_RETURN_TO_ILDE;
-               else { waitStable++; if (waitStable>SPECIALMODE_STABLEEXIT) { waitStable=0; modeState=MODESTATE_RELEASE; makeTone(TONE_EXITSPECIAL,0 ); } }
-               break;
-
-            case MODESTATE_ENTER_HOLDMODE:   // sipped, wait for release to enter detect hold state          
-                if (pressure > SPECIALMODE_SIP_RELEASE)
-                   waitStable++;
-                else waitStable=0;
-                if (waitStable>=SPECIALMODE_STABLETIME)
-                    modeState=MODESTATE_DETECT_HOLDSTATE;
-                 break; 
-            case MODESTATE_DETECT_HOLDSTATE:  // detect hold state
-               rememberMouseOn=settings.mouseOn;
-               if ((y<-settings.dy) || (y>settings.dy)) {holdMode=HOLD_Y; holdY=y; settings.mouseOn=0; modeState=MODESTATE_HOLDMODE_ACTIVE; }
-               else if ((x<-settings.dx) || (x>settings.dx)) {holdMode=HOLD_X; holdX=x; settings.mouseOn=0; modeState=MODESTATE_HOLDMODE_ACTIVE; }
-               else if ((pressure<settings.ts) || (pressure>settings.tp)) {holdMode=HOLD_PRESSURE; holdPressure=pressure; modeState=MODESTATE_HOLDMODE_ACTIVE; }
-               else { waitStable++; if (waitStable>SPECIALMODE_STABLEEXIT) { waitStable=0; modeState=MODESTATE_RELEASE; makeTone(TONE_HOLD,2 ); } }
-               break;
-
-            case MODESTATE_HOLDMODE_ACTIVE:   // hold mode selected          
-                    makeTone(TONE_HOLD,1 );             
-                    modeState=MODESTATE_RETURN_TO_ILDE;
-                break; 
-            case MODESTATE_RELEASE:   // wait for release to exit hold mode          
-                if (pressure > SPECIALMODE_SIP_RELEASE)  
-                {
-                    holdMode=HOLD_IDLE;
-                    modeState=MODESTATE_RETURN_TO_ILDE;
-                }
-                break; 
-
-            default:  // end special mode, enter idle again           
-                    initDebouncers();
-                    release_all();
-                    modeState=MODESTATE_IDLE;
-                 break; 
-          }
-}
-
-void handlePress (int buttonIndex)   // a button was pressed
-{   
-    performCommand(buttons[buttonIndex].mode,buttons[buttonIndex].value,keystringButton[buttonIndex],1);
-}
-
-void handleRelease (int buttonIndex)    // a button was released: deal with "sticky"-functions
+void handleMouseClicks()
 {
-   switch(buttons[buttonIndex].mode) {
-     case CMD_PL: leftMouseButton=0; break;
-     case CMD_PR: rightMouseButton=0; break;
-     case CMD_PM: middleMouseButton=0; break;
-     case CMD_JP: Joystick.button(buttons[buttonIndex].value,0); break;
-     case CMD_MX: moveX=0; break;      
-     case CMD_MY: moveY=0; break;      
-     case CMD_KP: releaseKeys(keystringButton[buttonIndex]); break; 
-   }
-}
-
-uint8_t inHoldMode (int i)
-{
-   if ((buttons[i].mode == CMD_PL) ||
-       (buttons[i].mode == CMD_PR) || 
-       (buttons[i].mode == CMD_PM) || 
-       (buttons[i].mode == CMD_JP) || 
-       (buttons[i].mode == CMD_MX) || 
-       (buttons[i].mode == CMD_MY) || 
-       (buttons[i].mode == CMD_KP))
-   return(1);
-   else return(0); 
-}
+      // handle running clicks or double clicks
+      if (leftClickRunning)
+          if (--leftClickRunning==0)  leftMouseButton=0; 
+      
+      if (rightClickRunning)
+          if (--rightClickRunning==0)  rightMouseButton=0; 
+   
+      if (middleClickRunning)
+          if (--middleClickRunning==0)  middleMouseButton=0; 
   
-
-uint8_t handleButton(int i, uint8_t state)    // button debouncing and longpress detection  
-{                                                 //   (if button i is pressed long and index l>=0, virtual button l is activated !)
-   if ( buttonDebouncers[i].bounceState == state) {
-     if (buttonDebouncers[i].bounceCount < DEFAULT_DEBOUNCING_TIME) {
-       buttonDebouncers[i].bounceCount++;
-       if (buttonDebouncers[i].bounceCount == DEFAULT_DEBOUNCING_TIME) {
-          if (state != buttonDebouncers[i].stableState)
-          { 
-            buttonDebouncers[i].stableState=state;
-            if (state == 1) {      // new stable state: pressed !
-              if (inHoldMode(i)) 
-                handlePress(i); 
-              buttonDebouncers[i].timestamp=millis();   // start measuring time
-            }
-            else {   // new stable state: released !
-                 if (!inHoldMode(i)) 
-                   handlePress(i); 
-                 handleRelease(i);
-                 return(1);         // indicate that button action has been performed !
-            }
-          }
-       }
+      if (doubleClickRunning)
+      {
+          doubleClickRunning--;
+          if (doubleClickRunning==DEFAULT_CLICK_TIME*2)  leftMouseButton=0; 
+          else if (doubleClickRunning==DEFAULT_CLICK_TIME)    leftMouseButton=1; 
+          else if (doubleClickRunning==0)    leftMouseButton=0; 
+      }
+ 
+      // if any changes were made, update the Mouse buttons
+      if(leftMouseButton!=old_leftMouseButton) {
+         if (leftMouseButton) Mouse.press(MOUSE_LEFT); else Mouse.release(MOUSE_LEFT);
+         old_leftMouseButton=leftMouseButton;
+      }
+      if  (middleMouseButton!=old_middleMouseButton) {
+         if (middleMouseButton) Mouse.press(MOUSE_MIDDLE); else Mouse.release(MOUSE_MIDDLE);
+         old_middleMouseButton=middleMouseButton;
+      }
+      if  (rightMouseButton!=old_rightMouseButton)  {
+         if (rightMouseButton) Mouse.press(MOUSE_RIGHT); else Mouse.release(MOUSE_RIGHT);
+         old_rightMouseButton=rightMouseButton;
      }
-     else {  // in stable state
-     }
-   }
-   else {
-     buttonDebouncers[i].bounceState = state;
-     buttonDebouncers[i].bounceCount=0;     
-   }
-   return(0);
-}   
+}
 
 
-void initDebouncers()
+void reportValues()
 {
-   for (int i=0; i<NUMBER_OF_BUTTONS; i++)   // initialize button array
-   {
-      buttonDebouncers[i].bounceState=0;
-      buttonDebouncers[i].stableState=0;
-      buttonDebouncers[i].bounceCount=0;
-      buttonDebouncers[i].longPressed=0;
-   }
+    static uint8_t valueReportCount =0; 
+    if (!reportRawValues)   return; 
+    
+    if (valueReportCount++ > 10) {                    // report raw values !
+      Serial.print("VALUES:");Serial.print(pressure);Serial.print(",");
+      Serial.print(up);Serial.print(",");Serial.print(down);Serial.print(",");
+      Serial.print(left);Serial.print(",");Serial.print(right);Serial.print(",");
+      Serial.print(x);Serial.print(",");Serial.println(y);
+      /*
+      Serial.print("AnalogRAW:");
+      Serial.print(analogRead(UP_SENSOR_PIN));
+      Serial.print(",");
+      Serial.print(analogRead(DOWN_SENSOR_PIN));
+      Serial.print(",");
+      Serial.print(analogRead(LEFT_SENSOR_PIN));
+      Serial.print(",");
+      Serial.println(analogRead(RIGHT_SENSOR_PIN));
+      */
+      valueReportCount=0;
+    }
 }
 
 void release_all()  // releases all previously pressed keys
 {
-    Keyboard.releaseAll();
+    release_all_keys(); 
     leftMouseButton=0;
     rightMouseButton=0;
     middleMouseButton=0;
@@ -657,10 +340,10 @@ void UpdateLeds()
 void makeTone(uint8_t kind, uint8_t param)
 {
    switch (kind) {
-		case TONE_ENTERSPECIAL: 
+		case TONE_ENTER_STRONGPUFF: 
 			tone(TONE_PIN, 4000, 200);
              break;
-		case TONE_EXITSPECIAL: 
+		case TONE_EXIT_STRONGPUFF: 
 			tone(TONE_PIN, 4000, 100);
             break;
 		case TONE_CALIB: 
@@ -669,7 +352,7 @@ void makeTone(uint8_t kind, uint8_t param)
 		case TONE_CHANGESLOT:
             tone(TONE_PIN, 2000+200*param, 200);
             break;
-		case TONE_HOLD:
+		case TONE_STRONGSIP:
 			switch (param) {
 				case 0: tone(TONE_PIN, 3000, 500); break;
 				case 1: tone(TONE_PIN, 3500, 100); break;
@@ -682,12 +365,10 @@ void makeTone(uint8_t kind, uint8_t param)
      }
 }
 
-
-
-int freeRam ()
+int freeRam ()  // TBD: has to be adapted for TeensyLC ...
 {
 //    extern int __heap_start, *__brkval;
 //    int v;
 //    return (int) &v - (__brkval == 0 ? (int) &__heap_start : (int) __brkval);
-return(1);
+      return(1);
 }

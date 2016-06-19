@@ -31,9 +31,9 @@ namespace MouseApp2
     {
         const string VERSION_STRING = "2.2";
 
-        const int SPEED_CHANGE_STEP = 2;
-        const int DEADZONE_CHANGE_STEP = 2;
-        const int SPECIALMODE_CHANGE_STEP = 5;
+        const int SPEED_CHANGE_STEP = 1;
+        const int DEADZONE_CHANGE_STEP = 1;
+        const int STRONGMODE_CHANGE_STEP = 1;
         const int PRESSURE_CHANGE_STEP = 1;
         const int GAIN_CHANGE_STEP = 1;
 
@@ -215,15 +215,22 @@ namespace MouseApp2
                     Button1FunctionBox.Items.Add(str);
                     Button2FunctionBox.Items.Add(str);
                     Button3FunctionBox.Items.Add(str);
-                    Button4FunctionBox.Items.Add(str);
                     UpFunctionMenu.Items.Add(str);
                     DownFunctionMenu.Items.Add(str);
                     LeftFunctionMenu.Items.Add(str);
                     RightFunctionMenu.Items.Add(str);
                     SipFunctionMenu.Items.Add(str);
-                    SpecialSipFunctionMenu.Items.Add(str);
+                    StrongSipFunctionMenu.Items.Add(str);
                     PuffFunctionMenu.Items.Add(str);
-                    SpecialPuffFunctionMenu.Items.Add(str);
+                    StrongPuffFunctionMenu.Items.Add(str);
+                    StrongSipUpFunctionBox.Items.Add(str);
+                    StrongSipDownFunctionBox.Items.Add(str);
+                    StrongSipLeftFunctionBox.Items.Add(str);
+                    StrongSipRightFunctionBox.Items.Add(str);
+                    StrongPuffUpFunctionBox.Items.Add(str);
+                    StrongPuffDownFunctionBox.Items.Add(str);
+                    StrongPuffLeftFunctionBox.Items.Add(str);
+                    StrongPuffRightFunctionBox.Items.Add(str);
                 }
             }
          
@@ -232,15 +239,22 @@ namespace MouseApp2
                 Button1ComboBox.Items.Add(str);
                 Button2ComboBox.Items.Add(str);
                 Button3ComboBox.Items.Add(str);
-                Button4ComboBox.Items.Add(str);
                 UpComboBox.Items.Add(str);
                 DownComboBox.Items.Add(str);
                 LeftComboBox.Items.Add(str);
                 RightComboBox.Items.Add(str);
                 SipComboBox.Items.Add(str);
-                SpecialSipComboBox.Items.Add(str);
+                StrongSipComboBox.Items.Add(str);
                 PuffComboBox.Items.Add(str);
-                SpecialPuffComboBox.Items.Add(str);
+                StrongPuffComboBox.Items.Add(str);
+                StrongSipUpComboBox.Items.Add(str);
+                StrongSipDownComboBox.Items.Add(str);
+                StrongSipLeftComboBox.Items.Add(str);
+                StrongSipRightComboBox.Items.Add(str);
+                StrongPuffUpComboBox.Items.Add(str);
+                StrongPuffDownComboBox.Items.Add(str);
+                StrongPuffLeftComboBox.Items.Add(str);
+                StrongPuffRightComboBox.Items.Add(str);
 
             }
 
@@ -517,11 +531,6 @@ namespace MouseApp2
             updateVisibility(Button3FunctionBox.Text, Button3ParameterText, Button3NumericParameter, Button3ComboBox, Button3Label, clearButton3);
         }
 
-        private void Button4FunctionBox_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            updateVisibility(Button4FunctionBox.Text, Button4ParameterText, Button4NumericParameter, Button4ComboBox, Button4Label, clearButton4);
-        }
-
         private void UpFunctionMenu_SelectedIndexChanged(object sender, EventArgs e)
         {
             updateVisibility(UpFunctionMenu.Text, UpParameterText, UpNumericParameter, UpComboBox, UpLabel, clearButtonUp);
@@ -547,9 +556,9 @@ namespace MouseApp2
             updateVisibility(SipFunctionMenu.Text, SipParameterText, SipNumericParameter, SipComboBox, SipParameterLabel, clearButtonSip);
         }
 
-        private void SpecialSipFunctionMenu_SelectedIndexChanged(object sender, EventArgs e)
+        private void StrongSipFunctionMenu_SelectedIndexChanged(object sender, EventArgs e)
         {
-            updateVisibility(SpecialSipFunctionMenu.Text, SpecialSipParameterText, SpecialSipNumericParameter, SpecialSipComboBox, SpecialSipParameterLabel, clearButtonSpecialSip);
+            updateVisibility(StrongSipFunctionMenu.Text, StrongSipParameterText, StrongSipNumericParameter, StrongSipComboBox, SpecialSipParameterLabel, clearButtonStrongSip);
         }
 
         private void PuffFunctionMenu_SelectedIndexChanged(object sender, EventArgs e)
@@ -557,10 +566,51 @@ namespace MouseApp2
             updateVisibility(PuffFunctionMenu.Text, PuffParameterText, PuffNumericParameter, PuffComboBox, PuffParameterLabel, clearButtonPuff);
         }
 
-        private void SpecialPuffFunctionMenu_SelectedIndexChanged(object sender, EventArgs e)
+        private void StrongPuffFunctionMenu_SelectedIndexChanged(object sender, EventArgs e)
         {
-            updateVisibility(SpecialPuffFunctionMenu.Text, SpecialPuffParameterText, SpecialPuffNumericParameter, SpecialPuffComboBox, SpecialPuffParameterLabel, clearButtonSpecialPuff);
+            updateVisibility(StrongPuffFunctionMenu.Text, StrongPuffParameterText, StrongPuffNumericParameter, StrongPuffComboBox, SpecialPuffParameterLabel, clearButtonStrongPuff);
         }
+
+        private void StrongSipUpFunctionBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            updateVisibility(StrongSipUpFunctionBox.Text, StrongSipUpParameterText, StrongSipUpNumericParameter, StrongSipUpComboBox, StrongSipUpLabel, clearButtonStrongSipUp);
+        }
+
+        private void StrongSipDownFunctionBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            updateVisibility(StrongSipDownFunctionBox.Text, StrongSipDownParameterText, StrongSipDownNumericParameter, StrongSipDownComboBox, StrongSipDownLabel, clearButtonStrongSipDown);
+        }
+
+        private void StrongSipLeftFunctionBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            updateVisibility(StrongSipLeftFunctionBox.Text, StrongSipLeftParameterText, StrongSipLeftNumericParameter, StrongSipLeftComboBox, StrongSipLeftLabel, clearButtonStrongSipLeft);
+        }
+
+        private void StrongSipRightFunctionBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            updateVisibility(StrongSipRightFunctionBox.Text, StrongSipRightParameterText, StrongSipRightNumericParameter, StrongSipRightComboBox, StrongSipRightLabel, clearButtonStrongSipRight);
+        }
+        
+        private void StrongPuffUpFunctionBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            updateVisibility(StrongPuffUpFunctionBox.Text, StrongPuffUpParameterText, StrongPuffUpNumericParameter, StrongPuffUpComboBox, StrongPuffUpLabel, clearButtonStrongPuffUp);
+        }
+
+        private void StrongPuffDownFunctionBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            updateVisibility(StrongPuffDownFunctionBox.Text, StrongPuffDownParameterText, StrongPuffDownNumericParameter, StrongPuffDownComboBox, StrongPuffDownLabel, clearButtonStrongPuffDown);
+        }
+
+        private void StrongPuffLeftFunctionBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            updateVisibility(StrongPuffLeftFunctionBox.Text, StrongPuffLeftParameterText, StrongPuffLeftNumericParameter, StrongPuffLeftComboBox, StrongPuffLeftLabel, clearButtonStrongPuffLeft);
+        }
+
+        private void StrongPuffRightFunctionBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            updateVisibility(StrongPuffRightFunctionBox.Text, StrongPuffRightParameterText, StrongPuffRightNumericParameter, StrongPuffRightComboBox, StrongPuffRightLabel, clearButtonStrongPuffRight);
+        }
+
 
         // update the keycode parameters:
 
@@ -602,16 +652,6 @@ namespace MouseApp2
         {
             Button3ParameterText.Text = "";
         }
-
-        private void Button4ComboBox_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            updateKeyCodeParameter(Button4ComboBox, Button4ParameterText);
-        }
-        private void clearButton4_Click(object sender, EventArgs e)
-        {
-            Button4ParameterText.Text = "";
-        }
-
 
         private void UpComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -659,13 +699,13 @@ namespace MouseApp2
             SipParameterText.Text = "";
         }
 
-        private void SpecialSipComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        private void StrongSipComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
-            updateKeyCodeParameter(SpecialSipComboBox, SpecialSipParameterText);
+            updateKeyCodeParameter(StrongSipComboBox, StrongSipParameterText);
         }
-        private void clearButtonSpecialSip_Click(object sender, EventArgs e)
+        private void clearButtonStrongSip_Click(object sender, EventArgs e)
         {
-            SpecialSipParameterText.Text = "";
+            StrongSipParameterText.Text = "";
         }
 
         private void PuffComboBox_SelectedIndexChanged(object sender, EventArgs e)
@@ -677,14 +717,87 @@ namespace MouseApp2
             PuffParameterText.Text = "";
         }
 
-        private void SpecialPuffComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        private void StrongPuffComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
-            updateKeyCodeParameter(SpecialPuffComboBox, SpecialPuffParameterText);
+            updateKeyCodeParameter(StrongPuffComboBox, StrongPuffParameterText);
         }
-        private void clearButtonSpecialPuff_Click(object sender, EventArgs e)
+        private void clearButtonStrongPuff_Click(object sender, EventArgs e)
         {
-            SpecialPuffParameterText.Text = "";
+            StrongPuffParameterText.Text = "";
         }
+
+        private void StrongSipUpComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            updateKeyCodeParameter(StrongSipUpComboBox, StrongSipUpParameterText);
+        }
+        private void clearStrongSipUp_Click(object sender, EventArgs e)
+        {
+            StrongSipUpParameterText.Text = "";
+        }
+
+        private void StrongSipDownComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            updateKeyCodeParameter(StrongSipDownComboBox, StrongSipDownParameterText);
+        }
+        private void clearStrongSipDown_Click(object sender, EventArgs e)
+        {
+            StrongSipDownParameterText.Text = "";
+        }
+
+        private void StrongSipLeftComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            updateKeyCodeParameter(StrongSipLeftComboBox, StrongSipLeftParameterText);
+        }
+        private void clearStrongSipLeft_Click(object sender, EventArgs e)
+        {
+            StrongSipLeftParameterText.Text = "";
+        }
+
+        private void StrongSipRightComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            updateKeyCodeParameter(StrongSipRightComboBox, StrongSipRightParameterText);
+        }
+        private void clearStrongSipRight_Click(object sender, EventArgs e)
+        {
+            StrongSipRightParameterText.Text = "";
+        }
+
+        private void StrongPuffUpComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            updateKeyCodeParameter(StrongPuffUpComboBox, StrongPuffUpParameterText);
+        }
+        private void clearStrongPuffUp_Click(object sender, EventArgs e)
+        {
+            StrongPuffUpParameterText.Text = "";
+        }
+
+        private void StrongPuffDownComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            updateKeyCodeParameter(StrongPuffDownComboBox, StrongPuffDownParameterText);
+        }
+        private void clearStrongPuffDown_Click(object sender, EventArgs e)
+        {
+            StrongPuffDownParameterText.Text = "";
+        }
+
+        private void StrongPuffLeftComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            updateKeyCodeParameter(StrongPuffLeftComboBox, StrongPuffLeftParameterText);
+        }
+        private void clearStrongPuffLeft_Click(object sender, EventArgs e)
+        {
+            StrongPuffLeftParameterText.Text = "";
+        }
+
+        private void StrongPuffRightComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            updateKeyCodeParameter(StrongPuffRightComboBox, StrongPuffRightParameterText);
+        }
+        private void clearStrongPuffRight_Click(object sender, EventArgs e)
+        {
+            StrongPuffRightParameterText.Text = "";
+        }
+
 
 
         private void splitXYBox_CheckedChanged(object sender, EventArgs e)
@@ -964,58 +1077,58 @@ namespace MouseApp2
             clickTimer.Start();
         }
 
-        private void specialThresholdBar_Scroll(object sender, EventArgs e)
+        private void strongPuffThresholdBar_Scroll(object sender, EventArgs e)
         {
-            specialThresholdLabel.Text =  specialThresholdBar.Value.ToString();
+            strongPuffThresholdLabel.Text =  strongPuffThresholdBar.Value.ToString();
         }
-        private void decSpecialThreshold_Click(object sender, EventArgs e)
+        private void decStrongPuffThreshold_Click(object sender, EventArgs e)
         {
-            if (specialThresholdBar.Value >= specialThresholdBar.Minimum + SPECIALMODE_CHANGE_STEP)
-                specialThresholdBar.Value -= SPECIALMODE_CHANGE_STEP;
-            specialThresholdLabel.Text = specialThresholdBar.Value.ToString();
+            if (strongPuffThresholdBar.Value >= strongPuffThresholdBar.Minimum + STRONGMODE_CHANGE_STEP)
+                strongPuffThresholdBar.Value -= STRONGMODE_CHANGE_STEP;
+            strongPuffThresholdLabel.Text = strongPuffThresholdBar.Value.ToString();
         }
-        private void decSpecialThreshold_MouseHover(object sender, EventArgs e)
+        private void decStrongPuffThreshold_MouseHover(object sender, EventArgs e)
         {
-            functionPointer = new ClickDelegate(decSpecialThreshold_Click);
+            functionPointer = new ClickDelegate(decStrongPuffThreshold_Click);
             clickTimer.Start();
         }
-        private void incSpecialThreshold_Click(object sender, EventArgs e)
+        private void incStrongPuffThreshold_Click(object sender, EventArgs e)
         {
-            if (specialThresholdBar.Value <= specialThresholdBar.Maximum - SPECIALMODE_CHANGE_STEP)
-                specialThresholdBar.Value += SPECIALMODE_CHANGE_STEP;
-            specialThresholdLabel.Text = specialThresholdBar.Value.ToString();
+            if (strongPuffThresholdBar.Value <= strongPuffThresholdBar.Maximum - STRONGMODE_CHANGE_STEP)
+                strongPuffThresholdBar.Value += STRONGMODE_CHANGE_STEP;
+            strongPuffThresholdLabel.Text = strongPuffThresholdBar.Value.ToString();
         }
         private void incSpecialThreshold_MouseHover(object sender, EventArgs e)
         {
-            functionPointer = new ClickDelegate(incSpecialThreshold_Click);
+            functionPointer = new ClickDelegate(incStrongPuffThreshold_Click);
             clickTimer.Start();
         }
 
-        private void holdThresholdBar_Scroll(object sender, EventArgs e)
+        private void strongSipThresholdBar_Scroll(object sender, EventArgs e)
         {
-            holdThresholdLabel.Text = holdThresholdBar.Value.ToString();
+            stongSipThresholdLabel.Text = strongSipThresholdBar.Value.ToString();
         }
-        private void incHoldThreshold_Click(object sender, EventArgs e)
+        private void incStrongSipThreshold_Click(object sender, EventArgs e)
         {
-            if (holdThresholdBar.Value <= holdThresholdBar.Maximum - SPECIALMODE_CHANGE_STEP)
-                holdThresholdBar.Value += SPECIALMODE_CHANGE_STEP;
-            holdThresholdLabel.Text = holdThresholdBar.Value.ToString();
+            if (strongSipThresholdBar.Value <= strongSipThresholdBar.Maximum - STRONGMODE_CHANGE_STEP)
+                strongSipThresholdBar.Value += STRONGMODE_CHANGE_STEP;
+            stongSipThresholdLabel.Text = strongSipThresholdBar.Value.ToString();
         }
-        private void incHoldThreshold_MouseHover(object sender, EventArgs e)
+        private void incStrongSipThreshold_MouseHover(object sender, EventArgs e)
         {
-            functionPointer = new ClickDelegate(incHoldThreshold_Click);
+            functionPointer = new ClickDelegate(incStrongSipThreshold_Click);
             clickTimer.Start();
         }
-        private void decHoldThreshold_Click(object sender, EventArgs e)
+        private void decStrongSipThreshold_Click(object sender, EventArgs e)
         {
-            if (holdThresholdBar.Value >= holdThresholdBar.Minimum + SPECIALMODE_CHANGE_STEP)
-                holdThresholdBar.Value -= SPECIALMODE_CHANGE_STEP;
-            holdThresholdLabel.Text = holdThresholdBar.Value.ToString();
+            if (strongSipThresholdBar.Value >= strongSipThresholdBar.Minimum + STRONGMODE_CHANGE_STEP)
+                strongSipThresholdBar.Value -= STRONGMODE_CHANGE_STEP;
+            stongSipThresholdLabel.Text = strongSipThresholdBar.Value.ToString();
 
         }
-        private void decHoldThreshold_MouseHover(object sender, EventArgs e)
+        private void decStrongSipThreshold_MouseHover(object sender, EventArgs e)
         {
-            functionPointer = new ClickDelegate(decHoldThreshold_Click);
+            functionPointer = new ClickDelegate(decStrongSipThreshold_Click);
             clickTimer.Start();
         }
 

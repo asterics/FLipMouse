@@ -212,8 +212,13 @@ void loop() {
 
           reportValues();     // send live data to serial 
           
-          if (abs(x)<= settings.dx) x=0;  // apply deadzone values
-          if (abs(y)<= settings.dy) y=0;
+          if (x<-settings.dx) x+=settings.dx;  // apply deadzone values x direction
+          else if (x>settings.dx) x-=settings.dx;
+          else x=0;
+          
+          if (y<-settings.dy) y+=settings.dy;  // apply deadzone values y direction
+          else if (y>settings.dy) y-=settings.dy;
+          else y=0;
 
           handleModeState(x, y, pressure);  // handle all mouse / joystick / button activities
           handleMouseClicks();              // update mouse click activities

@@ -6,20 +6,11 @@ Process: Lasercut
 Software: Corel Draw, Version X5 minimum
 
 This is the current case design for the FLipmouse.
-It contains only 2 FLipmouse cases on a 250mmx250mm acrylic glass.
+It contains one FLipmouse case on a 125mmx250mm acrylic glass.
 
-The lasercut settings are as following:
-
-* Green and black -> vector, cutting
-* Red -> vector + raster, engrave
-* Order of cutting: black,red,green
-
-### lipmouse_case_lasercut_2.cdr
-
-This file is nearly the same as the previous one, only the color black is replaced by the color blue.
-This step was necessary, because Epilog lasercutter software does not allow a sequence change of the black color.
-The lasercut settings are the same as previous, except the order and the colors of cutting (blue, red, green).
-
+Engraving and cutting objects are placed and grouped on different layers, which have to be selected in 2 steps.
+If you have a sophisticated printer (and software) you may use the different color codes and print the case in one step.
+The different layers are split into individual *.svg files and a combined one, for people without CorelDraw.
 
 ### FLipmouse_Lasercut.sgx
 

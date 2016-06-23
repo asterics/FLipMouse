@@ -19,26 +19,108 @@
 #include "FlipWare.h"
 
 #define KEY_ADD     0
-#define KEY_RELEASE 1
+#define KEY_HOLD    1
+#define KEY_RELEASE 2
+
+#define KEYPRESS_BUFFERSIZE 8
 
 int keyAction=KEY_ADD;
 char tmptxt[MAX_KEYSTRING_LEN];   // for parsing keystrings
+int pressed_keys[KEYPRESS_BUFFERSIZE];
+
+uint8_t in_keybuffer(int key);
+void remove_from_keybuffer(int key);
+void add_to_keybuffer(int key);
+void setKeyValues(char* text);
+
+
 
 void updateKey(int key)
 {
-   if (keyAction==KEY_ADD)
-      Keyboard.press(key);     // press keys individually   
-   else
-      Keyboard.release(key);   // release keys individually    
+   switch (keyAction)  {
+     case KEY_ADD:
+        // add_to_keybuffer (key);
+        Keyboard.press(key);     // press keys individually   
+        break;
+     case KEY_RELEASE:
+        // remove_from_keybuffer(key);
+        Keyboard.release(key);   // release keys individually
+        break;
+        
+     case KEY_HOLD:
+        if (in_keybuffer(key))  {
+            remove_from_keybuffer(key);
+            Keyboard.release(key);   // release keys individually
+        } else {
+            add_to_keybuffer (key);
+            Keyboard.press(key);     // press keys individually  
+        }        
+     }  
 }
 
+void pressKeys (char * text)
+{
+   keyAction=KEY_ADD; 
+   setKeyValues(text);
+}
+
+void holdKeys (char * text)
+{
+   keyAction=KEY_HOLD; 
+   setKeyValues(text);
+}
 
 void releaseKeys (char * text)
 {
    keyAction=KEY_RELEASE; 
    setKeyValues(text);
-   keyAction=KEY_ADD; 
 }
+
+void release_all_keys()
+{
+   Keyboard.releaseAll();
+   for (int i=0;i<KEYPRESS_BUFFERSIZE;i++)
+      pressed_keys[i]=0;
+}
+
+
+void add_to_keybuffer(int key)
+{
+    for (int i=0;i<KEYPRESS_BUFFERSIZE;i++)
+    {
+       if (pressed_keys[i]==0)
+           pressed_keys[i]=key;
+       if (pressed_keys[i]==key) i=KEYPRESS_BUFFERSIZE;
+    }
+}
+
+void remove_from_keybuffer(int key)
+{
+    for (int i=0;i<KEYPRESS_BUFFERSIZE;i++)
+    {
+       if (pressed_keys[i]==key)
+       {
+           while (i<KEYPRESS_BUFFERSIZE-1)
+           {
+              pressed_keys[i]=pressed_keys[i+1];
+              i++;
+           }
+           pressed_keys[KEYPRESS_BUFFERSIZE-1]=0;
+           i=KEYPRESS_BUFFERSIZE;   
+       }
+    }
+}
+
+uint8_t in_keybuffer(int key)
+{
+    for (int i=0;i<KEYPRESS_BUFFERSIZE;i++)
+    {
+       if (pressed_keys[i]==key)
+         return(1);
+    }
+    return(0);
+}
+
 
 // press all supported keys 
 // text is a string which contains the key identifiers eg. "KEY_CTRL KEY_C" for Ctrl-C

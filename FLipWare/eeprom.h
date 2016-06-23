@@ -82,31 +82,6 @@ struct storageHeader {
 
 
 
-struct slotGeneralSettings {
-	uint8_t  mouseOn;// mouse or alternative functions 
-	uint8_t  ax;     // acceleration x
-	uint8_t  ay;     // acceleration y
-	int16_t  dx;     // deadzone x
-	int16_t  dy;     // deadzone y
-	uint16_t ts;     // threshold sip
-	uint16_t tp;     // threshold puff 
-	uint8_t  ws;     // wheel stepsize  
-	uint16_t sm;     // threshold special mode 
-	uint16_t hm;     // threshold hold mode 
-	uint8_t  gu;     // gain up 
-	uint8_t  gd;     // gain down 
-	uint8_t  gl;     // gain left 
-	uint8_t  gr;     // gain right 
-	int16_t  cx;     // calib x
-	int16_t  cy;     // calib y
-};
-
-struct slotButtonSettings {
-	uint16_t mode;
-	uint16_t value;
-};
-
-
 /**
  * Load the EEPROM header, which contains all start addresses of the
  * slots and IR commands

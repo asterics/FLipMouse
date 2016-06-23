@@ -16,11 +16,17 @@
                              5: alternative DOWN 
                              6: alternative LEFT 
                              7: alternative RIGHT
-                             8: SIP (pressure lower than sip threshold)
-                             9: StrongSIP
-                             10: PUFF (pressure bigger than puff threshold)
-                             11: StrongPuff
-                             12: StrongPuff + DOWN
+                             8: Sip (pressure lower than sip threshold)
+                             9: Strong Sip
+                             10: Puff (pressure bigger than puff threshold)
+                             11: StrongSip + Up
+                             12: StrongSip + Down
+                             13: StrongSip + Left
+                             14: StrongSip + Right
+                             15: StrongPuff + Up
+                             16: StrongPuff + Down
+                             17: StrongPuff + Left
+                             18: StrongPuff + Right
 
 
    USB HID commands:
@@ -48,6 +54,8 @@
          AT KW <string>    keyboard write string (e.g." AT KW Hello!" writes "Hello!")    
          AT KP <string>    key press: press/hold keys identifier 
                            (e.g. "AT KP KEY_UP" presses the "Cursor-Up" key, "AT KP KEY_CTRL KEY_ALT KEY_DELETE" presses all three keys)
+         AT KH <string>    key hold: sticky hold keys (key will be pressed until next button press or "AT KH" command) 
+                           (e.g. "AT KH KEY_A" presses the "A" key until  "AT KH KEY_A" is called again)
                            for a list of supported key idientifier strings see below ! 
                             
          AT KR <string>    key release: releases all keys identified in the string    
@@ -76,8 +84,8 @@
          AT DY <uint>    deadzone y-axis  (0-1000)
          AT TS <uint>    treshold for sip action  (0-512)
          AT TP <uint>    treshold for puff action (512-1023)
-         AT SM <uint>    treshold for special mode (512-1023)
-         AT HM <uint>    treshold for hold mode (0-512)
+         AT SP <uint>    treshold for strong puff (512-1023)
+         AT SS <uint>    treshold for strong sip (0-512)
          AT GU <uint>    gain for up sensor (0-100)
          AT GD <uint>    gain for down sensor (0-100)
          AT GL <uint>    gain for left sensor (0-100)
@@ -172,6 +180,7 @@ namespace MouseApp2
             allCommands.add(new Command("AT JH", PARTYPE_INT, "Joystick Hat position", COMBOENTRY_YES, GUITYPE_INTFIELD));
             allCommands.add(new Command("AT KW", PARTYPE_STRING, "Write Text", COMBOENTRY_YES, GUITYPE_TEXTFIELD));
             allCommands.add(new Command("AT KP", PARTYPE_STRING, "Press Keys", COMBOENTRY_YES, GUITYPE_KEYSELECT));
+            allCommands.add(new Command("AT KH", PARTYPE_STRING, "Hold Keys", COMBOENTRY_YES, GUITYPE_KEYSELECT));
             allCommands.add(new Command("AT KR", PARTYPE_STRING, "Release Keys", COMBOENTRY_NO, GUITYPE_STANDARD));
             allCommands.add(new Command("AT RA", PARTYPE_NONE, "Release All", COMBOENTRY_NO, GUITYPE_STANDARD));
             allCommands.add(new Command("AT SA", PARTYPE_STRING, "Save Slot", COMBOENTRY_NO, GUITYPE_STANDARD));
@@ -192,8 +201,8 @@ namespace MouseApp2
             allCommands.add(new Command("AT DY", PARTYPE_UINT, "Deadzone Y", COMBOENTRY_NO, GUITYPE_SLIDER));
             allCommands.add(new Command("AT TS", PARTYPE_UINT, "Theshold Sip", COMBOENTRY_NO, GUITYPE_SLIDER));
             allCommands.add(new Command("AT TP", PARTYPE_UINT, "Theshold Puff", COMBOENTRY_NO, GUITYPE_SLIDER));
-            allCommands.add(new Command("AT SM", PARTYPE_UINT, "Threshold Special Mode", COMBOENTRY_NO, GUITYPE_SLIDER));
-            allCommands.add(new Command("AT HM", PARTYPE_UINT, "Threshold Hold Mode", COMBOENTRY_NO, GUITYPE_SLIDER));
+            allCommands.add(new Command("AT SP", PARTYPE_UINT, "Threshold StrongPuff", COMBOENTRY_NO, GUITYPE_SLIDER));
+            allCommands.add(new Command("AT SS", PARTYPE_UINT, "Threshold StrongSip", COMBOENTRY_NO, GUITYPE_SLIDER));
             allCommands.add(new Command("AT GU", PARTYPE_UINT, "Gain for Up Sensor", COMBOENTRY_NO, GUITYPE_SLIDER));
             allCommands.add(new Command("AT GD", PARTYPE_UINT, "Gain for Down Sensor", COMBOENTRY_NO, GUITYPE_SLIDER));
             allCommands.add(new Command("AT GL", PARTYPE_UINT, "Gain for Left Sensor", COMBOENTRY_NO, GUITYPE_SLIDER));
@@ -216,8 +225,8 @@ namespace MouseApp2
             commandGuiLinks.Add(new CommandGuiLink("AT DY", deadzoneYBar, deadzoneYLabel, "20"));
             commandGuiLinks.Add(new CommandGuiLink("AT TS", sipThresholdBar, sipThresholdLabel, "500"));
             commandGuiLinks.Add(new CommandGuiLink("AT TP", puffThresholdBar, puffThresholdLabel, "525"));
-            commandGuiLinks.Add(new CommandGuiLink("AT SM", specialThresholdBar, specialThresholdLabel, "700"));
-            commandGuiLinks.Add(new CommandGuiLink("AT HM", holdThresholdBar, holdThresholdLabel , "300"));
+            commandGuiLinks.Add(new CommandGuiLink("AT SP", strongPuffThresholdBar, strongPuffThresholdLabel, "700"));
+            commandGuiLinks.Add(new CommandGuiLink("AT SS", strongSipThresholdBar, stongSipThresholdLabel , "300"));
             commandGuiLinks.Add(new CommandGuiLink("AT GU", upGainBar, upGainLabel, "50"));
             commandGuiLinks.Add(new CommandGuiLink("AT GD", downGainBar, downGainLabel, "50"));
             commandGuiLinks.Add(new CommandGuiLink("AT GL", leftGainBar, leftGainLabel, "50"));
@@ -231,10 +240,17 @@ namespace MouseApp2
             commandGuiLinks.Add(new CommandGuiLink("AT BM 06", LeftFunctionMenu, LeftParameterText, LeftNumericParameter, "AT KP KEY_LEFT "));
             commandGuiLinks.Add(new CommandGuiLink("AT BM 07", RightFunctionMenu, RightParameterText, RightNumericParameter, "AT KP KEY_RIGHT "));
             commandGuiLinks.Add(new CommandGuiLink("AT BM 08", SipFunctionMenu, SipParameterText, SipNumericParameter, "AT PL"));
-            commandGuiLinks.Add(new CommandGuiLink("AT BM 09", SpecialSipFunctionMenu, SpecialSipParameterText, SpecialSipNumericParameter, "AT NC"));
+            commandGuiLinks.Add(new CommandGuiLink("AT BM 09", StrongSipFunctionMenu, StrongSipParameterText, StrongSipNumericParameter, "AT NC"));
             commandGuiLinks.Add(new CommandGuiLink("AT BM 10", PuffFunctionMenu, PuffParameterText, PuffNumericParameter, "AT CR"));
-            commandGuiLinks.Add(new CommandGuiLink("AT BM 11", SpecialPuffFunctionMenu, SpecialPuffParameterText, SpecialPuffNumericParameter, "AT CA"));
-            commandGuiLinks.Add(new CommandGuiLink("AT BM 12", Button4FunctionBox, Button4ParameterText, Button4NumericParameter, "AT NC"));
+            commandGuiLinks.Add(new CommandGuiLink("AT BM 11", StrongPuffFunctionMenu, StrongPuffParameterText, StrongPuffNumericParameter, "AT CA"));
+            commandGuiLinks.Add(new CommandGuiLink("AT BM 12", StrongSipUpFunctionBox, StrongSipUpParameterText, StrongSipUpNumericParameter, "AT NC"));
+            commandGuiLinks.Add(new CommandGuiLink("AT BM 13", StrongSipDownFunctionBox, StrongSipDownParameterText, StrongSipDownNumericParameter, "AT NC"));
+            commandGuiLinks.Add(new CommandGuiLink("AT BM 14", StrongSipLeftFunctionBox, StrongSipLeftParameterText, StrongSipLeftNumericParameter, "AT NC"));
+            commandGuiLinks.Add(new CommandGuiLink("AT BM 15", StrongSipRightFunctionBox, StrongSipRightParameterText, StrongSipRightNumericParameter, "AT NC"));
+            commandGuiLinks.Add(new CommandGuiLink("AT BM 16", StrongPuffUpFunctionBox, StrongPuffUpParameterText, StrongPuffUpNumericParameter, "AT NC"));
+            commandGuiLinks.Add(new CommandGuiLink("AT BM 17", StrongPuffDownFunctionBox, StrongPuffDownParameterText, StrongPuffDownNumericParameter, "AT NC"));
+            commandGuiLinks.Add(new CommandGuiLink("AT BM 18", StrongPuffLeftFunctionBox, StrongPuffLeftParameterText, StrongPuffLeftNumericParameter, "AT NC"));
+            commandGuiLinks.Add(new CommandGuiLink("AT BM 19", StrongPuffRightFunctionBox, StrongPuffRightParameterText, StrongPuffRightNumericParameter, "AT NC"));
         }
 
         String[] keyOptions = {    "Clear Keycodes!", "KEY_A","KEY_B","KEY_C","KEY_D","KEY_E","KEY_F","KEY_G","KEY_H","KEY_I","KEY_J","KEY_K","KEY_L",

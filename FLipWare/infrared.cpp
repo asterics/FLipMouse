@@ -60,8 +60,6 @@ void record_IR_command(char * name)
 	//retry loop, it is ended at the last statement
 	for(uint8_t retry=IR_MAX_RETRIES; retry>=0; retry--)
 	{
-
-    Serial.println(F("next retry"));
 		toggle = 1;
 		//activate wait flag
 		wait = 1;
@@ -122,10 +120,8 @@ void record_IR_command(char * name)
 				}
 			}	
 
-			//"compress" the timings by dividing, check if it is in the uint8_t range
-			//if((now - prev) > (37*255)) Serial.println("IR: Error, compression out of range");
 			if (i<IR_EDGE_REC_MAX) 
-			   timings[i] = (uint16_t)(now - prev);   //  / 37;
+			   timings[i] = (uint16_t)(now - prev); 
 			//new edge detection
 			toggle = !toggle;
 		}
@@ -219,8 +215,7 @@ void play_IR_command(char * name)
 	//iterate all edges
 	for(i=0; i<edges; i++)
 	{
-		//"decompress" the timings
-		state_time = timings[i]; // * 37;
+		state_time = timings[i];
 		//save the current micros time
 		edge_prev = micros();
 		//toggle the output state

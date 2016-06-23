@@ -38,7 +38,7 @@ namespace MouseApp2
                     g.FillRectangle(brush2, 0, 0, puffLevelIndicatorPanel.Width - 1, puffLevelIndicatorPanel.Height - 1);
                 
                 g = specialLevelIndicatorPanel.CreateGraphics();
-                if (Convert.ToInt32(values[0]) > specialThresholdBar.Value)
+                if (Convert.ToInt32(values[0]) > strongPuffThresholdBar.Value)
                     g.FillRectangle(brush, 0, 0, specialLevelIndicatorPanel.Width - 1, specialLevelIndicatorPanel.Height - 1);
                 else
                     g.FillRectangle(brush2, 0, 0, specialLevelIndicatorPanel.Width - 1, specialLevelIndicatorPanel.Height - 1);
@@ -50,7 +50,7 @@ namespace MouseApp2
                     g.FillRectangle(brush2, 0, 0, sipLevelIndicatorPanel.Width - 1, sipLevelIndicatorPanel.Height - 1);
 
                 g = holdLevelIndicatorPanel.CreateGraphics(); 
-                if (Convert.ToInt32(values[0]) < holdThresholdBar.Value)
+                if (Convert.ToInt32(values[0]) < strongSipThresholdBar.Value)
                     g.FillRectangle(brush, 0, 0, holdLevelIndicatorPanel.Width - 1, holdLevelIndicatorPanel.Height - 1);
                 else
                     g.FillRectangle(brush2, 0, 0, holdLevelIndicatorPanel.Width - 1, holdLevelIndicatorPanel.Height - 1);

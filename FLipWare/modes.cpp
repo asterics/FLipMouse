@@ -31,7 +31,7 @@
 #define MODESTATE_STRONGSIP_MODE_ACTIVE    11
 #define MODESTATE_RELEASE                  12
 
-#define SMOOTHING_VALUE 50.0f
+#define SMOOTHING_VALUE 15.0f
 
 uint8_t modeState = MODESTATE_IDLE;
 

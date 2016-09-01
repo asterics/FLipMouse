@@ -162,6 +162,7 @@ void handleModeState(int x, int y, int pressure)
              {
                 if (mouseMoveCount++%4==0)
                    Mouse.move(moveX, moveY);
+                   if(isBluetoothAvailable()) mouseBT(moveX,moveY,0);
              }
           
              if (settings.stickMode == STICKMODE_MOUSE) {   // handle mouse mode
@@ -180,6 +181,7 @@ void handleModeState(int x, int y, int pressure)
                 int yMove = (int)accumYpos;
                 
                 Mouse.move(xMove, yMove);
+                if(isBluetoothAvailable()) mouseBT(xMove,yMove,0);
                 accumXpos -= xMove;
                 accumYpos -= yMove;
             }

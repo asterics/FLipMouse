@@ -181,7 +181,7 @@ void handleModeState(int x, int y, int pressure)
                 int yMove = (int)accumYpos;
                 
                 Mouse.move(xMove, yMove);
-                if(isBluetoothAvailable()) mouseBT(xMove,yMove,0);
+                if(isBluetoothAvailable() && (xMove != 0 || yMove != 0)) mouseBT(xMove,yMove,0);
                 accumXpos -= xMove;
                 accumYpos -= yMove;
             }

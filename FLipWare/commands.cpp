@@ -166,12 +166,14 @@ void performCommand (uint8_t cmd, int16_t par1, char * keystring, int8_t periodi
         case CMD_WU:
                if (DebugOutput==DEBUG_FULLOUTPUT)  
                  Serial.println("wheel up");
-                 Mouse.scroll(-settings.ws); 
+                 Mouse.scroll(-settings.ws);
+                 if(isBluetoothAvailable()) mouseBT(0,0,-settings.ws);
             break;
         case CMD_WD:
                if (DebugOutput==DEBUG_FULLOUTPUT)  
                  Serial.println("wheel down");
                  Mouse.scroll(settings.ws); 
+                 if(isBluetoothAvailable()) mouseBT(0,0,settings.ws);
             break;
         case CMD_WS:
                if (DebugOutput==DEBUG_FULLOUTPUT)  
@@ -182,12 +184,14 @@ void performCommand (uint8_t cmd, int16_t par1, char * keystring, int8_t periodi
                if (DebugOutput==DEBUG_FULLOUTPUT) 
                {  Serial.print("mouse move x "); Serial.println(par1); }
                Mouse.move(par1, 0);
+               if(isBluetoothAvailable()) mouseBT(par1,0,0);
                if (periodicMouseMovement) moveX=par1;
             break;
         case CMD_MY:
                if (DebugOutput==DEBUG_FULLOUTPUT)  
                {  Serial.print("mouse move y "); Serial.println(par1); }
                Mouse.move(0, par1);
+               if(isBluetoothAvailable())  mouseBT(0,par1,0);
                if (periodicMouseMovement) moveY=par1;
             break;
         case CMD_JX:

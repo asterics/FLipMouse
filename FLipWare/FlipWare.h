@@ -37,6 +37,7 @@
 #include "eeprom.h"
 #include "buttons.h"
 #include "modes.h"
+#include "bluetooth.h"
 
 #define VERSION_STRING "Flipmouse v2.2"   
 

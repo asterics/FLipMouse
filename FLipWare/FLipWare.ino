@@ -63,13 +63,14 @@
   #define RIGHT_SENSOR_PIN    A8
   //Piezo Pin (for tone generation)
   #define TONE_PIN  9
+  //if a Bluetooth addon is installed, there is no space on the main PCB...
+  #define TONE_PIN_EXTERNAL 13
 
   int8_t  input_map[NUMBER_OF_PHYSICAL_BUTTONS]={0,2,1};  	//  maps physical button pins to button index 0,1,2
   uint8_t IR_SENSOR_PIN = 4;								//  input pin of the TSOP IR receiver
   int8_t  led_map[NUMBER_OF_LEDS]={5,16,17};              	//  maps leds pins   
   uint8_t LED_PIN = 13;                                   	//  Led output pin, ATTENTION: if SPI (AUX header) is used, this pin is also SCK!!!
   uint8_t IR_LED_PIN = 6;                                 	//  IR-Led output pin
-
 #endif
 
 struct slotGeneralSettings settings = {      // default settings valus, for type definition see fabi.h
@@ -88,7 +89,12 @@ uint8_t reportRawValues = 0;
 uint8_t actSlot=0;
 
 uint16_t calib_now = 1;                       // calibrate zeropoint right at startup !
-uint8_t DebugOutput = DEBUG_NOOUTPUT;         // for chatty serial interface use: DEBUG_FULLOUTPUT (attention: not GUI compatible ..)
+											
+//for chatty serial interface use: DEBUG_FULLOUTPUT (attention: not GUI compatible...)
+//if set to DEBUG_FULLOUTPUT please activate the following preprocessor warning
+uint8_t DebugOutput = DEBUG_NOOUTPUT;       
+//uint8_t DebugOutput = DEBUG_FULLOUTPUT;       
+//#warning DEACTIVATE DEBUG_FULLOUTPUT AGAIN!!!
 int waitTime=DEFAULT_WAIT_TIME;
 
 
@@ -131,7 +137,9 @@ extern uint8_t StandAloneMode;
 
 void setup() {
    Serial.begin(115200);
-    //while (!Serial) ;
+   
+   //initialise BT module, if available
+   initBluetooth();
    
    if (DebugOutput==DEBUG_FULLOUTPUT)  
      Serial.println("FLipMouse started, Flexible Assistive Button Interface ready !");
@@ -226,6 +234,7 @@ void loop() {
           // handle Keyboard output (single key press/release is done seperately via setKeyValues() ) 
           if (writeKeystring) {
             Keyboard.print(writeKeystring);
+            keyboardBTPrint(writeKeystring);
             writeKeystring=0;
           }    
            
@@ -257,19 +266,37 @@ void handleMouseClicks()
           else if (doubleClickRunning==0)    leftMouseButton=0; 
       }
  
-      // if any changes were made, update the Mouse buttons
-      if(leftMouseButton!=old_leftMouseButton) {
-         if (leftMouseButton) Mouse.press(MOUSE_LEFT); else Mouse.release(MOUSE_LEFT);
-         old_leftMouseButton=leftMouseButton;
-      }
-      if  (middleMouseButton!=old_middleMouseButton) {
-         if (middleMouseButton) Mouse.press(MOUSE_MIDDLE); else Mouse.release(MOUSE_MIDDLE);
-         old_middleMouseButton=middleMouseButton;
-      }
-      if  (rightMouseButton!=old_rightMouseButton)  {
-         if (rightMouseButton) Mouse.press(MOUSE_RIGHT); else Mouse.release(MOUSE_RIGHT);
-         old_rightMouseButton=rightMouseButton;
-     }
+	// if any changes were made, update the Mouse buttons
+	if(leftMouseButton!=old_leftMouseButton) {
+		if (leftMouseButton) { 
+			Mouse.press(MOUSE_LEFT); 
+			mouseBTPress(1<<0);
+		} else { 
+			Mouse.release(MOUSE_LEFT); 
+			mouseBTRelease(1<<0);
+		}
+		old_leftMouseButton=leftMouseButton;
+	}
+	if(middleMouseButton!=old_middleMouseButton) {
+		if (middleMouseButton) {
+			Mouse.press(MOUSE_MIDDLE); 
+			mouseBTPress(1<<2);
+		} else { 
+			Mouse.release(MOUSE_MIDDLE); 
+			mouseBTRelease(1<<2);
+		}
+		old_middleMouseButton=middleMouseButton;
+	}
+	if(rightMouseButton!=old_rightMouseButton) {
+		if (rightMouseButton) { 
+			Mouse.press(MOUSE_RIGHT); 
+			mouseBTPress(1<<1);
+		} else { 
+			Mouse.release(MOUSE_RIGHT); 
+			mouseBTRelease(1<<1);
+		}
+		old_rightMouseButton=rightMouseButton;
+	}
 }
 
 
@@ -344,28 +371,31 @@ void UpdateLeds()
 
 void makeTone(uint8_t kind, uint8_t param)
 {
-   switch (kind) {
+	uint8_t tonePin = TONE_PIN;
+	if(isBluetoothAvailable()) tonePin = TONE_PIN_EXTERNAL;
+		
+    switch (kind) {
 		case TONE_ENTER_STRONGPUFF: 
-			tone(TONE_PIN, 4000, 200);
-             break;
+			tone(tonePin, 4000, 200);
+            break;
 		case TONE_EXIT_STRONGPUFF: 
-			tone(TONE_PIN, 4000, 100);
+			tone(tonePin, 4000, 100);
             break;
 		case TONE_CALIB: 
-			tone(TONE_PIN, 100, 600);
+			tone(tonePin, 100, 600);
             break;
 		case TONE_CHANGESLOT:
-            tone(TONE_PIN, 2000+200*param, 200);
+            tone(tonePin, 2000+200*param, 200);
             break;
 		case TONE_STRONGSIP:
 			switch (param) {
-				case 0: tone(TONE_PIN, 3000, 500); break;
-				case 1: tone(TONE_PIN, 3500, 100); break;
-				case 2: tone(TONE_PIN, 3000, 100); break;
+				case 0: tone(tonePin, 3000, 500); break;
+				case 1: tone(tonePin, 3500, 100); break;
+				case 2: tone(tonePin, 3000, 100); break;
 			}
 			break;
 		case TONE_IR:
-			tone(TONE_PIN, 500, 600);
+			tone(tonePin, 500, 600);
 			break;
      }
 }

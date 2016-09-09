@@ -40,20 +40,24 @@ void updateKey(int key)
    switch (keyAction)  {
      case KEY_ADD:
         // add_to_keybuffer (key);
-        Keyboard.press(key);     // press keys individually   
+        Keyboard.press(key);     // press keys individually
+        keyboardBTPress(key);   
         break;
      case KEY_RELEASE:
         // remove_from_keybuffer(key);
         Keyboard.release(key);   // release keys individually
+        keyboardBTRelease(key);
         break;
         
      case KEY_HOLD:
         if (in_keybuffer(key))  {
             remove_from_keybuffer(key);
             Keyboard.release(key);   // release keys individually
+            keyboardBTRelease(key);
         } else {
             add_to_keybuffer (key);
             Keyboard.press(key);     // press keys individually  
+            keyboardBTPress(key);
         }        
      }  
 }
@@ -79,6 +83,7 @@ void releaseKeys (char * text)
 void release_all_keys()
 {
    Keyboard.releaseAll();
+   keyboardBTReleaseAll();
    for (int i=0;i<KEYPRESS_BUFFERSIZE;i++)
       pressed_keys[i]=0;
 }

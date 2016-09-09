@@ -19,7 +19,7 @@
 
 uint8_t bt_available = 0;
 uint8_t activeKeyCodes[6];
-uint8_t activeModifierKeys;
+uint8_t activeModifierKeys = 0;
 uint8_t activeMouseButtons = 0;
 
 /*
@@ -32,6 +32,7 @@ uint8_t activeMouseButtons = 0;
  * 
  * this method sends a mouse command via the Bluetooth module.
  * Mouse movements, buttons and scroll wheel (possibly no functioning, not an official EZ-KEY feature)
+ * Update: mouse wheel does not work.
  * The limit for the movement is +127/-127
  */
 void mouseBT(uint8_t x, uint8_t y, uint8_t scroll)
@@ -72,8 +73,8 @@ void mouseBT(uint8_t x, uint8_t y, uint8_t scroll)
 		Serial_AUX.write(x);
 		Serial_AUX.write(y);
 		
-		//maybe the wheel? Not official by Adafruit...
-		Serial_AUX.write(scroll); 
+		//maybe the wheel? Not official by Adafruit... -> not working
+		Serial_AUX.write((uint8_t)0x00); 
 		//some additional bytes...
 		Serial_AUX.write((uint8_t)0x00);
 		Serial_AUX.write((uint8_t)0x00);
@@ -107,6 +108,106 @@ void mouseBTRelease(uint8_t mousebutton)
 	mouseBT(0,0,0);
 }
 
+
+/*
+ * 
+ * name: mapArduinoToBTKey
+ * @param int key key number from the arduino keyboard lib
+ * @param uint8_t* isModifier reference to a variable, which will be changed if the key is a modifier
+ * @return key number for the EZ Key Bluetooth HID
+ * 
+ * Returns 0 if key is not a valid key, the key code otherwise.
+ * If the key is a modifier, the isModifier reference will be set to 1
+ */
+uint8_t mapArduinoToBTKey(int key, uint8_t *isModifier)
+{
+	switch(key)
+	{
+		case KEY_A: return 0x04;
+		case KEY_B: return 0x05;
+		case KEY_C: return 0x06;
+		case KEY_D: return 0x07;
+		case KEY_E: return 0x08;
+		case KEY_F: return 0x09;
+		case KEY_G: return 0x0A;
+		case KEY_H: return 0x0B;
+		case KEY_I: return 0x0C;
+		case KEY_J: return 0x0D;
+		case KEY_K: return 0x0E;
+		case KEY_L: return 0x0F;
+		case KEY_M: return 0x10;
+		case KEY_N: return 0x11;
+		case KEY_O: return 0x12;
+		case KEY_P: return 0x13;
+		case KEY_Q: return 0x14;
+		case KEY_R: return 0x15;
+		case KEY_S: return 0x16;
+		case KEY_T: return 0x17;
+		case KEY_U: return 0x18;
+		case KEY_V: return 0x19;
+		case KEY_W: return 0x1A;
+		case KEY_X: return 0x1B;
+		case KEY_Y: return 0x1C;
+		case KEY_Z: return 0x1D;
+		
+		case KEY_1: return 0x1E;
+		case KEY_2: return 0x1F;
+		case KEY_3: return 0x20;
+		case KEY_4: return 0x21;
+		case KEY_5: return 0x22;
+		case KEY_6: return 0x23;
+		case KEY_7: return 0x24;
+		case KEY_8: return 0x25;
+		case KEY_9: return 0x26;
+		case KEY_0: return 0x27;
+		
+		case KEY_F1: return 0x3A;
+		case KEY_F2: return 0x3B;
+		case KEY_F3: return 0x3C;
+		case KEY_F4: return 0x3D;
+		case KEY_F5: return 0x3E;
+		case KEY_F6: return 0x3F;
+		case KEY_F7: return 0x40;
+		case KEY_F8: return 0x41;
+		case KEY_F9: return 0x42;
+		case KEY_F10: return 0x43;
+		case KEY_F11: return 0x44;
+		case KEY_F12: return 0x45;
+		
+		case KEY_INSERT: return 0x49;
+		case KEY_HOME: return 0x4A;
+		case KEY_PAGE_UP: return 0x4B;
+		case KEY_DELETE: return 0x4C;
+		case KEY_END: return 0x4D;
+		case KEY_PAGE_DOWN: return 0x4E;
+		
+		case KEY_SCROLL_LOCK: return 0x47;
+		case KEY_PAUSE: return 0x48;
+		case KEY_NUM_LOCK: return 0x53;
+		case KEY_PRINTSCREEN: return 0x46;
+		
+		case KEY_LEFT_SHIFT: *isModifier = 1; return (1<<1);
+		case KEY_LEFT_CTRL: *isModifier = 1; return (1<<0);
+		case KEY_LEFT_ALT: *isModifier = 1; return (1<<2);
+		case KEY_RIGHT_ALT: *isModifier = 1; return (1<<6);
+		case KEY_LEFT_GUI: *isModifier = 1; return (1<<3);
+		case KEY_RIGHT_GUI: *isModifier = 1; return (1<<7);
+		case KEY_UP: return 0x52;
+		case KEY_DOWN: return 0x51;
+		case KEY_LEFT: return 0x50;
+		case KEY_RIGHT: return 0x4F;
+		
+		case KEY_ENTER: return 0x28;
+		case KEY_SPACE: return 0x2C;
+		case KEY_ESC: return 0x29;
+		case KEY_TAB: return 0x2B;
+		case KEY_BACKSPACE: return 0x2A;
+		case KEY_CAPS_LOCK: return 0x39;
+		
+		default: return 0x00;
+	}
+}
+
 /*
  * 
  * name: sendBTKeyboardReport
@@ -118,10 +219,22 @@ void mouseBTRelease(uint8_t mousebutton)
  */
 void sendBTKeyboardReport() 
 {
-	return; //TODO: activate if keycodes work...
 	//test if the external serial interface is available
 	if(bt_available && Serial_AUX.available() > 0)
 	{
+		if(DebugOutput == DEBUG_FULLOUTPUT)
+		{
+			Serial.println("BT keyboard actions:");
+			Serial.print("modifier: 0x");
+			Serial.println(activeModifierKeys,HEX);
+			Serial.print("activeKeyCodes: ");
+			Serial.println(activeKeyCodes[0],HEX);
+			Serial.println(activeKeyCodes[1],HEX);
+			Serial.println(activeKeyCodes[2],HEX);
+			Serial.println(activeKeyCodes[3],HEX);
+			Serial.println(activeKeyCodes[4],HEX);
+			Serial.println(activeKeyCodes[5],HEX);
+		}
 		Serial_AUX.write(0xFD);       			//raw HID
 		Serial_AUX.write(activeModifierKeys);  	//modifier keys
 		Serial_AUX.write(0x00); 				
@@ -146,12 +259,9 @@ void sendBTKeyboardReport()
  */
 void keyboardBTPress(int key) 
 {
-	//map key, check if it is a modifier key
-	uint8_t btKeyCode = key; //todo...
-	uint8_t isModifier = 0;
+	uint8_t isModifier = 0; //will be set by mapArduinotoBTKey()
+	uint8_t btKeyCode = mapArduinoToBTKey(key,&isModifier); //map the arduino to the BT key
 	uint8_t currentIndex = 0;
-	
-	//todo: map key to btKeyCode and set is modifier
 	
 	//check if it is a modifier key
 	if(isModifier)
@@ -181,11 +291,28 @@ void keyboardBTPress(int key)
  */
 void keyboardBTRelease(int key) 
 {
-	//delete from buffer
-	//press remaining keys, determine if modifier or normal key
+	uint8_t isModifier = 0; //will be set by mapArduinotoBTKey()
+	uint8_t btKeyCode = mapArduinoToBTKey(key,&isModifier); //map the arduino to the BT key
+	uint8_t currentIndex = 0;
 	
-	//TODO!!!
+	//check if it is a modifier key
+	if(isModifier)
+	{
+		//if it is, change bit in modifier key mask
+		activeModifierKeys &= ~btKeyCode;
+	} else {
+		//if not, check the active key codes for the pressed key
+		while(activeKeyCodes[currentIndex] != btKeyCode && currentIndex < 6) currentIndex++;
+		//delete the key code from the array
+		activeKeyCodes[currentIndex] = 0x00;
+		//resave all keys after the deleted one to close a fragmented array
+		for(int i=currentIndex; i<5;i++)
+		{
+			activeKeyCodes[i] = activeKeyCodes[i+1];
+		}
+	}
 	
+	//send the new keyboard report
 	sendBTKeyboardReport();
 }
 

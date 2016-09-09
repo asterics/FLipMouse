@@ -93,6 +93,7 @@ uint16_t calib_now = 1;                       // calibrate zeropoint right at st
 //for chatty serial interface use: DEBUG_FULLOUTPUT (attention: not GUI compatible...)
 //if set to DEBUG_FULLOUTPUT please activate the following preprocessor warning
 uint8_t DebugOutput = DEBUG_NOOUTPUT;       
+//uint8_t DebugOutput = DEBUG_FULLOUTPUT;       
 //#warning DEACTIVATE DEBUG_FULLOUTPUT AGAIN!!!
 int waitTime=DEFAULT_WAIT_TIME;
 
@@ -247,7 +248,6 @@ void loop() {
 
 void handleMouseClicks()
 {
-	uint8_t btMouseButtons = 0;
       // handle running clicks or double clicks
       if (leftClickRunning)
           if (--leftClickRunning==0)  leftMouseButton=0; 

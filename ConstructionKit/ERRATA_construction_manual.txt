@@ -1,0 +1,56 @@
+ 
+This document contains all additional information to the construction manual, which has a few minor errors.
+
+Please read this file carefully!
+Probably it is a good idea to write down all information from here to a printed version of the construction manual.
+
+Page 3:
+
+-) The rubber pad plate has a smaller hole than it is drawn on the picture
+-) The 22R resistor is a now 12R resistor 
+
+Page 7:
+
+-) ATTENTION: please take care of the orientation of the sensor PCB! The correct orientation is shown on the picture (5-pin holes on the PCB vs. bulges on the acrylic part)
+
+Page 11/12:
+
+-) The soldering of the TeensyLC works better if it is already placed on the PCB. So don't remove the Teensy while soldering
+
+Page 13: 
+
+-) Bend the pins of the pressure sensor as much as it is necessary to have a narrow space between PCB and sensor
+
+Page 21:
+
+-) Again: it is a 12R resistor now
+-) Please bend the resistor's pins as tight as possible, otherwise the buzzer won't fit well
+
+Page 22:
+
+-) Bend the LEDs BEFORE soldering. The adjustment will be easier then (switch the last two steps)
+
+Page 23:
+
+-) Bend the LED BEFORE soldering (switch the last two steps)
+
+Page 25:
+
+-) ATTENTION: please take care of the sensor and DO NOT remove anything else than the transparent foil on the bottom, otherwise the sensor is broken.
+
+Page 26:
+
+-) Please take care of the sensor, especially if you solder with a high temperature. Maybe you cool down the plastics with tweezers
+
+Page 28:
+
+-) Glue the screw nut, this is an important step.
+-) Turn the M4 screws until 1-2mm of the tip is visible on the other side ("not too much" is not precise enough)
+
+Page 29:
+
+-) ATTENTION: the angled pin header is used to adjust the PCB position. So don't solder the connector if you are not 100% if it fits. It's better
+to solder only 1pin out of 5, assemble the FLipMouse and if it fits, solder the remaining ones. Also take care of the positioning: the longer pins are soldered to the main PCB.
+
+
+   

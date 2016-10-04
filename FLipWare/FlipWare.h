@@ -39,8 +39,9 @@
 #include "modes.h"
 #include "bluetooth.h"
 
-#define VERSION_STRING "Flipmouse v2.2"   
+#define VERSION_STRING "Flipmouse v2.3"   
 
+//	V2.3: added support for internal Bluetooth Addon
 //  V2.2: added new EEPROM handling and IR-Command support
 //  V2.0: extended AT command set, TeensyLC support, external EEPROM
 //  V1.0: extended AT command set, GUI compatibility

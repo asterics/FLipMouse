@@ -146,13 +146,13 @@ void setup() {
 
    #ifdef TEENSY_LC
      Wire.begin();
+     pinMode(IR_SENSOR_PIN,INPUT);
+     analogWriteFrequency(IR_LED_PIN, 38000);
    #endif
    
-   pinMode(IR_SENSOR_PIN,INPUT);
 
    pinMode(LED_PIN,OUTPUT);
    digitalWrite(LED_PIN,LOW);
-   analogWriteFrequency(IR_LED_PIN, 38000);
 
    pinMode(IR_LED_PIN,OUTPUT);
    digitalWrite(LED_PIN,LOW);

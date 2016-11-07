@@ -414,6 +414,7 @@ void performCommand (uint8_t cmd, int16_t par1, char * keystring, int8_t periodi
                  Serial.println("set right gain");
                settings.gr=par1;
             break;
+   #ifdef TEENSY_LC
         case CMD_IR:
     				if (DebugOutput==DEBUG_FULLOUTPUT) Serial.println("record IR command");
     				record_IR_command(keystring);
@@ -434,6 +435,7 @@ void performCommand (uint8_t cmd, int16_t par1, char * keystring, int8_t periodi
             if (DebugOutput==DEBUG_FULLOUTPUT) Serial.println("set IR timeout");
             set_IR_timeout(par1);
             break;
+  #endif
         case CMD_E2:
       			DebugOutput=DEBUG_FULLOUTPUT; 
 	      		eepromDebugLevel = EEPROM_FULL_DEBUG;

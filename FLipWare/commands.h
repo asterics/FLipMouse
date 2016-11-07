@@ -98,6 +98,10 @@
           AT AY <uint>    acceleration y-axis  (0-100)
           AT DX <uint>    deadzone x-axis  (0-1000)
           AT DY <uint>    deadzone y-axis  (0-1000)
+          AT MS <uint>    maximum speed  (0-100)
+          AT AC <uint>    acceleration time (0-100)
+          AT MA <string>  execute a command macro (containing multiple AT commands)
+
           AT TS <uint>    treshold for sip action  (0-512)
           AT TP <uint>    treshold for puff action (512-1023)
           AT SP <uint>    treshold for strong puff (512-1023)
@@ -150,7 +154,7 @@ enum atCommands {
   CMD_LI, CMD_NE, CMD_DE, CMD_NC, CMD_E1, CMD_E0, CMD_MM, CMD_SW, CMD_SR, CMD_ER, CMD_CA, CMD_AX,
   CMD_AY, CMD_DX, CMD_DY, CMD_TS, CMD_TP, CMD_SP, CMD_SS, CMD_GU, CMD_GD, CMD_GL, CMD_GR, CMD_IR,
   CMD_IP, CMD_IC, CMD_IL, CMD_E2, CMD_JX, CMD_JY, CMD_JZ, CMD_JT, CMD_JS, CMD_JP, CMD_JR, CMD_JH,
-  CMD_IT, CMD_KH,
+  CMD_IT, CMD_KH, CMD_MS, CMD_AC, CMD_MA, 
   NUM_COMMANDS
 };
 

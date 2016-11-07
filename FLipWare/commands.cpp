@@ -36,7 +36,8 @@ const struct atCommandType atCommands[] PROGMEM = {
     {"IR"  , PARTYPE_STRING}, {"IP"  , PARTYPE_STRING},{"IC"  , PARTYPE_STRING},{"IL"  , PARTYPE_NONE },
     {"E2"  , PARTYPE_NONE },  {"JX"  , PARTYPE_INT  }, {"JY"  , PARTYPE_INT  }, {"JZ"  , PARTYPE_INT  }, 
     {"JT"  , PARTYPE_INT  },  {"JS"  , PARTYPE_INT  }, {"JP"  , PARTYPE_INT  }, {"JR"  , PARTYPE_INT  },
-    {"JH"  , PARTYPE_INT  },  {"IT"  , PARTYPE_UINT  }, {"KH", PARTYPE_STRING}, 
+    {"JH"  , PARTYPE_INT  },  {"IT"  , PARTYPE_UINT  },{"KH"  , PARTYPE_STRING},{"MS"  , PARTYPE_UINT },
+    {"AC"  , PARTYPE_UINT },  {"MA"  , PARTYPE_STRING},
 };
 
 void printCurrentSlot()
@@ -46,6 +47,8 @@ void printCurrentSlot()
         Serial.print("AT AY "); Serial.println(settings.ay);
         Serial.print("AT DX "); Serial.println(settings.dx);
         Serial.print("AT DY "); Serial.println(settings.dy);
+        Serial.print("AT MS "); Serial.println(settings.ms);
+        Serial.print("AT AC "); Serial.println(settings.ac);
         Serial.print("AT TS "); Serial.println(settings.ts);
         Serial.print("AT TP "); Serial.println(settings.tp);
         Serial.print("AT WS "); Serial.println(settings.ws);
@@ -374,6 +377,22 @@ void performCommand (uint8_t cmd, int16_t par1, char * keystring, int8_t periodi
                  Serial.println("set deadzone y");
                settings.dy=par1;
             break;
+        case CMD_MS:
+               if (DebugOutput==DEBUG_FULLOUTPUT)  
+                 Serial.println("set max speed");
+               settings.ms=par1;
+            break;
+        case CMD_AC:
+               if (DebugOutput==DEBUG_FULLOUTPUT)  
+                 Serial.println("set acceleration time");
+               settings.ac=par1;
+            break;
+        case CMD_MA:
+               if (DebugOutput==DEBUG_FULLOUTPUT)  
+               {  Serial.print("execute macro: "); Serial.println(keystring); }
+               // do the macro stuff ...
+               break;
+
         case CMD_TS:
                if (DebugOutput==DEBUG_FULLOUTPUT)  
                  Serial.println("set threshold sip");

@@ -31,9 +31,6 @@
 #define MODESTATE_STRONGSIP_MODE_ACTIVE    11
 #define MODESTATE_RELEASE                  12
 
-#define SMOOTHING_VALUE 15.0f
-#define MAX_SPEED 5.2f
-
 uint8_t modeState = MODESTATE_IDLE;
 
 uint8_t mouseMoveCount=0;
@@ -56,14 +53,14 @@ unsigned long time=0;
 void handleModeState(int x, int y, int pressure)
 {         
     static int waitStable=0;
-    static int accelTime=0;
+    static uint16_t accelTime=0;
     int strongDirThreshold;
     float moveVal;
 
     currentTime = millis();
     timeDifference = currentTime - previousTime;
     previousTime = currentTime;
-    accelFactor= timeDifference / 7000000.0f;      
+    accelFactor= timeDifference / 100000000.0f;      
 
     if (pressure>previousPressure) pressureRising=1; else pressureRising=0;
     if (pressure<previousPressure) pressureFalling=1; else pressureFalling=0;
@@ -170,22 +167,19 @@ void handleModeState(int x, int y, int pressure)
           
              if (settings.stickMode == STICKMODE_MOUSE) {   // handle mouse mode
 
-                float d;    // apply smooth acceleration curve
+                float max_speed= settings.ms / 3.0f;
 
                 if ((x==0) && (y==0)) accelTime=0;
-                else if (accelTime < 1000) accelTime++;
-                if (abs(x)<SMOOTHING_VALUE) d=abs(x) * (float)x/SMOOTHING_VALUE;
-                else d=x;
-                moveVal=d*settings.ax*accelFactor*accelTime;
-                if (moveVal>MAX_SPEED) moveVal=MAX_SPEED;
-                if (moveVal< -MAX_SPEED) moveVal=-MAX_SPEED;
+                else if (accelTime < 20000) accelTime+=settings.ac;
+                
+                moveVal=x*settings.ax*accelFactor*accelTime;
+                if (moveVal>max_speed) moveVal=max_speed;
+                if (moveVal< -max_speed) moveVal=-max_speed;
                 accumXpos+=moveVal;
 
-                if (abs(y)<SMOOTHING_VALUE) d=abs(y) * (float)y/SMOOTHING_VALUE;
-                else d=y;
-                moveVal=d*settings.ay*accelFactor*accelTime;
-                if (moveVal>MAX_SPEED) moveVal=MAX_SPEED;
-                if (moveVal< -MAX_SPEED) moveVal=-MAX_SPEED;
+                moveVal=y*settings.ay*accelFactor*accelTime;
+                if (moveVal>max_speed) moveVal=max_speed;
+                if (moveVal< -max_speed) moveVal=-max_speed;
                 accumYpos+=moveVal;
 
                 

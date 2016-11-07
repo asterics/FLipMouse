@@ -38,21 +38,20 @@
             this.portStatus = new System.Windows.Forms.Label();
             this.tabControl = new System.Windows.Forms.TabControl();
             this.LipmouseTab = new System.Windows.Forms.TabPage();
+            this.incAcceleration = new System.Windows.Forms.Button();
+            this.decAcceleration = new System.Windows.Forms.Button();
+            this.incMaxspeed = new System.Windows.Forms.Button();
+            this.decMaxspeed = new System.Windows.Forms.Button();
+            this.label42 = new System.Windows.Forms.Label();
+            this.accelerationLabel = new System.Windows.Forms.Label();
+            this.accelerationBar = new System.Windows.Forms.TrackBar();
+            this.maxspeedLabel = new System.Windows.Forms.Label();
+            this.maxspeedBar = new System.Windows.Forms.TrackBar();
+            this.label49 = new System.Windows.Forms.Label();
             this.joyModeLabel = new System.Windows.Forms.Label();
             this.joyModeBox = new System.Windows.Forms.ComboBox();
             this.label27 = new System.Windows.Forms.Label();
             this.selectJoystick = new System.Windows.Forms.RadioButton();
-            this.singlePanel = new System.Windows.Forms.Panel();
-            this.incSpeed = new System.Windows.Forms.Button();
-            this.decSpeed = new System.Windows.Forms.Button();
-            this.incDeadzone = new System.Windows.Forms.Button();
-            this.decDeadzone = new System.Windows.Forms.Button();
-            this.deadzoneLabel = new System.Windows.Forms.Label();
-            this.label34 = new System.Windows.Forms.Label();
-            this.deadzoneBar = new System.Windows.Forms.TrackBar();
-            this.speedLabel = new System.Windows.Forms.Label();
-            this.speedBar = new System.Windows.Forms.TrackBar();
-            this.label36 = new System.Windows.Forms.Label();
             this.splitPanel = new System.Windows.Forms.Panel();
             this.incDeadzoneY = new System.Windows.Forms.Button();
             this.decDeadzoneY = new System.Windows.Forms.Button();
@@ -64,15 +63,26 @@
             this.decDeadzoneX = new System.Windows.Forms.Button();
             this.DeadzoneYNameLabel = new System.Windows.Forms.Label();
             this.SpeedYNameLabel = new System.Windows.Forms.Label();
-            this.speedYLabel = new System.Windows.Forms.Label();
+            this.sensYLabel = new System.Windows.Forms.Label();
             this.deadzoneYLabel = new System.Windows.Forms.Label();
             this.deadzoneYBar = new System.Windows.Forms.TrackBar();
-            this.speedYBar = new System.Windows.Forms.TrackBar();
+            this.sensYBar = new System.Windows.Forms.TrackBar();
+            this.singlePanel = new System.Windows.Forms.Panel();
+            this.incSpeed = new System.Windows.Forms.Button();
+            this.decSpeed = new System.Windows.Forms.Button();
+            this.incDeadzone = new System.Windows.Forms.Button();
+            this.decDeadzone = new System.Windows.Forms.Button();
+            this.deadzoneLabel = new System.Windows.Forms.Label();
+            this.label34 = new System.Windows.Forms.Label();
+            this.deadzoneBar = new System.Windows.Forms.TrackBar();
+            this.sensLabel = new System.Windows.Forms.Label();
+            this.sensBar = new System.Windows.Forms.TrackBar();
+            this.label36 = new System.Windows.Forms.Label();
             this.deadzoneXLabel = new System.Windows.Forms.Label();
             this.DeadzoneXNameLabel = new System.Windows.Forms.Label();
             this.deadzoneXBar = new System.Windows.Forms.TrackBar();
-            this.speedXLabel = new System.Windows.Forms.Label();
-            this.speedXBar = new System.Windows.Forms.TrackBar();
+            this.sensXLabel = new System.Windows.Forms.Label();
+            this.sensXBar = new System.Windows.Forms.TrackBar();
             this.SpeedXNameLabel = new System.Windows.Forms.Label();
             this.splitXYBox = new System.Windows.Forms.CheckBox();
             this.selectAlternative = new System.Windows.Forms.RadioButton();
@@ -141,6 +151,7 @@
             this.SipPuffTab = new System.Windows.Forms.TabPage();
             this.sipPuffSelections = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.label41 = new System.Windows.Forms.Label();
             this.clearButtonStrongPuff = new System.Windows.Forms.Button();
             this.clearButtonPuff = new System.Windows.Forms.Button();
             this.clearButtonStrongSip = new System.Windows.Forms.Button();
@@ -170,6 +181,7 @@
             this.PuffParameterText = new System.Windows.Forms.TextBox();
             this.StrongPuffParameterText = new System.Windows.Forms.TextBox();
             this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.label35 = new System.Windows.Forms.Label();
             this.clearButtonStrongSipRight = new System.Windows.Forms.Button();
             this.StrongSipRightComboBox = new System.Windows.Forms.ComboBox();
             this.StrongSipRightNumericParameter = new System.Windows.Forms.NumericUpDown();
@@ -199,6 +211,7 @@
             this.label54 = new System.Windows.Forms.Label();
             this.StrongSipUpFunctionBox = new System.Windows.Forms.ComboBox();
             this.tabPage3 = new System.Windows.Forms.TabPage();
+            this.label32 = new System.Windows.Forms.Label();
             this.clearButtonStrongPuffRight = new System.Windows.Forms.Button();
             this.StrongPuffRightComboBox = new System.Windows.Forms.ComboBox();
             this.StrongPuffRightNumericParameter = new System.Windows.Forms.NumericUpDown();
@@ -320,19 +333,18 @@
             this.label37 = new System.Windows.Forms.Label();
             this.label33 = new System.Windows.Forms.Label();
             this.StoreButton = new System.Windows.Forms.Button();
-            this.label32 = new System.Windows.Forms.Label();
-            this.label35 = new System.Windows.Forms.Label();
-            this.label41 = new System.Windows.Forms.Label();
             this.tabControl.SuspendLayout();
             this.LipmouseTab.SuspendLayout();
-            this.singlePanel.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.deadzoneBar)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.speedBar)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.accelerationBar)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.maxspeedBar)).BeginInit();
             this.splitPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.deadzoneYBar)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.speedYBar)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.sensYBar)).BeginInit();
+            this.singlePanel.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.deadzoneBar)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.sensBar)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.deadzoneXBar)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.speedXBar)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.sensXBar)).BeginInit();
             this.AlternativeTab.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.RightNumericParameter)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.LeftNumericParameter)).BeginInit();
@@ -454,11 +466,21 @@
             // LipmouseTab
             // 
             this.LipmouseTab.BackColor = System.Drawing.SystemColors.ButtonFace;
+            this.LipmouseTab.Controls.Add(this.singlePanel);
+            this.LipmouseTab.Controls.Add(this.incAcceleration);
+            this.LipmouseTab.Controls.Add(this.decAcceleration);
+            this.LipmouseTab.Controls.Add(this.incMaxspeed);
+            this.LipmouseTab.Controls.Add(this.decMaxspeed);
+            this.LipmouseTab.Controls.Add(this.label42);
+            this.LipmouseTab.Controls.Add(this.accelerationLabel);
+            this.LipmouseTab.Controls.Add(this.accelerationBar);
+            this.LipmouseTab.Controls.Add(this.maxspeedLabel);
+            this.LipmouseTab.Controls.Add(this.maxspeedBar);
+            this.LipmouseTab.Controls.Add(this.label49);
             this.LipmouseTab.Controls.Add(this.joyModeLabel);
             this.LipmouseTab.Controls.Add(this.joyModeBox);
             this.LipmouseTab.Controls.Add(this.label27);
             this.LipmouseTab.Controls.Add(this.selectJoystick);
-            this.LipmouseTab.Controls.Add(this.singlePanel);
             this.LipmouseTab.Controls.Add(this.splitPanel);
             this.LipmouseTab.Controls.Add(this.splitXYBox);
             this.LipmouseTab.Controls.Add(this.selectAlternative);
@@ -472,10 +494,140 @@
             this.LipmouseTab.TabIndex = 0;
             this.LipmouseTab.Text = "Stick Actions";
             // 
+            // incAcceleration
+            // 
+            this.incAcceleration.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.incAcceleration.ForeColor = System.Drawing.Color.Black;
+            this.incAcceleration.Location = new System.Drawing.Point(701, 219);
+            this.incAcceleration.Margin = new System.Windows.Forms.Padding(4);
+            this.incAcceleration.Name = "incAcceleration";
+            this.incAcceleration.Size = new System.Drawing.Size(41, 37);
+            this.incAcceleration.TabIndex = 142;
+            this.incAcceleration.Text = "+";
+            this.incAcceleration.UseVisualStyleBackColor = true;
+            this.incAcceleration.Click += new System.EventHandler(this.incAcceleration_Click);
+            this.incAcceleration.MouseLeave += new System.EventHandler(this.stop_ClickTimer);
+            this.incAcceleration.MouseHover += new System.EventHandler(this.incAcceleration_MouseHover);
+            // 
+            // decAcceleration
+            // 
+            this.decAcceleration.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.decAcceleration.ForeColor = System.Drawing.Color.Black;
+            this.decAcceleration.Location = new System.Drawing.Point(403, 219);
+            this.decAcceleration.Margin = new System.Windows.Forms.Padding(4);
+            this.decAcceleration.Name = "decAcceleration";
+            this.decAcceleration.Size = new System.Drawing.Size(41, 37);
+            this.decAcceleration.TabIndex = 141;
+            this.decAcceleration.Text = "-";
+            this.decAcceleration.UseVisualStyleBackColor = true;
+            this.decAcceleration.Click += new System.EventHandler(this.decAcceleration_Click);
+            this.decAcceleration.MouseLeave += new System.EventHandler(this.stop_ClickTimer);
+            this.decAcceleration.MouseHover += new System.EventHandler(this.decAcceleration_MouseHover);
+            // 
+            // incMaxspeed
+            // 
+            this.incMaxspeed.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.incMaxspeed.ForeColor = System.Drawing.Color.Black;
+            this.incMaxspeed.Location = new System.Drawing.Point(337, 219);
+            this.incMaxspeed.Margin = new System.Windows.Forms.Padding(4);
+            this.incMaxspeed.Name = "incMaxspeed";
+            this.incMaxspeed.Size = new System.Drawing.Size(41, 37);
+            this.incMaxspeed.TabIndex = 140;
+            this.incMaxspeed.Text = "+";
+            this.incMaxspeed.UseVisualStyleBackColor = true;
+            this.incMaxspeed.Click += new System.EventHandler(this.incMaxspeed_Click);
+            this.incMaxspeed.MouseLeave += new System.EventHandler(this.stop_ClickTimer);
+            this.incMaxspeed.MouseHover += new System.EventHandler(this.incMaxspeed_MouseHover);
+            // 
+            // decMaxspeed
+            // 
+            this.decMaxspeed.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.decMaxspeed.ForeColor = System.Drawing.Color.Black;
+            this.decMaxspeed.Location = new System.Drawing.Point(37, 219);
+            this.decMaxspeed.Margin = new System.Windows.Forms.Padding(4);
+            this.decMaxspeed.Name = "decMaxspeed";
+            this.decMaxspeed.Size = new System.Drawing.Size(41, 37);
+            this.decMaxspeed.TabIndex = 139;
+            this.decMaxspeed.Text = "-";
+            this.decMaxspeed.UseVisualStyleBackColor = true;
+            this.decMaxspeed.Click += new System.EventHandler(this.decMaxspeed_Click);
+            this.decMaxspeed.MouseLeave += new System.EventHandler(this.stop_ClickTimer);
+            this.decMaxspeed.MouseHover += new System.EventHandler(this.decMaxspeed_MouseHover);
+            // 
+            // label42
+            // 
+            this.label42.AutoSize = true;
+            this.label42.Location = new System.Drawing.Point(458, 204);
+            this.label42.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label42.Name = "label42";
+            this.label42.Size = new System.Drawing.Size(86, 17);
+            this.label42.TabIndex = 138;
+            this.label42.Text = "Acceleration";
+            // 
+            // accelerationLabel
+            // 
+            this.accelerationLabel.AutoSize = true;
+            this.accelerationLabel.Location = new System.Drawing.Point(655, 204);
+            this.accelerationLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.accelerationLabel.Name = "accelerationLabel";
+            this.accelerationLabel.Size = new System.Drawing.Size(24, 17);
+            this.accelerationLabel.TabIndex = 137;
+            this.accelerationLabel.Text = "50";
+            // 
+            // accelerationBar
+            // 
+            this.accelerationBar.AutoSize = false;
+            this.accelerationBar.LargeChange = 1;
+            this.accelerationBar.Location = new System.Drawing.Point(443, 221);
+            this.accelerationBar.Margin = new System.Windows.Forms.Padding(4);
+            this.accelerationBar.Maximum = 100;
+            this.accelerationBar.Minimum = 1;
+            this.accelerationBar.Name = "accelerationBar";
+            this.accelerationBar.Size = new System.Drawing.Size(257, 55);
+            this.accelerationBar.TabIndex = 136;
+            this.accelerationBar.TickFrequency = 5;
+            this.accelerationBar.Value = 50;
+            this.accelerationBar.Scroll += new System.EventHandler(this.accelerationBar_Scroll);
+            // 
+            // maxspeedLabel
+            // 
+            this.maxspeedLabel.AutoSize = true;
+            this.maxspeedLabel.Location = new System.Drawing.Point(295, 207);
+            this.maxspeedLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.maxspeedLabel.Name = "maxspeedLabel";
+            this.maxspeedLabel.Size = new System.Drawing.Size(24, 17);
+            this.maxspeedLabel.TabIndex = 135;
+            this.maxspeedLabel.Text = "50";
+            // 
+            // maxspeedBar
+            // 
+            this.maxspeedBar.AutoSize = false;
+            this.maxspeedBar.LargeChange = 1;
+            this.maxspeedBar.Location = new System.Drawing.Point(79, 226);
+            this.maxspeedBar.Margin = new System.Windows.Forms.Padding(4);
+            this.maxspeedBar.Maximum = 100;
+            this.maxspeedBar.Minimum = 1;
+            this.maxspeedBar.Name = "maxspeedBar";
+            this.maxspeedBar.Size = new System.Drawing.Size(258, 55);
+            this.maxspeedBar.TabIndex = 134;
+            this.maxspeedBar.TickFrequency = 5;
+            this.maxspeedBar.Value = 50;
+            this.maxspeedBar.Scroll += new System.EventHandler(this.maxspeedBar_Scroll);
+            // 
+            // label49
+            // 
+            this.label49.AutoSize = true;
+            this.label49.Location = new System.Drawing.Point(94, 207);
+            this.label49.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label49.Name = "label49";
+            this.label49.Size = new System.Drawing.Size(111, 17);
+            this.label49.TabIndex = 133;
+            this.label49.Text = "Maximum Speed";
+            // 
             // joyModeLabel
             // 
             this.joyModeLabel.AutoSize = true;
-            this.joyModeLabel.Location = new System.Drawing.Point(55, 283);
+            this.joyModeLabel.Location = new System.Drawing.Point(55, 288);
             this.joyModeLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.joyModeLabel.Name = "joyModeLabel";
             this.joyModeLabel.Size = new System.Drawing.Size(134, 17);
@@ -486,7 +638,7 @@
             // joyModeBox
             // 
             this.joyModeBox.FormattingEnabled = true;
-            this.joyModeBox.Location = new System.Drawing.Point(56, 305);
+            this.joyModeBox.Location = new System.Drawing.Point(56, 310);
             this.joyModeBox.Margin = new System.Windows.Forms.Padding(4);
             this.joyModeBox.Name = "joyModeBox";
             this.joyModeBox.Size = new System.Drawing.Size(144, 24);
@@ -496,7 +648,7 @@
             // label27
             // 
             this.label27.AutoSize = true;
-            this.label27.Location = new System.Drawing.Point(62, 30);
+            this.label27.Location = new System.Drawing.Point(62, 19);
             this.label27.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label27.Name = "label27";
             this.label27.Size = new System.Drawing.Size(92, 17);
@@ -506,7 +658,7 @@
             // selectJoystick
             // 
             this.selectJoystick.AutoSize = true;
-            this.selectJoystick.Location = new System.Drawing.Point(390, 31);
+            this.selectJoystick.Location = new System.Drawing.Point(390, 20);
             this.selectJoystick.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.selectJoystick.Name = "selectJoystick";
             this.selectJoystick.Size = new System.Drawing.Size(148, 21);
@@ -514,152 +666,6 @@
             this.selectJoystick.Text = "Joystick Movement";
             this.selectJoystick.UseVisualStyleBackColor = true;
             this.selectJoystick.CheckedChanged += new System.EventHandler(this.selectJoystick_CheckedChanged);
-            // 
-            // singlePanel
-            // 
-            this.singlePanel.Controls.Add(this.incSpeed);
-            this.singlePanel.Controls.Add(this.decSpeed);
-            this.singlePanel.Controls.Add(this.incDeadzone);
-            this.singlePanel.Controls.Add(this.decDeadzone);
-            this.singlePanel.Controls.Add(this.deadzoneLabel);
-            this.singlePanel.Controls.Add(this.label34);
-            this.singlePanel.Controls.Add(this.deadzoneBar);
-            this.singlePanel.Controls.Add(this.speedLabel);
-            this.singlePanel.Controls.Add(this.speedBar);
-            this.singlePanel.Controls.Add(this.label36);
-            this.singlePanel.Location = new System.Drawing.Point(25, 64);
-            this.singlePanel.Name = "singlePanel";
-            this.singlePanel.Size = new System.Drawing.Size(724, 203);
-            this.singlePanel.TabIndex = 65;
-            // 
-            // incSpeed
-            // 
-            this.incSpeed.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.incSpeed.ForeColor = System.Drawing.Color.Black;
-            this.incSpeed.Location = new System.Drawing.Point(643, 37);
-            this.incSpeed.Margin = new System.Windows.Forms.Padding(4);
-            this.incSpeed.Name = "incSpeed";
-            this.incSpeed.Size = new System.Drawing.Size(41, 37);
-            this.incSpeed.TabIndex = 74;
-            this.incSpeed.Text = "+";
-            this.incSpeed.UseVisualStyleBackColor = true;
-            this.incSpeed.Click += new System.EventHandler(this.incSpeed_Click);
-            this.incSpeed.MouseLeave += new System.EventHandler(this.stop_ClickTimer);
-            this.incSpeed.MouseHover += new System.EventHandler(this.incSpeed_MouseHover);
-            // 
-            // decSpeed
-            // 
-            this.decSpeed.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.decSpeed.ForeColor = System.Drawing.Color.Black;
-            this.decSpeed.Location = new System.Drawing.Point(42, 37);
-            this.decSpeed.Margin = new System.Windows.Forms.Padding(4);
-            this.decSpeed.Name = "decSpeed";
-            this.decSpeed.Size = new System.Drawing.Size(41, 37);
-            this.decSpeed.TabIndex = 73;
-            this.decSpeed.Text = "-";
-            this.decSpeed.UseVisualStyleBackColor = true;
-            this.decSpeed.Click += new System.EventHandler(this.decSpeed_Click);
-            this.decSpeed.MouseLeave += new System.EventHandler(this.stop_ClickTimer);
-            this.decSpeed.MouseHover += new System.EventHandler(this.decSpeed_MouseHover);
-            // 
-            // incDeadzone
-            // 
-            this.incDeadzone.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.incDeadzone.ForeColor = System.Drawing.Color.Black;
-            this.incDeadzone.Location = new System.Drawing.Point(641, 137);
-            this.incDeadzone.Margin = new System.Windows.Forms.Padding(4);
-            this.incDeadzone.Name = "incDeadzone";
-            this.incDeadzone.Size = new System.Drawing.Size(41, 37);
-            this.incDeadzone.TabIndex = 72;
-            this.incDeadzone.Text = "+";
-            this.incDeadzone.UseVisualStyleBackColor = true;
-            this.incDeadzone.Click += new System.EventHandler(this.incDeadzone_Click);
-            this.incDeadzone.MouseLeave += new System.EventHandler(this.stop_ClickTimer);
-            this.incDeadzone.MouseHover += new System.EventHandler(this.incDeadzone_MouseHover);
-            // 
-            // decDeadzone
-            // 
-            this.decDeadzone.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.decDeadzone.ForeColor = System.Drawing.Color.Black;
-            this.decDeadzone.Location = new System.Drawing.Point(42, 137);
-            this.decDeadzone.Margin = new System.Windows.Forms.Padding(4);
-            this.decDeadzone.Name = "decDeadzone";
-            this.decDeadzone.Size = new System.Drawing.Size(41, 37);
-            this.decDeadzone.TabIndex = 71;
-            this.decDeadzone.Text = "-";
-            this.decDeadzone.UseVisualStyleBackColor = true;
-            this.decDeadzone.Click += new System.EventHandler(this.decDeadzone_Click);
-            this.decDeadzone.MouseLeave += new System.EventHandler(this.stop_ClickTimer);
-            this.decDeadzone.MouseHover += new System.EventHandler(this.decDeadzone_MouseHover);
-            // 
-            // deadzoneLabel
-            // 
-            this.deadzoneLabel.AutoSize = true;
-            this.deadzoneLabel.Location = new System.Drawing.Point(592, 122);
-            this.deadzoneLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.deadzoneLabel.Name = "deadzoneLabel";
-            this.deadzoneLabel.Size = new System.Drawing.Size(32, 17);
-            this.deadzoneLabel.TabIndex = 70;
-            this.deadzoneLabel.Text = "100";
-            // 
-            // label34
-            // 
-            this.label34.AutoSize = true;
-            this.label34.Location = new System.Drawing.Point(109, 122);
-            this.label34.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.label34.Name = "label34";
-            this.label34.Size = new System.Drawing.Size(73, 17);
-            this.label34.TabIndex = 69;
-            this.label34.Text = "Deadzone";
-            // 
-            // deadzoneBar
-            // 
-            this.deadzoneBar.LargeChange = 10;
-            this.deadzoneBar.Location = new System.Drawing.Point(97, 145);
-            this.deadzoneBar.Margin = new System.Windows.Forms.Padding(4);
-            this.deadzoneBar.Maximum = 650;
-            this.deadzoneBar.Minimum = 1;
-            this.deadzoneBar.Name = "deadzoneBar";
-            this.deadzoneBar.Size = new System.Drawing.Size(534, 56);
-            this.deadzoneBar.TabIndex = 68;
-            this.deadzoneBar.TickFrequency = 20;
-            this.deadzoneBar.Value = 100;
-            this.deadzoneBar.Scroll += new System.EventHandler(this.deadzoneBar_Scroll);
-            // 
-            // speedLabel
-            // 
-            this.speedLabel.AutoSize = true;
-            this.speedLabel.Location = new System.Drawing.Point(600, 23);
-            this.speedLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.speedLabel.Name = "speedLabel";
-            this.speedLabel.Size = new System.Drawing.Size(24, 17);
-            this.speedLabel.TabIndex = 67;
-            this.speedLabel.Text = "40";
-            // 
-            // speedBar
-            // 
-            this.speedBar.AutoSize = false;
-            this.speedBar.LargeChange = 10;
-            this.speedBar.Location = new System.Drawing.Point(97, 44);
-            this.speedBar.Margin = new System.Windows.Forms.Padding(4);
-            this.speedBar.Maximum = 255;
-            this.speedBar.Minimum = 1;
-            this.speedBar.Name = "speedBar";
-            this.speedBar.Size = new System.Drawing.Size(534, 55);
-            this.speedBar.TabIndex = 66;
-            this.speedBar.TickFrequency = 5;
-            this.speedBar.Value = 40;
-            this.speedBar.Scroll += new System.EventHandler(this.speedBar_Scroll);
-            // 
-            // label36
-            // 
-            this.label36.AutoSize = true;
-            this.label36.Location = new System.Drawing.Point(109, 25);
-            this.label36.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.label36.Name = "label36";
-            this.label36.Size = new System.Drawing.Size(49, 17);
-            this.label36.TabIndex = 65;
-            this.label36.Text = "Speed";
             // 
             // splitPanel
             // 
@@ -673,20 +679,20 @@
             this.splitPanel.Controls.Add(this.decDeadzoneX);
             this.splitPanel.Controls.Add(this.DeadzoneYNameLabel);
             this.splitPanel.Controls.Add(this.SpeedYNameLabel);
-            this.splitPanel.Controls.Add(this.speedYLabel);
+            this.splitPanel.Controls.Add(this.sensYLabel);
             this.splitPanel.Controls.Add(this.deadzoneYLabel);
             this.splitPanel.Controls.Add(this.deadzoneYBar);
-            this.splitPanel.Controls.Add(this.speedYBar);
+            this.splitPanel.Controls.Add(this.sensYBar);
             this.splitPanel.Controls.Add(this.deadzoneXLabel);
             this.splitPanel.Controls.Add(this.DeadzoneXNameLabel);
             this.splitPanel.Controls.Add(this.deadzoneXBar);
-            this.splitPanel.Controls.Add(this.speedXLabel);
-            this.splitPanel.Controls.Add(this.speedXBar);
+            this.splitPanel.Controls.Add(this.sensXLabel);
+            this.splitPanel.Controls.Add(this.sensXBar);
             this.splitPanel.Controls.Add(this.SpeedXNameLabel);
             this.splitPanel.Enabled = false;
-            this.splitPanel.Location = new System.Drawing.Point(23, 67);
+            this.splitPanel.Location = new System.Drawing.Point(23, 51);
             this.splitPanel.Name = "splitPanel";
-            this.splitPanel.Size = new System.Drawing.Size(729, 202);
+            this.splitPanel.Size = new System.Drawing.Size(729, 145);
             this.splitPanel.TabIndex = 39;
             this.splitPanel.Visible = false;
             // 
@@ -694,7 +700,7 @@
             // 
             this.incDeadzoneY.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.incDeadzoneY.ForeColor = System.Drawing.Color.Black;
-            this.incDeadzoneY.Location = new System.Drawing.Point(678, 136);
+            this.incDeadzoneY.Location = new System.Drawing.Point(678, 92);
             this.incDeadzoneY.Margin = new System.Windows.Forms.Padding(4);
             this.incDeadzoneY.Name = "incDeadzoneY";
             this.incDeadzoneY.Size = new System.Drawing.Size(41, 37);
@@ -710,7 +716,7 @@
             this.decDeadzoneY.AccessibleDescription = " ";
             this.decDeadzoneY.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.decDeadzoneY.ForeColor = System.Drawing.Color.Black;
-            this.decDeadzoneY.Location = new System.Drawing.Point(379, 138);
+            this.decDeadzoneY.Location = new System.Drawing.Point(379, 94);
             this.decDeadzoneY.Margin = new System.Windows.Forms.Padding(4);
             this.decDeadzoneY.Name = "decDeadzoneY";
             this.decDeadzoneY.Size = new System.Drawing.Size(41, 37);
@@ -725,67 +731,67 @@
             // 
             this.incSpeedY.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.incSpeedY.ForeColor = System.Drawing.Color.Black;
-            this.incSpeedY.Location = new System.Drawing.Point(678, 36);
+            this.incSpeedY.Location = new System.Drawing.Point(678, 23);
             this.incSpeedY.Margin = new System.Windows.Forms.Padding(4);
             this.incSpeedY.Name = "incSpeedY";
             this.incSpeedY.Size = new System.Drawing.Size(41, 37);
             this.incSpeedY.TabIndex = 56;
             this.incSpeedY.Text = "+";
             this.incSpeedY.UseVisualStyleBackColor = true;
-            this.incSpeedY.Click += new System.EventHandler(this.incSpeedY_Click);
+            this.incSpeedY.Click += new System.EventHandler(this.incSensY_Click);
             this.incSpeedY.MouseLeave += new System.EventHandler(this.stop_ClickTimer);
-            this.incSpeedY.MouseHover += new System.EventHandler(this.incSpeedY_MouseHover);
+            this.incSpeedY.MouseHover += new System.EventHandler(this.incSensY_MouseHover);
             // 
             // decSpeedY
             // 
             this.decSpeedY.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.decSpeedY.ForeColor = System.Drawing.Color.Black;
-            this.decSpeedY.Location = new System.Drawing.Point(379, 36);
+            this.decSpeedY.Location = new System.Drawing.Point(379, 24);
             this.decSpeedY.Margin = new System.Windows.Forms.Padding(4);
             this.decSpeedY.Name = "decSpeedY";
             this.decSpeedY.Size = new System.Drawing.Size(41, 37);
             this.decSpeedY.TabIndex = 55;
             this.decSpeedY.Text = "-";
             this.decSpeedY.UseVisualStyleBackColor = true;
-            this.decSpeedY.Click += new System.EventHandler(this.decSpeedY_Click);
+            this.decSpeedY.Click += new System.EventHandler(this.decSensY_Click);
             this.decSpeedY.MouseLeave += new System.EventHandler(this.stop_ClickTimer);
-            this.decSpeedY.MouseHover += new System.EventHandler(this.decSpeedY_MouseHover);
+            this.decSpeedY.MouseHover += new System.EventHandler(this.decSensY_MouseHover);
             // 
             // incSpeedX
             // 
             this.incSpeedX.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.incSpeedX.ForeColor = System.Drawing.Color.Black;
-            this.incSpeedX.Location = new System.Drawing.Point(313, 36);
+            this.incSpeedX.Location = new System.Drawing.Point(313, 24);
             this.incSpeedX.Margin = new System.Windows.Forms.Padding(4);
             this.incSpeedX.Name = "incSpeedX";
             this.incSpeedX.Size = new System.Drawing.Size(41, 37);
             this.incSpeedX.TabIndex = 54;
             this.incSpeedX.Text = "+";
             this.incSpeedX.UseVisualStyleBackColor = true;
-            this.incSpeedX.Click += new System.EventHandler(this.incSpeedX_Click);
+            this.incSpeedX.Click += new System.EventHandler(this.incSensX_Click);
             this.incSpeedX.MouseLeave += new System.EventHandler(this.stop_ClickTimer);
-            this.incSpeedX.MouseHover += new System.EventHandler(this.incSpeedX_MouseHover);
+            this.incSpeedX.MouseHover += new System.EventHandler(this.incSensX_MouseHover);
             // 
             // decSpeedX
             // 
             this.decSpeedX.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.decSpeedX.ForeColor = System.Drawing.Color.Black;
-            this.decSpeedX.Location = new System.Drawing.Point(14, 36);
+            this.decSpeedX.Location = new System.Drawing.Point(14, 24);
             this.decSpeedX.Margin = new System.Windows.Forms.Padding(4);
             this.decSpeedX.Name = "decSpeedX";
             this.decSpeedX.Size = new System.Drawing.Size(41, 37);
             this.decSpeedX.TabIndex = 53;
             this.decSpeedX.Text = "-";
             this.decSpeedX.UseVisualStyleBackColor = true;
-            this.decSpeedX.Click += new System.EventHandler(this.decSpeedX_Click);
+            this.decSpeedX.Click += new System.EventHandler(this.decSensX_Click);
             this.decSpeedX.MouseLeave += new System.EventHandler(this.stop_ClickTimer);
-            this.decSpeedX.MouseHover += new System.EventHandler(this.decSpeedX_MouseHover);
+            this.decSpeedX.MouseHover += new System.EventHandler(this.decSensX_MouseHover);
             // 
             // incDeadzoneX
             // 
             this.incDeadzoneX.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.incDeadzoneX.ForeColor = System.Drawing.Color.Black;
-            this.incDeadzoneX.Location = new System.Drawing.Point(312, 138);
+            this.incDeadzoneX.Location = new System.Drawing.Point(312, 94);
             this.incDeadzoneX.Margin = new System.Windows.Forms.Padding(4);
             this.incDeadzoneX.Name = "incDeadzoneX";
             this.incDeadzoneX.Size = new System.Drawing.Size(41, 37);
@@ -800,7 +806,7 @@
             // 
             this.decDeadzoneX.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.decDeadzoneX.ForeColor = System.Drawing.Color.Black;
-            this.decDeadzoneX.Location = new System.Drawing.Point(14, 136);
+            this.decDeadzoneX.Location = new System.Drawing.Point(14, 92);
             this.decDeadzoneX.Margin = new System.Windows.Forms.Padding(4);
             this.decDeadzoneX.Name = "decDeadzoneX";
             this.decDeadzoneX.Size = new System.Drawing.Size(41, 37);
@@ -814,7 +820,7 @@
             // DeadzoneYNameLabel
             // 
             this.DeadzoneYNameLabel.AutoSize = true;
-            this.DeadzoneYNameLabel.Location = new System.Drawing.Point(442, 121);
+            this.DeadzoneYNameLabel.Location = new System.Drawing.Point(431, 80);
             this.DeadzoneYNameLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.DeadzoneYNameLabel.Name = "DeadzoneYNameLabel";
             this.DeadzoneYNameLabel.Size = new System.Drawing.Size(87, 17);
@@ -824,27 +830,27 @@
             // SpeedYNameLabel
             // 
             this.SpeedYNameLabel.AutoSize = true;
-            this.SpeedYNameLabel.Location = new System.Drawing.Point(442, 23);
+            this.SpeedYNameLabel.Location = new System.Drawing.Point(431, 9);
             this.SpeedYNameLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.SpeedYNameLabel.Name = "SpeedYNameLabel";
-            this.SpeedYNameLabel.Size = new System.Drawing.Size(63, 17);
+            this.SpeedYNameLabel.Size = new System.Drawing.Size(85, 17);
             this.SpeedYNameLabel.TabIndex = 49;
-            this.SpeedYNameLabel.Text = "Speed-Y";
+            this.SpeedYNameLabel.Text = "Sensitivity-Y";
             // 
-            // speedYLabel
+            // sensYLabel
             // 
-            this.speedYLabel.AutoSize = true;
-            this.speedYLabel.Location = new System.Drawing.Point(640, 24);
-            this.speedYLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.speedYLabel.Name = "speedYLabel";
-            this.speedYLabel.Size = new System.Drawing.Size(24, 17);
-            this.speedYLabel.TabIndex = 48;
-            this.speedYLabel.Text = "40";
+            this.sensYLabel.AutoSize = true;
+            this.sensYLabel.Location = new System.Drawing.Point(638, 12);
+            this.sensYLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.sensYLabel.Name = "sensYLabel";
+            this.sensYLabel.Size = new System.Drawing.Size(24, 17);
+            this.sensYLabel.TabIndex = 48;
+            this.sensYLabel.Text = "40";
             // 
             // deadzoneYLabel
             // 
             this.deadzoneYLabel.AutoSize = true;
-            this.deadzoneYLabel.Location = new System.Drawing.Point(631, 121);
+            this.deadzoneYLabel.Location = new System.Drawing.Point(631, 78);
             this.deadzoneYLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.deadzoneYLabel.Name = "deadzoneYLabel";
             this.deadzoneYLabel.Size = new System.Drawing.Size(32, 17);
@@ -855,7 +861,7 @@
             // 
             this.deadzoneYBar.AutoSize = false;
             this.deadzoneYBar.LargeChange = 10;
-            this.deadzoneYBar.Location = new System.Drawing.Point(419, 143);
+            this.deadzoneYBar.Location = new System.Drawing.Point(419, 99);
             this.deadzoneYBar.Margin = new System.Windows.Forms.Padding(4);
             this.deadzoneYBar.Maximum = 650;
             this.deadzoneYBar.Minimum = 1;
@@ -866,25 +872,171 @@
             this.deadzoneYBar.Value = 100;
             this.deadzoneYBar.Scroll += new System.EventHandler(this.deadzoneYBar_Scroll);
             // 
-            // speedYBar
+            // sensYBar
             // 
-            this.speedYBar.AutoSize = false;
-            this.speedYBar.LargeChange = 1;
-            this.speedYBar.Location = new System.Drawing.Point(419, 43);
-            this.speedYBar.Margin = new System.Windows.Forms.Padding(4);
-            this.speedYBar.Maximum = 255;
-            this.speedYBar.Minimum = 1;
-            this.speedYBar.Name = "speedYBar";
-            this.speedYBar.Size = new System.Drawing.Size(258, 55);
-            this.speedYBar.TabIndex = 45;
-            this.speedYBar.TickFrequency = 5;
-            this.speedYBar.Value = 40;
-            this.speedYBar.Scroll += new System.EventHandler(this.speedYBar_Scroll);
+            this.sensYBar.AutoSize = false;
+            this.sensYBar.LargeChange = 1;
+            this.sensYBar.Location = new System.Drawing.Point(419, 28);
+            this.sensYBar.Margin = new System.Windows.Forms.Padding(4);
+            this.sensYBar.Maximum = 255;
+            this.sensYBar.Minimum = 1;
+            this.sensYBar.Name = "sensYBar";
+            this.sensYBar.Size = new System.Drawing.Size(258, 55);
+            this.sensYBar.TabIndex = 45;
+            this.sensYBar.TickFrequency = 5;
+            this.sensYBar.Value = 40;
+            this.sensYBar.Scroll += new System.EventHandler(this.sensYBar_Scroll);
+            // 
+            // singlePanel
+            // 
+            this.singlePanel.Controls.Add(this.incSpeed);
+            this.singlePanel.Controls.Add(this.decSpeed);
+            this.singlePanel.Controls.Add(this.incDeadzone);
+            this.singlePanel.Controls.Add(this.decDeadzone);
+            this.singlePanel.Controls.Add(this.deadzoneLabel);
+            this.singlePanel.Controls.Add(this.label34);
+            this.singlePanel.Controls.Add(this.deadzoneBar);
+            this.singlePanel.Controls.Add(this.sensLabel);
+            this.singlePanel.Controls.Add(this.sensBar);
+            this.singlePanel.Controls.Add(this.label36);
+            this.singlePanel.Location = new System.Drawing.Point(23, 49);
+            this.singlePanel.Name = "singlePanel";
+            this.singlePanel.Size = new System.Drawing.Size(729, 149);
+            this.singlePanel.TabIndex = 65;
+            // 
+            // incSpeed
+            // 
+            this.incSpeed.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.incSpeed.ForeColor = System.Drawing.Color.Black;
+            this.incSpeed.Location = new System.Drawing.Point(678, 25);
+            this.incSpeed.Margin = new System.Windows.Forms.Padding(4);
+            this.incSpeed.Name = "incSpeed";
+            this.incSpeed.Size = new System.Drawing.Size(41, 37);
+            this.incSpeed.TabIndex = 74;
+            this.incSpeed.Text = "+";
+            this.incSpeed.UseVisualStyleBackColor = true;
+            this.incSpeed.Click += new System.EventHandler(this.incSens_Click);
+            this.incSpeed.MouseLeave += new System.EventHandler(this.stop_ClickTimer);
+            this.incSpeed.MouseHover += new System.EventHandler(this.incSens_MouseHover);
+            // 
+            // decSpeed
+            // 
+            this.decSpeed.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.decSpeed.ForeColor = System.Drawing.Color.Black;
+            this.decSpeed.Location = new System.Drawing.Point(14, 26);
+            this.decSpeed.Margin = new System.Windows.Forms.Padding(4);
+            this.decSpeed.Name = "decSpeed";
+            this.decSpeed.Size = new System.Drawing.Size(41, 37);
+            this.decSpeed.TabIndex = 73;
+            this.decSpeed.Text = "-";
+            this.decSpeed.UseVisualStyleBackColor = true;
+            this.decSpeed.Click += new System.EventHandler(this.decSens_Click);
+            this.decSpeed.MouseLeave += new System.EventHandler(this.stop_ClickTimer);
+            this.decSpeed.MouseHover += new System.EventHandler(this.decSens_MouseHover);
+            // 
+            // incDeadzone
+            // 
+            this.incDeadzone.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.incDeadzone.ForeColor = System.Drawing.Color.Black;
+            this.incDeadzone.Location = new System.Drawing.Point(678, 94);
+            this.incDeadzone.Margin = new System.Windows.Forms.Padding(4);
+            this.incDeadzone.Name = "incDeadzone";
+            this.incDeadzone.Size = new System.Drawing.Size(41, 37);
+            this.incDeadzone.TabIndex = 72;
+            this.incDeadzone.Text = "+";
+            this.incDeadzone.UseVisualStyleBackColor = true;
+            this.incDeadzone.Click += new System.EventHandler(this.incDeadzone_Click);
+            this.incDeadzone.MouseLeave += new System.EventHandler(this.stop_ClickTimer);
+            this.incDeadzone.MouseHover += new System.EventHandler(this.incDeadzone_MouseHover);
+            // 
+            // decDeadzone
+            // 
+            this.decDeadzone.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.decDeadzone.ForeColor = System.Drawing.Color.Black;
+            this.decDeadzone.Location = new System.Drawing.Point(14, 94);
+            this.decDeadzone.Margin = new System.Windows.Forms.Padding(4);
+            this.decDeadzone.Name = "decDeadzone";
+            this.decDeadzone.Size = new System.Drawing.Size(41, 37);
+            this.decDeadzone.TabIndex = 71;
+            this.decDeadzone.Text = "-";
+            this.decDeadzone.UseVisualStyleBackColor = true;
+            this.decDeadzone.Click += new System.EventHandler(this.decDeadzone_Click);
+            this.decDeadzone.MouseLeave += new System.EventHandler(this.stop_ClickTimer);
+            this.decDeadzone.MouseHover += new System.EventHandler(this.decDeadzone_MouseHover);
+            // 
+            // deadzoneLabel
+            // 
+            this.deadzoneLabel.AutoSize = true;
+            this.deadzoneLabel.Location = new System.Drawing.Point(620, 84);
+            this.deadzoneLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.deadzoneLabel.Name = "deadzoneLabel";
+            this.deadzoneLabel.Size = new System.Drawing.Size(32, 17);
+            this.deadzoneLabel.TabIndex = 70;
+            this.deadzoneLabel.Text = "100";
+            // 
+            // label34
+            // 
+            this.label34.AutoSize = true;
+            this.label34.Location = new System.Drawing.Point(76, 80);
+            this.label34.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label34.Name = "label34";
+            this.label34.Size = new System.Drawing.Size(73, 17);
+            this.label34.TabIndex = 69;
+            this.label34.Text = "Deadzone";
+            // 
+            // deadzoneBar
+            // 
+            this.deadzoneBar.LargeChange = 10;
+            this.deadzoneBar.Location = new System.Drawing.Point(56, 101);
+            this.deadzoneBar.Margin = new System.Windows.Forms.Padding(4);
+            this.deadzoneBar.Maximum = 650;
+            this.deadzoneBar.Minimum = 1;
+            this.deadzoneBar.Name = "deadzoneBar";
+            this.deadzoneBar.Size = new System.Drawing.Size(614, 56);
+            this.deadzoneBar.TabIndex = 68;
+            this.deadzoneBar.TickFrequency = 20;
+            this.deadzoneBar.Value = 100;
+            this.deadzoneBar.Scroll += new System.EventHandler(this.deadzoneBar_Scroll);
+            // 
+            // sensLabel
+            // 
+            this.sensLabel.AutoSize = true;
+            this.sensLabel.Location = new System.Drawing.Point(624, 16);
+            this.sensLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.sensLabel.Name = "sensLabel";
+            this.sensLabel.Size = new System.Drawing.Size(24, 17);
+            this.sensLabel.TabIndex = 67;
+            this.sensLabel.Text = "40";
+            // 
+            // sensBar
+            // 
+            this.sensBar.AutoSize = false;
+            this.sensBar.LargeChange = 10;
+            this.sensBar.Location = new System.Drawing.Point(56, 31);
+            this.sensBar.Margin = new System.Windows.Forms.Padding(4);
+            this.sensBar.Maximum = 255;
+            this.sensBar.Minimum = 1;
+            this.sensBar.Name = "sensBar";
+            this.sensBar.Size = new System.Drawing.Size(614, 55);
+            this.sensBar.TabIndex = 66;
+            this.sensBar.TickFrequency = 5;
+            this.sensBar.Value = 40;
+            this.sensBar.Scroll += new System.EventHandler(this.sensBar_Scroll);
+            // 
+            // label36
+            // 
+            this.label36.AutoSize = true;
+            this.label36.Location = new System.Drawing.Point(76, 13);
+            this.label36.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label36.Name = "label36";
+            this.label36.Size = new System.Drawing.Size(71, 17);
+            this.label36.TabIndex = 65;
+            this.label36.Text = "Sensitivity";
             // 
             // deadzoneXLabel
             // 
             this.deadzoneXLabel.AutoSize = true;
-            this.deadzoneXLabel.Location = new System.Drawing.Point(267, 121);
+            this.deadzoneXLabel.Location = new System.Drawing.Point(267, 77);
             this.deadzoneXLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.deadzoneXLabel.Name = "deadzoneXLabel";
             this.deadzoneXLabel.Size = new System.Drawing.Size(32, 17);
@@ -894,7 +1046,7 @@
             // DeadzoneXNameLabel
             // 
             this.DeadzoneXNameLabel.AutoSize = true;
-            this.DeadzoneXNameLabel.Location = new System.Drawing.Point(69, 121);
+            this.DeadzoneXNameLabel.Location = new System.Drawing.Point(69, 81);
             this.DeadzoneXNameLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.DeadzoneXNameLabel.Name = "DeadzoneXNameLabel";
             this.DeadzoneXNameLabel.Size = new System.Drawing.Size(87, 17);
@@ -904,7 +1056,7 @@
             // deadzoneXBar
             // 
             this.deadzoneXBar.LargeChange = 10;
-            this.deadzoneXBar.Location = new System.Drawing.Point(56, 144);
+            this.deadzoneXBar.Location = new System.Drawing.Point(56, 100);
             this.deadzoneXBar.Margin = new System.Windows.Forms.Padding(4);
             this.deadzoneXBar.Maximum = 650;
             this.deadzoneXBar.Minimum = 1;
@@ -915,45 +1067,45 @@
             this.deadzoneXBar.Value = 100;
             this.deadzoneXBar.Scroll += new System.EventHandler(this.deadzoneX_Scroll);
             // 
-            // speedXLabel
+            // sensXLabel
             // 
-            this.speedXLabel.AutoSize = true;
-            this.speedXLabel.Location = new System.Drawing.Point(275, 24);
-            this.speedXLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.speedXLabel.Name = "speedXLabel";
-            this.speedXLabel.Size = new System.Drawing.Size(24, 17);
-            this.speedXLabel.TabIndex = 41;
-            this.speedXLabel.Text = "40";
+            this.sensXLabel.AutoSize = true;
+            this.sensXLabel.Location = new System.Drawing.Point(273, 13);
+            this.sensXLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.sensXLabel.Name = "sensXLabel";
+            this.sensXLabel.Size = new System.Drawing.Size(24, 17);
+            this.sensXLabel.TabIndex = 41;
+            this.sensXLabel.Text = "40";
             // 
-            // speedXBar
+            // sensXBar
             // 
-            this.speedXBar.AutoSize = false;
-            this.speedXBar.LargeChange = 1;
-            this.speedXBar.Location = new System.Drawing.Point(56, 43);
-            this.speedXBar.Margin = new System.Windows.Forms.Padding(4);
-            this.speedXBar.Maximum = 255;
-            this.speedXBar.Minimum = 1;
-            this.speedXBar.Name = "speedXBar";
-            this.speedXBar.Size = new System.Drawing.Size(257, 55);
-            this.speedXBar.TabIndex = 40;
-            this.speedXBar.TickFrequency = 5;
-            this.speedXBar.Value = 40;
-            this.speedXBar.Scroll += new System.EventHandler(this.speedXBar_Scroll);
+            this.sensXBar.AutoSize = false;
+            this.sensXBar.LargeChange = 1;
+            this.sensXBar.Location = new System.Drawing.Point(56, 31);
+            this.sensXBar.Margin = new System.Windows.Forms.Padding(4);
+            this.sensXBar.Maximum = 255;
+            this.sensXBar.Minimum = 1;
+            this.sensXBar.Name = "sensXBar";
+            this.sensXBar.Size = new System.Drawing.Size(257, 55);
+            this.sensXBar.TabIndex = 40;
+            this.sensXBar.TickFrequency = 5;
+            this.sensXBar.Value = 40;
+            this.sensXBar.Scroll += new System.EventHandler(this.sensXBar_Scroll);
             // 
             // SpeedXNameLabel
             // 
             this.SpeedXNameLabel.AutoSize = true;
-            this.SpeedXNameLabel.Location = new System.Drawing.Point(66, 24);
+            this.SpeedXNameLabel.Location = new System.Drawing.Point(66, 11);
             this.SpeedXNameLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.SpeedXNameLabel.Name = "SpeedXNameLabel";
-            this.SpeedXNameLabel.Size = new System.Drawing.Size(63, 17);
+            this.SpeedXNameLabel.Size = new System.Drawing.Size(85, 17);
             this.SpeedXNameLabel.TabIndex = 39;
-            this.SpeedXNameLabel.Text = "Speed-X";
+            this.SpeedXNameLabel.Text = "Sensitivity-X";
             // 
             // splitXYBox
             // 
             this.splitXYBox.AutoSize = true;
-            this.splitXYBox.Location = new System.Drawing.Point(605, 304);
+            this.splitXYBox.Location = new System.Drawing.Point(605, 298);
             this.splitXYBox.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.splitXYBox.Name = "splitXYBox";
             this.splitXYBox.Size = new System.Drawing.Size(81, 21);
@@ -965,7 +1117,7 @@
             // selectAlternative
             // 
             this.selectAlternative.AutoSize = true;
-            this.selectAlternative.Location = new System.Drawing.Point(559, 32);
+            this.selectAlternative.Location = new System.Drawing.Point(559, 21);
             this.selectAlternative.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.selectAlternative.Name = "selectAlternative";
             this.selectAlternative.Size = new System.Drawing.Size(146, 21);
@@ -978,7 +1130,7 @@
             // 
             this.selectStick.AutoSize = true;
             this.selectStick.Checked = true;
-            this.selectStick.Location = new System.Drawing.Point(188, 30);
+            this.selectStick.Location = new System.Drawing.Point(188, 19);
             this.selectStick.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.selectStick.Name = "selectStick";
             this.selectStick.Size = new System.Drawing.Size(182, 21);
@@ -992,7 +1144,7 @@
             // 
             this.calButton.Enabled = false;
             this.calButton.ForeColor = System.Drawing.Color.Black;
-            this.calButton.Location = new System.Drawing.Point(248, 285);
+            this.calButton.Location = new System.Drawing.Point(250, 287);
             this.calButton.Margin = new System.Windows.Forms.Padding(4);
             this.calButton.Name = "calButton";
             this.calButton.Size = new System.Drawing.Size(291, 59);
@@ -1847,6 +1999,16 @@
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Single";
             // 
+            // label41
+            // 
+            this.label41.AutoSize = true;
+            this.label41.Location = new System.Drawing.Point(167, 13);
+            this.label41.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label41.Name = "label41";
+            this.label41.Size = new System.Drawing.Size(181, 17);
+            this.label41.TabIndex = 179;
+            this.label41.Text = "Select Sip and Puff actions:";
+            // 
             // clearButtonStrongPuff
             // 
             this.clearButtonStrongPuff.Enabled = false;
@@ -2201,6 +2363,16 @@
             this.tabPage2.Size = new System.Drawing.Size(702, 323);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "StrongSip+";
+            // 
+            // label35
+            // 
+            this.label35.AutoSize = true;
+            this.label35.Location = new System.Drawing.Point(175, 13);
+            this.label35.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label35.Name = "label35";
+            this.label35.Size = new System.Drawing.Size(246, 17);
+            this.label35.TabIndex = 206;
+            this.label35.Text = "Select StrongSip combination actions:";
             // 
             // clearButtonStrongSipRight
             // 
@@ -2572,6 +2744,16 @@
             this.tabPage3.Size = new System.Drawing.Size(702, 323);
             this.tabPage3.TabIndex = 2;
             this.tabPage3.Text = "StrongPuff+";
+            // 
+            // label32
+            // 
+            this.label32.AutoSize = true;
+            this.label32.Location = new System.Drawing.Point(172, 13);
+            this.label32.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label32.Name = "label32";
+            this.label32.Size = new System.Drawing.Size(251, 17);
+            this.label32.TabIndex = 178;
+            this.label32.Text = "Select StrongPuff combination actions:";
             // 
             // clearButtonStrongPuffRight
             // 
@@ -4018,36 +4200,6 @@
             this.StoreButton.UseVisualStyleBackColor = true;
             this.StoreButton.Click += new System.EventHandler(this.StoreButton_Click);
             // 
-            // label32
-            // 
-            this.label32.AutoSize = true;
-            this.label32.Location = new System.Drawing.Point(172, 13);
-            this.label32.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.label32.Name = "label32";
-            this.label32.Size = new System.Drawing.Size(251, 17);
-            this.label32.TabIndex = 178;
-            this.label32.Text = "Select StrongPuff combination actions:";
-            // 
-            // label35
-            // 
-            this.label35.AutoSize = true;
-            this.label35.Location = new System.Drawing.Point(175, 13);
-            this.label35.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.label35.Name = "label35";
-            this.label35.Size = new System.Drawing.Size(246, 17);
-            this.label35.TabIndex = 206;
-            this.label35.Text = "Select StrongSip combination actions:";
-            // 
-            // label41
-            // 
-            this.label41.AutoSize = true;
-            this.label41.Location = new System.Drawing.Point(167, 13);
-            this.label41.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.label41.Name = "label41";
-            this.label41.Size = new System.Drawing.Size(181, 17);
-            this.label41.TabIndex = 179;
-            this.label41.Text = "Select Sip and Puff actions:";
-            // 
             // FLipMouseGUI
             // 
             this.AccessibleDescription = "FlipMouseGUI";
@@ -4083,16 +4235,18 @@
             this.tabControl.ResumeLayout(false);
             this.LipmouseTab.ResumeLayout(false);
             this.LipmouseTab.PerformLayout();
-            this.singlePanel.ResumeLayout(false);
-            this.singlePanel.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.deadzoneBar)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.speedBar)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.accelerationBar)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.maxspeedBar)).EndInit();
             this.splitPanel.ResumeLayout(false);
             this.splitPanel.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.deadzoneYBar)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.speedYBar)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.sensYBar)).EndInit();
+            this.singlePanel.ResumeLayout(false);
+            this.singlePanel.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.deadzoneBar)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.sensBar)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.deadzoneXBar)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.speedXBar)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.sensXBar)).EndInit();
             this.AlternativeTab.ResumeLayout(false);
             this.AlternativeTab.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.RightNumericParameter)).EndInit();
@@ -4306,15 +4460,15 @@
         private System.Windows.Forms.Button decDeadzoneX;
         private System.Windows.Forms.Label DeadzoneYNameLabel;
         private System.Windows.Forms.Label SpeedYNameLabel;
-        private System.Windows.Forms.Label speedYLabel;
+        private System.Windows.Forms.Label sensYLabel;
         private System.Windows.Forms.Label deadzoneYLabel;
         private System.Windows.Forms.TrackBar deadzoneYBar;
-        private System.Windows.Forms.TrackBar speedYBar;
+        private System.Windows.Forms.TrackBar sensYBar;
         private System.Windows.Forms.Label deadzoneXLabel;
         private System.Windows.Forms.Label DeadzoneXNameLabel;
         private System.Windows.Forms.TrackBar deadzoneXBar;
-        private System.Windows.Forms.Label speedXLabel;
-        private System.Windows.Forms.TrackBar speedXBar;
+        private System.Windows.Forms.Label sensXLabel;
+        private System.Windows.Forms.TrackBar sensXBar;
         private System.Windows.Forms.Label SpeedXNameLabel;
         private System.Windows.Forms.Panel singlePanel;
         private System.Windows.Forms.Button incSpeed;
@@ -4324,8 +4478,8 @@
         private System.Windows.Forms.Label deadzoneLabel;
         private System.Windows.Forms.Label label34;
         private System.Windows.Forms.TrackBar deadzoneBar;
-        private System.Windows.Forms.Label speedLabel;
-        private System.Windows.Forms.TrackBar speedBar;
+        private System.Windows.Forms.Label sensLabel;
+        private System.Windows.Forms.TrackBar sensBar;
         private System.Windows.Forms.Label label36;
         private System.Windows.Forms.Panel puffLevelIndicatorPanel;
         private System.Windows.Forms.Panel holdLevelIndicatorPanel;
@@ -4443,6 +4597,16 @@
         private System.Windows.Forms.Label label41;
         private System.Windows.Forms.Label label35;
         private System.Windows.Forms.Label label32;
+        private System.Windows.Forms.Button incAcceleration;
+        private System.Windows.Forms.Button decAcceleration;
+        private System.Windows.Forms.Button incMaxspeed;
+        private System.Windows.Forms.Button decMaxspeed;
+        private System.Windows.Forms.Label label42;
+        private System.Windows.Forms.Label accelerationLabel;
+        private System.Windows.Forms.TrackBar accelerationBar;
+        private System.Windows.Forms.Label maxspeedLabel;
+        private System.Windows.Forms.TrackBar maxspeedBar;
+        private System.Windows.Forms.Label label49;
     }
 }
 

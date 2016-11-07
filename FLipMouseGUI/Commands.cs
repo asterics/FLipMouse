@@ -82,6 +82,10 @@
          AT AY <uint>    acceleration y-axis  (0-100)
          AT DX <uint>    deadzone x-axis  (0-1000)
          AT DY <uint>    deadzone y-axis  (0-1000)
+         AT MS <uint>    maximum speed  (0-100)
+         AT AC <uint>    acceleration time (0-100)
+         AT MA <string>  execute a command macro (containing multiple AT commands)
+
          AT TS <uint>    treshold for sip action  (0-512)
          AT TP <uint>    treshold for puff action (512-1023)
          AT SP <uint>    treshold for strong puff (512-1023)
@@ -185,6 +189,7 @@ namespace MouseApp2
             allCommands.add(new Command("AT RA", PARTYPE_NONE, "Release All", COMBOENTRY_NO, GUITYPE_STANDARD));
             allCommands.add(new Command("AT SA", PARTYPE_STRING, "Save Slot", COMBOENTRY_NO, GUITYPE_STANDARD));
             allCommands.add(new Command("AT LO", PARTYPE_STRING, "Load Slot by Name", COMBOENTRY_YES, GUITYPE_TEXTFIELD));
+            allCommands.add(new Command("AT MA", PARTYPE_STRING, "Execute Command Macro", COMBOENTRY_YES, GUITYPE_TEXTFIELD));
             allCommands.add(new Command("AT LA", PARTYPE_NONE, "Load All", COMBOENTRY_NO, GUITYPE_STANDARD));
             allCommands.add(new Command("AT LI", PARTYPE_NONE, "List Slots", COMBOENTRY_NO, GUITYPE_STANDARD));
             allCommands.add(new Command("AT NE", PARTYPE_NONE, "Load Next Slot", COMBOENTRY_YES, GUITYPE_STANDARD));
@@ -199,6 +204,9 @@ namespace MouseApp2
             allCommands.add(new Command("AT AY", PARTYPE_UINT, "Acceleration Y", COMBOENTRY_NO, GUITYPE_SLIDER));
             allCommands.add(new Command("AT DX", PARTYPE_UINT, "Deadzone X", COMBOENTRY_NO, GUITYPE_SLIDER));
             allCommands.add(new Command("AT DY", PARTYPE_UINT, "Deadzone Y", COMBOENTRY_NO, GUITYPE_SLIDER));
+            allCommands.add(new Command("AT MS", PARTYPE_UINT, "MaxSpeed", COMBOENTRY_NO, GUITYPE_SLIDER));
+            allCommands.add(new Command("AT AC", PARTYPE_UINT, "Acceleration Time", COMBOENTRY_NO, GUITYPE_SLIDER));
+            allCommands.add(new Command("AT MA", PARTYPE_STRING, "Execute Macro", COMBOENTRY_YES, GUITYPE_TEXTFIELD));
             allCommands.add(new Command("AT TS", PARTYPE_UINT, "Theshold Sip", COMBOENTRY_NO, GUITYPE_SLIDER));
             allCommands.add(new Command("AT TP", PARTYPE_UINT, "Theshold Puff", COMBOENTRY_NO, GUITYPE_SLIDER));
             allCommands.add(new Command("AT SP", PARTYPE_UINT, "Threshold StrongPuff", COMBOENTRY_NO, GUITYPE_SLIDER));
@@ -219,10 +227,13 @@ namespace MouseApp2
 
         public void initCommandGuiLinks()
         {
-            commandGuiLinks.Add(new CommandGuiLink("AT AX", speedXBar, speedXLabel, "60"));
-            commandGuiLinks.Add(new CommandGuiLink("AT AY", speedYBar, speedYLabel, "60"));
+            commandGuiLinks.Add(new CommandGuiLink("AT AX", sensXBar, sensXLabel, "60"));
+            commandGuiLinks.Add(new CommandGuiLink("AT AY", sensYBar, sensYLabel, "60"));
             commandGuiLinks.Add(new CommandGuiLink("AT DX", deadzoneXBar, deadzoneXLabel, "20"));
             commandGuiLinks.Add(new CommandGuiLink("AT DY", deadzoneYBar, deadzoneYLabel, "20"));
+            commandGuiLinks.Add(new CommandGuiLink("AT MS", maxspeedBar, maxspeedLabel, "50"));
+            commandGuiLinks.Add(new CommandGuiLink("AT AC", accelerationBar, accelerationLabel, "50"));
+
             commandGuiLinks.Add(new CommandGuiLink("AT TS", sipThresholdBar, sipThresholdLabel, "500"));
             commandGuiLinks.Add(new CommandGuiLink("AT TP", puffThresholdBar, puffThresholdLabel, "525"));
             commandGuiLinks.Add(new CommandGuiLink("AT SP", strongPuffThresholdBar, strongPuffThresholdLabel, "700"));

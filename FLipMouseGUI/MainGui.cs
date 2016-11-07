@@ -29,9 +29,9 @@ namespace MouseApp2
 {
     public partial class FLipMouseGUI : Form
     {
-        const string VERSION_STRING = "2.2";
+        const string VERSION_STRING = "2.4";
 
-        const int SPEED_CHANGE_STEP = 1;
+        const int SENS_CHANGE_STEP = 1;
         const int DEADZONE_CHANGE_STEP = 1;
         const int STRONGMODE_CHANGE_STEP = 1;
         const int PRESSURE_CHANGE_STEP = 1;
@@ -176,12 +176,12 @@ namespace MouseApp2
                     }
                 }
             }
-            speedBar.Value=speedXBar.Value;
-            speedLabel.Text = speedBar.Value.ToString();
+            sensBar.Value=sensXBar.Value;
+            sensLabel.Text = sensBar.Value.ToString();
             deadzoneBar.Value = deadzoneXBar.Value;
             deadzoneLabel.Text = deadzoneBar.Value.ToString();
 
-            if ((speedXBar.Value != speedYBar.Value) ||
+            if ((sensXBar.Value != sensYBar.Value) ||
                 (deadzoneXBar.Value != deadzoneYBar.Value))
                 splitXYBox.Checked = true;
             else splitXYBox.Checked = false;
@@ -824,10 +824,10 @@ namespace MouseApp2
 
         private void updateGangBars()
         {
-            speedXBar.Value = speedBar.Value;
-            speedXLabel.Text = speedBar.Value.ToString();
-            speedYBar.Value = speedBar.Value;
-            speedYLabel.Text = speedBar.Value.ToString();
+            sensXBar.Value = sensBar.Value;
+            sensXLabel.Text = sensBar.Value.ToString();
+            sensYBar.Value = sensBar.Value;
+            sensYLabel.Text = sensBar.Value.ToString();
             
             deadzoneXBar.Value = deadzoneBar.Value;
             deadzoneXLabel.Text = deadzoneBar.Value.ToString();
@@ -835,33 +835,33 @@ namespace MouseApp2
             deadzoneYLabel.Text = deadzoneBar.Value.ToString();
         }
 
-        private void speedBar_Scroll(object sender, EventArgs e)
+        private void sensBar_Scroll(object sender, EventArgs e)
         {
-            speedLabel.Text  = speedBar.Value.ToString();
+            sensLabel.Text  = sensBar.Value.ToString();
             updateGangBars();
         }
-        private void decSpeed_Click(object sender, EventArgs e)
+        private void decSens_Click(object sender, EventArgs e)
         {
-            if (speedBar.Value >= speedBar.Minimum + SPEED_CHANGE_STEP)
-                speedBar.Value -= SPEED_CHANGE_STEP;
-            speedLabel.Text = speedBar.Value.ToString();
+            if (sensBar.Value >= sensBar.Minimum + SENS_CHANGE_STEP)
+                sensBar.Value -= SENS_CHANGE_STEP;
+            sensLabel.Text = sensBar.Value.ToString();
             updateGangBars();
         }
-        private void decSpeed_MouseHover(object sender, EventArgs e)
+        private void decSens_MouseHover(object sender, EventArgs e)
         {
-            functionPointer = new ClickDelegate(decSpeed_Click);
+            functionPointer = new ClickDelegate(decSens_Click);
             clickTimer.Start();
         }
-        private void incSpeed_Click(object sender, EventArgs e)
+        private void incSens_Click(object sender, EventArgs e)
         {
-            if (speedBar.Value <= speedBar.Maximum - SPEED_CHANGE_STEP)
-                speedBar.Value += SPEED_CHANGE_STEP;
-            speedLabel.Text = speedBar.Value.ToString();
+            if (sensBar.Value <= sensBar.Maximum - SENS_CHANGE_STEP)
+                sensBar.Value += SENS_CHANGE_STEP;
+            sensLabel.Text = sensBar.Value.ToString();
             updateGangBars();
         }
-        private void incSpeed_MouseHover(object sender, EventArgs e)
+        private void incSens_MouseHover(object sender, EventArgs e)
         {
-            functionPointer = new ClickDelegate(incSpeed_Click);
+            functionPointer = new ClickDelegate(incSens_Click);
             clickTimer.Start();
         }
 
@@ -895,58 +895,58 @@ namespace MouseApp2
             clickTimer.Start();
         }
 
-        private void speedXBar_Scroll(object sender, EventArgs e)
+        private void sensXBar_Scroll(object sender, EventArgs e)
         {
-            speedXLabel.Text = speedXBar.Value.ToString();
+            sensXLabel.Text = sensXBar.Value.ToString();
         }
-        private void decSpeedX_Click(object sender, EventArgs e)
+        private void decSensX_Click(object sender, EventArgs e)
         {
-            if (speedXBar.Value >= speedXBar.Minimum + SPEED_CHANGE_STEP)
-                speedXBar.Value -= SPEED_CHANGE_STEP;
-            speedXLabel.Text = speedXBar.Value.ToString();
+            if (sensXBar.Value >= sensXBar.Minimum + SENS_CHANGE_STEP)
+                sensXBar.Value -= SENS_CHANGE_STEP;
+            sensXLabel.Text = sensXBar.Value.ToString();
         }
-        private void decSpeedX_MouseHover(object sender, EventArgs e)
+        private void decSensX_MouseHover(object sender, EventArgs e)
         {
-            functionPointer = new ClickDelegate(decSpeedX_Click);
+            functionPointer = new ClickDelegate(decSensX_Click);
             clickTimer.Start();
         }
-        private void incSpeedX_Click(object sender, EventArgs e)
+        private void incSensX_Click(object sender, EventArgs e)
         {
-            if (speedXBar.Value <= speedXBar.Maximum - SPEED_CHANGE_STEP)
-                speedXBar.Value += SPEED_CHANGE_STEP;
-            speedXLabel.Text = speedXBar.Value.ToString();
+            if (sensXBar.Value <= sensXBar.Maximum - SENS_CHANGE_STEP)
+                sensXBar.Value += SENS_CHANGE_STEP;
+            sensXLabel.Text = sensXBar.Value.ToString();
         }
-        private void incSpeedX_MouseHover(object sender, EventArgs e)
+        private void incSensX_MouseHover(object sender, EventArgs e)
         {
-            functionPointer = new ClickDelegate(incSpeedX_Click);
+            functionPointer = new ClickDelegate(incSensX_Click);
             clickTimer.Start();
         }
 
 
-        private void speedYBar_Scroll(object sender, EventArgs e)
+        private void sensYBar_Scroll(object sender, EventArgs e)
         {
-            speedYLabel.Text = speedYBar.Value.ToString();
+            sensYLabel.Text = sensYBar.Value.ToString();
         }
-        private void decSpeedY_Click(object sender, EventArgs e)
+        private void decSensY_Click(object sender, EventArgs e)
         {
-            if (speedYBar.Value >= speedYBar.Minimum + SPEED_CHANGE_STEP)
-                speedYBar.Value -= SPEED_CHANGE_STEP;
-            speedYLabel.Text = speedYBar.Value.ToString();
+            if (sensYBar.Value >= sensYBar.Minimum + SENS_CHANGE_STEP)
+                sensYBar.Value -= SENS_CHANGE_STEP;
+            sensYLabel.Text = sensYBar.Value.ToString();
         }
-        private void decSpeedY_MouseHover(object sender, EventArgs e)
+        private void decSensY_MouseHover(object sender, EventArgs e)
         {
-            functionPointer = new ClickDelegate(decSpeedY_Click);
+            functionPointer = new ClickDelegate(decSensY_Click);
             clickTimer.Start();
         }
-        private void incSpeedY_Click(object sender, EventArgs e)
+        private void incSensY_Click(object sender, EventArgs e)
         {
-            if (speedYBar.Value <= speedYBar.Maximum - SPEED_CHANGE_STEP)
-                speedYBar.Value += SPEED_CHANGE_STEP;
-            speedYLabel.Text = speedYBar.Value.ToString();
+            if (sensYBar.Value <= sensYBar.Maximum - SENS_CHANGE_STEP)
+                sensYBar.Value += SENS_CHANGE_STEP;
+            sensYLabel.Text = sensYBar.Value.ToString();
         }
-        private void incSpeedY_MouseHover(object sender, EventArgs e)
+        private void incSensY_MouseHover(object sender, EventArgs e)
         {
-            functionPointer = new ClickDelegate(incSpeedY_Click);
+            functionPointer = new ClickDelegate(incSensY_Click);
             clickTimer.Start();
         }
 
@@ -1016,6 +1016,68 @@ namespace MouseApp2
         private void incDeadzoneY_MouseHover(object sender, EventArgs e)
         {
             functionPointer = new ClickDelegate(incDeadzoneY_Click);
+            clickTimer.Start();
+        }
+
+
+
+        private void maxspeedBar_Scroll(object sender, EventArgs e)
+        {
+            maxspeedLabel.Text = maxspeedBar.Value.ToString();
+        }
+
+        private void decMaxspeed_Click(object sender, EventArgs e)
+        {
+            if (maxspeedBar.Value >= maxspeedBar.Minimum + SENS_CHANGE_STEP)
+                maxspeedBar.Value -= SENS_CHANGE_STEP;
+            maxspeedLabel.Text = maxspeedBar.Value.ToString();
+        }
+        private void decMaxspeed_MouseHover(object sender, EventArgs e)
+        {
+            functionPointer = new ClickDelegate(decMaxspeed_Click);
+            clickTimer.Start();
+        }
+        private void incMaxspeed_Click(object sender, EventArgs e)
+        {
+            if (maxspeedBar.Value <= maxspeedBar.Maximum - SENS_CHANGE_STEP)
+                maxspeedBar.Value += SENS_CHANGE_STEP;
+            maxspeedLabel.Text = maxspeedBar.Value.ToString();
+        }
+
+        private void incMaxspeed_MouseHover(object sender, EventArgs e)
+        {
+            functionPointer = new ClickDelegate(incMaxspeed_Click);
+            clickTimer.Start();
+        }
+ 
+
+
+
+        private void accelerationBar_Scroll(object sender, EventArgs e)
+        {
+            accelerationLabel.Text = accelerationBar.Value.ToString();
+        }
+
+        private void decAcceleration_Click(object sender, EventArgs e)
+        {
+            if (accelerationBar.Value >= accelerationBar.Minimum + SENS_CHANGE_STEP)
+                accelerationBar.Value -= SENS_CHANGE_STEP;
+            accelerationLabel.Text = accelerationBar.Value.ToString();
+        }
+        private void decAcceleration_MouseHover(object sender, EventArgs e)
+        {
+            functionPointer = new ClickDelegate(decAcceleration_Click);
+            clickTimer.Start();
+        }
+        private void incAcceleration_Click(object sender, EventArgs e)
+        {
+            if (accelerationBar.Value <= accelerationBar.Maximum - SENS_CHANGE_STEP)
+                accelerationBar.Value += SENS_CHANGE_STEP;
+            accelerationLabel.Text = accelerationBar.Value.ToString();
+        }
+        private void incAcceleration_MouseHover(object sender, EventArgs e)
+        {
+            functionPointer = new ClickDelegate(incAcceleration_Click);
             clickTimer.Start();
         }
 
@@ -1300,5 +1362,6 @@ namespace MouseApp2
             storeSlot(actSlot);
             storeSettingsToFLipmouse();
         }
+
     }
 }

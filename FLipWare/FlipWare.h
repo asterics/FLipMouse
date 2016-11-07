@@ -39,8 +39,9 @@
 #include "modes.h"
 #include "bluetooth.h"
 
-#define VERSION_STRING "Flipmouse v2.3"   
+#define VERSION_STRING "Flipmouse v2.4"   
 
+//  V2.4: added support for acceleration and maximum speed
 //	V2.3: added support for internal Bluetooth Addon
 //  V2.2: added new EEPROM handling and IR-Command support
 //  V2.0: extended AT command set, TeensyLC support, external EEPROM
@@ -92,6 +93,8 @@ struct slotGeneralSettings {
   uint8_t  ay;     // acceleration y
   int16_t  dx;     // deadzone x
   int16_t  dy;     // deadzone y
+  uint16_t ms;     // maximum speed
+  uint16_t ac;     // acceleration time
   uint16_t ts;     // threshold sip
   uint16_t tp;     // threshold puff 
   uint8_t  ws;     // wheel stepsize  

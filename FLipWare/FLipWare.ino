@@ -75,7 +75,8 @@
 
 struct slotGeneralSettings settings = {      // default settings valus, for type definition see fabi.h
     1,                                // stickMode: Mouse cursor movement active
-    60, 60, 20, 20, 500, 525, 3,      // accx, accy, deadzone x, deadzone y, threshold sip, threshold puff, wheel step,
+    60, 60, 20, 20, 50, 50,           // accx, accy, deadzone x, deadzone y, maxspeed, acceleration time
+    500, 525, 3,                      // threshold sip, threshold puff, wheel step,
     800, 10,                          // threshold strong puff, threshold strong sip
     50, 50, 50, 50 ,                  // gain up / down / left / right
     0, 0                              // offset x / y

@@ -149,12 +149,15 @@ namespace MouseApp2
         public void gotEnd()
         {
             if (slots.Count < 1)
-              slots.Add(new Slot());
+            {
+                //slots.Add(new Slot());
+                initSlots();
+            }
 
-              actSlot = 0;
-              displaySlot(actSlot);
+            actSlot = 0;
+            displaySlot(actSlot);
 
-              sendStartReportingCommand();          
+            sendStartReportingCommand();          
         }
 
         public void gotID(String newLine)

@@ -119,52 +119,80 @@ void performCommand (uint8_t cmd, int16_t par1, char * keystring, int8_t periodi
         case CMD_CL:
                if (DebugOutput==DEBUG_FULLOUTPUT)  
                  Serial.println("click left");
-               leftMouseButton=1;  leftClickRunning=DEFAULT_CLICK_TIME;
+               Mouse.press(MOUSE_LEFT); 
+               if(isBluetoothAvailable()) mouseBTPress(1<<0);
+               delay(DEFAULT_CLICK_TIME);
+               Mouse.release(MOUSE_LEFT); 
+               if(isBluetoothAvailable()) mouseBTRelease(1<<0);
                break;
         case CMD_CR:
                if (DebugOutput==DEBUG_FULLOUTPUT)  
                  Serial.println("click right");
-               rightMouseButton=1; rightClickRunning=DEFAULT_CLICK_TIME;
+               Mouse.press(MOUSE_RIGHT); 
+               if(isBluetoothAvailable()) mouseBTPress(1<<1);
+               delay(DEFAULT_CLICK_TIME);
+               Mouse.release(MOUSE_RIGHT); 
+               if(isBluetoothAvailable()) mouseBTRelease(1<<1);
                break;
         case CMD_CD:
                if (DebugOutput==DEBUG_FULLOUTPUT)  
                  Serial.println("click double");
-               leftMouseButton=1;  doubleClickRunning=DEFAULT_CLICK_TIME*DOUBLECLICK_MULTIPLIER;
+               Mouse.press(MOUSE_LEFT); 
+               if(isBluetoothAvailable()) mouseBTPress(1<<0);
+               delay(DEFAULT_CLICK_TIME);
+               Mouse.release(MOUSE_LEFT); 
+               if(isBluetoothAvailable()) mouseBTRelease(1<<0);
+               delay(DEFAULT_CLICK_TIME);
+               Mouse.press(MOUSE_LEFT); 
+               if(isBluetoothAvailable()) mouseBTPress(1<<0);
+               delay(DEFAULT_CLICK_TIME);
+               Mouse.release(MOUSE_LEFT); 
+               if(isBluetoothAvailable()) mouseBTRelease(1<<0);
                break;
         case CMD_CM:
                if (DebugOutput==DEBUG_FULLOUTPUT)  
                  Serial.println("click middle");
-               middleMouseButton=1; middleClickRunning=DEFAULT_CLICK_TIME;
+               Mouse.press(MOUSE_MIDDLE); 
+               if(isBluetoothAvailable()) mouseBTPress(1<<2);
+               delay(DEFAULT_CLICK_TIME);
+               Mouse.release(MOUSE_MIDDLE); 
+               if(isBluetoothAvailable()) mouseBTRelease(1<<2);
               break;
         case CMD_PL:
                if (DebugOutput==DEBUG_FULLOUTPUT)  
                  Serial.println("press left");
-               leftMouseButton=1; 
+               Mouse.press(MOUSE_LEFT); 
+               if(isBluetoothAvailable()) mouseBTPress(1<<0);
                break;
         case CMD_PR:
                if (DebugOutput==DEBUG_FULLOUTPUT)  
                  Serial.println("press right");
-               rightMouseButton=1; 
+               Mouse.press(MOUSE_RIGHT); 
+               if(isBluetoothAvailable()) mouseBTPress(1<<1);
                break;
         case CMD_PM:
                if (DebugOutput==DEBUG_FULLOUTPUT)  
                  Serial.println("press middle");
-               middleMouseButton=1; 
+               Mouse.press(MOUSE_MIDDLE); 
+               if(isBluetoothAvailable()) mouseBTPress(1<<2);
                break;
         case CMD_RL:
                if (DebugOutput==DEBUG_FULLOUTPUT)  
                  Serial.println("release left");
-               leftMouseButton=0;
+               Mouse.release(MOUSE_LEFT); 
+               if(isBluetoothAvailable()) mouseBTRelease(1<<0);
                break; 
         case CMD_RR:
                if (DebugOutput==DEBUG_FULLOUTPUT)  
                  Serial.println("release right");
-               rightMouseButton=0;
+               Mouse.release(MOUSE_RIGHT); 
+               if(isBluetoothAvailable()) mouseBTRelease(1<<1);
                break; 
         case CMD_RM:
                if (DebugOutput==DEBUG_FULLOUTPUT)  
                  Serial.println("release middle");
-               middleMouseButton=0;
+               Mouse.release(MOUSE_MIDDLE); 
+               if(isBluetoothAvailable()) mouseBTRelease(1<<2);
                break; 
         case CMD_WU:
                if (DebugOutput==DEBUG_FULLOUTPUT)  
@@ -241,7 +269,8 @@ void performCommand (uint8_t cmd, int16_t par1, char * keystring, int8_t periodi
         case CMD_KW:
                if (DebugOutput==DEBUG_FULLOUTPUT)  
                {  Serial.print("keyboard write: "); Serial.println(keystring); }
-               writeKeystring=keystring;
+               Keyboard.print(keystring);
+               if(isBluetoothAvailable()) keyboardBTPrint(keystring);
                break;
         case CMD_KP:
                if (DebugOutput==DEBUG_FULLOUTPUT)  
@@ -390,7 +419,7 @@ void performCommand (uint8_t cmd, int16_t par1, char * keystring, int8_t periodi
         case CMD_MA:
                if (DebugOutput==DEBUG_FULLOUTPUT)  
                {  Serial.print("execute macro: "); Serial.println(keystring); }
-               // do the macro stuff ...
+               // do the macro stuff in parser.cpp ...
                break;
 
         case CMD_TS:

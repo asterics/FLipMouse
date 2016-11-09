@@ -132,14 +132,6 @@ extern int8_t  input_map[NUMBER_OF_PHYSICAL_BUTTONS];
 extern uint16_t calib_now;
 extern int16_t  cx;
 extern int16_t  cy;
-extern uint8_t leftMouseButton;
-extern uint8_t middleMouseButton;
-extern uint8_t rightMouseButton;
-extern uint8_t leftClickRunning;
-extern uint8_t rightClickRunning;
-extern uint8_t middleClickRunning;
-extern uint8_t doubleClickRunning;
-extern char * writeKeystring;
 extern int8_t moveX;       
 extern int8_t moveY;
 

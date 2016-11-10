@@ -15,18 +15,18 @@ You need to print every STL part once to have the FLipMouse case.
 We also provide fully sliced G code files for the Prusa i3 MK2 3D printer, which was used by us to print the parts. We used the standard Prusa settings at quality level "normal", in this case the print of one case takes about four hours.
 There are different types of sliced files:
 
-* FLipMouse_Prusa_i3_MK2_PLA_NORMAL.g
+* **FLipMouse_Prusa_i3_MK2_PLA_NORMAL.g**
 
 This file can be used to print directly one FLipMouse case with the Prusa i3 MK2 and PLA material. We did not tested this file with any other materials!
 
 * FLipMouse_Prusa_i3_MK2_PLA_NORMAL_MULTI1.g
 
-TBD: This file will contain many same parts for production (e.g. only main cases)
+This file contains 10 main cases, can be used for multiple production.
 
 * FLipMouse_Prusa_i3_MK2_PLA_NORMAL_MULTI2.g
 
-TBD: This file will contain many same parts for production (e.g. only case covers)
+This file contains 10 covers, can be used for multiple production.
 
 * FLipMouse_Prusa_i3_MK2_PLA_NORMAL_MULTI3.g
 
-TBD: This file will contain many same parts for production (e.g. only inside parts)
+This file contains 10 times the rubberpad and sensor carrier as well as the front cover, can be used for multiple production.

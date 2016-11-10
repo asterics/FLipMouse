@@ -105,22 +105,12 @@ int pressure;
 
 int16_t  cx=0,cy=0;
 
-uint8_t leftMouseButton=0,old_leftMouseButton=0;
-uint8_t middleMouseButton=0,old_middleMouseButton=0;
-uint8_t rightMouseButton=0,old_rightMouseButton=0;
-uint8_t leftClickRunning=0;
-uint8_t rightClickRunning=0;
-uint8_t middleClickRunning=0;
-uint8_t doubleClickRunning=0;
-
 uint8_t blinkCount=0;
 uint8_t blinkTime=0;
 uint8_t blinkStartTime=0;
 
 int inByte=0;
 char * keystring=0;
-char * writeKeystring=0;
-
 
 // function declarations 
 void UpdateLeds();
@@ -230,15 +220,8 @@ void loop() {
           else y=0;
 
           handleModeState(x, y, pressure);  // handle all mouse / joystick / button activities
-          handleMouseClicks();              // update mouse click activities
+  //        handleMouseClicks();              // update mouse click activities
         
-          // handle Keyboard output (single key press/release is done seperately via setKeyValues() ) 
-          if (writeKeystring) {
-            Keyboard.print(writeKeystring);
-            keyboardBTPrint(writeKeystring);
-            writeKeystring=0;
-          }    
-           
           delay(waitTime);  // to limit move movement speed. TBD: remove delay, use millis() !
     }  
     else 
@@ -246,60 +229,6 @@ void loop() {
 
     UpdateLeds();
 }
-
-void handleMouseClicks()
-{
-      // handle running clicks or double clicks
-      if (leftClickRunning)
-          if (--leftClickRunning==0)  leftMouseButton=0; 
-      
-      if (rightClickRunning)
-          if (--rightClickRunning==0)  rightMouseButton=0; 
-   
-      if (middleClickRunning)
-          if (--middleClickRunning==0)  middleMouseButton=0; 
-  
-      if (doubleClickRunning)
-      {
-          doubleClickRunning--;
-          if (doubleClickRunning==DEFAULT_CLICK_TIME*2)  leftMouseButton=0; 
-          else if (doubleClickRunning==DEFAULT_CLICK_TIME)    leftMouseButton=1; 
-          else if (doubleClickRunning==0)    leftMouseButton=0; 
-      }
- 
-	// if any changes were made, update the Mouse buttons
-	if(leftMouseButton!=old_leftMouseButton) {
-		if (leftMouseButton) { 
-			Mouse.press(MOUSE_LEFT); 
-			mouseBTPress(1<<0);
-		} else { 
-			Mouse.release(MOUSE_LEFT); 
-			mouseBTRelease(1<<0);
-		}
-		old_leftMouseButton=leftMouseButton;
-	}
-	if(middleMouseButton!=old_middleMouseButton) {
-		if (middleMouseButton) {
-			Mouse.press(MOUSE_MIDDLE); 
-			mouseBTPress(1<<2);
-		} else { 
-			Mouse.release(MOUSE_MIDDLE); 
-			mouseBTRelease(1<<2);
-		}
-		old_middleMouseButton=middleMouseButton;
-	}
-	if(rightMouseButton!=old_rightMouseButton) {
-		if (rightMouseButton) { 
-			Mouse.press(MOUSE_RIGHT); 
-			mouseBTPress(1<<1);
-		} else { 
-			Mouse.release(MOUSE_RIGHT); 
-			mouseBTRelease(1<<1);
-		}
-		old_rightMouseButton=rightMouseButton;
-	}
-}
-
 
 void reportValues()
 {
@@ -328,9 +257,14 @@ void reportValues()
 void release_all()  // releases all previously pressed keys
 {
     release_all_keys(); 
-    leftMouseButton=0;
-    rightMouseButton=0;
-    middleMouseButton=0;
+    Mouse.release(MOUSE_LEFT); 
+    Mouse.release(MOUSE_MIDDLE); 
+    Mouse.release(MOUSE_RIGHT); 
+    if(isBluetoothAvailable())  {
+      mouseBTRelease(1<<0);
+      mouseBTRelease(1<<1);
+      mouseBTRelease(1<<2);
+    }
     moveX=0;
     moveY=0;
 }

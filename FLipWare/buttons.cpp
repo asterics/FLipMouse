@@ -59,9 +59,18 @@ void handlePress (int buttonIndex)   // a button was pressed
 void handleRelease (int buttonIndex)    // a button was released: deal with "sticky"-functions
 {
    switch(buttons[buttonIndex].mode) {
-     case CMD_PL: leftMouseButton=0; break;
-     case CMD_PR: rightMouseButton=0; break;
-     case CMD_PM: middleMouseButton=0; break;
+     case CMD_PL: 
+               Mouse.release(MOUSE_LEFT); 
+               if(isBluetoothAvailable()) mouseBTRelease(1<<0);
+               break;
+     case CMD_PR:
+               Mouse.release(MOUSE_RIGHT); 
+               if(isBluetoothAvailable()) mouseBTRelease(1<<1);
+               break;
+     case CMD_PM:
+               Mouse.release(MOUSE_MIDDLE); 
+               if(isBluetoothAvailable()) mouseBTRelease(1<<2);
+               break;
      case CMD_JP: Joystick.button(buttons[buttonIndex].value,0); break;
      case CMD_MX: moveX=0; break;      
      case CMD_MY: moveY=0; break;      

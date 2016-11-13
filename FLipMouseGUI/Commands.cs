@@ -84,7 +84,9 @@
          AT DY <uint>    deadzone y-axis  (0-1000)
          AT MS <uint>    maximum speed  (0-100)
          AT AC <uint>    acceleration time (0-100)
-         AT MA <string>  execute a command macro (containing multiple AT commands)
+         AT MA <string>  execute a command macro containing multiple commands (separated by semicolon) 
+                         example: "AT MA MX 100;MY 100;CL;"  use backslash to mask semicolon: "AT MA KW \;;CL;" writes a semicolon and then clicks left 
+         AT WA <uint>    wait (given in milliseconds, useful for macro commands)
 
          AT TS <uint>    treshold for sip action  (0-512)
          AT TP <uint>    treshold for puff action (512-1023)
@@ -182,7 +184,7 @@ namespace MouseApp2
             allCommands.add(new Command("AT JP", PARTYPE_INT, "Press Joystick Button", COMBOENTRY_YES, GUITYPE_INTFIELD));
             allCommands.add(new Command("AT JR", PARTYPE_INT, "Release Joystick Button", COMBOENTRY_NO, GUITYPE_STANDARD));
             allCommands.add(new Command("AT JH", PARTYPE_INT, "Joystick Hat position", COMBOENTRY_YES, GUITYPE_INTFIELD));
-            allCommands.add(new Command("AT KW", PARTYPE_STRING, "Write Text", COMBOENTRY_YES, GUITYPE_TEXTFIELD));
+            allCommands.add(new Command("AT KW", PARTYPE_STRING, "Write Text", COMBOENTRY_YES, GUITYPE_STANDARD));
             allCommands.add(new Command("AT KP", PARTYPE_STRING, "Press Keys", COMBOENTRY_YES, GUITYPE_KEYSELECT));
             allCommands.add(new Command("AT KH", PARTYPE_STRING, "Hold Keys", COMBOENTRY_YES, GUITYPE_KEYSELECT));
             allCommands.add(new Command("AT KR", PARTYPE_STRING, "Release Keys", COMBOENTRY_NO, GUITYPE_STANDARD));
@@ -190,6 +192,7 @@ namespace MouseApp2
             allCommands.add(new Command("AT SA", PARTYPE_STRING, "Save Slot", COMBOENTRY_NO, GUITYPE_STANDARD));
             allCommands.add(new Command("AT LO", PARTYPE_STRING, "Load Slot by Name", COMBOENTRY_YES, GUITYPE_TEXTFIELD));
             allCommands.add(new Command("AT MA", PARTYPE_STRING, "Execute Command Macro", COMBOENTRY_YES, GUITYPE_TEXTFIELD));
+            allCommands.add(new Command("AT WA", PARTYPE_UINT, "Wait (milliseconds)", COMBOENTRY_NO, GUITYPE_STANDARD));
             allCommands.add(new Command("AT LA", PARTYPE_NONE, "Load All", COMBOENTRY_NO, GUITYPE_STANDARD));
             allCommands.add(new Command("AT LI", PARTYPE_NONE, "List Slots", COMBOENTRY_NO, GUITYPE_STANDARD));
             allCommands.add(new Command("AT NE", PARTYPE_NONE, "Load Next Slot", COMBOENTRY_YES, GUITYPE_STANDARD));

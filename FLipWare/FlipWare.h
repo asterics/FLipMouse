@@ -41,7 +41,7 @@
 
 #define VERSION_STRING "Flipmouse v2.4"   
 
-//  V2.4: added support for acceleration and maximum speed
+//  V2.4: added support for acceleration, maximum speed and command macros
 //	V2.3: added support for internal Bluetooth Addon
 //  V2.2: added new EEPROM handling and IR-Command support
 //  V2.0: extended AT command set, TeensyLC support, external EEPROM
@@ -58,8 +58,7 @@
 #endif 
 
 #define MAX_SLOTS          7          // maximum number of EEPROM memory slots
-
-#define MAX_KEYSTRING_LEN 30          // maximum length for key identifiers / keyboard text
+#define MAX_KEYSTRING_LEN 65          // maximum length for key identifiers / keyboard text
 #define MAX_SLOTNAME_LEN  15          // maximum length for a slotname
 #define MAX_CMDLEN MAX_KEYSTRING_LEN+3
 
@@ -80,7 +79,7 @@
 #define TONE_IR			          5
 
 #define DEFAULT_CLICK_TIME      8    // time for mouse click (loop iterations from press to release)
-#define DOUBLECLICK_MULTIPLIER  5    // CLICK_TIME factor for double clicks
+// #define DOUBLECLICK_MULTIPLIER  5    // CLICK_TIME factor for double clicks
 
 #define DEBUG_NOOUTPUT 0
 #define DEBUG_FULLOUTPUT 1

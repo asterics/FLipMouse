@@ -19,6 +19,7 @@
 
 uint8_t actButton=0;
 
+extern void parseCommand (char * cmdstr);
 
 const struct atCommandType atCommands[] PROGMEM = {
     {"ID"  , PARTYPE_NONE },  {"BM"  , PARTYPE_UINT }, {"CL"  , PARTYPE_NONE }, {"CR"  , PARTYPE_NONE },
@@ -37,7 +38,7 @@ const struct atCommandType atCommands[] PROGMEM = {
     {"E2"  , PARTYPE_NONE },  {"JX"  , PARTYPE_INT  }, {"JY"  , PARTYPE_INT  }, {"JZ"  , PARTYPE_INT  }, 
     {"JT"  , PARTYPE_INT  },  {"JS"  , PARTYPE_INT  }, {"JP"  , PARTYPE_INT  }, {"JR"  , PARTYPE_INT  },
     {"JH"  , PARTYPE_INT  },  {"IT"  , PARTYPE_UINT  },{"KH"  , PARTYPE_STRING},{"MS"  , PARTYPE_UINT },
-    {"AC"  , PARTYPE_UINT },  {"MA"  , PARTYPE_STRING},
+    {"AC"  , PARTYPE_UINT },  {"MA"  , PARTYPE_STRING},{"WA"  , PARTYPE_UINT  },
 };
 
 void printCurrentSlot()
@@ -214,16 +215,25 @@ void performCommand (uint8_t cmd, int16_t par1, char * keystring, int8_t periodi
         case CMD_MX:
                if (DebugOutput==DEBUG_FULLOUTPUT) 
                {  Serial.print("mouse move x "); Serial.println(par1); }
-               Mouse.move(par1, 0);
-               if(isBluetoothAvailable()) mouseBT(par1,0,0);
                if (periodicMouseMovement) moveX=par1;
+               else {
+                 while (par1<-128) { Mouse.move(-128, 0); par1+=128; }
+                 while (par1>127) { Mouse.move(127, 0); par1-=127; }
+                 Mouse.move(par1, 0);
+                 if(isBluetoothAvailable()) mouseBT(par1,0,0);
+               }
             break;
         case CMD_MY:
                if (DebugOutput==DEBUG_FULLOUTPUT)  
                {  Serial.print("mouse move y "); Serial.println(par1); }
-               Mouse.move(0, par1);
-               if(isBluetoothAvailable())  mouseBT(0,par1,0);
                if (periodicMouseMovement) moveY=par1;
+               else {
+                 while (par1<-128) { Mouse.move(0, -128); par1+=128; }
+                 while (par1>127) { Mouse.move(0, 127); par1-=127; }
+                 Mouse.move(0, par1);
+                 if(isBluetoothAvailable()) mouseBT(par1,0,0);
+               }
+               if(isBluetoothAvailable())  mouseBT(0,par1,0);
             break;
         case CMD_JX:
                if (DebugOutput==DEBUG_FULLOUTPUT) 
@@ -409,7 +419,7 @@ void performCommand (uint8_t cmd, int16_t par1, char * keystring, int8_t periodi
         case CMD_MS:
                if (DebugOutput==DEBUG_FULLOUTPUT)  
                  Serial.println("set max speed");
-               settings.ms=par1;
+               settings.ms=par1/3;
             break;
         case CMD_AC:
                if (DebugOutput==DEBUG_FULLOUTPUT)  
@@ -417,11 +427,38 @@ void performCommand (uint8_t cmd, int16_t par1, char * keystring, int8_t periodi
                settings.ac=par1;
             break;
         case CMD_MA:
-               if (DebugOutput==DEBUG_FULLOUTPUT)  
-               {  Serial.print("execute macro: "); Serial.println(keystring); }
-               // do the macro stuff in parser.cpp ...
-               break;
+               {
+                 char current[MAX_KEYSTRING_LEN], *cmd_copy_ptr, backslash;
+                 uint8_t len;
+                 if (DebugOutput==DEBUG_FULLOUTPUT)  
+                 {  Serial.print("execute macro:"); Serial.println(keystring); }
 
+                 // do the macro stuff: feed single commands to parser, seperator: ';'
+                 cmd_copy_ptr=keystring;
+                 while (*cmd_copy_ptr)
+                 {
+                    len=0;backslash=0;
+                    while ((*cmd_copy_ptr) && ((*cmd_copy_ptr != ';') || backslash) && (len<MAX_KEYSTRING_LEN-1))
+                    {
+                       if ((*cmd_copy_ptr == '\\') && (!backslash))   // check for escape character
+                         backslash=1; 
+                       else  {
+                        current[len++] = *cmd_copy_ptr;
+                        backslash=0;
+                      }
+                      cmd_copy_ptr++;
+                    }
+                    current[len]=0; 
+                    parseCommand(current);
+                    if (*cmd_copy_ptr) cmd_copy_ptr++;
+                 }
+               }
+               break;
+        case CMD_WA:
+               if (DebugOutput==DEBUG_FULLOUTPUT)  
+                  Serial.println("wait");
+                delay(par1);
+               break;
         case CMD_TS:
                if (DebugOutput==DEBUG_FULLOUTPUT)  
                  Serial.println("set threshold sip");

@@ -162,11 +162,18 @@ namespace MouseApp2
 
         public void gotID(String newLine)
         {
-            addToLog("Flipmouse detected:" + newLine);
+            DialogResult dialogResult;
+            addToLog("Connected device: " + newLine);
+            if (!(newLine.Contains(VERSION_STRING)))
+            {
+                dialogResult = MessageBox.Show(newLine + "The firmware is not compatible to GUI version " + VERSION_STRING + " !\nPlease update firmware and GUI to the newest version, see: https://github.com/asterics/FLipMouse/releases", "Software update necessary", MessageBoxButtons.OK);
+                disconnnectComButton_Click(this, null);
+                return;
+            }
             flipMouseOnline = 1;
             slotNames.Items.Clear();
 
-            DialogResult dialogResult = MessageBox.Show("Do you want to load the slots and settings which are stored in the FLipMouse device ?", "Load Settings ?", MessageBoxButtons.YesNo);
+            dialogResult = MessageBox.Show("Connected device: " + newLine + "Do you want to load the slots and settings which are stored in the FLipMouse device ?", "Load Settings ?", MessageBoxButtons.YesNo);
             if (dialogResult == DialogResult.Yes)
             {
                 loadSettingsFromFLipmouse();

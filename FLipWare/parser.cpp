@@ -47,6 +47,7 @@ uint8_t get_int(char * str, int16_t * result)
     if (*str =='-') {fact=-1; str++;} else fact=1;
     if (!get_uint(str,&num)) return(0);
     *result=num*fact;
+    Serial.println(*result);
     return(1);    
 }
 
@@ -62,15 +63,12 @@ void strup (char * str)   // convert to upper case letters
 
 void parseCommand (char * cmdstr)
 {
-    char current[30];
-    char * actmacropos=0;
     int8_t cmd=-1;
-    uint8_t macro=0;
     int16_t num=0;
     
-    //if (DebugOutput==DEBUG_FULLOUTPUT)  {
-		Serial.print("parseCommand:"); Serial.println(cmdstr); 
-    //}
+    if (DebugOutput==DEBUG_FULLOUTPUT)  {
+  		Serial.print("parseCommand:"); Serial.println(cmdstr); 
+    }
     char * actpos = strtok(cmdstr," ");   // see a nice explaination of strtok here:  http://www.reddit.com/r/arduino/comments/2h9l1l/using_the_strtok_function/
     
     if (actpos) 
@@ -85,7 +83,6 @@ void parseCommand (char * cmdstr)
         {
           if (!strcmp_FM(actpos,(uint_farptr_t_FM)atCommands[i].atCmd))  {
             // Serial.print ("partype="); Serial.println (pgm_read_byte_near(&(atCommands[i].partype)));
-            if (!strcmp(actpos,"MA")) actmacropos=actpos+3;  //activate macro mode !
             switch (pgm_read_byte_near(&(atCommands[i].partype))) 
             {
                case PARTYPE_UINT: actpos=strtok(NULL," ");  if (get_uint(actpos, &num)) cmd=i ; break;
@@ -94,33 +91,15 @@ void parseCommand (char * cmdstr)
                default: cmd=i; actpos=0; break;
             }
           }
-
-          if (cmd>-1) { 
-            // Serial.print("cmd:");Serial.print(cmd);Serial.print("numpar:");
-            // Serial.print(num);Serial.print("stringpar:");Serial.println(actpos);
-            performCommand(cmd,num,actpos,0);        
-            if ((actmacropos) && (*actmacropos)) {
-               // Serial.print("macro step:");
-               int pos=0;
-               while ((*actmacropos!=0) && (*actmacropos!=';'))
-                 current[pos++]=*actmacropos++;
-               current[pos]=0; 
-               if (*actmacropos) actmacropos++;
-               actpos=current;
-               // Serial.println(actpos);
-                             
-               actpos=strtok(actpos," ");
-               if (actpos) {     // continue with next command in macro!
-                  strup(actpos);
-                  // Serial.print("next cmd token:"); Serial.println(actpos);
-                  cmd=-1; i=0;
-               }
-            }
-          }
         }  
-        if (i==NUM_COMMANDS) Serial.println("???");      // command not recognized!                
     }
 
+    if (cmd>-1) { 
+      // Serial.print("cmd:");Serial.print(cmd);Serial.print("numpar:");
+      // Serial.print(num);Serial.print("stringpar:");Serial.println(actpos);
+      performCommand(cmd,num,actpos,0);        
+    } 
+    else Serial.println("???");      // command not recognized!                
 }
 
 

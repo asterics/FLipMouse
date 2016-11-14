@@ -26,7 +26,7 @@
 #define NUMBER_OF_PHYSICAL_BUTTONS 3  // number of physical switches
 #define NUMBER_OF_LEDS     3          // number of connected leds
 
-#define DEFAULT_DEBOUNCING_TIME 7   // debouncing interval for button-press / release
+#define DEFAULT_DEBOUNCING_TIME 5   // debouncing interval for button-press / release
 
 // define index numbers of the virtual buttons (not pin numbers in this case !)
 // (buttons 0-2 are the physical switches on the device)

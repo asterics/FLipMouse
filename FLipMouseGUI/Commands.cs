@@ -184,7 +184,7 @@ namespace MouseApp2
             allCommands.add(new Command("AT JP", PARTYPE_INT, "Press Joystick Button", COMBOENTRY_YES, GUITYPE_INTFIELD));
             allCommands.add(new Command("AT JR", PARTYPE_INT, "Release Joystick Button", COMBOENTRY_NO, GUITYPE_STANDARD));
             allCommands.add(new Command("AT JH", PARTYPE_INT, "Joystick Hat position", COMBOENTRY_YES, GUITYPE_INTFIELD));
-            allCommands.add(new Command("AT KW", PARTYPE_STRING, "Write Text", COMBOENTRY_YES, GUITYPE_STANDARD));
+            allCommands.add(new Command("AT KW", PARTYPE_STRING, "Write Text", COMBOENTRY_YES, GUITYPE_TEXTFIELD));
             allCommands.add(new Command("AT KP", PARTYPE_STRING, "Press Keys", COMBOENTRY_YES, GUITYPE_KEYSELECT));
             allCommands.add(new Command("AT KH", PARTYPE_STRING, "Hold Keys", COMBOENTRY_YES, GUITYPE_KEYSELECT));
             allCommands.add(new Command("AT KR", PARTYPE_STRING, "Release Keys", COMBOENTRY_NO, GUITYPE_STANDARD));

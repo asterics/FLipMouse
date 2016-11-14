@@ -71,12 +71,15 @@
 #define REPORT_ONE_SLOT  1
 #define REPORT_ALL_SLOTS 2
 
-#define TONE_ENTER_STRONGPUFF 0
 #define TONE_CALIB            1
 #define TONE_CHANGESLOT       2
-#define TONE_STRONGSIP        3
-#define TONE_EXIT_STRONGPUFF  4
-#define TONE_IR			          5
+#define TONE_ENTER_STRONGSIP  3
+#define TONE_EXIT_STRONGSIP   4
+#define TONE_ENTER_STRONGPUFF 5
+#define TONE_EXIT_STRONGPUFF  6
+#define TONE_INDICATE_SIP     7
+#define TONE_INDICATE_PUFF    8
+#define TONE_IR			          9
 
 #define DEFAULT_CLICK_TIME      8    // time for mouse click (loop iterations from press to release)
 // #define DOUBLECLICK_MULTIPLIER  5    // CLICK_TIME factor for double clicks

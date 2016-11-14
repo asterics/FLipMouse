@@ -20,16 +20,18 @@
 
 #define STRONGMODE_MOUSE_JOYSTICK_THRESHOLD  50
 #define STRONGPUFF_MODE_PUFF_RELEASE 530
-#define STRONGSIP_MODE_SIP_RELEASE   505
-#define STRONG_MODE_STABLETIME        20
-#define STRONG_MODE_EXIT_TIME        250
+#define STRONGSIP_MODE_SIP_RELEASE   400
+#define STRONGMODE_STABLETIME        20
+#define STRONGMODE_EXIT_TIME        200
+#define STRONGMODE_IDLE_TIME         20
 
 #define MODESTATE_IDLE                      0
 #define MODESTATE_ENTER_STRONGPUFF_MODE     1
 #define MODESTATE_STRONGPUFF_MODE_ACTIVE    2
-#define MODESTATE_ENTER_STRONGSIP_MODE     10
-#define MODESTATE_STRONGSIP_MODE_ACTIVE    11
-#define MODESTATE_RELEASE                  12
+#define MODESTATE_ENTER_STRONGSIP_MODE      3
+#define MODESTATE_STRONGSIP_MODE_ACTIVE     4
+#define MODESTATE_RELEASE                   5
+#define MODESTATE_RETURN_TO_IDLE            6
 
 #define ACCELTIME_MAX 20000
 
@@ -56,6 +58,7 @@ void handleModeState(int x, int y, int pressure)
 {         
     static int waitStable=0;
     static uint16_t accelTimeX=0,accelTimeY=0;
+    static uint8_t puffActive=0, sipActive=0;
     int strongDirThreshold;
     float moveVal;
 
@@ -82,7 +85,7 @@ void handleModeState(int x, int y, int pressure)
                }
            if (pressure < settings.ss ) { 
                  modeState=MODESTATE_ENTER_STRONGSIP_MODE;      
-                 makeTone(TONE_STRONGSIP,0 );             
+                 makeTone(TONE_ENTER_STRONGSIP,0 );             
                  //initDebouncers();
              }
              break;
@@ -91,23 +94,26 @@ void handleModeState(int x, int y, int pressure)
             if (pressure < STRONGPUFF_MODE_PUFF_RELEASE)
                waitStable++;
             else waitStable=0;
-            if (waitStable>=STRONG_MODE_STABLETIME)
+            if (waitStable>=STRONGMODE_STABLETIME)
                 modeState=MODESTATE_STRONGPUFF_MODE_ACTIVE;
             break;
 
         case MODESTATE_STRONGPUFF_MODE_ACTIVE:    // strong puff mode active
-           if (handleButton(STRONGPUFF_UP_BUTTON, (y<-strongDirThreshold) ? 1 : 0)) modeState=MODESTATE_IDLE;
-           else if (handleButton(STRONGPUFF_LEFT_BUTTON, (x<-strongDirThreshold) ? 1 : 0)) modeState=MODESTATE_IDLE;
-           else if (handleButton(STRONGPUFF_RIGHT_BUTTON, (x>strongDirThreshold) ? 1 : 0)) modeState=MODESTATE_IDLE;
-           else if (handleButton(STRONGPUFF_DOWN_BUTTON, (y>strongDirThreshold) ? 1 : 0)) modeState=MODESTATE_IDLE;
+           if (handleButton(STRONGPUFF_UP_BUTTON, (y<-strongDirThreshold) ? 1 : 0)) 
+           { makeTone(TONE_EXIT_STRONGPUFF,0 ); modeState=MODESTATE_IDLE;}
+           else if (handleButton(STRONGPUFF_LEFT_BUTTON, (x<-strongDirThreshold) ? 1 : 0)) 
+           { makeTone(TONE_EXIT_STRONGPUFF,0 ); modeState=MODESTATE_IDLE;}
+           else if (handleButton(STRONGPUFF_RIGHT_BUTTON, (x>strongDirThreshold) ? 1 : 0)) 
+           { makeTone(TONE_EXIT_STRONGPUFF,0 ); modeState=MODESTATE_IDLE;}
+           else if (handleButton(STRONGPUFF_DOWN_BUTTON, (y>strongDirThreshold) ? 1 : 0)) 
+           { makeTone(TONE_EXIT_STRONGPUFF,0 ); modeState=MODESTATE_IDLE;}
            else { 
                   waitStable++; 
-                  if (waitStable>STRONG_MODE_EXIT_TIME) {  // no stick movement occurred: perform strong puff action
+                  if (waitStable>STRONGMODE_EXIT_TIME) {  // no stick movement occurred: perform strong puff action
                     waitStable=0; 
                     handlePress(STRONGPUFF_BUTTON); 
                     handleRelease(STRONGPUFF_BUTTON);
-                    makeTone(TONE_EXIT_STRONGPUFF,0 ); 
-                    modeState=MODESTATE_IDLE; 
+                    modeState=MODESTATE_RETURN_TO_IDLE;
                   } 
                 }
            break;
@@ -116,61 +122,82 @@ void handleModeState(int x, int y, int pressure)
             if (pressure > STRONGSIP_MODE_SIP_RELEASE)
                waitStable++;
             else waitStable=0;
-            if (waitStable>=STRONG_MODE_STABLETIME)
+            if (waitStable>=STRONGMODE_STABLETIME)
                 modeState=MODESTATE_STRONGSIP_MODE_ACTIVE;
             break;
   
         case MODESTATE_STRONGSIP_MODE_ACTIVE:   // strong sip mode active          
-           if (handleButton(STRONGSIP_UP_BUTTON, (y<-strongDirThreshold) ? 1 : 0)) modeState=MODESTATE_IDLE;
-           else if (handleButton(STRONGSIP_LEFT_BUTTON, (x<-strongDirThreshold) ? 1 : 0)) modeState=MODESTATE_IDLE;
-           else if (handleButton(STRONGSIP_RIGHT_BUTTON, (x>strongDirThreshold) ? 1 : 0)) modeState=MODESTATE_IDLE;
-           else if (handleButton(STRONGSIP_DOWN_BUTTON, (y>strongDirThreshold) ? 1 : 0)) modeState=MODESTATE_IDLE;
-           //else if (handleButton(STRONGSIP_SIP_BUTTON, pressure < settings.ts  ? 1 : 0)) modeState=MODESTATE_IDLE;
+           if (handleButton(STRONGSIP_UP_BUTTON, (y<-strongDirThreshold) ? 1 : 0))
+           { makeTone(TONE_EXIT_STRONGSIP,0 ); modeState=MODESTATE_IDLE;}
+           else if (handleButton(STRONGSIP_LEFT_BUTTON, (x<-strongDirThreshold) ? 1 : 0))
+           { makeTone(TONE_EXIT_STRONGSIP,0 ); modeState=MODESTATE_IDLE;}
+           else if (handleButton(STRONGSIP_RIGHT_BUTTON, (x>strongDirThreshold) ? 1 : 0))
+           { makeTone(TONE_EXIT_STRONGSIP,0 ); modeState=MODESTATE_IDLE;}
+           else if (handleButton(STRONGSIP_DOWN_BUTTON, (y>strongDirThreshold) ? 1 : 0))
+           { makeTone(TONE_EXIT_STRONGSIP,0 ); modeState=MODESTATE_IDLE;}
            else {
              waitStable++; 
-             if (waitStable>STRONG_MODE_EXIT_TIME) {    // no stick movement occurred: perform strong sip action
+             if (waitStable>STRONGMODE_EXIT_TIME) {    // no stick movement occurred: perform strong sip action
                 waitStable=0; 
                 handlePress(STRONGSIP_BUTTON); 
                 handleRelease(STRONGSIP_BUTTON);
-                modeState=MODESTATE_IDLE;
-                makeTone(TONE_STRONGSIP,1 );
+                modeState=MODESTATE_RETURN_TO_IDLE;
               }
            }
            break;
-             
+
+       case MODESTATE_RETURN_TO_IDLE:
+             waitStable++;
+             if (waitStable>STRONGMODE_IDLE_TIME)
+             {
+                waitStable=0;
+                modeState=MODESTATE_IDLE;
+                initDebouncers();
+             }
+            break;             
         default: break; 
       }
 
 
       if (modeState==MODESTATE_IDLE)
       {  
-            for (int i=0;i<NUMBER_OF_PHYSICAL_BUTTONS;i++)    // update button press / release events
-                handleButton(i, digitalRead(input_map[i]) == LOW ? 1 : 0);
-      
+           for (int i=0;i<NUMBER_OF_PHYSICAL_BUTTONS;i++)    // update button press / release events
+              handleButton(i, digitalRead(input_map[i]) == LOW ? 1 : 0);
 
-             if (pressure > settings.tp)   // handle single sip/puff actions
-             {  
-                if (!pressureRising)
-                  handleButton(PUFF_BUTTON, 1);
-             } else handleButton(PUFF_BUTTON, 0);
+           if (pressure > settings.tp)   // handle single sip/puff actions
+           {  
+              if (!puffActive) {puffActive=1;makeTone(TONE_INDICATE_PUFF,0);}
+              if (!pressureRising)
+               // handleButton(PUFF_BUTTON, 1);
+               if (puffActive != 2) { puffActive=2; handlePress(PUFF_BUTTON); }
+           } else { 
+              // handleButton(PUFF_BUTTON, 0); 
+              if (pressureRising) { if (puffActive==2)handleRelease(PUFF_BUTTON); puffActive=0; }
+           }
 
-             if (pressure < settings.ts) 
-             {  
-                if (!pressureFalling)
-                 handleButton(SIP_BUTTON, 1); 
-             } else handleButton(SIP_BUTTON, 0);
+           if (pressure < settings.ts) 
+           {  
+              if (!sipActive) {sipActive=1;makeTone(TONE_INDICATE_SIP,0);}
+              if (!pressureFalling) 
+               //handleButton(SIP_BUTTON, 1); 
+               if (sipActive != 2) { sipActive=2; handlePress(SIP_BUTTON); }
+           } else { 
+              //handleButton(SIP_BUTTON, 0); 
+              if (pressureFalling) { if (sipActive==2) handleRelease(SIP_BUTTON);sipActive=0;}
+              
+           }
 
-             if ((moveX!=0) || (moveY!=0))   // handle movement induced by button actions  
-             {
-                if (mouseMoveCount++%4==0)
-                   Mouse.move(moveX, moveY);
-                   if(isBluetoothAvailable()) mouseBT(moveX,moveY,0);
-             }
-          
-             if (settings.stickMode == STICKMODE_MOUSE) {   // handle mouse mode
+           if ((moveX!=0) || (moveY!=0))   // handle movement induced by button actions  
+           {
+              if (mouseMoveCount++%4==0)
+                 Mouse.move(moveX, moveY);
+                 if(isBluetoothAvailable()) mouseBT(moveX,moveY,0);
+           }
+        
+           if (settings.stickMode == STICKMODE_MOUSE) {   // handle mouse mode
 
                 float max_speed= settings.ms / 10.0f;
-
+  
                 if (x==0) accelTimeX=0;
                 else if (accelTimeX < ACCELTIME_MAX) accelTimeX+=settings.ac;
                 if (y==0) accelTimeY=0;
@@ -180,12 +207,12 @@ void handleModeState(int x, int y, int pressure)
                 if (moveVal>max_speed) moveVal=max_speed;
                 if (moveVal< -max_speed) moveVal=-max_speed;
                 accumXpos+=moveVal;
-
+  
                 moveVal=y*settings.ay*accelFactor*accelTimeY;
                 if (moveVal>max_speed) moveVal=max_speed;
                 if (moveVal< -max_speed) moveVal=-max_speed;
                 accumYpos+=moveVal;
-
+  
                 
                 int xMove = (int)accumXpos;
                 int yMove = (int)accumYpos;
@@ -207,7 +234,7 @@ void handleModeState(int x, int y, int pressure)
               
               if (x==0) accumXpos = 512;
               else  accumXpos = 512+(float)x*settings.ax/50.0f;
-
+  
               if (accumXpos<0) accumXpos=0; if (accumXpos>1023) accumXpos=1023;
               if (accumYpos<0) accumYpos=0; if (accumYpos>1023) accumYpos=1023;
               
@@ -225,7 +252,7 @@ void handleModeState(int x, int y, int pressure)
                   Joystick.sliderRight (accumYpos);
                   break;
                 }
-            }      
+            }
       }
 }
 

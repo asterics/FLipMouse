@@ -314,27 +314,32 @@ void makeTone(uint8_t kind, uint8_t param)
 		
     switch (kind) {
 		case TONE_ENTER_STRONGPUFF: 
-			tone(tonePin, 4000, 200);
+			tone(tonePin, 400, 200);
             break;
 		case TONE_EXIT_STRONGPUFF: 
-			tone(tonePin, 4000, 100);
+			tone(tonePin, 400, 100);
             break;
 		case TONE_CALIB: 
-			tone(tonePin, 100, 600);
+			tone(tonePin, 200, 400);
             break;
 		case TONE_CHANGESLOT:
-            tone(tonePin, 2000+200*param, 200);
+      tone(tonePin, 2000+200*param, 400);
             break;
-		case TONE_STRONGSIP:
-			switch (param) {
-				case 0: tone(tonePin, 3000, 500); break;
-				case 1: tone(tonePin, 3500, 100); break;
-				case 2: tone(tonePin, 3000, 100); break;
-			}
-			break;
+		case TONE_ENTER_STRONGSIP:
+  		tone(tonePin, 300, 200); 
+  				break;
+    case TONE_EXIT_STRONGSIP:
+      tone(tonePin, 300, 100); 
+          break;
 		case TONE_IR:
-			tone(tonePin, 500, 600);
+			tone(tonePin, 800, 400);
 			break;
+    case TONE_INDICATE_SIP:
+      tone(tonePin, 5000, 5);
+      break;
+    case TONE_INDICATE_PUFF:
+      tone(tonePin, 4000, 5);
+      break;
      }
 }
 

@@ -20,6 +20,7 @@
 #define _BUTTONS_H_
 
 // Constants and Macro definitions
+#define MAX_KEYSTRINGBUFFER_LEN 900  // maximum length for all keystring parameters
 
 #define NUMBER_OF_BUTTONS  19         // number of physical + virtual switches
 #define NUMBER_OF_PHYSICAL_BUTTONS 3  // number of physical switches
@@ -66,9 +67,15 @@ struct buttonDebouncerType {              // holds working data for button debou
   uint32_t timestamp;
 } ; 
 
-
+extern struct slotButtonSettings buttons[NUMBER_OF_BUTTONS];
+extern char* keystringButtons[NUMBER_OF_BUTTONS];
+extern uint16_t keystringBufferLen;
+// extern char keystringBuffer[MAX_KEYSTRINGBUFFER_LEN];
+// extern struct buttonDebouncerType buttonDebouncers[NUMBER_OF_BUTTONS];
 
 // function declarations 
+uint16_t storeKeystringButton(uint8_t buttonIndex, char * text);
+uint16_t deleteKeystringButton(uint8_t buttonIndex);
 void handlePress (int buttonIndex);      // a button was pressed
 void handleRelease (int buttonIndex);    // a button was released
 uint8_t handleButton(int i, uint8_t state);    // button debouncing and longpress detection  

@@ -74,7 +74,7 @@ void printCurrentSlot()
             {
                case PARTYPE_UINT: 
                case PARTYPE_INT:  Serial.print(" ");Serial.print(buttons[i].value); break;
-               case PARTYPE_STRING: Serial.print(" ");Serial.print(keystringButton[i]); break;
+               case PARTYPE_STRING: Serial.print(" ");Serial.print(keystringButtons[i]); break;
             }
             Serial.println("");
         }
@@ -98,8 +98,8 @@ void performCommand (uint8_t cmd, int16_t par1, char * keystring, int8_t periodi
         }
         buttons[actButton-1].mode=cmd;
         buttons[actButton-1].value=par1;
-        if (keystring==0) keystringButton[actButton-1][0]=0;
-        else strcpy(keystringButton[actButton-1],keystring);
+        deleteKeystringButton(actButton-1);
+        if (keystring!=0) storeKeystringButton(actButton-1,keystring);
         actButton=0;
         return;  // do not actually execute the command (just store it)
     }
@@ -419,7 +419,7 @@ void performCommand (uint8_t cmd, int16_t par1, char * keystring, int8_t periodi
         case CMD_MS:
                if (DebugOutput==DEBUG_FULLOUTPUT)  
                  Serial.println("set max speed");
-               settings.ms=par1/3;
+               settings.ms=par1;
             break;
         case CMD_AC:
                if (DebugOutput==DEBUG_FULLOUTPUT)  

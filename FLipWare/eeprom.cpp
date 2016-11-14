@@ -158,7 +158,7 @@ void saveToEEPROMSlotNumber(int8_t nr, char * slotname)
 		size += sizeof(slotButtonSettings);
 		size++; //\0
 		addr = 0;
-		while(*(keystringButton[i] + addr) != '\0') addr++;
+		while(*(keystringButtons[i] + addr) != '\0') addr++;
 		size+=addr;
 	}
 	
@@ -255,7 +255,7 @@ void saveToEEPROMSlotNumber(int8_t nr, char * slotname)
 		writeEEPROM(addr++,0);
 		
 		//add additional payload
-		p = (uint8_t *)keystringButton[i];
+		p = (uint8_t *)keystringButtons[i];
 		for(uint16_t t = 0; t<MAX_KEYSTRING_LEN; t++)
 		{
 			writeEEPROM(addr++,*(p+t));
@@ -559,12 +559,13 @@ void readFromEEPROMSlotNumber(uint8_t nr, bool search)
 		//check for additional payload
 		if(readEEPROM(address) != '\0') {
 			//load additional payload
-			p = (uint8_t *) &keystringButton[i];
-			for(uint16_t t = 0; t<sizeof(keystringButton[i]);t++)
+			p = (uint8_t *)tmpstring;
+			for(uint16_t t = 0; t<MAX_KEYSTRING_LEN;t++)
 			{
 				*(p+t) = readEEPROM(address++);
 				if(*(p+t) == 0) break;
 			}
+      storeKeystringButton(i,tmpstring);
 		} else {
 			//jump to next slot
 			address++;

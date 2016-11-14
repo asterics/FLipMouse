@@ -22,8 +22,6 @@ extern void init_CIM_frame (void);
 extern void parse_CIM_protocol(int actbyte);
 extern uint8_t CimParserActive;
 
-static char cmdstring[MAX_CMDLEN];
-
 
 uint8_t get_uint(char * str, int16_t * result)
 {
@@ -128,9 +126,9 @@ void parseByte (int newByte)  // parse an incoming commandbyte from serial inter
             break;
         case 3: 
                 if ((newByte==13) || (newByte==10) || (cmdlen>=MAX_CMDLEN-1))
-                {  cmdstring[cmdlen]=0;  parseCommand(cmdstring); 
+                {  tmpstring[cmdlen]=0;  parseCommand(tmpstring); 
                   readstate=0; }
-                else cmdstring[cmdlen++]=newByte;
+                else tmpstring[cmdlen++]=newByte;
             break;   
         default: err: Serial.println("?");readstate=0;
       }

@@ -58,7 +58,7 @@
 #endif 
 
 #define MAX_SLOTS          7          // maximum number of EEPROM memory slots
-#define MAX_KEYSTRING_LEN 65          // maximum length for key identifiers / keyboard text
+#define MAX_KEYSTRING_LEN 250         // maximum length for key identifiers / keyboard text
 #define MAX_SLOTNAME_LEN  15          // maximum length for a slotname
 #define MAX_CMDLEN MAX_KEYSTRING_LEN+3
 
@@ -122,9 +122,9 @@ extern struct slotGeneralSettings settings;
 extern char slotName[MAX_SLOTNAME_LEN];
 extern char IRName[MAX_SLOTNAME_LEN];
 extern int EmptySlotAddress;
-extern struct slotButtonSettings buttons[NUMBER_OF_BUTTONS];
-extern char keystringButton[NUMBER_OF_BUTTONS][MAX_KEYSTRING_LEN];
-extern struct buttonDebouncerType buttonDebouncers[NUMBER_OF_BUTTONS];
+extern char tmpstring[MAX_CMDLEN];
+
+
 extern const struct atCommandType atCommands[];
 extern int8_t  input_map[NUMBER_OF_PHYSICAL_BUTTONS];
 

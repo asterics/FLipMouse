@@ -24,18 +24,59 @@
 
 
 struct slotButtonSettings buttons [NUMBER_OF_BUTTONS];   // array for all buttons - type definition see FlipWare.h 
-char keystringButton[NUMBER_OF_BUTTONS][MAX_KEYSTRING_LEN] = {"","","","","","","","","","","",""};
+char * keystringButtons[NUMBER_OF_BUTTONS];              // pointers to keystring parameters
+char keystringBuffer[MAX_KEYSTRINGBUFFER_LEN];           // storage for keystring parameters for all buttons  
+uint16_t keystringBufferLen=0;
 struct buttonDebouncerType buttonDebouncers [NUMBER_OF_BUTTONS];   // array for all buttonsDebouncers - type definition see fabi.h 
+
+uint16_t deleteKeystringButton(uint8_t buttonIndex)
+{
+   char * startaddress;
+   uint16_t len;
+   startaddress = keystringButtons[buttonIndex];
+   if (!startaddress) return(0);
+   len = strlen(startaddress)+1;
+   // Serial.print("delete:");Serial.println(startaddress);
+
+   uint16_t num=keystringBuffer+MAX_KEYSTRINGBUFFER_LEN-(startaddress+len);
+   memmove(startaddress, startaddress+len, num);
+   keystringButtons[buttonIndex]=0;
+   for (int i=0;i<NUMBER_OF_BUTTONS;i++)
+   {
+      if (keystringButtons[i]>startaddress) keystringButtons[i]-=len;
+   }
+   keystringBufferLen-=len;
+
+   //Serial.print("bytes deleted:");Serial.println(len);
+   //Serial.print("bytes left:");Serial.println(MAX_KEYSTRINGBUFFER_LEN-keystringBufferLen);
+
+   return(MAX_KEYSTRINGBUFFER_LEN-keystringBufferLen);
+}
+
+
+uint16_t storeKeystringButton(uint8_t buttonIndex, char * text)
+{
+   char * targetaddress;
+   deleteKeystringButton(buttonIndex);
+   if (keystringBufferLen + strlen(text) >= MAX_KEYSTRINGBUFFER_LEN-1) return(0);
+   targetaddress=keystringBuffer+keystringBufferLen;
+   strcpy (targetaddress, text);
+   keystringButtons[buttonIndex]=targetaddress;
+   keystringBufferLen+=strlen(text)+1;
+   // Serial.print("allocated stringbuffer:");Serial.println(keystringButtons[buttonIndex]);
+   // Serial.print("bytes left:");Serial.println(MAX_KEYSTRINGBUFFER_LEN-keystringBufferLen);
+   return(MAX_KEYSTRINGBUFFER_LEN-keystringBufferLen);
+}
 
 
 void initButtons() {
      buttons[0].mode=CMD_NE;  // default function for first button: switch to next slot
-     buttons[1].mode=CMD_KP; strcpy(keystringButton[1],"KEY_ESC ");;
+     buttons[1].mode=CMD_KP; storeKeystringButton(1,"KEY_ESC ");;
      buttons[2].mode=CMD_NC;  // no command
-     buttons[3].mode=CMD_KP; strcpy(keystringButton[3],"KEY_UP ");
-     buttons[4].mode=CMD_KP; strcpy(keystringButton[4],"KEY_DOWN ");
-     buttons[5].mode=CMD_KP; strcpy(keystringButton[5],"KEY_LEFT ");
-     buttons[6].mode=CMD_KP; strcpy(keystringButton[6],"KEY_RIGHT ");
+     buttons[3].mode=CMD_KP; storeKeystringButton(3,"KEY_UP ");
+     buttons[4].mode=CMD_KP; storeKeystringButton(4,"KEY_DOWN ");
+     buttons[5].mode=CMD_KP; storeKeystringButton(5,"KEY_LEFT ");
+     buttons[6].mode=CMD_KP; storeKeystringButton(6,"KEY_RIGHT ");
      buttons[7].mode=CMD_PL;   // press left mouse button
      buttons[8].mode=CMD_NC;   // no command 
      buttons[9].mode=CMD_CR;   // click right                        
@@ -53,7 +94,7 @@ void initButtons() {
 
 void handlePress (int buttonIndex)   // a button was pressed
 {   
-    performCommand(buttons[buttonIndex].mode,buttons[buttonIndex].value,keystringButton[buttonIndex],1);
+    performCommand(buttons[buttonIndex].mode,buttons[buttonIndex].value,keystringButtons[buttonIndex],1);
 }
 
 void handleRelease (int buttonIndex)    // a button was released: deal with "sticky"-functions
@@ -74,7 +115,7 @@ void handleRelease (int buttonIndex)    // a button was released: deal with "sti
      case CMD_JP: Joystick.button(buttons[buttonIndex].value,0); break;
      case CMD_MX: moveX=0; break;      
      case CMD_MY: moveY=0; break;      
-     case CMD_KP: releaseKeys(keystringButton[buttonIndex]); break; 
+     case CMD_KP: releaseKeys(keystringButtons[buttonIndex]); break; 
    }
 }
   

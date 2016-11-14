@@ -3,7 +3,7 @@
      FLipWare - AsTeRICS Academy 2016
      For more info please visit: http://www.asterics-academy.net
 
-     Module: modes.cpp: implementation of special modes
+     Module: modes.cpp: implementation of stick operation and special modes
   
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -31,6 +31,8 @@
 #define MODESTATE_STRONGSIP_MODE_ACTIVE    11
 #define MODESTATE_RELEASE                  12
 
+#define ACCELTIME_MAX 20000
+
 uint8_t modeState = MODESTATE_IDLE;
 
 uint8_t mouseMoveCount=0;
@@ -53,7 +55,7 @@ unsigned long time=0;
 void handleModeState(int x, int y, int pressure)
 {         
     static int waitStable=0;
-    static uint16_t accelTime=0;
+    static uint16_t accelTimeX=0,accelTimeY=0;
     int strongDirThreshold;
     float moveVal;
 
@@ -167,17 +169,19 @@ void handleModeState(int x, int y, int pressure)
           
              if (settings.stickMode == STICKMODE_MOUSE) {   // handle mouse mode
 
-                float max_speed= settings.ms / 3.0f;
+                float max_speed= settings.ms / 10.0f;
 
-                if ((x==0) && (y==0)) accelTime=0;
-                else if (accelTime < 20000) accelTime+=settings.ac;
+                if (x==0) accelTimeX=0;
+                else if (accelTimeX < ACCELTIME_MAX) accelTimeX+=settings.ac;
+                if (y==0) accelTimeY=0;
+                else if (accelTimeY < ACCELTIME_MAX) accelTimeY+=settings.ac;
                 
-                moveVal=x*settings.ax*accelFactor*accelTime;
+                moveVal=x*settings.ax*accelFactor*accelTimeX;
                 if (moveVal>max_speed) moveVal=max_speed;
                 if (moveVal< -max_speed) moveVal=-max_speed;
                 accumXpos+=moveVal;
 
-                moveVal=y*settings.ay*accelFactor*accelTime;
+                moveVal=y*settings.ay*accelFactor*accelTimeY;
                 if (moveVal>max_speed) moveVal=max_speed;
                 if (moveVal< -max_speed) moveVal=-max_speed;
                 accumYpos+=moveVal;

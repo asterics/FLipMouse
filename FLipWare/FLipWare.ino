@@ -82,6 +82,8 @@ struct slotGeneralSettings settings = {      // default settings valus, for type
     0, 0                              // offset x / y
 }; 
 
+
+char tmpstring[MAX_CMDLEN];
 char IRName[MAX_SLOTNAME_LEN];
 char slotName[MAX_SLOTNAME_LEN] = "empty";
 int EmptySlotAddress = 0;
@@ -159,7 +161,8 @@ void setup() {
    for (int i=0; i<NUMBER_OF_BUTTONS; i++)   // initialize button array
    {
       buttons[i].value=0;
-      keystringButton[i][0]=0;
+      keystringButtons[i]=0;
+      keystringBufferLen=0;
    }
    
    init_CIM_frame();  // for AsTeRICS CIM protocol compatibility

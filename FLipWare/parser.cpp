@@ -119,13 +119,13 @@ void parseByte (int newByte)  // parse an incoming commandbyte from serial inter
                 if ((newByte=='T') || (newByte=='t')) readstate++; else readstate=0;
             break;
         case 2: 
-                if ((newByte==13) || (newByte==10))  // AT reply: "OK" 
+                if ((newByte=='\r') || (newByte=='\n'))  // AT reply: "OK" 
                 {  Serial.println("OK");  readstate=0; }
                 else if (newByte==' ') { cmdlen=0; readstate++; } 
                 else goto err;
             break;
         case 3: 
-                if ((newByte==13) || (newByte==10) || (cmdlen>=MAX_CMDLEN-1))
+                if ((newByte=='\r') || (newByte=='\n') || (cmdlen>=MAX_CMDLEN-1))
                 {  tmpstring[cmdlen]=0;  parseCommand(tmpstring); 
                   readstate=0; }
                 else tmpstring[cmdlen++]=newByte;

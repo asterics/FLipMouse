@@ -382,8 +382,7 @@ void initBluetooth()
 	if(reply.length() < 2) reply = Serial_AUX.readStringUntil('\n');
 	
 	   
-	//wait 10s before startup, to have enough time to open the serial connection and see the output
-	if(DebugOutput == DEBUG_FULLOUTPUT) delay(10000);
+	
 	
 	//test for the Bluefruit version string
 	if(reply.indexOf("Adafruit Bluefruit HID") != -1)
@@ -400,6 +399,8 @@ void initBluetooth()
 	} else {
 		if(DebugOutput == DEBUG_FULLOUTPUT)
 		{
+			//wait 10s before startup, to have enough time to open the serial connection and see the output
+			delay(10000);
 			Serial.println("No Bluetooth module found, reply:");
 			Serial.println(reply);
 		}

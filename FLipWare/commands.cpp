@@ -231,9 +231,8 @@ void performCommand (uint8_t cmd, int16_t par1, char * keystring, int8_t periodi
                  while (par1<-128) { Mouse.move(0, -128); par1+=128; }
                  while (par1>127) { Mouse.move(0, 127); par1-=127; }
                  Mouse.move(0, par1);
-                 if(isBluetoothAvailable()) mouseBT(par1,0,0);
+                 if(isBluetoothAvailable()) mouseBT(0,par1,0);
                }
-               if(isBluetoothAvailable())  mouseBT(0,par1,0);
             break;
         case CMD_JX:
                if (DebugOutput==DEBUG_FULLOUTPUT) 

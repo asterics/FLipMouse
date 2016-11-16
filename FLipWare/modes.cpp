@@ -18,12 +18,11 @@
 
 #include "FlipWare.h"        
 
-#define STRONGMODE_MOUSE_JOYSTICK_THRESHOLD  50
-#define STRONGPUFF_MODE_PUFF_RELEASE 530
-#define STRONGSIP_MODE_SIP_RELEASE   400
+#define STRONGMODE_MOUSE_JOYSTICK_THRESHOLD  200
 #define STRONGMODE_STABLETIME        20
 #define STRONGMODE_EXIT_TIME        200
-#define STRONGMODE_IDLE_TIME         20
+#define STRONGMODE_IDLE_TIME         30
+#define SIP_PUFF_SETTLE_TIME         15
 
 #define MODESTATE_IDLE                      0
 #define MODESTATE_ENTER_STRONGPUFF_MODE     1
@@ -58,7 +57,7 @@ void handleModeState(int x, int y, int pressure)
 {         
     static int waitStable=0;
     static uint16_t accelTimeX=0,accelTimeY=0;
-    static uint8_t puffActive=0, sipActive=0;
+    static uint8_t puffActive=0, sipActive=0, puffCount=0, sipCount=0;
     int strongDirThreshold;
     float moveVal;
 
@@ -81,17 +80,15 @@ void handleModeState(int x, int y, int pressure)
            if (pressure > settings.sp) { 
                modeState=MODESTATE_ENTER_STRONGPUFF_MODE;
                makeTone(TONE_ENTER_STRONGPUFF,0 );             
-               //initDebouncers();
                }
            if (pressure < settings.ss ) { 
                  modeState=MODESTATE_ENTER_STRONGSIP_MODE;      
                  makeTone(TONE_ENTER_STRONGSIP,0 );             
-                 //initDebouncers();
              }
              break;
              
         case MODESTATE_ENTER_STRONGPUFF_MODE:     // puffed strong, wait for release          
-            if (pressure < STRONGPUFF_MODE_PUFF_RELEASE)
+            if (pressure < settings.tp)
                waitStable++;
             else waitStable=0;
             if (waitStable>=STRONGMODE_STABLETIME)
@@ -99,14 +96,26 @@ void handleModeState(int x, int y, int pressure)
             break;
 
         case MODESTATE_STRONGPUFF_MODE_ACTIVE:    // strong puff mode active
-           if (handleButton(STRONGPUFF_UP_BUTTON, (y<-strongDirThreshold) ? 1 : 0)) 
-           { makeTone(TONE_EXIT_STRONGPUFF,0 ); modeState=MODESTATE_IDLE;}
-           else if (handleButton(STRONGPUFF_LEFT_BUTTON, (x<-strongDirThreshold) ? 1 : 0)) 
-           { makeTone(TONE_EXIT_STRONGPUFF,0 ); modeState=MODESTATE_IDLE;}
-           else if (handleButton(STRONGPUFF_RIGHT_BUTTON, (x>strongDirThreshold) ? 1 : 0)) 
-           { makeTone(TONE_EXIT_STRONGPUFF,0 ); modeState=MODESTATE_IDLE;}
-           else if (handleButton(STRONGPUFF_DOWN_BUTTON, (y>strongDirThreshold) ? 1 : 0)) 
-           { makeTone(TONE_EXIT_STRONGPUFF,0 ); modeState=MODESTATE_IDLE;}
+           if (y<-strongDirThreshold) { 
+             makeTone(TONE_EXIT_STRONGPUFF,0 );
+             handlePress(STRONGPUFF_UP_BUTTON); handleRelease(STRONGPUFF_UP_BUTTON);
+             modeState=MODESTATE_RETURN_TO_IDLE;
+           }
+           else if (x<-strongDirThreshold) { 
+             makeTone(TONE_EXIT_STRONGPUFF,0 );
+             handlePress(STRONGPUFF_LEFT_BUTTON); handleRelease(STRONGPUFF_LEFT_BUTTON);
+             modeState=MODESTATE_RETURN_TO_IDLE;
+           }
+           else if (x>strongDirThreshold) { 
+             makeTone(TONE_EXIT_STRONGPUFF,0 ); 
+             handlePress(STRONGPUFF_RIGHT_BUTTON); handleRelease(STRONGPUFF_RIGHT_BUTTON);
+             modeState=MODESTATE_RETURN_TO_IDLE;
+           }
+           else if (y>strongDirThreshold) { 
+             makeTone(TONE_EXIT_STRONGPUFF,0 ); 
+             handlePress(STRONGPUFF_DOWN_BUTTON); handleRelease(STRONGPUFF_DOWN_BUTTON);
+             modeState=MODESTATE_RETURN_TO_IDLE;
+          }
            else { 
                   waitStable++; 
                   if (waitStable>STRONGMODE_EXIT_TIME) {  // no stick movement occurred: perform strong puff action
@@ -119,7 +128,7 @@ void handleModeState(int x, int y, int pressure)
            break;
 
         case MODESTATE_ENTER_STRONGSIP_MODE:   // sipped strong, wait for release          
-            if (pressure > STRONGSIP_MODE_SIP_RELEASE)
+            if (pressure > settings.ts)
                waitStable++;
             else waitStable=0;
             if (waitStable>=STRONGMODE_STABLETIME)
@@ -127,15 +136,27 @@ void handleModeState(int x, int y, int pressure)
             break;
   
         case MODESTATE_STRONGSIP_MODE_ACTIVE:   // strong sip mode active          
-           if (handleButton(STRONGSIP_UP_BUTTON, (y<-strongDirThreshold) ? 1 : 0))
-           { makeTone(TONE_EXIT_STRONGSIP,0 ); modeState=MODESTATE_IDLE;}
-           else if (handleButton(STRONGSIP_LEFT_BUTTON, (x<-strongDirThreshold) ? 1 : 0))
-           { makeTone(TONE_EXIT_STRONGSIP,0 ); modeState=MODESTATE_IDLE;}
-           else if (handleButton(STRONGSIP_RIGHT_BUTTON, (x>strongDirThreshold) ? 1 : 0))
-           { makeTone(TONE_EXIT_STRONGSIP,0 ); modeState=MODESTATE_IDLE;}
-           else if (handleButton(STRONGSIP_DOWN_BUTTON, (y>strongDirThreshold) ? 1 : 0))
-           { makeTone(TONE_EXIT_STRONGSIP,0 ); modeState=MODESTATE_IDLE;}
-           else {
+           if (y<-strongDirThreshold) { 
+             makeTone(TONE_EXIT_STRONGSIP,0 );
+             handlePress(STRONGSIP_UP_BUTTON); handleRelease(STRONGSIP_UP_BUTTON);
+             modeState=MODESTATE_RETURN_TO_IDLE;
+           }
+           else if (x<-strongDirThreshold) { 
+             makeTone(TONE_EXIT_STRONGSIP,0 );
+             handlePress(STRONGSIP_LEFT_BUTTON); handleRelease(STRONGSIP_LEFT_BUTTON);
+             modeState=MODESTATE_RETURN_TO_IDLE;
+           }
+           else if (x>strongDirThreshold) { 
+             makeTone(TONE_EXIT_STRONGSIP,0 ); 
+             handlePress(STRONGSIP_RIGHT_BUTTON); handleRelease(STRONGSIP_RIGHT_BUTTON);
+             modeState=MODESTATE_RETURN_TO_IDLE;
+           }
+           else if (y>strongDirThreshold) { 
+             makeTone(TONE_EXIT_STRONGSIP,0 ); 
+             handlePress(STRONGSIP_DOWN_BUTTON); handleRelease(STRONGSIP_DOWN_BUTTON);
+             modeState=MODESTATE_RETURN_TO_IDLE;
+          }
+          else {
              waitStable++; 
              if (waitStable>STRONGMODE_EXIT_TIME) {    // no stick movement occurred: perform strong sip action
                 waitStable=0; 
@@ -153,6 +174,7 @@ void handleModeState(int x, int y, int pressure)
                 waitStable=0;
                 modeState=MODESTATE_IDLE;
                 initDebouncers();
+                puffActive=0;sipActive=0;
              }
             break;             
         default: break; 
@@ -164,27 +186,57 @@ void handleModeState(int x, int y, int pressure)
            for (int i=0;i<NUMBER_OF_PHYSICAL_BUTTONS;i++)    // update button press / release events
               handleButton(i, digitalRead(input_map[i]) == LOW ? 1 : 0);
 
-           if (pressure > settings.tp)   // handle single sip/puff actions
-           {  
-              if (!puffActive) {puffActive=1;makeTone(TONE_INDICATE_PUFF,0);}
-              if (!pressureRising)
-               // handleButton(PUFF_BUTTON, 1);
-               if (puffActive != 2) { puffActive=2; handlePress(PUFF_BUTTON); }
-           } else { 
+           switch (puffActive)  {
+            case 0:
+               if (pressure > settings.tp)   // handle single puff actions
+               {  
+                 makeTone(TONE_INDICATE_PUFF,0);
+                 puffActive=1;puffCount=0;
+               }  
+               break;
+            case 1:  
+                 if (!pressureRising)
+                 { 
+                    if (puffCount++>SIP_PUFF_SETTLE_TIME) 
+                    {
+                       puffActive=2; 
+                       handlePress(PUFF_BUTTON); 
+                    }
+                 } else if (puffCount) puffCount--;
+                 break;
               // handleButton(PUFF_BUTTON, 0); 
-              if (pressureRising) { if (puffActive==2)handleRelease(PUFF_BUTTON); puffActive=0; }
+            case 2:
+                 if (pressure < settings.tp) { 
+                    handleRelease(PUFF_BUTTON); 
+                    puffActive=0; 
+                 }
            }
 
-           if (pressure < settings.ts) 
-           {  
-              if (!sipActive) {sipActive=1;makeTone(TONE_INDICATE_SIP,0);}
-              if (!pressureFalling) 
-               //handleButton(SIP_BUTTON, 1); 
-               if (sipActive != 2) { sipActive=2; handlePress(SIP_BUTTON); }
-           } else { 
-              //handleButton(SIP_BUTTON, 0); 
-              if (pressureFalling) { if (sipActive==2) handleRelease(SIP_BUTTON);sipActive=0;}
-              
+ 
+           switch (sipActive)  {
+            case 0:
+               if (pressure < settings.ts)   // handle single sip actions
+               {  
+                 makeTone(TONE_INDICATE_SIP,0);
+                 sipActive=1;sipCount=0;
+               }  
+               break;
+            case 1:  
+                 if (!pressureFalling)
+                 { 
+                    if (sipCount++>SIP_PUFF_SETTLE_TIME) 
+                    {
+                       sipActive=2; 
+                       handlePress(SIP_BUTTON); 
+                    }
+                 } else if (sipCount) sipCount--;
+                 break;
+              // handleButton(SIP_BUTTON, 0); 
+            case 2:
+                 if (pressure > settings.ts) { 
+                    handleRelease(SIP_BUTTON); 
+                    sipActive=0; 
+                 }
            }
 
            if ((moveX!=0) || (moveY!=0))   // handle movement induced by button actions  

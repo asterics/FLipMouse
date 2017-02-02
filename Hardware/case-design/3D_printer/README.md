@@ -21,7 +21,7 @@ This file can be used to print directly one FLipMouse case with the Prusa i3 MK2
 
 * FLipMouse_Prusa_i3_MK2_PLA_NORMAL_MULTI1.g
 
-This file contains 10 main cases, can be used for multiple production.
+This file contains 10 times the rubberpad and sensor carrier as well as the front cover, can be used for multiple production.
 
 * FLipMouse_Prusa_i3_MK2_PLA_NORMAL_MULTI2.g
 
@@ -29,4 +29,8 @@ This file contains 10 covers, can be used for multiple production.
 
 * FLipMouse_Prusa_i3_MK2_PLA_NORMAL_MULTI3.g
 
-This file contains 10 times the rubberpad and sensor carrier as well as the front cover, can be used for multiple production.
+This file contains 10 main cases, can be used for multiple production.
+
+* FLipMouse_Prusa_Slic3r_settings.ini
+
+This is the settings file, which was used by the Slic3r (1.31.6-prusa3d-win64)

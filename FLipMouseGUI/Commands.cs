@@ -174,8 +174,8 @@ namespace MouseApp2
             allCommands.add(new Command("AT WU", PARTYPE_NONE, "Wheel Up", COMBOENTRY_YES, GUITYPE_STANDARD));
             allCommands.add(new Command("AT WD", PARTYPE_NONE, "Wheel Down", COMBOENTRY_YES, GUITYPE_STANDARD));
             allCommands.add(new Command("AT WS", PARTYPE_UINT, "Mouse Wheel Step Size", COMBOENTRY_NO, GUITYPE_STANDARD));
-            allCommands.add(new Command("AT MX", PARTYPE_INT, "Move Mouse X", COMBOENTRY_YES, GUITYPE_INTFIELD));
-            allCommands.add(new Command("AT MY", PARTYPE_INT, "Move Mouse Y", COMBOENTRY_YES, GUITYPE_INTFIELD));
+            allCommands.add(new Command("AT MX", PARTYPE_INT, "Move Mouse X", COMBOENTRY_NO, GUITYPE_INTFIELD));
+            allCommands.add(new Command("AT MY", PARTYPE_INT, "Move Mouse Y", COMBOENTRY_NO, GUITYPE_INTFIELD));
             allCommands.add(new Command("AT JX", PARTYPE_INT, "Joystick X-Axis", COMBOENTRY_YES, GUITYPE_INTFIELD));
             allCommands.add(new Command("AT JY", PARTYPE_INT, "Joystick Y-Axis", COMBOENTRY_YES, GUITYPE_INTFIELD));
             allCommands.add(new Command("AT JZ", PARTYPE_INT, "Joystick Z-Axis", COMBOENTRY_YES, GUITYPE_INTFIELD));

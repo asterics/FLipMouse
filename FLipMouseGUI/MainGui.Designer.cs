@@ -38,6 +38,17 @@
             this.portStatus = new System.Windows.Forms.Label();
             this.tabControl = new System.Windows.Forms.TabControl();
             this.LipmouseTab = new System.Windows.Forms.TabPage();
+            this.singlePanel = new System.Windows.Forms.Panel();
+            this.incSpeed = new System.Windows.Forms.Button();
+            this.decSpeed = new System.Windows.Forms.Button();
+            this.incDeadzone = new System.Windows.Forms.Button();
+            this.decDeadzone = new System.Windows.Forms.Button();
+            this.deadzoneLabel = new System.Windows.Forms.Label();
+            this.label34 = new System.Windows.Forms.Label();
+            this.deadzoneBar = new System.Windows.Forms.TrackBar();
+            this.sensLabel = new System.Windows.Forms.Label();
+            this.sensBar = new System.Windows.Forms.TrackBar();
+            this.label36 = new System.Windows.Forms.Label();
             this.incAcceleration = new System.Windows.Forms.Button();
             this.decAcceleration = new System.Windows.Forms.Button();
             this.incMaxspeed = new System.Windows.Forms.Button();
@@ -67,17 +78,6 @@
             this.deadzoneYLabel = new System.Windows.Forms.Label();
             this.deadzoneYBar = new System.Windows.Forms.TrackBar();
             this.sensYBar = new System.Windows.Forms.TrackBar();
-            this.singlePanel = new System.Windows.Forms.Panel();
-            this.incSpeed = new System.Windows.Forms.Button();
-            this.decSpeed = new System.Windows.Forms.Button();
-            this.incDeadzone = new System.Windows.Forms.Button();
-            this.decDeadzone = new System.Windows.Forms.Button();
-            this.deadzoneLabel = new System.Windows.Forms.Label();
-            this.label34 = new System.Windows.Forms.Label();
-            this.deadzoneBar = new System.Windows.Forms.TrackBar();
-            this.sensLabel = new System.Windows.Forms.Label();
-            this.sensBar = new System.Windows.Forms.TrackBar();
-            this.label36 = new System.Windows.Forms.Label();
             this.deadzoneXLabel = new System.Windows.Forms.Label();
             this.DeadzoneXNameLabel = new System.Windows.Forms.Label();
             this.deadzoneXBar = new System.Windows.Forms.TrackBar();
@@ -335,14 +335,14 @@
             this.StoreButton = new System.Windows.Forms.Button();
             this.tabControl.SuspendLayout();
             this.LipmouseTab.SuspendLayout();
+            this.singlePanel.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.deadzoneBar)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.sensBar)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.accelerationBar)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.maxspeedBar)).BeginInit();
             this.splitPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.deadzoneYBar)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.sensYBar)).BeginInit();
-            this.singlePanel.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.deadzoneBar)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.sensBar)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.deadzoneXBar)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.sensXBar)).BeginInit();
             this.AlternativeTab.SuspendLayout();
@@ -493,6 +493,153 @@
             this.LipmouseTab.Size = new System.Drawing.Size(780, 361);
             this.LipmouseTab.TabIndex = 0;
             this.LipmouseTab.Text = "Stick Actions";
+            // 
+            // singlePanel
+            // 
+            this.singlePanel.Controls.Add(this.incSpeed);
+            this.singlePanel.Controls.Add(this.decSpeed);
+            this.singlePanel.Controls.Add(this.incDeadzone);
+            this.singlePanel.Controls.Add(this.decDeadzone);
+            this.singlePanel.Controls.Add(this.deadzoneLabel);
+            this.singlePanel.Controls.Add(this.label34);
+            this.singlePanel.Controls.Add(this.deadzoneBar);
+            this.singlePanel.Controls.Add(this.sensLabel);
+            this.singlePanel.Controls.Add(this.sensBar);
+            this.singlePanel.Controls.Add(this.label36);
+            this.singlePanel.Location = new System.Drawing.Point(23, 49);
+            this.singlePanel.Name = "singlePanel";
+            this.singlePanel.Size = new System.Drawing.Size(729, 149);
+            this.singlePanel.TabIndex = 65;
+            // 
+            // incSpeed
+            // 
+            this.incSpeed.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.incSpeed.ForeColor = System.Drawing.Color.Black;
+            this.incSpeed.Location = new System.Drawing.Point(678, 25);
+            this.incSpeed.Margin = new System.Windows.Forms.Padding(4);
+            this.incSpeed.Name = "incSpeed";
+            this.incSpeed.Size = new System.Drawing.Size(41, 37);
+            this.incSpeed.TabIndex = 74;
+            this.incSpeed.Text = "+";
+            this.incSpeed.UseVisualStyleBackColor = true;
+            this.incSpeed.Click += new System.EventHandler(this.incSens_Click);
+            this.incSpeed.MouseLeave += new System.EventHandler(this.stop_ClickTimer);
+            this.incSpeed.MouseHover += new System.EventHandler(this.incSens_MouseHover);
+            // 
+            // decSpeed
+            // 
+            this.decSpeed.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.decSpeed.ForeColor = System.Drawing.Color.Black;
+            this.decSpeed.Location = new System.Drawing.Point(14, 26);
+            this.decSpeed.Margin = new System.Windows.Forms.Padding(4);
+            this.decSpeed.Name = "decSpeed";
+            this.decSpeed.Size = new System.Drawing.Size(41, 37);
+            this.decSpeed.TabIndex = 73;
+            this.decSpeed.Text = "-";
+            this.decSpeed.UseVisualStyleBackColor = true;
+            this.decSpeed.Click += new System.EventHandler(this.decSens_Click);
+            this.decSpeed.MouseLeave += new System.EventHandler(this.stop_ClickTimer);
+            this.decSpeed.MouseHover += new System.EventHandler(this.decSens_MouseHover);
+            // 
+            // incDeadzone
+            // 
+            this.incDeadzone.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.incDeadzone.ForeColor = System.Drawing.Color.Black;
+            this.incDeadzone.Location = new System.Drawing.Point(678, 94);
+            this.incDeadzone.Margin = new System.Windows.Forms.Padding(4);
+            this.incDeadzone.Name = "incDeadzone";
+            this.incDeadzone.Size = new System.Drawing.Size(41, 37);
+            this.incDeadzone.TabIndex = 72;
+            this.incDeadzone.Text = "+";
+            this.incDeadzone.UseVisualStyleBackColor = true;
+            this.incDeadzone.Click += new System.EventHandler(this.incDeadzone_Click);
+            this.incDeadzone.MouseLeave += new System.EventHandler(this.stop_ClickTimer);
+            this.incDeadzone.MouseHover += new System.EventHandler(this.incDeadzone_MouseHover);
+            // 
+            // decDeadzone
+            // 
+            this.decDeadzone.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.decDeadzone.ForeColor = System.Drawing.Color.Black;
+            this.decDeadzone.Location = new System.Drawing.Point(14, 94);
+            this.decDeadzone.Margin = new System.Windows.Forms.Padding(4);
+            this.decDeadzone.Name = "decDeadzone";
+            this.decDeadzone.Size = new System.Drawing.Size(41, 37);
+            this.decDeadzone.TabIndex = 71;
+            this.decDeadzone.Text = "-";
+            this.decDeadzone.UseVisualStyleBackColor = true;
+            this.decDeadzone.Click += new System.EventHandler(this.decDeadzone_Click);
+            this.decDeadzone.MouseLeave += new System.EventHandler(this.stop_ClickTimer);
+            this.decDeadzone.MouseHover += new System.EventHandler(this.decDeadzone_MouseHover);
+            // 
+            // deadzoneLabel
+            // 
+            this.deadzoneLabel.AutoSize = true;
+            this.deadzoneLabel.Location = new System.Drawing.Point(620, 84);
+            this.deadzoneLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.deadzoneLabel.Name = "deadzoneLabel";
+            this.deadzoneLabel.Size = new System.Drawing.Size(32, 17);
+            this.deadzoneLabel.TabIndex = 70;
+            this.deadzoneLabel.Text = "100";
+            // 
+            // label34
+            // 
+            this.label34.AutoSize = true;
+            this.label34.Location = new System.Drawing.Point(76, 80);
+            this.label34.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label34.Name = "label34";
+            this.label34.Size = new System.Drawing.Size(73, 17);
+            this.label34.TabIndex = 69;
+            this.label34.Text = "Deadzone";
+            // 
+            // deadzoneBar
+            // 
+            this.deadzoneBar.LargeChange = 10;
+            this.deadzoneBar.Location = new System.Drawing.Point(56, 101);
+            this.deadzoneBar.Margin = new System.Windows.Forms.Padding(4);
+            this.deadzoneBar.Maximum = 650;
+            this.deadzoneBar.Minimum = 1;
+            this.deadzoneBar.Name = "deadzoneBar";
+            this.deadzoneBar.Size = new System.Drawing.Size(614, 56);
+            this.deadzoneBar.TabIndex = 68;
+            this.deadzoneBar.TickFrequency = 20;
+            this.deadzoneBar.Value = 100;
+            this.deadzoneBar.Scroll += new System.EventHandler(this.deadzoneBar_Scroll);
+            // 
+            // sensLabel
+            // 
+            this.sensLabel.AutoSize = true;
+            this.sensLabel.Location = new System.Drawing.Point(624, 16);
+            this.sensLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.sensLabel.Name = "sensLabel";
+            this.sensLabel.Size = new System.Drawing.Size(24, 17);
+            this.sensLabel.TabIndex = 67;
+            this.sensLabel.Text = "40";
+            // 
+            // sensBar
+            // 
+            this.sensBar.AutoSize = false;
+            this.sensBar.LargeChange = 10;
+            this.sensBar.Location = new System.Drawing.Point(56, 31);
+            this.sensBar.Margin = new System.Windows.Forms.Padding(4);
+            this.sensBar.Maximum = 255;
+            this.sensBar.Minimum = 1;
+            this.sensBar.Name = "sensBar";
+            this.sensBar.Size = new System.Drawing.Size(614, 55);
+            this.sensBar.TabIndex = 66;
+            this.sensBar.TickFrequency = 5;
+            this.sensBar.Value = 40;
+            this.sensBar.Scroll += new System.EventHandler(this.sensBar_Scroll);
+            // 
+            // label36
+            // 
+            this.label36.AutoSize = true;
+            this.label36.Location = new System.Drawing.Point(74, 14);
+            this.label36.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label36.Name = "label36";
+            this.label36.Size = new System.Drawing.Size(49, 17);
+            this.label36.TabIndex = 65;
+            this.label36.Text = "Speed";
+            this.label36.Click += new System.EventHandler(this.label36_Click);
             // 
             // incAcceleration
             // 
@@ -886,152 +1033,6 @@
             this.sensYBar.TickFrequency = 5;
             this.sensYBar.Value = 40;
             this.sensYBar.Scroll += new System.EventHandler(this.sensYBar_Scroll);
-            // 
-            // singlePanel
-            // 
-            this.singlePanel.Controls.Add(this.incSpeed);
-            this.singlePanel.Controls.Add(this.decSpeed);
-            this.singlePanel.Controls.Add(this.incDeadzone);
-            this.singlePanel.Controls.Add(this.decDeadzone);
-            this.singlePanel.Controls.Add(this.deadzoneLabel);
-            this.singlePanel.Controls.Add(this.label34);
-            this.singlePanel.Controls.Add(this.deadzoneBar);
-            this.singlePanel.Controls.Add(this.sensLabel);
-            this.singlePanel.Controls.Add(this.sensBar);
-            this.singlePanel.Controls.Add(this.label36);
-            this.singlePanel.Location = new System.Drawing.Point(23, 49);
-            this.singlePanel.Name = "singlePanel";
-            this.singlePanel.Size = new System.Drawing.Size(729, 149);
-            this.singlePanel.TabIndex = 65;
-            // 
-            // incSpeed
-            // 
-            this.incSpeed.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.incSpeed.ForeColor = System.Drawing.Color.Black;
-            this.incSpeed.Location = new System.Drawing.Point(678, 25);
-            this.incSpeed.Margin = new System.Windows.Forms.Padding(4);
-            this.incSpeed.Name = "incSpeed";
-            this.incSpeed.Size = new System.Drawing.Size(41, 37);
-            this.incSpeed.TabIndex = 74;
-            this.incSpeed.Text = "+";
-            this.incSpeed.UseVisualStyleBackColor = true;
-            this.incSpeed.Click += new System.EventHandler(this.incSens_Click);
-            this.incSpeed.MouseLeave += new System.EventHandler(this.stop_ClickTimer);
-            this.incSpeed.MouseHover += new System.EventHandler(this.incSens_MouseHover);
-            // 
-            // decSpeed
-            // 
-            this.decSpeed.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.decSpeed.ForeColor = System.Drawing.Color.Black;
-            this.decSpeed.Location = new System.Drawing.Point(14, 26);
-            this.decSpeed.Margin = new System.Windows.Forms.Padding(4);
-            this.decSpeed.Name = "decSpeed";
-            this.decSpeed.Size = new System.Drawing.Size(41, 37);
-            this.decSpeed.TabIndex = 73;
-            this.decSpeed.Text = "-";
-            this.decSpeed.UseVisualStyleBackColor = true;
-            this.decSpeed.Click += new System.EventHandler(this.decSens_Click);
-            this.decSpeed.MouseLeave += new System.EventHandler(this.stop_ClickTimer);
-            this.decSpeed.MouseHover += new System.EventHandler(this.decSens_MouseHover);
-            // 
-            // incDeadzone
-            // 
-            this.incDeadzone.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.incDeadzone.ForeColor = System.Drawing.Color.Black;
-            this.incDeadzone.Location = new System.Drawing.Point(678, 94);
-            this.incDeadzone.Margin = new System.Windows.Forms.Padding(4);
-            this.incDeadzone.Name = "incDeadzone";
-            this.incDeadzone.Size = new System.Drawing.Size(41, 37);
-            this.incDeadzone.TabIndex = 72;
-            this.incDeadzone.Text = "+";
-            this.incDeadzone.UseVisualStyleBackColor = true;
-            this.incDeadzone.Click += new System.EventHandler(this.incDeadzone_Click);
-            this.incDeadzone.MouseLeave += new System.EventHandler(this.stop_ClickTimer);
-            this.incDeadzone.MouseHover += new System.EventHandler(this.incDeadzone_MouseHover);
-            // 
-            // decDeadzone
-            // 
-            this.decDeadzone.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.decDeadzone.ForeColor = System.Drawing.Color.Black;
-            this.decDeadzone.Location = new System.Drawing.Point(14, 94);
-            this.decDeadzone.Margin = new System.Windows.Forms.Padding(4);
-            this.decDeadzone.Name = "decDeadzone";
-            this.decDeadzone.Size = new System.Drawing.Size(41, 37);
-            this.decDeadzone.TabIndex = 71;
-            this.decDeadzone.Text = "-";
-            this.decDeadzone.UseVisualStyleBackColor = true;
-            this.decDeadzone.Click += new System.EventHandler(this.decDeadzone_Click);
-            this.decDeadzone.MouseLeave += new System.EventHandler(this.stop_ClickTimer);
-            this.decDeadzone.MouseHover += new System.EventHandler(this.decDeadzone_MouseHover);
-            // 
-            // deadzoneLabel
-            // 
-            this.deadzoneLabel.AutoSize = true;
-            this.deadzoneLabel.Location = new System.Drawing.Point(620, 84);
-            this.deadzoneLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.deadzoneLabel.Name = "deadzoneLabel";
-            this.deadzoneLabel.Size = new System.Drawing.Size(32, 17);
-            this.deadzoneLabel.TabIndex = 70;
-            this.deadzoneLabel.Text = "100";
-            // 
-            // label34
-            // 
-            this.label34.AutoSize = true;
-            this.label34.Location = new System.Drawing.Point(76, 80);
-            this.label34.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.label34.Name = "label34";
-            this.label34.Size = new System.Drawing.Size(73, 17);
-            this.label34.TabIndex = 69;
-            this.label34.Text = "Deadzone";
-            // 
-            // deadzoneBar
-            // 
-            this.deadzoneBar.LargeChange = 10;
-            this.deadzoneBar.Location = new System.Drawing.Point(56, 101);
-            this.deadzoneBar.Margin = new System.Windows.Forms.Padding(4);
-            this.deadzoneBar.Maximum = 650;
-            this.deadzoneBar.Minimum = 1;
-            this.deadzoneBar.Name = "deadzoneBar";
-            this.deadzoneBar.Size = new System.Drawing.Size(614, 56);
-            this.deadzoneBar.TabIndex = 68;
-            this.deadzoneBar.TickFrequency = 20;
-            this.deadzoneBar.Value = 100;
-            this.deadzoneBar.Scroll += new System.EventHandler(this.deadzoneBar_Scroll);
-            // 
-            // sensLabel
-            // 
-            this.sensLabel.AutoSize = true;
-            this.sensLabel.Location = new System.Drawing.Point(624, 16);
-            this.sensLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.sensLabel.Name = "sensLabel";
-            this.sensLabel.Size = new System.Drawing.Size(24, 17);
-            this.sensLabel.TabIndex = 67;
-            this.sensLabel.Text = "40";
-            // 
-            // sensBar
-            // 
-            this.sensBar.AutoSize = false;
-            this.sensBar.LargeChange = 10;
-            this.sensBar.Location = new System.Drawing.Point(56, 31);
-            this.sensBar.Margin = new System.Windows.Forms.Padding(4);
-            this.sensBar.Maximum = 255;
-            this.sensBar.Minimum = 1;
-            this.sensBar.Name = "sensBar";
-            this.sensBar.Size = new System.Drawing.Size(614, 55);
-            this.sensBar.TabIndex = 66;
-            this.sensBar.TickFrequency = 5;
-            this.sensBar.Value = 40;
-            this.sensBar.Scroll += new System.EventHandler(this.sensBar_Scroll);
-            // 
-            // label36
-            // 
-            this.label36.AutoSize = true;
-            this.label36.Location = new System.Drawing.Point(76, 13);
-            this.label36.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.label36.Name = "label36";
-            this.label36.Size = new System.Drawing.Size(71, 17);
-            this.label36.TabIndex = 65;
-            this.label36.Text = "Sensitivity";
             // 
             // deadzoneXLabel
             // 
@@ -4235,16 +4236,16 @@
             this.tabControl.ResumeLayout(false);
             this.LipmouseTab.ResumeLayout(false);
             this.LipmouseTab.PerformLayout();
+            this.singlePanel.ResumeLayout(false);
+            this.singlePanel.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.deadzoneBar)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.sensBar)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.accelerationBar)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.maxspeedBar)).EndInit();
             this.splitPanel.ResumeLayout(false);
             this.splitPanel.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.deadzoneYBar)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.sensYBar)).EndInit();
-            this.singlePanel.ResumeLayout(false);
-            this.singlePanel.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.deadzoneBar)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.sensBar)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.deadzoneXBar)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.sensXBar)).EndInit();
             this.AlternativeTab.ResumeLayout(false);

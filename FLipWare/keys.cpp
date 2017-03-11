@@ -212,6 +212,7 @@ void setKeyValues(char* text)
     if (!strcmp(acttoken,"KEY_8")) updateKey(KEY_8);
     if (!strcmp(acttoken,"KEY_9")) updateKey(KEY_9);
     if (!strcmp(acttoken,"KEY_0")) updateKey(KEY_0);
+    if (!strcmp(acttoken,"KEY_SEMICOLON")) updateKey(KEY_SEMICOLON);
     
     if (!strcmp(acttoken,"KEY_SCROLL_LOCK")) updateKey(KEY_SCROLL_LOCK);
     if (!strcmp(acttoken,"KEY_PAUSE")) updateKey(KEY_PAUSE);

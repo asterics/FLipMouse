@@ -42,6 +42,7 @@ namespace MouseApp2
         static int slotCounter = 0;
         static int actSlot = 0;
 
+        TabPage saveAlternativeTab = new TabPage();
 
         public delegate void StringReceivedDelegate(string newLine);
         public StringReceivedDelegate stringReceivedDelegate;
@@ -207,6 +208,7 @@ namespace MouseApp2
 
             Text += VERSION_STRING;
 
+            saveAlternativeTab = tabControl.TabPages[1];
 
             for (int i = 0; i < allCommands.length(); i++)
             {
@@ -385,19 +387,28 @@ namespace MouseApp2
 
         private void selectStick_Checked(object sender, EventArgs e)
         {
+           // ((Control)tabControl.TabPages[1]).Enabled = false;
+            if (tabControl.TabPages[1].Name == "AlternativeTab")
+                tabControl.TabPages.Remove(tabControl.TabPages[1]);
             joyModeBox.Visible = false;
             joyModeLabel.Visible = false;
+
         }
 
         private void selectJoystick_CheckedChanged(object sender, EventArgs e)
         {
+            //((Control)tabControl.TabPages[1]).Enabled = false;
+            if (tabControl.TabPages[1].Name == "AlternativeTab") 
+              tabControl.TabPages.Remove(tabControl.TabPages[1]);
             joyModeBox.Visible = true;
             joyModeLabel.Visible = true;
-
         }
 
         private void selectAlternative_Checked(object sender, EventArgs e)
         {
+         //   ((Control)tabControl.TabPages[1]).Enabled = true;
+            if (tabControl.TabPages[1].Name != "AlternativeTab")
+                tabControl.TabPages.Insert(1, saveAlternativeTab);
             joyModeBox.Visible = false;
             joyModeLabel.Visible = false;
         }
@@ -1362,6 +1373,11 @@ namespace MouseApp2
         {
             storeSlot(actSlot);
             storeSettingsToFLipmouse();
+        }
+
+        private void label36_Click(object sender, EventArgs e)
+        {
+
         }
 
     }

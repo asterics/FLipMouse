@@ -278,8 +278,15 @@ void performCommand (uint8_t cmd, int16_t par1, char * keystring, int8_t periodi
         case CMD_KW:
                if (DebugOutput==DEBUG_FULLOUTPUT)  
                {  Serial.print("keyboard write: "); Serial.println(keystring); }
-               Keyboard.print(keystring);
-               if(isBluetoothAvailable()) keyboardBTPrint(keystring);
+               //Keyboard.print(keystring);
+               //Serial.println("keyboard write");
+               for (int i=0; i<strlen(keystring); i++)
+               {
+                  // Serial.println(keystring[i]);
+                  Keyboard.press(keystring[i]);
+                  Keyboard.release(keystring[i]);
+               }
+               if(isBluetoothAvailable()) keyboardBTPrint(keystring);  // TODO: check ISO8859-compatibility
                break;
         case CMD_KP:
                if (DebugOutput==DEBUG_FULLOUTPUT)  

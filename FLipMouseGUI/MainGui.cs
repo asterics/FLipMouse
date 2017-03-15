@@ -209,6 +209,7 @@ namespace MouseApp2
             Text += VERSION_STRING;
 
             saveAlternativeTab = tabControl.TabPages[1];
+            tabControl.TabPages.Remove(tabControl.TabPages[1]);  // default: no alternative actions
 
             for (int i = 0; i < allCommands.length(); i++)
             {

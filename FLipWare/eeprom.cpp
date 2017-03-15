@@ -135,8 +135,6 @@ void saveToEEPROM(char * slotname)
  * Store current slot data to the EEPROM.
  * The slot is identified by the slot number. If the nr parameter is -1,
  * a new slot will be created (at the first possible position)
- * ATTENTION: if this method is not called from another function (e.g. saveToEEPROM()),
- * it is necessary to preload the start adresses via bootstrapSlotAddresses()!
  * */
 void saveToEEPROMSlotNumber(int8_t nr, char * slotname)
 {
@@ -283,7 +281,6 @@ void saveToEEPROMSlotNumber(int8_t nr, char * slotname)
 	
 	
 	//store the storageheader permanently to the EEPROM
-	//bootstrap is not necessary, already updated previously
 	for(uint16_t i = 0; i<sizeof(storageHeader); i++)
 	{
 		writeEEPROM(i, *((uint8_t*)&slotAdresses+i));
@@ -301,9 +298,6 @@ int8_t slotnameToNumber(char * slotname)
 {
 	uint16_t address; //current EEPROM address
 	uint8_t matches;
-
-	//pre-load all starting adresses from the memory
-	bootstrapSlotAddresses();
 	
 	//iterate all possible slots
 	for(uint8_t i = 0; i < EEPROM_COUNT_SLOTS; i++)
@@ -376,9 +370,6 @@ int8_t slotnameIRToNumber(char * slotname)
 {
 	uint16_t address; //current EEPROM address
 	uint8_t matches;
-
-	//pre-load all starting adresses from the memory
-	bootstrapSlotAddresses();
 	
 	//iterate all possible slots
 	for(uint8_t i = 0; i < EEPROM_COUNT_IRCOMMAND; i++)
@@ -468,8 +459,6 @@ void readFromEEPROM(char * slotname)
  * The slot is identified by the slot number.
  * If the search flag is set, this function loads the next possible slot, if
  * the current one is not valid
- * ATTENTION: if this method is not called from another function (e.g. readFromEEPROM()),
- * it is necessary to preload the start adresses via bootstrapSlotAddresses()!
  * */
 void readFromEEPROMSlotNumber(uint8_t nr, bool search)
 {
@@ -598,7 +587,6 @@ void deleteSlots()
 		slotAdresses.startSlotAddress[i] = 0;
 	}
 	//store the storageheader permanently to the EEPROM
-	//bootstrap is not necessary, already updated previously
 	for(uint16_t i = 0; i<sizeof(storageHeader); i++)
 	{
 		writeEEPROM(i, *((uint8_t*)&slotAdresses+i));
@@ -772,7 +760,6 @@ void saveIRToEEPROMSlotNumber(uint8_t nr, char * name, uint16_t *timings,uint8_t
 	
 	
 	//store the storageheader permanently to the EEPROM
-	//bootstrap is not necessary, already updated previously
 	for(uint16_t i = 0; i<sizeof(storageHeader); i++)
 	{
 		writeEEPROM(i, *((uint8_t*)&slotAdresses+i));
@@ -788,9 +775,6 @@ void listIRCommands()
 	uint16_t address; //current EEPROM address
 	uint8_t b;
 
-	//pre-load all starting adresses from the memory
-	bootstrapSlotAddresses();
-	
 	//iterate all possible slots
 	for(uint8_t i = 0; i < EEPROM_COUNT_IRCOMMAND; i++)
 	{
@@ -810,8 +794,6 @@ void listIRCommands()
 /**
  * Replay one IR command from the EEPROM.
  * The slot is identified by the slot number
- * ATTENTION: if this method is not called from another function (e.g. readIRFromEEPROM()),
- * it is necessary to preload the start adresses via bootstrapSlotAddresses()!!!
  * */
 uint16_t readIRFromEEPROMSlotNumber(uint8_t slotNr,uint16_t *timings,uint8_t maxEdges)
 {
@@ -882,11 +864,24 @@ uint16_t readIRFromEEPROM(char * name,uint16_t *timings,uint8_t maxEdges)
  * slots and IR commands
  * */
 void bootstrapSlotAddresses()
-{
+{ 
 	for(uint16_t i = 0; i < sizeof(storageHeader); i++)
 	{
 		*((uint8_t *)&slotAdresses + i) = readEEPROM(i);
 	}
+
+  // check if we need to initialize EEPROM (only at first start, when EEPROM is empty )
+  if ((readEEPROM(slotAdresses.startSlotAddress[0]) != (EEPROM_MAGIC_NUMBER_SLOT & 0x00FF)) ||
+      (readEEPROM(slotAdresses.startSlotAddress[0]+1) != ((EEPROM_MAGIC_NUMBER_SLOT & 0xFF00)>>8)))
+  {
+     Serial.println(F("Initializing EEPROM!"));
+     
+     for(uint16_t i = 0; i < sizeof(storageHeader); i++)
+        writeEEPROM(i, 0xff); 
+       
+     saveToEEPROMSlotNumber(0,"default");  // save default settings to first slot
+  }
+  
 	if(eepromDebugLevel == EEPROM_BASIC_DEBUG)
 	{
 		Serial.println(F("EEPROM slot address struct (bootstrap):"));
@@ -913,9 +908,6 @@ void listSlots()
 {
 	uint16_t address; //current EEPROM address
 	uint8_t b;
-
-	//pre-load all starting adresses from the memory
-	bootstrapSlotAddresses();
 	
 	//iterate all possible slots
 	for(uint8_t i = 0; i < EEPROM_COUNT_SLOTS; i++)

@@ -2,7 +2,7 @@
 
 /* 
      FLipMouseGUI - Graphical user Interface for FlipMouse / FlipWare firmware
-       built upon Assistive Button Interface (FABI) Version 2.0  - AsTeRICS Academy 2015 - http://www.asterics-academy.net
+     http://www.asterics-academy.net
    
      for a list of supported AT commands, see commands.cs
    
@@ -29,7 +29,7 @@ namespace MouseApp2
 {
     public partial class FLipMouseGUI : Form
     {
-        const string VERSION_STRING = "2.4";
+        const string VERSION_STRING = "2.5";
         const int MAX_KEYSTRING_LEN = 65;
 
         const int SENS_CHANGE_STEP = 1;
@@ -41,6 +41,7 @@ namespace MouseApp2
         Boolean readDone = false;
         static int slotCounter = 0;
         static int actSlot = 0;
+        static int checkVersion = 1;
 
         TabPage saveAlternativeTab = new TabPage();
 
@@ -88,6 +89,7 @@ namespace MouseApp2
                     case GUITYPE_INTFIELD: actSettingString+=(" "+guiLink.nud.Value); break;
                     case GUITYPE_KEYSELECT:
                     case GUITYPE_TEXTFIELD: actSettingString+=(" "+guiLink.tb.Text); break;
+                    case GUITYPE_COMBO_ONLY: actSettingString += (" " + guiLink.cb.Text); break;
                     case GUITYPE_SLIDER: actSettingString += (" " + guiLink.tr.Value); break;
                     case GUITYPE_3RADIOBUTTONS: 
                         if (guiLink.rb1.Checked) actSettingString += (" 1"); 
@@ -152,6 +154,8 @@ namespace MouseApp2
                                     strValue = settingString.Substring(guiLink.cmd.Length + 1);
                                     guiLink.tr.Value = Int32.Parse(strValue);
                                     guiLink.tl.Text = strValue; break;
+                                case GUITYPE_COMBO_ONLY: guiLink.cb.Text = settingString.Substring(6);
+                                    break;
                                 case GUITYPE_3RADIOBUTTONS: 
                                     strValue = settingString.Substring(guiLink.cmd.Length + 1);
                                     int value= Int32.Parse(strValue);
@@ -192,9 +196,13 @@ namespace MouseApp2
         }
 
 
-        public FLipMouseGUI()
+        public FLipMouseGUI(string[] args)
         {
-
+            if (args.Length == 1)
+            {
+                if (args[0].Equals("-noversioncheck")) checkVersion=0;
+            }
+                
             InitializeComponent();
 
             initCommands();
@@ -266,6 +274,12 @@ namespace MouseApp2
             joyModeBox.Items.Add("Z/Rotation-Axis");
             joyModeBox.Items.Add("Slider1/Slider2");
             joyModeBox.SelectedIndex = 0;
+
+            orientationBox.Items.Add("0");
+            orientationBox.Items.Add("90");
+            orientationBox.Items.Add("180");
+            orientationBox.Items.Add("270");
+            orientationBox.SelectedIndex = 0;
 
             displaySlot(0);
 
@@ -1374,11 +1388,6 @@ namespace MouseApp2
         {
             storeSlot(actSlot);
             storeSettingsToFLipmouse();
-        }
-
-        private void label36_Click(object sender, EventArgs e)
-        {
-
         }
 
     }

@@ -164,7 +164,7 @@ namespace MouseApp2
         {
             DialogResult dialogResult;
             addToLog("Connected device: " + newLine);
-            if (!(newLine.Contains(VERSION_STRING)))
+            if ((!(newLine.Contains(VERSION_STRING))) && (checkVersion==1))
             {
                 dialogResult = MessageBox.Show(newLine + "The firmware is not compatible to GUI version " + VERSION_STRING + " !\nPlease update firmware and GUI to the newest version, see: https://github.com/asterics/FLipMouse/releases", "Software update necessary", MessageBoxButtons.OK);
                 disconnnectComButton_Click(this, null);

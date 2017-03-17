@@ -1,5 +1,5 @@
 /*
-     FLipWare - AsTeRICS Academy 2016
+     FLipWare - AsTeRICS Foundation 2017
      For more info please visit: http://www.asterics-academy.net
 
      Module: eeprom.h - implementation of the EEPROM storage management, header file

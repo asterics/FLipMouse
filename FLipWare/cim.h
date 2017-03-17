@@ -1,5 +1,5 @@
 /*
-     FLipWare - AsTeRICS Academy 2016
+     FLipWare - AsTeRICS Foundation 2017
      For more info please visit: http://www.asterics-academy.net
 
      Module: cim.h - header file for AsTeRICS LipMouse CIM Firmware using Teensy controller

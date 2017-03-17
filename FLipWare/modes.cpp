@@ -1,6 +1,5 @@
-  
 /* 
-     FLipWare - AsTeRICS Academy 2016
+     FLipWare - AsTeRICS Foundation 2017
      For more info please visit: http://www.asterics-academy.net
 
      Module: modes.cpp: implementation of stick operation and special modes

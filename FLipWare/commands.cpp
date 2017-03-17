@@ -1,5 +1,5 @@
 /*
-     FLipWare - AsTeRICS Academy 2016
+     FLipWare - AsTeRICS Foundation 2017
      For more info please visit: http://www.asterics-academy.net
 
      Module: commands.cpp - implementation of the AT-commands
@@ -38,7 +38,7 @@ const struct atCommandType atCommands[] PROGMEM = {
     {"E2"  , PARTYPE_NONE },  {"JX"  , PARTYPE_INT  }, {"JY"  , PARTYPE_INT  }, {"JZ"  , PARTYPE_INT  }, 
     {"JT"  , PARTYPE_INT  },  {"JS"  , PARTYPE_INT  }, {"JP"  , PARTYPE_INT  }, {"JR"  , PARTYPE_INT  },
     {"JH"  , PARTYPE_INT  },  {"IT"  , PARTYPE_UINT  },{"KH"  , PARTYPE_STRING},{"MS"  , PARTYPE_UINT },
-    {"AC"  , PARTYPE_UINT },  {"MA"  , PARTYPE_STRING},{"WA"  , PARTYPE_UINT  },
+    {"AC"  , PARTYPE_UINT },  {"MA"  , PARTYPE_STRING},{"WA"  , PARTYPE_UINT  },{"RO"  , PARTYPE_UINT },
 };
 
 void printCurrentSlot()
@@ -60,6 +60,8 @@ void printCurrentSlot()
         Serial.print("AT GD "); Serial.println(settings.gd);
         Serial.print("AT GL "); Serial.println(settings.gl);
         Serial.print("AT GR "); Serial.println(settings.gr);
+        Serial.print("AT RO "); Serial.println(settings.ro);
+        
         for (int i=0;i<NUMBER_OF_BUTTONS;i++) 
         {
            Serial.print("AT BM "); 
@@ -118,8 +120,6 @@ void performCommand (uint8_t cmd, int16_t par1, char * keystring, int8_t periodi
             break;
         
         case CMD_CL:
-               if (DebugOutput==DEBUG_FULLOUTPUT)  
-                 Serial.println("click left");
                Mouse.press(MOUSE_LEFT); 
                if(isBluetoothAvailable()) mouseBTPress(1<<0);
                delay(DEFAULT_CLICK_TIME);
@@ -127,8 +127,6 @@ void performCommand (uint8_t cmd, int16_t par1, char * keystring, int8_t periodi
                if(isBluetoothAvailable()) mouseBTRelease(1<<0);
                break;
         case CMD_CR:
-               if (DebugOutput==DEBUG_FULLOUTPUT)  
-                 Serial.println("click right");
                Mouse.press(MOUSE_RIGHT); 
                if(isBluetoothAvailable()) mouseBTPress(1<<1);
                delay(DEFAULT_CLICK_TIME);
@@ -136,8 +134,6 @@ void performCommand (uint8_t cmd, int16_t par1, char * keystring, int8_t periodi
                if(isBluetoothAvailable()) mouseBTRelease(1<<1);
                break;
         case CMD_CD:
-               if (DebugOutput==DEBUG_FULLOUTPUT)  
-                 Serial.println("click double");
                Mouse.press(MOUSE_LEFT); 
                if(isBluetoothAvailable()) mouseBTPress(1<<0);
                delay(DEFAULT_CLICK_TIME);
@@ -151,8 +147,6 @@ void performCommand (uint8_t cmd, int16_t par1, char * keystring, int8_t periodi
                if(isBluetoothAvailable()) mouseBTRelease(1<<0);
                break;
         case CMD_CM:
-               if (DebugOutput==DEBUG_FULLOUTPUT)  
-                 Serial.println("click middle");
                Mouse.press(MOUSE_MIDDLE); 
                if(isBluetoothAvailable()) mouseBTPress(1<<2);
                delay(DEFAULT_CLICK_TIME);
@@ -160,61 +154,41 @@ void performCommand (uint8_t cmd, int16_t par1, char * keystring, int8_t periodi
                if(isBluetoothAvailable()) mouseBTRelease(1<<2);
               break;
         case CMD_PL:
-               if (DebugOutput==DEBUG_FULLOUTPUT)  
-                 Serial.println("press left");
                Mouse.press(MOUSE_LEFT); 
                if(isBluetoothAvailable()) mouseBTPress(1<<0);
                break;
         case CMD_PR:
-               if (DebugOutput==DEBUG_FULLOUTPUT)  
-                 Serial.println("press right");
                Mouse.press(MOUSE_RIGHT); 
                if(isBluetoothAvailable()) mouseBTPress(1<<1);
                break;
         case CMD_PM:
-               if (DebugOutput==DEBUG_FULLOUTPUT)  
-                 Serial.println("press middle");
                Mouse.press(MOUSE_MIDDLE); 
                if(isBluetoothAvailable()) mouseBTPress(1<<2);
                break;
         case CMD_RL:
-               if (DebugOutput==DEBUG_FULLOUTPUT)  
-                 Serial.println("release left");
                Mouse.release(MOUSE_LEFT); 
                if(isBluetoothAvailable()) mouseBTRelease(1<<0);
                break; 
         case CMD_RR:
-               if (DebugOutput==DEBUG_FULLOUTPUT)  
-                 Serial.println("release right");
                Mouse.release(MOUSE_RIGHT); 
                if(isBluetoothAvailable()) mouseBTRelease(1<<1);
                break; 
         case CMD_RM:
-               if (DebugOutput==DEBUG_FULLOUTPUT)  
-                 Serial.println("release middle");
                Mouse.release(MOUSE_MIDDLE); 
                if(isBluetoothAvailable()) mouseBTRelease(1<<2);
                break; 
         case CMD_WU:
-               if (DebugOutput==DEBUG_FULLOUTPUT)  
-                 Serial.println("wheel up");
                  Mouse.scroll(-settings.ws);
                  if(isBluetoothAvailable()) mouseBT(0,0,-settings.ws);
             break;
         case CMD_WD:
-               if (DebugOutput==DEBUG_FULLOUTPUT)  
-                 Serial.println("wheel down");
                  Mouse.scroll(settings.ws); 
                  if(isBluetoothAvailable()) mouseBT(0,0,settings.ws);
             break;
         case CMD_WS:
-               if (DebugOutput==DEBUG_FULLOUTPUT)  
-                 Serial.println("wheel step");
                settings.ws=par1;
             break;
         case CMD_MX:
-               if (DebugOutput==DEBUG_FULLOUTPUT) 
-               {  Serial.print("mouse move x "); Serial.println(par1); }
                if (periodicMouseMovement) moveX=par1;
                else {
                  while (par1<-128) { Mouse.move(-128, 0); par1+=128; }
@@ -224,8 +198,6 @@ void performCommand (uint8_t cmd, int16_t par1, char * keystring, int8_t periodi
                }
             break;
         case CMD_MY:
-               if (DebugOutput==DEBUG_FULLOUTPUT)  
-               {  Serial.print("mouse move y "); Serial.println(par1); }
                if (periodicMouseMovement) moveY=par1;
                else {
                  while (par1<-128) { Mouse.move(0, -128); par1+=128; }
@@ -235,49 +207,31 @@ void performCommand (uint8_t cmd, int16_t par1, char * keystring, int8_t periodi
                }
             break;
         case CMD_JX:
-               if (DebugOutput==DEBUG_FULLOUTPUT) 
-               {  Serial.print("set joystick x axis to "); Serial.println(par1); }
                Joystick.X(par1);
             break;
         case CMD_JY:
-               if (DebugOutput==DEBUG_FULLOUTPUT) 
-               {  Serial.print("set joystick y axis to "); Serial.println(par1); }
                Joystick.Y(par1);
             break;
         case CMD_JZ:
-               if (DebugOutput==DEBUG_FULLOUTPUT) 
-               {  Serial.print("set joystick z axis to "); Serial.println(par1); }
                Joystick.Z(par1);
             break;
         case CMD_JT:
-               if (DebugOutput==DEBUG_FULLOUTPUT) 
-               {  Serial.print("set joystick z turn rotation to "); Serial.println(par1); }
                Joystick.Zrotate(par1);
             break;
         case CMD_JS:
-               if (DebugOutput==DEBUG_FULLOUTPUT) 
-               {  Serial.print("set joystick slider to "); Serial.println(par1); }
                Joystick.sliderLeft(par1);
             break;
         case CMD_JP:
-               if (DebugOutput==DEBUG_FULLOUTPUT) 
-               {  Serial.print("press joystick button "); Serial.println(par1); }
                Joystick.button(par1,1);
             break;
         case CMD_JR:
-               if (DebugOutput==DEBUG_FULLOUTPUT) 
-               {  Serial.print("release joystick button "); Serial.println(par1); }
                Joystick.button(par1,0);
             break;
         case CMD_JH:
-               if (DebugOutput==DEBUG_FULLOUTPUT) 
-               {  Serial.print("set joystick hat position to "); Serial.println(par1); }
                Joystick.hat(par1);
             break;
         
         case CMD_KW:
-               if (DebugOutput==DEBUG_FULLOUTPUT)  
-               {  Serial.print("keyboard write: "); Serial.println(keystring); }
                //Keyboard.print(keystring);
                //Serial.println("keyboard write");
                for (int i=0; i<strlen(keystring); i++)
@@ -289,38 +243,26 @@ void performCommand (uint8_t cmd, int16_t par1, char * keystring, int8_t periodi
                if(isBluetoothAvailable()) keyboardBTPrint(keystring);  // TODO: check ISO8859-compatibility
                break;
         case CMD_KP:
-               if (DebugOutput==DEBUG_FULLOUTPUT)  
-               {  Serial.print("key press: "); Serial.println(keystring); }
                if (keystring[strlen(keystring)-1] != ' ') strcat(keystring," ");
                pressKeys(keystring);
                break;
         case CMD_KH:
-               if (DebugOutput==DEBUG_FULLOUTPUT)  
-               {  Serial.print("hold key: "); Serial.println(keystring); }
                if (keystring[strlen(keystring)-1] != ' ') strcat(keystring," ");
                holdKeys(keystring);
                break;
         case CMD_KR:
-               if (DebugOutput==DEBUG_FULLOUTPUT)  
-               {  Serial.print("key release: ");  Serial.println(keystring); }
                strcat(keystring," ");
                releaseKeys(keystring);             
                break;
         case CMD_RA:
-               if (DebugOutput==DEBUG_FULLOUTPUT)  
-                 Serial.print("release all");
                release_all();             
                break;
               
         case CMD_SA:
-               if (DebugOutput==DEBUG_FULLOUTPUT)  
-               {  Serial.print("save slot ");  Serial.println(keystring); }
                release_all();
                saveToEEPROM(keystring); 
             break;
         case CMD_LO:
-               if (DebugOutput==DEBUG_FULLOUTPUT)  
-               {  Serial.print("load slot: "); Serial.println(keystring); }
                if (keystring) {
                  release_all();
                  // reportSlotParameters=REPORT_ONE_SLOT;
@@ -331,8 +273,6 @@ void performCommand (uint8_t cmd, int16_t par1, char * keystring, int8_t periodi
                }
             break;
         case CMD_LA:
-               if (DebugOutput==DEBUG_FULLOUTPUT)  
-                 Serial.println("load all slots");
                release_all();
                reportSlotParameters=REPORT_ALL_SLOTS;
                //necessary, because we load via slot numbers
@@ -345,8 +285,6 @@ void performCommand (uint8_t cmd, int16_t par1, char * keystring, int8_t periodi
                readFromEEPROMSlotNumber(0,true);
             break;
         case CMD_LI:
-               if (DebugOutput==DEBUG_FULLOUTPUT)  
-                 Serial.println("list slots: ");
                release_all();
                listSlots();
             break;
@@ -367,8 +305,6 @@ void performCommand (uint8_t cmd, int16_t par1, char * keystring, int8_t periodi
                deleteSlots();
             break;
         case CMD_NC:
-               if (DebugOutput==DEBUG_FULLOUTPUT)  
-                 Serial.println("no command"); 
             break;
 
         case CMD_MM:
@@ -403,33 +339,21 @@ void performCommand (uint8_t cmd, int16_t par1, char * keystring, int8_t periodi
                makeTone(TONE_CALIB,0);
             break;
         case CMD_AX:
-               if (DebugOutput==DEBUG_FULLOUTPUT)  
-                 Serial.println("set acc x");
                settings.ax=par1;
             break;
         case CMD_AY:
-               if (DebugOutput==DEBUG_FULLOUTPUT)  
-                 Serial.println("set acc y");
                settings.ay=par1;
             break;
         case CMD_DX:
-              if (DebugOutput==DEBUG_FULLOUTPUT)  
-                 Serial.print("set deadzone x");
                settings.dx=par1;
             break;
         case CMD_DY:
-               if (DebugOutput==DEBUG_FULLOUTPUT)  
-                 Serial.println("set deadzone y");
                settings.dy=par1;
             break;
         case CMD_MS:
-               if (DebugOutput==DEBUG_FULLOUTPUT)  
-                 Serial.println("set max speed");
                settings.ms=par1;
             break;
         case CMD_AC:
-               if (DebugOutput==DEBUG_FULLOUTPUT)  
-                 Serial.println("set acceleration time");
                settings.ac=par1;
             break;
         case CMD_MA:
@@ -461,50 +385,37 @@ void performCommand (uint8_t cmd, int16_t par1, char * keystring, int8_t periodi
                }
                break;
         case CMD_WA:
-               if (DebugOutput==DEBUG_FULLOUTPUT)  
-                  Serial.println("wait");
                 delay(par1);
                break;
         case CMD_TS:
-               if (DebugOutput==DEBUG_FULLOUTPUT)  
-                 Serial.println("set threshold sip");
                settings.ts=par1;
             break;
         case CMD_TP:
-               if (DebugOutput==DEBUG_FULLOUTPUT)  
-                 Serial.println("set threshold puff");
                settings.tp=par1;
             break;
         case CMD_SP:
-               if (DebugOutput==DEBUG_FULLOUTPUT)  
-                 Serial.println("set strong puff threshold");
                settings.sp=par1;
             break;
         case CMD_SS:
-               if (DebugOutput==DEBUG_FULLOUTPUT)  
-                 Serial.println("set strong sip threshold");
                settings.ss=par1;
             break;
         case CMD_GU:
-               if (DebugOutput==DEBUG_FULLOUTPUT)  
-                 Serial.println("set up gain");
                settings.gu=par1;
             break;
         case CMD_GD:
-               if (DebugOutput==DEBUG_FULLOUTPUT)  
-                 Serial.println("set down gain");
                settings.gd=par1;
             break;
         case CMD_GL:
-               if (DebugOutput==DEBUG_FULLOUTPUT)  
-                 Serial.println("set left gain");
                settings.gl=par1;
             break;
         case CMD_GR:
-               if (DebugOutput==DEBUG_FULLOUTPUT)  
-                 Serial.println("set right gain");
                settings.gr=par1;
             break;
+        case CMD_RO:
+               settings.ro=par1;
+            break;
+
+            
    #ifdef TEENSY_LC
         case CMD_IR:
     				if (DebugOutput==DEBUG_FULLOUTPUT) Serial.println("record IR command");
@@ -515,15 +426,12 @@ void performCommand (uint8_t cmd, int16_t par1, char * keystring, int8_t periodi
     				play_IR_command(keystring);
             break;
         case CMD_IL:
-    				if (DebugOutput==DEBUG_FULLOUTPUT) Serial.println("list IR commands");
     				list_IR_commands();
             break;
         case CMD_IC:
-    				if (DebugOutput==DEBUG_FULLOUTPUT) Serial.println("delete IR command");
     				delete_IR_command(keystring);
             break;
         case CMD_IT:
-            if (DebugOutput==DEBUG_FULLOUTPUT) Serial.println("set IR timeout");
             set_IR_timeout(par1);
             break;
   #endif
@@ -543,7 +451,4 @@ void performCommand (uint8_t cmd, int16_t par1, char * keystring, int8_t periodi
             break;
      }
 }
-
-
-
 

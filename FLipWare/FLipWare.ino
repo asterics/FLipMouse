@@ -1,6 +1,6 @@
   
 /* 
-     FLipWare - AsTeRICS Academy 2016
+     FLipWare - AsTeRICS Foundation 2017
      For more info please visit: http://www.asterics-academy.net
 
      Module: FLipWare.ino  (main module)
@@ -14,7 +14,8 @@
         sensors:  3 momentary switches connected to GPIO pins / 4 force sensors
                   1 pressure sensor connected to ADC pins 
           
-   For a list of supported AT commands, see commands.h / commands.cpp
+   For version information and change log see FlipWare.h
+   For a list of supported AT commands see commands.h / commands.cpp
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -79,7 +80,8 @@ struct slotGeneralSettings settings = {      // default settings valus, for type
     500, 525, 3,                      // threshold sip, threshold puff, wheel step,
     800, 10,                          // threshold strong puff, threshold strong sip
     50, 50, 50, 50 ,                  // gain up / down / left / right
-    0, 0                              // offset x / y
+    0, 0,                             // offset x / y
+    0,                                // orientation
 }; 
 
 
@@ -101,7 +103,7 @@ uint8_t DebugOutput = DEBUG_NOOUTPUT;
 int waitTime=DEFAULT_WAIT_TIME;
 
 
-int up,down,left,right;
+int up,down,left,right,tmp;
 int x,y;
 int pressure;
 
@@ -116,6 +118,7 @@ char * keystring=0;
 
 // function declarations 
 void UpdateLeds();
+void UpdateTones();
 void handleMouseClicks();
 void reportValues();
 
@@ -191,6 +194,12 @@ void loop() {
     left =     (uint16_t)((uint32_t)analogRead(LEFT_SENSOR_PIN) * settings.gr/50); if (left>1023) left=1023; if (left<0) left=0;
     right =    (uint16_t)((uint32_t)analogRead(RIGHT_SENSOR_PIN) * settings.gl/50); if (right>1023) right=1023; if (right<0) right=0;
 
+    switch (settings.ro) {
+      case 90: tmp=up; up=left; left=down; down=right; right=tmp; break;
+      case 180: tmp=up; up=down; down=tmp; tmp=right; right=left; left=tmp; break;
+      case 270: tmp=up; up=right; right=down; down=left; left=tmp;break;
+    }
+
     while (Serial.available() > 0) {
       // get incoming byte:
       inByte = Serial.read();
@@ -231,6 +240,7 @@ void loop() {
        handleCimMode();   // create periodic reports if running in AsTeRICS CIM compatibility mode
 
     UpdateLeds();
+    UpdateTones();
 }
 
 void reportValues()
@@ -305,6 +315,35 @@ void UpdateLeds()
      digitalWrite(LED_PIN,HIGH);       
 }
 
+uint16_t toneHeight;
+uint16_t toneOnTime;
+uint16_t toneOffTime;
+uint16_t toneCount=0;
+
+void UpdateTones()
+{  
+  static uint16_t toneState=0;
+  static uint16_t cnt=0;
+
+  if (!toneCount) return;
+
+  uint8_t tonePin = TONE_PIN;
+  if(isBluetoothAvailable()) tonePin = TONE_PIN_EXTERNAL;
+
+  switch(toneState) {
+      case 0:
+            tone(tonePin, toneHeight, toneOnTime);
+            toneState++;
+            break;
+      case 1:
+            if (++cnt > (toneOnTime+toneOffTime)/5 )  {
+              toneCount--;
+              toneState=0;
+              cnt=0;
+            }
+            break;
+    }
+  }
 
 
 void makeTone(uint8_t kind, uint8_t param)
@@ -323,7 +362,10 @@ void makeTone(uint8_t kind, uint8_t param)
 			tone(tonePin, 200, 400);
             break;
 		case TONE_CHANGESLOT:
-      tone(tonePin, 2000+200*param, 400);
+      toneHeight=2000+200*param;
+      toneOnTime=150;
+      toneOffTime=50;
+      toneCount=param+1;
             break;
 		case TONE_ENTER_STRONGSIP:
   		tone(tonePin, 300, 200); 

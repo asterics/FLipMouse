@@ -1,6 +1,6 @@
 
 /* 
-     FLipWare - AsTeRICS Academy 2016
+     FLipWare - AsTeRICS Foundation 2017
      For more info please visit: http://www.asterics-academy.net
 
      Module: FlipWare.h  - main header file
@@ -39,8 +39,9 @@
 #include "modes.h"
 #include "bluetooth.h"
 
-#define VERSION_STRING "Flipmouse v2.4"   
+#define VERSION_STRING "Flipmouse v2.5"   
 
+//  V2.5: added stick rotation options, modified acoustic slot feedback, improved keycode handling
 //  V2.4: added support for acceleration, maximum speed and command macros
 //	V2.3: added support for internal Bluetooth Addon
 //  V2.2: added new EEPROM handling and IR-Command support
@@ -108,6 +109,7 @@ struct slotGeneralSettings {
   uint8_t  gr;     // gain right 
   int16_t  cx;     // calib x
   int16_t  cy;     // calib y
+  uint16_t ro;     // orientation (0,90,180,270)
 };
 
 

@@ -1,5 +1,5 @@
 /*
-     FLipWare - AsTeRICS Academy 2016
+     FLipWare - AsTeRICS Foundation 2017
      For more info please visit: http://www.asterics-academy.net
 
      Module: commands.h - implementation of the AT-commands, header file
@@ -53,6 +53,7 @@
    
           AT MX <int>       move mouse in x direction (e.g. "AT MX 4" moves cursor 4 pixels to the right)  
           AT MY <int>       move mouse in y direction (e.g. "AT MY -10" moves cursor 10 pixels up)  
+          AT RO <uint>      rotate stick orientation (e.g. "AT RO 180" flips x any y movements)  
 
           AT JX <int>       set joystick x axis (e.g. "AT JX 512" sets the x-axis to middle position)  
           AT JY <int>       set joystick y axis (e.g. "AT JY 1023" sets the y-axis to full up position)  
@@ -156,7 +157,7 @@ enum atCommands {
   CMD_LI, CMD_NE, CMD_DE, CMD_NC, CMD_E1, CMD_E0, CMD_MM, CMD_SW, CMD_SR, CMD_ER, CMD_CA, CMD_AX,
   CMD_AY, CMD_DX, CMD_DY, CMD_TS, CMD_TP, CMD_SP, CMD_SS, CMD_GU, CMD_GD, CMD_GL, CMD_GR, CMD_IR,
   CMD_IP, CMD_IC, CMD_IL, CMD_E2, CMD_JX, CMD_JY, CMD_JZ, CMD_JT, CMD_JS, CMD_JP, CMD_JR, CMD_JH,
-  CMD_IT, CMD_KH, CMD_MS, CMD_AC, CMD_MA, CMD_WA,
+  CMD_IT, CMD_KH, CMD_MS, CMD_AC, CMD_MA, CMD_WA, CMD_RO,
   NUM_COMMANDS
 };
 

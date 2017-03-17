@@ -50,6 +50,7 @@
    
          AT MX <int>       move mouse in x direction (e.g. "AT MX 4" moves cursor 4 pixels to the right)  
          AT MY <int>       move mouse in y direction (e.g. "AT MY -10" moves cursor 10 pixels up)  
+         AT RO <uint>      rotate stick orientation (e.g. "AT OR 180" flips x any y movements)  
 
          AT KW <string>    keyboard write string (e.g." AT KW Hello!" writes "Hello!")    
          AT KP <string>    key press: press/hold keys identifier 
@@ -145,6 +146,7 @@ namespace MouseApp2
         const int GUITYPE_SLIDER    = 4;
         const int GUITYPE_3RADIOBUTTONS   = 5;
         const int GUITYPE_GENERIC   = 6;
+        const int GUITYPE_COMBO_ONLY= 7;
 
         const string PREFIX_FLIPMOUSE_VERSION = "FLIPMOUSE ";
         const string PREFIX_REPORT_VALUES = "VALUES:";
@@ -222,6 +224,7 @@ namespace MouseApp2
             allCommands.add(new Command("AT IP", PARTYPE_STRING, "Play Infrared Command", COMBOENTRY_YES, GUITYPE_TEXTFIELD));
             allCommands.add(new Command("AT IC", PARTYPE_STRING, "Clear Infrared Command", COMBOENTRY_NO, GUITYPE_STANDARD));
             allCommands.add(new Command("AT IL", PARTYPE_NONE,   "List Infrared Commands", COMBOENTRY_NO, GUITYPE_STANDARD));
+            allCommands.add(new Command("AT RO", PARTYPE_UINT, "Rotate orientation", COMBOENTRY_NO, GUITYPE_COMBO_ONLY));
 
         }
 
@@ -236,6 +239,7 @@ namespace MouseApp2
             commandGuiLinks.Add(new CommandGuiLink("AT DY", deadzoneYBar, deadzoneYLabel, "20"));
             commandGuiLinks.Add(new CommandGuiLink("AT MS", maxspeedBar, maxspeedLabel, "50"));
             commandGuiLinks.Add(new CommandGuiLink("AT AC", accelerationBar, accelerationLabel, "50"));
+            commandGuiLinks.Add(new CommandGuiLink("AT RO", orientationBox, "0"));
 
             commandGuiLinks.Add(new CommandGuiLink("AT TS", sipThresholdBar, sipThresholdLabel, "500"));
             commandGuiLinks.Add(new CommandGuiLink("AT TP", puffThresholdBar, puffThresholdLabel, "525"));
@@ -366,6 +370,7 @@ namespace MouseApp2
                             settingStrings.Add(cgl.cmd); settingStrings.Add(cgl.def);
                             break;
                         case GUITYPE_3RADIOBUTTONS:
+                        case GUITYPE_COMBO_ONLY:
                         case GUITYPE_SLIDER:
                             settingStrings.Add(cgl.cmd + " " + cgl.def);
                             break;
@@ -397,6 +402,9 @@ namespace MouseApp2
                     case GUITYPE_GENERIC:
                         sendCmd(cgl.cmd);
                         sendCmd(buildCommandString(cgl.cb.Text, cgl.tb.Text, (int)cgl.nud.Value));
+                        break;
+                    case GUITYPE_COMBO_ONLY:
+                        sendCmd(cgl.cmd + " " + cgl.cb.Text);
                         break;
                     case GUITYPE_SLIDER:
                         sendCmd(cgl.cmd + " " + cgl.tl.Text);
@@ -534,6 +542,14 @@ namespace MouseApp2
                 this.cb = cb;
                 this.tb = tb;
                 this.nud = nud;
+                this.def = def;
+            }
+
+            public CommandGuiLink(String cmd, ComboBox cb, String def)
+            {
+                this.type = GUITYPE_COMBO_ONLY;
+                this.cmd = cmd;
+                this.cb = cb;
                 this.def = def;
             }
 

@@ -320,6 +320,7 @@ namespace MouseApp2
                         playIRButton.Enabled = true;
                         recordIRButton.Enabled = true;
                         deleteIRButton.Enabled = true;
+                        deleteAllIRButton.Enabled = true;
                         connectComButton.Enabled = false;
 
                         IdTimer.Interval = 1500;
@@ -347,6 +348,7 @@ namespace MouseApp2
             playIRButton.Enabled = false;
             recordIRButton.Enabled = false;
             deleteIRButton.Enabled = false;
+            deleteAllIRButton.Enabled = false;
             connectComButton.Enabled = true;
         }
 
@@ -1379,6 +1381,15 @@ namespace MouseApp2
             if (irCommandBox.Text.Length == 0) return;
             addToLog("Deleting IR Command " + irCommandBox.Text);
             sendClearIRCommand(irCommandBox.Text);
+
+            irCommandBox.Items.Clear();
+            sendListIRCommand();
+        }
+
+        private void deleteAllIRButton_Click(object sender, EventArgs e)
+        {
+            addToLog("Deleting IR Commands ");
+            sendClearIRCommands();
 
             irCommandBox.Items.Clear();
             sendListIRCommand();

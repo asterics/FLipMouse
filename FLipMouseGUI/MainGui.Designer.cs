@@ -335,6 +335,7 @@
             this.label37 = new System.Windows.Forms.Label();
             this.label33 = new System.Windows.Forms.Label();
             this.StoreButton = new System.Windows.Forms.Button();
+            this.deleteAllIRButton = new System.Windows.Forms.Button();
             this.tabControl.SuspendLayout();
             this.LipmouseTab.SuspendLayout();
             this.singlePanel.SuspendLayout();
@@ -998,9 +999,9 @@
             this.SpeedYNameLabel.Location = new System.Drawing.Point(431, 9);
             this.SpeedYNameLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.SpeedYNameLabel.Name = "SpeedYNameLabel";
-            this.SpeedYNameLabel.Size = new System.Drawing.Size(85, 17);
+            this.SpeedYNameLabel.Size = new System.Drawing.Size(63, 17);
             this.SpeedYNameLabel.TabIndex = 49;
-            this.SpeedYNameLabel.Text = "Sensitivity-Y";
+            this.SpeedYNameLabel.Text = "Speed-Y";
             // 
             // sensYLabel
             // 
@@ -1117,9 +1118,9 @@
             this.SpeedXNameLabel.Location = new System.Drawing.Point(66, 11);
             this.SpeedXNameLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.SpeedXNameLabel.Name = "SpeedXNameLabel";
-            this.SpeedXNameLabel.Size = new System.Drawing.Size(85, 17);
+            this.SpeedXNameLabel.Size = new System.Drawing.Size(63, 17);
             this.SpeedXNameLabel.TabIndex = 39;
-            this.SpeedXNameLabel.Text = "Sensitivity-X";
+            this.SpeedXNameLabel.Text = "Speed-X";
             // 
             // splitXYBox
             // 
@@ -3451,7 +3452,7 @@
             this.RawValueTab.Name = "RawValueTab";
             this.RawValueTab.Size = new System.Drawing.Size(780, 361);
             this.RawValueTab.TabIndex = 4;
-            this.RawValueTab.Text = "Gain&Orientation";
+            this.RawValueTab.Text = "GeneralSettings";
             // 
             // label47
             // 
@@ -3868,6 +3869,7 @@
             // IRTab
             // 
             this.IRTab.BackColor = System.Drawing.SystemColors.ButtonFace;
+            this.IRTab.Controls.Add(this.deleteAllIRButton);
             this.IRTab.Controls.Add(this.label1);
             this.IRTab.Controls.Add(this.irTimeoutBox);
             this.IRTab.Controls.Add(this.irCommandBox);
@@ -3886,7 +3888,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(193, 247);
+            this.label1.Location = new System.Drawing.Point(147, 247);
             this.label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(288, 17);
@@ -3895,30 +3897,30 @@
             // 
             // irTimeoutBox
             // 
-            this.irTimeoutBox.Location = new System.Drawing.Point(497, 245);
+            this.irTimeoutBox.Location = new System.Drawing.Point(451, 245);
             this.irTimeoutBox.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.irTimeoutBox.Name = "irTimeoutBox";
-            this.irTimeoutBox.Size = new System.Drawing.Size(110, 22);
+            this.irTimeoutBox.Size = new System.Drawing.Size(40, 22);
             this.irTimeoutBox.TabIndex = 4;
             this.irTimeoutBox.Text = "10";
             // 
             // irCommandBox
             // 
             this.irCommandBox.FormattingEnabled = true;
-            this.irCommandBox.Location = new System.Drawing.Point(196, 117);
+            this.irCommandBox.Location = new System.Drawing.Point(151, 117);
             this.irCommandBox.Margin = new System.Windows.Forms.Padding(4);
             this.irCommandBox.Name = "irCommandBox";
-            this.irCommandBox.Size = new System.Drawing.Size(411, 24);
+            this.irCommandBox.Size = new System.Drawing.Size(490, 24);
             this.irCommandBox.TabIndex = 1;
             // 
             // deleteIRButton
             // 
             this.deleteIRButton.Enabled = false;
             this.deleteIRButton.ForeColor = System.Drawing.Color.Black;
-            this.deleteIRButton.Location = new System.Drawing.Point(420, 167);
+            this.deleteIRButton.Location = new System.Drawing.Point(325, 167);
             this.deleteIRButton.Margin = new System.Windows.Forms.Padding(4);
             this.deleteIRButton.Name = "deleteIRButton";
-            this.deleteIRButton.Size = new System.Drawing.Size(187, 40);
+            this.deleteIRButton.Size = new System.Drawing.Size(153, 40);
             this.deleteIRButton.TabIndex = 3;
             this.deleteIRButton.Text = "Delete this command";
             this.deleteIRButton.UseVisualStyleBackColor = true;
@@ -3938,10 +3940,10 @@
             // 
             this.playIRButton.Enabled = false;
             this.playIRButton.ForeColor = System.Drawing.Color.Black;
-            this.playIRButton.Location = new System.Drawing.Point(196, 167);
+            this.playIRButton.Location = new System.Drawing.Point(151, 167);
             this.playIRButton.Margin = new System.Windows.Forms.Padding(4);
             this.playIRButton.Name = "playIRButton";
-            this.playIRButton.Size = new System.Drawing.Size(189, 40);
+            this.playIRButton.Size = new System.Drawing.Size(162, 40);
             this.playIRButton.TabIndex = 2;
             this.playIRButton.Text = "Play this command ";
             this.playIRButton.UseVisualStyleBackColor = true;
@@ -3951,10 +3953,10 @@
             // 
             this.recordIRButton.Enabled = false;
             this.recordIRButton.ForeColor = System.Drawing.Color.Black;
-            this.recordIRButton.Location = new System.Drawing.Point(196, 280);
+            this.recordIRButton.Location = new System.Drawing.Point(150, 280);
             this.recordIRButton.Margin = new System.Windows.Forms.Padding(4);
             this.recordIRButton.Name = "recordIRButton";
-            this.recordIRButton.Size = new System.Drawing.Size(411, 40);
+            this.recordIRButton.Size = new System.Drawing.Size(491, 40);
             this.recordIRButton.TabIndex = 5;
             this.recordIRButton.Text = "Record new command now !";
             this.recordIRButton.UseVisualStyleBackColor = true;
@@ -3963,7 +3965,7 @@
             // label24
             // 
             this.label24.AutoSize = true;
-            this.label24.Location = new System.Drawing.Point(193, 87);
+            this.label24.Location = new System.Drawing.Point(148, 87);
             this.label24.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label24.Name = "label24";
             this.label24.Size = new System.Drawing.Size(365, 17);
@@ -4256,6 +4258,19 @@
             this.StoreButton.Text = "Store settings";
             this.StoreButton.UseVisualStyleBackColor = true;
             this.StoreButton.Click += new System.EventHandler(this.StoreButton_Click);
+            // 
+            // deleteAllIRButton
+            // 
+            this.deleteAllIRButton.Enabled = false;
+            this.deleteAllIRButton.ForeColor = System.Drawing.Color.Black;
+            this.deleteAllIRButton.Location = new System.Drawing.Point(488, 167);
+            this.deleteAllIRButton.Margin = new System.Windows.Forms.Padding(4);
+            this.deleteAllIRButton.Name = "deleteAllIRButton";
+            this.deleteAllIRButton.Size = new System.Drawing.Size(153, 40);
+            this.deleteAllIRButton.TabIndex = 147;
+            this.deleteAllIRButton.Text = "Delete all commands";
+            this.deleteAllIRButton.UseVisualStyleBackColor = true;
+            this.deleteAllIRButton.Click += new System.EventHandler(this.deleteAllIRButton_Click);
             // 
             // FLipMouseGUI
             // 
@@ -4666,6 +4681,7 @@
         private System.Windows.Forms.Label label49;
         private System.Windows.Forms.Label label47;
         private System.Windows.Forms.ComboBox orientationBox;
+        private System.Windows.Forms.Button deleteAllIRButton;
     }
 }
 

@@ -103,6 +103,7 @@
          AT IR <string>  record new infrared code and store it under given name (e.g. "AT IR vol_up")
          AT IP <string>  play  infrared code with given name (e.g. "AT IP vol_up")
          AT IC <string>  clear infrared code with given name (e.g. "AT ID vol_up")
+         AT IW           wipe infrared memory (clear all codes)
          AT IL           lists all stored infrared command names
 
   supported key identifiers for key press command (AT KP):
@@ -344,6 +345,11 @@ namespace MouseApp2
         public void sendClearIRCommand(String commandName)
         {
             sendCmd("AT IC " + commandName);
+        }
+
+        public void sendClearIRCommands()
+        {
+            sendCmd("AT IW");
         }
 
 

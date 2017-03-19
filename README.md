@@ -6,7 +6,7 @@ The clicking functionality is done by sip and puff at the mouthpiece.
 
 This device is originally designed for people with motor disablities, which can not or will not efford a medical device as mouse replacement.
 
-Our goal is to provide a affordable solution for anybody who is not able to use a PC in the usual way.
+Our goal is to provide an affordable solution for everybody who is not able to use a PC or smartphone in the usual way.
 
 
 ![Front view of 3 FLipmice in different colors (black, pink and transparent orange)](/img/FLipmouse1.jpg)

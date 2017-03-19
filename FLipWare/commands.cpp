@@ -39,7 +39,7 @@ const struct atCommandType atCommands[] PROGMEM = {
     {"JT"  , PARTYPE_INT  },  {"JS"  , PARTYPE_INT  }, {"JP"  , PARTYPE_INT  }, {"JR"  , PARTYPE_INT  },
     {"JH"  , PARTYPE_INT  },  {"IT"  , PARTYPE_UINT  },{"KH"  , PARTYPE_STRING},{"MS"  , PARTYPE_UINT },
     {"AC"  , PARTYPE_UINT },  {"MA"  , PARTYPE_STRING},{"WA"  , PARTYPE_UINT  },{"RO"  , PARTYPE_UINT },
-    {"IW"  , PARTYPE_NONE },
+    {"IW"  , PARTYPE_NONE },  {"BT"  , PARTYPE_UINT },
 };
 
 void printCurrentSlot()
@@ -62,11 +62,12 @@ void printCurrentSlot()
         Serial.print("AT GL "); Serial.println(settings.gl);
         Serial.print("AT GR "); Serial.println(settings.gr);
         Serial.print("AT RO "); Serial.println(settings.ro);
+        Serial.print("AT BT "); Serial.println(settings.bt);
         
         for (int i=0;i<NUMBER_OF_BUTTONS;i++) 
         {
            Serial.print("AT BM "); 
-           if (i<9) Serial.print("0");
+           if (i<9) Serial.print("0");  // leading zero for button numbers !
            Serial.println(i+1); 
            Serial.print("AT "); 
            int actCmd = buttons[i].mode;
@@ -121,91 +122,63 @@ void performCommand (uint8_t cmd, int16_t par1, char * keystring, int8_t periodi
             break;
         
         case CMD_CL:
-               Mouse.press(MOUSE_LEFT); 
-               if(isBluetoothAvailable()) mouseBTPress(1<<0);
+               mousePress(MOUSE_LEFT); 
                delay(DEFAULT_CLICK_TIME);
-               Mouse.release(MOUSE_LEFT); 
-               if(isBluetoothAvailable()) mouseBTRelease(1<<0);
+               mouseRelease(MOUSE_LEFT); 
                break;
         case CMD_CR:
-               Mouse.press(MOUSE_RIGHT); 
-               if(isBluetoothAvailable()) mouseBTPress(1<<1);
+               mousePress(MOUSE_RIGHT); 
                delay(DEFAULT_CLICK_TIME);
-               Mouse.release(MOUSE_RIGHT); 
-               if(isBluetoothAvailable()) mouseBTRelease(1<<1);
+               mouseRelease(MOUSE_RIGHT); 
                break;
         case CMD_CD:
-               Mouse.press(MOUSE_LEFT); 
-               if(isBluetoothAvailable()) mouseBTPress(1<<0);
+               mousePress(MOUSE_LEFT); 
                delay(DEFAULT_CLICK_TIME);
-               Mouse.release(MOUSE_LEFT); 
-               if(isBluetoothAvailable()) mouseBTRelease(1<<0);
+               mouseRelease(MOUSE_LEFT); 
                delay(DEFAULT_CLICK_TIME);
-               Mouse.press(MOUSE_LEFT); 
-               if(isBluetoothAvailable()) mouseBTPress(1<<0);
+               mousePress(MOUSE_LEFT); 
                delay(DEFAULT_CLICK_TIME);
-               Mouse.release(MOUSE_LEFT); 
-               if(isBluetoothAvailable()) mouseBTRelease(1<<0);
+               mouseRelease(MOUSE_LEFT); 
                break;
         case CMD_CM:
-               Mouse.press(MOUSE_MIDDLE); 
-               if(isBluetoothAvailable()) mouseBTPress(1<<2);
+               mousePress(MOUSE_MIDDLE); 
                delay(DEFAULT_CLICK_TIME);
-               Mouse.release(MOUSE_MIDDLE); 
-               if(isBluetoothAvailable()) mouseBTRelease(1<<2);
+               mouseRelease(MOUSE_MIDDLE); 
               break;
         case CMD_PL:
-               Mouse.press(MOUSE_LEFT); 
-               if(isBluetoothAvailable()) mouseBTPress(1<<0);
+               mousePress(MOUSE_LEFT); 
                break;
         case CMD_PR:
-               Mouse.press(MOUSE_RIGHT); 
-               if(isBluetoothAvailable()) mouseBTPress(1<<1);
+               mousePress(MOUSE_RIGHT); 
                break;
         case CMD_PM:
-               Mouse.press(MOUSE_MIDDLE); 
-               if(isBluetoothAvailable()) mouseBTPress(1<<2);
+               mousePress(MOUSE_MIDDLE); 
                break;
         case CMD_RL:
-               Mouse.release(MOUSE_LEFT); 
-               if(isBluetoothAvailable()) mouseBTRelease(1<<0);
+               mouseRelease(MOUSE_LEFT); 
                break; 
         case CMD_RR:
-               Mouse.release(MOUSE_RIGHT); 
-               if(isBluetoothAvailable()) mouseBTRelease(1<<1);
+               mouseRelease(MOUSE_RIGHT); 
                break; 
         case CMD_RM:
-               Mouse.release(MOUSE_MIDDLE); 
-               if(isBluetoothAvailable()) mouseBTRelease(1<<2);
+               mouseRelease(MOUSE_MIDDLE); 
                break; 
         case CMD_WU:
-                 Mouse.scroll(-settings.ws);
-                 if(isBluetoothAvailable()) mouseBT(0,0,-settings.ws);
+               mouseScroll(-settings.ws);
             break;
         case CMD_WD:
-                 Mouse.scroll(settings.ws); 
-                 if(isBluetoothAvailable()) mouseBT(0,0,settings.ws);
+               mouseScroll(settings.ws); 
             break;
         case CMD_WS:
                settings.ws=par1;
             break;
         case CMD_MX:
                if (periodicMouseMovement) moveX=par1;
-               else {
-                 while (par1<-128) { Mouse.move(-128, 0); par1+=128; }
-                 while (par1>127) { Mouse.move(127, 0); par1-=127; }
-                 Mouse.move(par1, 0);
-                 if(isBluetoothAvailable()) mouseBT(par1,0,0);
-               }
+               else mouseMove(par1,0);
             break;
         case CMD_MY:
                if (periodicMouseMovement) moveY=par1;
-               else {
-                 while (par1<-128) { Mouse.move(0, -128); par1+=128; }
-                 while (par1>127) { Mouse.move(0, 127); par1-=127; }
-                 Mouse.move(0, par1);
-                 if(isBluetoothAvailable()) mouseBT(0,par1,0);
-               }
+               else mouseMove(0,par1);
             break;
         case CMD_JX:
                Joystick.X(par1);
@@ -233,15 +206,7 @@ void performCommand (uint8_t cmd, int16_t par1, char * keystring, int8_t periodi
             break;
         
         case CMD_KW:
-               //Keyboard.print(keystring);
-               //Serial.println("keyboard write");
-               for (int i=0; i<strlen(keystring); i++)
-               {
-                  // Serial.println(keystring[i]);
-                  Keyboard.press(keystring[i]);
-                  Keyboard.release(keystring[i]);
-               }
-               if(isBluetoothAvailable()) keyboardBTPrint(keystring);  // TODO: check ISO8859-compatibility
+               keyboardPrint(keystring);
                break;
         case CMD_KP:
                if (keystring[strlen(keystring)-1] != ' ') strcat(keystring," ");
@@ -359,7 +324,8 @@ void performCommand (uint8_t cmd, int16_t par1, char * keystring, int8_t periodi
             break;
         case CMD_MA:
                {
-                 char current[MAX_KEYSTRING_LEN], *cmd_copy_ptr, backslash;
+                 char current[MAX_KEYSTRING_LEN];  // TBD: save memory here via improved command extraction ...
+                 char *cmd_copy_ptr, backslash;
                  uint8_t len;
                  if (DebugOutput==DEBUG_FULLOUTPUT)  
                  {  Serial.print("execute macro:"); Serial.println(keystring); }
@@ -414,6 +380,9 @@ void performCommand (uint8_t cmd, int16_t par1, char * keystring, int8_t periodi
             break;
         case CMD_RO:
                settings.ro=par1;
+            break;
+        case CMD_BT:
+               settings.bt=par1;
             break;
 
         case CMD_IR:

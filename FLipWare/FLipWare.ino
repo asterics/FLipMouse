@@ -70,6 +70,7 @@ struct slotGeneralSettings settings = {      // default settings valus, for type
     50, 50, 50, 50 ,                  // gain up / down / left / right
     0, 0,                             // offset x / y
     0,                                // orientation
+    3,                                // bt-mode: "both" - USB and BT
 }; 
 
 
@@ -256,15 +257,10 @@ void reportValues()
 
 void release_all()  // releases all previously pressed keys
 {
-    release_all_keys(); 
-    Mouse.release(MOUSE_LEFT); 
-    Mouse.release(MOUSE_MIDDLE); 
-    Mouse.release(MOUSE_RIGHT); 
-    if(isBluetoothAvailable())  {
-      mouseBTRelease(1<<0);
-      mouseBTRelease(1<<1);
-      mouseBTRelease(1<<2);
-    }
+    release_all_keys();
+    mouseRelease(MOUSE_LEFT);
+    mouseRelease(MOUSE_MIDDLE);
+    mouseRelease(MOUSE_RIGHT);
     moveX=0;
     moveY=0;
 }

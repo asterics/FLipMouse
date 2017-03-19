@@ -46,10 +46,12 @@
 #include "buttons.h"
 #include "modes.h"
 #include "bluetooth.h"
+#include "hid_hal.h"
 
 #define VERSION_STRING "Flipmouse v2.5"   
 
-//  V2.5: added stick rotation options, modified acoustic slot feedback, improved keycode handling
+//  V2.5: added stick rotation options, improved acoustic slot feedback, improved keycode handling, 
+//        removed Teensy2.0++ support, new AT commands: clear IR memory, route HID to BT/USB/both
 //  V2.4: added support for acceleration, maximum speed and command macros
 //	V2.3: added support for internal Bluetooth Addon
 //  V2.2: added new EEPROM handling and IR-Command support
@@ -109,6 +111,7 @@ struct slotGeneralSettings {
   int16_t  cx;     // calib x
   int16_t  cy;     // calib y
   uint16_t ro;     // orientation (0,90,180,270)
+  uint8_t  bt;     // bt-mode (0,1,2)
 };
 
 

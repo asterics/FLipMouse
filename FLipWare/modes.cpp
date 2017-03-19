@@ -203,7 +203,7 @@ void handleModeState(int x, int y, int pressure)
                     }
                  } else if (puffCount) puffCount--;
                  break;
-              // handleButton(PUFF_BUTTON, 0); 
+
             case 2:
                  if (pressure < settings.tp) { 
                     handleRelease(PUFF_BUTTON); 
@@ -230,7 +230,7 @@ void handleModeState(int x, int y, int pressure)
                     }
                  } else if (sipCount) sipCount--;
                  break;
-              // handleButton(SIP_BUTTON, 0); 
+
             case 2:
                  if (pressure > settings.ts) { 
                     handleRelease(SIP_BUTTON); 
@@ -241,8 +241,7 @@ void handleModeState(int x, int y, int pressure)
            if ((moveX!=0) || (moveY!=0))   // handle movement induced by button actions  
            {
               if (mouseMoveCount++%4==0)
-                 Mouse.move(moveX, moveY);
-                 if(isBluetoothAvailable()) mouseBT(moveX,moveY,0);
+                 mouseMove(moveX, moveY);
            }
         
            if (settings.stickMode == STICKMODE_MOUSE) {   // handle mouse mode
@@ -267,9 +266,10 @@ void handleModeState(int x, int y, int pressure)
                 
                 int xMove = (int)accumXpos;
                 int yMove = (int)accumYpos;
-                
-                Mouse.move(xMove, yMove);
-                if(isBluetoothAvailable() && (xMove != 0 || yMove != 0)) mouseBT(xMove,yMove,0);
+
+                if ((xMove != 0) || (yMove != 0))
+                   mouseMove(xMove, yMove);
+
                 accumXpos -= xMove;
                 accumYpos -= yMove;
             }

@@ -101,16 +101,13 @@ void handleRelease (int buttonIndex)    // a button was released: deal with "sti
 {
    switch(buttons[buttonIndex].mode) {
      case CMD_PL: 
-               Mouse.release(MOUSE_LEFT); 
-               if(isBluetoothAvailable()) mouseBTRelease(1<<0);
+               mouseRelease(MOUSE_LEFT); 
                break;
      case CMD_PR:
-               Mouse.release(MOUSE_RIGHT); 
-               if(isBluetoothAvailable()) mouseBTRelease(1<<1);
+               mouseRelease(MOUSE_RIGHT); 
                break;
      case CMD_PM:
-               Mouse.release(MOUSE_MIDDLE); 
-               if(isBluetoothAvailable()) mouseBTRelease(1<<2);
+               mouseRelease(MOUSE_MIDDLE); 
                break;
      case CMD_JP: Joystick.button(buttons[buttonIndex].value,0); break;
      case CMD_MX: moveX=0; break;      

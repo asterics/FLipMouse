@@ -87,6 +87,8 @@
           AT E0           turn echo off (no debug output on serial console, default and GUI compatible)
           AT E1           turn echo on (debug output on serial console)
           AT E2           turn echo on (debug output on serial console), extended output
+          AT BT <uint>    set bluetooth mode, 1=USB only, 2=BT only, 3=both(default) 
+                          (e.g. AT BT 2 -> send HID commands only via BT if BT-daughter board is available)
           
     FLipMouse-specific settings and commands:
 
@@ -158,7 +160,7 @@ enum atCommands {
   CMD_LI, CMD_NE, CMD_DE, CMD_NC, CMD_E1, CMD_E0, CMD_MM, CMD_SW, CMD_SR, CMD_ER, CMD_CA, CMD_AX,
   CMD_AY, CMD_DX, CMD_DY, CMD_TS, CMD_TP, CMD_SP, CMD_SS, CMD_GU, CMD_GD, CMD_GL, CMD_GR, CMD_IR,
   CMD_IP, CMD_IC, CMD_IL, CMD_E2, CMD_JX, CMD_JY, CMD_JZ, CMD_JT, CMD_JS, CMD_JP, CMD_JR, CMD_JH,
-  CMD_IT, CMD_KH, CMD_MS, CMD_AC, CMD_MA, CMD_WA, CMD_RO, CMD_IW,
+  CMD_IT, CMD_KH, CMD_MS, CMD_AC, CMD_MA, CMD_WA, CMD_RO, CMD_IW, CMD_BT, 
   NUM_COMMANDS
 };
 

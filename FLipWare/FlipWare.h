@@ -8,11 +8,19 @@
         This firmware allows control of HID functions via FLipmouse module and/or AT-commands  
         For a description of the supported commands see: commands.h
 
-        requirements:  Teensy 2.0++ or TeensyLC with external EEPROM
-                       Teensyduino AddOn for Arduino IDE
-                       USB-type set to USB composite device (Serial + Keyboard + Mouse + Joystick)
-        sensors:  3 momentary switches connected to GPIO pins / 4 force sensors
-                  1 pressure sensor connected to ADC pins 
+        HW-requirements:  
+                  TeensyLC with external EEPROM (see FlipMouse board schematics)
+                  4 FSR force sensors connected via voltage dividers to ADC pins A6-A9
+                  1 pressure sensor connected to ADC pin A0
+                  3 momentary switches connected to GPIO pins 0,1,2
+                  3 slot indication LEDs connected to GPIO pins 5,16,17
+                  1 TSOP 38kHz IR-receiver connected to GPIO pin 4
+                  1 high current IR-LED connected to GPIO pin 6 via MOSEFT
+                  optional: FlipMouse Bluetooth daughter board
+
+        SW-requirements:  
+                  Teensyduino AddOn for Arduino IDE
+                  USB-type set to USB composite device (Serial + Keyboard + Mouse + Joystick)
           
    For a list of supported AT commands, see commands.h / commands.cpp
 
@@ -47,16 +55,6 @@
 //  V2.2: added new EEPROM handling and IR-Command support
 //  V2.0: extended AT command set, TeensyLC support, external EEPROM
 //  V1.0: extended AT command set, GUI compatibility
-
-
-//#define TEENSY               //  if Teensy2.0++ controller is used (FLipmouse V1)
-#define TEENSY_LC            //  if Teensy LC controller is used (FLipmouse V2)
-
-#ifndef TEENSY
-#ifndef TEENSY_LC
-  #error "NO CHIP SELECTED, EITHER TEENSY OR TEENSY LC ARE SUPPORTED"
-#endif
-#endif 
 
 #define MAX_SLOTS          7          // maximum number of EEPROM memory slots
 #define MAX_KEYSTRING_LEN 250         // maximum length for key identifiers / keyboard text
@@ -166,17 +164,9 @@ void list_IR_commands();
 void delete_IR_command(char * name);
 void set_IR_timeout(uint16_t ms);
 
-//set the correct strcpy/strcmp functions (either for AVR or ARM)
-#ifdef TEENSY
-    #define strcpy_FM   strcpy_PF
-    #define strcmp_FM   strcmp_PF
-    typedef uint_farptr_t uint_farptr_t_FM;
-#endif
-
-#ifdef TEENSY_LC
-    #define strcpy_FM   strcpy
-    #define strcmp_FM   strcmp
-    typedef char* uint_farptr_t_FM;
-#endif
+//set the correct strcpy/strcmp functions for TeensyLC / ARM)
+#define strcpy_FM   strcpy
+#define strcmp_FM   strcmp
+typedef char* uint_farptr_t_FM;
 
 #endif

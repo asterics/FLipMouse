@@ -8,14 +8,21 @@
         This firmware allows control of HID functions via FLipmouse module and/or AT-commands
         For a description of the supported commands see: commands.h
 
-        requirements:  Teensy 2.0++ or TeensyLC with external EEPROM
-                       Teensyduino AddOn for Arduino IDE
-                       USB-type set to USB composite device (Serial + Keyboard + Mouse + Joystick)
-        sensors:  3 momentary switches connected to GPIO pins / 4 force sensors
-                  1 pressure sensor connected to ADC pins 
+        HW-requirements:  
+                  TeensyLC with external EEPROM (see FlipMouse board schematics)
+                  4 FSR force sensors connected via voltage dividers to ADC pins A6-A9
+                  1 pressure sensor connected to ADC pin A0
+                  3 momentary switches connected to GPIO pins 0,1,2
+                  3 slot indication LEDs connected to GPIO pins 5,16,17
+                  1 TSOP 38kHz IR-receiver connected to GPIO pin 4
+                  1 high current IR-LED connected to GPIO pin 6 via MOSEFT
+                  optional: FlipMouse Bluetooth daughter board
+
+        SW-requirements:  
+                  Teensyduino AddOn for Arduino IDE
+                  USB-type set to USB composite device (Serial + Keyboard + Mouse + Joystick)
           
-   For version information and change log see FlipWare.h
-   For a list of supported AT commands see commands.h / commands.cpp
+   For a list of supported AT commands, see commands.h / commands.cpp
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -25,8 +32,7 @@
    but WITHOUT ANY WARRANTY; See the GNU General Public License: 
    http://www.gnu.org/licenses/gpl-3.0.en.html
  
- */
- 
+ */ 
 
 #include "FlipWare.h"        //  FABI command definitions
 #include <EEPROM.h>
@@ -36,43 +42,25 @@
 
 #define DEFAULT_WAIT_TIME       5   // wait time for one loop interation in milliseconds
 
+// Global variables
 
-// global variables
+// Analog input pins (4FSRs + 1 pressure sensor)
+#define PRESSURE_SENSOR_PIN A0
+#define DOWN_SENSOR_PIN     A6
+#define LEFT_SENSOR_PIN     A9
+#define UP_SENSOR_PIN       A7
+#define RIGHT_SENSOR_PIN    A8
 
-#ifdef TEENSY
-  //Analog input pins (4FSRs + 1 pressure sensor)
-  #define PRESSURE_SENSOR_PIN A0
-  #define DOWN_SENSOR_PIN     A7
-  #define LEFT_SENSOR_PIN     A5
-  #define UP_SENSOR_PIN       A6
-  #define RIGHT_SENSOR_PIN    A4
-  //Piezo Pin (for tone generation)  
-  #define TONE_PIN  16
+//Piezo Pin (for tone generation)
+#define TONE_PIN  9
+//if a Bluetooth addon is installed, there is no space on the main PCB...
+#define TONE_PIN_EXTERNAL 13
 
-  int8_t  input_map[NUMBER_OF_PHYSICAL_BUTTONS]={13,2,3};  //  maps physical button pins to button index 0,1,2  
-  int8_t  led_map[NUMBER_OF_LEDS]={18,19,20};              //  maps leds pins   
-  uint8_t LED_PIN = 6;                                     //  Led output pin
-  uint8_t IR_LED_PIN = 6;                                  //  IR-Led output pin
-#endif
-
-#ifdef TEENSY_LC
-  //Analog input pins (4FSRs + 1 pressure sensor)
-  #define PRESSURE_SENSOR_PIN A0
-  #define DOWN_SENSOR_PIN     A6
-  #define LEFT_SENSOR_PIN     A9
-  #define UP_SENSOR_PIN       A7
-  #define RIGHT_SENSOR_PIN    A8
-  //Piezo Pin (for tone generation)
-  #define TONE_PIN  9
-  //if a Bluetooth addon is installed, there is no space on the main PCB...
-  #define TONE_PIN_EXTERNAL 13
-
-  int8_t  input_map[NUMBER_OF_PHYSICAL_BUTTONS]={0,2,1};  	//  maps physical button pins to button index 0,1,2
-  uint8_t IR_SENSOR_PIN = 4;								//  input pin of the TSOP IR receiver
-  int8_t  led_map[NUMBER_OF_LEDS]={5,16,17};              	//  maps leds pins   
-  uint8_t LED_PIN = 13;                                   	//  Led output pin, ATTENTION: if SPI (AUX header) is used, this pin is also SCK!!!
-  uint8_t IR_LED_PIN = 6;                                 	//  IR-Led output pin
-#endif
+int8_t  input_map[NUMBER_OF_PHYSICAL_BUTTONS]={0,2,1};  	//  maps physical button pins to button index 0,1,2
+uint8_t IR_SENSOR_PIN = 4;								//  input pin of the TSOP IR receiver
+int8_t  led_map[NUMBER_OF_LEDS]={5,16,17};              	//  maps leds pins   
+uint8_t LED_PIN = 13;                                   	//  Led output pin, ATTENTION: if SPI (AUX header) is used, this pin is also SCK!!!
+uint8_t IR_LED_PIN = 6;                                 	//  IR-Led output pin
 
 struct slotGeneralSettings settings = {      // default settings valus, for type definition see fabi.h
     1,                                // stickMode: Mouse cursor movement active
@@ -140,11 +128,9 @@ void setup() {
    if (DebugOutput==DEBUG_FULLOUTPUT)  
      Serial.println("FLipMouse started, Flexible Assistive Button Interface ready !");
 
-   #ifdef TEENSY_LC
-     Wire.begin();
-     pinMode(IR_SENSOR_PIN,INPUT);
-     analogWriteFrequency(IR_LED_PIN, 38000);
-   #endif
+   Wire.begin();
+   pinMode(IR_SENSOR_PIN,INPUT);
+   analogWriteFrequency(IR_LED_PIN, 38000);
    
 
    pinMode(LED_PIN,OUTPUT);

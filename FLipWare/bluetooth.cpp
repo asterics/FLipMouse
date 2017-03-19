@@ -3,7 +3,7 @@
 	Copyright (c) Benjamin Aigner
 	For more info please visit: http://www.asterics-academy.net
 
-	Module: blueooth.cpp - using external Bluefruit EZ-KEY HID as BT communication
+	Module: bluetooth.cpp - using external Bluefruit EZ-KEY HID as BT communication
 
 	This program is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by

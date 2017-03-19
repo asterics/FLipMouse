@@ -19,8 +19,6 @@
 
 #include "FlipWare.h"
 
-#ifdef TEENSY_LC
-
 //Time until the record command will be canceled
 #define IR_USER_TIMEOUT_MS 10000
 //Maximum count of edges for one command
@@ -274,4 +272,4 @@ void set_IR_timeout(uint16_t tout_ms)
    edge_timeout = (uint32_t)tout_ms * 1000;
 }
 
-#endif
+

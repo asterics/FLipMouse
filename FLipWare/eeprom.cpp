@@ -39,7 +39,6 @@ uint8_t currentSlot;
  * */
 void writeEEPROM(unsigned int eeaddress, byte data ) 
 {
-  #ifdef TEENSY_LC
     Wire.beginTransmission(deviceaddress);
     Wire.send((int)(eeaddress >> 8));   // MSB
     Wire.send((int)(eeaddress & 0xFF)); // LSB
@@ -48,15 +47,12 @@ void writeEEPROM(unsigned int eeaddress, byte data )
     delay(5);
     
     if(eepromDebugLevel == EEPROM_FULL_DEBUG)
-	{
-		Serial.print(F("EEPROM w@"));
-		Serial.print(eeaddress);
-		Serial.print(": ");
-		Serial.println(data);
-	}
-  #else
-    EEPROM.write(eeaddress, data);
-  #endif
+  	{
+  		Serial.print(F("EEPROM w@"));
+  		Serial.print(eeaddress);
+  		Serial.print(": ");
+  		Serial.println(data);
+  	}
 }
  
 /**
@@ -65,8 +61,6 @@ void writeEEPROM(unsigned int eeaddress, byte data )
  * */
 byte readEEPROM(unsigned int eeaddress ) 
 {
-
-  #ifdef TEENSY_LC
     byte rdata = 0xFF;
     Wire.beginTransmission(deviceaddress);
     Wire.send((int)(eeaddress >> 8));   // MSB
@@ -76,17 +70,14 @@ byte readEEPROM(unsigned int eeaddress )
     Wire.requestFrom(deviceaddress,1);
  
     if (Wire.available()) rdata = Wire.receive();
-	if(eepromDebugLevel == EEPROM_FULL_DEBUG)
-	{
-		Serial.print(F("EEPROM r@"));
-		Serial.print(eeaddress);
-		Serial.print(": ");
-		Serial.println(rdata);
-	}
+  	if(eepromDebugLevel == EEPROM_FULL_DEBUG)
+  	{
+  		Serial.print(F("EEPROM r@"));
+  		Serial.print(eeaddress);
+  		Serial.print(": ");
+  		Serial.println(rdata);
+  	}
     return rdata;
-  #else
-    return(EEPROM.read(eeaddress));
-  #endif
 }
 
 

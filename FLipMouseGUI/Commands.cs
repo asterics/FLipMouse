@@ -71,6 +71,11 @@
          AT NE           next mode will be loaded (wrap around after last slot)
          AT DE           delete EEPROM content (delete all stored slots)
          AT NC           no command (idle operation)
+         AT E0           turn echo off (no debug output on serial console, default and GUI compatible)
+         AT E1           turn echo on (debug output on serial console)
+         AT E2           turn echo on (debug output on serial console), extended output
+         AT BT <uint>    set bluetooth mode, 1=USB only, 2=BT only, 3=both(default) 
+                         (e.g. AT BT 2 -> send HID commands only via BT if BT-daughter board is available)
           
    FLipMouse-specific settings and commands:
 
@@ -121,7 +126,6 @@
 */
 
 
-
 using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
@@ -148,6 +152,7 @@ namespace MouseApp2
         const int GUITYPE_3RADIOBUTTONS   = 5;
         const int GUITYPE_GENERIC   = 6;
         const int GUITYPE_COMBO_ONLY= 7;
+        const int GUITYPE_COMBO_INDEX = 8;
 
         const string PREFIX_FLIPMOUSE_VERSION = "FLIPMOUSE ";
         const string PREFIX_REPORT_VALUES = "VALUES:";
@@ -226,6 +231,7 @@ namespace MouseApp2
             allCommands.add(new Command("AT IC", PARTYPE_STRING, "Clear Infrared Command", COMBOENTRY_NO, GUITYPE_STANDARD));
             allCommands.add(new Command("AT IL", PARTYPE_NONE,   "List Infrared Commands", COMBOENTRY_NO, GUITYPE_STANDARD));
             allCommands.add(new Command("AT RO", PARTYPE_UINT, "Rotate orientation", COMBOENTRY_NO, GUITYPE_COMBO_ONLY));
+            allCommands.add(new Command("AT BT", PARTYPE_UINT, "HID / Bluetooth mode", COMBOENTRY_NO, GUITYPE_COMBO_INDEX));
 
         }
 
@@ -241,6 +247,7 @@ namespace MouseApp2
             commandGuiLinks.Add(new CommandGuiLink("AT MS", maxspeedBar, maxspeedLabel, "50"));
             commandGuiLinks.Add(new CommandGuiLink("AT AC", accelerationBar, accelerationLabel, "50"));
             commandGuiLinks.Add(new CommandGuiLink("AT RO", orientationBox, "0"));
+            commandGuiLinks.Add(new CommandGuiLink("AT BT", HIDComboBox, 3));
 
             commandGuiLinks.Add(new CommandGuiLink("AT TS", sipThresholdBar, sipThresholdLabel, "500"));
             commandGuiLinks.Add(new CommandGuiLink("AT TP", puffThresholdBar, puffThresholdLabel, "525"));
@@ -377,6 +384,7 @@ namespace MouseApp2
                             break;
                         case GUITYPE_3RADIOBUTTONS:
                         case GUITYPE_COMBO_ONLY:
+                        case GUITYPE_COMBO_INDEX:
                         case GUITYPE_SLIDER:
                             settingStrings.Add(cgl.cmd + " " + cgl.def);
                             break;
@@ -411,6 +419,9 @@ namespace MouseApp2
                         break;
                     case GUITYPE_COMBO_ONLY:
                         sendCmd(cgl.cmd + " " + cgl.cb.Text);
+                        break;
+                    case GUITYPE_COMBO_INDEX:
+                        sendCmd(cgl.cmd + " " + cgl.cb.SelectedIndex);
                         break;
                     case GUITYPE_SLIDER:
                         sendCmd(cgl.cmd + " " + cgl.tl.Text);
@@ -553,10 +564,18 @@ namespace MouseApp2
 
             public CommandGuiLink(String cmd, ComboBox cb, String def)
             {
-                this.type = GUITYPE_COMBO_ONLY;
+                this.type = GUITYPE_COMBO_INDEX;
                 this.cmd = cmd;
                 this.cb = cb;
                 this.def = def;
+            }
+
+            public CommandGuiLink(String cmd, ComboBox cb, int def)
+            {
+                this.type = GUITYPE_COMBO_INDEX;
+                this.cmd = cmd;
+                this.cb = cb;
+                this.def = def.ToString();
             }
 
             public CommandGuiLink(String cmd, TrackBar tr, Label tl, String def)

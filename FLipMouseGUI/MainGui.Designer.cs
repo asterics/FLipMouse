@@ -264,8 +264,6 @@
             this.label6 = new System.Windows.Forms.Label();
             this.Button1FunctionBox = new System.Windows.Forms.ComboBox();
             this.RawValueTab = new System.Windows.Forms.TabPage();
-            this.label47 = new System.Windows.Forms.Label();
-            this.orientationBox = new System.Windows.Forms.ComboBox();
             this.incRightGain = new System.Windows.Forms.Button();
             this.decRightGain = new System.Windows.Forms.Button();
             this.rightGainLabel = new System.Windows.Forms.Label();
@@ -336,6 +334,14 @@
             this.label33 = new System.Windows.Forms.Label();
             this.StoreButton = new System.Windows.Forms.Button();
             this.deleteAllIRButton = new System.Windows.Forms.Button();
+            this.GeneralTab = new System.Windows.Forms.TabPage();
+            this.label43 = new System.Windows.Forms.Label();
+            this.HIDComboBox = new System.Windows.Forms.ComboBox();
+            this.label47 = new System.Windows.Forms.Label();
+            this.orientationBox = new System.Windows.Forms.ComboBox();
+            this.label50 = new System.Windows.Forms.Label();
+            this.label51 = new System.Windows.Forms.Label();
+            this.label55 = new System.Windows.Forms.Label();
             this.tabControl.SuspendLayout();
             this.LipmouseTab.SuspendLayout();
             this.singlePanel.SuspendLayout();
@@ -388,6 +394,7 @@
             this.groupBox1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             this.groupBox2.SuspendLayout();
+            this.GeneralTab.SuspendLayout();
             this.SuspendLayout();
             // 
             // serialPort1
@@ -457,12 +464,13 @@
             this.tabControl.Controls.Add(this.ButtonsTab);
             this.tabControl.Controls.Add(this.RawValueTab);
             this.tabControl.Controls.Add(this.IRTab);
-            this.tabControl.Location = new System.Drawing.Point(50, 103);
+            this.tabControl.Controls.Add(this.GeneralTab);
+            this.tabControl.Location = new System.Drawing.Point(42, 103);
             this.tabControl.Margin = new System.Windows.Forms.Padding(4);
             this.tabControl.Multiline = true;
             this.tabControl.Name = "tabControl";
             this.tabControl.SelectedIndex = 0;
-            this.tabControl.Size = new System.Drawing.Size(788, 390);
+            this.tabControl.Size = new System.Drawing.Size(842, 390);
             this.tabControl.TabIndex = 6;
             this.tabControl.SelectedIndexChanged += new System.EventHandler(this.tabControl_SelectedIndexChanged);
             // 
@@ -493,7 +501,7 @@
             this.LipmouseTab.Margin = new System.Windows.Forms.Padding(4);
             this.LipmouseTab.Name = "LipmouseTab";
             this.LipmouseTab.Padding = new System.Windows.Forms.Padding(4);
-            this.LipmouseTab.Size = new System.Drawing.Size(780, 361);
+            this.LipmouseTab.Size = new System.Drawing.Size(834, 361);
             this.LipmouseTab.TabIndex = 0;
             this.LipmouseTab.Text = "Stick Actions";
             // 
@@ -509,7 +517,7 @@
             this.singlePanel.Controls.Add(this.sensLabel);
             this.singlePanel.Controls.Add(this.sensBar);
             this.singlePanel.Controls.Add(this.label36);
-            this.singlePanel.Location = new System.Drawing.Point(23, 49);
+            this.singlePanel.Location = new System.Drawing.Point(51, 49);
             this.singlePanel.Name = "singlePanel";
             this.singlePanel.Size = new System.Drawing.Size(729, 149);
             this.singlePanel.TabIndex = 65;
@@ -651,7 +659,7 @@
             // 
             this.incAcceleration.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.incAcceleration.ForeColor = System.Drawing.Color.Black;
-            this.incAcceleration.Location = new System.Drawing.Point(701, 219);
+            this.incAcceleration.Location = new System.Drawing.Point(729, 219);
             this.incAcceleration.Margin = new System.Windows.Forms.Padding(4);
             this.incAcceleration.Name = "incAcceleration";
             this.incAcceleration.Size = new System.Drawing.Size(41, 37);
@@ -667,7 +675,7 @@
             // 
             this.decAcceleration.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.decAcceleration.ForeColor = System.Drawing.Color.Black;
-            this.decAcceleration.Location = new System.Drawing.Point(403, 219);
+            this.decAcceleration.Location = new System.Drawing.Point(431, 219);
             this.decAcceleration.Margin = new System.Windows.Forms.Padding(4);
             this.decAcceleration.Name = "decAcceleration";
             this.decAcceleration.Size = new System.Drawing.Size(41, 37);
@@ -683,7 +691,7 @@
             // 
             this.incMaxspeed.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.incMaxspeed.ForeColor = System.Drawing.Color.Black;
-            this.incMaxspeed.Location = new System.Drawing.Point(337, 219);
+            this.incMaxspeed.Location = new System.Drawing.Point(365, 219);
             this.incMaxspeed.Margin = new System.Windows.Forms.Padding(4);
             this.incMaxspeed.Name = "incMaxspeed";
             this.incMaxspeed.Size = new System.Drawing.Size(41, 37);
@@ -699,7 +707,7 @@
             // 
             this.decMaxspeed.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.decMaxspeed.ForeColor = System.Drawing.Color.Black;
-            this.decMaxspeed.Location = new System.Drawing.Point(37, 219);
+            this.decMaxspeed.Location = new System.Drawing.Point(65, 219);
             this.decMaxspeed.Margin = new System.Windows.Forms.Padding(4);
             this.decMaxspeed.Name = "decMaxspeed";
             this.decMaxspeed.Size = new System.Drawing.Size(41, 37);
@@ -714,7 +722,7 @@
             // label42
             // 
             this.label42.AutoSize = true;
-            this.label42.Location = new System.Drawing.Point(458, 204);
+            this.label42.Location = new System.Drawing.Point(486, 204);
             this.label42.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label42.Name = "label42";
             this.label42.Size = new System.Drawing.Size(86, 17);
@@ -724,7 +732,7 @@
             // accelerationLabel
             // 
             this.accelerationLabel.AutoSize = true;
-            this.accelerationLabel.Location = new System.Drawing.Point(655, 204);
+            this.accelerationLabel.Location = new System.Drawing.Point(683, 204);
             this.accelerationLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.accelerationLabel.Name = "accelerationLabel";
             this.accelerationLabel.Size = new System.Drawing.Size(24, 17);
@@ -735,7 +743,7 @@
             // 
             this.accelerationBar.AutoSize = false;
             this.accelerationBar.LargeChange = 1;
-            this.accelerationBar.Location = new System.Drawing.Point(443, 221);
+            this.accelerationBar.Location = new System.Drawing.Point(471, 221);
             this.accelerationBar.Margin = new System.Windows.Forms.Padding(4);
             this.accelerationBar.Maximum = 100;
             this.accelerationBar.Minimum = 1;
@@ -749,7 +757,7 @@
             // maxspeedLabel
             // 
             this.maxspeedLabel.AutoSize = true;
-            this.maxspeedLabel.Location = new System.Drawing.Point(295, 207);
+            this.maxspeedLabel.Location = new System.Drawing.Point(323, 207);
             this.maxspeedLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.maxspeedLabel.Name = "maxspeedLabel";
             this.maxspeedLabel.Size = new System.Drawing.Size(24, 17);
@@ -760,7 +768,7 @@
             // 
             this.maxspeedBar.AutoSize = false;
             this.maxspeedBar.LargeChange = 1;
-            this.maxspeedBar.Location = new System.Drawing.Point(79, 226);
+            this.maxspeedBar.Location = new System.Drawing.Point(107, 226);
             this.maxspeedBar.Margin = new System.Windows.Forms.Padding(4);
             this.maxspeedBar.Maximum = 100;
             this.maxspeedBar.Minimum = 1;
@@ -774,7 +782,7 @@
             // label49
             // 
             this.label49.AutoSize = true;
-            this.label49.Location = new System.Drawing.Point(94, 207);
+            this.label49.Location = new System.Drawing.Point(122, 207);
             this.label49.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label49.Name = "label49";
             this.label49.Size = new System.Drawing.Size(111, 17);
@@ -784,7 +792,7 @@
             // joyModeLabel
             // 
             this.joyModeLabel.AutoSize = true;
-            this.joyModeLabel.Location = new System.Drawing.Point(55, 288);
+            this.joyModeLabel.Location = new System.Drawing.Point(83, 288);
             this.joyModeLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.joyModeLabel.Name = "joyModeLabel";
             this.joyModeLabel.Size = new System.Drawing.Size(134, 17);
@@ -795,7 +803,7 @@
             // joyModeBox
             // 
             this.joyModeBox.FormattingEnabled = true;
-            this.joyModeBox.Location = new System.Drawing.Point(56, 310);
+            this.joyModeBox.Location = new System.Drawing.Point(84, 310);
             this.joyModeBox.Margin = new System.Windows.Forms.Padding(4);
             this.joyModeBox.Name = "joyModeBox";
             this.joyModeBox.Size = new System.Drawing.Size(144, 24);
@@ -805,7 +813,7 @@
             // label27
             // 
             this.label27.AutoSize = true;
-            this.label27.Location = new System.Drawing.Point(62, 19);
+            this.label27.Location = new System.Drawing.Point(90, 19);
             this.label27.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label27.Name = "label27";
             this.label27.Size = new System.Drawing.Size(92, 17);
@@ -815,7 +823,7 @@
             // selectJoystick
             // 
             this.selectJoystick.AutoSize = true;
-            this.selectJoystick.Location = new System.Drawing.Point(390, 20);
+            this.selectJoystick.Location = new System.Drawing.Point(418, 20);
             this.selectJoystick.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.selectJoystick.Name = "selectJoystick";
             this.selectJoystick.Size = new System.Drawing.Size(148, 21);
@@ -848,7 +856,7 @@
             this.splitPanel.Controls.Add(this.sensXBar);
             this.splitPanel.Controls.Add(this.SpeedXNameLabel);
             this.splitPanel.Enabled = false;
-            this.splitPanel.Location = new System.Drawing.Point(23, 51);
+            this.splitPanel.Location = new System.Drawing.Point(51, 51);
             this.splitPanel.Name = "splitPanel";
             this.splitPanel.Size = new System.Drawing.Size(729, 145);
             this.splitPanel.TabIndex = 39;
@@ -1125,7 +1133,7 @@
             // splitXYBox
             // 
             this.splitXYBox.AutoSize = true;
-            this.splitXYBox.Location = new System.Drawing.Point(594, 298);
+            this.splitXYBox.Location = new System.Drawing.Point(622, 298);
             this.splitXYBox.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.splitXYBox.Name = "splitXYBox";
             this.splitXYBox.Size = new System.Drawing.Size(81, 21);
@@ -1137,7 +1145,7 @@
             // selectAlternative
             // 
             this.selectAlternative.AutoSize = true;
-            this.selectAlternative.Location = new System.Drawing.Point(559, 21);
+            this.selectAlternative.Location = new System.Drawing.Point(587, 21);
             this.selectAlternative.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.selectAlternative.Name = "selectAlternative";
             this.selectAlternative.Size = new System.Drawing.Size(146, 21);
@@ -1151,7 +1159,7 @@
             // 
             this.selectStick.AutoSize = true;
             this.selectStick.Checked = true;
-            this.selectStick.Location = new System.Drawing.Point(188, 19);
+            this.selectStick.Location = new System.Drawing.Point(216, 19);
             this.selectStick.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.selectStick.Name = "selectStick";
             this.selectStick.Size = new System.Drawing.Size(182, 21);
@@ -1165,7 +1173,7 @@
             // 
             this.calButton.Enabled = false;
             this.calButton.ForeColor = System.Drawing.Color.Black;
-            this.calButton.Location = new System.Drawing.Point(252, 287);
+            this.calButton.Location = new System.Drawing.Point(280, 287);
             this.calButton.Margin = new System.Windows.Forms.Padding(4);
             this.calButton.Name = "calButton";
             this.calButton.Size = new System.Drawing.Size(274, 59);
@@ -1209,7 +1217,7 @@
             this.AlternativeTab.Location = new System.Drawing.Point(4, 25);
             this.AlternativeTab.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.AlternativeTab.Name = "AlternativeTab";
-            this.AlternativeTab.Size = new System.Drawing.Size(780, 361);
+            this.AlternativeTab.Size = new System.Drawing.Size(834, 361);
             this.AlternativeTab.TabIndex = 3;
             this.AlternativeTab.Text = "Alternative Actions";
             // 
@@ -1217,7 +1225,7 @@
             // 
             this.clearButtonRight.Enabled = false;
             this.clearButtonRight.ForeColor = System.Drawing.Color.Black;
-            this.clearButtonRight.Location = new System.Drawing.Point(533, 298);
+            this.clearButtonRight.Location = new System.Drawing.Point(549, 298);
             this.clearButtonRight.Margin = new System.Windows.Forms.Padding(4);
             this.clearButtonRight.Name = "clearButtonRight";
             this.clearButtonRight.Size = new System.Drawing.Size(36, 28);
@@ -1231,7 +1239,7 @@
             // 
             this.clearButtonLeft.Enabled = false;
             this.clearButtonLeft.ForeColor = System.Drawing.Color.Black;
-            this.clearButtonLeft.Location = new System.Drawing.Point(533, 231);
+            this.clearButtonLeft.Location = new System.Drawing.Point(549, 231);
             this.clearButtonLeft.Margin = new System.Windows.Forms.Padding(4);
             this.clearButtonLeft.Name = "clearButtonLeft";
             this.clearButtonLeft.Size = new System.Drawing.Size(36, 28);
@@ -1245,7 +1253,7 @@
             // 
             this.clearButtonDown.Enabled = false;
             this.clearButtonDown.ForeColor = System.Drawing.Color.Black;
-            this.clearButtonDown.Location = new System.Drawing.Point(533, 162);
+            this.clearButtonDown.Location = new System.Drawing.Point(549, 162);
             this.clearButtonDown.Margin = new System.Windows.Forms.Padding(4);
             this.clearButtonDown.Name = "clearButtonDown";
             this.clearButtonDown.Size = new System.Drawing.Size(36, 28);
@@ -1259,7 +1267,7 @@
             // 
             this.clearButtonUp.Enabled = false;
             this.clearButtonUp.ForeColor = System.Drawing.Color.Black;
-            this.clearButtonUp.Location = new System.Drawing.Point(533, 94);
+            this.clearButtonUp.Location = new System.Drawing.Point(549, 94);
             this.clearButtonUp.Margin = new System.Windows.Forms.Padding(4);
             this.clearButtonUp.Name = "clearButtonUp";
             this.clearButtonUp.Size = new System.Drawing.Size(36, 28);
@@ -1272,7 +1280,7 @@
             // label18
             // 
             this.label18.AutoSize = true;
-            this.label18.Location = new System.Drawing.Point(215, 29);
+            this.label18.Location = new System.Drawing.Point(231, 29);
             this.label18.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label18.Name = "label18";
             this.label18.Size = new System.Drawing.Size(300, 17);
@@ -1282,7 +1290,7 @@
             // RightComboBox
             // 
             this.RightComboBox.FormattingEnabled = true;
-            this.RightComboBox.Location = new System.Drawing.Point(533, 270);
+            this.RightComboBox.Location = new System.Drawing.Point(549, 270);
             this.RightComboBox.Margin = new System.Windows.Forms.Padding(4);
             this.RightComboBox.Name = "RightComboBox";
             this.RightComboBox.Size = new System.Drawing.Size(161, 24);
@@ -1292,7 +1300,7 @@
             // 
             // RightNumericParameter
             // 
-            this.RightNumericParameter.Location = new System.Drawing.Point(216, 300);
+            this.RightNumericParameter.Location = new System.Drawing.Point(232, 300);
             this.RightNumericParameter.Margin = new System.Windows.Forms.Padding(4);
             this.RightNumericParameter.Minimum = new decimal(new int[] {
             100,
@@ -1312,7 +1320,7 @@
             // RightLabel
             // 
             this.RightLabel.AutoSize = true;
-            this.RightLabel.Location = new System.Drawing.Point(121, 302);
+            this.RightLabel.Location = new System.Drawing.Point(137, 302);
             this.RightLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.RightLabel.Name = "RightLabel";
             this.RightLabel.Size = new System.Drawing.Size(78, 17);
@@ -1321,7 +1329,7 @@
             // 
             // RightParameterText
             // 
-            this.RightParameterText.Location = new System.Drawing.Point(216, 300);
+            this.RightParameterText.Location = new System.Drawing.Point(232, 300);
             this.RightParameterText.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.RightParameterText.Name = "RightParameterText";
             this.RightParameterText.ReadOnly = true;
@@ -1331,7 +1339,7 @@
             // label15
             // 
             this.label15.AutoSize = true;
-            this.label15.Location = new System.Drawing.Point(88, 274);
+            this.label15.Location = new System.Drawing.Point(104, 274);
             this.label15.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label15.Name = "label15";
             this.label15.Size = new System.Drawing.Size(109, 17);
@@ -1341,7 +1349,7 @@
             // RightFunctionMenu
             // 
             this.RightFunctionMenu.FormattingEnabled = true;
-            this.RightFunctionMenu.Location = new System.Drawing.Point(216, 270);
+            this.RightFunctionMenu.Location = new System.Drawing.Point(232, 270);
             this.RightFunctionMenu.Margin = new System.Windows.Forms.Padding(4);
             this.RightFunctionMenu.Name = "RightFunctionMenu";
             this.RightFunctionMenu.Size = new System.Drawing.Size(311, 24);
@@ -1351,7 +1359,7 @@
             // LeftComboBox
             // 
             this.LeftComboBox.FormattingEnabled = true;
-            this.LeftComboBox.Location = new System.Drawing.Point(533, 204);
+            this.LeftComboBox.Location = new System.Drawing.Point(549, 204);
             this.LeftComboBox.Margin = new System.Windows.Forms.Padding(4);
             this.LeftComboBox.Name = "LeftComboBox";
             this.LeftComboBox.Size = new System.Drawing.Size(161, 24);
@@ -1362,7 +1370,7 @@
             // DownComboBox
             // 
             this.DownComboBox.FormattingEnabled = true;
-            this.DownComboBox.Location = new System.Drawing.Point(533, 134);
+            this.DownComboBox.Location = new System.Drawing.Point(549, 134);
             this.DownComboBox.Margin = new System.Windows.Forms.Padding(4);
             this.DownComboBox.Name = "DownComboBox";
             this.DownComboBox.Size = new System.Drawing.Size(161, 24);
@@ -1373,7 +1381,7 @@
             // UpComboBox
             // 
             this.UpComboBox.FormattingEnabled = true;
-            this.UpComboBox.Location = new System.Drawing.Point(533, 66);
+            this.UpComboBox.Location = new System.Drawing.Point(549, 66);
             this.UpComboBox.Margin = new System.Windows.Forms.Padding(4);
             this.UpComboBox.Name = "UpComboBox";
             this.UpComboBox.Size = new System.Drawing.Size(161, 24);
@@ -1383,7 +1391,7 @@
             // 
             // LeftNumericParameter
             // 
-            this.LeftNumericParameter.Location = new System.Drawing.Point(216, 234);
+            this.LeftNumericParameter.Location = new System.Drawing.Point(232, 234);
             this.LeftNumericParameter.Margin = new System.Windows.Forms.Padding(4);
             this.LeftNumericParameter.Minimum = new decimal(new int[] {
             100,
@@ -1402,7 +1410,7 @@
             // 
             // DownNumericParameter
             // 
-            this.DownNumericParameter.Location = new System.Drawing.Point(216, 164);
+            this.DownNumericParameter.Location = new System.Drawing.Point(232, 164);
             this.DownNumericParameter.Margin = new System.Windows.Forms.Padding(4);
             this.DownNumericParameter.Minimum = new decimal(new int[] {
             100,
@@ -1421,7 +1429,7 @@
             // 
             // UpNumericParameter
             // 
-            this.UpNumericParameter.Location = new System.Drawing.Point(216, 94);
+            this.UpNumericParameter.Location = new System.Drawing.Point(232, 94);
             this.UpNumericParameter.Margin = new System.Windows.Forms.Padding(4);
             this.UpNumericParameter.Minimum = new decimal(new int[] {
             100,
@@ -1441,7 +1449,7 @@
             // LeftLabel
             // 
             this.LeftLabel.AutoSize = true;
-            this.LeftLabel.Location = new System.Drawing.Point(121, 235);
+            this.LeftLabel.Location = new System.Drawing.Point(137, 235);
             this.LeftLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.LeftLabel.Name = "LeftLabel";
             this.LeftLabel.Size = new System.Drawing.Size(78, 17);
@@ -1450,7 +1458,7 @@
             // 
             // LeftParameterText
             // 
-            this.LeftParameterText.Location = new System.Drawing.Point(216, 234);
+            this.LeftParameterText.Location = new System.Drawing.Point(232, 234);
             this.LeftParameterText.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.LeftParameterText.Name = "LeftParameterText";
             this.LeftParameterText.ReadOnly = true;
@@ -1460,7 +1468,7 @@
             // DownLabel
             // 
             this.DownLabel.AutoSize = true;
-            this.DownLabel.Location = new System.Drawing.Point(121, 165);
+            this.DownLabel.Location = new System.Drawing.Point(137, 165);
             this.DownLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.DownLabel.Name = "DownLabel";
             this.DownLabel.Size = new System.Drawing.Size(78, 17);
@@ -1469,7 +1477,7 @@
             // 
             // DownParameterText
             // 
-            this.DownParameterText.Location = new System.Drawing.Point(216, 164);
+            this.DownParameterText.Location = new System.Drawing.Point(232, 164);
             this.DownParameterText.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.DownParameterText.Name = "DownParameterText";
             this.DownParameterText.ReadOnly = true;
@@ -1479,7 +1487,7 @@
             // UpLabel
             // 
             this.UpLabel.AutoSize = true;
-            this.UpLabel.Location = new System.Drawing.Point(121, 98);
+            this.UpLabel.Location = new System.Drawing.Point(137, 98);
             this.UpLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.UpLabel.Name = "UpLabel";
             this.UpLabel.Size = new System.Drawing.Size(78, 17);
@@ -1489,7 +1497,7 @@
             // 
             // UpParameterText
             // 
-            this.UpParameterText.Location = new System.Drawing.Point(216, 94);
+            this.UpParameterText.Location = new System.Drawing.Point(232, 94);
             this.UpParameterText.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.UpParameterText.Name = "UpParameterText";
             this.UpParameterText.ReadOnly = true;
@@ -1499,7 +1507,7 @@
             // label11
             // 
             this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(98, 206);
+            this.label11.Location = new System.Drawing.Point(114, 206);
             this.label11.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label11.Name = "label11";
             this.label11.Size = new System.Drawing.Size(100, 17);
@@ -1509,7 +1517,7 @@
             // LeftFunctionMenu
             // 
             this.LeftFunctionMenu.FormattingEnabled = true;
-            this.LeftFunctionMenu.Location = new System.Drawing.Point(216, 204);
+            this.LeftFunctionMenu.Location = new System.Drawing.Point(232, 204);
             this.LeftFunctionMenu.Margin = new System.Windows.Forms.Padding(4);
             this.LeftFunctionMenu.Name = "LeftFunctionMenu";
             this.LeftFunctionMenu.Size = new System.Drawing.Size(311, 24);
@@ -1519,7 +1527,7 @@
             // label12
             // 
             this.label12.AutoSize = true;
-            this.label12.Location = new System.Drawing.Point(85, 137);
+            this.label12.Location = new System.Drawing.Point(101, 137);
             this.label12.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label12.Name = "label12";
             this.label12.Size = new System.Drawing.Size(111, 17);
@@ -1529,7 +1537,7 @@
             // DownFunctionMenu
             // 
             this.DownFunctionMenu.FormattingEnabled = true;
-            this.DownFunctionMenu.Location = new System.Drawing.Point(216, 134);
+            this.DownFunctionMenu.Location = new System.Drawing.Point(232, 134);
             this.DownFunctionMenu.Margin = new System.Windows.Forms.Padding(4);
             this.DownFunctionMenu.Name = "DownFunctionMenu";
             this.DownFunctionMenu.Size = new System.Drawing.Size(311, 24);
@@ -1539,7 +1547,7 @@
             // label13
             // 
             this.label13.AutoSize = true;
-            this.label13.Location = new System.Drawing.Point(104, 69);
+            this.label13.Location = new System.Drawing.Point(120, 69);
             this.label13.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label13.Name = "label13";
             this.label13.Size = new System.Drawing.Size(94, 17);
@@ -1549,7 +1557,7 @@
             // UpFunctionMenu
             // 
             this.UpFunctionMenu.FormattingEnabled = true;
-            this.UpFunctionMenu.Location = new System.Drawing.Point(216, 66);
+            this.UpFunctionMenu.Location = new System.Drawing.Point(232, 66);
             this.UpFunctionMenu.Margin = new System.Windows.Forms.Padding(4);
             this.UpFunctionMenu.Name = "UpFunctionMenu";
             this.UpFunctionMenu.Size = new System.Drawing.Size(311, 24);
@@ -1592,7 +1600,7 @@
             this.SipPuffLevelsTab.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.SipPuffLevelsTab.Name = "SipPuffLevelsTab";
             this.SipPuffLevelsTab.Padding = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.SipPuffLevelsTab.Size = new System.Drawing.Size(780, 361);
+            this.SipPuffLevelsTab.Size = new System.Drawing.Size(834, 361);
             this.SipPuffLevelsTab.TabIndex = 5;
             this.SipPuffLevelsTab.Text = "Sip/Puff Levels";
             // 
@@ -1600,7 +1608,7 @@
             // 
             this.holdLevelIndicatorPanel.BackColor = System.Drawing.SystemColors.ButtonHighlight;
             this.holdLevelIndicatorPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.holdLevelIndicatorPanel.Location = new System.Drawing.Point(86, 204);
+            this.holdLevelIndicatorPanel.Location = new System.Drawing.Point(114, 204);
             this.holdLevelIndicatorPanel.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.holdLevelIndicatorPanel.Name = "holdLevelIndicatorPanel";
             this.holdLevelIndicatorPanel.Size = new System.Drawing.Size(34, 24);
@@ -1610,7 +1618,7 @@
             // 
             this.sipLevelIndicatorPanel.BackColor = System.Drawing.SystemColors.ButtonHighlight;
             this.sipLevelIndicatorPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.sipLevelIndicatorPanel.Location = new System.Drawing.Point(230, 204);
+            this.sipLevelIndicatorPanel.Location = new System.Drawing.Point(258, 204);
             this.sipLevelIndicatorPanel.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.sipLevelIndicatorPanel.Name = "sipLevelIndicatorPanel";
             this.sipLevelIndicatorPanel.Size = new System.Drawing.Size(34, 24);
@@ -1620,7 +1628,7 @@
             // 
             this.specialLevelIndicatorPanel.BackColor = System.Drawing.SystemColors.ButtonHighlight;
             this.specialLevelIndicatorPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.specialLevelIndicatorPanel.Location = new System.Drawing.Point(667, 82);
+            this.specialLevelIndicatorPanel.Location = new System.Drawing.Point(695, 82);
             this.specialLevelIndicatorPanel.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.specialLevelIndicatorPanel.Name = "specialLevelIndicatorPanel";
             this.specialLevelIndicatorPanel.Size = new System.Drawing.Size(34, 24);
@@ -1630,7 +1638,7 @@
             // 
             this.puffLevelIndicatorPanel.BackColor = System.Drawing.SystemColors.ButtonHighlight;
             this.puffLevelIndicatorPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.puffLevelIndicatorPanel.Location = new System.Drawing.Point(516, 82);
+            this.puffLevelIndicatorPanel.Location = new System.Drawing.Point(544, 82);
             this.puffLevelIndicatorPanel.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.puffLevelIndicatorPanel.Name = "puffLevelIndicatorPanel";
             this.puffLevelIndicatorPanel.Size = new System.Drawing.Size(34, 24);
@@ -1639,7 +1647,7 @@
             // label30
             // 
             this.label30.AutoSize = true;
-            this.label30.Location = new System.Drawing.Point(56, 59);
+            this.label30.Location = new System.Drawing.Point(84, 59);
             this.label30.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label30.Name = "label30";
             this.label30.Size = new System.Drawing.Size(164, 17);
@@ -1649,7 +1657,7 @@
             // label29
             // 
             this.label29.AutoSize = true;
-            this.label29.Location = new System.Drawing.Point(56, 40);
+            this.label29.Location = new System.Drawing.Point(84, 40);
             this.label29.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label29.Name = "label29";
             this.label29.Size = new System.Drawing.Size(150, 17);
@@ -1661,7 +1669,7 @@
             this.decHoldThreshold.Cursor = System.Windows.Forms.Cursors.Hand;
             this.decHoldThreshold.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.decHoldThreshold.ForeColor = System.Drawing.Color.Black;
-            this.decHoldThreshold.Location = new System.Drawing.Point(83, 285);
+            this.decHoldThreshold.Location = new System.Drawing.Point(111, 285);
             this.decHoldThreshold.Margin = new System.Windows.Forms.Padding(4);
             this.decHoldThreshold.Name = "decHoldThreshold";
             this.decHoldThreshold.Size = new System.Drawing.Size(41, 37);
@@ -1677,7 +1685,7 @@
             // 
             this.incHoldThreshold.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.incHoldThreshold.ForeColor = System.Drawing.Color.Black;
-            this.incHoldThreshold.Location = new System.Drawing.Point(83, 240);
+            this.incHoldThreshold.Location = new System.Drawing.Point(111, 240);
             this.incHoldThreshold.Margin = new System.Windows.Forms.Padding(4);
             this.incHoldThreshold.Name = "incHoldThreshold";
             this.incHoldThreshold.Size = new System.Drawing.Size(41, 37);
@@ -1692,7 +1700,7 @@
             // stongSipThresholdLabel
             // 
             this.stongSipThresholdLabel.AutoSize = true;
-            this.stongSipThresholdLabel.Location = new System.Drawing.Point(121, 170);
+            this.stongSipThresholdLabel.Location = new System.Drawing.Point(149, 170);
             this.stongSipThresholdLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.stongSipThresholdLabel.Name = "stongSipThresholdLabel";
             this.stongSipThresholdLabel.Size = new System.Drawing.Size(32, 17);
@@ -1702,7 +1710,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(82, 151);
+            this.label2.Location = new System.Drawing.Point(110, 151);
             this.label2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(108, 17);
@@ -1712,7 +1720,7 @@
             // strongSipThresholdBar
             // 
             this.strongSipThresholdBar.LargeChange = 20;
-            this.strongSipThresholdBar.Location = new System.Drawing.Point(140, 191);
+            this.strongSipThresholdBar.Location = new System.Drawing.Point(168, 191);
             this.strongSipThresholdBar.Margin = new System.Windows.Forms.Padding(4);
             this.strongSipThresholdBar.Maximum = 512;
             this.strongSipThresholdBar.Name = "strongSipThresholdBar";
@@ -1728,7 +1736,7 @@
             // 
             this.incTimeThreshld.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.incTimeThreshld.ForeColor = System.Drawing.Color.Black;
-            this.incTimeThreshld.Location = new System.Drawing.Point(663, 115);
+            this.incTimeThreshld.Location = new System.Drawing.Point(691, 115);
             this.incTimeThreshld.Margin = new System.Windows.Forms.Padding(4);
             this.incTimeThreshld.Name = "incTimeThreshld";
             this.incTimeThreshld.Size = new System.Drawing.Size(41, 37);
@@ -1744,7 +1752,7 @@
             // 
             this.decTimeThreshold.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.decTimeThreshold.ForeColor = System.Drawing.Color.Black;
-            this.decTimeThreshold.Location = new System.Drawing.Point(663, 161);
+            this.decTimeThreshold.Location = new System.Drawing.Point(691, 161);
             this.decTimeThreshold.Margin = new System.Windows.Forms.Padding(4);
             this.decTimeThreshold.Name = "decTimeThreshold";
             this.decTimeThreshold.Size = new System.Drawing.Size(41, 37);
@@ -1760,7 +1768,7 @@
             // 
             this.incSipThreshold.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.incSipThreshold.ForeColor = System.Drawing.Color.Black;
-            this.incSipThreshold.Location = new System.Drawing.Point(227, 238);
+            this.incSipThreshold.Location = new System.Drawing.Point(255, 238);
             this.incSipThreshold.Margin = new System.Windows.Forms.Padding(4);
             this.incSipThreshold.Name = "incSipThreshold";
             this.incSipThreshold.Size = new System.Drawing.Size(41, 37);
@@ -1777,7 +1785,7 @@
             this.decSipThreshold.Cursor = System.Windows.Forms.Cursors.Hand;
             this.decSipThreshold.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.decSipThreshold.ForeColor = System.Drawing.Color.Black;
-            this.decSipThreshold.Location = new System.Drawing.Point(227, 283);
+            this.decSipThreshold.Location = new System.Drawing.Point(255, 283);
             this.decSipThreshold.Margin = new System.Windows.Forms.Padding(4);
             this.decSipThreshold.Name = "decSipThreshold";
             this.decSipThreshold.Size = new System.Drawing.Size(41, 37);
@@ -1793,7 +1801,7 @@
             // 
             this.incPuffThreshold.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.incPuffThreshold.ForeColor = System.Drawing.Color.Black;
-            this.incPuffThreshold.Location = new System.Drawing.Point(512, 115);
+            this.incPuffThreshold.Location = new System.Drawing.Point(540, 115);
             this.incPuffThreshold.Margin = new System.Windows.Forms.Padding(4);
             this.incPuffThreshold.Name = "incPuffThreshold";
             this.incPuffThreshold.Size = new System.Drawing.Size(41, 37);
@@ -1809,7 +1817,7 @@
             // 
             this.decPuffThreshold.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.decPuffThreshold.ForeColor = System.Drawing.Color.Black;
-            this.decPuffThreshold.Location = new System.Drawing.Point(512, 161);
+            this.decPuffThreshold.Location = new System.Drawing.Point(540, 161);
             this.decPuffThreshold.Margin = new System.Windows.Forms.Padding(4);
             this.decPuffThreshold.Name = "decPuffThreshold";
             this.decPuffThreshold.Size = new System.Drawing.Size(41, 37);
@@ -1824,7 +1832,7 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(357, 32);
+            this.label4.Location = new System.Drawing.Point(385, 32);
             this.label4.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(65, 17);
@@ -1834,7 +1842,7 @@
             // strongPuffThresholdLabel
             // 
             this.strongPuffThresholdLabel.AutoSize = true;
-            this.strongPuffThresholdLabel.Location = new System.Drawing.Point(632, 240);
+            this.strongPuffThresholdLabel.Location = new System.Drawing.Point(660, 240);
             this.strongPuffThresholdLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.strongPuffThresholdLabel.Name = "strongPuffThresholdLabel";
             this.strongPuffThresholdLabel.Size = new System.Drawing.Size(32, 17);
@@ -1845,7 +1853,7 @@
             // label16
             // 
             this.label16.AutoSize = true;
-            this.label16.Location = new System.Drawing.Point(600, 219);
+            this.label16.Location = new System.Drawing.Point(628, 219);
             this.label16.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label16.Name = "label16";
             this.label16.Size = new System.Drawing.Size(113, 17);
@@ -1855,7 +1863,7 @@
             // strongPuffThresholdBar
             // 
             this.strongPuffThresholdBar.LargeChange = 10;
-            this.strongPuffThresholdBar.Location = new System.Drawing.Point(580, 72);
+            this.strongPuffThresholdBar.Location = new System.Drawing.Point(608, 72);
             this.strongPuffThresholdBar.Margin = new System.Windows.Forms.Padding(4);
             this.strongPuffThresholdBar.Maximum = 1023;
             this.strongPuffThresholdBar.Minimum = 512;
@@ -1873,7 +1881,7 @@
             // 
             this.pressureDrawPanel.BackColor = System.Drawing.SystemColors.ButtonHighlight;
             this.pressureDrawPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.pressureDrawPanel.Location = new System.Drawing.Point(348, 72);
+            this.pressureDrawPanel.Location = new System.Drawing.Point(376, 72);
             this.pressureDrawPanel.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.pressureDrawPanel.Name = "pressureDrawPanel";
             this.pressureDrawPanel.Size = new System.Drawing.Size(86, 260);
@@ -1882,7 +1890,7 @@
             // pressureLabel
             // 
             this.pressureLabel.AutoSize = true;
-            this.pressureLabel.Location = new System.Drawing.Point(368, 50);
+            this.pressureLabel.Location = new System.Drawing.Point(396, 50);
             this.pressureLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.pressureLabel.Name = "pressureLabel";
             this.pressureLabel.Size = new System.Drawing.Size(16, 17);
@@ -1893,7 +1901,7 @@
             // puffThresholdLabel
             // 
             this.puffThresholdLabel.AutoSize = true;
-            this.puffThresholdLabel.Location = new System.Drawing.Point(493, 242);
+            this.puffThresholdLabel.Location = new System.Drawing.Point(521, 242);
             this.puffThresholdLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.puffThresholdLabel.Name = "puffThresholdLabel";
             this.puffThresholdLabel.Size = new System.Drawing.Size(32, 17);
@@ -1904,7 +1912,7 @@
             // 
             this.puffThresholdBar.AllowDrop = true;
             this.puffThresholdBar.LargeChange = 20;
-            this.puffThresholdBar.Location = new System.Drawing.Point(435, 70);
+            this.puffThresholdBar.Location = new System.Drawing.Point(463, 70);
             this.puffThresholdBar.Margin = new System.Windows.Forms.Padding(4);
             this.puffThresholdBar.Maximum = 1023;
             this.puffThresholdBar.Minimum = 512;
@@ -1922,7 +1930,7 @@
             // 
             this.thresholdLabelForPuff.AutoSize = true;
             this.thresholdLabelForPuff.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.thresholdLabelForPuff.Location = new System.Drawing.Point(480, 221);
+            this.thresholdLabelForPuff.Location = new System.Drawing.Point(508, 221);
             this.thresholdLabelForPuff.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.thresholdLabelForPuff.Name = "thresholdLabelForPuff";
             this.thresholdLabelForPuff.Size = new System.Drawing.Size(71, 17);
@@ -1933,7 +1941,7 @@
             // sipThresholdLabel
             // 
             this.sipThresholdLabel.AutoSize = true;
-            this.sipThresholdLabel.Location = new System.Drawing.Point(261, 170);
+            this.sipThresholdLabel.Location = new System.Drawing.Point(289, 170);
             this.sipThresholdLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.sipThresholdLabel.Name = "sipThresholdLabel";
             this.sipThresholdLabel.Size = new System.Drawing.Size(32, 17);
@@ -1943,7 +1951,7 @@
             // sipThresholdBar
             // 
             this.sipThresholdBar.LargeChange = 20;
-            this.sipThresholdBar.Location = new System.Drawing.Point(284, 191);
+            this.sipThresholdBar.Location = new System.Drawing.Point(312, 191);
             this.sipThresholdBar.Margin = new System.Windows.Forms.Padding(4);
             this.sipThresholdBar.Maximum = 512;
             this.sipThresholdBar.Name = "sipThresholdBar";
@@ -1958,7 +1966,7 @@
             // thresholdLabelForSip
             // 
             this.thresholdLabelForSip.AutoSize = true;
-            this.thresholdLabelForSip.Location = new System.Drawing.Point(243, 151);
+            this.thresholdLabelForSip.Location = new System.Drawing.Point(271, 151);
             this.thresholdLabelForSip.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.thresholdLabelForSip.Name = "thresholdLabelForSip";
             this.thresholdLabelForSip.Size = new System.Drawing.Size(66, 17);
@@ -1972,7 +1980,7 @@
             this.SipPuffTab.Location = new System.Drawing.Point(4, 25);
             this.SipPuffTab.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.SipPuffTab.Name = "SipPuffTab";
-            this.SipPuffTab.Size = new System.Drawing.Size(780, 361);
+            this.SipPuffTab.Size = new System.Drawing.Size(834, 361);
             this.SipPuffTab.TabIndex = 2;
             this.SipPuffTab.Text = "Sip/Puff Actions";
             // 
@@ -1982,7 +1990,7 @@
             this.sipPuffSelections.Controls.Add(this.tabPage1);
             this.sipPuffSelections.Controls.Add(this.tabPage2);
             this.sipPuffSelections.Controls.Add(this.tabPage3);
-            this.sipPuffSelections.Location = new System.Drawing.Point(25, 14);
+            this.sipPuffSelections.Location = new System.Drawing.Point(49, 14);
             this.sipPuffSelections.Multiline = true;
             this.sipPuffSelections.Name = "sipPuffSelections";
             this.sipPuffSelections.SelectedIndex = 0;
@@ -3146,7 +3154,7 @@
             this.ButtonsTab.Margin = new System.Windows.Forms.Padding(4);
             this.ButtonsTab.Name = "ButtonsTab";
             this.ButtonsTab.Padding = new System.Windows.Forms.Padding(4);
-            this.ButtonsTab.Size = new System.Drawing.Size(780, 361);
+            this.ButtonsTab.Size = new System.Drawing.Size(834, 361);
             this.ButtonsTab.TabIndex = 1;
             this.ButtonsTab.Text = "Button Actions";
             // 
@@ -3413,8 +3421,6 @@
             // RawValueTab
             // 
             this.RawValueTab.BackColor = System.Drawing.SystemColors.ButtonFace;
-            this.RawValueTab.Controls.Add(this.label47);
-            this.RawValueTab.Controls.Add(this.orientationBox);
             this.RawValueTab.Controls.Add(this.incRightGain);
             this.RawValueTab.Controls.Add(this.decRightGain);
             this.RawValueTab.Controls.Add(this.rightGainLabel);
@@ -3450,33 +3456,15 @@
             this.RawValueTab.Location = new System.Drawing.Point(4, 25);
             this.RawValueTab.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.RawValueTab.Name = "RawValueTab";
-            this.RawValueTab.Size = new System.Drawing.Size(780, 361);
+            this.RawValueTab.Size = new System.Drawing.Size(834, 361);
             this.RawValueTab.TabIndex = 4;
-            this.RawValueTab.Text = "GeneralSettings";
-            // 
-            // label47
-            // 
-            this.label47.AutoSize = true;
-            this.label47.Location = new System.Drawing.Point(609, 40);
-            this.label47.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.label47.Name = "label47";
-            this.label47.Size = new System.Drawing.Size(116, 17);
-            this.label47.TabIndex = 147;
-            this.label47.Text = "Stick Orientation:";
-            // 
-            // orientationBox
-            // 
-            this.orientationBox.Location = new System.Drawing.Point(612, 62);
-            this.orientationBox.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.orientationBox.Name = "orientationBox";
-            this.orientationBox.Size = new System.Drawing.Size(107, 24);
-            this.orientationBox.TabIndex = 13;
+            this.RawValueTab.Text = "Force Levels";
             // 
             // incRightGain
             // 
             this.incRightGain.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.incRightGain.ForeColor = System.Drawing.Color.Black;
-            this.incRightGain.Location = new System.Drawing.Point(465, 252);
+            this.incRightGain.Location = new System.Drawing.Point(508, 252);
             this.incRightGain.Margin = new System.Windows.Forms.Padding(4);
             this.incRightGain.Name = "incRightGain";
             this.incRightGain.Size = new System.Drawing.Size(41, 37);
@@ -3493,7 +3481,7 @@
             this.decRightGain.Cursor = System.Windows.Forms.Cursors.Hand;
             this.decRightGain.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.decRightGain.ForeColor = System.Drawing.Color.Black;
-            this.decRightGain.Location = new System.Drawing.Point(417, 252);
+            this.decRightGain.Location = new System.Drawing.Point(460, 252);
             this.decRightGain.Margin = new System.Windows.Forms.Padding(4);
             this.decRightGain.Name = "decRightGain";
             this.decRightGain.Size = new System.Drawing.Size(41, 37);
@@ -3508,7 +3496,7 @@
             // rightGainLabel
             // 
             this.rightGainLabel.AutoSize = true;
-            this.rightGainLabel.Location = new System.Drawing.Point(523, 274);
+            this.rightGainLabel.Location = new System.Drawing.Point(566, 274);
             this.rightGainLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.rightGainLabel.Name = "rightGainLabel";
             this.rightGainLabel.Size = new System.Drawing.Size(24, 17);
@@ -3518,7 +3506,7 @@
             // label28
             // 
             this.label28.AutoSize = true;
-            this.label28.Location = new System.Drawing.Point(520, 254);
+            this.label28.Location = new System.Drawing.Point(563, 254);
             this.label28.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label28.Name = "label28";
             this.label28.Size = new System.Drawing.Size(67, 17);
@@ -3528,7 +3516,7 @@
             // rightGainBar
             // 
             this.rightGainBar.LargeChange = 10;
-            this.rightGainBar.Location = new System.Drawing.Point(406, 210);
+            this.rightGainBar.Location = new System.Drawing.Point(449, 210);
             this.rightGainBar.Margin = new System.Windows.Forms.Padding(4);
             this.rightGainBar.Maximum = 100;
             this.rightGainBar.Name = "rightGainBar";
@@ -3542,7 +3530,7 @@
             // 
             this.incDownGain.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.incDownGain.ForeColor = System.Drawing.Color.Black;
-            this.incDownGain.Location = new System.Drawing.Point(246, 272);
+            this.incDownGain.Location = new System.Drawing.Point(289, 272);
             this.incDownGain.Margin = new System.Windows.Forms.Padding(4);
             this.incDownGain.Name = "incDownGain";
             this.incDownGain.Size = new System.Drawing.Size(41, 37);
@@ -3559,7 +3547,7 @@
             this.decDownGain.Cursor = System.Windows.Forms.Cursors.Hand;
             this.decDownGain.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.decDownGain.ForeColor = System.Drawing.Color.Black;
-            this.decDownGain.Location = new System.Drawing.Point(246, 228);
+            this.decDownGain.Location = new System.Drawing.Point(289, 228);
             this.decDownGain.Margin = new System.Windows.Forms.Padding(4);
             this.decDownGain.Name = "decDownGain";
             this.decDownGain.Size = new System.Drawing.Size(41, 37);
@@ -3574,7 +3562,7 @@
             // downGainLabel
             // 
             this.downGainLabel.AutoSize = true;
-            this.downGainLabel.Location = new System.Drawing.Point(198, 268);
+            this.downGainLabel.Location = new System.Drawing.Point(241, 268);
             this.downGainLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.downGainLabel.Name = "downGainLabel";
             this.downGainLabel.Size = new System.Drawing.Size(24, 17);
@@ -3584,7 +3572,7 @@
             // label25
             // 
             this.label25.AutoSize = true;
-            this.label25.Location = new System.Drawing.Point(160, 250);
+            this.label25.Location = new System.Drawing.Point(203, 250);
             this.label25.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label25.Name = "label25";
             this.label25.Size = new System.Drawing.Size(72, 17);
@@ -3595,7 +3583,7 @@
             // 
             this.incLeftGain.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.incLeftGain.ForeColor = System.Drawing.Color.Black;
-            this.incLeftGain.Location = new System.Drawing.Point(224, 82);
+            this.incLeftGain.Location = new System.Drawing.Point(267, 82);
             this.incLeftGain.Margin = new System.Windows.Forms.Padding(4);
             this.incLeftGain.Name = "incLeftGain";
             this.incLeftGain.Size = new System.Drawing.Size(41, 37);
@@ -3612,7 +3600,7 @@
             this.decLeftGain.Cursor = System.Windows.Forms.Cursors.Hand;
             this.decLeftGain.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.decLeftGain.ForeColor = System.Drawing.Color.Black;
-            this.decLeftGain.Location = new System.Drawing.Point(276, 82);
+            this.decLeftGain.Location = new System.Drawing.Point(319, 82);
             this.decLeftGain.Margin = new System.Windows.Forms.Padding(4);
             this.decLeftGain.Name = "decLeftGain";
             this.decLeftGain.Size = new System.Drawing.Size(41, 37);
@@ -3627,7 +3615,7 @@
             // leftGainLabel
             // 
             this.leftGainLabel.AutoSize = true;
-            this.leftGainLabel.Location = new System.Drawing.Point(185, 100);
+            this.leftGainLabel.Location = new System.Drawing.Point(228, 100);
             this.leftGainLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.leftGainLabel.Name = "leftGainLabel";
             this.leftGainLabel.Size = new System.Drawing.Size(24, 17);
@@ -3637,7 +3625,7 @@
             // label26
             // 
             this.label26.AutoSize = true;
-            this.label26.Location = new System.Drawing.Point(160, 82);
+            this.label26.Location = new System.Drawing.Point(203, 82);
             this.label26.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label26.Name = "label26";
             this.label26.Size = new System.Drawing.Size(58, 17);
@@ -3648,7 +3636,7 @@
             // 
             this.incUpGain.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.incUpGain.ForeColor = System.Drawing.Color.Black;
-            this.incUpGain.Location = new System.Drawing.Point(448, 55);
+            this.incUpGain.Location = new System.Drawing.Point(491, 55);
             this.incUpGain.Margin = new System.Windows.Forms.Padding(4);
             this.incUpGain.Name = "incUpGain";
             this.incUpGain.Size = new System.Drawing.Size(41, 37);
@@ -3665,7 +3653,7 @@
             this.decUpGain.Cursor = System.Windows.Forms.Cursors.Hand;
             this.decUpGain.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.decUpGain.ForeColor = System.Drawing.Color.Black;
-            this.decUpGain.Location = new System.Drawing.Point(448, 100);
+            this.decUpGain.Location = new System.Drawing.Point(491, 100);
             this.decUpGain.Margin = new System.Windows.Forms.Padding(4);
             this.decUpGain.Name = "decUpGain";
             this.decUpGain.Size = new System.Drawing.Size(41, 37);
@@ -3680,7 +3668,7 @@
             // upGainLabel
             // 
             this.upGainLabel.AutoSize = true;
-            this.upGainLabel.Location = new System.Drawing.Point(497, 103);
+            this.upGainLabel.Location = new System.Drawing.Point(540, 103);
             this.upGainLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.upGainLabel.Name = "upGainLabel";
             this.upGainLabel.Size = new System.Drawing.Size(24, 17);
@@ -3690,7 +3678,7 @@
             // label23
             // 
             this.label23.AutoSize = true;
-            this.label23.Location = new System.Drawing.Point(496, 86);
+            this.label23.Location = new System.Drawing.Point(539, 86);
             this.label23.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label23.Name = "label23";
             this.label23.Size = new System.Drawing.Size(55, 17);
@@ -3700,7 +3688,7 @@
             // label22
             // 
             this.label22.AutoSize = true;
-            this.label22.Location = new System.Drawing.Point(249, 334);
+            this.label22.Location = new System.Drawing.Point(295, 325);
             this.label22.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label22.Name = "label22";
             this.label22.Size = new System.Drawing.Size(92, 17);
@@ -3710,7 +3698,7 @@
             // downSensorLabel
             // 
             this.downSensorLabel.AutoSize = true;
-            this.downSensorLabel.Location = new System.Drawing.Point(347, 334);
+            this.downSensorLabel.Location = new System.Drawing.Point(393, 325);
             this.downSensorLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.downSensorLabel.Name = "downSensorLabel";
             this.downSensorLabel.Size = new System.Drawing.Size(16, 17);
@@ -3721,7 +3709,7 @@
             // label19
             // 
             this.label19.AutoSize = true;
-            this.label19.Location = new System.Drawing.Point(108, 162);
+            this.label19.Location = new System.Drawing.Point(153, 162);
             this.label19.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label19.Name = "label19";
             this.label19.Size = new System.Drawing.Size(81, 17);
@@ -3731,7 +3719,7 @@
             // leftSensorLabel
             // 
             this.leftSensorLabel.AutoSize = true;
-            this.leftSensorLabel.Location = new System.Drawing.Point(150, 183);
+            this.leftSensorLabel.Location = new System.Drawing.Point(195, 183);
             this.leftSensorLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.leftSensorLabel.Name = "leftSensorLabel";
             this.leftSensorLabel.Size = new System.Drawing.Size(16, 17);
@@ -3742,7 +3730,7 @@
             // label17
             // 
             this.label17.AutoSize = true;
-            this.label17.Location = new System.Drawing.Point(550, 162);
+            this.label17.Location = new System.Drawing.Point(587, 162);
             this.label17.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label17.Name = "label17";
             this.label17.Size = new System.Drawing.Size(90, 17);
@@ -3752,7 +3740,7 @@
             // rightSensorLabel
             // 
             this.rightSensorLabel.AutoSize = true;
-            this.rightSensorLabel.Location = new System.Drawing.Point(555, 183);
+            this.rightSensorLabel.Location = new System.Drawing.Point(592, 183);
             this.rightSensorLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.rightSensorLabel.Name = "rightSensorLabel";
             this.rightSensorLabel.Size = new System.Drawing.Size(16, 17);
@@ -3763,7 +3751,7 @@
             // label10
             // 
             this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(268, 16);
+            this.label10.Location = new System.Drawing.Point(313, 24);
             this.label10.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(75, 17);
@@ -3773,7 +3761,7 @@
             // upSensorLabel
             // 
             this.upSensorLabel.AutoSize = true;
-            this.upSensorLabel.Location = new System.Drawing.Point(347, 16);
+            this.upSensorLabel.Location = new System.Drawing.Point(392, 24);
             this.upSensorLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.upSensorLabel.Name = "upSensorLabel";
             this.upSensorLabel.Size = new System.Drawing.Size(16, 17);
@@ -3785,46 +3773,46 @@
             // 
             this.rightPanel.BackColor = System.Drawing.SystemColors.ButtonHighlight;
             this.rightPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.rightPanel.Location = new System.Drawing.Point(392, 164);
+            this.rightPanel.Location = new System.Drawing.Point(435, 164);
             this.rightPanel.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.rightPanel.Name = "rightPanel";
-            this.rightPanel.Size = new System.Drawing.Size(142, 40);
+            this.rightPanel.Size = new System.Drawing.Size(130, 40);
             this.rightPanel.TabIndex = 94;
             // 
             // leftPanel
             // 
             this.leftPanel.BackColor = System.Drawing.SystemColors.ButtonHighlight;
             this.leftPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.leftPanel.Location = new System.Drawing.Point(201, 164);
+            this.leftPanel.Location = new System.Drawing.Point(258, 164);
             this.leftPanel.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.leftPanel.Name = "leftPanel";
-            this.leftPanel.Size = new System.Drawing.Size(142, 40);
+            this.leftPanel.Size = new System.Drawing.Size(130, 40);
             this.leftPanel.TabIndex = 93;
             // 
             // downPanel
             // 
             this.downPanel.BackColor = System.Drawing.SystemColors.ButtonHighlight;
             this.downPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.downPanel.Location = new System.Drawing.Point(345, 205);
+            this.downPanel.Location = new System.Drawing.Point(389, 205);
             this.downPanel.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.downPanel.Name = "downPanel";
-            this.downPanel.Size = new System.Drawing.Size(45, 128);
+            this.downPanel.Size = new System.Drawing.Size(45, 115);
             this.downPanel.TabIndex = 92;
             // 
             // upPanel
             // 
             this.upPanel.BackColor = System.Drawing.SystemColors.ButtonHighlight;
             this.upPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.upPanel.Location = new System.Drawing.Point(345, 34);
+            this.upPanel.Location = new System.Drawing.Point(389, 47);
             this.upPanel.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.upPanel.Name = "upPanel";
-            this.upPanel.Size = new System.Drawing.Size(45, 128);
+            this.upPanel.Size = new System.Drawing.Size(45, 115);
             this.upPanel.TabIndex = 91;
             // 
             // leftGainBar
             // 
             this.leftGainBar.LargeChange = 10;
-            this.leftGainBar.Location = new System.Drawing.Point(214, 126);
+            this.leftGainBar.Location = new System.Drawing.Point(257, 126);
             this.leftGainBar.Margin = new System.Windows.Forms.Padding(4);
             this.leftGainBar.Maximum = 100;
             this.leftGainBar.Name = "leftGainBar";
@@ -3839,7 +3827,7 @@
             // 
             this.downGainBar.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.downGainBar.LargeChange = 10;
-            this.downGainBar.Location = new System.Drawing.Point(299, 214);
+            this.downGainBar.Location = new System.Drawing.Point(396, 214);
             this.downGainBar.Margin = new System.Windows.Forms.Padding(4);
             this.downGainBar.Maximum = 100;
             this.downGainBar.Name = "downGainBar";
@@ -3853,7 +3841,7 @@
             // upGainBar
             // 
             this.upGainBar.LargeChange = 10;
-            this.upGainBar.Location = new System.Drawing.Point(375, 46);
+            this.upGainBar.Location = new System.Drawing.Point(418, 46);
             this.upGainBar.Margin = new System.Windows.Forms.Padding(4);
             this.upGainBar.Maximum = 100;
             this.upGainBar.Name = "upGainBar";
@@ -3881,14 +3869,14 @@
             this.IRTab.Location = new System.Drawing.Point(4, 25);
             this.IRTab.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.IRTab.Name = "IRTab";
-            this.IRTab.Size = new System.Drawing.Size(780, 361);
+            this.IRTab.Size = new System.Drawing.Size(834, 361);
             this.IRTab.TabIndex = 6;
             this.IRTab.Text = "IR-Remote";
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(147, 247);
+            this.label1.Location = new System.Drawing.Point(181, 247);
             this.label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(288, 17);
@@ -3897,7 +3885,7 @@
             // 
             // irTimeoutBox
             // 
-            this.irTimeoutBox.Location = new System.Drawing.Point(451, 245);
+            this.irTimeoutBox.Location = new System.Drawing.Point(485, 245);
             this.irTimeoutBox.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.irTimeoutBox.Name = "irTimeoutBox";
             this.irTimeoutBox.Size = new System.Drawing.Size(40, 22);
@@ -3907,7 +3895,7 @@
             // irCommandBox
             // 
             this.irCommandBox.FormattingEnabled = true;
-            this.irCommandBox.Location = new System.Drawing.Point(151, 117);
+            this.irCommandBox.Location = new System.Drawing.Point(185, 117);
             this.irCommandBox.Margin = new System.Windows.Forms.Padding(4);
             this.irCommandBox.Name = "irCommandBox";
             this.irCommandBox.Size = new System.Drawing.Size(490, 24);
@@ -3917,7 +3905,7 @@
             // 
             this.deleteIRButton.Enabled = false;
             this.deleteIRButton.ForeColor = System.Drawing.Color.Black;
-            this.deleteIRButton.Location = new System.Drawing.Point(325, 167);
+            this.deleteIRButton.Location = new System.Drawing.Point(359, 167);
             this.deleteIRButton.Margin = new System.Windows.Forms.Padding(4);
             this.deleteIRButton.Name = "deleteIRButton";
             this.deleteIRButton.Size = new System.Drawing.Size(153, 40);
@@ -3929,7 +3917,7 @@
             // label31
             // 
             this.label31.AutoSize = true;
-            this.label31.Location = new System.Drawing.Point(36, 36);
+            this.label31.Location = new System.Drawing.Point(70, 36);
             this.label31.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label31.Name = "label31";
             this.label31.Size = new System.Drawing.Size(236, 17);
@@ -3940,7 +3928,7 @@
             // 
             this.playIRButton.Enabled = false;
             this.playIRButton.ForeColor = System.Drawing.Color.Black;
-            this.playIRButton.Location = new System.Drawing.Point(151, 167);
+            this.playIRButton.Location = new System.Drawing.Point(185, 167);
             this.playIRButton.Margin = new System.Windows.Forms.Padding(4);
             this.playIRButton.Name = "playIRButton";
             this.playIRButton.Size = new System.Drawing.Size(162, 40);
@@ -3953,7 +3941,7 @@
             // 
             this.recordIRButton.Enabled = false;
             this.recordIRButton.ForeColor = System.Drawing.Color.Black;
-            this.recordIRButton.Location = new System.Drawing.Point(150, 280);
+            this.recordIRButton.Location = new System.Drawing.Point(184, 280);
             this.recordIRButton.Margin = new System.Windows.Forms.Padding(4);
             this.recordIRButton.Name = "recordIRButton";
             this.recordIRButton.Size = new System.Drawing.Size(491, 40);
@@ -3965,7 +3953,7 @@
             // label24
             // 
             this.label24.AutoSize = true;
-            this.label24.Location = new System.Drawing.Point(148, 87);
+            this.label24.Location = new System.Drawing.Point(182, 87);
             this.label24.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label24.Name = "label24";
             this.label24.Size = new System.Drawing.Size(365, 17);
@@ -3975,11 +3963,11 @@
             // groupBox1
             // 
             this.groupBox1.Controls.Add(this.activityLogTextbox);
-            this.groupBox1.Location = new System.Drawing.Point(53, 562);
+            this.groupBox1.Location = new System.Drawing.Point(42, 562);
             this.groupBox1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Padding = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.groupBox1.Size = new System.Drawing.Size(553, 153);
+            this.groupBox1.Size = new System.Drawing.Size(555, 148);
             this.groupBox1.TabIndex = 74;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Activity-Log";
@@ -3992,7 +3980,7 @@
             this.activityLogTextbox.Margin = new System.Windows.Forms.Padding(4);
             this.activityLogTextbox.Name = "activityLogTextbox";
             this.activityLogTextbox.ReadOnly = true;
-            this.activityLogTextbox.Size = new System.Drawing.Size(501, 110);
+            this.activityLogTextbox.Size = new System.Drawing.Size(501, 108);
             this.activityLogTextbox.TabIndex = 63;
             this.activityLogTextbox.TabStop = false;
             this.activityLogTextbox.Text = "";
@@ -4002,10 +3990,10 @@
             this.slotNames.CausesValidation = false;
             this.slotNames.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.slotNames.ForeColor = System.Drawing.SystemColors.MenuHighlight;
-            this.slotNames.Location = new System.Drawing.Point(339, 512);
+            this.slotNames.Location = new System.Drawing.Point(342, 512);
             this.slotNames.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.slotNames.Name = "slotNames";
-            this.slotNames.Size = new System.Drawing.Size(206, 28);
+            this.slotNames.Size = new System.Drawing.Size(236, 28);
             this.slotNames.TabIndex = 27;
             this.slotNames.Text = "<choose>";
             this.slotNames.SelectedIndexChanged += new System.EventHandler(this.slotNames_SelectedIndexChanged);
@@ -4019,7 +4007,7 @@
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Padding = new System.Windows.Forms.Padding(5, 2, 0, 2);
-            this.menuStrip1.Size = new System.Drawing.Size(885, 28);
+            this.menuStrip1.Size = new System.Drawing.Size(921, 28);
             this.menuStrip1.TabIndex = 77;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -4088,7 +4076,7 @@
             // 
             // prevSlotButton
             // 
-            this.prevSlotButton.Location = new System.Drawing.Point(186, 505);
+            this.prevSlotButton.Location = new System.Drawing.Point(181, 505);
             this.prevSlotButton.Margin = new System.Windows.Forms.Padding(4);
             this.prevSlotButton.Name = "prevSlotButton";
             this.prevSlotButton.Size = new System.Drawing.Size(143, 40);
@@ -4100,7 +4088,7 @@
             // nextSlotButton
             // 
             this.nextSlotButton.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.nextSlotButton.Location = new System.Drawing.Point(553, 505);
+            this.nextSlotButton.Location = new System.Drawing.Point(592, 505);
             this.nextSlotButton.Margin = new System.Windows.Forms.Padding(4);
             this.nextSlotButton.Name = "nextSlotButton";
             this.nextSlotButton.Size = new System.Drawing.Size(145, 40);
@@ -4113,7 +4101,7 @@
             // 
             this.ApplyButton.Enabled = false;
             this.ApplyButton.ForeColor = System.Drawing.Color.Black;
-            this.ApplyButton.Location = new System.Drawing.Point(601, 51);
+            this.ApplyButton.Location = new System.Drawing.Point(647, 51);
             this.ApplyButton.Margin = new System.Windows.Forms.Padding(4);
             this.ApplyButton.Name = "ApplyButton";
             this.ApplyButton.Size = new System.Drawing.Size(107, 28);
@@ -4125,7 +4113,7 @@
             // newSlotButton
             // 
             this.newSlotButton.ForeColor = System.Drawing.Color.Black;
-            this.newSlotButton.Location = new System.Drawing.Point(51, 505);
+            this.newSlotButton.Location = new System.Drawing.Point(46, 505);
             this.newSlotButton.Margin = new System.Windows.Forms.Padding(4);
             this.newSlotButton.Name = "newSlotButton";
             this.newSlotButton.Size = new System.Drawing.Size(126, 40);
@@ -4138,7 +4126,7 @@
             // 
             this.deleteSlotButton.ForeColor = System.Drawing.Color.Black;
             this.deleteSlotButton.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.deleteSlotButton.Location = new System.Drawing.Point(708, 505);
+            this.deleteSlotButton.Location = new System.Drawing.Point(747, 505);
             this.deleteSlotButton.Margin = new System.Windows.Forms.Padding(4);
             this.deleteSlotButton.Name = "deleteSlotButton";
             this.deleteSlotButton.Size = new System.Drawing.Size(131, 40);
@@ -4151,7 +4139,7 @@
             // 
             this.upIndicatorPanel.BackColor = System.Drawing.SystemColors.ButtonFace;
             this.upIndicatorPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.upIndicatorPanel.Location = new System.Drawing.Point(90, 46);
+            this.upIndicatorPanel.Location = new System.Drawing.Point(106, 46);
             this.upIndicatorPanel.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.upIndicatorPanel.Name = "upIndicatorPanel";
             this.upIndicatorPanel.Size = new System.Drawing.Size(34, 24);
@@ -4161,7 +4149,7 @@
             // 
             this.downIndicatorPanel.BackColor = System.Drawing.SystemColors.ButtonFace;
             this.downIndicatorPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.downIndicatorPanel.Location = new System.Drawing.Point(90, 99);
+            this.downIndicatorPanel.Location = new System.Drawing.Point(106, 99);
             this.downIndicatorPanel.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.downIndicatorPanel.Name = "downIndicatorPanel";
             this.downIndicatorPanel.Size = new System.Drawing.Size(34, 24);
@@ -4171,7 +4159,7 @@
             // 
             this.rightIndicatorPanel.BackColor = System.Drawing.SystemColors.ButtonFace;
             this.rightIndicatorPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.rightIndicatorPanel.Location = new System.Drawing.Point(126, 73);
+            this.rightIndicatorPanel.Location = new System.Drawing.Point(142, 73);
             this.rightIndicatorPanel.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.rightIndicatorPanel.Name = "rightIndicatorPanel";
             this.rightIndicatorPanel.Size = new System.Drawing.Size(34, 24);
@@ -4181,7 +4169,7 @@
             // 
             this.leftIndicatorPanel.BackColor = System.Drawing.SystemColors.ButtonFace;
             this.leftIndicatorPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.leftIndicatorPanel.Location = new System.Drawing.Point(53, 73);
+            this.leftIndicatorPanel.Location = new System.Drawing.Point(69, 73);
             this.leftIndicatorPanel.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.leftIndicatorPanel.Name = "leftIndicatorPanel";
             this.leftIndicatorPanel.Size = new System.Drawing.Size(34, 24);
@@ -4197,11 +4185,11 @@
             this.groupBox2.Controls.Add(this.upIndicatorPanel);
             this.groupBox2.Controls.Add(this.rightIndicatorPanel);
             this.groupBox2.Controls.Add(this.downIndicatorPanel);
-            this.groupBox2.Location = new System.Drawing.Point(612, 561);
+            this.groupBox2.Location = new System.Drawing.Point(630, 562);
             this.groupBox2.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Padding = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.groupBox2.Size = new System.Drawing.Size(222, 154);
+            this.groupBox2.Size = new System.Drawing.Size(248, 150);
             this.groupBox2.TabIndex = 75;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Stick-Direction";
@@ -4209,7 +4197,7 @@
             // label39
             // 
             this.label39.AutoSize = true;
-            this.label39.Location = new System.Drawing.Point(23, 77);
+            this.label39.Location = new System.Drawing.Point(39, 77);
             this.label39.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label39.Name = "label39";
             this.label39.Size = new System.Drawing.Size(27, 17);
@@ -4219,7 +4207,7 @@
             // label38
             // 
             this.label38.AutoSize = true;
-            this.label38.Location = new System.Drawing.Point(164, 77);
+            this.label38.Location = new System.Drawing.Point(180, 77);
             this.label38.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label38.Name = "label38";
             this.label38.Size = new System.Drawing.Size(36, 17);
@@ -4229,7 +4217,7 @@
             // label37
             // 
             this.label37.AutoSize = true;
-            this.label37.Location = new System.Drawing.Point(87, 125);
+            this.label37.Location = new System.Drawing.Point(101, 125);
             this.label37.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label37.Name = "label37";
             this.label37.Size = new System.Drawing.Size(41, 17);
@@ -4239,7 +4227,7 @@
             // label33
             // 
             this.label33.AutoSize = true;
-            this.label33.Location = new System.Drawing.Point(95, 29);
+            this.label33.Location = new System.Drawing.Point(111, 29);
             this.label33.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label33.Name = "label33";
             this.label33.Size = new System.Drawing.Size(24, 17);
@@ -4250,7 +4238,7 @@
             // 
             this.StoreButton.Enabled = false;
             this.StoreButton.ForeColor = System.Drawing.Color.Black;
-            this.StoreButton.Location = new System.Drawing.Point(716, 51);
+            this.StoreButton.Location = new System.Drawing.Point(762, 51);
             this.StoreButton.Margin = new System.Windows.Forms.Padding(4);
             this.StoreButton.Name = "StoreButton";
             this.StoreButton.Size = new System.Drawing.Size(118, 28);
@@ -4263,7 +4251,7 @@
             // 
             this.deleteAllIRButton.Enabled = false;
             this.deleteAllIRButton.ForeColor = System.Drawing.Color.Black;
-            this.deleteAllIRButton.Location = new System.Drawing.Point(488, 167);
+            this.deleteAllIRButton.Location = new System.Drawing.Point(522, 167);
             this.deleteAllIRButton.Margin = new System.Windows.Forms.Padding(4);
             this.deleteAllIRButton.Name = "deleteAllIRButton";
             this.deleteAllIRButton.Size = new System.Drawing.Size(153, 40);
@@ -4271,6 +4259,89 @@
             this.deleteAllIRButton.Text = "Delete all commands";
             this.deleteAllIRButton.UseVisualStyleBackColor = true;
             this.deleteAllIRButton.Click += new System.EventHandler(this.deleteAllIRButton_Click);
+            // 
+            // GeneralTab
+            // 
+            this.GeneralTab.BackColor = System.Drawing.SystemColors.ButtonFace;
+            this.GeneralTab.Controls.Add(this.label55);
+            this.GeneralTab.Controls.Add(this.label51);
+            this.GeneralTab.Controls.Add(this.label50);
+            this.GeneralTab.Controls.Add(this.label43);
+            this.GeneralTab.Controls.Add(this.HIDComboBox);
+            this.GeneralTab.Controls.Add(this.label47);
+            this.GeneralTab.Controls.Add(this.orientationBox);
+            this.GeneralTab.Location = new System.Drawing.Point(4, 25);
+            this.GeneralTab.Name = "GeneralTab";
+            this.GeneralTab.Size = new System.Drawing.Size(834, 361);
+            this.GeneralTab.TabIndex = 7;
+            this.GeneralTab.Text = "General";
+            // 
+            // label43
+            // 
+            this.label43.AutoSize = true;
+            this.label43.Location = new System.Drawing.Point(113, 206);
+            this.label43.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label43.Name = "label43";
+            this.label43.Size = new System.Drawing.Size(151, 17);
+            this.label43.TabIndex = 153;
+            this.label43.Text = "USB / Bluetooth Mode:";
+            // 
+            // HIDComboBox
+            // 
+            this.HIDComboBox.Location = new System.Drawing.Point(284, 203);
+            this.HIDComboBox.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.HIDComboBox.Name = "HIDComboBox";
+            this.HIDComboBox.Size = new System.Drawing.Size(143, 24);
+            this.HIDComboBox.TabIndex = 152;
+            // 
+            // label47
+            // 
+            this.label47.AutoSize = true;
+            this.label47.Location = new System.Drawing.Point(109, 97);
+            this.label47.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label47.Name = "label47";
+            this.label47.Size = new System.Drawing.Size(182, 17);
+            this.label47.TabIndex = 151;
+            this.label47.Text = "Stick Orientation (degrees):";
+            // 
+            // orientationBox
+            // 
+            this.orientationBox.Location = new System.Drawing.Point(316, 94);
+            this.orientationBox.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.orientationBox.Name = "orientationBox";
+            this.orientationBox.Size = new System.Drawing.Size(107, 24);
+            this.orientationBox.TabIndex = 150;
+            // 
+            // label50
+            // 
+            this.label50.AutoSize = true;
+            this.label50.Location = new System.Drawing.Point(113, 241);
+            this.label50.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label50.Name = "label50";
+            this.label50.Size = new System.Drawing.Size(557, 17);
+            this.label50.TabIndex = 154;
+            this.label50.Text = "This setting defines if the mouse/keyboard activities are sent to USB, bluetooth " +
+                "or both ";
+            // 
+            // label51
+            // 
+            this.label51.AutoSize = true;
+            this.label51.Location = new System.Drawing.Point(109, 128);
+            this.label51.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label51.Name = "label51";
+            this.label51.Size = new System.Drawing.Size(373, 17);
+            this.label51.TabIndex = 155;
+            this.label51.Text = "This setting allows reversing / rotating the stick orientation";
+            // 
+            // label55
+            // 
+            this.label55.AutoSize = true;
+            this.label55.Location = new System.Drawing.Point(482, 127);
+            this.label55.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label55.Name = "label55";
+            this.label55.Size = new System.Drawing.Size(241, 17);
+            this.label55.TabIndex = 156;
+            this.label55.Text = "(useful for differnt  mounting options)";
             // 
             // FLipMouseGUI
             // 
@@ -4280,7 +4351,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoScroll = true;
             this.AutoSize = true;
-            this.ClientSize = new System.Drawing.Size(885, 732);
+            this.ClientSize = new System.Drawing.Size(921, 732);
             this.Controls.Add(this.StoreButton);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.deleteSlotButton);
@@ -4369,6 +4440,8 @@
             this.menuStrip1.PerformLayout();
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
+            this.GeneralTab.ResumeLayout(false);
+            this.GeneralTab.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -4679,9 +4752,15 @@
         private System.Windows.Forms.Label maxspeedLabel;
         private System.Windows.Forms.TrackBar maxspeedBar;
         private System.Windows.Forms.Label label49;
+        private System.Windows.Forms.Button deleteAllIRButton;
+        private System.Windows.Forms.TabPage GeneralTab;
+        private System.Windows.Forms.Label label43;
+        private System.Windows.Forms.ComboBox HIDComboBox;
         private System.Windows.Forms.Label label47;
         private System.Windows.Forms.ComboBox orientationBox;
-        private System.Windows.Forms.Button deleteAllIRButton;
+        private System.Windows.Forms.Label label55;
+        private System.Windows.Forms.Label label51;
+        private System.Windows.Forms.Label label50;
     }
 }
 

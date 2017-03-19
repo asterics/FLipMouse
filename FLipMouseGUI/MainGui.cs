@@ -90,6 +90,7 @@ namespace MouseApp2
                     case GUITYPE_KEYSELECT:
                     case GUITYPE_TEXTFIELD: actSettingString+=(" "+guiLink.tb.Text); break;
                     case GUITYPE_COMBO_ONLY: actSettingString += (" " + guiLink.cb.Text); break;
+                    case GUITYPE_COMBO_INDEX: actSettingString += (" " + guiLink.cb.SelectedIndex); break;
                     case GUITYPE_SLIDER: actSettingString += (" " + guiLink.tr.Value); break;
                     case GUITYPE_3RADIOBUTTONS: 
                         if (guiLink.rb1.Checked) actSettingString += (" 1"); 
@@ -155,6 +156,10 @@ namespace MouseApp2
                                     guiLink.tr.Value = Int32.Parse(strValue);
                                     guiLink.tl.Text = strValue; break;
                                 case GUITYPE_COMBO_ONLY: guiLink.cb.Text = settingString.Substring(6);
+                                    break;
+                                case GUITYPE_COMBO_INDEX: 
+                                    strValue = settingString.Substring(guiLink.cmd.Length + 1);
+                                    guiLink.cb.SelectedIndex = Int32.Parse(strValue);
                                     break;
                                 case GUITYPE_3RADIOBUTTONS: 
                                     strValue = settingString.Substring(guiLink.cmd.Length + 1);
@@ -280,6 +285,12 @@ namespace MouseApp2
             orientationBox.Items.Add("180");
             orientationBox.Items.Add("270");
             orientationBox.SelectedIndex = 0;
+
+            HIDComboBox.Items.Add("disable");
+            HIDComboBox.Items.Add("USB HID only");
+            HIDComboBox.Items.Add("Bluetooth HID only");
+            HIDComboBox.Items.Add("both (USB + BT)");
+            HIDComboBox.SelectedIndex = 2;
 
             displaySlot(0);
 

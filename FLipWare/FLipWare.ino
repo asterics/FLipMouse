@@ -73,7 +73,8 @@ struct slotGeneralSettings settings = {      // default settings valus, for type
 }; 
 
 
-char tmpstring[MAX_CMDLEN];
+uint8_t workingmem[WORKINGMEM_SIZE];     // working memory (command parser, IR-rec/play)
+
 char IRName[MAX_SLOTNAME_LEN];
 char slotName[MAX_SLOTNAME_LEN] = "empty";
 int EmptySlotAddress = 0;
@@ -130,7 +131,7 @@ void setup() {
 
    Wire.begin();
    pinMode(IR_SENSOR_PIN,INPUT);
-   analogWriteFrequency(IR_LED_PIN, 38000);
+   analogWriteFrequency(IR_LED_PIN, 38000);  // TBD: flexible carrier frequency for IR, not only 38kHz !
    
 
    pinMode(LED_PIN,OUTPUT);

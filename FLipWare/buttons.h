@@ -20,8 +20,6 @@
 #define _BUTTONS_H_
 
 // Constants and Macro definitions
-#define MAX_KEYSTRINGBUFFER_LEN 900  // maximum length for all keystring parameters
-
 #define NUMBER_OF_BUTTONS  19         // number of physical + virtual switches
 #define NUMBER_OF_PHYSICAL_BUTTONS 3  // number of physical switches
 #define NUMBER_OF_LEDS     3          // number of connected leds

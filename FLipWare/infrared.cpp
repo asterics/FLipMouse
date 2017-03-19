@@ -14,16 +14,13 @@
 
 */
 
-
-
-
 #include "FlipWare.h"
 
 //Time until the record command will be canceled
 #define IR_USER_TIMEOUT_MS 10000
-//Maximum count of edges for one command
-//Note: this value may be increased if your recorded command exceeds this value
-#define IR_EDGE_REC_MAX 250
+
+ // Maximum count of uint16_t edges for one IR-command
+ #define IR_EDGE_REC_MAX 250
 //minimum count of signal edges which are necessary to accept a command
 #define IR_EDGE_REC_MIN 5
 //maximum number of retries, if a signal record fails (edges < IR_EDGE_REC_MIN)
@@ -38,7 +35,7 @@ uint32_t edge_timeout = 10000UL;  // timeout for IR code edge length in microsec
 //current edge count
 uint8_t edges;
 //array of the time difference between the edges
-uint16_t timings[IR_EDGE_REC_MAX];
+uint16_t timings [IR_EDGE_REC_MAX];
 
 /**
  * Record an infrared remote command with a given name.
@@ -56,7 +53,7 @@ void record_IR_command(char * name)
 	uint8_t i;
 	uint8_t toggle = 1;
 	uint8_t wait = 1;
-	
+  
 	//retry loop, it is ended at the last statement
 	for(uint8_t retry=IR_MAX_RETRIES; retry>=0; retry--)
 	{
@@ -70,23 +67,22 @@ void record_IR_command(char * name)
 			now = millis();
 			duration = now - prev; //calculate the difference
 			
-			//if it took longer than the user timeout (a few seconds)
-			//cancel the record
+			//cancel recording if takes longer than the user timeout
 			if(duration >= IR_USER_TIMEOUT_MS)
 			{
-				Serial.println(F("IR_TIMEOUT: User timeout"));
+				Serial.println("IR_TIMEOUT: User timeout");
 				return;
 			} 
 			//check if something happens on the IR input pin
 			else if(!digitalRead(IR_SENSOR_PIN))
 			{
-				if(DebugOutput == DEBUG_FULLOUTPUT) { Serial.println(F("IR: Start condition")); }
+				if(DebugOutput == DEBUG_FULLOUTPUT) { Serial.println("IR: Start condition"); }
 				//cancel while loop by clearing wait flag
 				wait = 0;
 			}
 		}
 		
-		//start the record...
+		//start the recording...
 		
 		//record for a maximum of IR_EDGE_REC_MAX edges
 		for(i=0; i<IR_EDGE_REC_MAX; i++)
@@ -105,10 +101,10 @@ void record_IR_command(char * name)
 				//is the edge timeout over?
 				if(duration >= edge_timeout) 
 				{
-					if(DebugOutput == DEBUG_FULLOUTPUT) { Serial.println(F("IR_TIMEOUT: Edge timeout")); }
+					if(DebugOutput == DEBUG_FULLOUTPUT) { Serial.println("IR_TIMEOUT: Edge timeout"); }
 					//cancel the wait loop
 					wait = 0;
-					//cancel the edge record loop and save the current edges
+					//cancel the edge recording loop and save the current edges
 					edges = i;
 					i = IR_EDGE_REC_MAX;
 				}
@@ -132,7 +128,7 @@ void record_IR_command(char * name)
 		if(retry == 1)
 		{
 			//send a message and return (no command is stored)
-			Serial.println(F("IR_TIMEOUT: Retries reached"));
+			Serial.println("IR_TIMEOUT: Retries reached");
 			return;
 		}
 	}
@@ -155,7 +151,7 @@ void record_IR_command(char * name)
 	}
 	
 	//return the recorded command name and the edge count
-	Serial.print(F("IR: recorded "));
+	Serial.print("IR: recorded ");
 	Serial.print(name);
 	Serial.print("/");
 	Serial.println(edges);
@@ -197,7 +193,7 @@ void play_IR_command(char * name)
 	//no edges, no command -> cancel
 	if(edges == 0)
 	{
-		if(DebugOutput == DEBUG_FULLOUTPUT) Serial.println(F("No IR command found"));
+		if(DebugOutput == DEBUG_FULLOUTPUT) Serial.println("No IR command found");
 		return;
 	}
 	
@@ -256,7 +252,7 @@ void play_IR_command(char * name)
 	
 	if(DebugOutput == DEBUG_FULLOUTPUT) 
 	{
-		Serial.print(F("IR: play "));
+		Serial.print("IR: play ");
 		Serial.print(name);
 		Serial.print("/");
 		Serial.println(IRName);
@@ -266,6 +262,10 @@ void play_IR_command(char * name)
 	digitalWrite(IR_LED_PIN,LOW);	
 }
 
+void wipe_IR_commands()
+{
+   deleteIRCommand(0);
+}
 
 void set_IR_timeout(uint16_t tout_ms)
 {

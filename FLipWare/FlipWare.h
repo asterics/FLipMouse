@@ -56,10 +56,11 @@
 //  V2.0: extended AT command set, TeensyLC support, external EEPROM
 //  V1.0: extended AT command set, GUI compatibility
 
+#define WORKINGMEM_SIZE    400        // reserved RAM for working memory (command parser, IR-rec/play)
 #define MAX_SLOTS          7          // maximum number of EEPROM memory slots
-#define MAX_KEYSTRING_LEN 250         // maximum length for key identifiers / keyboard text
+#define MAX_KEYSTRING_LEN (WORKINGMEM_SIZE-3)   // maximum length for AT command parameters
 #define MAX_SLOTNAME_LEN  15          // maximum length for a slotname
-#define MAX_CMDLEN MAX_KEYSTRING_LEN+3
+#define MAX_KEYSTRINGBUFFER_LEN 700   // maximum length for all string parameters of one slot
 
 #define PARTYPE_NONE  0
 #define PARTYPE_UINT  1
@@ -86,7 +87,7 @@
 #define DEBUG_NOOUTPUT 0
 #define DEBUG_FULLOUTPUT 1
 
-
+extern uint8_t workingmem[WORKINGMEM_SIZE];    // working memory  (command parser, IR-rec/play)
 
 struct slotGeneralSettings {
   uint8_t  stickMode;  // alternative (0) mouse (1) or joystick (2,3,4) mode
@@ -125,8 +126,6 @@ extern struct slotGeneralSettings settings;
 extern char slotName[MAX_SLOTNAME_LEN];
 extern char IRName[MAX_SLOTNAME_LEN];
 extern int EmptySlotAddress;
-extern char tmpstring[MAX_CMDLEN];
-
 
 extern const struct atCommandType atCommands[];
 extern int8_t  input_map[NUMBER_OF_PHYSICAL_BUTTONS];
@@ -163,6 +162,7 @@ void play_IR_command(char * name);
 void list_IR_commands();
 void delete_IR_command(char * name);
 void set_IR_timeout(uint16_t ms);
+void wipe_IR_commands();
 
 //set the correct strcpy/strcmp functions for TeensyLC / ARM)
 #define strcpy_FM   strcpy

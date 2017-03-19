@@ -39,6 +39,7 @@ const struct atCommandType atCommands[] PROGMEM = {
     {"JT"  , PARTYPE_INT  },  {"JS"  , PARTYPE_INT  }, {"JP"  , PARTYPE_INT  }, {"JR"  , PARTYPE_INT  },
     {"JH"  , PARTYPE_INT  },  {"IT"  , PARTYPE_UINT  },{"KH"  , PARTYPE_STRING},{"MS"  , PARTYPE_UINT },
     {"AC"  , PARTYPE_UINT },  {"MA"  , PARTYPE_STRING},{"WA"  , PARTYPE_UINT  },{"RO"  , PARTYPE_UINT },
+    {"IW"  , PARTYPE_NONE },
 };
 
 void printCurrentSlot()
@@ -431,6 +432,9 @@ void performCommand (uint8_t cmd, int16_t par1, char * keystring, int8_t periodi
             break;
         case CMD_IT:
             set_IR_timeout(par1);
+            break;
+        case CMD_IW:
+            wipe_IR_commands();
             break;
 
         case CMD_E2:

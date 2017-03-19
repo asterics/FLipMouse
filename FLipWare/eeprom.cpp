@@ -539,13 +539,13 @@ void readFromEEPROMSlotNumber(uint8_t nr, bool search)
 		//check for additional payload
 		if(readEEPROM(address) != '\0') {
 			//load additional payload
-			p = (uint8_t *)tmpstring;
+			p = (uint8_t *)workingmem;
 			for(uint16_t t = 0; t<MAX_KEYSTRING_LEN;t++)
 			{
 				*(p+t) = readEEPROM(address++);
 				if(*(p+t) == 0) break;
 			}
-      storeKeystringButton(i,tmpstring);
+      storeKeystringButton(i,(char *) workingmem);
 		} else {
 			//jump to next slot
 			address++;
@@ -614,7 +614,8 @@ void deleteIRCommand(char * name)
 			}
 		}
 	} else {
-		if(eepromDebugLevel==EEPROM_BASIC_DEBUG) Serial.println("Deleting all IR slots");
+//		if(eepromDebugLevel==EEPROM_BASIC_DEBUG) 
+		  Serial.println("Deleting all IR slots");
 		for(uint8_t i = 0; i < EEPROM_COUNT_IRCOMMAND; i++) 
 		{
 			if(slotAdresses.startIRAddress[i] > sizeof(storageHeader))
@@ -869,7 +870,8 @@ void bootstrapSlotAddresses()
      
      for(uint16_t i = 0; i < sizeof(storageHeader); i++)
         writeEEPROM(i, 0xff); 
-       
+
+     deleteIRCommand(0);                   // initialize IR command address table  
      saveToEEPROMSlotNumber(0,"default");  // save default settings to first slot
   }
   

@@ -37,9 +37,6 @@ uint8_t activeMouseButtons = 0;
  */
 void mouseBT(uint8_t x, uint8_t y, uint8_t scroll)
 {
-	//test if the external serial interface is available
-	if(bt_available)
-	{
 		if(DebugOutput == DEBUG_FULLOUTPUT)
 		{
 			Serial.println("BT mouse actions:");
@@ -78,12 +75,6 @@ void mouseBT(uint8_t x, uint8_t y, uint8_t scroll)
 		//some additional bytes...
 		Serial_AUX.write((uint8_t)0x00);
 		Serial_AUX.write((uint8_t)0x00);
-	} else {
-		if(DebugOutput == DEBUG_FULLOUTPUT) 
-		{
-			Serial.println("BT not available");
-		}
-	}
 }
 
 /*
@@ -120,9 +111,6 @@ void mouseBTRelease(uint8_t mousebutton)
  */
 void sendBTKeyboardReport() 
 {
-	//test if the external serial interface is available
-	if(bt_available)
-	{
 		if(DebugOutput == DEBUG_FULLOUTPUT)
 		{
 			Serial.println("BT keyboard actions:");
@@ -145,7 +133,6 @@ void sendBTKeyboardReport()
 		Serial_AUX.write(activeKeyCodes[3]);   	//key 4
 		Serial_AUX.write(activeKeyCodes[4]);   	//key 5
 		Serial_AUX.write(activeKeyCodes[5]);   	//key 6
-	}
 }
 
 /*
@@ -282,6 +269,7 @@ void initBluetooth()
 	//test for the Bluefruit version string
 	if(reply.indexOf("Adafruit Bluefruit HID") != -1)
 	{
+    bt_available=1;
 		//if debug output is active, print out info and version string
 		if(DebugOutput==DEBUG_FULLOUTPUT)
 		{

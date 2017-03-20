@@ -47,22 +47,22 @@ void mouseMove(int x, int y)
   if (x) {
     while (x<-128) { 
       if (settings.bt & 1) 
-		Mouse.move(-128, 0); 
-	  if ((settings.bt & 2) && (isBluetoothAvailable()))  
-	    mouseBT(-128,0,0);
-	  x+=128; 
+		     Mouse.move(-128, 0); 
+	    if ((settings.bt & 2) && (isBluetoothAvailable()))  
+	       mouseBT(-128,0,0);
+	    x+=128; 
 	}
-    while (x>127) { 
-      if (settings.bt & 1) 
-		Mouse.move(127, 0); 
+  while (x>127) { 
+    if (settings.bt & 1) 
+	  	Mouse.move(127, 0); 
 	  if ((settings.bt & 2) && (isBluetoothAvailable())) 
 	    mouseBT(127,0,0);
 		x-=127; 
 	}
-    if (settings.bt & 1) 
-		Mouse.move(x, 0);
+  if (settings.bt & 1) 
+	  Mouse.move(x, 0);
 	if ((settings.bt & 2) && (isBluetoothAvailable()))
-	    mouseBT(x,0,0);
+	  mouseBT(x,0,0);
   }
   
   if (y) {
@@ -73,14 +73,14 @@ void mouseMove(int x, int y)
 	    mouseBT(0,-128,0);
 	  y+=128; 
 	}
-    while (y>127) { 
-      if (settings.bt & 1) 
+  while (y>127) { 
+    if (settings.bt & 1) 
 		Mouse.move(0, 127); 
 	  if ((settings.bt & 2) && (isBluetoothAvailable())) 
 	    mouseBT(0,127,0);
 		y-=127; 
 	}
-    if (settings.bt & 1) 
+  if (settings.bt & 1) 
 		Mouse.move(0, y);
 	if ((settings.bt & 2) && (isBluetoothAvailable()))
 	    mouseBT(0,y,0);

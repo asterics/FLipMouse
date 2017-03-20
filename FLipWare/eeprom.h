@@ -51,7 +51,7 @@
 #include <EEPROM.h>
 
 #define EEPROM_COUNT_SLOTS 7
-#define EEPROM_COUNT_IRCOMMAND 64
+#define EEPROM_COUNT_IRCOMMAND 63
 #define EEPROM_MAX_ADDRESS 0x7FFF
 
 
@@ -77,6 +77,7 @@ extern uint8_t eepromDebugLevel;
 struct storageHeader {
 	uint16_t	startSlotAddress[EEPROM_COUNT_SLOTS];
 	uint16_t	startIRAddress[EEPROM_COUNT_IRCOMMAND];
+  uint16_t  versionID;
 	uint16_t	endSlotAddress;
 };
 

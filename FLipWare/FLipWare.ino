@@ -345,11 +345,13 @@ void makeTone(uint8_t kind, uint8_t param)
 			tone(tonePin, 200, 400);
             break;
 		case TONE_CHANGESLOT:
-      toneHeight=2000+200*param;
-      toneOnTime=150;
-      toneOffTime=50;
-      toneCount=param+1;
-            break;
+          if (!toneCount) {
+            toneHeight=2000+200*param;
+            toneOnTime=150;
+            toneOffTime=50;
+            toneCount=param+1;
+          }
+          break;
 		case TONE_ENTER_STRONGSIP:
   		tone(tonePin, 300, 200); 
   				break;

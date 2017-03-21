@@ -125,7 +125,7 @@
    KEY_LEFT_BRACE   KEY_RIGHT_BRACE   KEY_QUOTE   KEY_TILDE
  
    KEY_RIGHT   KEY_LEFT       KEY_DOWN        KEY_UP      KEY_ENTER    KEY_ESC   KEY_BACKSPACE   KEY_TAB	
-   KEY_HOME    KEY_PAGE_UP    KEY_PAGE_DOWN   KEY_DELETE  KEY_INSERT   KEY_END	  KEY_NUM_LOCK    KEY_SCROLL_LOCK
+   KEY_HOME    KEY_PAGE_UP    KEY_PAGE_DOWN   KEY_DELETE  KEY_INSERT   KEY_END	  KEY_NUM_LOCK   KEY_SCROLL_LOCK
    KEY_SPACE   KEY_CAPS_LOCK  KEY_PAUSE       KEY_SHIFT   KEY_CTRL     KEY_ALT   KEY_RIGHT_ALT   KEY_GUI 
    KEY_RIGHT_GUI
 
@@ -254,7 +254,7 @@ namespace MouseApp2
             commandGuiLinks.Add(new CommandGuiLink("AT MS", maxspeedBar, maxspeedLabel, "50"));
             commandGuiLinks.Add(new CommandGuiLink("AT AC", accelerationBar, accelerationLabel, "50"));
             commandGuiLinks.Add(new CommandGuiLink("AT RO", orientationBox, "0"));
-            commandGuiLinks.Add(new CommandGuiLink("AT BT", HIDComboBox, 3));
+            commandGuiLinks.Add(new CommandGuiLink("AT BT", HIDComboBox, 1));
 
             commandGuiLinks.Add(new CommandGuiLink("AT TS", sipThresholdBar, sipThresholdLabel, "500"));
             commandGuiLinks.Add(new CommandGuiLink("AT TP", puffThresholdBar, puffThresholdLabel, "525"));

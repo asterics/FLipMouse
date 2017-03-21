@@ -297,6 +297,7 @@
             this.downGainBar = new System.Windows.Forms.TrackBar();
             this.upGainBar = new System.Windows.Forms.TrackBar();
             this.IRTab = new System.Windows.Forms.TabPage();
+            this.deleteAllIRButton = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.irTimeoutBox = new System.Windows.Forms.TextBox();
             this.irCommandBox = new System.Windows.Forms.ComboBox();
@@ -305,6 +306,14 @@
             this.playIRButton = new System.Windows.Forms.Button();
             this.recordIRButton = new System.Windows.Forms.Button();
             this.label24 = new System.Windows.Forms.Label();
+            this.GeneralTab = new System.Windows.Forms.TabPage();
+            this.label55 = new System.Windows.Forms.Label();
+            this.label51 = new System.Windows.Forms.Label();
+            this.label50 = new System.Windows.Forms.Label();
+            this.label43 = new System.Windows.Forms.Label();
+            this.HIDComboBox = new System.Windows.Forms.ComboBox();
+            this.label47 = new System.Windows.Forms.Label();
+            this.orientationBox = new System.Windows.Forms.ComboBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.activityLogTextbox = new System.Windows.Forms.RichTextBox();
             this.slotNames = new System.Windows.Forms.ComboBox();
@@ -333,15 +342,6 @@
             this.label37 = new System.Windows.Forms.Label();
             this.label33 = new System.Windows.Forms.Label();
             this.StoreButton = new System.Windows.Forms.Button();
-            this.deleteAllIRButton = new System.Windows.Forms.Button();
-            this.GeneralTab = new System.Windows.Forms.TabPage();
-            this.label43 = new System.Windows.Forms.Label();
-            this.HIDComboBox = new System.Windows.Forms.ComboBox();
-            this.label47 = new System.Windows.Forms.Label();
-            this.orientationBox = new System.Windows.Forms.ComboBox();
-            this.label50 = new System.Windows.Forms.Label();
-            this.label51 = new System.Windows.Forms.Label();
-            this.label55 = new System.Windows.Forms.Label();
             this.tabControl.SuspendLayout();
             this.LipmouseTab.SuspendLayout();
             this.singlePanel.SuspendLayout();
@@ -391,10 +391,10 @@
             ((System.ComponentModel.ISupportInitialize)(this.downGainBar)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.upGainBar)).BeginInit();
             this.IRTab.SuspendLayout();
+            this.GeneralTab.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             this.groupBox2.SuspendLayout();
-            this.GeneralTab.SuspendLayout();
             this.SuspendLayout();
             // 
             // serialPort1
@@ -3873,6 +3873,19 @@
             this.IRTab.TabIndex = 6;
             this.IRTab.Text = "IR-Remote";
             // 
+            // deleteAllIRButton
+            // 
+            this.deleteAllIRButton.Enabled = false;
+            this.deleteAllIRButton.ForeColor = System.Drawing.Color.Black;
+            this.deleteAllIRButton.Location = new System.Drawing.Point(522, 167);
+            this.deleteAllIRButton.Margin = new System.Windows.Forms.Padding(4);
+            this.deleteAllIRButton.Name = "deleteAllIRButton";
+            this.deleteAllIRButton.Size = new System.Drawing.Size(153, 40);
+            this.deleteAllIRButton.TabIndex = 147;
+            this.deleteAllIRButton.Text = "Delete all commands";
+            this.deleteAllIRButton.UseVisualStyleBackColor = true;
+            this.deleteAllIRButton.Click += new System.EventHandler(this.deleteAllIRButton_Click);
+            // 
             // label1
             // 
             this.label1.AutoSize = true;
@@ -3959,6 +3972,89 @@
             this.label24.Size = new System.Drawing.Size(365, 17);
             this.label24.TabIndex = 114;
             this.label24.Text = "Infrared command name (enter new name for recording):";
+            // 
+            // GeneralTab
+            // 
+            this.GeneralTab.BackColor = System.Drawing.SystemColors.ButtonFace;
+            this.GeneralTab.Controls.Add(this.label55);
+            this.GeneralTab.Controls.Add(this.label51);
+            this.GeneralTab.Controls.Add(this.label50);
+            this.GeneralTab.Controls.Add(this.label43);
+            this.GeneralTab.Controls.Add(this.HIDComboBox);
+            this.GeneralTab.Controls.Add(this.label47);
+            this.GeneralTab.Controls.Add(this.orientationBox);
+            this.GeneralTab.Location = new System.Drawing.Point(4, 25);
+            this.GeneralTab.Name = "GeneralTab";
+            this.GeneralTab.Size = new System.Drawing.Size(834, 361);
+            this.GeneralTab.TabIndex = 7;
+            this.GeneralTab.Text = "General";
+            // 
+            // label55
+            // 
+            this.label55.AutoSize = true;
+            this.label55.Location = new System.Drawing.Point(482, 127);
+            this.label55.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label55.Name = "label55";
+            this.label55.Size = new System.Drawing.Size(249, 17);
+            this.label55.TabIndex = 156;
+            this.label55.Text = "(useful for different  mounting options)";
+            // 
+            // label51
+            // 
+            this.label51.AutoSize = true;
+            this.label51.Location = new System.Drawing.Point(109, 128);
+            this.label51.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label51.Name = "label51";
+            this.label51.Size = new System.Drawing.Size(373, 17);
+            this.label51.TabIndex = 155;
+            this.label51.Text = "This setting allows reversing / rotating the stick orientation";
+            // 
+            // label50
+            // 
+            this.label50.AutoSize = true;
+            this.label50.Location = new System.Drawing.Point(113, 241);
+            this.label50.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label50.Name = "label50";
+            this.label50.Size = new System.Drawing.Size(557, 17);
+            this.label50.TabIndex = 154;
+            this.label50.Text = "This setting defines if the mouse/keyboard activities are sent to USB, bluetooth " +
+                "or both ";
+            // 
+            // label43
+            // 
+            this.label43.AutoSize = true;
+            this.label43.Location = new System.Drawing.Point(113, 206);
+            this.label43.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label43.Name = "label43";
+            this.label43.Size = new System.Drawing.Size(151, 17);
+            this.label43.TabIndex = 153;
+            this.label43.Text = "USB / Bluetooth Mode:";
+            // 
+            // HIDComboBox
+            // 
+            this.HIDComboBox.Location = new System.Drawing.Point(284, 203);
+            this.HIDComboBox.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.HIDComboBox.Name = "HIDComboBox";
+            this.HIDComboBox.Size = new System.Drawing.Size(143, 24);
+            this.HIDComboBox.TabIndex = 152;
+            // 
+            // label47
+            // 
+            this.label47.AutoSize = true;
+            this.label47.Location = new System.Drawing.Point(109, 97);
+            this.label47.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label47.Name = "label47";
+            this.label47.Size = new System.Drawing.Size(182, 17);
+            this.label47.TabIndex = 151;
+            this.label47.Text = "Stick Orientation (degrees):";
+            // 
+            // orientationBox
+            // 
+            this.orientationBox.Location = new System.Drawing.Point(316, 94);
+            this.orientationBox.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.orientationBox.Name = "orientationBox";
+            this.orientationBox.Size = new System.Drawing.Size(107, 24);
+            this.orientationBox.TabIndex = 150;
             // 
             // groupBox1
             // 
@@ -4247,102 +4343,6 @@
             this.StoreButton.UseVisualStyleBackColor = true;
             this.StoreButton.Click += new System.EventHandler(this.StoreButton_Click);
             // 
-            // deleteAllIRButton
-            // 
-            this.deleteAllIRButton.Enabled = false;
-            this.deleteAllIRButton.ForeColor = System.Drawing.Color.Black;
-            this.deleteAllIRButton.Location = new System.Drawing.Point(522, 167);
-            this.deleteAllIRButton.Margin = new System.Windows.Forms.Padding(4);
-            this.deleteAllIRButton.Name = "deleteAllIRButton";
-            this.deleteAllIRButton.Size = new System.Drawing.Size(153, 40);
-            this.deleteAllIRButton.TabIndex = 147;
-            this.deleteAllIRButton.Text = "Delete all commands";
-            this.deleteAllIRButton.UseVisualStyleBackColor = true;
-            this.deleteAllIRButton.Click += new System.EventHandler(this.deleteAllIRButton_Click);
-            // 
-            // GeneralTab
-            // 
-            this.GeneralTab.BackColor = System.Drawing.SystemColors.ButtonFace;
-            this.GeneralTab.Controls.Add(this.label55);
-            this.GeneralTab.Controls.Add(this.label51);
-            this.GeneralTab.Controls.Add(this.label50);
-            this.GeneralTab.Controls.Add(this.label43);
-            this.GeneralTab.Controls.Add(this.HIDComboBox);
-            this.GeneralTab.Controls.Add(this.label47);
-            this.GeneralTab.Controls.Add(this.orientationBox);
-            this.GeneralTab.Location = new System.Drawing.Point(4, 25);
-            this.GeneralTab.Name = "GeneralTab";
-            this.GeneralTab.Size = new System.Drawing.Size(834, 361);
-            this.GeneralTab.TabIndex = 7;
-            this.GeneralTab.Text = "General";
-            // 
-            // label43
-            // 
-            this.label43.AutoSize = true;
-            this.label43.Location = new System.Drawing.Point(113, 206);
-            this.label43.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.label43.Name = "label43";
-            this.label43.Size = new System.Drawing.Size(151, 17);
-            this.label43.TabIndex = 153;
-            this.label43.Text = "USB / Bluetooth Mode:";
-            // 
-            // HIDComboBox
-            // 
-            this.HIDComboBox.Location = new System.Drawing.Point(284, 203);
-            this.HIDComboBox.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.HIDComboBox.Name = "HIDComboBox";
-            this.HIDComboBox.Size = new System.Drawing.Size(143, 24);
-            this.HIDComboBox.TabIndex = 152;
-            // 
-            // label47
-            // 
-            this.label47.AutoSize = true;
-            this.label47.Location = new System.Drawing.Point(109, 97);
-            this.label47.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.label47.Name = "label47";
-            this.label47.Size = new System.Drawing.Size(182, 17);
-            this.label47.TabIndex = 151;
-            this.label47.Text = "Stick Orientation (degrees):";
-            // 
-            // orientationBox
-            // 
-            this.orientationBox.Location = new System.Drawing.Point(316, 94);
-            this.orientationBox.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.orientationBox.Name = "orientationBox";
-            this.orientationBox.Size = new System.Drawing.Size(107, 24);
-            this.orientationBox.TabIndex = 150;
-            // 
-            // label50
-            // 
-            this.label50.AutoSize = true;
-            this.label50.Location = new System.Drawing.Point(113, 241);
-            this.label50.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.label50.Name = "label50";
-            this.label50.Size = new System.Drawing.Size(557, 17);
-            this.label50.TabIndex = 154;
-            this.label50.Text = "This setting defines if the mouse/keyboard activities are sent to USB, bluetooth " +
-                "or both ";
-            // 
-            // label51
-            // 
-            this.label51.AutoSize = true;
-            this.label51.Location = new System.Drawing.Point(109, 128);
-            this.label51.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.label51.Name = "label51";
-            this.label51.Size = new System.Drawing.Size(373, 17);
-            this.label51.TabIndex = 155;
-            this.label51.Text = "This setting allows reversing / rotating the stick orientation";
-            // 
-            // label55
-            // 
-            this.label55.AutoSize = true;
-            this.label55.Location = new System.Drawing.Point(482, 127);
-            this.label55.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.label55.Name = "label55";
-            this.label55.Size = new System.Drawing.Size(241, 17);
-            this.label55.TabIndex = 156;
-            this.label55.Text = "(useful for differnt  mounting options)";
-            // 
             // FLipMouseGUI
             // 
             this.AccessibleDescription = "FlipMouseGUI";
@@ -4435,13 +4435,13 @@
             ((System.ComponentModel.ISupportInitialize)(this.upGainBar)).EndInit();
             this.IRTab.ResumeLayout(false);
             this.IRTab.PerformLayout();
+            this.GeneralTab.ResumeLayout(false);
+            this.GeneralTab.PerformLayout();
             this.groupBox1.ResumeLayout(false);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
-            this.GeneralTab.ResumeLayout(false);
-            this.GeneralTab.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 

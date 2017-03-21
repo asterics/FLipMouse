@@ -117,12 +117,19 @@
    KEY_M   KEY_N   KEY_O   KEY_P    KEY_Q   KEY_R   KEY_S   KEY_T   KEY_U   KEY_V    KEY_W    KEY_X 
    KEY_Y   KEY_Z   KEY_1   KEY_2    KEY_3   KEY_4   KEY_5   KEY_6   KEY_7   KEY_8    KEY_9    KEY_0
    KEY_F1  KEY_F2  KEY_F3  KEY_F4   KEY_F5  KEY_F6  KEY_F7  KEY_F8  KEY_F9  KEY_F10  KEY_F11  KEY_F12	
-    
+   KEY_F13 KEY_F14 KEY_F15 KEY_F16  KEY_F17 KEY_F18 KEY_F19 KEY_F20 KEY_F21 KEY_F22  KEY_F23  KEY_F24
+ 
+   KEYPAD_1   KEYPAD_2   KEYPAD_3   KEYPAD_4    KEYPAD_5   KEYPAD_6   KEYPAD_7   KEYPAD_8   KEYPAD_9   KEYPAD_0
+   KEYPAD_PERIOD   KEYPAD_SLASH   KEYPAD_ASTERIX   KEYPAD_MINUS   KEYPAD_PLUS  KEYPAD_ENTER
+   KEY_MINUS    KEY_EQUAL   KEY_COMMA   KEY_PERIOD   KEY_SLASH     KEY_BACKSLASH    KEY_MENU
+   KEY_LEFT_BRACE   KEY_RIGHT_BRACE   KEY_QUOTE   KEY_TILDE
+ 
    KEY_RIGHT   KEY_LEFT       KEY_DOWN        KEY_UP      KEY_ENTER    KEY_ESC   KEY_BACKSPACE   KEY_TAB	
    KEY_HOME    KEY_PAGE_UP    KEY_PAGE_DOWN   KEY_DELETE  KEY_INSERT   KEY_END	  KEY_NUM_LOCK    KEY_SCROLL_LOCK
    KEY_SPACE   KEY_CAPS_LOCK  KEY_PAUSE       KEY_SHIFT   KEY_CTRL     KEY_ALT   KEY_RIGHT_ALT   KEY_GUI 
    KEY_RIGHT_GUI
-    
+
+  
 */
 
 
@@ -279,14 +286,19 @@ namespace MouseApp2
             commandGuiLinks.Add(new CommandGuiLink("AT BM 19", StrongPuffRightFunctionBox, StrongPuffRightParameterText, StrongPuffRightNumericParameter, "AT NC"));
         }
 
-        String[] keyOptions = {    "Clear Keycodes!", "KEY_A","KEY_B","KEY_C","KEY_D","KEY_E","KEY_F","KEY_G","KEY_H","KEY_I","KEY_J","KEY_K","KEY_L",
+        String[] keyOptions = {    "Clear Keycodes!","KEY_SHIFT", "KEY_CTRL", "KEY_ALT","KEY_RIGHT_ALT","KEY_GUI","KEY_RIGHT_GUI",
+                                   "KEY_A","KEY_B","KEY_C","KEY_D","KEY_E","KEY_F","KEY_G","KEY_H","KEY_I","KEY_J","KEY_K","KEY_L",
                                    "KEY_M","KEY_N","KEY_O","KEY_P","KEY_Q","KEY_R","KEY_S","KEY_T","KEY_U","KEY_V","KEY_W","KEY_X",
                                    "KEY_Y","KEY_Z","KEY_1","KEY_2","KEY_3","KEY_4","KEY_5","KEY_6","KEY_7","KEY_8","KEY_9","KEY_0",
-                                   "KEY_F1","KEY_F2","KEY_F3","KEY_F4","KEY_F5","KEY_F6","KEY_F7","KEY_F8","KEY_F9","KEY_F10","KEY_F11","KEY_F12",	
-                                   "KEY_UP","KEY_DOWN","KEY_LEFT","KEY_RIGHT","KEY_SPACE","KEY_ENTER",
-                                   "KEY_ALT","KEY_BACKSPACE","KEY_CAPS_LOCK","KEY_CTRL","KEY_DELETE","KEY_END","KEY_ESC","KEY_GUI",
-                                   "KEY_HOME","KEY_INSERT","KEY_NUM_LOCK","KEY_PAGE_DOWN","KEY_PAGE_UP","KEY_PAUSE","KEY_RIGHT_ALT",
-                                   "KEY_RIGHT_GUI","KEY_SCROLL_LOCK","KEY_SHIFT","KEY_TAB", "KEY_SEMICOLON"
+                                   "KEY_F1","KEY_F2","KEY_F3","KEY_F4","KEY_F5","KEY_F6","KEY_F7","KEY_F8","KEY_F9","KEY_F10","KEY_F11","KEY_F12",
+	                               "KEY_F13","KEY_F14","KEY_F15","KEY_F16","KEY_F17","KEY_F18","KEY_F19","KEY_F20","KEY_F21","KEY_F22","KEY_F23","KEY_F24",
+                                   "KEY_UP","KEY_DOWN","KEY_LEFT","KEY_RIGHT","KEY_SPACE","KEY_ENTER","KEY_BACKSPACE","KEY_CAPS_LOCK","KEY_DELETE",
+                                   "KEY_END","KEY_ESC","KEY_HOME","KEY_INSERT","KEY_PAGE_DOWN","KEY_PAGE_UP","KEY_PAUSE","KEY_TAB",
+                                   "KEY_NUM_LOCK","KEY_SCROLL_LOCK","KEY_SEMICOLON","KEY_MINUS", "KEY_EQUAL","KEY_COMMA","KEY_PERIOD","KEY_SLASH",
+                                   "KEY_CAPS_LOCK", "KEY_BACKSLASH","KEY_LEFT_BRACE","KEY_RIGHT_BRACE","KEY_QUOTE","KEY_TILDE","KEY_MENU",
+                                   "KEYPAD_SLASH","KEYPAD_ASTERIX","KEYPAD_MINUS","KEYPAD_PLUS","KEYPAD_ENTER","KEYPAD_1","KEYPAD_2","KEYPAD_3","KEYPAD_4","KEYPAD_5",
+                                   "KEYPAD_6","KEYPAD_7","KEYPAD_8","KEYPAD_9","KEYPAD_0","KEYPAD_PERIOD",
+
                               };
 
         public void sendIDCommand()

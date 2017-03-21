@@ -158,6 +158,18 @@ void setKeyValues(char* text,  uint8_t keyAction)
     if (!strcmp(acttoken,"KEY_F10")) updateKey(KEY_F10, keyAction);
     if (!strcmp(acttoken,"KEY_F11")) updateKey(KEY_F11, keyAction);
     if (!strcmp(acttoken,"KEY_F12")) updateKey(KEY_F12, keyAction);
+    if (!strcmp(acttoken,"KEY_F13")) updateKey(KEY_F13, keyAction);
+    if (!strcmp(acttoken,"KEY_F14")) updateKey(KEY_F14, keyAction);
+    if (!strcmp(acttoken,"KEY_F15")) updateKey(KEY_F15, keyAction);
+    if (!strcmp(acttoken,"KEY_F16")) updateKey(KEY_F16, keyAction);
+    if (!strcmp(acttoken,"KEY_F17")) updateKey(KEY_F17, keyAction);
+    if (!strcmp(acttoken,"KEY_F18")) updateKey(KEY_F18, keyAction);
+    if (!strcmp(acttoken,"KEY_F19")) updateKey(KEY_F19, keyAction);
+    if (!strcmp(acttoken,"KEY_F20")) updateKey(KEY_F20, keyAction);
+    if (!strcmp(acttoken,"KEY_F21")) updateKey(KEY_F21, keyAction);
+    if (!strcmp(acttoken,"KEY_F22")) updateKey(KEY_F22, keyAction);
+    if (!strcmp(acttoken,"KEY_F23")) updateKey(KEY_F23, keyAction);
+    if (!strcmp(acttoken,"KEY_F24")) updateKey(KEY_F24, keyAction);
     if (!strcmp(acttoken,"KEY_INSERT")) updateKey(KEY_INSERT, keyAction);
     if (!strcmp(acttoken,"KEY_HOME")) updateKey(KEY_HOME, keyAction);
     if (!strcmp(acttoken,"KEY_PAGE_UP")) updateKey(KEY_PAGE_UP, keyAction);
@@ -201,13 +213,43 @@ void setKeyValues(char* text,  uint8_t keyAction)
     if (!strcmp(acttoken,"KEY_8")) updateKey(KEY_8, keyAction);
     if (!strcmp(acttoken,"KEY_9")) updateKey(KEY_9, keyAction);
     if (!strcmp(acttoken,"KEY_0")) updateKey(KEY_0, keyAction);
-    if (!strcmp(acttoken,"KEY_SEMICOLON")) updateKey(KEY_SEMICOLON, keyAction);
+
     
-    if (!strcmp(acttoken,"KEY_SCROLL_LOCK")) updateKey(KEY_SCROLL_LOCK, keyAction);
     if (!strcmp(acttoken,"KEY_PAUSE")) updateKey(KEY_PAUSE, keyAction);
+    if (!strcmp(acttoken,"KEY_SCROLL_LOCK")) updateKey(KEY_SCROLL_LOCK, keyAction);
     if (!strcmp(acttoken,"KEY_NUM_LOCK")) updateKey(KEY_NUM_LOCK, keyAction);
     if (!strcmp(acttoken,"KEY_PRINTSCREEN")) updateKey(KEY_PRINTSCREEN, keyAction);
 
+    if (!strcmp(acttoken,"KEY_SEMICOLON")) updateKey(KEY_SEMICOLON, keyAction);
+    if (!strcmp(acttoken,"KEY_COMMA")) updateKey(KEY_COMMA, keyAction);
+    if (!strcmp(acttoken,"KEY_PERIOD")) updateKey(KEY_PERIOD, keyAction);
+    if (!strcmp(acttoken,"KEY_MINUS")) updateKey(KEY_MINUS, keyAction);
+    if (!strcmp(acttoken,"KEY_EQUAL")) updateKey(KEY_EQUAL, keyAction);
+    if (!strcmp(acttoken,"KEY_SLASH")) updateKey(KEY_SLASH, keyAction);
+    if (!strcmp(acttoken,"KEY_BACKSLASH")) updateKey(KEY_BACKSLASH, keyAction);
+    if (!strcmp(acttoken,"KEY_LEFT_BRACE")) updateKey(KEY_LEFT_BRACE, keyAction);
+    if (!strcmp(acttoken,"KEY_RIGHT_BRACE")) updateKey(KEY_RIGHT_BRACE, keyAction);
+    if (!strcmp(acttoken,"KEY_QUOTE")) updateKey(KEY_QUOTE, keyAction);
+    if (!strcmp(acttoken,"KEY_TILDE")) updateKey(KEY_TILDE, keyAction);
+    if (!strcmp(acttoken,"KEY_MENU")) updateKey(KEY_MENU, keyAction);
+
+    if (!strcmp(acttoken,"KEYPAD_SLASH")) updateKey(KEYPAD_SLASH, keyAction);
+    if (!strcmp(acttoken,"KEYPAD_ASTERIX")) updateKey(KEYPAD_ASTERIX, keyAction);
+    if (!strcmp(acttoken,"KEYPAD_MINUS")) updateKey(KEYPAD_MINUS, keyAction);
+    if (!strcmp(acttoken,"KEYPAD_PLUS")) updateKey(KEYPAD_PLUS, keyAction);
+    if (!strcmp(acttoken,"KEYPAD_ENTER")) updateKey(KEYPAD_ENTER, keyAction);
+    if (!strcmp(acttoken,"KEYPAD_1")) updateKey(KEYPAD_1, keyAction);
+    if (!strcmp(acttoken,"KEYPAD_2")) updateKey(KEYPAD_2, keyAction);
+    if (!strcmp(acttoken,"KEYPAD_3")) updateKey(KEYPAD_3, keyAction);
+    if (!strcmp(acttoken,"KEYPAD_4")) updateKey(KEYPAD_4, keyAction);
+    if (!strcmp(acttoken,"KEYPAD_5")) updateKey(KEYPAD_5, keyAction);
+    if (!strcmp(acttoken,"KEYPAD_6")) updateKey(KEYPAD_6, keyAction);
+    if (!strcmp(acttoken,"KEYPAD_7")) updateKey(KEYPAD_7, keyAction);
+    if (!strcmp(acttoken,"KEYPAD_8")) updateKey(KEYPAD_8, keyAction);
+    if (!strcmp(acttoken,"KEYPAD_9")) updateKey(KEYPAD_9, keyAction);
+    if (!strcmp(acttoken,"KEYPAD_0")) updateKey(KEYPAD_0, keyAction);
+    if (!strcmp(acttoken,"KEYPAD_PERIOD")) updateKey(KEYPAD_PERIOD, keyAction);
+    
     acttoken = strtok(NULL," ");
   }
 }

@@ -45,7 +45,7 @@ uint8_t get_int(char * str, int16_t * result)
     if (*str =='-') {fact=-1; str++;} else fact=1;
     if (!get_uint(str,&num)) return(0);
     *result=num*fact;
-    Serial.println(*result);
+    // Serial.println(*result);
     return(1);    
 }
 

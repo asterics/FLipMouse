@@ -44,57 +44,48 @@ void mouseScroll(int8_t steps)
 
 void mouseMove(int x, int y) 
 {
-  if (x) {
-    while (x<-128) { 
-      if (settings.bt & 1) 
-		     Mouse.move(-128, 0); 
-	    if ((settings.bt & 2) && (isBluetoothAvailable()))  
-	       mouseBT(-128,0,0);
-	    x+=128; 
-	}
-  while (x>127) { 
-    if (settings.bt & 1) 
-	  	Mouse.move(127, 0); 
-	  if ((settings.bt & 2) && (isBluetoothAvailable())) 
-	    mouseBT(127,0,0);
-		x-=127; 
-	}
-  if (settings.bt & 1) 
-	  Mouse.move(x, 0);
-	if ((settings.bt & 2) && (isBluetoothAvailable()))
-	  mouseBT(x,0,0);
-  }
-  
-  if (y) {
-    while (y<-128) { 
-      if (settings.bt & 1) 
-		Mouse.move(0, -128); 
-	  if ((settings.bt & 2) && (isBluetoothAvailable()))  
-	    mouseBT(0,-128,0);
-	  y+=128; 
-	}
-  while (y>127) { 
-    if (settings.bt & 1) 
-		Mouse.move(0, 127); 
-	  if ((settings.bt & 2) && (isBluetoothAvailable())) 
-	    mouseBT(0,127,0);
-		y-=127; 
-	}
-  if (settings.bt & 1) 
-		Mouse.move(0, y);
-	if ((settings.bt & 2) && (isBluetoothAvailable()))
-	    mouseBT(0,y,0);
-  }
-}
+   while (x<-128) { 
+     if (settings.bt & 1) 
+		    Mouse.move(-128, 0); 
+	   if ((settings.bt & 2) && (isBluetoothAvailable()))  
+	      mouseBT(-128,0,0);
+	   x+=128; 
+	 }
+   while (x>127) { 
+     if (settings.bt & 1) 
+	    	Mouse.move(127, 0); 
+	   if ((settings.bt & 2) && (isBluetoothAvailable())) 
+	      mouseBT(127,0,0);
+		 x-=127; 
+	 }
+ 
+   while (y<-128) { 
+     if (settings.bt & 1) 
+		    Mouse.move(0, -128); 
+	   if ((settings.bt & 2) && (isBluetoothAvailable()))  
+	      mouseBT(0,-128,0);
+	   y+=128; 
+	 }
+   while (y>127) { 
+     if (settings.bt & 1) 
+		    Mouse.move(0, 127); 
+	   if ((settings.bt & 2) && (isBluetoothAvailable())) 
+	      mouseBT(0,127,0);
+		 y-=127; 
+	 }
 
+   if (settings.bt & 1) 
+      Mouse.move(x, y);
+   if ((settings.bt & 2) && (isBluetoothAvailable()))
+      mouseBT(x,y,0);
+}
 
 void keyboardPrint(char * keystring)
 {
   if (settings.bt & 1) {
-    //Keyboard.print(keystring);
+    //Keyboard.print(keystring);  // improved for ISO 8859 compatibility (but: slower ..)
     for (int i=0; i<strlen(keystring); i++)
     {
-        // Serial.println(keystring[i]);
         Keyboard.press(keystring[i]);
         Keyboard.release(keystring[i]);
     }
@@ -103,7 +94,6 @@ void keyboardPrint(char * keystring)
   if ((settings.bt & 2) && (isBluetoothAvailable())) 
     keyboardBTPrint(keystring);  // TODO: check ISO8859-compatibility
 }
-
 
 void keyboardPress(int key)
 {
@@ -116,15 +106,15 @@ void keyboardPress(int key)
 void keyboardRelease(int key)
 {
   if (settings.bt & 1)
-        Keyboard.release(key);
+      Keyboard.release(key);
   if ((settings.bt & 2) && (isBluetoothAvailable())) 
-        keyboardBTRelease(key);   
+      keyboardBTRelease(key);   
 }
 
 void keyboardReleaseAll()
 {
   if (settings.bt & 1)
-   Keyboard.releaseAll();
+     Keyboard.releaseAll();
   if ((settings.bt & 2) && (isBluetoothAvailable())) 
-   keyboardBTReleaseAll();
+     keyboardBTReleaseAll();
 }

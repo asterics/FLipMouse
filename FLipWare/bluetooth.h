@@ -36,7 +36,7 @@
  * Mouse movements, buttons and scroll wheel (possibly no functioning, not an official EZ-KEY feature)
  * The limit for the movement is +127/-127
  */
-void mouseBT(uint8_t x, uint8_t y, uint8_t scroll);
+void mouseBT(int x, int y, uint8_t scroll);
 
 
 /*

@@ -70,7 +70,7 @@ struct slotGeneralSettings settings = {      // default settings valus, for type
     50, 50, 50, 50 ,                  // gain up / down / left / right
     0, 0,                             // offset x / y
     0,                                // orientation
-    3,                                // bt-mode: "both" - USB and BT
+    1,                                // bt-mode 1: USB, 2: Bluetooth, 3: both (2 & 3 need daughter board)) 
 }; 
 
 

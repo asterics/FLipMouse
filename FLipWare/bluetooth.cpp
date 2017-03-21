@@ -16,11 +16,14 @@
 
 #include "bluetooth.h"
 
+#define BT_DATA_REDUCTION 4    // reduce mouse report frequency in BT mode  !
 
 uint8_t bt_available = 0;
 uint8_t activeKeyCodes[6];
 uint8_t activeModifierKeys = 0;
 uint8_t activeMouseButtons = 0;
+
+
 
 /*
  * 
@@ -35,8 +38,12 @@ uint8_t activeMouseButtons = 0;
  * Update: mouse wheel does not work.
  * The limit for the movement is +127/-127
  */
-void mouseBT(uint8_t x, uint8_t y, uint8_t scroll)
+void mouseBT(int x, int y, uint8_t scroll)
 {
+    static int oldMouseButtons=0;
+    static int sendCnt=0;
+    static int accuX=0, accuY=0;
+    
 		if(DebugOutput == DEBUG_FULLOUTPUT)
 		{
 			Serial.println("BT mouse actions:");
@@ -52,29 +59,40 @@ void mouseBT(uint8_t x, uint8_t y, uint8_t scroll)
 		
 		//according to:
 		//https://learn.adafruit.com/introducing-bluefruit-ez-key-diy-bluetooth-hid-keyboard/sending-keys-via-serial
-		
-		//starting RAW HID mouse report
-		Serial_AUX.write((uint8_t)0xFD);
-		
-		//stuffing...
-		Serial_AUX.write((uint8_t)0x00);
-		Serial_AUX.write((uint8_t)0x03);
-		
-		//masked buttons:
-		//left: (1<<0)
-		//right: (1<<1)
-		//middle: (1<<2) (not sure)
-		Serial_AUX.write(activeMouseButtons);
-		
-		//send x/y relative movement
-		Serial_AUX.write(x);
-		Serial_AUX.write(y);
-		
-		//maybe the wheel? Not official by Adafruit... -> not working
-		Serial_AUX.write((uint8_t)0x00); 
-		//some additional bytes...
-		Serial_AUX.write((uint8_t)0x00);
-		Serial_AUX.write((uint8_t)0x00);
+
+    sendCnt=(sendCnt+1) % BT_DATA_REDUCTION;
+    accuX+=x;
+    accuY+=y;
+    
+    if ((activeMouseButtons != oldMouseButtons) || (sendCnt==0))
+    {    
+  		//starting RAW HID mouse report
+  		Serial_AUX.write((uint8_t)0xFD);
+  		
+  		//stuffing...
+  		Serial_AUX.write((uint8_t)0x00);
+  		Serial_AUX.write((uint8_t)0x03);
+  		
+  		//masked buttons:
+  		//left: (1<<0)
+  		//right: (1<<1)
+  		//middle: (1<<2) (not sure)
+  		Serial_AUX.write(activeMouseButtons);
+  		
+  		//send x/y relative movement
+  		Serial_AUX.write((uint8_t)accuX);
+  		Serial_AUX.write((uint8_t)accuY);
+  		
+  		//maybe the wheel? Not official by Adafruit... -> not working
+  		Serial_AUX.write((uint8_t)0x00); 
+  		//some additional bytes...
+  		Serial_AUX.write((uint8_t)0x00);
+  		Serial_AUX.write((uint8_t)0x00);
+
+      sendCnt=0;
+      accuX=0; accuY=0;
+      oldMouseButtons=activeMouseButtons;
+    }
 }
 
 /*
@@ -116,7 +134,7 @@ void sendBTKeyboardReport()
 			Serial.println("BT keyboard actions:");
 			Serial.print("modifier: 0x");
 			Serial.println(activeModifierKeys,HEX);
-			Serial.print("activeKeyCodes: ");
+			Serial.println("activeKeyCodes: ");
 			Serial.println(activeKeyCodes[0],HEX);
 			Serial.println(activeKeyCodes[1],HEX);
 			Serial.println(activeKeyCodes[2],HEX);
@@ -149,7 +167,7 @@ void sendBTKeyboardReport()
 void keyboardBTPress(int key) 
 {
 	uint8_t currentIndex = 0;
-  uint8_t keyCode = (uint8_t)(key && 0xff);
+  uint8_t keyCode = (uint8_t)(key & 0xff);
 
   if ((key >> 8) ==  0xE0)  // supported modifier key ?
   {
@@ -176,15 +194,14 @@ void keyboardBTPress(int key)
  * 					well be mapped here to the EZ-KEY keycode set
  * @return none
  * 
- * Release a defined key code. There is a major difference between Teensy/Arduino keycodes
- * and the used keycodes for the EZ-Key. The mapping from Arduino/Tennsy will be done here.
+ * Release a defined key code.
  */
 void keyboardBTRelease(int key) 
 {
 	uint8_t currentIndex = 0;
-  uint8_t keyCode = (uint8_t)(key && 0xff);
+  uint8_t keyCode = (uint8_t)(key & 0xff);
 	
-  if ((key >> 8) ==  0xE0)  // supported modifier key
+  if ((key >> 8) ==  0xE0)  // supported modifier key (see Teensy keylayouts.h)
   {
 		// clear bit in modifier key mask
 		activeModifierKeys &= ~keyCode;
@@ -232,15 +249,41 @@ void keyboardBTReleaseAll()
 void keyboardBTPrint(char * writeString)
 {
 	uint16_t i = 0;
-	//test if the external serial interface is available
-	if(bt_available)
+
+  // print each char of the string
+  while(writeString[i])
 	{
-		//print each char until string is terminated
-		while(*(writeString+i) != 0)
-		{
-			Serial_AUX.write(*(writeString+i));
-			i++;
-		}
+    // Serial_AUX.write(writeString[i]);
+    // improved for localization / keycodes (but: slower ...)
+    
+    int keycode=0, modifier=0;
+   
+    // Serial.print("key ="); Serial.print(writeString[i]);
+    if (writeString[i]<128) {       // ASCII
+        // Serial.print(" ASCII ="); Serial.println((int)writeString[i]);
+        keycode=pgm_read_byte(keycodes_ascii + (writeString[i] - 0x20));
+    }
+    else  {  // ISO_8859
+      // Serial.print(" ISO_8859 ="); Serial.println((int)writeString[i]);
+      keycode=pgm_read_byte(keycodes_iso_8859_1 + (writeString[i] - 0xA0));  
+    }
+    
+    if (keycode & 0x40) {  // SHIFT 
+      // Serial.print("SHIFT+"); 
+      keycode &= ~0x40; 
+      modifier = 0xe002;
+    } else if (keycode & 0x80) {  // ALTGR
+      // Serial.print("ALTGR+"); 
+      keycode &= ~0x80; 
+      modifier = 0xe040;
+    }
+    // Serial.print("HID ="); 
+    // Serial.println(keycode);  
+
+    if (modifier) keyboardBTPress(modifier);
+    keyboardBTPress(keycode | 0xf000);
+    keyboardBTRelease(keycode | 0xf000);
+    if (modifier) keyboardBTRelease(modifier);    
 	}
 }
 
@@ -257,6 +300,10 @@ void keyboardBTPrint(char * writeString)
  */
 void initBluetooth()
 {
+
+  if(DebugOutput==DEBUG_FULLOUTPUT)
+    Serial.println("init Bluetooth");
+
 	//start the AUX serial port 9600 8N1
 	Serial_AUX.begin(9600);
 	//set a short timeout, that the FLipMouse does not freeze if no BT module is connected
@@ -265,7 +312,7 @@ void initBluetooth()
 	String reply = Serial_AUX.readStringUntil('\n');
 	//try 2 times, maybe there is a \n BEFORE the version string
 	if(reply.length() < 2) reply = Serial_AUX.readStringUntil('\n');
-	
+
 	//test for the Bluefruit version string
 	if(reply.indexOf("Adafruit Bluefruit HID") != -1)
 	{
@@ -280,7 +327,7 @@ void initBluetooth()
 		if(DebugOutput == DEBUG_FULLOUTPUT)
 		{
 			//wait 10s before startup, to have enough time to open the serial connection and see the output
-			delay(10000);
+			//delay(10000);
 			Serial.println("No Bluetooth module found, reply:");
 			Serial.println(reply);
 		}

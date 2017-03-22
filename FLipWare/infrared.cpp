@@ -269,6 +269,7 @@ void wipe_IR_commands()
 
 void set_IR_timeout(uint16_t tout_ms)
 {
+	if(tout_ms < 2) return;
    edge_timeout = (uint32_t)tout_ms * 1000;
 }
 

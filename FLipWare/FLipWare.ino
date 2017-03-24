@@ -53,8 +53,6 @@
 
 //Piezo Pin (for tone generation)
 #define TONE_PIN  9
-//if a Bluetooth addon is installed, there is no space on the main PCB...
-#define TONE_PIN_EXTERNAL 13
 
 int8_t  input_map[NUMBER_OF_PHYSICAL_BUTTONS]={0,2,1};  	//  maps physical button pins to button index 0,1,2
 uint8_t IR_SENSOR_PIN = 4;								//  input pin of the TSOP IR receiver
@@ -311,7 +309,6 @@ void UpdateTones()
   if (!toneCount) return;
 
   uint8_t tonePin = TONE_PIN;
-  if(isBluetoothAvailable()) tonePin = TONE_PIN_EXTERNAL;
 
   switch(toneState) {
       case 0:
@@ -332,7 +329,6 @@ void UpdateTones()
 void makeTone(uint8_t kind, uint8_t param)
 {
 	uint8_t tonePin = TONE_PIN;
-	if(isBluetoothAvailable()) tonePin = TONE_PIN_EXTERNAL;
 		
     switch (kind) {
 		case TONE_ENTER_STRONGPUFF: 

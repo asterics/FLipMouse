@@ -73,7 +73,7 @@
             this.incDeadzoneX = new System.Windows.Forms.Button();
             this.decDeadzoneX = new System.Windows.Forms.Button();
             this.DeadzoneYNameLabel = new System.Windows.Forms.Label();
-            this.SpeedYNameLabel = new System.Windows.Forms.Label();
+            this.SensitivityYNameLabel = new System.Windows.Forms.Label();
             this.sensYLabel = new System.Windows.Forms.Label();
             this.deadzoneYLabel = new System.Windows.Forms.Label();
             this.deadzoneYBar = new System.Windows.Forms.TrackBar();
@@ -83,7 +83,7 @@
             this.deadzoneXBar = new System.Windows.Forms.TrackBar();
             this.sensXLabel = new System.Windows.Forms.Label();
             this.sensXBar = new System.Windows.Forms.TrackBar();
-            this.SpeedXNameLabel = new System.Windows.Forms.Label();
+            this.SensitivityXNameLabel = new System.Windows.Forms.Label();
             this.splitXYBox = new System.Windows.Forms.CheckBox();
             this.selectAlternative = new System.Windows.Forms.RadioButton();
             this.selectStick = new System.Windows.Forms.RadioButton();
@@ -651,9 +651,9 @@
             this.label36.Location = new System.Drawing.Point(74, 14);
             this.label36.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label36.Name = "label36";
-            this.label36.Size = new System.Drawing.Size(49, 17);
+            this.label36.Size = new System.Drawing.Size(71, 17);
             this.label36.TabIndex = 65;
-            this.label36.Text = "Speed";
+            this.label36.Text = "Sensitivity";
             // 
             // incAcceleration
             // 
@@ -844,7 +844,7 @@
             this.splitPanel.Controls.Add(this.incDeadzoneX);
             this.splitPanel.Controls.Add(this.decDeadzoneX);
             this.splitPanel.Controls.Add(this.DeadzoneYNameLabel);
-            this.splitPanel.Controls.Add(this.SpeedYNameLabel);
+            this.splitPanel.Controls.Add(this.SensitivityYNameLabel);
             this.splitPanel.Controls.Add(this.sensYLabel);
             this.splitPanel.Controls.Add(this.deadzoneYLabel);
             this.splitPanel.Controls.Add(this.deadzoneYBar);
@@ -854,7 +854,7 @@
             this.splitPanel.Controls.Add(this.deadzoneXBar);
             this.splitPanel.Controls.Add(this.sensXLabel);
             this.splitPanel.Controls.Add(this.sensXBar);
-            this.splitPanel.Controls.Add(this.SpeedXNameLabel);
+            this.splitPanel.Controls.Add(this.SensitivityXNameLabel);
             this.splitPanel.Enabled = false;
             this.splitPanel.Location = new System.Drawing.Point(51, 51);
             this.splitPanel.Name = "splitPanel";
@@ -1001,15 +1001,15 @@
             this.DeadzoneYNameLabel.TabIndex = 50;
             this.DeadzoneYNameLabel.Text = "Deadzone-Y";
             // 
-            // SpeedYNameLabel
+            // SensitivityYNameLabel
             // 
-            this.SpeedYNameLabel.AutoSize = true;
-            this.SpeedYNameLabel.Location = new System.Drawing.Point(431, 9);
-            this.SpeedYNameLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.SpeedYNameLabel.Name = "SpeedYNameLabel";
-            this.SpeedYNameLabel.Size = new System.Drawing.Size(63, 17);
-            this.SpeedYNameLabel.TabIndex = 49;
-            this.SpeedYNameLabel.Text = "Speed-Y";
+            this.SensitivityYNameLabel.AutoSize = true;
+            this.SensitivityYNameLabel.Location = new System.Drawing.Point(431, 9);
+            this.SensitivityYNameLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.SensitivityYNameLabel.Name = "SensitivityYNameLabel";
+            this.SensitivityYNameLabel.Size = new System.Drawing.Size(85, 17);
+            this.SensitivityYNameLabel.TabIndex = 49;
+            this.SensitivityYNameLabel.Text = "Sensitivity-Y";
             // 
             // sensYLabel
             // 
@@ -1120,15 +1120,15 @@
             this.sensXBar.Value = 40;
             this.sensXBar.Scroll += new System.EventHandler(this.sensXBar_Scroll);
             // 
-            // SpeedXNameLabel
+            // SensitivityXNameLabel
             // 
-            this.SpeedXNameLabel.AutoSize = true;
-            this.SpeedXNameLabel.Location = new System.Drawing.Point(66, 11);
-            this.SpeedXNameLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.SpeedXNameLabel.Name = "SpeedXNameLabel";
-            this.SpeedXNameLabel.Size = new System.Drawing.Size(63, 17);
-            this.SpeedXNameLabel.TabIndex = 39;
-            this.SpeedXNameLabel.Text = "Speed-X";
+            this.SensitivityXNameLabel.AutoSize = true;
+            this.SensitivityXNameLabel.Location = new System.Drawing.Point(66, 11);
+            this.SensitivityXNameLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.SensitivityXNameLabel.Name = "SensitivityXNameLabel";
+            this.SensitivityXNameLabel.Size = new System.Drawing.Size(85, 17);
+            this.SensitivityXNameLabel.TabIndex = 39;
+            this.SensitivityXNameLabel.Text = "Sensitivity-X";
             // 
             // splitXYBox
             // 
@@ -4604,7 +4604,7 @@
         private System.Windows.Forms.Button incDeadzoneX;
         private System.Windows.Forms.Button decDeadzoneX;
         private System.Windows.Forms.Label DeadzoneYNameLabel;
-        private System.Windows.Forms.Label SpeedYNameLabel;
+        private System.Windows.Forms.Label SensitivityYNameLabel;
         private System.Windows.Forms.Label sensYLabel;
         private System.Windows.Forms.Label deadzoneYLabel;
         private System.Windows.Forms.TrackBar deadzoneYBar;
@@ -4614,7 +4614,7 @@
         private System.Windows.Forms.TrackBar deadzoneXBar;
         private System.Windows.Forms.Label sensXLabel;
         private System.Windows.Forms.TrackBar sensXBar;
-        private System.Windows.Forms.Label SpeedXNameLabel;
+        private System.Windows.Forms.Label SensitivityXNameLabel;
         private System.Windows.Forms.Panel singlePanel;
         private System.Windows.Forms.Button incSpeed;
         private System.Windows.Forms.Button decSpeed;

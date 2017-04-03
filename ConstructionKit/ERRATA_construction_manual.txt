@@ -4,7 +4,30 @@ This document contains all additional information to the construction manual, wh
 Please read this file carefully!
 Probably it is a good idea to write down all information from here to a printed version of the construction manual.
 
-
-Currently no errors are known... Good luck!
-
 (If you find any errors -> please drop us a note, either as GitHub issue or via eMail)
+
+
+We are currently changing the construction kit to simplify the resistor soldering.
+You have to follow either one of the listed options:
+
+Option 1 (Currently in the manual, a little bit more complex):
+
+You get 5 resistors:
+1x 12R (big, brown housing)
+1x 120R (small, blue housing; with ONE mark on the leads)
+2x 10k (small, blue housing; with TWO marks on the leads)
+1x 4k7 (small, blue housing; with THREE marks on the leads)
+
+Please be careful to distinct all indiviual resistors BEFORE soldering!!!
+On page 21, the places of the resistors are shown.
+
+
+Option 2 (Currently not shown in the manual, easier to distinct the resistors):
+
+You get 5 resistors:
+1x 12R (big, brown housing)
+1x 120R (small, brown housing)
+3x 4k7 (small, blue housing)
+
+On page 21, the old values are shown. You have to place two 4k7 resistors instead of the 10k resistors.
+Due to the different housing colors, no marks are necessary

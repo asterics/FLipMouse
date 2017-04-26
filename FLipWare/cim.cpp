@@ -38,7 +38,6 @@
 
 #define ARE_MINIMAL_VERSION 1
 
-
 extern int pressure;
 extern int down;
 extern int left;
@@ -69,6 +68,7 @@ unsigned int  datapos=0;
 uint8_t first_packet=1;
 uint8_t reports_running=0;
 
+void parseCommand (char * cmdstr);
 
 
 //extern unsigned char old_PIND;
@@ -86,7 +86,7 @@ void init_CIM_frame (void)
 
 uint8_t process_ARE_frame(uint8_t status_code)
 {
-        uint8_t ack_needed;
+  uint8_t ack_needed;
 	uint8_t data_size=0;
 	uint8_t command;
         
@@ -103,30 +103,30 @@ uint8_t process_ARE_frame(uint8_t status_code)
 	if ((status_code & CIM_ERROR_INVALID_ARE_VERSION) == 0)
 	{
 	      // UART_Print(" feature ");  UART_Putchar(command);
-		  // no serious packet error 
+		    // no serious packet error 
 	      switch (command)   {  // process requested command
 
 		  	case CMD_REQUEST_FEATURELIST:
 			       if (data_size==0) {
-				     reply_FeatureList();  // reply requested feature list
-					 ack_needed=0;
-					} else status_code |= CIM_ERROR_INVALID_FEATURE;
+				       reply_FeatureList();  // reply requested feature list
+					     ack_needed=0;
+					   } else status_code |= CIM_ERROR_INVALID_FEATURE;
 				  	break;
 
 		  	case CMD_REQUEST_RESET_CIM:
 					if (data_size!=0) status_code |= CIM_ERROR_INVALID_FEATURE;
 					break;
 		  	case CMD_REQUEST_START_CIM:
-			        if (data_size==0) {
-					 // enable_timer_ISR();
-                                         StandAloneMode=0;
+			     if (data_size==0) {
+					  // enable_timer_ISR();
+            StandAloneMode=0;
 					} else status_code |= CIM_ERROR_INVALID_FEATURE;
 					break;
 		  	case CMD_REQUEST_STOP_CIM:
 			       if (data_size==0) {
-				         first_packet=1;  // reset first frame indicator etc.
-					 //disable_timer_ISR();
-                                         StandAloneMode=1;
+				       first_packet=1;  // reset first frame indicator etc.
+					     //disable_timer_ISR();
+               StandAloneMode=1;
 					} else status_code |= CIM_ERROR_INVALID_FEATURE;
 				  break;
 
@@ -134,11 +134,11 @@ uint8_t process_ARE_frame(uint8_t status_code)
 
 			  switch (ARE_frame.cim_feature) {
 			     case LIPMOUSE_CIM_FEATURE_UNIQUENUMBER:   // read unique serial number
-  		            if (data_size==0) {    
-				     reply_UniqueNumber();
-					 ack_needed=0;
-					} else status_code |= CIM_ERROR_INVALID_FEATURE;
-  			     	break;
+  		       if (data_size==0) {    
+				       reply_UniqueNumber();
+					     ack_needed=0;
+					   } else status_code |= CIM_ERROR_INVALID_FEATURE;
+  			 	break;
 
 			     case LIPMOUSE_CIM_FEATURE_ADCREPORT:
 						generate_ADCFrame();
@@ -147,15 +147,12 @@ uint8_t process_ARE_frame(uint8_t status_code)
 				     break;
 
 			     case LIPMOUSE_CIM_FEATURE_BUTTONREPORT:
-						generate_ButtonFrame();
-						reply_DataFrame();
-					    ack_needed=0;
-				     break;
-
-
-  			      default: 				// not a valid read  feature;		 
-					status_code |= CIM_ERROR_INVALID_FEATURE;
-					
+						 generate_ButtonFrame();
+					 	 reply_DataFrame();
+					   ack_needed=0;
+				   break;
+  			  default: 				// not a valid read  feature;		 
+					  status_code |= CIM_ERROR_INVALID_FEATURE;
 			   }
 			   break;
 				   
@@ -166,43 +163,43 @@ uint8_t process_ARE_frame(uint8_t status_code)
 
 			        case LIPMOUSE_CIM_FEATURE_SET_ADCPERIOD:
 	  		            if (data_size==2) {    
-  					ADC_updatetime=  (uint16_t)ARE_frame.data[0];
-					ADC_updatetime+= ((uint16_t)ARE_frame.data[1])<<8;
-				    }
-				    break;
+  					           ADC_updatetime=  (uint16_t)ARE_frame.data[0];
+                       ADC_updatetime+= ((uint16_t)ARE_frame.data[1])<<8;
+				            }
+				      break;
 			        case LIPMOUSE_CIM_FEATURE_SET_LEDS:
 	  		            if (data_size==1) {
-					uint8_t actLeds=ARE_frame.data[0];    
-					if (actLeds&1) digitalWrite (led_map[0],LOW); else digitalWrite (led_map[0],HIGH);
-					if (actLeds&2) digitalWrite (led_map[1],LOW); else digitalWrite (led_map[1],HIGH);
-					if (actLeds&4) digitalWrite (led_map[2],LOW); else digitalWrite (led_map[2],HIGH);
-				     }
-				     break;
+            					uint8_t actLeds=ARE_frame.data[0];    
+            					if (actLeds&1) digitalWrite (led_map[0],LOW); else digitalWrite (led_map[0],HIGH);
+            					if (actLeds&2) digitalWrite (led_map[1],LOW); else digitalWrite (led_map[1],HIGH);
+            					if (actLeds&4) digitalWrite (led_map[2],LOW); else digitalWrite (led_map[2],HIGH);
+        				     }
+				      break;
+              case LIPMOUSE_CIM_FEATURE_ATCMD:
+                    parseCommand((char *)workingmem); 
+              break;
 			        default:         // not a valid write  feature;
-		   			status_code |= CIM_ERROR_INVALID_FEATURE;
+		   		       status_code |= CIM_ERROR_INVALID_FEATURE;
 			    }
+     	 }
+    }
 
-		}
-        }
-
-	if (status_code & CIM_ERROR_INVALID_FEATURE)   {  // invalid data size or feature
-	//	LEDs_ToggleLEDs(LED5);  // indicate wrong feature
-	//	UART_Print(" invalid data size or no feature ");
+  	if (status_code & CIM_ERROR_INVALID_FEATURE)   {  // invalid data size or feature
+	  //	LEDs_ToggleLEDs(LED5);  // indicate wrong feature
+	  //	UART_Print(" invalid data size or no feature ");
 	}
  
 
 	if (ack_needed) {
 	    reply_Acknowledge();
 	}
-
-    return(1);
+  return(1);
 }
 
 
 
 void reply_FeatureList(void)
 {
-  
   Serial.write ((uint8_t *) &CIM_frame, 7);    // attention : byte alignment in struct not possible for Cortex M0 !
   Serial.write ((uint8_t *) &(CIM_frame.cim_feature), 4);
 	Serial.write  ( (uint8_t *)&LIPMOUSE_CIM_FEATURELIST, CIM_frame.data_size);
@@ -227,7 +224,6 @@ void reply_DataFrame(void)
 {
 	Serial.write ((uint8_t *) &CIM_frame, 7);    // attention : byte alignment in struct not possible for Cortex M0 !
   Serial.write ((uint8_t *) &(CIM_frame.cim_feature), 4);
-  
 	Serial.write ((uint8_t *) CIM_frame.data, CIM_frame.data_size);
 }
 
@@ -261,11 +257,11 @@ uint8_t update_Buttonval()
 	if (digitalRead(input_map[1])==LOW) actval|=2; 
 	if (digitalRead(input_map[2])==LOW) actval|=4; 
 
-    if (actval != buttonval)
+  if (actval != buttonval)
 	{
 	   buttonval=actval;
 	   return(1);
-    }
+  }
 	else return (0);
 }
 
@@ -288,63 +284,60 @@ void parse_CIM_protocol(int actbyte)
     static uint8_t last_serial;
 
       switch (readstate) 
-	  {
+	   {
 		  case 0: // first sync byte
 		  		  if (actbyte=='@') { readstate++; }
-                                  if ((actbyte=='A') || (actbyte=='a')) 
-                                  { readstate++; CimParserActive=0; StandAloneMode=1;}  // switch to normal AT-command mode
+            if ((actbyte=='A') || (actbyte=='a')) 
+            { readstate++; CimParserActive=0; StandAloneMode=1;}  // switch to normal AT-command mode
 				  break;
 		  case 1: // second sync byte
 		  		  if (actbyte=='T')  readstate++;
-				  else readstate=0;
+				    else readstate=0;
 				  break;
 
  		  // packet in sync !
 
 		  case 2: // ARE-ID: SW-version low byte
-		  		  reply_status_code=0;
-				  ARE_frame.are_id=actbyte;  
+            reply_status_code=0;
+            ARE_frame.are_id=actbyte;  
 		  		  readstate++; 
 				  break;
 		  case 3: // ARE-ID: SW-version high byte
-		  		  ARE_frame.are_id+=((uint16_t)actbyte)<<8;  
+		  		ARE_frame.are_id+=((uint16_t)actbyte)<<8;  
 				  if (ARE_frame.are_id < ARE_MINIMAL_VERSION)    // outdated ARE ?
-				     reply_status_code |= CIM_ERROR_INVALID_ARE_VERSION;
-		  		  readstate++; 
+				    reply_status_code |= CIM_ERROR_INVALID_ARE_VERSION;
+		  		readstate++; 
 				  break;
 		  case 4: // data length low byte
-		  		  ARE_frame.data_size=actbyte;
+		  		ARE_frame.data_size=actbyte;
 				  readstate++; 
 				  break;
 		  case 5: // data length high byte
-		  		  ARE_frame.data_size+=((uint16_t)actbyte)<<8;
+		  		ARE_frame.data_size+=((uint16_t)actbyte)<<8;
 				  if (ARE_frame.data_size > DATABUF_SIZE)  { // dismiss packets of excessive length
-				       readstate=0;
+				     readstate=0;
 					   //ARE_frame.data_size=0;
-  				       //reply_status_code |= CIM_ERROR_INVALID_FEATURE;
+  		       //reply_status_code |= CIM_ERROR_INVALID_FEATURE;
 				  }
 				  else readstate++; 
-				 
 				  break;
 	      case 6: // serial_number 
 		  		  ARE_frame.serial_number = actbyte;
 				  if (first_packet)    // don't check first serial
-				      first_packet=0;
+				    first_packet=0;
 				  else if (actbyte != (last_serial+1)%0x80) // check current serial number
-				     reply_status_code |= CIM_ERROR_LOST_PACKETS;
+			      reply_status_code |= CIM_ERROR_LOST_PACKETS;
 
-				  last_serial=actbyte;
-			      readstate++;
+				   last_serial=actbyte;
+			     readstate++;
 				  break;
 		  case 7: // CIM-feature low byte
 		  		  ARE_frame.cim_feature= actbyte; 
 		  		  readstate++; 
-				  
 				  break;
 		  case 8: // CIM-feature high byte
 		  		  ARE_frame.cim_feature+=((int)actbyte)<<8; 
-		  		  readstate++; 
-
+		  		  readstate++; 				  
 				  break;
 		  case 9: // Request code low byte ( command )
 		  		  ARE_frame.request_code=actbyte;
@@ -352,44 +345,50 @@ void parse_CIM_protocol(int actbyte)
 				  break;
 		  case 10:// Request code high byte (transmission mode)
 		  		  transmission_mode=actbyte;  // bit 0: CRC enable
-				  // reply_status_code|=(actbyte & CIM_STATUS_CRC);   
-				  // remember CRC state for reply
+				    // reply_status_code|=(actbyte & CIM_STATUS_CRC);   
+				    // remember CRC state for reply
 				  
 		  		  if (ARE_frame.data_size>0) {
-				  	readstate++;
-					datapos=0;
-				  }
+				  	  readstate++;
+					    datapos=0;
+				    }
 				  else {  // no data in packet 
 				    if (transmission_mode & CIM_STATUS_CRC) 
-					   readstate+=2;      // proceed with CRC 
-					else readstate=FRAME_DONE;  // frame is finished here !
+					    readstate+=2;      // proceed with CRC 
+					  else readstate=FRAME_DONE;  // frame is finished here !
 				  }
 				  break;
 
 		  case 11: // read out data
-		  		  ARE_frame.data[datapos]=actbyte;
+
+          if ( (ARE_frame.cim_feature == LIPMOUSE_CIM_FEATURE_ATCMD ) 
+             && (datapos<WORKINGMEM_SIZE-4)) {    // receive AT-Command
+               workingmem[datapos]=actbyte;
+               workingmem[datapos+1]=0;
+          }
+          else ARE_frame.data[datapos]=actbyte;  // receive normal CIM packet
+
 				  datapos++;
-				  if (datapos==ARE_frame.data_size)
-				  {
+				  if (datapos==ARE_frame.data_size)  {
 				     if (transmission_mode & CIM_STATUS_CRC)  // with CRC: get checksum 
  				        readstate++;  					 
-					 else  readstate=FRAME_DONE; // no CRC:  frame is finished here !
+					   else readstate=FRAME_DONE; // no CRC:  frame is finished here !
 				  } 
 				  break;
 		  case 12: // checksum byte 1
-		  		  checksum=actbyte;
+		  		checksum=actbyte;
 				  readstate++;
 				  break;
 		  case 13: // checksum byte 2
-		  		  checksum+=((long)actbyte)<<8;
+		  		checksum+=((long)actbyte)<<8;
 				  readstate++;
 				  break;
 		  case 14: // checksum byte 3
-		  		  checksum+=((long)actbyte)<<16;
+		  		checksum+=((long)actbyte)<<16;
 				  readstate++;
 				  break;
 		  case 15: // checksum byte 4
-		  		  checksum+=((long)actbyte)<<24;	  
+		  		checksum+=((long)actbyte)<<24;	  
 
 				  // check CRC now (currently not used):
 				  // if (checksum != crc32(ARE_frame.data, ARE_frame.data_size))
@@ -401,10 +400,10 @@ void parse_CIM_protocol(int actbyte)
 		  default: readstate=0; break;
 	 }		
 
-     if (readstate==FRAME_DONE)  {  // frame finished: store command in ringbuffer
-        process_ARE_frame(reply_status_code);
-	readstate=0;
-     }
+   if (readstate==FRAME_DONE)  {  // frame finished: store command in ringbuffer
+      process_ARE_frame(reply_status_code);
+    	readstate=0;
+   }
 }
 
 extern struct CIM_frame_t CIM_frame;
@@ -414,15 +413,15 @@ uint8_t autoreply_num=0x80;   // sequential number for automatic replies, 0x80-0
 
 void handleCimMode(void)
 {
-     if ( ADC_updatetime>0)   
-     {
+    if ( ADC_updatetime>0)   
+    {
 	    autoreply_num++; 
 	    if (autoreply_num==0) autoreply_num=0x80;
 
 	    CIM_frame.cim_feature=LIPMOUSE_CIM_FEATURE_ADCREPORT;
 	    CIM_frame.serial_number=autoreply_num;
 	    CIM_frame.reply_code=CMD_EVENT_REPLY;
-  	    generate_ADCFrame();
+  	  generate_ADCFrame();
 	    reply_DataFrame();
 
 	    if (update_Buttonval())  // if buttonstate has changed 
@@ -433,9 +432,9 @@ void handleCimMode(void)
 	        CIM_frame.cim_feature=LIPMOUSE_CIM_FEATURE_BUTTONREPORT;
 	        CIM_frame.serial_number=autoreply_num;
 	        CIM_frame.reply_code=CMD_EVENT_REPLY;
-	    	generate_ButtonFrame();  // send new buttonframe
-		reply_DataFrame();
-    	    }
-      }              
-      delay(ADC_updatetime);  // to limit move movement speed. TBD: remove delay, use millis() !
+	      	generate_ButtonFrame();  // send new buttonframe
+		      reply_DataFrame();
+    	}
+    }              
+    delay(ADC_updatetime);  // to limit move movement speed. TBD: remove delay, use millis() !
 }

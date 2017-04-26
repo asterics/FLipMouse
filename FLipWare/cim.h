@@ -65,6 +65,7 @@
 #define LIPMOUSE_CIM_FEATURE_ADCREPORT 	     0x02
 #define LIPMOUSE_CIM_FEATURE_BUTTONREPORT 	 0x03
 #define LIPMOUSE_CIM_FEATURE_SET_LEDS 		 0x04
+#define LIPMOUSE_CIM_FEATURE_ATCMD      0x05
 
 
 #define DATABUF_SIZE 15       // max. 15 bytes needed for data field

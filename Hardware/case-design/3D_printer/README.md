@@ -15,3 +15,9 @@ You need to print every STL part once to have the FLipMouse case.
 * FLipMouse_Prusa_Slic3r_settings.ini
 
 This is the settings file, which was used by the Slic3r (1.31.6-prusa3d-win64)
+
+
+# FreeCAD - changing the version number
+
+If you want to change the version string/version number you need to select a Font file (except you use Debian).
+In this folder, there is the FreeSans.ttf, which was used. You need to select this file in the properties of the "versionNumer" shape file.

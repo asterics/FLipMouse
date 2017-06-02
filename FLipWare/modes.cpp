@@ -22,6 +22,7 @@
 #define STRONGMODE_EXIT_TIME        200
 #define STRONGMODE_IDLE_TIME         30
 #define SIP_PUFF_SETTLE_TIME         15
+#define MIN_HOLD_TIME                10
 
 #define MODESTATE_IDLE                      0
 #define MODESTATE_ENTER_STRONGPUFF_MODE     1
@@ -198,14 +199,16 @@ void handleModeState(int x, int y, int pressure)
                  { 
                     if (puffCount++>SIP_PUFF_SETTLE_TIME) 
                     {
-                       puffActive=2; 
+                       puffActive=2;
+                       puffCount=MIN_HOLD_TIME; 
                        handlePress(PUFF_BUTTON); 
                     }
                  } else if (puffCount) puffCount--;
                  break;
 
             case 2:
-                 if (pressure < settings.tp) { 
+                 if (puffCount) puffCount--;
+                 if ((pressure < settings.tp)&&(!puffCount)) { 
                     handleRelease(PUFF_BUTTON); 
                     puffActive=0; 
                  }
@@ -225,14 +228,16 @@ void handleModeState(int x, int y, int pressure)
                  { 
                     if (sipCount++>SIP_PUFF_SETTLE_TIME) 
                     {
-                       sipActive=2; 
+                       sipActive=2;
+                       sipCount=MIN_HOLD_TIME; 
                        handlePress(SIP_BUTTON); 
                     }
                  } else if (sipCount) sipCount--;
                  break;
 
             case 2:
-                 if (pressure > settings.ts) { 
+                 if (sipCount) sipCount--;
+                 if ((pressure > settings.ts) && (!sipCount)) { 
                     handleRelease(SIP_BUTTON); 
                     sipActive=0; 
                  }

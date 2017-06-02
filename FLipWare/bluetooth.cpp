@@ -264,8 +264,10 @@ void keyboardBTPrint(char * writeString)
         keycode=pgm_read_byte(keycodes_ascii + (writeString[i] - 0x20));
     }
     else  {  // ISO_8859
+    #ifdef ISO_8859_1_A0
       // Serial.print(" ISO_8859 ="); Serial.println((int)writeString[i]);
-      keycode=pgm_read_byte(keycodes_iso_8859_1 + (writeString[i] - 0xA0));  
+      keycode=pgm_read_byte(keycodes_iso_8859_1 + (writeString[i] - 0xA0)); 
+    #endif 
     }
     
     if (keycode & 0x40) {  // SHIFT 

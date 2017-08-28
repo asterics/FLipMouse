@@ -158,7 +158,7 @@ namespace MouseApp2
         const int GUITYPE_SLIDER    = 4;
         const int GUITYPE_3RADIOBUTTONS   = 5;
         const int GUITYPE_GENERIC   = 6;
-        const int GUITYPE_COMBO_ONLY= 7;
+        const int GUITYPE_COMBO_ONLY = 7;
         const int GUITYPE_COMBO_INDEX = 8;
 
         const string PREFIX_FLIPMOUSE_VERSION = "FLIPMOUSE ";
@@ -575,7 +575,7 @@ namespace MouseApp2
 
             public CommandGuiLink(String cmd, ComboBox cb, String def)
             {
-                this.type = GUITYPE_COMBO_INDEX;
+                this.type = GUITYPE_COMBO_ONLY;
                 this.cmd = cmd;
                 this.cb = cb;
                 this.def = def;

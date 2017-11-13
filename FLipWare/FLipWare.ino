@@ -87,7 +87,7 @@ uint16_t calib_now = 1;                       // calibrate zeropoint right at st
 //if set to DEBUG_FULLOUTPUT please activate the following preprocessor warning
 uint8_t DebugOutput = DEBUG_NOOUTPUT;       
 //uint8_t DebugOutput = DEBUG_FULLOUTPUT;       
-//#warning DEACTIVATE DEBUG_FULLOUTPUT AGAIN!!!
+//#warning "DEACTIVATE DEBUG_FULLOUTPUT AGAIN!!!"
 int waitTime=DEFAULT_WAIT_TIME;
 
 

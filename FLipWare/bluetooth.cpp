@@ -318,7 +318,7 @@ void initBluetooth()
 	//test for the Bluefruit version string
 	if(reply.indexOf("Adafruit Bluefruit HID") != -1)
 	{
-    bt_available=1;
+                bt_available=1;
 		//if debug output is active, print out info and version string
 		if(DebugOutput==DEBUG_FULLOUTPUT)
 		{
@@ -326,12 +326,14 @@ void initBluetooth()
 			Serial.println(reply);
 		}
 	} else {
+                bt_available=1;
 		if(DebugOutput == DEBUG_FULLOUTPUT)
 		{
 			//wait 10s before startup, to have enough time to open the serial connection and see the output
 			//delay(10000);
 			Serial.println("No Bluetooth module found, reply:");
 			Serial.println(reply);
+                        Serial.println("Overriding anyway, Adafruit modules are buggy");
 		}
 	}
 }

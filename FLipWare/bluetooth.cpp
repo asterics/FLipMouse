@@ -16,7 +16,7 @@
 
 #include "bluetooth.h"
 
-#define BT_DATA_REDUCTION 4    // reduce mouse report frequency in BT mode  !
+#define BT_DATA_REDUCTION 10    // reduce mouse report frequency in BT mode  !
 
 uint8_t bt_available = 0;
 uint8_t activeKeyCodes[6];

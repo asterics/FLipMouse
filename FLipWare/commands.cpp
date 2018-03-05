@@ -243,7 +243,7 @@ void performCommand (uint8_t cmd, int16_t par1, char * keystring, int8_t periodi
                bootstrapSlotAddresses();
                for(uint8_t i = 0; i<EEPROM_COUNT_SLOTS; i++)
                {
-        					readFromEEPROMSlotNumber(i,false);
+        					readFromEEPROMSlotNumber(i,false,false);
 				       }
                reportSlotParameters=REPORT_NONE;
                readFromEEPROMSlotNumber(0,true);

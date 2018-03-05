@@ -453,6 +453,18 @@ void readFromEEPROM(char * slotname)
  * */
 void readFromEEPROMSlotNumber(uint8_t nr, bool search)
 {
+    readFromEEPROMSlotNumber(nr, search, true);
+}
+
+/**
+ * Read one slot data from the EEPROM to the global variables
+ * The slot is identified by the slot number.
+ * If the search flag is set, this function loads the next possible slot, if
+ * the current one is not valid
+ * if the playTone flag is set, a tone according to the current slot number will be played
+ * */
+void readFromEEPROMSlotNumber(uint8_t nr, bool search, bool playTone)
+{
 	uint8_t* p = (uint8_t *)&settings;
 	uint16_t address;
 	uint8_t x;
@@ -558,7 +570,7 @@ void readFromEEPROMSlotNumber(uint8_t nr, bool search)
 	if (reportSlotParameters!=REPORT_NONE)  
            printCurrentSlot();
            
-	makeTone(TONE_CHANGESLOT,actSlot);
+	if(playTone) makeTone(TONE_CHANGESLOT,actSlot);
 	if(eepromDebugLevel >= EEPROM_BASIC_DEBUG) { 
 	  Serial.print("actSlot: "); Serial.println(actSlot); 
 	}

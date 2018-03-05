@@ -119,13 +119,12 @@ uint8_t in_keybuffer(int key)
 // text is a string which contains the key identifiers eg. "KEY_CTRL KEY_C" for Ctrl-C
 void setKeyValues(char* text,  uint8_t keyAction)
 {
-  char tmptxt[80];   // for parsing keystrings
+  char * tmptxt = (char *) malloc( sizeof(char) * ( strlen(text)+2 ) );   // for parsing keystrings
   char * acttoken;
   //int modifiers=0;
 
-  //Serial.print("setKeyValues: "); Serial.println(text);
-
-  strcpy(tmptxt, text); 
+  strcpy(tmptxt, text);
+  if (tmptxt[strlen(tmptxt)-1] != ' ') strcat(tmptxt," ");
   acttoken = strtok(tmptxt," ");
   
   while (acttoken)
@@ -249,9 +248,10 @@ void setKeyValues(char* text,  uint8_t keyAction)
     if (!strcmp(acttoken,"KEYPAD_9")) updateKey(KEYPAD_9, keyAction);
     if (!strcmp(acttoken,"KEYPAD_0")) updateKey(KEYPAD_0, keyAction);
     if (!strcmp(acttoken,"KEYPAD_PERIOD")) updateKey(KEYPAD_PERIOD, keyAction);
-    
+
     acttoken = strtok(NULL," ");
   }
+  free(tmptxt);
 }
 
 

@@ -48,7 +48,7 @@
 #include "bluetooth.h"
 #include "hid_hal.h"
 
-#define VERSION_STRING "Flipmouse v2.5"   
+#define VERSION_STRING "Flipmouse v2.5.1"
 
 //  V2.5: added stick rotation options, improved acoustic slot feedback, improved keycode handling, 
 //        removed Teensy2.0++ support, new AT commands: clear IR memory, route HID to BT/USB/both

@@ -159,6 +159,17 @@ void readFromEEPROMSlotNumber(uint8_t nr, bool search);
 
 /**
  * Read one slot data from the EEPROM to the global variables
+ * The slot is identified by the slot number.
+ * If the search flag is set, this function loads the next possible slot, if
+ * the current one is not valid
+ * if the playTone flag is set, a tone according to the current slot number will be played
+ * ATTENTION: if this method is not called from another function (e.g. readFromEEPROM()),
+ * it is necessary to preload the start adresses via bootstrapSlotAddresses()!
+ * */
+void readFromEEPROMSlotNumber(uint8_t nr, bool search, bool playTone);
+
+/**
+ * Read one slot data from the EEPROM to the global variables
  * The slot is identified by the slot name
  * */
 void readFromEEPROM(char * slotname);

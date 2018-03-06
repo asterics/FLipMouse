@@ -41,6 +41,7 @@ By now, the joystick commands are not used.
 
 To use the configuration without any additional host program, it is possible to store up to 4 slots on the EEPROM. The limit of 4 slots is caused by the old software revision, it should be higher on the new hardware version with the external EEPROM.
 
+If you want to build or edit the FLipMouse firmware on your own, please see https://github.com/asterics/FLipMouse/wiki/dev-firmware
 
 # The host software
 

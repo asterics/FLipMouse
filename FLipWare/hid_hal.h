@@ -71,6 +71,16 @@ void mousePress(uint8_t button);
 
 /*
  * 
+ * name: mouseToggle
+ * @param uint8_t button  button code which should be toggled. 
+ * @return none
+ * 
+ * Toggle a defined mouse button (MOUSE_LEFT, MOUSE_RIGHT, MOUSE_MIDDLE) 
+ */
+void mouseToggle(uint8_t button);
+
+/*
+ * 
  * name: mouseRelease
  * @param uint8_t button	button code which should be released. 
  * @return none

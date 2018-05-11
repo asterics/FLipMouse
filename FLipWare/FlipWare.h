@@ -48,8 +48,9 @@
 #include "bluetooth.h"
 #include "hid_hal.h"
 
-#define VERSION_STRING "Flipmouse v2.5.1"
+#define VERSION_STRING "Flipmouse v2.6"
 
+//  V2.6: updated API for KEY commands (added KT, changed KP) and Mouse Click commands (added toggle clicks) 
 //  V2.5: added stick rotation options, improved acoustic slot feedback, improved keycode handling, 
 //        removed Teensy2.0++ support, new AT commands: clear IR memory, route HID to BT/USB/both
 //  V2.4: added support for acceleration, maximum speed and command macros
@@ -151,11 +152,12 @@ void makeTone(uint8_t kind, uint8_t param);
 
 
 void BlinkLed();
-int freeRam ();
+int  freeRam ();
 void parseByte (int newByte);
 
 void pressKeys(char* text); // presses individual keys
-void holdKeys(char* text); // presses individual keys
+void holdKeys(char* text);  // holds individual keys
+void toggleKeys(char* text);  // toggles individual keys
 void releaseKeys(char* text);  // releases individual keys
 void release_all_keys();       // releases all previously pressed keys
 void release_all();            // releases all previously pressed keys and buttons

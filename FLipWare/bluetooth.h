@@ -53,6 +53,14 @@ void mouseBTPress(uint8_t mousebutton);
  */
 void mouseBTRelease(uint8_t mousebutton);
 
+
+/*
+ * @name isMouseBTPressed
+ * @param mousebutton uint8_t buttons which should be polled 
+ * @return boolan 
+ */
+boolean isMouseBTPressed(uint8_t mousebutton);
+
 /*
  * 
  * name: initBluetooth

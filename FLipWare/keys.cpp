@@ -18,9 +18,10 @@
 
 #include "FlipWare.h"
 
-#define KEY_ADD     0
-#define KEY_HOLD    1
-#define KEY_RELEASE 2
+#define KEY_PRESS    0
+#define KEY_HOLD     1
+#define KEY_RELEASE  2
+#define KEY_TOGGLE   3
 
 #define KEYPRESS_BUFFERSIZE 8
 
@@ -36,27 +37,33 @@ void setKeyValues(char* text, uint8_t keyAction);
 void updateKey(int key, uint8_t keyAction)
 {
    switch (keyAction)  {
-     case KEY_ADD:
-        keyboardPress(key);      // press keys individually
-        break;
-     case KEY_RELEASE:
-        keyboardRelease(key);   // release keys individually
-        break;
-        
+     case KEY_PRESS:
      case KEY_HOLD:
+          add_to_keybuffer(key);
+          keyboardPress(key);       // press/hold keys individually  
+        break;
+    
+     case KEY_RELEASE:
+        remove_from_keybuffer(key);
+        keyboardRelease(key);       // release keys individually
+        break;
+     
+     case KEY_TOGGLE:
         if (in_keybuffer(key))  {
             remove_from_keybuffer(key);
-            keyboardRelease(key);   // release keys individually
+            keyboardRelease(key);
         } else {
             add_to_keybuffer (key);
-            keyboardPress(key);     // press keys individually  
+            keyboardPress(key);
         }        
+        break;
      }  
 }
 
 void pressKeys (char * text)
 {
-   setKeyValues(text,KEY_ADD);
+   setKeyValues(text,KEY_PRESS);
+   setKeyValues(text,KEY_RELEASE);
 }
 
 void holdKeys (char * text)
@@ -67,6 +74,11 @@ void holdKeys (char * text)
 void releaseKeys (char * text)
 {
    setKeyValues(text,KEY_RELEASE);
+}
+
+void toggleKeys (char * text)
+{
+   setKeyValues(text,KEY_TOGGLE);
 }
 
 void release_all_keys()

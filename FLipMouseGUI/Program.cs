@@ -14,7 +14,7 @@ namespace MouseApp2
         /// <summary>
         /// The main entry point for the application.
         /// </summary>
-        private static string appGuid = "c0a76b5a-12ab-45c5-b9d9-d693faa6e7b9";
+        private static string appGuid = "AsTeRICS_Foundation_FlipMouseGUI";
 
         [STAThread]
         static void Main(string[] args)

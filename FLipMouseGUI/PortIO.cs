@@ -165,9 +165,16 @@ namespace MouseApp2
             DialogResult dialogResult;
             addToLog("Connected device: " + newLine);
             if ((!(newLine.Contains(VERSION_STRING))) && (checkVersion==1))
-            {
-                dialogResult = MessageBox.Show(newLine + "The firmware is not compatible to GUI version " + VERSION_STRING + " !\nPlease update firmware and GUI to the newest version, see: https://github.com/asterics/FLipMouse/releases", "Software update necessary", MessageBoxButtons.OK);
+                {
+                dialogResult = MessageBox.Show(newLine + "The firmware is not compatible to GUI version " + VERSION_STRING + " !\nCurrent releases can be found at: https://github.com/asterics/FLipMouse/releases \nShould the Firmware be updated automatically ? ", "FlipMouse update necessary", MessageBoxButtons.YesNo);
                 disconnnectComButton_Click(this, null);
+                if (dialogResult == DialogResult.Yes)
+                {
+                    Thread.Sleep(500);
+                    string strCmdText;
+                    strCmdText = "/C tycmd.exe upload FlipWare.ino.hex";
+                    System.Diagnostics.Process.Start("CMD.exe", strCmdText);
+                }
                 return;
             }
             flipMouseOnline = 1;

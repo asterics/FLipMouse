@@ -123,5 +123,17 @@ void keyboardBTRelease(int key);
  */
 bool isBluetoothAvailable();
 
+/*
+ * 
+ * name: startBTPairing
+ * @param none
+ * @return none
+ * 
+ * This method initialtes the pairing mode of the Adafruit EZ-Key module
+ * by pulling pin 12 high for 5 seconds. this only works if the BT-module's pair pin is connected
+ * to pin 1 of the extension header
+ */
+bool startBTPairing();
+
 
 #endif

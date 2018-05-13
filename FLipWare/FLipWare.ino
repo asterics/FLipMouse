@@ -63,7 +63,7 @@ uint8_t IR_LED_PIN = 6;                                 	//  IR-Led output pin
 struct slotGeneralSettings settings = {      // default settings valus, for type definition see fabi.h
     1,                                // stickMode: Mouse cursor movement active
     60, 60, 20, 20, 50, 50,           // accx, accy, deadzone x, deadzone y, maxspeed, acceleration time
-    500, 525, 3,                      // threshold sip, threshold puff, wheel step,
+    400, 600, 3,                      // threshold sip, threshold puff, wheel step,
     800, 10,                          // threshold strong puff, threshold strong sip
     50, 50, 50, 50 ,                  // gain up / down / left / right
     0, 0,                             // offset x / y
@@ -362,6 +362,9 @@ void makeTone(uint8_t kind, uint8_t param)
       break;
     case TONE_INDICATE_PUFF:
       tone(tonePin, 4000, 5);
+      break;
+    case TONE_BT_PAIRING:
+      tone(tonePin, 230, 4000);
       break;
      }
 }

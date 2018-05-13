@@ -56,6 +56,7 @@ unsigned long time=0;
 void handleModeState(int x, int y, int pressure)
 {         
     static int waitStable=0;
+    static int checkPairing=0;
     static uint16_t accelTimeX=0,accelTimeY=0;
     static uint8_t puffActive=0, sipActive=0, puffCount=0, sipCount=0;
     int strongDirThreshold;
@@ -185,6 +186,15 @@ void handleModeState(int x, int y, int pressure)
       {  
            for (int i=0;i<NUMBER_OF_PHYSICAL_BUTTONS;i++)    // update button press / release events
               handleButton(i, digitalRead(input_map[i]) == LOW ? 1 : 0);
+
+           if (digitalRead(input_map[0]) == LOW) {
+            checkPairing++;
+            if (checkPairing == BUTTON1_PRESS_TIME_FOR_PAIRING) {
+                    makeTone(TONE_BT_PAIRING, 0);
+                    startBTPairing();
+                    checkPairing=0;
+            }
+           } else checkPairing=0;
 
            switch (puffActive)  {
             case 0:

@@ -82,6 +82,9 @@
 #define TONE_INDICATE_SIP     7
 #define TONE_INDICATE_PUFF    8
 #define TONE_IR			          9
+#define TONE_BT_PAIRING      10
+
+#define BUTTON1_PRESS_TIME_FOR_PAIRING 800
 
 #define DEFAULT_CLICK_TIME      8    // time for mouse click (loop iterations from press to release)
 // #define DOUBLECLICK_MULTIPLIER  5    // CLICK_TIME factor for double clicks

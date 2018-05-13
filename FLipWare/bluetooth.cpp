@@ -16,14 +16,14 @@
 
 #include "bluetooth.h"
 
-#define BT_DATA_REDUCTION 10    // reduce mouse report frequency in BT mode  !
+#define BT_MINIMUM_SENDINTERVAL 40     // reduce mouse reports in BT mode (in milliseconds) !
 
 uint8_t bt_available = 0;
 uint8_t activeKeyCodes[6];
 uint8_t activeModifierKeys = 0;
 uint8_t activeMouseButtons = 0;
 
-
+long btsendTimestamp=millis();
 
 /*
  * 
@@ -57,16 +57,17 @@ void mouseBT(int x, int y, uint8_t scroll)
 			Serial.println(scroll,DEC);
 		}
 		
-		//according to:
-		//https://learn.adafruit.com/introducing-bluefruit-ez-key-diy-bluetooth-hid-keyboard/sending-keys-via-serial
-
-    sendCnt=(sendCnt+1) % BT_DATA_REDUCTION;
     accuX+=x;
     accuY+=y;
-    
-    if ((activeMouseButtons != oldMouseButtons) || (sendCnt==0))
-    {    
+
+    if ((activeMouseButtons != oldMouseButtons) || 
+        (btsendTimestamp+BT_MINIMUM_SENDINTERVAL<=millis()))
+    {   
+      btsendTimestamp=millis(); 
   		//starting RAW HID mouse report
+      //according to:
+      //https://learn.adafruit.com/introducing-bluefruit-ez-key-diy-bluetooth-hid-keyboard/sending-keys-via-serial
+
   		Serial_AUX.write((uint8_t)0xFD);
   		
   		//stuffing...
@@ -252,8 +253,9 @@ void keyboardBTPrint(char * writeString)
 
   // print each char of the string
   while(writeString[i])
-	{
-    // Serial_AUX.write(writeString[i]);
+  {
+    // Serial_AUX.write(writeString[i++]);
+ 
     // improved for localization / keycodes (but: slower ...)
     
     int keycode=0, modifier=0;
@@ -286,7 +288,8 @@ void keyboardBTPrint(char * writeString)
     keyboardBTPress(keycode | 0xf000);
     keyboardBTRelease(keycode | 0xf000);
     if (modifier) keyboardBTRelease(modifier);    
-	}
+    i++;    
+  }
 }
 
 /*
@@ -302,13 +305,19 @@ void keyboardBTPrint(char * writeString)
  */
 void initBluetooth()
 {
-
+  
   if(DebugOutput==DEBUG_FULLOUTPUT)
     Serial.println("init Bluetooth");
 
 	//start the AUX serial port 9600 8N1
 	Serial_AUX.begin(9600);
-	//set a short timeout, that the FLipMouse does not freeze if no BT module is connected
+  bt_available=1;
+
+  // we skipped the detection of the Adafruit EZKeys module as it was unreliable
+  // and slowed down startup time of the FlipMouse 
+  
+  /*
+  //set a short timeout, that the FLipMouse does not freeze if no BT module is connected
 	Serial_AUX.setTimeout(1000);
 	//receive a reply string from the BT module (if available)
 	String reply = Serial_AUX.readStringUntil('\n');
@@ -336,6 +345,7 @@ void initBluetooth()
                         Serial.println("Overriding anyway, Adafruit modules are buggy");
 		}
 	}
+ */
 }
 
 /*
@@ -352,4 +362,23 @@ bool isBluetoothAvailable()
 {
 	return bt_available;
 }
+
+/*
+ * 
+ * name: startBTPairing
+ * @param none
+ * @return none
+ * 
+ * This method initialtes the pairing mode of the Adafruit EZ-Key module
+ * by pulling pin 12 high for 4 seconds. this only works if the BT-module's pair pin is connected
+ * to pin 1 of the extension header
+ */
+bool startBTPairing()
+{
+    pinMode(12, OUTPUT);
+    digitalWrite (12, HIGH);
+    delay (4000);
+    pinMode(12, INPUT);
+}
+
 

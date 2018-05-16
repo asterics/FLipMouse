@@ -277,12 +277,13 @@ namespace MouseApp2
                     sendApplyCommands();
                     sendSaveSlotCommands(slots[slotCounter].slotName);
                     addToLog("Slot " + slots[slotCounter].slotName + " is stored into FLipmouse.");
+                    Thread.Sleep(1000);  // time to store slot in flipmouse
                 }
                 addToLog("The settings were stored!");
                 displaySlot(0);
                 sendLoadSlotCommand(slots[0].slotName);
                 sendStartReportingCommand();
-                Thread.Sleep(3000);  // time to activate config in flipmouse
+                Thread.Sleep(1000);  // time to activate config in flipmouse
                 Cursor.Current = Cursors.Default;
             }
 

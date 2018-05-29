@@ -111,11 +111,7 @@ namespace MouseApp2
 
         public void stringReceived(String newLine)
         {
-            if (newLine.ToUpper().Contains(PREFIX_FLIPMOUSE_VERSION))  // read flipmouse ID 
-            {
-                gotID(newLine);
-            } 
-            else if (newLine.ToUpper().StartsWith(PREFIX_REPORT_VALUES))  // read raw report (ADC values)
+            if (newLine.ToUpper().StartsWith(PREFIX_REPORT_VALUES))  // read raw report (ADC values)
             {
                 drawRawValues(newLine.Substring(PREFIX_REPORT_VALUES.Length));
             }
@@ -143,7 +139,10 @@ namespace MouseApp2
             {
                 gotIRCommandTimeout(newLine);
             }
-
+            else if (newLine.ToUpper().Contains(PREFIX_FLIPMOUSE_VERSION))  // read flipmouse ID 
+            {
+                gotID(newLine);
+            } 
         }
 
         public void gotEnd()

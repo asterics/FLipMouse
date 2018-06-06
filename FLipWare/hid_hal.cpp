@@ -33,6 +33,20 @@ void mousePress(uint8_t button)
     mouseBTPress(button);
 }
 
+void mouseToggle(uint8_t button)
+{
+  if (settings.bt & 1) {
+    if (Mouse.isPressed(button))
+       Mouse.release(button); else Mouse.press(button);
+  }
+  
+  if ((settings.bt & 2) && (isBluetoothAvailable())) {
+    if (isMouseBTPressed(button))
+      mouseBTRelease(button); else mouseBTPress(button);
+  }
+}
+
+
 void mouseScroll(int8_t steps) 
 {
   if (settings.bt & 1) 

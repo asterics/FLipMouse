@@ -39,13 +39,17 @@
           AT CM             click middle mouse button  
           AT CD             click double with left mouse button
 
-          AT PL             press/hold the left mouse button  
-          AT PR             press/hold the right mouse button
-          AT PM             press/hold the middle mouse button 
-  
+          AT HL             hold the left mouse button (automatic release when user action is done)
+          AT HR             hold the right mouse button (automatic release when user action is done)
+          AT HM             hold the middle mouse button (automatic release when user action is done)
+
           AT RL             release the left mouse button  
           AT RR             release the right mouse button
           AT RM             release the middle mouse button 
+
+          AT TL             toggle the left mouse button  
+          AT TR             toggle the right mouse button
+          AT TM             toggle the middle mouse button 
           
           AT WU             move mouse wheel up  
           AT WD             move mouse wheel down  
@@ -66,10 +70,14 @@
                             possible values are: 0, 45, 90, 135, 180, 225, 270, 315 and -1 to set center position)   
 
           AT KW <string>    keyboard write string (e.g." AT KW Hello!" writes "Hello!")    
-          AT KP <string>    key press: press/hold keys identifier 
+          AT KP <string>    key press: press keys once (automatic release after all keys were pressed)
                             (e.g. "AT KP KEY_UP" presses the "Cursor-Up" key, "AT KP KEY_CTRL KEY_ALT KEY_DELETE" presses all three keys)
-          AT KH <string>    key hold: sticky hold keys (key will be pressed until next button press or "AT KH" command) 
-                            (e.g. "AT KH KEY_A" presses the "A" key until  "AT KH KEY_A" is called again)
+          AT KH <string>    key hold: hold keys (automatic release when user action is done)
+                            (e.g. "AT KH KEY_A" presses the "A" key until  "AT KR KEY_A" is sent)
+          AT KT <string>    key toggle: "sticky" hold keys (key will be pressed until "AT KT" command is sent again or a "AT KR" command is sent) 
+                            in contrast to "AT KH" a finished user action does not release the keys
+                            (e.g. "AT KT KEY_A" presses the "A" key until  "AT KT KEY_A" is sent again.)
+
                             for a list of supported key idientifier strings see below ! 
                             
           AT KR <string>    key release: releases all keys identified in the string    
@@ -125,7 +133,7 @@
           AT IL           lists all stored infrared command names
           AT IT <uint>    set code timeout value for IR Recording (e.g. "AT IT 10" sets 10 milliseconds timeout)
 
-   supported key identifiers for key press command (AT KP):
+   supported key identifiers for key commands (AT KP/KH/KR/KT):
  
     KEY_A   KEY_B   KEY_C   KEY_D    KEY_E   KEY_F   KEY_G   KEY_H   KEY_I   KEY_J    KEY_K    KEY_L
     KEY_M   KEY_N   KEY_O   KEY_P    KEY_Q   KEY_R   KEY_S   KEY_T   KEY_U   KEY_V    KEY_W    KEY_X 
@@ -160,7 +168,8 @@ enum atCommands {
   CMD_LI, CMD_NE, CMD_DE, CMD_NC, CMD_E1, CMD_E0, CMD_MM, CMD_SW, CMD_SR, CMD_ER, CMD_CA, CMD_AX,
   CMD_AY, CMD_DX, CMD_DY, CMD_TS, CMD_TP, CMD_SP, CMD_SS, CMD_GU, CMD_GD, CMD_GL, CMD_GR, CMD_IR,
   CMD_IP, CMD_IC, CMD_IL, CMD_E2, CMD_JX, CMD_JY, CMD_JZ, CMD_JT, CMD_JS, CMD_JP, CMD_JR, CMD_JH,
-  CMD_IT, CMD_KH, CMD_MS, CMD_AC, CMD_MA, CMD_WA, CMD_RO, CMD_IW, CMD_BT, 
+  CMD_IT, CMD_KH, CMD_MS, CMD_AC, CMD_MA, CMD_WA, CMD_RO, CMD_IW, CMD_BT, CMD_HL, CMD_HR, CMD_HM,
+  CMD_TL, CMD_TR, CMD_TM, CMD_KT,
   NUM_COMMANDS
 };
 

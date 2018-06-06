@@ -118,6 +118,17 @@ void mouseBTRelease(uint8_t mousebutton)
 	mouseBT(0,0,0);
 }
 
+/*
+ * @name isMouseBTPressed
+ * @param mousebutton uint8_t buttons which should be polled 
+ * @return boolan 
+ */
+boolean isMouseBTPressed(uint8_t mousebutton)
+{
+  if (activeMouseButtons & mousebutton) return true;
+  return false;
+}
+
 
 /*
  * 

@@ -101,24 +101,27 @@ void handleRelease (int buttonIndex)    // a button was released: deal with "sti
 {
    switch(buttons[buttonIndex].mode) {
      case CMD_PL: 
+     case CMD_HL: 
                mouseRelease(MOUSE_LEFT); 
                break;
      case CMD_PR:
+     case CMD_HR:
                mouseRelease(MOUSE_RIGHT); 
                break;
      case CMD_PM:
+     case CMD_HM:
                mouseRelease(MOUSE_MIDDLE); 
                break;
      case CMD_JP: Joystick.button(buttons[buttonIndex].value,0); break;
      case CMD_MX: moveX=0; break;      
      case CMD_MY: moveY=0; break;      
-     case CMD_KP: releaseKeys(keystringButtons[buttonIndex]); break; 
+     case CMD_KH: releaseKeys(keystringButtons[buttonIndex]); break; 
    }
 }
   
 
-uint8_t handleButton(int i, uint8_t state)    // button debouncing and longpress detection  
-{                                                 //   (if button i is pressed long and index l>=0, virtual button l is activated !)
+uint8_t handleButton(int i, uint8_t state)    // button debouncing and press detection  
+{
    if ( buttonDebouncers[i].bounceState == state) {
      if (buttonDebouncers[i].bounceCount < DEFAULT_DEBOUNCING_TIME) {
        buttonDebouncers[i].bounceCount++;
@@ -128,15 +131,16 @@ uint8_t handleButton(int i, uint8_t state)    // button debouncing and longpress
           { 
             buttonDebouncers[i].stableState=state;
             if (state == 1) {      // new stable state: pressed !
-              if (inHoldMode(i)) 
+              //if (inHoldMode(i)) 
                 handlePress(i); 
               buttonDebouncers[i].timestamp=millis();   // start measuring time
             }
             else {   // new stable state: released !
-                 if (!inHoldMode(i)) 
-                   handlePress(i); 
-                 handleRelease(i);
-                 return(1);         // indicate that button action has been performed !
+                // if (!inHoldMode(i)) 
+                //   handlePress(i); 
+                if (inHoldMode(i))
+                  handleRelease(i);
+                return(1);         // indicate that button action has been performed !
             }
           }
        }
@@ -156,10 +160,13 @@ uint8_t inHoldMode (int i)
    if ((buttons[i].mode == CMD_PL) ||
        (buttons[i].mode == CMD_PR) || 
        (buttons[i].mode == CMD_PM) || 
+       (buttons[i].mode == CMD_HL) || 
+       (buttons[i].mode == CMD_HR) || 
+       (buttons[i].mode == CMD_HM) || 
        (buttons[i].mode == CMD_JP) || 
        (buttons[i].mode == CMD_MX) || 
        (buttons[i].mode == CMD_MY) || 
-       (buttons[i].mode == CMD_KP))
+       (buttons[i].mode == CMD_KH))
    return(1);
    else return(0); 
 }

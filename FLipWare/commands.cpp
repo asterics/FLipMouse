@@ -39,7 +39,9 @@ const struct atCommandType atCommands[] PROGMEM = {
     {"JT"  , PARTYPE_INT  },  {"JS"  , PARTYPE_INT  }, {"JP"  , PARTYPE_INT  }, {"JR"  , PARTYPE_INT  },
     {"JH"  , PARTYPE_INT  },  {"IT"  , PARTYPE_UINT  },{"KH"  , PARTYPE_STRING},{"MS"  , PARTYPE_UINT },
     {"AC"  , PARTYPE_UINT },  {"MA"  , PARTYPE_STRING},{"WA"  , PARTYPE_UINT  },{"RO"  , PARTYPE_UINT },
-    {"IW"  , PARTYPE_NONE },  {"BT"  , PARTYPE_UINT },
+    {"IW"  , PARTYPE_NONE },  {"BT"  , PARTYPE_UINT }, {"HL"  , PARTYPE_NONE },  {"HR"  , PARTYPE_NONE },
+    {"HM"  , PARTYPE_NONE },  {"TL"  , PARTYPE_NONE }, {"TR"  , PARTYPE_NONE },  {"TM"  , PARTYPE_NONE },
+    {"KT"  , PARTYPE_STRING }, 
 };
 
 void printCurrentSlot()
@@ -145,14 +147,26 @@ void performCommand (uint8_t cmd, int16_t par1, char * keystring, int8_t periodi
                delay(DEFAULT_CLICK_TIME);
                mouseRelease(MOUSE_MIDDLE); 
               break;
-        case CMD_PL:
+        case CMD_PL:  // for compatibility to v2.5 and below
+        case CMD_HL:
                mousePress(MOUSE_LEFT); 
                break;
-        case CMD_PR:
+        case CMD_PR:  // for compatibility to v2.5 and below
+        case CMD_HR:
                mousePress(MOUSE_RIGHT); 
                break;
-        case CMD_PM:
+        case CMD_PM:  // for compatibility to v2.5 and below
+        case CMD_HM:
                mousePress(MOUSE_MIDDLE); 
+               break;
+        case CMD_TL:
+               mouseToggle(MOUSE_LEFT); 
+               break;
+        case CMD_TR:
+               mouseToggle(MOUSE_RIGHT); 
+               break;
+        case CMD_TM:
+               mouseToggle(MOUSE_MIDDLE); 
                break;
         case CMD_RL:
                mouseRelease(MOUSE_LEFT); 
@@ -214,8 +228,10 @@ void performCommand (uint8_t cmd, int16_t par1, char * keystring, int8_t periodi
         case CMD_KH:
                holdKeys(keystring);
                break;
+        case CMD_KT:
+               toggleKeys(keystring);             
+               break;
         case CMD_KR:
-               strcat(keystring," ");
                releaseKeys(keystring);             
                break;
         case CMD_RA:

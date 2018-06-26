@@ -1,5 +1,5 @@
 /* 
-	FLipWare - AsTeRICS Foundation 2017
+	FLipWare - AsTeRICS Foundation
 	For more info please visit: http://www.asterics-academy.net
 
 	Module: hid_hal.h - covers USB HID and BT HID send routines

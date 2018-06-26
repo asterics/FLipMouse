@@ -1,5 +1,5 @@
 /*
-     FLipWare - AsTeRICS Foundation 2017
+     FLipWare - AsTeRICS Foundation
      For more info please visit: http://www.asterics-academy.net
 
      Module: keys.cpp - implementation of the keyboard handling

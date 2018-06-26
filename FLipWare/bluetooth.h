@@ -1,5 +1,5 @@
 /* 
-	FLipWare - AsTeRICS Foundation 2017
+	FLipWare - AsTeRICS Foundation
 	Copyright (c) Benjamin Aigner
 	For more info please visit: http://www.asterics-academy.net
 

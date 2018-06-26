@@ -304,6 +304,7 @@ namespace MouseApp2
 
         private void connectComButton_click(object sender, EventArgs e) //select button
         {
+            storeSlot(actSlot);
             addToLog("Trying to open COM port...");
             if (portComboBox.SelectedIndex > -1)
             {

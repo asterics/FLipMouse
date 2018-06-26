@@ -3462,6 +3462,7 @@
             // 
             // incRightGain
             // 
+            this.incRightGain.Enabled = false;
             this.incRightGain.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.incRightGain.ForeColor = System.Drawing.Color.Black;
             this.incRightGain.Location = new System.Drawing.Point(508, 252);
@@ -3472,6 +3473,7 @@
             this.incRightGain.TabStop = false;
             this.incRightGain.Text = "+";
             this.incRightGain.UseVisualStyleBackColor = true;
+            this.incRightGain.Visible = false;
             this.incRightGain.Click += new System.EventHandler(this.incRightGain_Click);
             this.incRightGain.MouseLeave += new System.EventHandler(this.stop_ClickTimer);
             this.incRightGain.MouseHover += new System.EventHandler(this.incRightGain_MouseHover);
@@ -3479,6 +3481,7 @@
             // decRightGain
             // 
             this.decRightGain.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.decRightGain.Enabled = false;
             this.decRightGain.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.decRightGain.ForeColor = System.Drawing.Color.Black;
             this.decRightGain.Location = new System.Drawing.Point(460, 252);
@@ -3489,6 +3492,7 @@
             this.decRightGain.TabStop = false;
             this.decRightGain.Text = "-";
             this.decRightGain.UseVisualStyleBackColor = true;
+            this.decRightGain.Visible = false;
             this.decRightGain.Click += new System.EventHandler(this.decRightGain_Click);
             this.decRightGain.MouseLeave += new System.EventHandler(this.stop_ClickTimer);
             this.decRightGain.MouseHover += new System.EventHandler(this.decRightGain_MouseHover);
@@ -3496,25 +3500,30 @@
             // rightGainLabel
             // 
             this.rightGainLabel.AutoSize = true;
+            this.rightGainLabel.Enabled = false;
             this.rightGainLabel.Location = new System.Drawing.Point(566, 274);
             this.rightGainLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.rightGainLabel.Name = "rightGainLabel";
             this.rightGainLabel.Size = new System.Drawing.Size(24, 17);
             this.rightGainLabel.TabIndex = 134;
             this.rightGainLabel.Text = "50";
+            this.rightGainLabel.Visible = false;
             // 
             // label28
             // 
             this.label28.AutoSize = true;
+            this.label28.Enabled = false;
             this.label28.Location = new System.Drawing.Point(563, 254);
             this.label28.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label28.Name = "label28";
             this.label28.Size = new System.Drawing.Size(67, 17);
             this.label28.TabIndex = 132;
             this.label28.Text = "right gain";
+            this.label28.Visible = false;
             // 
             // rightGainBar
             // 
+            this.rightGainBar.Enabled = false;
             this.rightGainBar.LargeChange = 10;
             this.rightGainBar.Location = new System.Drawing.Point(449, 210);
             this.rightGainBar.Margin = new System.Windows.Forms.Padding(4);
@@ -3524,10 +3533,12 @@
             this.rightGainBar.TabIndex = 12;
             this.rightGainBar.TickFrequency = 10;
             this.rightGainBar.Value = 50;
+            this.rightGainBar.Visible = false;
             this.rightGainBar.Scroll += new System.EventHandler(this.rightGainBar_Scroll);
             // 
             // incDownGain
             // 
+            this.incDownGain.Enabled = false;
             this.incDownGain.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.incDownGain.ForeColor = System.Drawing.Color.Black;
             this.incDownGain.Location = new System.Drawing.Point(289, 272);
@@ -3538,6 +3549,7 @@
             this.incDownGain.TabStop = false;
             this.incDownGain.Text = "+";
             this.incDownGain.UseVisualStyleBackColor = true;
+            this.incDownGain.Visible = false;
             this.incDownGain.Click += new System.EventHandler(this.incDownGain_Click);
             this.incDownGain.MouseLeave += new System.EventHandler(this.stop_ClickTimer);
             this.incDownGain.MouseHover += new System.EventHandler(this.incDownGain_MouseHover);
@@ -3545,6 +3557,7 @@
             // decDownGain
             // 
             this.decDownGain.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.decDownGain.Enabled = false;
             this.decDownGain.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.decDownGain.ForeColor = System.Drawing.Color.Black;
             this.decDownGain.Location = new System.Drawing.Point(289, 228);
@@ -3555,6 +3568,7 @@
             this.decDownGain.TabStop = false;
             this.decDownGain.Text = "-";
             this.decDownGain.UseVisualStyleBackColor = true;
+            this.decDownGain.Visible = false;
             this.decDownGain.Click += new System.EventHandler(this.decDownGain_Click);
             this.decDownGain.MouseLeave += new System.EventHandler(this.stop_ClickTimer);
             this.decDownGain.MouseHover += new System.EventHandler(this.decDownGain_MouseHover);
@@ -3562,25 +3576,30 @@
             // downGainLabel
             // 
             this.downGainLabel.AutoSize = true;
+            this.downGainLabel.Enabled = false;
             this.downGainLabel.Location = new System.Drawing.Point(241, 268);
             this.downGainLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.downGainLabel.Name = "downGainLabel";
             this.downGainLabel.Size = new System.Drawing.Size(24, 17);
             this.downGainLabel.TabIndex = 129;
             this.downGainLabel.Text = "50";
+            this.downGainLabel.Visible = false;
             // 
             // label25
             // 
             this.label25.AutoSize = true;
+            this.label25.Enabled = false;
             this.label25.Location = new System.Drawing.Point(203, 250);
             this.label25.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label25.Name = "label25";
             this.label25.Size = new System.Drawing.Size(72, 17);
             this.label25.TabIndex = 127;
             this.label25.Text = "down gain";
+            this.label25.Visible = false;
             // 
             // incLeftGain
             // 
+            this.incLeftGain.Enabled = false;
             this.incLeftGain.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.incLeftGain.ForeColor = System.Drawing.Color.Black;
             this.incLeftGain.Location = new System.Drawing.Point(267, 82);
@@ -3591,6 +3610,7 @@
             this.incLeftGain.TabStop = false;
             this.incLeftGain.Text = "+";
             this.incLeftGain.UseVisualStyleBackColor = true;
+            this.incLeftGain.Visible = false;
             this.incLeftGain.Click += new System.EventHandler(this.incLeftGain_Click);
             this.incLeftGain.MouseLeave += new System.EventHandler(this.stop_ClickTimer);
             this.incLeftGain.MouseHover += new System.EventHandler(this.incLeftGain_MouseHover);
@@ -3598,6 +3618,7 @@
             // decLeftGain
             // 
             this.decLeftGain.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.decLeftGain.Enabled = false;
             this.decLeftGain.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.decLeftGain.ForeColor = System.Drawing.Color.Black;
             this.decLeftGain.Location = new System.Drawing.Point(319, 82);
@@ -3608,6 +3629,7 @@
             this.decLeftGain.TabStop = false;
             this.decLeftGain.Text = "-";
             this.decLeftGain.UseVisualStyleBackColor = true;
+            this.decLeftGain.Visible = false;
             this.decLeftGain.Click += new System.EventHandler(this.decLeftGain_Click);
             this.decLeftGain.MouseLeave += new System.EventHandler(this.stop_ClickTimer);
             this.decLeftGain.MouseHover += new System.EventHandler(this.decLeftGain_MouseHover);
@@ -3615,25 +3637,30 @@
             // leftGainLabel
             // 
             this.leftGainLabel.AutoSize = true;
+            this.leftGainLabel.Enabled = false;
             this.leftGainLabel.Location = new System.Drawing.Point(228, 100);
             this.leftGainLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.leftGainLabel.Name = "leftGainLabel";
             this.leftGainLabel.Size = new System.Drawing.Size(24, 17);
             this.leftGainLabel.TabIndex = 124;
             this.leftGainLabel.Text = "50";
+            this.leftGainLabel.Visible = false;
             // 
             // label26
             // 
             this.label26.AutoSize = true;
+            this.label26.Enabled = false;
             this.label26.Location = new System.Drawing.Point(203, 82);
             this.label26.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label26.Name = "label26";
             this.label26.Size = new System.Drawing.Size(58, 17);
             this.label26.TabIndex = 122;
             this.label26.Text = "left gain";
+            this.label26.Visible = false;
             // 
             // incUpGain
             // 
+            this.incUpGain.Enabled = false;
             this.incUpGain.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.incUpGain.ForeColor = System.Drawing.Color.Black;
             this.incUpGain.Location = new System.Drawing.Point(491, 55);
@@ -3644,6 +3671,7 @@
             this.incUpGain.TabStop = false;
             this.incUpGain.Text = "+";
             this.incUpGain.UseVisualStyleBackColor = true;
+            this.incUpGain.Visible = false;
             this.incUpGain.Click += new System.EventHandler(this.incUpGain_Click);
             this.incUpGain.MouseLeave += new System.EventHandler(this.stop_ClickTimer);
             this.incUpGain.MouseHover += new System.EventHandler(this.incUpGain_MouseHover);
@@ -3651,6 +3679,7 @@
             // decUpGain
             // 
             this.decUpGain.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.decUpGain.Enabled = false;
             this.decUpGain.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.decUpGain.ForeColor = System.Drawing.Color.Black;
             this.decUpGain.Location = new System.Drawing.Point(491, 100);
@@ -3661,6 +3690,7 @@
             this.decUpGain.TabStop = false;
             this.decUpGain.Text = "-";
             this.decUpGain.UseVisualStyleBackColor = true;
+            this.decUpGain.Visible = false;
             this.decUpGain.Click += new System.EventHandler(this.decUpGain_Click);
             this.decUpGain.MouseLeave += new System.EventHandler(this.stop_ClickTimer);
             this.decUpGain.MouseHover += new System.EventHandler(this.decUpGain_MouseHover);
@@ -3668,22 +3698,26 @@
             // upGainLabel
             // 
             this.upGainLabel.AutoSize = true;
+            this.upGainLabel.Enabled = false;
             this.upGainLabel.Location = new System.Drawing.Point(540, 103);
             this.upGainLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.upGainLabel.Name = "upGainLabel";
             this.upGainLabel.Size = new System.Drawing.Size(24, 17);
             this.upGainLabel.TabIndex = 119;
             this.upGainLabel.Text = "50";
+            this.upGainLabel.Visible = false;
             // 
             // label23
             // 
             this.label23.AutoSize = true;
+            this.label23.Enabled = false;
             this.label23.Location = new System.Drawing.Point(539, 86);
             this.label23.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label23.Name = "label23";
             this.label23.Size = new System.Drawing.Size(55, 17);
             this.label23.TabIndex = 117;
             this.label23.Text = "up gain";
+            this.label23.Visible = false;
             // 
             // label22
             // 
@@ -3811,6 +3845,7 @@
             // 
             // leftGainBar
             // 
+            this.leftGainBar.Enabled = false;
             this.leftGainBar.LargeChange = 10;
             this.leftGainBar.Location = new System.Drawing.Point(257, 126);
             this.leftGainBar.Margin = new System.Windows.Forms.Padding(4);
@@ -3821,13 +3856,15 @@
             this.leftGainBar.TabIndex = 9;
             this.leftGainBar.TickFrequency = 10;
             this.leftGainBar.Value = 50;
+            this.leftGainBar.Visible = false;
             this.leftGainBar.Scroll += new System.EventHandler(this.leftGainBar_Scroll);
             // 
             // downGainBar
             // 
             this.downGainBar.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.downGainBar.Enabled = false;
             this.downGainBar.LargeChange = 10;
-            this.downGainBar.Location = new System.Drawing.Point(396, 214);
+            this.downGainBar.Location = new System.Drawing.Point(332, 205);
             this.downGainBar.Margin = new System.Windows.Forms.Padding(4);
             this.downGainBar.Maximum = 100;
             this.downGainBar.Name = "downGainBar";
@@ -3836,10 +3873,12 @@
             this.downGainBar.TabIndex = 6;
             this.downGainBar.TickFrequency = 10;
             this.downGainBar.Value = 50;
+            this.downGainBar.Visible = false;
             this.downGainBar.Scroll += new System.EventHandler(this.downGainBar_Scroll);
             // 
             // upGainBar
             // 
+            this.upGainBar.Enabled = false;
             this.upGainBar.LargeChange = 10;
             this.upGainBar.Location = new System.Drawing.Point(418, 46);
             this.upGainBar.Margin = new System.Windows.Forms.Padding(4);
@@ -3852,6 +3891,7 @@
             this.upGainBar.TabIndex = 3;
             this.upGainBar.TickFrequency = 10;
             this.upGainBar.Value = 50;
+            this.upGainBar.Visible = false;
             this.upGainBar.Scroll += new System.EventHandler(this.upGainBar_Scroll);
             // 
             // IRTab
@@ -4018,7 +4058,7 @@
             this.label50.Size = new System.Drawing.Size(557, 17);
             this.label50.TabIndex = 154;
             this.label50.Text = "This setting defines if the mouse/keyboard activities are sent to USB, bluetooth " +
-                "or both ";
+    "or both ";
             // 
             // label43
             // 

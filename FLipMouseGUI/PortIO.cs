@@ -177,14 +177,14 @@ namespace MouseApp2
                 return;
             }
             flipMouseOnline = 1;
-            slotNames.Items.Clear();
 
             dialogResult = MessageBox.Show("Connected device: " + newLine + "Do you want to load the slots and settings which are stored in the FLipMouse device ?", "Load Settings ?", MessageBoxButtons.YesNo);
             if (dialogResult == DialogResult.Yes)
             {
                 loadSettingsFromFLipmouse();
+                slotNames.Items.Clear();
             }
-            
+
             irCommandBox.Items.Clear();
             sendListIRCommand();
             sendStartReportingCommand();   // start reporting raw values !

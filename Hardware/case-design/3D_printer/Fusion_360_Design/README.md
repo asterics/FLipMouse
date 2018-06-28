@@ -2,7 +2,7 @@
 
 This case was designed with Fusion 360. If you want to edit the Fusion 360 file (.f3d) you need to be a student, buy it, or use the 30 day free trail.
 
-![Break Off](../../../../img/fusion_design_animation.gif)
+![Break Off](img/fusion_design_animation.gif)
 
 
 ### Assembly
@@ -16,19 +16,19 @@ You need these additinal things to have a fully functional case:
 
 The nut and screw are located in the back where the lid and main case meet.
 
-![Screw](../../../../img/fusion_design_screw.png)
+![Screw](img/fusion_design_screw.png)
 
 Altough, there are no screw nuts intended in the front of the case which hold the mouth piece, this can be changed easily.
 
 The front plate also contains a cross section which is just there to support the top part while printing. Without it the top part would not stick to the rest of the case and fall down. The cross parts should be removed after the print to ensure that the mouth piece can move.
 
-![Break Off Part](../../../../img/fusion_design_break_off_part.png)
+![Break Off Part](img/fusion_design_break_off_part.png)
 
 ### Parameters
 
 The design has some parameters which can be changed under Modify -> Parameters.
 
-![Parameters](../../../../img/fusion_design_parameters.png)
+![Parameters](img/fusion_design_parameters.png)
 
 * **wall_thickness**: Changes the thickness everywhere. This can be adjusted to fit the width of your printer nozzle.
 * **board_width**: Width of the PCB.

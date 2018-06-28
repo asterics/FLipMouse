@@ -1,19 +1,20 @@
 # FLipMouse
 
-The FLipMouse (Finger- and Lipmouse) is a device, which is intended to be a replacement for a normal PC mouse.
-Instead of moving the mouse device with your hand and clicking with your fingers, you move the mouse cursor by applying very low forces to the mouthpiece.
-The clicking functionality is done by sip and puff at the mouthpiece.
+The FLipMouse (a.k.a. Finger- and Lipmouse) is a replacement for a normal PC mouse / keyboard / joystick. 
+Instead of moving the mouse device with your hand and clicking with your fingers, the FlipMouse can be controlled by applying very low forces to the mouthpiece (joystick).
+The clicking functionality can be accomplished by sip- and puff-activities into the mouthpiece or via eternal switches.
 
 ![Full euqipped FLipmouse with 2 external buttons attached. Mounted on Manfrotto mount](/img/FLipmouse2.jpg)
 
-This device is originally designed for people with motor disablities, which can not or will not efford a medical device as mouse replacement.
+The FlipMouse might be used as a full replacement of standard computer input devices and can also be used for accessing smartphones or tablets (via the standard HID support or accessibility features).
+It can be useful for people with motor disablities, computer gamers, musicians or people who want a hands-free computer access for other purposes.
 
-Our goal is to provide an affordable solution for everybody who is not able to use a PC or smartphone in the usual way.
+Our goal is to provide an affordable DIY-solution for everybody who wants to use a PC or smartphone in the usual way.
 
 
 # The construction kit
 
-The official FlipMouse DIY kit is available for purchase via https://hackerspaceshop.com/products/flipmouse-diy-kit 
+The official FlipMouse DIY kit is available for purchase via https://hackerspaceshop.com/products/flipmouse-diy-kit. 
 We provide instructions how to assemble this kit in the folder ConstructionKit. In case you want to buy the components from other sources, a full part list is available in folder Hardware.
 There are different options for the enclosure: a laser-cut acrylic case (which is delivered in the DIY kit) and various 3d-printed variants. The desing files for enclosures can be found in folder Hardware/case-design.
 The PCB design (schematic and layout) have been made with EagleCAD and are available in folder Hardware/PCB-design
@@ -21,25 +22,23 @@ The PCB design (schematic and layout) have been made with EagleCAD and are avail
 
 # Hardware and Features
 
-The FLipMouse uses a TeensyLC controller (ARM CortexM0+) as main module. Movements of the mouthpiece are measured via FSRs (Force Sensing Resistors), which are able to detect small changes of the applied force (biased via springs) on the mouthpiece.
+The FLipMouse uses a TeensyLC microcontroller (ARM CortexM0+ architecture) as main module. Movements of the mouthpiece are measured via FSRs (Force Sensing Resistors), which detect small force applied to the mouthpiece / joystick.
 The sip/puff actions are detected by a pressure sensor. Via two 3.5mm jack plugs, external momentary switches can be connected and desired actions can be assigned.
-An IR-module and a IR-LED allow recording annd replay or arbitray infrared remote commands. Via an add-on module, bluetooth functionalty can be realized (for more information about the bluetooth add-on module please refer to the [FlipMouse Wiki](https://github.com/asterics/FLipMouse/wiki)
+An IR-receiver module and a IR-LED allow recording and replay of arbitrary infrared remote control commands. Via an add-on module, bluetooth functionalty can be realized (for more information about the bluetooth add-on module please refer to the [FlipMouse Wiki](https://github.com/asterics/FLipMouse/wiki)
 
 
 # Software (firmware and settings manager)
 
-FLipMouse's firmware is based on the Arduino framework. On the one hand because its easy to program and on the other hand its easy to use by people with basic skills in microcontroller programming.
-The firmware is capable of communication via a combined USB-HID device, which implements mouse, keyboard, joystick and a serial port.
+FLipMouse's firmware is based on the Arduino/Teensyduino framework. The firmware implements a composite USB HID device (mouse, keyboard, joystick and a serial port in one device).
 
-The mouse and keyboard device classes are used to transmit different keys or mouse actions to the host PC. The serial port is used configure the FLipMouse (or even use it as a mouse simulator via AT commands).
-By now, the joystick commands are not used.
+The mouse and keyboard device classes are used to transmit different keys or mouse actions to the host device. The serial port is used configure the FLipMouse (or even use it as a mouse simulator via AT commands).
 
-To use the configuration without any additional host program, it is possible to store up to 4 slots on the EEPROM. The limit of 4 slots is caused by the old software revision, it should be higher on the new hardware version with the external EEPROM.
+Multiple configuration settings can be saved (stored in an EEPROM module) and changed via desired user actions.
 
-If you want to build or edit the FLipMouse firmware on your own, please see https://github.com/asterics/FLipMouse/wiki/dev-firmware
+For more information about (modifying) the FLipMouse firmware see https://github.com/asterics/FLipMouse/wiki/dev-firmware
 
 
-The configuration of the FLipMouse can be changed via the **FlipmouseGUI settings manager**. Currently, the settings manager runs on Windows platfroms only (although Wine can be used to run it under Linux). 
+The configuration settings of the FLipMouse can be changed via the **FlipmouseGUI settings manager**. Currently, the settings manager runs on Windows platfroms only (although Wine can be used to run it under Linux). 
 Using the settings manager, you can assign different actions to all hardware inputs of the FLipMouse (mouthpiece, sip and puff, external buttons,...).
 More Information can be found in the user manual: [user manual](https://github.com/asterics/FLipMouse/blob/master/UserManualFlipMouse.pdf)
 

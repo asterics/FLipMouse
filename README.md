@@ -1,8 +1,12 @@
 # FLipMouse
 
 The FLipMouse (a.k.a. Finger- and Lipmouse) is a replacement for a normal PC mouse / keyboard / joystick. 
-Instead of moving the mouse device with your hand and clicking with your fingers, the FlipMouse can be controlled by applying very low forces to the mouthpiece (joystick).
-The clicking functionality can be accomplished by sip- and puff-activities into the mouthpiece or via eternal switches.
+Instead of moving the mouse device with your hand and clicking with your fingers, the FlipMouse can be controlled by applying very low forces to the mouthpiece (joystick) with your lips, fingers or other body parts.
+The clicking functionality can be accomplished by sip- and puff-activities into the mouthpiece or via external switches.
+All settings and functions of the FlipMouse can be tailored to specific user capabilites or needs. Multiple settings can be stored into the device and changed via desired user actions.
+Additional features like built-in environmental control via infrared, optional bluetooth-add-on module or complete software-based control of all functions via serial command interface make the FlipMouse a very flexible
+make the FlipMouse one of the most flexible alternative input devices available today.
+
 
 ![Full euqipped FLipmouse with 2 external buttons attached. Mounted on Manfrotto mount](/img/FLipmouse2.jpg)
 
@@ -12,7 +16,7 @@ It can be useful for people with motor disablities, computer gamers, musicians o
 Our goal is to provide an affordable DIY-solution for everybody who wants to use a PC or smartphone in the usual way.
 
 
-# The construction kit
+# The DIY construction kit
 
 The official FlipMouse DIY kit is available for purchase via https://hackerspaceshop.com/products/flipmouse-diy-kit. 
 We provide instructions how to assemble this kit in the folder ConstructionKit. In case you want to buy the components from other sources, a full part list is available in folder Hardware.

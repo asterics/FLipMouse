@@ -124,6 +124,8 @@
 
           AT IR <string>  record new infrared code and store it under given name (e.g. "AT IR vol_up")
           AT IP <string>  play  infrared code with given name (e.g. "AT IP vol_up")
+          AT IH <string>  play and hold the infrared code with given name
+          AT IS           stop currently playing infrared code
           AT IC <string>  clear infrared code with given name (e.g. "AT IC vol_up")
           AT IW           wipe infrared memory (clear all codes)
           AT IL           lists all stored infrared command names
@@ -253,6 +255,7 @@ namespace MouseApp2
             allCommands.add(new Command("AT GR", PARTYPE_UINT, "Gain for Right Sensor", COMBOENTRY_NO, GUITYPE_SLIDER));
             allCommands.add(new Command("AT IR", PARTYPE_STRING, "Record Infrared Command", COMBOENTRY_NO, GUITYPE_STANDARD));
             allCommands.add(new Command("AT IP", PARTYPE_STRING, "Play Infrared Command", COMBOENTRY_YES, GUITYPE_TEXTFIELD));
+            allCommands.add(new Command("AT IH", PARTYPE_STRING, "Hold Infrared Command", COMBOENTRY_YES, GUITYPE_TEXTFIELD));
             allCommands.add(new Command("AT IC", PARTYPE_STRING, "Clear Infrared Command", COMBOENTRY_NO, GUITYPE_STANDARD));
             allCommands.add(new Command("AT IL", PARTYPE_NONE,   "List Infrared Commands", COMBOENTRY_NO, GUITYPE_STANDARD));
             allCommands.add(new Command("AT RO", PARTYPE_UINT, "Rotate orientation", COMBOENTRY_NO, GUITYPE_COMBO_ONLY));

@@ -116,6 +116,9 @@ void handleRelease (int buttonIndex)    // a button was released: deal with "sti
      case CMD_MX: moveX=0; break;      
      case CMD_MY: moveY=0; break;      
      case CMD_KH: releaseKeys(keystringButtons[buttonIndex]); break; 
+     case CMD_IH:
+               stop_IR_command();
+               break;
    }
 }
   
@@ -166,7 +169,8 @@ uint8_t inHoldMode (int i)
        (buttons[i].mode == CMD_JP) || 
        (buttons[i].mode == CMD_MX) || 
        (buttons[i].mode == CMD_MY) || 
-       (buttons[i].mode == CMD_KH))
+       (buttons[i].mode == CMD_KH) ||
+       (buttons[i].mode == CMD_IH)) 
    return(1);
    else return(0); 
 }

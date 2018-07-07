@@ -802,6 +802,7 @@
             // 
             // joyModeBox
             // 
+            this.joyModeBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.joyModeBox.FormattingEnabled = true;
             this.joyModeBox.Location = new System.Drawing.Point(84, 310);
             this.joyModeBox.Margin = new System.Windows.Forms.Padding(4);
@@ -1289,6 +1290,7 @@
             // 
             // RightComboBox
             // 
+            this.RightComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.RightComboBox.FormattingEnabled = true;
             this.RightComboBox.Location = new System.Drawing.Point(549, 270);
             this.RightComboBox.Margin = new System.Windows.Forms.Padding(4);
@@ -1348,6 +1350,7 @@
             // 
             // RightFunctionMenu
             // 
+            this.RightFunctionMenu.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.RightFunctionMenu.FormattingEnabled = true;
             this.RightFunctionMenu.Location = new System.Drawing.Point(232, 270);
             this.RightFunctionMenu.Margin = new System.Windows.Forms.Padding(4);
@@ -1358,6 +1361,7 @@
             // 
             // LeftComboBox
             // 
+            this.LeftComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.LeftComboBox.FormattingEnabled = true;
             this.LeftComboBox.Location = new System.Drawing.Point(549, 204);
             this.LeftComboBox.Margin = new System.Windows.Forms.Padding(4);
@@ -1369,6 +1373,7 @@
             // 
             // DownComboBox
             // 
+            this.DownComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.DownComboBox.FormattingEnabled = true;
             this.DownComboBox.Location = new System.Drawing.Point(549, 134);
             this.DownComboBox.Margin = new System.Windows.Forms.Padding(4);
@@ -1380,6 +1385,7 @@
             // 
             // UpComboBox
             // 
+            this.UpComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.UpComboBox.FormattingEnabled = true;
             this.UpComboBox.Location = new System.Drawing.Point(549, 66);
             this.UpComboBox.Margin = new System.Windows.Forms.Padding(4);
@@ -1516,6 +1522,7 @@
             // 
             // LeftFunctionMenu
             // 
+            this.LeftFunctionMenu.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.LeftFunctionMenu.FormattingEnabled = true;
             this.LeftFunctionMenu.Location = new System.Drawing.Point(232, 204);
             this.LeftFunctionMenu.Margin = new System.Windows.Forms.Padding(4);
@@ -1536,6 +1543,7 @@
             // 
             // DownFunctionMenu
             // 
+            this.DownFunctionMenu.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.DownFunctionMenu.FormattingEnabled = true;
             this.DownFunctionMenu.Location = new System.Drawing.Point(232, 134);
             this.DownFunctionMenu.Margin = new System.Windows.Forms.Padding(4);
@@ -1556,6 +1564,7 @@
             // 
             // UpFunctionMenu
             // 
+            this.UpFunctionMenu.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.UpFunctionMenu.FormattingEnabled = true;
             this.UpFunctionMenu.Location = new System.Drawing.Point(232, 66);
             this.UpFunctionMenu.Margin = new System.Windows.Forms.Padding(4);
@@ -2104,6 +2113,7 @@
             // 
             // StrongPuffComboBox
             // 
+            this.StrongPuffComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.StrongPuffComboBox.FormattingEnabled = true;
             this.StrongPuffComboBox.Location = new System.Drawing.Point(501, 253);
             this.StrongPuffComboBox.Margin = new System.Windows.Forms.Padding(4);
@@ -2149,6 +2159,7 @@
             // 
             // StrongPuffFunctionMenu
             // 
+            this.StrongPuffFunctionMenu.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.StrongPuffFunctionMenu.FormattingEnabled = true;
             this.StrongPuffFunctionMenu.Location = new System.Drawing.Point(168, 253);
             this.StrongPuffFunctionMenu.Margin = new System.Windows.Forms.Padding(4);
@@ -2159,6 +2170,7 @@
             // 
             // StrongSipComboBox
             // 
+            this.StrongSipComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.StrongSipComboBox.FormattingEnabled = true;
             this.StrongSipComboBox.Location = new System.Drawing.Point(501, 111);
             this.StrongSipComboBox.Margin = new System.Windows.Forms.Padding(4);
@@ -2204,6 +2216,7 @@
             // 
             // StrongSipFunctionMenu
             // 
+            this.StrongSipFunctionMenu.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.StrongSipFunctionMenu.FormattingEnabled = true;
             this.StrongSipFunctionMenu.Location = new System.Drawing.Point(170, 111);
             this.StrongSipFunctionMenu.Margin = new System.Windows.Forms.Padding(4);
@@ -2214,6 +2227,7 @@
             // 
             // PuffComboBox
             // 
+            this.PuffComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.PuffComboBox.FormattingEnabled = true;
             this.PuffComboBox.Location = new System.Drawing.Point(501, 185);
             this.PuffComboBox.Margin = new System.Windows.Forms.Padding(4);
@@ -2225,6 +2239,7 @@
             // 
             // SipComboBox
             // 
+            this.SipComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.SipComboBox.FormattingEnabled = true;
             this.SipComboBox.Location = new System.Drawing.Point(501, 42);
             this.SipComboBox.Margin = new System.Windows.Forms.Padding(4);
@@ -2294,6 +2309,7 @@
             // 
             // PuffFunctionMenu
             // 
+            this.PuffFunctionMenu.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.PuffFunctionMenu.FormattingEnabled = true;
             this.PuffFunctionMenu.Location = new System.Drawing.Point(168, 185);
             this.PuffFunctionMenu.Margin = new System.Windows.Forms.Padding(4);
@@ -2314,6 +2330,7 @@
             // 
             // SipFunctionMenu
             // 
+            this.SipFunctionMenu.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.SipFunctionMenu.FormattingEnabled = true;
             this.SipFunctionMenu.Location = new System.Drawing.Point(168, 43);
             this.SipFunctionMenu.Margin = new System.Windows.Forms.Padding(4);
@@ -2427,6 +2444,7 @@
             // 
             // StrongSipRightComboBox
             // 
+            this.StrongSipRightComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.StrongSipRightComboBox.FormattingEnabled = true;
             this.StrongSipRightComboBox.Location = new System.Drawing.Point(513, 254);
             this.StrongSipRightComboBox.Margin = new System.Windows.Forms.Padding(4);
@@ -2486,6 +2504,7 @@
             // 
             // StrongSipRightFunctionBox
             // 
+            this.StrongSipRightFunctionBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.StrongSipRightFunctionBox.FormattingEnabled = true;
             this.StrongSipRightFunctionBox.Location = new System.Drawing.Point(177, 254);
             this.StrongSipRightFunctionBox.Margin = new System.Windows.Forms.Padding(4);
@@ -2538,6 +2557,7 @@
             // 
             // StrongSipLeftComboBox
             // 
+            this.StrongSipLeftComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.StrongSipLeftComboBox.FormattingEnabled = true;
             this.StrongSipLeftComboBox.Location = new System.Drawing.Point(513, 183);
             this.StrongSipLeftComboBox.Margin = new System.Windows.Forms.Padding(4);
@@ -2549,6 +2569,7 @@
             // 
             // StrongSipDownComboBox
             // 
+            this.StrongSipDownComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.StrongSipDownComboBox.FormattingEnabled = true;
             this.StrongSipDownComboBox.Location = new System.Drawing.Point(513, 112);
             this.StrongSipDownComboBox.Margin = new System.Windows.Forms.Padding(4);
@@ -2560,6 +2581,7 @@
             // 
             // StrongSipUpComboBox
             // 
+            this.StrongSipUpComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.StrongSipUpComboBox.FormattingEnabled = true;
             this.StrongSipUpComboBox.Location = new System.Drawing.Point(513, 42);
             this.StrongSipUpComboBox.Margin = new System.Windows.Forms.Padding(4);
@@ -2696,6 +2718,7 @@
             // 
             // StrongSipLeftFunctionBox
             // 
+            this.StrongSipLeftFunctionBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.StrongSipLeftFunctionBox.FormattingEnabled = true;
             this.StrongSipLeftFunctionBox.Location = new System.Drawing.Point(177, 183);
             this.StrongSipLeftFunctionBox.Margin = new System.Windows.Forms.Padding(4);
@@ -2716,6 +2739,7 @@
             // 
             // StrongSipDownFunctionBox
             // 
+            this.StrongSipDownFunctionBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.StrongSipDownFunctionBox.FormattingEnabled = true;
             this.StrongSipDownFunctionBox.Location = new System.Drawing.Point(177, 112);
             this.StrongSipDownFunctionBox.Margin = new System.Windows.Forms.Padding(4);
@@ -2736,6 +2760,7 @@
             // 
             // StrongSipUpFunctionBox
             // 
+            this.StrongSipUpFunctionBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.StrongSipUpFunctionBox.FormattingEnabled = true;
             this.StrongSipUpFunctionBox.Location = new System.Drawing.Point(177, 42);
             this.StrongSipUpFunctionBox.Margin = new System.Windows.Forms.Padding(4);
@@ -2808,6 +2833,7 @@
             // 
             // StrongPuffRightComboBox
             // 
+            this.StrongPuffRightComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.StrongPuffRightComboBox.FormattingEnabled = true;
             this.StrongPuffRightComboBox.Location = new System.Drawing.Point(511, 254);
             this.StrongPuffRightComboBox.Margin = new System.Windows.Forms.Padding(4);
@@ -2867,6 +2893,7 @@
             // 
             // StrongPuffRightFunctionBox
             // 
+            this.StrongPuffRightFunctionBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.StrongPuffRightFunctionBox.FormattingEnabled = true;
             this.StrongPuffRightFunctionBox.Location = new System.Drawing.Point(175, 254);
             this.StrongPuffRightFunctionBox.Margin = new System.Windows.Forms.Padding(4);
@@ -2919,6 +2946,7 @@
             // 
             // StrongPuffLeftComboBox
             // 
+            this.StrongPuffLeftComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.StrongPuffLeftComboBox.FormattingEnabled = true;
             this.StrongPuffLeftComboBox.Location = new System.Drawing.Point(511, 183);
             this.StrongPuffLeftComboBox.Margin = new System.Windows.Forms.Padding(4);
@@ -2930,6 +2958,7 @@
             // 
             // StrongPuffDownComboBox
             // 
+            this.StrongPuffDownComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.StrongPuffDownComboBox.FormattingEnabled = true;
             this.StrongPuffDownComboBox.Location = new System.Drawing.Point(511, 112);
             this.StrongPuffDownComboBox.Margin = new System.Windows.Forms.Padding(4);
@@ -2941,6 +2970,7 @@
             // 
             // StrongPuffUpComboBox
             // 
+            this.StrongPuffUpComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.StrongPuffUpComboBox.FormattingEnabled = true;
             this.StrongPuffUpComboBox.Location = new System.Drawing.Point(511, 42);
             this.StrongPuffUpComboBox.Margin = new System.Windows.Forms.Padding(4);
@@ -3077,6 +3107,7 @@
             // 
             // StrongPuffLeftFunctionBox
             // 
+            this.StrongPuffLeftFunctionBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.StrongPuffLeftFunctionBox.FormattingEnabled = true;
             this.StrongPuffLeftFunctionBox.Location = new System.Drawing.Point(175, 183);
             this.StrongPuffLeftFunctionBox.Margin = new System.Windows.Forms.Padding(4);
@@ -3097,6 +3128,7 @@
             // 
             // StrongPuffDownFunctionBox
             // 
+            this.StrongPuffDownFunctionBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.StrongPuffDownFunctionBox.FormattingEnabled = true;
             this.StrongPuffDownFunctionBox.Location = new System.Drawing.Point(175, 112);
             this.StrongPuffDownFunctionBox.Margin = new System.Windows.Forms.Padding(4);
@@ -3117,6 +3149,7 @@
             // 
             // StrongPuffUpFunctionBox
             // 
+            this.StrongPuffUpFunctionBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.StrongPuffUpFunctionBox.FormattingEnabled = true;
             this.StrongPuffUpFunctionBox.Location = new System.Drawing.Point(175, 42);
             this.StrongPuffUpFunctionBox.Margin = new System.Windows.Forms.Padding(4);
@@ -3212,6 +3245,7 @@
             // 
             // Button3ComboBox
             // 
+            this.Button3ComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.Button3ComboBox.FormattingEnabled = true;
             this.Button3ComboBox.Location = new System.Drawing.Point(566, 251);
             this.Button3ComboBox.Margin = new System.Windows.Forms.Padding(4);
@@ -3223,6 +3257,7 @@
             // 
             // Button2ComboBox
             // 
+            this.Button2ComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.Button2ComboBox.FormattingEnabled = true;
             this.Button2ComboBox.Location = new System.Drawing.Point(566, 173);
             this.Button2ComboBox.Margin = new System.Windows.Forms.Padding(4);
@@ -3234,6 +3269,7 @@
             // 
             // Button1ComboBox
             // 
+            this.Button1ComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.Button1ComboBox.FormattingEnabled = true;
             this.Button1ComboBox.Location = new System.Drawing.Point(566, 96);
             this.Button1ComboBox.Margin = new System.Windows.Forms.Padding(4);
@@ -3370,6 +3406,7 @@
             // 
             // Button3FunctionBox
             // 
+            this.Button3FunctionBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.Button3FunctionBox.FormattingEnabled = true;
             this.Button3FunctionBox.Location = new System.Drawing.Point(230, 251);
             this.Button3FunctionBox.Margin = new System.Windows.Forms.Padding(4);
@@ -3390,6 +3427,7 @@
             // 
             // Button2FunctionBox
             // 
+            this.Button2FunctionBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.Button2FunctionBox.FormattingEnabled = true;
             this.Button2FunctionBox.Location = new System.Drawing.Point(230, 173);
             this.Button2FunctionBox.Margin = new System.Windows.Forms.Padding(4);
@@ -3410,6 +3448,7 @@
             // 
             // Button1FunctionBox
             // 
+            this.Button1FunctionBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.Button1FunctionBox.FormattingEnabled = true;
             this.Button1FunctionBox.Location = new System.Drawing.Point(230, 96);
             this.Button1FunctionBox.Margin = new System.Windows.Forms.Padding(4);
@@ -4058,7 +4097,7 @@
             this.label50.Size = new System.Drawing.Size(557, 17);
             this.label50.TabIndex = 154;
             this.label50.Text = "This setting defines if the mouse/keyboard activities are sent to USB, bluetooth " +
-    "or both ";
+                "or both ";
             // 
             // label43
             // 
@@ -4072,6 +4111,7 @@
             // 
             // HIDComboBox
             // 
+            this.HIDComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.HIDComboBox.Location = new System.Drawing.Point(284, 203);
             this.HIDComboBox.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.HIDComboBox.Name = "HIDComboBox";
@@ -4090,6 +4130,7 @@
             // 
             // orientationBox
             // 
+            this.orientationBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.orientationBox.Location = new System.Drawing.Point(316, 94);
             this.orientationBox.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.orientationBox.Name = "orientationBox";
@@ -4124,6 +4165,7 @@
             // slotNames
             // 
             this.slotNames.CausesValidation = false;
+            this.slotNames.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.slotNames.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.slotNames.ForeColor = System.Drawing.SystemColors.MenuHighlight;
             this.slotNames.Location = new System.Drawing.Point(342, 512);
@@ -4131,7 +4173,6 @@
             this.slotNames.Name = "slotNames";
             this.slotNames.Size = new System.Drawing.Size(236, 28);
             this.slotNames.TabIndex = 27;
-            this.slotNames.Text = "<choose>";
             this.slotNames.SelectedIndexChanged += new System.EventHandler(this.slotNames_SelectedIndexChanged);
             // 
             // menuStrip1

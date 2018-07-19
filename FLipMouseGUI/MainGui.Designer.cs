@@ -4097,7 +4097,7 @@
             this.label50.Size = new System.Drawing.Size(557, 17);
             this.label50.TabIndex = 154;
             this.label50.Text = "This setting defines if the mouse/keyboard activities are sent to USB, bluetooth " +
-                "or both ";
+    "or both ";
             // 
             // label43
             // 
@@ -4165,7 +4165,6 @@
             // slotNames
             // 
             this.slotNames.CausesValidation = false;
-            this.slotNames.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.slotNames.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.slotNames.ForeColor = System.Drawing.SystemColors.MenuHighlight;
             this.slotNames.Location = new System.Drawing.Point(342, 512);

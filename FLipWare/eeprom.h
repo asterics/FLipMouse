@@ -20,7 +20,7 @@
  * 0x0000-0x008F	struct storageHeader		
  * 0x0090-0xXXXX	setting slots:
  * 
- * Magic Number: 0xAA55
+ * Magic Number: 0xBB66
  * struct slotGeneralSettings
  * '\0'
  * char * slotName ('\0')

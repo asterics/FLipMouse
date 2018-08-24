@@ -124,6 +124,8 @@
 
           AT IR <string>  record new infrared code and store it under given name (e.g. "AT IR vol_up")
           AT IP <string>  play  infrared code with given name (e.g. "AT IP vol_up")
+          AT IH <string>  play and hold the infrared code with given name
+          AT IS           stop currently playing infrared code
           AT IC <string>  clear infrared code with given name (e.g. "AT IC vol_up")
           AT IW           wipe infrared memory (clear all codes)
           AT IL           lists all stored infrared command names
@@ -172,6 +174,7 @@ namespace MouseApp2
         const int GUITYPE_GENERIC   = 6;
         const int GUITYPE_COMBO_ONLY = 7;
         const int GUITYPE_COMBO_INDEX = 8;
+        const int GUITYPE_IRSELECT = 9;
 
         const string PREFIX_FLIPMOUSE_VERSION = "FLIPMOUSE ";
         const string PREFIX_REPORT_VALUES = "VALUES:";
@@ -252,7 +255,8 @@ namespace MouseApp2
             allCommands.add(new Command("AT GL", PARTYPE_UINT, "Gain for Left Sensor", COMBOENTRY_NO, GUITYPE_SLIDER));
             allCommands.add(new Command("AT GR", PARTYPE_UINT, "Gain for Right Sensor", COMBOENTRY_NO, GUITYPE_SLIDER));
             allCommands.add(new Command("AT IR", PARTYPE_STRING, "Record Infrared Command", COMBOENTRY_NO, GUITYPE_STANDARD));
-            allCommands.add(new Command("AT IP", PARTYPE_STRING, "Play Infrared Command", COMBOENTRY_YES, GUITYPE_TEXTFIELD));
+            allCommands.add(new Command("AT IP", PARTYPE_STRING, "Play Infrared Command", COMBOENTRY_YES, GUITYPE_IRSELECT));
+            allCommands.add(new Command("AT IH", PARTYPE_STRING, "Hold Infrared Command", COMBOENTRY_YES, GUITYPE_IRSELECT));
             allCommands.add(new Command("AT IC", PARTYPE_STRING, "Clear Infrared Command", COMBOENTRY_NO, GUITYPE_STANDARD));
             allCommands.add(new Command("AT IL", PARTYPE_NONE,   "List Infrared Commands", COMBOENTRY_NO, GUITYPE_STANDARD));
             allCommands.add(new Command("AT RO", PARTYPE_UINT, "Rotate orientation", COMBOENTRY_NO, GUITYPE_COMBO_ONLY));
@@ -283,28 +287,28 @@ namespace MouseApp2
             commandGuiLinks.Add(new CommandGuiLink("AT GL", leftGainBar, leftGainLabel, "50"));
             commandGuiLinks.Add(new CommandGuiLink("AT GR", rightGainBar, rightGainLabel, "50"));
             commandGuiLinks.Add(new CommandGuiLink("AT MM", selectStick, selectJoystick, selectAlternative, "1"));
-            commandGuiLinks.Add(new CommandGuiLink("AT BM 01", Button1FunctionBox, Button1ParameterText, Button1NumericParameter, "AT NE"));
-            commandGuiLinks.Add(new CommandGuiLink("AT BM 02", Button2FunctionBox, Button2ParameterText, Button2NumericParameter, "AT NC "));
-            commandGuiLinks.Add(new CommandGuiLink("AT BM 03", Button3FunctionBox, Button3ParameterText, Button3NumericParameter, "AT NC" ));
-            commandGuiLinks.Add(new CommandGuiLink("AT BM 04", UpFunctionMenu, UpParameterText, UpNumericParameter, "AT KP KEY_UP "));
-            commandGuiLinks.Add(new CommandGuiLink("AT BM 05", DownFunctionMenu, DownParameterText, DownNumericParameter, "AT KP KEY_DOWN "));
-            commandGuiLinks.Add(new CommandGuiLink("AT BM 06", LeftFunctionMenu, LeftParameterText, LeftNumericParameter, "AT KP KEY_LEFT "));
-            commandGuiLinks.Add(new CommandGuiLink("AT BM 07", RightFunctionMenu, RightParameterText, RightNumericParameter, "AT KP KEY_RIGHT "));
-            commandGuiLinks.Add(new CommandGuiLink("AT BM 08", SipFunctionMenu, SipParameterText, SipNumericParameter, "AT HL"));
-            commandGuiLinks.Add(new CommandGuiLink("AT BM 09", StrongSipFunctionMenu, StrongSipParameterText, StrongSipNumericParameter, "AT NC"));
-            commandGuiLinks.Add(new CommandGuiLink("AT BM 10", PuffFunctionMenu, PuffParameterText, PuffNumericParameter, "AT CR"));
-            commandGuiLinks.Add(new CommandGuiLink("AT BM 11", StrongPuffFunctionMenu, StrongPuffParameterText, StrongPuffNumericParameter, "AT CA"));
-            commandGuiLinks.Add(new CommandGuiLink("AT BM 12", StrongSipUpFunctionBox, StrongSipUpParameterText, StrongSipUpNumericParameter, "AT NC"));
-            commandGuiLinks.Add(new CommandGuiLink("AT BM 13", StrongSipDownFunctionBox, StrongSipDownParameterText, StrongSipDownNumericParameter, "AT NC"));
-            commandGuiLinks.Add(new CommandGuiLink("AT BM 14", StrongSipLeftFunctionBox, StrongSipLeftParameterText, StrongSipLeftNumericParameter, "AT NC"));
-            commandGuiLinks.Add(new CommandGuiLink("AT BM 15", StrongSipRightFunctionBox, StrongSipRightParameterText, StrongSipRightNumericParameter, "AT NC"));
-            commandGuiLinks.Add(new CommandGuiLink("AT BM 16", StrongPuffUpFunctionBox, StrongPuffUpParameterText, StrongPuffUpNumericParameter, "AT NC"));
-            commandGuiLinks.Add(new CommandGuiLink("AT BM 17", StrongPuffDownFunctionBox, StrongPuffDownParameterText, StrongPuffDownNumericParameter, "AT NC"));
-            commandGuiLinks.Add(new CommandGuiLink("AT BM 18", StrongPuffLeftFunctionBox, StrongPuffLeftParameterText, StrongPuffLeftNumericParameter, "AT NC"));
-            commandGuiLinks.Add(new CommandGuiLink("AT BM 19", StrongPuffRightFunctionBox, StrongPuffRightParameterText, StrongPuffRightNumericParameter, "AT NC"));
+            commandGuiLinks.Add(new CommandGuiLink("AT BM 01", Button1FunctionBox, Button1ParameterText, Button1NumericParameter, Button1ComboBox, "AT NE"));
+            commandGuiLinks.Add(new CommandGuiLink("AT BM 02", Button2FunctionBox, Button2ParameterText, Button2NumericParameter, Button2ComboBox, "AT NC "));
+            commandGuiLinks.Add(new CommandGuiLink("AT BM 03", Button3FunctionBox, Button3ParameterText, Button3NumericParameter, Button3ComboBox, "AT NC" ));
+            commandGuiLinks.Add(new CommandGuiLink("AT BM 04", UpFunctionMenu, UpParameterText, UpNumericParameter, UpComboBox, "AT KP KEY_UP "));
+            commandGuiLinks.Add(new CommandGuiLink("AT BM 05", DownFunctionMenu, DownParameterText, DownNumericParameter, DownComboBox, "AT KP KEY_DOWN "));
+            commandGuiLinks.Add(new CommandGuiLink("AT BM 06", LeftFunctionMenu, LeftParameterText, LeftNumericParameter, LeftComboBox, "AT KP KEY_LEFT "));
+            commandGuiLinks.Add(new CommandGuiLink("AT BM 07", RightFunctionMenu, RightParameterText, RightNumericParameter, RightComboBox, "AT KP KEY_RIGHT "));
+            commandGuiLinks.Add(new CommandGuiLink("AT BM 08", SipFunctionMenu, SipParameterText, SipNumericParameter, SipComboBox, "AT HL"));
+            commandGuiLinks.Add(new CommandGuiLink("AT BM 09", StrongSipFunctionMenu, StrongSipParameterText, StrongSipNumericParameter, StrongSipComboBox, "AT NC"));
+            commandGuiLinks.Add(new CommandGuiLink("AT BM 10", PuffFunctionMenu, PuffParameterText, PuffNumericParameter, PuffComboBox, "AT CR"));
+            commandGuiLinks.Add(new CommandGuiLink("AT BM 11", StrongPuffFunctionMenu, StrongPuffParameterText, StrongPuffNumericParameter, StrongPuffComboBox, "AT CA"));
+            commandGuiLinks.Add(new CommandGuiLink("AT BM 12", StrongSipUpFunctionBox, StrongSipUpParameterText, StrongSipUpNumericParameter, StrongSipUpComboBox, "AT NC"));
+            commandGuiLinks.Add(new CommandGuiLink("AT BM 13", StrongSipDownFunctionBox, StrongSipDownParameterText, StrongSipDownNumericParameter, StrongSipDownComboBox, "AT NC"));
+            commandGuiLinks.Add(new CommandGuiLink("AT BM 14", StrongSipLeftFunctionBox, StrongSipLeftParameterText, StrongSipLeftNumericParameter, StrongSipLeftComboBox, "AT NC"));
+            commandGuiLinks.Add(new CommandGuiLink("AT BM 15", StrongSipRightFunctionBox, StrongSipRightParameterText, StrongSipRightNumericParameter, StrongSipRightComboBox, "AT NC"));
+            commandGuiLinks.Add(new CommandGuiLink("AT BM 16", StrongPuffUpFunctionBox, StrongPuffUpParameterText, StrongPuffUpNumericParameter, StrongPuffUpComboBox, "AT NC"));
+            commandGuiLinks.Add(new CommandGuiLink("AT BM 17", StrongPuffDownFunctionBox, StrongPuffDownParameterText, StrongPuffDownNumericParameter, StrongPuffDownComboBox, "AT NC"));
+            commandGuiLinks.Add(new CommandGuiLink("AT BM 18", StrongPuffLeftFunctionBox, StrongPuffLeftParameterText, StrongPuffLeftNumericParameter, StrongPuffLeftComboBox, "AT NC"));
+            commandGuiLinks.Add(new CommandGuiLink("AT BM 19", StrongPuffRightFunctionBox, StrongPuffRightParameterText, StrongPuffRightNumericParameter, StrongPuffRightComboBox, "AT NC"));
         }
 
-        String[] keyOptions = {    "Clear Keycodes!","KEY_SHIFT", "KEY_CTRL", "KEY_ALT","KEY_RIGHT_ALT","KEY_GUI","KEY_RIGHT_GUI",
+        String[] keyOptions = {    "KEY_SHIFT", "KEY_CTRL", "KEY_ALT","KEY_RIGHT_ALT","KEY_GUI","KEY_RIGHT_GUI",
                                    "KEY_A","KEY_B","KEY_C","KEY_D","KEY_E","KEY_F","KEY_G","KEY_H","KEY_I","KEY_J","KEY_K","KEY_L",
                                    "KEY_M","KEY_N","KEY_O","KEY_P","KEY_Q","KEY_R","KEY_S","KEY_T","KEY_U","KEY_V","KEY_W","KEY_X",
                                    "KEY_Y","KEY_Z","KEY_1","KEY_2","KEY_3","KEY_4","KEY_5","KEY_6","KEY_7","KEY_8","KEY_9","KEY_0",
@@ -574,6 +578,7 @@ namespace MouseApp2
             public String def;
 
             public ComboBox cb;
+            public ComboBox cb2;
             public TextBox tb;
             public NumericUpDown nud;
             public TrackBar tr;
@@ -582,7 +587,7 @@ namespace MouseApp2
             public RadioButton rb2;
             public RadioButton rb3;
 
-            public CommandGuiLink(String cmd, ComboBox cb, TextBox tb, NumericUpDown nud, String def)
+            public CommandGuiLink(String cmd, ComboBox cb, TextBox tb, NumericUpDown nud, ComboBox cb2, String def)
             {
                 this.type = GUITYPE_GENERIC;
                 this.cmd = cmd;
@@ -590,6 +595,7 @@ namespace MouseApp2
                 this.tb = tb;
                 this.nud = nud;
                 this.def = def;
+                this.cb2 = cb2;
             }
 
             public CommandGuiLink(String cmd, ComboBox cb, String def)

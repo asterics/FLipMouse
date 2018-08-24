@@ -167,6 +167,8 @@ void release_all();            // releases all previously pressed keys and butto
 
 void record_IR_command(char * name);
 void play_IR_command(char * name);
+void hold_IR_command(char * name);
+void stop_IR_command();
 void list_IR_commands();
 void delete_IR_command(char * name);
 void set_IR_timeout(uint16_t ms);

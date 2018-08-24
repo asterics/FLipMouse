@@ -88,7 +88,8 @@ namespace MouseApp2
                 {
                     case GUITYPE_INTFIELD: actSettingString+=(" "+guiLink.nud.Value); break;
                     case GUITYPE_KEYSELECT:
-                    case GUITYPE_TEXTFIELD: actSettingString+=(" "+guiLink.tb.Text); break;
+                    case GUITYPE_IRSELECT:
+                    case GUITYPE_TEXTFIELD: actSettingString += (" " + guiLink.tb.Text); break;
                     case GUITYPE_COMBO_ONLY: actSettingString += (" " + guiLink.cb.Text); break;
                     case GUITYPE_COMBO_INDEX: actSettingString += (" " + guiLink.cb.SelectedIndex); break;
                     case GUITYPE_SLIDER: actSettingString += (" " + guiLink.tr.Value); break;
@@ -121,6 +122,8 @@ namespace MouseApp2
                             strValue = settingString.Substring(6);
                             actButtonLink.nud.Value = Int32.Parse(strValue); break;
                         case GUITYPE_KEYSELECT:
+                        case GUITYPE_IRSELECT:
+                        case GUITYPE_COMBO_ONLY:
                         case GUITYPE_TEXTFIELD: actButtonLink.cb.SelectedIndex = allCommands.getSelectionIndex(cmd);
                             strValue = settingString.Substring(6);
                             actButtonLink.tb.Text = strValue; break;
@@ -552,7 +555,12 @@ namespace MouseApp2
             {
                 case GUITYPE_INTFIELD: la.Visible = true; la.Text = "   Value:"; nud.Visible = true; tb.Visible = false; cb.Visible = false; bu.Visible = false; bu.Enabled = false; break;
                 case GUITYPE_TEXTFIELD: la.Visible = true; la.Text = "    Text:"; nud.Visible = false; tb.Enabled = true; tb.ReadOnly = false; tb.Visible = true; tb.Text = ""; cb.Visible = false; bu.Visible = true; bu.Enabled = true; break;
-                case GUITYPE_KEYSELECT: la.Visible = true; la.Text = "KeyCodes:"; nud.Visible = false; tb.Visible = true; tb.Text = ""; tb.ReadOnly = true; cb.Visible = true; bu.Visible = true; bu.Enabled = true; break;
+                case GUITYPE_IRSELECT: // combo box used for IR commands
+                                        la.Visible = true; la.Text = " IR-Code:"; nud.Visible = false; tb.Text = "";  tb.Visible = true; tb.ReadOnly = true; cb.Visible = true; bu.Visible = true; bu.Enabled = true; 
+                                        cb.Items.Clear(); foreach (Object itm in irCommandBox.Items) cb.Items.Add(itm.ToString()); cb.Text="";break;
+                case GUITYPE_KEYSELECT: // combo box used for keycodes 
+                                        la.Visible = true; la.Text = "KeyCodes:"; nud.Visible = false; tb.Text = "";  tb.Visible = true; tb.ReadOnly = true; cb.Visible = true; bu.Visible = true; bu.Enabled = true; 
+                                        cb.Items.Clear(); foreach (string str in keyOptions) cb.Items.Add(str); cb.Text="";break;
                 default: la.Visible = false; nud.Visible = false; tb.Visible = false; cb.Visible = false; bu.Visible = false; bu.Enabled = false; break;
             }
         }
@@ -657,14 +665,13 @@ namespace MouseApp2
 
         private void updateKeyCodeParameter(ComboBox cb, TextBox tb)
         {
-            if (cb.SelectedIndex == 0)
-                tb.Text = "";
-            else
+            if (cb.Text.ToString().StartsWith("KEY_"))   // combo box used for Keycodes
             {
                 String add = cb.Text.ToString() + " ";
                 if (!tb.Text.Contains(add))
                     tb.Text += add;
             }
+            else tb.Text = cb.Text.ToString();    // combo box used for ir command names
         }
 
         private void Button1ComboBox_SelectedIndexChanged(object sender, EventArgs e)

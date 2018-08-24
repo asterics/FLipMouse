@@ -189,6 +189,7 @@ namespace MouseApp2
             sendListIRCommand();
             sendStartReportingCommand();   // start reporting raw values !
 
+
         }
 
         public void gotSlotNames(String newSlotName)
@@ -220,6 +221,22 @@ namespace MouseApp2
             irCommandBox.Items.Add(newIRCommandName);
             //irCommandBox.SelectedIndex=0;
             irCommandBox.Text = newIRCommandName;
+
+
+            // update all infrared code selection boxes
+            // TDB: improve this ... (should be performed only once, after the last received ir-code)
+            foreach (CommandGuiLink cgl in commandGuiLinks)
+            {
+                if (cgl.cb != null)
+                {
+                    if (cgl.cb.Text.Equals("Play Infrared Command") || cgl.cb.Text.Equals("Hold Infrared Command"))
+                    {
+                        cgl.cb2.Items.Clear();
+                        foreach (Object itm in irCommandBox.Items)
+                            cgl.cb2.Items.Add(itm.ToString());
+                    }
+                }
+            }
         }
 
         public void gotIRCommandRecorded(String newIRCommandName)

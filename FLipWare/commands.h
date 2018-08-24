@@ -127,7 +127,9 @@
     Infrared-specific commands:
 
           AT IR <string>  record new infrared code and store it under given name (e.g. "AT IR vol_up")
-          AT IP <string>  play  infrared code with given name (e.g. "AT IP vol_up")
+          AT IP <string>  play infrared code with given name (e.g. "AT IP vol_up")
+          AT IH <string>  play and hold the infrared code with given name
+          AT IS           stop currently playing infrared code
           AT IC <string>  clear infrared code with given name (e.g. "AT IC vol_up")
           AT IW           wipe infrared memory (clear all codes)
           AT IL           lists all stored infrared command names
@@ -169,7 +171,7 @@ enum atCommands {
   CMD_AY, CMD_DX, CMD_DY, CMD_TS, CMD_TP, CMD_SP, CMD_SS, CMD_GU, CMD_GD, CMD_GL, CMD_GR, CMD_IR,
   CMD_IP, CMD_IC, CMD_IL, CMD_E2, CMD_JX, CMD_JY, CMD_JZ, CMD_JT, CMD_JS, CMD_JP, CMD_JR, CMD_JH,
   CMD_IT, CMD_KH, CMD_MS, CMD_AC, CMD_MA, CMD_WA, CMD_RO, CMD_IW, CMD_BT, CMD_HL, CMD_HR, CMD_HM,
-  CMD_TL, CMD_TR, CMD_TM, CMD_KT,
+  CMD_TL, CMD_TR, CMD_TM, CMD_KT, CMD_IH, CMD_IS,
   NUM_COMMANDS
 };
 

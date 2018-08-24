@@ -41,7 +41,7 @@ const struct atCommandType atCommands[] PROGMEM = {
     {"AC"  , PARTYPE_UINT },  {"MA"  , PARTYPE_STRING},{"WA"  , PARTYPE_UINT  },{"RO"  , PARTYPE_UINT },
     {"IW"  , PARTYPE_NONE },  {"BT"  , PARTYPE_UINT }, {"HL"  , PARTYPE_NONE },  {"HR"  , PARTYPE_NONE },
     {"HM"  , PARTYPE_NONE },  {"TL"  , PARTYPE_NONE }, {"TR"  , PARTYPE_NONE },  {"TM"  , PARTYPE_NONE },
-    {"KT"  , PARTYPE_STRING }, 
+    {"KT"  , PARTYPE_STRING },{"IH"  , PARTYPE_STRING },{"IS"  , PARTYPE_NONE }, 
 };
 
 void printCurrentSlot()
@@ -406,6 +406,14 @@ void performCommand (uint8_t cmd, int16_t par1, char * keystring, int8_t periodi
         case CMD_IP:
     				if (DebugOutput==DEBUG_FULLOUTPUT) Serial.println("play IR command");
     				play_IR_command(keystring);
+            break;
+        case CMD_IH:
+            if (DebugOutput==DEBUG_FULLOUTPUT) Serial.println("hold IR command");
+            hold_IR_command(keystring);   
+            break;
+        case CMD_IS:
+            if (DebugOutput==DEBUG_FULLOUTPUT) Serial.println("stop IR command");
+            stop_IR_command();
             break;
         case CMD_IL:
     				list_IR_commands();

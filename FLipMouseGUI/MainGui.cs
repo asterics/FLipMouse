@@ -29,7 +29,7 @@ namespace MouseApp2
 {
     public partial class FLipMouseGUI : Form
     {
-        const string VERSION_STRING = "2.6";
+        const string VERSION_STRING = "2.7";
         const int MAX_KEYSTRING_LEN = 65;
 
         const int SENS_CHANGE_STEP = 1;
@@ -101,6 +101,10 @@ namespace MouseApp2
                     case GUITYPE_STANDARD: break;
                 }
                 slots[slotNumber].settingStrings.Add(actSettingString);
+            }
+            if (irIdleSequenceBox.Text != "")
+            {
+                slots[slotNumber].settingStrings.Add("AT IO " + irIdleSequenceBox.Text);
             }
         }
 
@@ -1382,7 +1386,7 @@ namespace MouseApp2
             int timeout = Int32.Parse(irTimeoutBox.Text);
             if ((timeout < 1) || (timeout > 10000)) return;
 
-            addToLog("Trying to Record IR Command " + irCommandBox.Text + " with edge timeout " + irTimeoutBox.Text);
+            addToLog("Recording IR Command " + irCommandBox.Text + ", timeout=" + irTimeoutBox.Text+"ms.");
             sendCmd("AT IT " + irTimeoutBox.Text);
             sendRecordIRCommand(irCommandBox.Text);
         }
@@ -1395,6 +1399,7 @@ namespace MouseApp2
             
         }
 
+
         private void deleteIRButton_Click(object sender, EventArgs e)
         {
             if (irCommandBox.Text.Length == 0) return;
@@ -1402,6 +1407,7 @@ namespace MouseApp2
             sendClearIRCommand(irCommandBox.Text);
 
             irCommandBox.Items.Clear();
+            irIdleSequenceBox.Items.Clear();
             sendListIRCommand();
         }
 
@@ -1411,6 +1417,7 @@ namespace MouseApp2
             sendClearIRCommands();
 
             irCommandBox.Items.Clear();
+            irIdleSequenceBox.Items.Clear();
             sendListIRCommand();
         }
 
@@ -1418,6 +1425,11 @@ namespace MouseApp2
         {
             storeSlot(actSlot);
             storeSettingsToFLipmouse();
+        }
+
+        private void clearIROffButton_Click(object sender, EventArgs e)
+        {
+            irIdleSequenceBox.Text = "";
         }
 
     }

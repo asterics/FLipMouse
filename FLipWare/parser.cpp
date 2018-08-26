@@ -63,7 +63,9 @@ void parseCommand (char * cmdstr)
 {
     int8_t cmd=-1;
     int16_t num=0;
-    
+    char dummy[20];
+
+    strcpy (dummy, cmdstr);
     if (DebugOutput==DEBUG_FULLOUTPUT)  {
   		Serial.print("parseCommand:"); Serial.println(cmdstr); 
     }
@@ -85,7 +87,7 @@ void parseCommand (char * cmdstr)
             {
                case PARTYPE_UINT: actpos=strtok(NULL," ");  if (get_uint(actpos, &num)) cmd=i ; break;
                case PARTYPE_INT:  actpos=strtok(NULL," ");  if (get_int(actpos, &num)) cmd=i ; break;
-               case PARTYPE_STRING: actpos+=3; if (*actpos) cmd=i; break;
+               case PARTYPE_STRING: actpos+=3; cmd=i; break;
                default: cmd=i; actpos=0; break;
             }
           }
@@ -97,7 +99,7 @@ void parseCommand (char * cmdstr)
       // Serial.print(num);Serial.print("stringpar:");Serial.println(actpos);
       performCommand(cmd,num,actpos,0);        
     } 
-    else Serial.println("???");      // command not recognized!                
+    else { Serial.println("???"); Serial.println(dummy);}      // command not recognized!                
 }
 
 

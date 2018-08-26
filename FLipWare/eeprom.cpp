@@ -847,17 +847,23 @@ uint16_t readIRFromEEPROMSlotNumber(uint8_t slotNr,uint16_t *timings,uint8_t max
 uint16_t readIRFromEEPROM(char * name,uint16_t *timings,uint8_t maxEdges)
 {
 	int8_t nr = slotnameIRToNumber(name);
-	#ifdef EEPROM_FULL_DEBUG
-		Serial.print("Load IR command ");
-		Serial.print(name);
-		Serial.print("@");
-		Serial.println(nr);
-	#endif
-	//call the method which loads the data
+
 	if(nr >= 0)
 	{
-		return readIRFromEEPROMSlotNumber(nr, timings, maxEdges);
+    if (DebugOutput==DEBUG_FULLOUTPUT) {
+      Serial.print("Load IR command ");
+      Serial.print(name);
+      Serial.print("@");
+      Serial.println(nr);
+    }
+
+    //call the method which loads the data
+    return readIRFromEEPROMSlotNumber(nr, timings, maxEdges);
 	} else {
+    if (DebugOutput==DEBUG_FULLOUTPUT) {
+      Serial.print("Could not Load IR command ");
+      Serial.println(name);
+	  }
 		return 0;
 	}
 }

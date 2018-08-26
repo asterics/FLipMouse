@@ -69,6 +69,7 @@ struct slotGeneralSettings settings = {      // default settings valus, for type
     0, 0,                             // offset x / y
     0,                                // orientation
     1,                                // bt-mode 1: USB, 2: Bluetooth, 3: both (2 & 3 need daughter board)) 
+    "",                               // no ir idle code
 }; 
 
 
@@ -355,8 +356,11 @@ void makeTone(uint8_t kind, uint8_t param)
       tone(tonePin, 300, 100); 
           break;
 		case TONE_IR:
-			tone(tonePin, 800, 400);
+			tone(tonePin, 2500, 30);
 			break;
+    case TONE_IR_REC:
+      tone(tonePin, 350, 500);
+      break;
     case TONE_INDICATE_SIP:
       tone(tonePin, 5000, 5);
       break;

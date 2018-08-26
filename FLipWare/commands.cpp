@@ -39,9 +39,9 @@ const struct atCommandType atCommands[] PROGMEM = {
     {"JT"  , PARTYPE_INT  },  {"JS"  , PARTYPE_INT  }, {"JP"  , PARTYPE_INT  }, {"JR"  , PARTYPE_INT  },
     {"JH"  , PARTYPE_INT  },  {"IT"  , PARTYPE_UINT  },{"KH"  , PARTYPE_STRING},{"MS"  , PARTYPE_UINT },
     {"AC"  , PARTYPE_UINT },  {"MA"  , PARTYPE_STRING},{"WA"  , PARTYPE_UINT  },{"RO"  , PARTYPE_UINT },
-    {"IW"  , PARTYPE_NONE },  {"BT"  , PARTYPE_UINT }, {"HL"  , PARTYPE_NONE },  {"HR"  , PARTYPE_NONE },
-    {"HM"  , PARTYPE_NONE },  {"TL"  , PARTYPE_NONE }, {"TR"  , PARTYPE_NONE },  {"TM"  , PARTYPE_NONE },
-    {"KT"  , PARTYPE_STRING },{"IH"  , PARTYPE_STRING },{"IS"  , PARTYPE_NONE }, 
+    {"IW"  , PARTYPE_NONE },  {"BT"  , PARTYPE_UINT }, {"HL"  , PARTYPE_NONE }, {"HR"  , PARTYPE_NONE },
+    {"HM"  , PARTYPE_NONE },  {"TL"  , PARTYPE_NONE }, {"TR"  , PARTYPE_NONE }, {"TM"  , PARTYPE_NONE },
+    {"KT"  , PARTYPE_STRING },{"IH"  , PARTYPE_STRING },{"IS"  , PARTYPE_NONE },{"II"  , PARTYPE_STRING }, 
 };
 
 void printCurrentSlot()
@@ -65,6 +65,7 @@ void printCurrentSlot()
         Serial.print("AT GR "); Serial.println(settings.gr);
         Serial.print("AT RO "); Serial.println(settings.ro);
         Serial.print("AT BT "); Serial.println(settings.bt);
+        Serial.print("AT II "); Serial.println(settings.ii);
         
         for (int i=0;i<NUMBER_OF_BUTTONS;i++) 
         {
@@ -220,19 +221,19 @@ void performCommand (uint8_t cmd, int16_t par1, char * keystring, int8_t periodi
             break;
         
         case CMD_KW:
-               keyboardPrint(keystring);
+               if (*keystring) keyboardPrint(keystring);
                break;
         case CMD_KP:
-               pressKeys(keystring);
+               if (*keystring) pressKeys(keystring);
                break;
         case CMD_KH:
-               holdKeys(keystring);
+               if (*keystring) holdKeys(keystring);
                break;
         case CMD_KT:
-               toggleKeys(keystring);             
+               if (*keystring) toggleKeys(keystring);             
                break;
         case CMD_KR:
-               releaseKeys(keystring);             
+               if (*keystring) releaseKeys(keystring);             
                break;
         case CMD_RA:
                release_all();             
@@ -240,10 +241,10 @@ void performCommand (uint8_t cmd, int16_t par1, char * keystring, int8_t periodi
               
         case CMD_SA:
                release_all();
-               saveToEEPROM(keystring); 
+               if (*keystring) saveToEEPROM(keystring); 
             break;
         case CMD_LO:
-               if (keystring) {
+               if (*keystring) {
                  release_all();
                  // reportSlotParameters=REPORT_ONE_SLOT;
                  readFromEEPROM(keystring);
@@ -401,15 +402,19 @@ void performCommand (uint8_t cmd, int16_t par1, char * keystring, int8_t periodi
 
         case CMD_IR:
     				if (DebugOutput==DEBUG_FULLOUTPUT) Serial.println("record IR command");
-    				record_IR_command(keystring);
+    				if (*keystring) record_IR_command(keystring);
             break;
         case CMD_IP:
     				if (DebugOutput==DEBUG_FULLOUTPUT) Serial.println("play IR command");
-    				play_IR_command(keystring);
+    				if (*keystring) play_IR_command(keystring);
+            break;
+        case CMD_II:
+            if (DebugOutput==DEBUG_FULLOUTPUT) Serial.println("set IR idle sequence command");
+            strcpy(settings.ii,keystring);
             break;
         case CMD_IH:
             if (DebugOutput==DEBUG_FULLOUTPUT) Serial.println("hold IR command");
-            hold_IR_command(keystring);   
+            if (*keystring) hold_IR_command(keystring);   
             break;
         case CMD_IS:
             if (DebugOutput==DEBUG_FULLOUTPUT) Serial.println("stop IR command");
@@ -419,7 +424,7 @@ void performCommand (uint8_t cmd, int16_t par1, char * keystring, int8_t periodi
     				list_IR_commands();
             break;
         case CMD_IC:
-    				delete_IR_command(keystring);
+    				if (*keystring) delete_IR_command(keystring);
             break;
         case CMD_IT:
             set_IR_timeout(par1);

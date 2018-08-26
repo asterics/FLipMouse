@@ -48,8 +48,9 @@
 #include "bluetooth.h"
 #include "hid_hal.h"
 
-#define VERSION_STRING "Flipmouse v2.6"
+#define VERSION_STRING "Flipmouse v2.7"
 
+//  V2.7: improved IR command recording and playback (IR hold repeats codes, optionally append off-sequence) 
 //  V2.6: updated API for KEY commands (added KT, changed KP) and Mouse Click commands (added toggle clicks) 
 //  V2.5: added stick rotation options, improved acoustic slot feedback, improved keycode handling, 
 //        removed Teensy2.0++ support, new AT commands: clear IR memory, route HID to BT/USB/both
@@ -84,6 +85,7 @@
 #define TONE_INDICATE_PUFF    8
 #define TONE_IR			          9
 #define TONE_BT_PAIRING      10
+#define TONE_IR_REC          11
 
 #define BUTTON1_PRESS_TIME_FOR_PAIRING 800
 
@@ -116,6 +118,7 @@ struct slotGeneralSettings {
   int16_t  cy;     // calib y
   uint16_t ro;     // orientation (0,90,180,270)
   uint8_t  bt;     // bt-mode (0,1,2)
+  char  ii[10]; // infrared idle sequence name
 };
 
 

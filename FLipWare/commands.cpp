@@ -221,19 +221,19 @@ void performCommand (uint8_t cmd, int16_t par1, char * keystring, int8_t periodi
             break;
         
         case CMD_KW:
-               if (*keystring) keyboardPrint(keystring);
+               if (keystring) keyboardPrint(keystring);
                break;
         case CMD_KP:
-               if (*keystring) pressKeys(keystring);
+               if (keystring) pressKeys(keystring);
                break;
         case CMD_KH:
-               if (*keystring) holdKeys(keystring);
+               if (keystring) holdKeys(keystring);
                break;
         case CMD_KT:
-               if (*keystring) toggleKeys(keystring);             
+               if (keystring) toggleKeys(keystring);             
                break;
         case CMD_KR:
-               if (*keystring) releaseKeys(keystring);             
+               if (keystring) releaseKeys(keystring);             
                break;
         case CMD_RA:
                release_all();             
@@ -241,10 +241,13 @@ void performCommand (uint8_t cmd, int16_t par1, char * keystring, int8_t periodi
               
         case CMD_SA:
                release_all();
-               if (*keystring) saveToEEPROM(keystring); 
+            if (keystring) { 
+                 if ((strlen(keystring)>0) && (strlen(keystring)< MAX_NAME_LEN)) 
+                    saveToEEPROM(keystring); 
+            }
             break;
         case CMD_LO:
-               if (*keystring) {
+               if (keystring) {
                  release_all();
                  // reportSlotParameters=REPORT_ONE_SLOT;
                  readFromEEPROM(keystring);
@@ -402,19 +405,29 @@ void performCommand (uint8_t cmd, int16_t par1, char * keystring, int8_t periodi
 
         case CMD_IR:
     				if (DebugOutput==DEBUG_FULLOUTPUT) Serial.println("record IR command");
-    				if (*keystring) record_IR_command(keystring);
+    				if (keystring) { 
+    				     if ((strlen(keystring)>0) && (strlen(keystring)< MAX_NAME_LEN)) 
+    				         record_IR_command(keystring);
+    				}
             break;
         case CMD_IP:
     				if (DebugOutput==DEBUG_FULLOUTPUT) Serial.println("play IR command");
-    				if (*keystring) play_IR_command(keystring);
+            if (keystring) 
+                     play_IR_command(keystring);
             break;
         case CMD_II:
             if (DebugOutput==DEBUG_FULLOUTPUT) Serial.println("set IR idle sequence command");
-            strcpy(settings.ii,keystring);
+            if (keystring) { 
+                 if ((strlen(keystring)>0) && (strlen(keystring)< MAX_NAME_LEN)) 
+                    strcpy(settings.ii,keystring);
+            }
             break;
         case CMD_IH:
             if (DebugOutput==DEBUG_FULLOUTPUT) Serial.println("hold IR command");
-            if (*keystring) hold_IR_command(keystring);   
+            if (keystring) { 
+               if ((strlen(keystring)>0) && (strlen(keystring)< MAX_NAME_LEN)) 
+                  hold_IR_command(keystring);   
+            }      
             break;
         case CMD_IS:
             if (DebugOutput==DEBUG_FULLOUTPUT) Serial.println("stop IR command");
@@ -424,7 +437,7 @@ void performCommand (uint8_t cmd, int16_t par1, char * keystring, int8_t periodi
     				list_IR_commands();
             break;
         case CMD_IC:
-    				if (*keystring) delete_IR_command(keystring);
+    				if (keystring) delete_IR_command(keystring);
             break;
         case CMD_IT:
             set_IR_timeout(par1);

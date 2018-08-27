@@ -75,8 +75,7 @@ struct slotGeneralSettings settings = {      // default settings valus, for type
 
 uint8_t workingmem[WORKINGMEM_SIZE];     // working memory (command parser, IR-rec/play)
 
-char IRName[MAX_SLOTNAME_LEN];
-char slotName[MAX_SLOTNAME_LEN] = "empty";
+char slotName[MAX_NAME_LEN] = "empty";
 int EmptySlotAddress = 0;
 uint8_t reportSlotParameters = REPORT_NONE;
 uint8_t reportRawValues = 0;

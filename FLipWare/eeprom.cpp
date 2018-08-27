@@ -313,7 +313,7 @@ int8_t slotnameToNumber(char * slotname)
 		matches = 1;
 
 		//compare the slotname
-		for (unsigned int t=0;t<MAX_SLOTNAME_LEN;t++)
+		for (unsigned int t=0;t<MAX_NAME_LEN;t++)
 		{
 			//compare byte for byte
 			if(*(slotname + t) != readEEPROM(address + t))
@@ -379,7 +379,7 @@ int8_t slotnameIRToNumber(char * slotname)
 		matches = 1;
 
 		//compare the slotname
-		for (unsigned int t=0;t<MAX_SLOTNAME_LEN;t++)
+		for (unsigned int t=0;t<MAX_NAME_LEN;t++)
 		{
 			//compare byte for byte
 			if(*(slotname + t) != readEEPROM(address - t))
@@ -818,14 +818,7 @@ uint16_t readIRFromEEPROMSlotNumber(uint8_t slotNr,uint16_t *timings,uint8_t max
 		Serial.println(address);
 	}
 
-	//read the slotname
-	p = (uint8_t *)&IRName;
-	do {
-		*p++ = readEEPROM(address--);
-	} while(*(p-1) != '\0');
-	
-	if (DebugOutput==DEBUG_FULLOUTPUT) {  Serial.print("found IR command: "); Serial.println(slotName); }
-	
+  while (readEEPROM(address--)) ;   // skip IR name
 	slotEdges = readEEPROM(address--);
 
 	//load all IR command edges

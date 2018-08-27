@@ -63,7 +63,7 @@
 #define WORKINGMEM_SIZE    400        // reserved RAM for working memory (command parser, IR-rec/play)
 #define MAX_SLOTS          7          // maximum number of EEPROM memory slots
 #define MAX_KEYSTRING_LEN (WORKINGMEM_SIZE-3)   // maximum length for AT command parameters
-#define MAX_SLOTNAME_LEN  15          // maximum length for a slotname
+#define MAX_NAME_LEN  15              // maximum length for a slotname or ir name
 #define MAX_KEYSTRINGBUFFER_LEN 700   // maximum length for all string parameters of one slot
 
 #define PARTYPE_NONE  0
@@ -118,7 +118,7 @@ struct slotGeneralSettings {
   int16_t  cy;     // calib y
   uint16_t ro;     // orientation (0,90,180,270)
   uint8_t  bt;     // bt-mode (0,1,2)
-  char  ii[10]; // infrared idle sequence name
+  char     ii[MAX_NAME_LEN]; // infrared idle sequence name
 };
 
 
@@ -133,8 +133,7 @@ extern uint8_t actSlot;
 extern uint8_t reportSlotParameters;
 extern uint8_t reportRawValues;
 extern struct slotGeneralSettings settings;
-extern char slotName[MAX_SLOTNAME_LEN];
-extern char IRName[MAX_SLOTNAME_LEN];
+extern char slotName[MAX_NAME_LEN];
 extern int EmptySlotAddress;
 
 extern const struct atCommandType atCommands[];

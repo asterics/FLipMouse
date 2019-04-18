@@ -48,8 +48,9 @@
 #include "bluetooth.h"
 #include "hid_hal.h"
 
-#define VERSION_STRING "Flipmouse v2.7"
+#define VERSION_STRING "Flipmouse v2.8"
 
+//  V2.8: improved cursor control by using polar coordinates and damping 
 //  V2.7: improved IR command recording and playback (IR hold repeats codes, optionally append off-sequence) 
 //  V2.6: updated API for KEY commands (added KT, changed KP) and Mouse Click commands (added toggle clicks) 
 //  V2.5: added stick rotation options, improved acoustic slot feedback, improved keycode handling, 
@@ -144,6 +145,8 @@ extern int16_t  cx;
 extern int16_t  cy;
 extern int8_t moveX;       
 extern int8_t moveY;
+extern double force;
+extern double angle;
 
 void performCommand (uint8_t cmd, int16_t par1, char * keystring, int8_t periodicMouseMovement);
 void saveToEEPROM(char * slotname);

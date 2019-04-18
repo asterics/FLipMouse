@@ -37,6 +37,7 @@
 #include "FlipWare.h"        //  FABI command definitions
 #include <EEPROM.h>
 #include <Wire.h>        // for the external EEPROM
+#include "math.h" 
 
 // Constants and Macro definitions
 
@@ -94,6 +95,7 @@ int waitTime=DEFAULT_WAIT_TIME;
 int up,down,left,right,tmp;
 int x,y;
 int pressure;
+double dz=0,force=0,angle=0;
 
 int16_t  cx=0,cy=0;
 
@@ -107,8 +109,8 @@ char * keystring=0;
 // function declarations 
 void UpdateLeds();
 void UpdateTones();
-void handleMouseClicks();
 void reportValues();
+void applyDeadzone();
 
 extern void handleCimMode(void);
 extern void init_CIM_frame(void);
@@ -209,16 +211,9 @@ void loop() {
 
           reportValues();     // send live data to serial 
           
-          if (x<-settings.dx) x+=settings.dx;  // apply deadzone values x direction
-          else if (x>settings.dx) x-=settings.dx;
-          else x=0;
-          
-          if (y<-settings.dy) y+=settings.dy;  // apply deadzone values y direction
-          else if (y>settings.dy) y-=settings.dy;
-          else y=0;
+          applyDeadzone();
 
           handleModeState(x, y, pressure);  // handle all mouse / joystick / button activities
-  //        handleMouseClicks();              // update mouse click activities
         
           delay(waitTime);  // to limit move movement speed. TBD: remove delay, use millis() !
     }  
@@ -251,6 +246,40 @@ void reportValues()
       */
       valueReportCount=0;
     }
+}
+
+void applyDeadzone()
+{
+    double x2,y2;
+    char str[80];
+
+    force=sqrt(x*x+y*y);
+    if (force!=0) {
+      angle = atan2 ((double)y/force, (double)x/force );
+      dz= settings.dx * (fabs((double)x)/force) + settings.dy * (fabs((double)y)/force);
+    }
+    else { angle=0; dz=settings.dx; }
+
+    if (force<dz) force=0; else force-=dz;
+
+    y2=force*sin(angle);
+    x2=force*cos(angle);
+
+    x=int(x2);
+    y=int(y2);
+
+    /*
+    {
+      static uint8_t valueReportCount =0; 
+      if (valueReportCount++ > 20) {                    // report raw values !
+        sprintf(str,"X=%04d Y=%04d F=%04d A=%04d",x,y,(int)force,(int)(angle * 180 / PI));
+        Serial.print(str);     Serial.print(" --> ");
+        sprintf(str,"X2=%04d Y2=%04d",(int)x2,(int)y2);
+        Serial.println(str);
+        valueReportCount=0;
+      }
+    }
+    */
 }
 
 void release_all()  // releases all previously pressed keys

@@ -29,7 +29,7 @@ namespace MouseApp2
 {
     public partial class FLipMouseGUI : Form
     {
-        const string VERSION_STRING = "2.7";
+        const string VERSION_STRING = "2.8";
         const int MAX_KEYSTRING_LEN = 65;
 
         const int SENS_CHANGE_STEP = 1;

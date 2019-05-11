@@ -20,7 +20,7 @@
 #define STRONGMODE_MOUSE_JOYSTICK_THRESHOLD  200
 #define STRONGMODE_STABLETIME        20
 #define STRONGMODE_EXIT_TIME        200
-#define STRONGMODE_IDLE_TIME         30
+#define STRONGMODE_IDLE_TIME         150
 #define SIP_PUFF_SETTLE_TIME         15
 #define MIN_HOLD_TIME                10
 
@@ -102,21 +102,25 @@ void handleModeState(int x, int y, int pressure)
              makeTone(TONE_EXIT_STRONGPUFF,0 );
              handlePress(STRONGPUFF_UP_BUTTON); handleRelease(STRONGPUFF_UP_BUTTON);
              modeState=MODESTATE_RETURN_TO_IDLE;
+             waitStable=0;
            }
            else if (x<-strongDirThreshold) { 
              makeTone(TONE_EXIT_STRONGPUFF,0 );
              handlePress(STRONGPUFF_LEFT_BUTTON); handleRelease(STRONGPUFF_LEFT_BUTTON);
              modeState=MODESTATE_RETURN_TO_IDLE;
+             waitStable=0;
            }
            else if (x>strongDirThreshold) { 
              makeTone(TONE_EXIT_STRONGPUFF,0 ); 
              handlePress(STRONGPUFF_RIGHT_BUTTON); handleRelease(STRONGPUFF_RIGHT_BUTTON);
              modeState=MODESTATE_RETURN_TO_IDLE;
+             waitStable=0;
            }
            else if (y>strongDirThreshold) { 
              makeTone(TONE_EXIT_STRONGPUFF,0 ); 
              handlePress(STRONGPUFF_DOWN_BUTTON); handleRelease(STRONGPUFF_DOWN_BUTTON);
              modeState=MODESTATE_RETURN_TO_IDLE;
+             waitStable=0;
           }
            else { 
                   waitStable++; 
@@ -142,21 +146,25 @@ void handleModeState(int x, int y, int pressure)
              makeTone(TONE_EXIT_STRONGSIP,0 );
              handlePress(STRONGSIP_UP_BUTTON); handleRelease(STRONGSIP_UP_BUTTON);
              modeState=MODESTATE_RETURN_TO_IDLE;
+             waitStable=0;
            }
            else if (x<-strongDirThreshold) { 
              makeTone(TONE_EXIT_STRONGSIP,0 );
              handlePress(STRONGSIP_LEFT_BUTTON); handleRelease(STRONGSIP_LEFT_BUTTON);
              modeState=MODESTATE_RETURN_TO_IDLE;
+             waitStable=0;
            }
            else if (x>strongDirThreshold) { 
              makeTone(TONE_EXIT_STRONGSIP,0 ); 
              handlePress(STRONGSIP_RIGHT_BUTTON); handleRelease(STRONGSIP_RIGHT_BUTTON);
              modeState=MODESTATE_RETURN_TO_IDLE;
+             waitStable=0;
            }
            else if (y>strongDirThreshold) { 
              makeTone(TONE_EXIT_STRONGSIP,0 ); 
              handlePress(STRONGSIP_DOWN_BUTTON); handleRelease(STRONGSIP_DOWN_BUTTON);
              modeState=MODESTATE_RETURN_TO_IDLE;
+             waitStable=0;
           }
           else {
              waitStable++; 

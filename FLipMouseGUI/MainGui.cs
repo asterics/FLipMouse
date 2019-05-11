@@ -29,7 +29,7 @@ namespace MouseApp2
 {
     public partial class FLipMouseGUI : Form
     {
-        const string VERSION_STRING = "2.8";
+        const string VERSION_STRING = "2.81";
         const int MAX_KEYSTRING_LEN = 65;
 
         const int SENS_CHANGE_STEP = 1;
@@ -558,12 +558,12 @@ namespace MouseApp2
             switch (allCommands.getGuiTypeFromDescription(selectedFunction))
             {
                 case GUITYPE_INTFIELD: la.Visible = true; la.Text = "   Value:"; nud.Visible = true; tb.Visible = false; cb.Visible = false; bu.Visible = false; bu.Enabled = false; break;
-                case GUITYPE_TEXTFIELD: la.Visible = true; la.Text = "    Text:"; nud.Visible = false; tb.Enabled = true; tb.ReadOnly = false; tb.Visible = true; tb.Text = ""; cb.Visible = false; bu.Visible = true; bu.Enabled = true; break;
+                case GUITYPE_TEXTFIELD: la.Visible = true; la.Text = "    Text:"; nud.Visible = false; tb.Enabled = true; tb.ReadOnly = false; tb.Visible = true; cb.Visible = false; bu.Visible = true; bu.Enabled = true; tb.Text = ""; break; 
                 case GUITYPE_IRSELECT: // combo box used for IR commands
                                         la.Visible = true; la.Text = " IR-Code:"; nud.Visible = false; tb.Text = "";  tb.Visible = true; tb.ReadOnly = true; cb.Visible = true; bu.Visible = true; bu.Enabled = true; 
                                         cb.Items.Clear(); foreach (Object itm in irCommandBox.Items) cb.Items.Add(itm.ToString()); cb.Text="";break;
                 case GUITYPE_KEYSELECT: // combo box used for keycodes 
-                                        la.Visible = true; la.Text = "KeyCodes:"; nud.Visible = false; tb.Text = "";  tb.Visible = true; tb.ReadOnly = true; cb.Visible = true; bu.Visible = true; bu.Enabled = true; 
+                                        la.Visible = true; la.Text = "KeyCodes:"; nud.Visible = false;  tb.Visible = true; tb.ReadOnly = true; cb.Visible = true; bu.Visible = true; bu.Enabled = true; if (!tb.Text.StartsWith("KEY_")) tb.Text = ""; 
                                         cb.Items.Clear(); foreach (string str in keyOptions) cb.Items.Add(str); cb.Text="";break;
                 default: la.Visible = false; nud.Visible = false; tb.Visible = false; cb.Visible = false; bu.Visible = false; bu.Enabled = false; break;
             }

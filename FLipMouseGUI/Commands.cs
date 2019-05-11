@@ -293,10 +293,10 @@ namespace MouseApp2
             commandGuiLinks.Add(new CommandGuiLink("AT BM 01", Button1FunctionBox, Button1ParameterText, Button1NumericParameter, Button1ComboBox, "AT NE"));
             commandGuiLinks.Add(new CommandGuiLink("AT BM 02", Button2FunctionBox, Button2ParameterText, Button2NumericParameter, Button2ComboBox, "AT NC "));
             commandGuiLinks.Add(new CommandGuiLink("AT BM 03", Button3FunctionBox, Button3ParameterText, Button3NumericParameter, Button3ComboBox, "AT NC" ));
-            commandGuiLinks.Add(new CommandGuiLink("AT BM 04", UpFunctionMenu, UpParameterText, UpNumericParameter, UpComboBox, "AT KP KEY_UP "));
-            commandGuiLinks.Add(new CommandGuiLink("AT BM 05", DownFunctionMenu, DownParameterText, DownNumericParameter, DownComboBox, "AT KP KEY_DOWN "));
-            commandGuiLinks.Add(new CommandGuiLink("AT BM 06", LeftFunctionMenu, LeftParameterText, LeftNumericParameter, LeftComboBox, "AT KP KEY_LEFT "));
-            commandGuiLinks.Add(new CommandGuiLink("AT BM 07", RightFunctionMenu, RightParameterText, RightNumericParameter, RightComboBox, "AT KP KEY_RIGHT "));
+            commandGuiLinks.Add(new CommandGuiLink("AT BM 04", UpFunctionMenu, UpParameterText, UpNumericParameter, UpComboBox, "AT KH KEY_UP "));
+            commandGuiLinks.Add(new CommandGuiLink("AT BM 05", DownFunctionMenu, DownParameterText, DownNumericParameter, DownComboBox, "AT KH KEY_DOWN "));
+            commandGuiLinks.Add(new CommandGuiLink("AT BM 06", LeftFunctionMenu, LeftParameterText, LeftNumericParameter, LeftComboBox, "AT KH KEY_LEFT "));
+            commandGuiLinks.Add(new CommandGuiLink("AT BM 07", RightFunctionMenu, RightParameterText, RightNumericParameter, RightComboBox, "AT KH KEY_RIGHT "));
             commandGuiLinks.Add(new CommandGuiLink("AT BM 08", SipFunctionMenu, SipParameterText, SipNumericParameter, SipComboBox, "AT HL"));
             commandGuiLinks.Add(new CommandGuiLink("AT BM 09", StrongSipFunctionMenu, StrongSipParameterText, StrongSipNumericParameter, StrongSipComboBox, "AT NC"));
             commandGuiLinks.Add(new CommandGuiLink("AT BM 10", PuffFunctionMenu, PuffParameterText, PuffNumericParameter, PuffComboBox, "AT CR"));

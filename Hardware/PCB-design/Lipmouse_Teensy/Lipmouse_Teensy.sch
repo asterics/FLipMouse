@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE eagle SYSTEM "eagle.dtd">
-<eagle version="6.6.0">
+<eagle version="7.5.0">
 <drawing>
 <settings>
 <setting alwaysvectorfont="no"/>
@@ -10312,16 +10312,16 @@ Source: Panbasonic .. 2SC1685.pdf</description>
 <part name="C2" library="resistor" deviceset="C-EU" device="025-025X050" value="100nF"/>
 <part name="RN1" library="resistor-net" deviceset="RN04" device="" value="220R"/>
 <part name="RN2" library="resistor-net" deviceset="RN04" device="" value="10k"/>
-<part name="R11" library="resistor" deviceset="R-EU_" device="0309/V" value="120R"/>
+<part name="R11" library="resistor" deviceset="R-EU_" device="0309/V" value="4k7"/>
 <part name="Q1" library="transistor-small-signal" deviceset="BS170" device=""/>
 <part name="IC1" library="microchip" deviceset="24*" device="P" technology="LC256" value="24FC1025-I/P"/>
 <part name="U1" library="Teensy_3_Series_Board_v1.0" deviceset="TEENSY_3.1_BASIC" device=""/>
-<part name="R12" library="resistor" deviceset="R-EU_" device="0309/V" value="22R"/>
+<part name="R12" library="resistor" deviceset="R-EU_" device="0309/V" value="12R"/>
 <part name="GND13" library="supply1" deviceset="GND" device=""/>
 <part name="GND2" library="supply1" deviceset="GND" device=""/>
 <part name="GND3" library="supply1" deviceset="GND" device=""/>
-<part name="R1" library="resistor" deviceset="R-EU_" device="0309/V" value="10k"/>
-<part name="R2" library="resistor" deviceset="R-EU_" device="0309/V" value="10k"/>
+<part name="R1" library="resistor" deviceset="R-EU_" device="0309/V" value="4k7"/>
+<part name="R2" library="resistor" deviceset="R-EU_" device="0309/V" value="4k7"/>
 <part name="P+1" library="supply1" deviceset="VCC" device=""/>
 <part name="X1" library="con-lumberg" deviceset="1503_02" device=""/>
 <part name="X2" library="con-lumberg" deviceset="1503_02" device=""/>
@@ -10330,8 +10330,9 @@ Source: Panbasonic .. 2SC1685.pdf</description>
 <part name="GND5" library="supply1" deviceset="GND" device=""/>
 <part name="I2C" library="pinhead" deviceset="PINHD-1X2" device=""/>
 <part name="SG1" library="buzzer" deviceset="EFB?" device="AA40D101" value="RS: 457011"/>
-<part name="R3" library="resistor" deviceset="R-EU_" device="0309/V" value="10k"/>
+<part name="R3" library="resistor" deviceset="R-EU_" device="0309/V" value="4k7"/>
 <part name="GND6" library="supply1" deviceset="GND" device=""/>
+<part name="GND7" library="supply1" deviceset="GND" device=""/>
 </parts>
 <sheets>
 <sheet>
@@ -10349,10 +10350,10 @@ Source: Panbasonic .. 2SC1685.pdf</description>
 <text x="30.48" y="5.08" size="1.778" layer="97">additional mounting
 stability (NC)</text>
 <wire x1="2.54" y1="177.8" x2="76.2" y2="177.8" width="0.1524" layer="97"/>
-<wire x1="76.2" y1="177.8" x2="76.2" y2="132.08" width="0.1524" layer="97"/>
-<wire x1="76.2" y1="132.08" x2="2.54" y2="132.08" width="0.1524" layer="97"/>
-<wire x1="2.54" y1="132.08" x2="2.54" y2="177.8" width="0.1524" layer="97"/>
-<text x="5.08" y="134.62" size="1.778" layer="97">IR receiver/transmitter</text>
+<wire x1="76.2" y1="177.8" x2="76.2" y2="127" width="0.1524" layer="97"/>
+<wire x1="76.2" y1="127" x2="2.54" y2="127" width="0.1524" layer="97"/>
+<wire x1="2.54" y1="127" x2="2.54" y2="177.8" width="0.1524" layer="97"/>
+<text x="5.08" y="129.54" size="1.778" layer="97">IR receiver/transmitter</text>
 <wire x1="2.54" y1="124.46" x2="76.2" y2="124.46" width="0.1524" layer="97"/>
 <wire x1="76.2" y1="124.46" x2="76.2" y2="63.5" width="0.1524" layer="97"/>
 <wire x1="76.2" y1="63.5" x2="2.54" y2="63.5" width="0.1524" layer="97"/>
@@ -10422,7 +10423,7 @@ External Buttons</text>
 <instance part="C2" gate="G$1" x="40.64" y="157.48"/>
 <instance part="RN1" gate="1" x="228.6" y="129.54"/>
 <instance part="RN2" gate="1" x="220.98" y="76.2"/>
-<instance part="R11" gate="G$1" x="50.8" y="144.78"/>
+<instance part="R11" gate="G$1" x="53.34" y="139.7" rot="R90"/>
 <instance part="Q1" gate="1" x="60.96" y="144.78"/>
 <instance part="IC1" gate="G$1" x="121.92" y="20.32"/>
 <instance part="U1" gate="G$1" x="139.7" y="121.92"/>
@@ -10447,6 +10448,7 @@ External Buttons</text>
 </instance>
 <instance part="R3" gate="G$1" x="170.18" y="45.72" rot="R180"/>
 <instance part="GND6" gate="1" x="187.96" y="43.18"/>
+<instance part="GND7" gate="1" x="53.34" y="132.08"/>
 </instances>
 <busses>
 </busses>
@@ -10542,6 +10544,10 @@ External Buttons</text>
 <pinref part="SG1" gate="G$1" pin="2"/>
 <wire x1="185.42" y1="45.72" x2="187.96" y2="45.72" width="0.1524" layer="91"/>
 <pinref part="GND6" gate="1" pin="GND"/>
+</segment>
+<segment>
+<pinref part="R11" gate="G$1" pin="1"/>
+<pinref part="GND7" gate="1" pin="GND"/>
 </segment>
 </net>
 <net name="FSR1" class="0">
@@ -10707,12 +10713,6 @@ External Buttons</text>
 <wire x1="66.04" y1="10.16" x2="66.04" y2="17.78" width="0.1524" layer="91"/>
 </segment>
 </net>
-<net name="N$8" class="0">
-<segment>
-<pinref part="R11" gate="G$1" pin="2"/>
-<pinref part="Q1" gate="1" pin="G"/>
-</segment>
-</net>
 <net name="N$9" class="0">
 <segment>
 <pinref part="Q1" gate="1" pin="D"/>
@@ -10785,14 +10785,16 @@ External Buttons</text>
 </net>
 <net name="IRLED" class="0">
 <segment>
-<pinref part="R11" gate="G$1" pin="1"/>
-<wire x1="45.72" y1="144.78" x2="35.56" y2="144.78" width="0.1524" layer="91"/>
-<label x="35.56" y="144.78" size="1.778" layer="95"/>
-</segment>
-<segment>
 <pinref part="U1" gate="G$1" pin="6/PWM"/>
 <wire x1="116.84" y1="134.62" x2="104.14" y2="134.62" width="0.1524" layer="91"/>
 <label x="104.14" y="134.62" size="1.778" layer="95"/>
+</segment>
+<segment>
+<pinref part="R11" gate="G$1" pin="2"/>
+<pinref part="Q1" gate="1" pin="G"/>
+<wire x1="53.34" y1="144.78" x2="55.88" y2="144.78" width="0.1524" layer="91"/>
+<wire x1="53.34" y1="144.78" x2="38.1" y2="144.78" width="0.1524" layer="91"/>
+<label x="38.1" y="144.78" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="BUTTON1" class="0">

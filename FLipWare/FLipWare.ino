@@ -91,6 +91,7 @@ uint8_t DebugOutput = DEBUG_NOOUTPUT;
 //#warning "DEACTIVATE DEBUG_FULLOUTPUT AGAIN!!!"
 int waitTime=DEFAULT_WAIT_TIME;
 
+unsigned long updateStandaloneTimestamp;
 
 int up,down,left,right,tmp;
 int x,y;
@@ -115,6 +116,7 @@ void applyDeadzone();
 extern void handleCimMode(void);
 extern void init_CIM_frame(void);
 extern uint8_t StandAloneMode;
+extern uint8_t CimMode;
 
 
 ////////////////////////////////////////
@@ -166,7 +168,8 @@ void setup() {
    
    if (DebugOutput==DEBUG_FULLOUTPUT) 
    {   Serial.print("Free RAM:");  Serial.println(freeRam());}
-   
+
+   updateStandaloneTimestamp=millis();
 }
 
 ///////////////////////////////
@@ -194,7 +197,9 @@ void loop() {
       parseByte (inByte);      // implemented in parser.cpp
     }
 
-    if (StandAloneMode)  {              
+    if (StandAloneMode && (millis() >= updateStandaloneTimestamp+waitTime))  {
+
+          updateStandaloneTimestamp=millis();    
           if (calib_now == 0)  {      // no calibration, use current values for x and y offset !
               x = (left-right) - cx;
               y = (up-down) - cy;
@@ -210,19 +215,15 @@ void loop() {
           }    
 
           reportValues();     // send live data to serial 
-
-
           applyDeadzone();
-
           handleModeState(x, y, pressure);  // handle all mouse / joystick / button activities
-        
-          delay(waitTime);  // to limit move movement speed. TBD: remove delay, use millis() !
+          UpdateLeds();
+          UpdateTones();
     }  
-    else 
-       handleCimMode();   // create periodic reports if running in AsTeRICS CIM compatibility mode
 
-    UpdateLeds();
-    UpdateTones();
+    if (CimMode) {
+      handleCimMode();   // create periodic reports if running in AsTeRICS CIM compatibility mode
+    }
 }
 
 void reportValues()

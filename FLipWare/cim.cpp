@@ -48,6 +48,8 @@ extern  int8_t  led_map[];              //  maps leds pins
 //const uint32_t LIPMOUSE_CIM_UNIQUE_NUMBER = 0x12345678;  
 const uint32_t LIPMOUSE_CIM_UNIQUE_NUMBER = 7;  
 volatile uint16_t ADC_updatetime=0;    
+unsigned long updateReportsTimestamp;
+
 const char LIPMOUSE_CIM_FEATURELIST[]=
 {
    0x00,0x00,  // unique number, data: 4 bytes 
@@ -59,6 +61,8 @@ const char LIPMOUSE_CIM_FEATURELIST[]=
 extern uint8_t readstate;
 volatile uint8_t CimParserActive=0;
 volatile uint8_t StandAloneMode=1;
+volatile uint8_t CimMode=0;  // generate CIM pakets from main loop ?
+volatile uint8_t actMode=0;  // 0: standalone functions disabled, 1: standalond functions enabled
 
 struct ARE_frame_t ARE_frame;
 struct CIM_frame_t CIM_frame;
@@ -118,8 +122,10 @@ uint8_t process_ARE_frame(uint8_t status_code)
 					break;
 		  	case CMD_REQUEST_START_CIM:
 			     if (data_size==0) {
-					  // enable_timer_ISR();
-            StandAloneMode=0;
+            updateReportsTimestamp=millis();
+            StandAloneMode=actMode;
+            CimMode=1;
+            // enable_timer_ISR();
 					} else status_code |= CIM_ERROR_INVALID_FEATURE;
 					break;
 		  	case CMD_REQUEST_STOP_CIM:
@@ -127,6 +133,7 @@ uint8_t process_ARE_frame(uint8_t status_code)
 				       first_packet=1;  // reset first frame indicator etc.
 					     //disable_timer_ISR();
                StandAloneMode=1;
+               CimMode=0;
 					} else status_code |= CIM_ERROR_INVALID_FEATURE;
 				  break;
 
@@ -177,6 +184,12 @@ uint8_t process_ARE_frame(uint8_t status_code)
 				      break;
               case LIPMOUSE_CIM_FEATURE_ATCMD:
                     parseCommand((char *)workingmem); 
+              break;
+              case LIPMOUSE_CIM_FEATURE_SET_MODE:
+                    if (data_size==1) {
+                      actMode=ARE_frame.data[0];
+                      StandAloneMode=actMode;
+                     }
               break;
 			        default:         // not a valid write  feature;
 		   		       status_code |= CIM_ERROR_INVALID_FEATURE;
@@ -413,8 +426,9 @@ uint8_t autoreply_num=0x80;   // sequential number for automatic replies, 0x80-0
 
 void handleCimMode(void)
 {
-    if ( ADC_updatetime>0)   
+    if ( (ADC_updatetime>0) && (millis() >= updateReportsTimestamp + ADC_updatetime))   
     {
+      updateReportsTimestamp=millis();
 	    autoreply_num++; 
 	    if (autoreply_num==0) autoreply_num=0x80;
 
@@ -436,5 +450,4 @@ void handleCimMode(void)
 		      reply_DataFrame();
     	}
     }              
-    delay(ADC_updatetime);  // to limit move movement speed. TBD: remove delay, use millis() !
 }

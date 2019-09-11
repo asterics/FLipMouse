@@ -62,11 +62,11 @@
 //  V2.0: extended AT command set, TeensyLC support, external EEPROM
 //  V1.0: extended AT command set, GUI compatibility
 
-#define WORKINGMEM_SIZE    400        // reserved RAM for working memory (command parser, IR-rec/play)
+#define WORKINGMEM_SIZE    300        // reserved RAM for working memory (command parser, IR-rec/play)
 #define MAX_SLOTS          7          // maximum number of EEPROM memory slots
 #define MAX_KEYSTRING_LEN (WORKINGMEM_SIZE-3)   // maximum length for AT command parameters
 #define MAX_NAME_LEN  15              // maximum length for a slotname or ir name
-#define MAX_KEYSTRINGBUFFER_LEN 700   // maximum length for all string parameters of one slot
+#define MAX_KEYSTRINGBUFFER_LEN 500   // maximum length for all string parameters of one slot
 
 #define PARTYPE_NONE  0
 #define PARTYPE_UINT  1

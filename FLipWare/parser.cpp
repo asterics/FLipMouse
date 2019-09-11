@@ -63,9 +63,7 @@ void parseCommand (char * cmdstr)
 {
     int8_t cmd=-1;
     int16_t num=0;
-    char dummy[20];
 
-    strcpy (dummy, cmdstr);
     if (DebugOutput==DEBUG_FULLOUTPUT)  {
   		Serial.print("parseCommand:"); Serial.println(cmdstr); 
     }
@@ -97,9 +95,9 @@ void parseCommand (char * cmdstr)
     if (cmd>-1) { 
       // Serial.print("cmd:");Serial.print(cmd);Serial.print("numpar:");
       // Serial.print(num);Serial.print("stringpar:");Serial.println(actpos);
-      performCommand(cmd,num,actpos,0);        
+      performCommand(cmd,num,actpos,0);       
     } 
-    else { Serial.println("???"); Serial.println(dummy);}      // command not recognized!                
+    else Serial.println("???");       // command not recognized!                
 }
 
 
@@ -136,6 +134,3 @@ void parseByte (int newByte)  // parse an incoming commandbyte from serial inter
       }
    }
 }
-
-
-

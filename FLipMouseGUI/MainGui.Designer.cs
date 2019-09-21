@@ -307,6 +307,10 @@
             this.recordIRButton = new System.Windows.Forms.Button();
             this.label24 = new System.Windows.Forms.Label();
             this.GeneralTab = new System.Windows.Forms.TabPage();
+            this.irIdleSequenceBox = new System.Windows.Forms.ComboBox();
+            this.label57 = new System.Windows.Forms.Label();
+            this.clearIROffButton = new System.Windows.Forms.Button();
+            this.label56 = new System.Windows.Forms.Label();
             this.label55 = new System.Windows.Forms.Label();
             this.label51 = new System.Windows.Forms.Label();
             this.label50 = new System.Windows.Forms.Label();
@@ -342,10 +346,11 @@
             this.label37 = new System.Windows.Forms.Label();
             this.label33 = new System.Windows.Forms.Label();
             this.StoreButton = new System.Windows.Forms.Button();
-            this.label56 = new System.Windows.Forms.Label();
-            this.clearIROffButton = new System.Windows.Forms.Button();
-            this.irIdleSequenceBox = new System.Windows.Forms.ComboBox();
-            this.label57 = new System.Windows.Forms.Label();
+            this.copy_orientation = new System.Windows.Forms.Button();
+            this.copy_buttons = new System.Windows.Forms.Button();
+            this.copy_btmode = new System.Windows.Forms.Button();
+            this.copy_levels = new System.Windows.Forms.Button();
+            this.copy_stickactions = new System.Windows.Forms.Button();
             this.tabControl.SuspendLayout();
             this.LipmouseTab.SuspendLayout();
             this.singlePanel.SuspendLayout();
@@ -481,6 +486,7 @@
             // LipmouseTab
             // 
             this.LipmouseTab.BackColor = System.Drawing.SystemColors.ButtonFace;
+            this.LipmouseTab.Controls.Add(this.copy_stickactions);
             this.LipmouseTab.Controls.Add(this.singlePanel);
             this.LipmouseTab.Controls.Add(this.incAcceleration);
             this.LipmouseTab.Controls.Add(this.decAcceleration);
@@ -1138,7 +1144,7 @@
             // splitXYBox
             // 
             this.splitXYBox.AutoSize = true;
-            this.splitXYBox.Location = new System.Drawing.Point(622, 298);
+            this.splitXYBox.Location = new System.Drawing.Point(584, 309);
             this.splitXYBox.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.splitXYBox.Name = "splitXYBox";
             this.splitXYBox.Size = new System.Drawing.Size(81, 21);
@@ -1580,6 +1586,7 @@
             // SipPuffLevelsTab
             // 
             this.SipPuffLevelsTab.BackColor = System.Drawing.SystemColors.ButtonFace;
+            this.SipPuffLevelsTab.Controls.Add(this.copy_levels);
             this.SipPuffLevelsTab.Controls.Add(this.holdLevelIndicatorPanel);
             this.SipPuffLevelsTab.Controls.Add(this.sipLevelIndicatorPanel);
             this.SipPuffLevelsTab.Controls.Add(this.specialLevelIndicatorPanel);
@@ -3165,6 +3172,7 @@
             // ButtonsTab
             // 
             this.ButtonsTab.BackColor = System.Drawing.SystemColors.ButtonFace;
+            this.ButtonsTab.Controls.Add(this.copy_buttons);
             this.ButtonsTab.Controls.Add(this.clearButton3);
             this.ButtonsTab.Controls.Add(this.clearButton2);
             this.ButtonsTab.Controls.Add(this.clearButton1);
@@ -4059,6 +4067,8 @@
             // GeneralTab
             // 
             this.GeneralTab.BackColor = System.Drawing.SystemColors.ButtonFace;
+            this.GeneralTab.Controls.Add(this.copy_btmode);
+            this.GeneralTab.Controls.Add(this.copy_orientation);
             this.GeneralTab.Controls.Add(this.irIdleSequenceBox);
             this.GeneralTab.Controls.Add(this.label57);
             this.GeneralTab.Controls.Add(this.clearIROffButton);
@@ -4075,6 +4085,47 @@
             this.GeneralTab.Size = new System.Drawing.Size(834, 361);
             this.GeneralTab.TabIndex = 7;
             this.GeneralTab.Text = "General";
+            // 
+            // irIdleSequenceBox
+            // 
+            this.irIdleSequenceBox.FormattingEnabled = true;
+            this.irIdleSequenceBox.Location = new System.Drawing.Point(105, 292);
+            this.irIdleSequenceBox.Margin = new System.Windows.Forms.Padding(4);
+            this.irIdleSequenceBox.Name = "irIdleSequenceBox";
+            this.irIdleSequenceBox.Size = new System.Drawing.Size(467, 24);
+            this.irIdleSequenceBox.TabIndex = 159;
+            // 
+            // label57
+            // 
+            this.label57.AutoSize = true;
+            this.label57.Location = new System.Drawing.Point(102, 262);
+            this.label57.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label57.Name = "label57";
+            this.label57.Size = new System.Drawing.Size(417, 17);
+            this.label57.TabIndex = 160;
+            this.label57.Text = "Send an Infrared code (idle sequence) after every other IR-code:";
+            // 
+            // clearIROffButton
+            // 
+            this.clearIROffButton.ForeColor = System.Drawing.Color.Black;
+            this.clearIROffButton.Location = new System.Drawing.Point(585, 283);
+            this.clearIROffButton.Margin = new System.Windows.Forms.Padding(4);
+            this.clearIROffButton.Name = "clearIROffButton";
+            this.clearIROffButton.Size = new System.Drawing.Size(216, 40);
+            this.clearIROffButton.TabIndex = 158;
+            this.clearIROffButton.Text = "do not use an idle-sequence";
+            this.clearIROffButton.UseVisualStyleBackColor = true;
+            this.clearIROffButton.Click += new System.EventHandler(this.clearIROffButton_Click);
+            // 
+            // label56
+            // 
+            this.label56.AutoSize = true;
+            this.label56.Location = new System.Drawing.Point(42, 30);
+            this.label56.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label56.Name = "label56";
+            this.label56.Size = new System.Drawing.Size(142, 17);
+            this.label56.TabIndex = 157;
+            this.label56.Text = "General slot settings:";
             // 
             // label55
             // 
@@ -4105,7 +4156,7 @@
             this.label50.Size = new System.Drawing.Size(557, 17);
             this.label50.TabIndex = 154;
             this.label50.Text = "This setting defines if the mouse/keyboard activities are sent to USB, bluetooth " +
-                "or both ";
+    "or both ";
             // 
             // label43
             // 
@@ -4431,46 +4482,65 @@
             this.StoreButton.UseVisualStyleBackColor = true;
             this.StoreButton.Click += new System.EventHandler(this.StoreButton_Click);
             // 
-            // label56
+            // copy_orientation
             // 
-            this.label56.AutoSize = true;
-            this.label56.Location = new System.Drawing.Point(42, 30);
-            this.label56.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.label56.Name = "label56";
-            this.label56.Size = new System.Drawing.Size(142, 17);
-            this.label56.TabIndex = 157;
-            this.label56.Text = "General slot settings:";
+            this.copy_orientation.ForeColor = System.Drawing.Color.Black;
+            this.copy_orientation.Location = new System.Drawing.Point(439, 72);
+            this.copy_orientation.Margin = new System.Windows.Forms.Padding(4);
+            this.copy_orientation.Name = "copy_orientation";
+            this.copy_orientation.Size = new System.Drawing.Size(127, 30);
+            this.copy_orientation.TabIndex = 161;
+            this.copy_orientation.Text = "copy to all slots";
+            this.copy_orientation.UseVisualStyleBackColor = true;
+            this.copy_orientation.Click += new System.EventHandler(this.copy_orientation_Click);
             // 
-            // clearIROffButton
+            // copy_buttons
             // 
-            this.clearIROffButton.ForeColor = System.Drawing.Color.Black;
-            this.clearIROffButton.Location = new System.Drawing.Point(585, 283);
-            this.clearIROffButton.Margin = new System.Windows.Forms.Padding(4);
-            this.clearIROffButton.Name = "clearIROffButton";
-            this.clearIROffButton.Size = new System.Drawing.Size(216, 40);
-            this.clearIROffButton.TabIndex = 158;
-            this.clearIROffButton.Text = "do not use an idle-sequence";
-            this.clearIROffButton.UseVisualStyleBackColor = true;
-            this.clearIROffButton.Click += new System.EventHandler(this.clearIROffButton_Click);
+            this.copy_buttons.ForeColor = System.Drawing.Color.Black;
+            this.copy_buttons.Location = new System.Drawing.Point(653, 303);
+            this.copy_buttons.Margin = new System.Windows.Forms.Padding(4);
+            this.copy_buttons.Name = "copy_buttons";
+            this.copy_buttons.Size = new System.Drawing.Size(127, 30);
+            this.copy_buttons.TabIndex = 162;
+            this.copy_buttons.Text = "copy to all slots";
+            this.copy_buttons.UseVisualStyleBackColor = true;
+            this.copy_buttons.Click += new System.EventHandler(this.copy_buttons_Click);
             // 
-            // irIdleSequenceBox
+            // copy_btmode
             // 
-            this.irIdleSequenceBox.FormattingEnabled = true;
-            this.irIdleSequenceBox.Location = new System.Drawing.Point(105, 292);
-            this.irIdleSequenceBox.Margin = new System.Windows.Forms.Padding(4);
-            this.irIdleSequenceBox.Name = "irIdleSequenceBox";
-            this.irIdleSequenceBox.Size = new System.Drawing.Size(467, 24);
-            this.irIdleSequenceBox.TabIndex = 159;
+            this.copy_btmode.ForeColor = System.Drawing.Color.Black;
+            this.copy_btmode.Location = new System.Drawing.Point(441, 165);
+            this.copy_btmode.Margin = new System.Windows.Forms.Padding(4);
+            this.copy_btmode.Name = "copy_btmode";
+            this.copy_btmode.Size = new System.Drawing.Size(127, 30);
+            this.copy_btmode.TabIndex = 162;
+            this.copy_btmode.Text = "copy to all slots";
+            this.copy_btmode.UseVisualStyleBackColor = true;
+            this.copy_btmode.Click += new System.EventHandler(this.copy_btmode_Click);
             // 
-            // label57
+            // copy_levels
             // 
-            this.label57.AutoSize = true;
-            this.label57.Location = new System.Drawing.Point(102, 262);
-            this.label57.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.label57.Name = "label57";
-            this.label57.Size = new System.Drawing.Size(417, 17);
-            this.label57.TabIndex = 160;
-            this.label57.Text = "Send an Infrared code (idle sequence) after every other IR-code:";
+            this.copy_levels.ForeColor = System.Drawing.Color.Black;
+            this.copy_levels.Location = new System.Drawing.Point(619, 302);
+            this.copy_levels.Margin = new System.Windows.Forms.Padding(4);
+            this.copy_levels.Name = "copy_levels";
+            this.copy_levels.Size = new System.Drawing.Size(127, 30);
+            this.copy_levels.TabIndex = 162;
+            this.copy_levels.Text = "copy to all slots";
+            this.copy_levels.UseVisualStyleBackColor = true;
+            this.copy_levels.Click += new System.EventHandler(this.copy_levels_Click);
+            // 
+            // copy_stickactions
+            // 
+            this.copy_stickactions.ForeColor = System.Drawing.Color.Black;
+            this.copy_stickactions.Location = new System.Drawing.Point(679, 305);
+            this.copy_stickactions.Margin = new System.Windows.Forms.Padding(4);
+            this.copy_stickactions.Name = "copy_stickactions";
+            this.copy_stickactions.Size = new System.Drawing.Size(127, 30);
+            this.copy_stickactions.TabIndex = 162;
+            this.copy_stickactions.Text = "copy to all slots";
+            this.copy_stickactions.UseVisualStyleBackColor = true;
+            this.copy_stickactions.Click += new System.EventHandler(this.copy_stickactions_Click);
             // 
             // FLipMouseGUI
             // 
@@ -4894,6 +4964,11 @@
         private System.Windows.Forms.Label label57;
         private System.Windows.Forms.Button clearIROffButton;
         private System.Windows.Forms.Label label56;
+        private System.Windows.Forms.Button copy_orientation;
+        private System.Windows.Forms.Button copy_buttons;
+        private System.Windows.Forms.Button copy_btmode;
+        private System.Windows.Forms.Button copy_levels;
+        private System.Windows.Forms.Button copy_stickactions;
     }
 }
 

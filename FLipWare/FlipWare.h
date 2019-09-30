@@ -48,8 +48,9 @@
 #include "bluetooth.h"
 #include "hid_hal.h"
 
-#define VERSION_STRING "Flipmouse v2.81"
+#define VERSION_STRING "Flipmouse v2.82"
 
+//  V2.82: corrected memory bugs (index / heap overflows) 
 //  V2.81: corrected bug in deadzone calculation for keyboard actions, improved stable time for strong sip/puff functions 
 //  V2.8: improved cursor control by using polar coordinates and damping 
 //  V2.7: improved IR command recording and playback (IR hold repeats codes, optionally append off-sequence) 

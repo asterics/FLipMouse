@@ -29,7 +29,7 @@ namespace MouseApp2
 {
     public partial class FLipMouseGUI : Form
     {
-        const string VERSION_STRING = "2.81";
+        const string VERSION_STRING = "2.82";
         const int MAX_KEYSTRING_LEN = 65;
 
         const int SENS_CHANGE_STEP = 1;
@@ -64,6 +64,46 @@ namespace MouseApp2
             slots.Add(new Slot());
             slotNames.Items.Clear();
             slotNames.Items.Add("mouse");
+        }
+
+        public void copyToAllSlots(int slotNumber, string cmd)
+        {
+            string replaceWith="AT NC";
+
+            if (slotNumber < 0) return;
+
+            for (int i = 0; i < slots[slotNumber].settingStrings.Count(); i++)
+            {
+                string c = slots[slotNumber].settingStrings[i];
+                if (c.StartsWith(cmd))
+                {
+                    if (cmd.StartsWith("AT BM "))
+                        replaceWith = slots[slotNumber].settingStrings[i + 1];
+                    else replaceWith = c;
+                    // Console.WriteLine("replace with:" + replaceWith);
+                    break;
+                }
+            }
+
+
+            foreach (Slot s in slots)
+            {
+                // Console.WriteLine("SLOT " + s.slotName);
+
+                for (int x=0; x < s.settingStrings.Count();x++)
+                {
+                    string str =s.settingStrings[x];
+                    // Console.WriteLine(str);
+                    if (str.StartsWith(cmd)) {
+                        // Console.WriteLine("-->> replace!");
+                        if (cmd.StartsWith("AT BM ")) 
+                            s.settingStrings[x+1]=replaceWith;
+                        else 
+                            s.settingStrings[x]=replaceWith;
+                        break;
+                    }
+                }
+            }
         }
 
         public void storeSlot(int slotNumber)
@@ -1430,6 +1470,49 @@ namespace MouseApp2
         private void clearIROffButton_Click(object sender, EventArgs e)
         {
             irIdleSequenceBox.Text = "";
+        }
+
+        private void copy_orientation_Click(object sender, EventArgs e)
+        {
+            storeSlot(actSlot);
+            copyToAllSlots(actSlot, "AT RO");
+        }
+
+        private void copy_btmode_Click(object sender, EventArgs e)
+        {
+            storeSlot(actSlot);
+            copyToAllSlots(actSlot, "AT BT");
+        }
+
+        private void copy_buttons_Click(object sender, EventArgs e)
+        {
+            storeSlot(actSlot);
+            copyToAllSlots(actSlot, "AT BM 01");
+            copyToAllSlots(actSlot, "AT BM 02");
+            copyToAllSlots(actSlot, "AT BM 03");
+
+        }
+
+        private void copy_levels_Click(object sender, EventArgs e)
+        {
+            storeSlot(actSlot);
+            copyToAllSlots(actSlot, "AT TS");
+            copyToAllSlots(actSlot, "AT TP");
+            copyToAllSlots(actSlot, "AT SS");
+            copyToAllSlots(actSlot, "AT SP");
+
+        }
+
+        private void copy_stickactions_Click(object sender, EventArgs e)
+        {
+            storeSlot(actSlot);
+            copyToAllSlots(actSlot, "AT AX");
+            copyToAllSlots(actSlot, "AT AY");
+            copyToAllSlots(actSlot, "AT DX");
+            copyToAllSlots(actSlot, "AT DY");
+            copyToAllSlots(actSlot, "AT MS");
+            copyToAllSlots(actSlot, "AT AC");
+
         }
 
     }

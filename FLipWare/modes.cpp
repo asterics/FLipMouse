@@ -32,7 +32,8 @@
 #define MODESTATE_RELEASE                   5
 #define MODESTATE_RETURN_TO_IDLE            6
 
-#define ACCELTIME_MAX 40000
+#define MIN_FORCE 0
+#define ACCELTIME_MAX 100000
 
 uint8_t modeState = MODESTATE_IDLE;
 
@@ -66,7 +67,7 @@ void handleModeState(int x, int y, int pressure)
     currentTime = millis();
     timeDifference = currentTime - previousTime;
     previousTime = currentTime;
-    accelGain= timeDifference / 100000000.0f;       
+    accelGain= timeDifference / 1000000000.0f;       
 
     if (pressure>previousPressure) pressureRising=1; else pressureRising=0;
     if (pressure<previousPressure) pressureFalling=1; else pressureFalling=0;
@@ -272,7 +273,7 @@ void handleModeState(int x, int y, int pressure)
 
                 float max_speed= settings.ms / 10.0f;
   
-                if (force==0) { accelFactor=0; accelMaxForce=20; lastAngle=0;}
+                if (force==0) { accelFactor=0; accelMaxForce=MIN_FORCE; lastAngle=0;}
                 else {
 
                   if (force>accelMaxForce) accelMaxForce=force;
@@ -282,7 +283,7 @@ void handleModeState(int x, int y, int pressure)
                       if (accelFactor < ACCELTIME_MAX)
                           accelFactor +=settings.ac;                    
                   }
-                  else if (accelMaxForce > 20) accelMaxForce *= 0.99;
+                  else if (accelMaxForce > MIN_FORCE) accelMaxForce *= 0.99;
 
                   if (force < accelMaxForce * 0.7)  accelFactor *= 0.999;
                   if (force < accelMaxForce * 0.3)  accelFactor *= 0.994;
@@ -291,16 +292,17 @@ void handleModeState(int x, int y, int pressure)
 //                     double dampingFactor=fabs(fabs(angle)-fabs(lastAngle));
 //                     if (dampingFactor>0.1) dampingFactor=0.1;
 //                     accelFactor *= (1.0-dampingFactor/7);
+
                      double dampingFactor=fabs(x-xo)+fabs(y-yo);
-                     accelFactor *= (1.0-dampingFactor/2000.0);
+                     accelFactor *= (1.0-dampingFactor/1000.0);
                      //Serial.println((int)(dampingFactor*100));
 //                  } 
                   lastAngle=angle;
                   xo=x;yo=y;
                 }
 
-                moveValX=x*(float)settings.ax*accelFactor*accelGain;
-                moveValY=y*(float)settings.ay*accelFactor*accelGain;
+                moveValX=x*(float)settings.ax*(float)settings.ax*accelFactor*accelGain;
+                moveValY=y*(float)settings.ay*(float)settings.ay*accelFactor*accelGain;
 
                 float actSpeed= sqrt (moveValX*moveValX + moveValY*moveValY);
                 if (actSpeed > max_speed) {

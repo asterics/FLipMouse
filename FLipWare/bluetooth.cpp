@@ -16,7 +16,7 @@
 
 #include "bluetooth.h"
 
-#define BT_MINIMUM_SENDINTERVAL 40     // reduce mouse reports in BT mode (in milliseconds) !
+#define BT_MINIMUM_SENDINTERVAL 20     // reduce mouse reports in BT mode (in milliseconds) !
 
 uint8_t bt_available = 0;
 uint8_t activeKeyCodes[6];
@@ -391,5 +391,3 @@ bool startBTPairing()
     delay (4000);
     pinMode(12, INPUT);
 }
-
-

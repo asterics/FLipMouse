@@ -250,6 +250,7 @@ void reportValues()
     }
 }
 
+#define FORCE_GAIN 1
 void applyDeadzone()
 {
     if (settings.stickMode == STICKMODE_ALTERNATIVE) {
@@ -265,17 +266,23 @@ void applyDeadzone()
       double x2,y2;
       char str[80];
   
-      force=sqrt(x*x+y*y);
+      force=sqrt(x*x+y*y)*FORCE_GAIN;
+
       if (force!=0) {
         angle = atan2 ((double)y/force, (double)x/force );
         dz= settings.dx * (fabs((double)x)/force) + settings.dy * (fabs((double)y)/force);
       }
       else { angle=0; dz=settings.dx; }
   
-      if (force<dz) force=0; else force-=dz;
+      if (force<dz*FORCE_GAIN) force=0; else force-=dz;
+      
   
       y2=force*sin(angle);
       x2=force*cos(angle);
+
+      // Serial.print ("force=");Serial.print((int)(force*100)); Serial.print (", dz=");Serial.print((int)(dz*100));
+      // Serial.print ("x=");Serial.print(x); Serial.print (", y=");Serial.print(y);
+      // Serial.print (", x2=");Serial.print(x2); Serial.print (", y2=");Serial.println(y2);
   
       x=int(x2);
       y=int(y2);

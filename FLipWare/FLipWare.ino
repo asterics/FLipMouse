@@ -63,7 +63,7 @@ uint8_t IR_LED_PIN = 6;                                 	//  IR-Led output pin
 
 struct slotGeneralSettings settings = {      // default settings valus, for type definition see fabi.h
     1,                                // stickMode: Mouse cursor movement active
-    60, 60, 20, 20, 50, 50,           // accx, accy, deadzone x, deadzone y, maxspeed, acceleration time
+    40, 40, 20, 20, 50, 20,           // accx, accy, deadzone x, deadzone y, maxspeed, acceleration time
     400, 600, 3,                      // threshold sip, threshold puff, wheel step,
     800, 10,                          // threshold strong puff, threshold strong sip
     50, 50, 50, 50 ,                  // gain up / down / left / right
@@ -250,7 +250,6 @@ void reportValues()
     }
 }
 
-#define FORCE_GAIN 1
 void applyDeadzone()
 {
     if (settings.stickMode == STICKMODE_ALTERNATIVE) {
@@ -266,7 +265,7 @@ void applyDeadzone()
       double x2,y2;
       char str[80];
   
-      force=sqrt(x*x+y*y)*FORCE_GAIN;
+      force=sqrt(x*x+y*y);
 
       if (force!=0) {
         angle = atan2 ((double)y/force, (double)x/force );
@@ -274,7 +273,7 @@ void applyDeadzone()
       }
       else { angle=0; dz=settings.dx; }
   
-      if (force<dz*FORCE_GAIN) force=0; else force-=dz;
+      if (force<dz) force=0; else force-=dz;
       
   
       y2=force*sin(angle);

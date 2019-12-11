@@ -63,7 +63,7 @@ uint8_t IR_LED_PIN = 6;                                 	//  IR-Led output pin
 
 struct slotGeneralSettings settings = {      // default settings valus, for type definition see fabi.h
     1,                                // stickMode: Mouse cursor movement active
-    60, 60, 20, 20, 50, 50,           // accx, accy, deadzone x, deadzone y, maxspeed, acceleration time
+    40, 40, 20, 20, 50, 20,           // accx, accy, deadzone x, deadzone y, maxspeed, acceleration time
     400, 600, 3,                      // threshold sip, threshold puff, wheel step,
     800, 10,                          // threshold strong puff, threshold strong sip
     50, 50, 50, 50 ,                  // gain up / down / left / right
@@ -266,6 +266,7 @@ void applyDeadzone()
       char str[80];
   
       force=sqrt(x*x+y*y);
+
       if (force!=0) {
         angle = atan2 ((double)y/force, (double)x/force );
         dz= settings.dx * (fabs((double)x)/force) + settings.dy * (fabs((double)y)/force);
@@ -273,9 +274,14 @@ void applyDeadzone()
       else { angle=0; dz=settings.dx; }
   
       if (force<dz) force=0; else force-=dz;
+      
   
       y2=force*sin(angle);
       x2=force*cos(angle);
+
+      // Serial.print ("force=");Serial.print((int)(force*100)); Serial.print (", dz=");Serial.print((int)(dz*100));
+      // Serial.print ("x=");Serial.print(x); Serial.print (", y=");Serial.print(y);
+      // Serial.print (", x2=");Serial.print(x2); Serial.print (", y2=");Serial.println(y2);
   
       x=int(x2);
       y=int(y2);

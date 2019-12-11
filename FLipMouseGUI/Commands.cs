@@ -271,12 +271,12 @@ namespace MouseApp2
 
         public void initCommandGuiLinks()
         {
-            commandGuiLinks.Add(new CommandGuiLink("AT AX", sensXBar, sensXLabel, "60"));
-            commandGuiLinks.Add(new CommandGuiLink("AT AY", sensYBar, sensYLabel, "60"));
+            commandGuiLinks.Add(new CommandGuiLink("AT AX", sensXBar, sensXLabel, "40"));
+            commandGuiLinks.Add(new CommandGuiLink("AT AY", sensYBar, sensYLabel, "40"));
             commandGuiLinks.Add(new CommandGuiLink("AT DX", deadzoneXBar, deadzoneXLabel, "20"));
             commandGuiLinks.Add(new CommandGuiLink("AT DY", deadzoneYBar, deadzoneYLabel, "20"));
             commandGuiLinks.Add(new CommandGuiLink("AT MS", maxspeedBar, maxspeedLabel, "50"));
-            commandGuiLinks.Add(new CommandGuiLink("AT AC", accelerationBar, accelerationLabel, "50"));
+            commandGuiLinks.Add(new CommandGuiLink("AT AC", accelerationBar, accelerationLabel, "20"));
             commandGuiLinks.Add(new CommandGuiLink("AT RO", orientationBox, "0"));
             commandGuiLinks.Add(new CommandGuiLink("AT BT", HIDComboBox, 1));
             commandGuiLinks.Add(new CommandGuiLink("AT II", irIdleSequenceBox, ""));

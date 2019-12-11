@@ -165,18 +165,24 @@ namespace MouseApp2
         {
             DialogResult dialogResult;
             addToLog("Connected device: " + newLine);
-            if ((!(newLine.Contains(VERSION_STRING))) && (checkVersion==1))
-                {
-                dialogResult = MessageBox.Show(newLine + "The firmware is not compatible to GUI version " + VERSION_STRING + " !\nCurrent releases can be found at: https://github.com/asterics/FLipMouse/releases \nShould the Firmware be updated automatically ? ", "FlipMouse update necessary", MessageBoxButtons.YesNo);
+            IdTimer.Stop();
+            if (!(newLine.Contains("Flipmouse")))
+            {
                 disconnnectComButton_Click(this, null);
+                dialogResult = MessageBox.Show("The connected device could not be identified - disconnecting!", "FlipMouse not found", MessageBoxButtons.OK);
+                return;
+            }
+            if ((!(newLine.Contains(VERSION_STRING))) && (checkVersion==1))
+            {
+                dialogResult = MessageBox.Show(newLine + "The firmware is not 100% compatible to GUI version " + VERSION_STRING + " !\nCurrent releases can be found at: https://github.com/asterics/FLipMouse/releases \nShould the Firmware be updated automatically ? ", "Software/Firmware update recommended", MessageBoxButtons.YesNo);
                 if (dialogResult == DialogResult.Yes)
                 {
                     Thread.Sleep(500);
                     string strCmdText;
                     strCmdText = "/C tycmd.exe upload FlipWare.ino.hex";
                     System.Diagnostics.Process.Start("CMD.exe", strCmdText);
+                    return;
                 }
-                return;
             }
             flipMouseOnline = 1;
 

@@ -177,7 +177,8 @@ namespace MouseApp2
                 dialogResult = MessageBox.Show(newLine + "The firmware is not 100% compatible to GUI version " + VERSION_STRING + " !\nCurrent releases can be found at: https://github.com/asterics/FLipMouse/releases \nShould the Firmware be updated automatically ? ", "Software/Firmware update recommended", MessageBoxButtons.YesNo);
                 if (dialogResult == DialogResult.Yes)
                 {
-                    Thread.Sleep(500);
+                    disconnnectComButton_Click(this, null);
+                    Thread.Sleep(1000);
                     string strCmdText;
                     strCmdText = "/C tycmd.exe upload FlipWare.ino.hex";
                     System.Diagnostics.Process.Start("CMD.exe", strCmdText);

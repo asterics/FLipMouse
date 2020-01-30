@@ -602,7 +602,7 @@
       (net 2 GND))
     (pad 39 smd rect (at 0.3 2.45) (size 6 6) (layers B.Cu B.Paste B.Mask)
       (net 2 GND))
-    (model ${KIPRJMOD}/lib/ESP32-footprints-Lib.pretty/KiCAD-ESP-WROOM-32.wrl
+    (model ${KIPRJMOD}/lib/ESP32-footprints-Lib.pretty/KiCAD-ESP-WROOM-32.step
       (at (xyz 0 0 0))
       (scale (xyz 1 1 1))
       (rotate (xyz 0 0 0))

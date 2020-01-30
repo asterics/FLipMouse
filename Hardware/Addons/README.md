@@ -4,11 +4,9 @@ This folder contains any additional piece of software hardware or gadget to incr
 Since there is are 2 extension headers on the FLipmouse PCB, it is easy to extend the functionality.
 
 
-## FLipmouse side-mount (side_mount)
+## BT-module
 
-The standard FLipmouse is mounted via a hotshoe adapter (used for cameras and flash lights) on the rear of the case.
-In some mounting situations its a little bit tricky to mount the device without touching the user.
-For this occasions, a special acrylic glass part was built to mount the FLipmouse on the side.
+The BT module is an ESP32 based addon board for the FLipMouse v2. It is placed on a separate module on the __AUX__ extension header.
+This folder here contains the KiCAD design files for PCB production.
+Please refer to [esp32_mouse_keyboard](https://github.com/asterics/esp32_mouse_keyboard) repository for the corresponding source code.
 
-This part needs to be cutted with the lasercutter and bent to a 90° angle (with hot-air support on the edge).
-Afterwards it is possible to mount this piece to the stand/tripod and put the FLipmouse into it.

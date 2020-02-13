@@ -11,7 +11,7 @@ This case consists of three parts. The main case where the PCB and sensors are l
 For this case you need one extra **M3-Screw - 6mm**.
 The screw is located in the back where the lid and main case meet.
 
-![Back of Flip Mouse](/img/fusion_design_screw.png)
+![Back of Flip Mouse](img/fusion_design_screw.png)
 
 The construction manual can be found [here](https://github.com/asterics/FLipMouse/blob/master/ConstructionKit/ConstructionManual.pdf).
 

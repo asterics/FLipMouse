@@ -1,28 +1,20 @@
 # 3D Printed Case
 
-This case was designed with Fusion 360. If you want to edit the Fusion 360 file (.f3d) you need to be a student, buy it, or use the 30 day free trail.
+This case was designed with Fusion 360. If the design needs to be changed, Fusion 360 can be downloaded on the AutoDesk Website. It is free for students and private users. It is not recommended to edit the uploaded files is a different CAD software.
 
 ![Break Off](img/fusion_design_animation.gif)
-
 
 ### Assembly
 
 This case consists of three parts. The main case where the PCB and sensors are located. A lid which closes everything up and a mouth piece holder.
 
-You need these additinal things to have a fully functional case:
+For this case you need one extra **M3-Screw - 6mm**.
+The screw is located in the back where the lid and main case meet.
 
-* 1x M3 screw nut (not needed but useful, RS component: 278-584)
-* 1x M3 screw
+![Back of Flip Mouse](/img/fusion_design_screw.png)
 
-The nut and screw are located in the back where the lid and main case meet.
+The construction manual can be found [here](https://github.com/asterics/FLipMouse/blob/master/ConstructionKit/ConstructionManual.pdf).
 
-![Screw](img/fusion_design_screw.png)
-
-Altough, there are no screw nuts intended in the front of the case which hold the mouth piece, this can be changed easily.
-
-The front plate also contains a cross section which is just there to support the top part while printing. Without it the top part would not stick to the rest of the case and fall down. The cross parts should be removed after the print to ensure that the mouth piece can move.
-
-![Break Off Part](img/fusion_design_break_off_part.png)
 
 ### Parameters
 
@@ -36,9 +28,3 @@ The design has some parameters which can be changed under Modify -> Parameters.
 * **height_below_board**: The distance between board and the bottom layer. If your tripod holder is higher and touches the PCB you need to adjust this parameter to prevent a short.
 * **lid_holder_thickness**: The lid has two thin plastic pieces to keep its positiion. If they are too thin you can change them here.
 * **mouth_piece_holder_thickness**: The thickness of the plate holding the mouth piece. We noticed that the plate could bend with time if its too thin.
-
-### Things to improve
-
-* The IR LED is still inside the case and could be located like the other LEDs between the lid and main case
-* More parameters to distiguish between usage with screw nuts or without
-* Markers where the FSR sensors should be glued on.

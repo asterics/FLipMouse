@@ -10,3 +10,4 @@ The BT module is an ESP32 based addon board for the FLipMouse v2. It is placed o
 This folder here contains the KiCAD design files for PCB production.
 Please refer to [esp32_mouse_keyboard](https://github.com/asterics/esp32_mouse_keyboard) repository for the corresponding source code.
 
+This design was done in KiCAD __v5.1.2__. Please use a version equal or newer.

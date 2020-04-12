@@ -1,4 +1,4 @@
-(kicad_pcb (version 20171130) (host pcbnew 5.1.5+dfsg1-2~bpo10+1)
+(kicad_pcb (version 20171130) (host pcbnew "(5.1.5)-2")
 
   (general
     (thickness 1.6)
@@ -831,7 +831,7 @@
     (tags "capacitor handsolder")
     (path /58CD1E4D)
     (attr smd)
-    (fp_text reference C7 (at -2.54 -1.905 180) (layer F.SilkS)
+    (fp_text reference C7 (at -2.54 0 180) (layer F.SilkS)
       (effects (font (size 0.7 0.7) (thickness 0.15)))
     )
     (fp_text value 1nf (at 0 1.43 90) (layer F.Fab)
@@ -1214,7 +1214,7 @@
     (tags "resistor handsolder")
     (path /5B13208F)
     (attr smd)
-    (fp_text reference R2 (at 2.54 -2.032 180) (layer F.SilkS)
+    (fp_text reference R2 (at 2.54 0 180) (layer F.SilkS)
       (effects (font (size 0.7 0.7) (thickness 0.15)))
     )
     (fp_text value 10K (at 0 1.43 90) (layer F.Fab)

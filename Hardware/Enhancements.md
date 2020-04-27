@@ -3,7 +3,8 @@
 * Use different resistor networks, they are too easy to be swapped
 * Remove I2C header, unused and can lead to short-circuits on a daughterboard
 * Place I2C pins on AUX header and remove SPI
-* Change IR LED (and possibly the FET too) to a side-viewer LED (e.g., LTE-302)
+* Change IR LED to a side-viewer LED (e.g., LTE-302)
+* Change IR-FET from BS170 (3V Vgs is around 200mA, near the requirements) to e.g., ZVN4210 (3V Vgs -> ~500mA); but D/S are switched.
 * Use RGB LED instead of 3 single LEDs (to be discussed)
 * Route I2C pins to pressure sensor, for possible update to a different sensor (cheaper!)
 * Change jack plugs to THT types, easier to solder.

@@ -7,7 +7,7 @@
 * Change IR-FET from BS170 (3V Vgs is around 200mA, near the requirements) to e.g., ZVN4210 (3V Vgs -> ~500mA); but D/S are switched.
 * Use RGB LED instead of 3 single LEDs (to be discussed)
 * Route I2C pins to pressure sensor, for possible update to a different sensor (cheaper!)
-* Place a second pressure sensor footprint for DPS310 (2€ for single pieces!). An adapter for the tube is already available here: https://byteswap.systems:666/git/AT_devices_public/pressure_sensor
+* Place a second pressure sensor footprint for DPS310 (2€ for single pieces!). An adapter for the tube is already available here: https://byteswap.systems:666/git/AT_devices/pressure_sensor
 * Change jack plugs to THT types, easier to solder.
 * Re-route the program button. Mostly unused and could be more useful on a GPIO (e.g. for enabling the webinterface from BLE addon)
 * Overthink FSR soldering, many FSRs were destroyed by soldering...

@@ -1,6 +1,6 @@
 # Possible Enhancements for future revisions
 
-* Use different resistor networks, they are too easy to be swapped
+* Use different resistor networks, they are too easy to be swapped. E.g., for the LED network: 652-4604X-1LF-470, which has only 4 pins (5pins for the FSR bias resistors)
 * Remove I2C header, unused and can lead to short-circuits on a daughterboard
 * Place I2C pins on AUX header and remove SPI
 * Change IR LED to a side-viewer LED (e.g., LTE-302)

@@ -98,6 +98,12 @@ int x,y;
 int pressure;
 double dz=0,force=0,angle=0;
 
+
+double DRIFT_COMP_FACTOR = 0.10;
+int DRIFT_COMP_MAX = 35;
+int xLocalMax=0, yLocalMax=0;
+
+
 int16_t  cx=0,cy=0;
 
 uint8_t blinkCount=0;
@@ -211,8 +217,31 @@ void loop() {
                  settings.cy = (up-down);
                  cx=settings.cx;
                  cy=settings.cy;
+                 xLocalMax=0; yLocalMax=0;
               }
           }    
+
+          // apply drift correction
+          if (((x<0) && (xLocalMax>0)) || ((x>0) && (xLocalMax<0)))  xLocalMax=0;
+          if (abs(x)>abs(xLocalMax)) {
+            xLocalMax=x;
+            //Serial.print("xLocalMax=");
+            //Serial.println(xLocalMax);
+          }
+          if (xLocalMax>DRIFT_COMP_MAX) xLocalMax=DRIFT_COMP_MAX;
+          if (xLocalMax<-DRIFT_COMP_MAX) xLocalMax=-DRIFT_COMP_MAX;
+         
+          if (((y<0) && (yLocalMax>0)) || ((y>0) && (yLocalMax<0)))  yLocalMax=0;
+          if (abs(y)>abs(yLocalMax)) {
+            yLocalMax=y;
+            //Serial.print("yLocalMax=");
+            //Serial.println(yLocalMax);
+          }
+          if (yLocalMax>DRIFT_COMP_MAX) yLocalMax=DRIFT_COMP_MAX;
+          if (yLocalMax<-DRIFT_COMP_MAX) yLocalMax=-DRIFT_COMP_MAX;
+    
+          x-=xLocalMax*DRIFT_COMP_FACTOR;
+          y-=yLocalMax*DRIFT_COMP_FACTOR;
 
           reportValues();     // send live data to serial 
           applyDeadzone();
@@ -253,6 +282,9 @@ void reportValues()
 void applyDeadzone()
 {
     if (settings.stickMode == STICKMODE_ALTERNATIVE) {
+
+          // rectangular deadzone for alternative modes
+          
           if (x<-settings.dx) x+=settings.dx;  // apply deadzone values x direction
           else if (x>settings.dx) x-=settings.dx;
           else x=0;
@@ -260,12 +292,55 @@ void applyDeadzone()
           if (y<-settings.dy) y+=settings.dy;  // apply deadzone values y direction
           else if (y>settings.dy) y-=settings.dy;
           else y=0;
-    } else {
-  
-      double x2,y2;
-      char str[80];
-  
+
+    } else {     
+      
+      //  circular deadzone for mouse control
+
       force=sqrt(x*x+y*y);
+/*
+      // try to attenuate drifting (due to sensor inaccuracies) 
+      static uint16_t attenuationActive=0;
+      static float attenuate=1.0f;
+      static float biasedForce=0;
+
+      // assume that a high force is intentional!
+      if (force>15) {  
+        attenuationActive=0;
+        biasedForce=0.0f;
+        attenuate=1.0f;
+      } 
+      else {
+        attenuationActive++;
+
+        // after a certain time of low force, assume it is a biased value
+        if (attenuationActive>=200) {
+          biasedForce=force;
+        }
+      }
+
+      // attenuate invalid sensor values
+      if (biasedForce>0) {
+        // begin attenuation if actual force does not change
+        if (fabs(force-biasedForce) < 8) {
+          attenuate-=0.001;
+          if (attenuate < 0) {
+            attenuate=0;
+          }
+        }
+        // if actual force changes, assume intentional change an stop attenuation 
+        else {
+          attenuate+=0.002;
+          if (attenuate >= 0.9) {
+            attenuate=1.0;
+            biasedForce=0.0;
+          }          
+        }
+      }
+
+      force *= attenuate;
+*/
+
 
       if (force!=0) {
         angle = atan2 ((double)y/force, (double)x/force );
@@ -273,9 +348,9 @@ void applyDeadzone()
       }
       else { angle=0; dz=settings.dx; }
   
-      if (force<dz) force=0; else force-=dz;
-      
+      if (force<dz) force=0; else force-=dz;      
   
+      double x2,y2;
       y2=force*sin(angle);
       x2=force*cos(angle);
 

@@ -48,8 +48,9 @@
 #include "bluetooth.h"
 #include "hid_hal.h"
 
-#define VERSION_STRING "Flipmouse v2.8.3"
+#define VERSION_STRING "Flipmouse v2.8.4"
 
+//  V2.8.4: implemented drift correction for small deadzones
 //  V2.8.3: switched to semantic version numbering, increased acceleration factors
 //  V2.82: corrected memory bugs (index / heap overflows), added slot copy feature (in GUI) 
 //  V2.81: corrected bug in deadzone calculation for keyboard actions, improved stable time for strong sip/puff functions 

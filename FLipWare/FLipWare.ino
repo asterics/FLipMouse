@@ -407,10 +407,23 @@ void makeTone(uint8_t kind, uint8_t param)
      }
 }
 
-int freeRam ()  // TBD: has to be adapted for TeensyLC ...
+//source of code for free ram:
+//https://github.com/mpflaga/Arduino-MemoryFree/blob/master/MemoryFree.cpp
+#ifdef __arm__
+	// should use uinstd.h to define sbrk but Due causes a conflict
+	extern "C" char* sbrk(int incr);
+#else  // __ARM__
+	extern char *__brkval;
+#endif  // __arm__
+
+int freeRam()
 {
-//    extern int __heap_start, *__brkval;
-//    int v;
-//    return (int) &v - (__brkval == 0 ? (int) &__heap_start : (int) __brkval);
-      return(1);
+	char top;
+	#ifdef __arm__
+		return &top - reinterpret_cast<char*>(sbrk(0));
+	#elif defined(CORE_TEENSY) || (ARDUINO > 103 && ARDUINO != 151)
+		return &top - __brkval;
+	#else  // __arm__
+		return __brkval ? &top - __brkval : &top - __malloc_heap_start;
+	#endif  // __arm__
 }

@@ -3,7 +3,7 @@
 	Copyright (c) Benjamin Aigner
 	For more info please visit: http://www.asterics-academy.net
 
-	Module: bluetooth.cpp - using external Bluefruit EZ-KEY HID as BT communication
+	Module: bluetooth.cpp - using external Bluetooth addon for mouse/keyboard control
 
 	This program is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -18,24 +18,26 @@
 
 #define BT_MINIMUM_SENDINTERVAL 20     // reduce mouse reports in BT mode (in milliseconds) !
 
+typedef enum {NONE,EZKEY,MINIBT01,MINIBT02} addontype_t;
+
 uint8_t bt_available = 0;
+addontype_t bt_esp32addon = NONE;
 uint8_t activeKeyCodes[6];
 uint8_t activeModifierKeys = 0;
 uint8_t activeMouseButtons = 0;
 
 long btsendTimestamp=millis();
 
-/*
+/**
  * 
  * name: mouseBT
- * @þaram x uint8_t relative movement x axis
- * @þaram y uint8_t relative movement y axis
- * @þaram scroll uint8_t relative scroll actions
- * @return --
+ * @þaram x relative movement x axis
+ * @þaram y relative movement y axis
+ * @þaram scroll relative scroll actions
+ * @return 
  * 
  * this method sends a mouse command via the Bluetooth module.
- * Mouse movements, buttons and scroll wheel (possibly no functioning, not an official EZ-KEY feature)
- * Update: mouse wheel does not work.
+ * Mouse movements, buttons and scroll wheel.
  * The limit for the movement is +127/-127
  */
 void mouseBT(int x, int y, uint8_t scroll)
@@ -44,18 +46,18 @@ void mouseBT(int x, int y, uint8_t scroll)
     static int sendCnt=0;
     static int accuX=0, accuY=0;
     
-		if(DebugOutput == DEBUG_FULLOUTPUT)
-		{
-			Serial.println("BT mouse actions:");
-			Serial.print("buttons: 0x");
-			Serial.println(activeMouseButtons,HEX);
-			Serial.print("x/y/scroll: ");
-			Serial.print(x,DEC);
-			Serial.print("/");
-			Serial.print(y,DEC);
-			Serial.print("/");
-			Serial.println(scroll,DEC);
-		}
+	if(DebugOutput == DEBUG_FULLOUTPUT)
+	{
+		Serial.println("BT mouse actions:");
+		Serial.print("buttons: 0x");
+		Serial.println(activeMouseButtons,HEX);
+		Serial.print("x/y/scroll: ");
+		Serial.print(x,DEC);
+		Serial.print("/");
+		Serial.print(y,DEC);
+		Serial.print("/");
+		Serial.println(scroll,DEC);
+	}
 		
     accuX+=x;
     accuY+=y;
@@ -63,10 +65,12 @@ void mouseBT(int x, int y, uint8_t scroll)
     if ((activeMouseButtons != oldMouseButtons) || 
         (btsendTimestamp+BT_MINIMUM_SENDINTERVAL<=millis()))
     {   
-      btsendTimestamp=millis(); 
+		btsendTimestamp=millis(); 
+		
+		///@todo refactor this code here, send more efficient mouse report data.
   		//starting RAW HID mouse report
-      //according to:
-      //https://learn.adafruit.com/introducing-bluefruit-ez-key-diy-bluetooth-hid-keyboard/sending-keys-via-serial
+		//according to:
+		//https://learn.adafruit.com/introducing-bluefruit-ez-key-diy-bluetooth-hid-keyboard/sending-keys-via-serial
 
   		Serial_AUX.write((uint8_t)0xFD);
   		
@@ -90,13 +94,13 @@ void mouseBT(int x, int y, uint8_t scroll)
   		Serial_AUX.write((uint8_t)0x00);
   		Serial_AUX.write((uint8_t)0x00);
 
-      sendCnt=0;
-      accuX=0; accuY=0;
-      oldMouseButtons=activeMouseButtons;
+		sendCnt=0;
+		accuX=0; accuY=0;
+		oldMouseButtons=activeMouseButtons;
     }
 }
 
-/*
+/**
  * @name mouseBTPress
  * @param mousebutton uint8_t contains all buttons to be pressed (masked): (1<<0) left; (1<<1) right; (1<<2) middle
  * @return none
@@ -104,10 +108,11 @@ void mouseBT(int x, int y, uint8_t scroll)
 void mouseBTPress(uint8_t mousebutton)
 {
 	activeMouseButtons |= mousebutton;
+	//update buttons without sending relative data for x/y/wheel
 	mouseBT(0,0,0);
 }
 
-/*
+/**
  * @name mouseBTRelease
  * @param mousebutton uint8_t contains all buttons to be release (masked): (1<<0) left; (1<<1) right; (1<<2) middle
  * @return none
@@ -115,12 +120,13 @@ void mouseBTPress(uint8_t mousebutton)
 void mouseBTRelease(uint8_t mousebutton)
 {
 	activeMouseButtons &= ~mousebutton;
+	//update buttons without sending relative data for x/y/wheel
 	mouseBT(0,0,0);
 }
 
-/*
+/**
  * @name isMouseBTPressed
- * @param mousebutton uint8_t buttons which should be polled 
+ * @param mousebutton buttons which should be polled 
  * @return boolan 
  */
 boolean isMouseBTPressed(uint8_t mousebutton)
@@ -130,7 +136,7 @@ boolean isMouseBTPressed(uint8_t mousebutton)
 }
 
 
-/*
+/**
  * 
  * name: sendBTKeyboardReport
  * @param none
@@ -138,38 +144,39 @@ boolean isMouseBTPressed(uint8_t mousebutton)
  * 
  * Sends a full keyboard report where all keys contained in activeKeyCodes
  * and activeModifierKeys will be sent
+ * 
+ * @todo Should we send with a different API here when upgrading to ESP32miniBT v0.2?
  */
 void sendBTKeyboardReport() 
 {
-		if(DebugOutput == DEBUG_FULLOUTPUT)
-		{
-			Serial.println("BT keyboard actions:");
-			Serial.print("modifier: 0x");
-			Serial.println(activeModifierKeys,HEX);
-			Serial.println("activeKeyCodes: ");
-			Serial.println(activeKeyCodes[0],HEX);
-			Serial.println(activeKeyCodes[1],HEX);
-			Serial.println(activeKeyCodes[2],HEX);
-			Serial.println(activeKeyCodes[3],HEX);
-			Serial.println(activeKeyCodes[4],HEX);
-			Serial.println(activeKeyCodes[5],HEX);
-		}
-		Serial_AUX.write(0xFD);       			//raw HID
-		Serial_AUX.write(activeModifierKeys);  	//modifier keys
-		Serial_AUX.write(0x00); 				
-		Serial_AUX.write(activeKeyCodes[0]);	//key 1
-		Serial_AUX.write(activeKeyCodes[1]);   	//key 2
-		Serial_AUX.write(activeKeyCodes[2]);   	//key 3
-		Serial_AUX.write(activeKeyCodes[3]);   	//key 4
-		Serial_AUX.write(activeKeyCodes[4]);   	//key 5
-		Serial_AUX.write(activeKeyCodes[5]);   	//key 6
+	if(DebugOutput == DEBUG_FULLOUTPUT)
+	{
+		Serial.println("BT keyboard actions:");
+		Serial.print("modifier: 0x");
+		Serial.println(activeModifierKeys,HEX);
+		Serial.println("activeKeyCodes: ");
+		Serial.println(activeKeyCodes[0],HEX);
+		Serial.println(activeKeyCodes[1],HEX);
+		Serial.println(activeKeyCodes[2],HEX);
+		Serial.println(activeKeyCodes[3],HEX);
+		Serial.println(activeKeyCodes[4],HEX);
+		Serial.println(activeKeyCodes[5],HEX);
+	}
+	Serial_AUX.write(0xFD);       			//raw HID
+	Serial_AUX.write(activeModifierKeys);  	//modifier keys
+	Serial_AUX.write(0x00); 				
+	Serial_AUX.write(activeKeyCodes[0]);	//key 1
+	Serial_AUX.write(activeKeyCodes[1]);   	//key 2
+	Serial_AUX.write(activeKeyCodes[2]);   	//key 3
+	Serial_AUX.write(activeKeyCodes[3]);   	//key 4
+	Serial_AUX.write(activeKeyCodes[4]);   	//key 5
+	Serial_AUX.write(activeKeyCodes[5]);   	//key 6
 }
 
-/*
+/**
  * 
  * name: keyboardBTPress
- * @param int key	Keycode which should be pressed. Keycodes are in Teensy format,
- * 					well be mapped here to the EZ-KEY keycode set
+ * @param int key	Keycode which should be pressed. Keycodes are in Teensy format
  * @return none
  * 
  *  Press a defined key code.
@@ -179,15 +186,13 @@ void sendBTKeyboardReport()
 void keyboardBTPress(int key) 
 {
 	uint8_t currentIndex = 0;
-  uint8_t keyCode = (uint8_t)(key & 0xff);
-
-  if ((key >> 8) ==  0xE0)  // supported modifier key ?
-  {
+	uint8_t keyCode = (uint8_t)(key & 0xff);
+	
+	if ((key >> 8) ==  0xE0)  // supported modifier key ?
+	{
 		// set bit in modifier key mask
 		activeModifierKeys |= keyCode;
-	} 
-	else if ((key >> 8) ==  0xF0)  // supported key ?
-  {
+	} else if ((key >> 8) ==  0xF0) { // supported key ?
 		// check the active key codes for a free slot or overwrite the last one
 		while((activeKeyCodes[currentIndex] != 0) && (activeKeyCodes[currentIndex] != keyCode) && (currentIndex < 6)) 
 		   currentIndex++;
@@ -199,11 +204,10 @@ void keyboardBTPress(int key)
 	sendBTKeyboardReport();
 }
 
-/*
+/**
  * 
  * name: keyboardBTRelease
- * @param int key	Keycode which should be released. Keycodes are in Teensy format,
- * 					well be mapped here to the EZ-KEY keycode set
+ * @param int key	Keycode which should be released. Keycodes are in Teensy format (16bit, divided into consumer keys, systemkeys & keyboard keys)
  * @return none
  * 
  * Release a defined key code.
@@ -211,10 +215,10 @@ void keyboardBTPress(int key)
 void keyboardBTRelease(int key) 
 {
 	uint8_t currentIndex = 0;
-  uint8_t keyCode = (uint8_t)(key & 0xff);
+	uint8_t keyCode = (uint8_t)(key & 0xff);
 	
-  if ((key >> 8) ==  0xE0)  // supported modifier key (see Teensy keylayouts.h)
-  {
+	if ((key >> 8) ==  0xE0)  // supported modifier key (see Teensy keylayouts.h)
+	{
 		// clear bit in modifier key mask
 		activeModifierKeys &= ~keyCode;
 	} else {
@@ -223,14 +227,14 @@ void keyboardBTRelease(int key)
 		//delete the key code from the array
 		for(int i=currentIndex; i<5;i++)
 			activeKeyCodes[i] = activeKeyCodes[i+1];
-    activeKeyCodes[5] = 0;
- }
+		activeKeyCodes[5] = 0;
+	}
 	
 	//send the new keyboard report
 	sendBTKeyboardReport();
 }
 
-/*
+/**
  * 
  * name: keyboardBTReleaseAll
  * @param none
@@ -249,7 +253,7 @@ void keyboardBTReleaseAll()
 }
 
 
-/*
+/**
  * 
  * name: keyboardBTPrint
  * @param char* writeString	string to typed by the Bluetooth HID keyboard
@@ -257,53 +261,55 @@ void keyboardBTReleaseAll()
  * 
  * This method prints out an ASCII string (no modifiers available!!!) via the
  * Bluetooth module
+ * 
+ * @todo We should use the keyboard maps from ESP32, can store all of them. But how to handle any multibyte strings?
  */
 void keyboardBTPrint(char * writeString)
 {
 	uint16_t i = 0;
-
-  // print each char of the string
-  while(writeString[i])
-  {
-    // Serial_AUX.write(writeString[i++]);
- 
-    // improved for localization / keycodes (but: slower ...)
-    
-    int keycode=0, modifier=0;
-   
-    // Serial.print("key ="); Serial.print(writeString[i]);
-    if (writeString[i]<128) {       // ASCII
-        // Serial.print(" ASCII ="); Serial.println((int)writeString[i]);
-        keycode=pgm_read_byte(keycodes_ascii + (writeString[i] - 0x20));
-    }
-    else  {  // ISO_8859
-    #ifdef ISO_8859_1_A0
-      // Serial.print(" ISO_8859 ="); Serial.println((int)writeString[i]);
-      keycode=pgm_read_byte(keycodes_iso_8859_1 + (writeString[i] - 0xA0)); 
-    #endif 
-    }
-    
-    if (keycode & 0x40) {  // SHIFT 
-      // Serial.print("SHIFT+"); 
-      keycode &= ~0x40; 
-      modifier = 0xe002;
-    } else if (keycode & 0x80) {  // ALTGR
-      // Serial.print("ALTGR+"); 
-      keycode &= ~0x80; 
-      modifier = 0xe040;
-    }
-    // Serial.print("HID ="); 
-    // Serial.println(keycode);  
-
-    if (modifier) keyboardBTPress(modifier);
-    keyboardBTPress(keycode | 0xf000);
-    keyboardBTRelease(keycode | 0xf000);
-    if (modifier) keyboardBTRelease(modifier);    
-    i++;    
-  }
+	
+	// print each char of the string
+	while(writeString[i])
+	{
+		// Serial_AUX.write(writeString[i++]);
+		
+		// improved for localization / keycodes (but: slower ...)
+		
+		int keycode=0, modifier=0;
+		
+		// Serial.print("key ="); Serial.print(writeString[i]);
+		if (writeString[i]<128) {       // ASCII
+			// Serial.print(" ASCII ="); Serial.println((int)writeString[i]);
+			keycode=pgm_read_byte(keycodes_ascii + (writeString[i] - 0x20));
+		}
+		else  {  // ISO_8859
+			#ifdef ISO_8859_1_A0
+			// Serial.print(" ISO_8859 ="); Serial.println((int)writeString[i]);
+			keycode=pgm_read_byte(keycodes_iso_8859_1 + (writeString[i] - 0xA0)); 
+			#endif 
+		}
+		
+		if (keycode & 0x40) {  // SHIFT 
+			// Serial.print("SHIFT+"); 
+			keycode &= ~0x40; 
+			modifier = 0xe002;
+		} else if (keycode & 0x80) {  // ALTGR
+			// Serial.print("ALTGR+"); 
+			keycode &= ~0x80; 
+			modifier = 0xe040;
+		}
+		// Serial.print("HID ="); 
+		// Serial.println(keycode);  
+		
+		if (modifier) keyboardBTPress(modifier);
+		keyboardBTPress(keycode | 0xf000);
+		keyboardBTRelease(keycode | 0xf000);
+		if (modifier) keyboardBTRelease(modifier);    
+		i++;    
+	}
 }
 
-/*
+/**
  * 
  * name: initBluetooth
  * @param none
@@ -311,55 +317,25 @@ void keyboardBTPrint(char * writeString)
  * 
  * Initialize the Bluetooth module on the external serial port.
  * If the module returns a valid version string, BT communication is
- * enabled.
+ * enabled (bt_enable is set to 1).
+ * 
+ * @see bt_enable
  * 
  */
 void initBluetooth()
 {
-  
-  if(DebugOutput==DEBUG_FULLOUTPUT)
-    Serial.println("init Bluetooth");
+	if(DebugOutput==DEBUG_FULLOUTPUT) Serial.println("init Bluetooth");
 
 	//start the AUX serial port 9600 8N1
 	Serial_AUX.begin(9600);
-  bt_available=1;
-
-  // we skipped the detection of the Adafruit EZKeys module as it was unreliable
-  // and slowed down startup time of the FlipMouse 
-  
-  /*
-  //set a short timeout, that the FLipMouse does not freeze if no BT module is connected
-	Serial_AUX.setTimeout(1000);
-	//receive a reply string from the BT module (if available)
-	String reply = Serial_AUX.readStringUntil('\n');
-	//try 2 times, maybe there is a \n BEFORE the version string
-	if(reply.length() < 2) reply = Serial_AUX.readStringUntil('\n');
-
-	//test for the Bluefruit version string
-	if(reply.indexOf("Adafruit Bluefruit HID") != -1)
-	{
-                bt_available=1;
-		//if debug output is active, print out info and version string
-		if(DebugOutput==DEBUG_FULLOUTPUT)
-		{
-			Serial.println("Bluetooth module found:");
-			Serial.println(reply);
-		}
-	} else {
-                bt_available=1;
-		if(DebugOutput == DEBUG_FULLOUTPUT)
-		{
-			//wait 10s before startup, to have enough time to open the serial connection and see the output
-			//delay(10000);
-			Serial.println("No Bluetooth module found, reply:");
-			Serial.println(reply);
-                        Serial.println("Overriding anyway, Adafruit modules are buggy");
-		}
-	}
- */
+	bt_available=1;
+	
+	///@todo send identifier to BT module & check response. With BT addon this is much faster and reliable
+	bt_esp32addon = EZKEY;
+	Serial_AUX.println("$ID");
 }
 
-/*
+/**
  * 
  * name: isBluetoothAvailable
  * @param none
@@ -374,20 +350,16 @@ bool isBluetoothAvailable()
 	return bt_available;
 }
 
-/*
+/**
  * 
  * name: startBTPairing
  * @param none
  * @return none
- * 
- * This method initialtes the pairing mode of the Adafruit EZ-Key module
- * by pulling pin 12 high for 4 seconds. this only works if the BT-module's pair pin is connected
- * to pin 1 of the extension header
+ * @note Not implemented
  */
 bool startBTPairing()
 {
-    pinMode(12, OUTPUT);
-    digitalWrite (12, HIGH);
-    delay (4000);
-    pinMode(12, INPUT);
+	//we will send a command to the BT addon board here.
+	///@todo which command & implement on BT addon
+    return true;
 }

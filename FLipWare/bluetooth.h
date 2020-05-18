@@ -3,7 +3,7 @@
 	Copyright (c) Benjamin Aigner
 	For more info please visit: http://www.asterics-academy.net
 
-	Module: blueooth.h - using external Bluefruit EZ-KEY HID as BT communication
+	Module: bluetooth.h - using external Bluetooth addon for mouse/keyboard control
 
 	This program is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -12,7 +12,7 @@
 	This program is distributed in the hope that it will be useful,
 	but WITHOUT ANY WARRANTY; See the GNU General Public License: 
 	http://www.gnu.org/licenses/gpl-3.0.en.html
-*/ 
+*/  
 
 
 #ifndef _BLUETOOTH_H_
@@ -24,29 +24,29 @@
 //RX/TX3 are used to communicate with an addon board (mounted on AUX header)
 #define Serial_AUX Serial3
 
-/*
+/**
  * 
  * name: mouseBT
- * @þaram x uint8_t relative movement x axis
- * @þaram y uint8_t relative movement y axis
- * @þaram scroll uint8_t relative scroll actions
- * @return --
+ * @þaram x relative movement x axis
+ * @þaram y relative movement y axis
+ * @þaram scroll relative scroll actions
+ * @return 
  * 
  * this method sends a mouse command via the Bluetooth module.
- * Mouse movements, buttons and scroll wheel (possibly no functioning, not an official EZ-KEY feature)
+ * Mouse movements, buttons and scroll wheel.
  * The limit for the movement is +127/-127
  */
 void mouseBT(int x, int y, uint8_t scroll);
 
 
-/*
+/**
  * @name mouseBTPress
  * @param mousebutton uint8_t contains all buttons to be pressed (masked): (1<<0) left; (1<<1) right; (1<<2) middle
  * @return none
  */
 void mouseBTPress(uint8_t mousebutton);
 
-/*
+/**
  * @name mouseBTRelease
  * @param mousebutton uint8_t contains all buttons to be release (masked): (1<<0) left; (1<<1) right; (1<<2) middle
  * @return none
@@ -54,14 +54,14 @@ void mouseBTPress(uint8_t mousebutton);
 void mouseBTRelease(uint8_t mousebutton);
 
 
-/*
+/**
  * @name isMouseBTPressed
- * @param mousebutton uint8_t buttons which should be polled 
+ * @param mousebutton buttons which should be polled 
  * @return boolan 
  */
 boolean isMouseBTPressed(uint8_t mousebutton);
-
-/*
+ 
+/**
  * 
  * name: initBluetooth
  * @param none
@@ -69,12 +69,14 @@ boolean isMouseBTPressed(uint8_t mousebutton);
  * 
  * Initialize the Bluetooth module on the external serial port.
  * If the module returns a valid version string, BT communication is
- * enabled.
+ * enabled (bt_enable is set to 1).
+ * 
+ * @see bt_enable
  * 
  */
 void initBluetooth();
 
-/*
+/**
  * 
  * name: keyboardBTPrint
  * @param char* writeString	string to typed by the Bluetooth HID keyboard
@@ -82,10 +84,12 @@ void initBluetooth();
  * 
  * This method prints out an ASCII string (no modifiers available!!!) via the
  * Bluetooth module
+ * 
+ * @todo We should use the keyboard maps from ESP32, can store all of them. But how to handle any multibyte strings?
  */
 void keyboardBTPrint(char * writeString);
 
-/*
+/**
  * 
  * name: keyboardBTReleaseAll
  * @param none
@@ -95,31 +99,29 @@ void keyboardBTPrint(char * writeString);
  */
 void keyboardBTReleaseAll();
 
-/*
+/**
  * 
  * name: keyboardBTPress
- * @param int key	Keycode which should be pressed. Keycodes are in Teensy format,
- * 					well be mapped here to the EZ-KEY keycode set
+ * @param int key	Keycode which should be pressed. Keycodes are in Teensy format
  * @return none
  * 
- * Press a defined key code. There is a major difference between Teensy/Arduino keycodes
- * and the used keycodes for the EZ-Key. The mapping from Arduino/Tennsy will be done here.
+ *  Press a defined key code.
+ *  keycodes and modifier codes are extracted and sent to EZ-Key module via UART
+ *  for keylayouts see: https://github.com/PaulStoffregen/cores/blob/master/teensy/keylayouts.h 
  */
 void keyboardBTPress(int key);
 
-/*
+/**
  * 
  * name: keyboardBTRelease
- * @param int key	Keycode which should be released. Keycodes are in Teensy format,
- * 					well be mapped here to the EZ-KEY keycode set
+ * @param int key	Keycode which should be released. Keycodes are in Teensy format (16bit, divided into consumer keys, systemkeys & keyboard keys)
  * @return none
  * 
- * Release a defined key code. There is a major difference between Teensy/Arduino keycodes
- * and the used keycodes for the EZ-Key. The mapping from Arduino/Tennsy will be done here.
+ * Release a defined key code.
  */
 void keyboardBTRelease(int key);
 
-/*
+/**
  * 
  * name: isBluetoothAvailable
  * @param none
@@ -131,15 +133,12 @@ void keyboardBTRelease(int key);
  */
 bool isBluetoothAvailable();
 
-/*
+/**
  * 
  * name: startBTPairing
  * @param none
  * @return none
- * 
- * This method initialtes the pairing mode of the Adafruit EZ-Key module
- * by pulling pin 12 high for 5 seconds. this only works if the BT-module's pair pin is connected
- * to pin 1 of the extension header
+ * @note Not implemented
  */
 bool startBTPairing();
 

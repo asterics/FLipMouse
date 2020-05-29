@@ -113,5 +113,34 @@ void mouseScroll(int8_t steps);
 void mouseMove(int x, int y);
 
 
+/*
+ * name: joystickAxis
+ * @param axistype Determine axis for these values: 
+ * 			- STICKMODE_JOYSTICK_XY Assign value1 to X, and value2 to Y
+ * 			- STICKMODE_JOYSTICK_ZR Assign value1 to Z, and value2 to Zrotate
+ * 			- STICKMODE_JOYSTICK_SLIDERS Assign value1 to slider left, and value2 to slider right
+ * @param value1 Value 1 for the selected axis
+ * @param value2 Value 2 for the selected axis
+ * @note If one parameter is set to -1, it won't be updated.
+ * set a pair of joystick axis to the defined values.
+ */
+void joystickAxis(uint8_t axistype, int16_t value1, int16_t  value2);
+
+/*
+ * name: joystickButtons
+ * @param buttonnr Number of button to be pressed/released
+ * @param value State of button (false/0 for released, true/1 for pressed)
+ * @note Button number is limited to 31! (32buttons)
+ * This function sets the state of all buttons for the joystick.
+ */
+void joystickButtons(uint8_t buttonnr, bool value);
+
+/*
+ * name: joystickHat
+ * @param angle Value of hat, possible values: 0,45,90,135,180,225,270,315,-1
+ * 
+ * This functions sets the hat position. Center/released position is -1
+ */
+void joystickHat(int16_t angle);
 
 #endif

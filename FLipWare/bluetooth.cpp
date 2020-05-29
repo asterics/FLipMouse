@@ -26,6 +26,23 @@ uint8_t activeKeyCodes[6];
 uint8_t activeModifierKeys = 0;
 uint8_t activeMouseButtons = 0;
 
+//RAW joystick report, structure (in bytes)
+//[0-3]: buttons
+//[4]: 	b0-b3: hat (0-7)
+//		b4-b7: X axis
+//[5]:  b0-b5: X axis
+//		b6-b7: Y axis
+//[6]:  b0-b7: Y axis
+//[7]:  b0-b7: Z axis
+//[8]:  b0-b1: Z axis
+//		b2-b7: Z rotate
+//[9]:  b0-b3: Z rotate
+//		b4-b7: slider left
+//[10]: b0-b5: slider left
+//		b6-b7: slider right
+//[11]: b0-b7: slider right
+uint32_t joystickReport[3];
+
 long btsendTimestamp=millis();
 
 /**
@@ -363,3 +380,107 @@ bool startBTPairing()
 	///@todo which command & implement on BT addon
     return true;
 }
+
+/**
+ * name: joystickBTAxis
+ * @param axistype Determine axis for these values: 
+ * 			- STICKMODE_JOYSTICK_XY Assign value1 to X, and value2 to Y
+ * 			- STICKMODE_JOYSTICK_ZR Assign value1 to Z, and value2 to Zrotate
+ * 			- STICKMODE_JOYSTICK_SLIDERS Assign value1 to slider left, and value2 to slider right
+ * @param value1 Value 1 for the selected axis
+ * @param value2 Value 2 for the selected axis
+ * @note If one parameter is set to -1, it won't be updated.
+ * set a pair of joystick axis to the defined values.
+ */
+void joystickBTAxis(uint8_t axistype, unsigned int value1, unsigned int  value2)
+{
+	if(value1 > 1023) value1 = 1023;
+	if(value2 > 1023) value2 = 1023;
+	
+	//implemented similar to TeensyDuino.
+	
+	//X axis
+	if((axistype == STICKMODE_JOYSTICK_XY) && (value1 >= 0)) joystickReport[1] = (joystickReport[1] & 0xFFFFC00F) | (value1 << 4);
+	//Y axis
+	if((axistype == STICKMODE_JOYSTICK_XY) && (value2 >= 0)) joystickReport[1] = (joystickReport[1] & 0xFF003FFF) | (value2 << 14);
+	//Z axis
+	if((axistype == STICKMODE_JOYSTICK_ZR) && (value1 >= 0))
+	{
+		joystickReport[1] = (joystickReport[1] & 0x00FFFFFF) | (value1 << 24);
+		joystickReport[2] = (joystickReport[2] & 0xFFFFFFFC) | (value1 >> 8);
+	}
+	//Z rotate
+	if((axistype == STICKMODE_JOYSTICK_ZR) && (value2 >= 0)) joystickReport[2] = (joystickReport[2] & 0xFFFFF003) | (value2 << 2);
+	//slider left
+	if((axistype == STICKMODE_JOYSTICK_SLIDERS) && (value1 >= 0)) joystickReport[2] = (joystickReport[2] & 0xFFC00FFF) | (value1 << 12);
+	//slider right
+	if((axistype == STICKMODE_JOYSTICK_SLIDERS) && (value2 >= 0)) joystickReport[2] = (joystickReport[2] & 0x003FFFFF) | (value2 << 22);
+
+	sendBTJoystickReport();
+}
+
+/**
+ * name: joystickBTButtons
+ * @param buttonnr Number of button to be pressed/released
+ * @param value State of button (false/0 for released, true/1 for pressed)
+ * @note Button number is limited to 31! (32buttons)
+ * This function sets the state of all buttons for the joystick.
+ */
+void joystickBTButtons(uint8_t buttonnr, bool value)
+{
+	if(buttonnr >= 32) return;
+	if(value) joystickReport[0] |= (1<<buttonnr);
+	else joystickReport[0] &= ~(1<<buttonnr);
+	
+	sendBTJoystickReport();
+}
+
+/**
+ * name: joystickHat
+ * @param angle Value of hat, possible values: 0,45,90,135,180,225,270,315,-1
+ * 
+ * This functions sets the hat position. Center/released position is -1
+ */
+void joystickBTHat(int16_t angle)
+{
+	//according to TeensyDuino's steps, to have exactly same behaviour
+	uint32_t val = 0;
+	if (angle < 0) val = 15;
+	else if (angle < 23) val = 0;
+	else if (angle < 68) val = 1;
+	else if (angle < 113) val = 2;
+	else if (angle < 158) val = 3;
+	else if (angle < 203) val = 4;
+	else if (angle < 245) val = 5;
+	else if (angle < 293) val = 6;
+	else if (angle < 338) val = 7;
+	joystickReport[1] = (joystickReport[1] & 0xFFFFFFF0) | val;
+	
+	sendBTJoystickReport();
+}
+
+/**
+ * 
+ * name: sendBTJoystickReport
+ * @param none
+ * @return none
+ * 
+ * Sends a full joystick report with all buttons and axes
+ */
+void sendBTJoystickReport() 
+{
+	if(DebugOutput == DEBUG_FULLOUTPUT)
+	{
+		Serial.print("BT joystick report: ");
+		Serial.print(joystickReport[0],HEX);
+		Serial.print(":");
+		Serial.print(joystickReport[1],HEX);
+		Serial.print(":");
+		Serial.println(joystickReport[2],HEX);
+	}
+	Serial_AUX.write(0xFD);       			//raw HID
+	Serial_AUX.write(0x00);  				//stuffing
+	Serial_AUX.write(0x01); 				//joystick interface
+	Serial_AUX.write((uint8_t*)joystickReport,12);
+}
+

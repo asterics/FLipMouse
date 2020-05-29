@@ -584,6 +584,9 @@ void readFromEEPROMSlotNumber(uint8_t nr, bool search, bool playTone)
  * */
 void deleteSlots()
 {
+	//for(uint32_t i = 0; i<=EEPROM_MAX_ADDRESS; i++) writeEEPROM(i,0xFF);
+	//return;
+	
 	if(eepromDebugLevel == EEPROM_BASIC_DEBUG) Serial.println("Deleting all slots");
 	for(uint8_t i = 0; i < EEPROM_COUNT_SLOTS; i++) 
 	{

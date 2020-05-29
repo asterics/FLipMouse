@@ -340,16 +340,13 @@ void handleModeState(int x, int y, int pressure)
               
               switch (settings.stickMode) {
                 case STICKMODE_JOYSTICK_XY:
-                  Joystick.X (accumXpos);
-                  Joystick.Y (accumYpos);
+				  joystickAxis(STICKMODE_JOYSTICK_XY,accumXpos,accumYpos);
                   break;
                 case STICKMODE_JOYSTICK_ZR:
-                  Joystick.Z (accumXpos);
-                  Joystick.Zrotate (accumYpos);
+                  joystickAxis(STICKMODE_JOYSTICK_ZR,accumXpos,accumYpos);
                   break;
                 case STICKMODE_JOYSTICK_SLIDERS:
-                  Joystick.sliderLeft (accumXpos);
-                  Joystick.sliderRight (accumYpos);
+                  joystickAxis(STICKMODE_JOYSTICK_SLIDERS,accumXpos,accumYpos);
                   break;
                 }
             }

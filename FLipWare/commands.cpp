@@ -196,28 +196,28 @@ void performCommand (uint8_t cmd, int16_t par1, char * keystring, int8_t periodi
                else mouseMove(0,par1);
             break;
         case CMD_JX:
-               Joystick.X(par1);
+			   joystickAxis(STICKMODE_JOYSTICK_XY, par1, -1);
             break;
         case CMD_JY:
-               Joystick.Y(par1);
+               joystickAxis(STICKMODE_JOYSTICK_XY, -1, par1);
             break;
         case CMD_JZ:
-               Joystick.Z(par1);
+               joystickAxis(STICKMODE_JOYSTICK_ZR, par1, -1);
             break;
         case CMD_JT:
-               Joystick.Zrotate(par1);
+               joystickAxis(STICKMODE_JOYSTICK_ZR, -1, par1);
             break;
         case CMD_JS:
-               Joystick.sliderLeft(par1);
+               joystickAxis(STICKMODE_JOYSTICK_SLIDERS, par1, -1);
             break;
         case CMD_JP:
-               Joystick.button(par1,1);
+			   joystickButtons(par1,1);
             break;
         case CMD_JR:
-               Joystick.button(par1,0);
+               joystickButtons(par1,0);
             break;
         case CMD_JH:
-               Joystick.hat(par1);
+               joystickHat(par1);
             break;
         
         case CMD_KW:

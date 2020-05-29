@@ -32,9 +32,6 @@
 #define MODESTATE_RELEASE                   5
 #define MODESTATE_RETURN_TO_IDLE            6
 
-#define MIN_FORCE 0
-#define ACCELTIME_MAX 100000
-
 uint8_t modeState = MODESTATE_IDLE;
 
 uint8_t mouseMoveCount=0;
@@ -60,14 +57,9 @@ void handleModeState(int x, int y, int pressure)
     static int waitStable=0;
     static int checkPairing=0;
     static uint8_t puffActive=0, sipActive=0, puffCount=0, sipCount=0;
-    static double accelGain=0, accelMaxForce=0,lastAngle=0;
+    static double accelMaxForce=0,lastAngle=0;
     int strongDirThreshold;
     float moveValX,moveValY;
-
-    currentTime = millis();
-    timeDifference = currentTime - previousTime;
-    previousTime = currentTime;
-    accelGain= timeDifference / 1000000000.0f;       
 
     if (pressure>previousPressure) pressureRising=1; else pressureRising=0;
     if (pressure<previousPressure) pressureFalling=1; else pressureFalling=0;
@@ -270,44 +262,41 @@ void handleModeState(int x, int y, int pressure)
            }
         
            if (settings.stickMode == STICKMODE_MOUSE) {   // handle mouse mode
-
-                float max_speed= settings.ms / 10.0f;
   
-                if (force==0) { accelFactor=0; accelMaxForce=MIN_FORCE; lastAngle=0;}
+                if (force==0) { 
+                  accelFactor=0; 
+                  accelMaxForce=0; 
+                  lastAngle=0;
+                }
                 else {
 
                   if (force>accelMaxForce) accelMaxForce=force;
 
                   if (force > accelMaxForce * 0.8)
                   {
-                      if (accelFactor < ACCELTIME_MAX)
-                          accelFactor +=settings.ac;                    
+                      if (accelFactor < 1.0)
+                          accelFactor += ((float)settings.ac/5000000.0);                    
                   }
-                  else if (accelMaxForce > MIN_FORCE) accelMaxForce *= 0.99;
+                  else if (accelMaxForce > 0) accelMaxForce *= 0.99;
 
-                  if (force < accelMaxForce * 0.7)  accelFactor *= 0.999;
-                  if (force < accelMaxForce * 0.3)  accelFactor *= 0.994;
+                  if (force < accelMaxForce * 0.6)  accelFactor *= 0.995;
+                  if (force < accelMaxForce * 0.4)  accelFactor *= 0.99;
 
-//                  if (lastAngle != 0) {
-//                     double dampingFactor=fabs(fabs(angle)-fabs(lastAngle));
-//                     if (dampingFactor>0.1) dampingFactor=0.1;
-//                     accelFactor *= (1.0-dampingFactor/7);
-
-                     double dampingFactor=fabs(x-xo)+fabs(y-yo);
-                     accelFactor *= (1.0-dampingFactor/1000.0);
-                     //Serial.println((int)(dampingFactor*100));
-//                  } 
+                  double dampingFactor=fabs(x-xo)+fabs(y-yo);
+                  accelFactor *= (1.0-dampingFactor/1000.0);
                   lastAngle=angle;
                   xo=x;yo=y;
                 }
-
-                moveValX=x*(float)settings.ax*(float)settings.ax*accelFactor*accelGain;
-                moveValY=y*(float)settings.ay*(float)settings.ay*accelFactor*accelGain;
+                
+                moveValX=x*(float)settings.ax*accelFactor;
+                moveValY=y*(float)settings.ay*accelFactor;
 
                 float actSpeed= sqrt (moveValX*moveValX + moveValY*moveValY);
+                float max_speed= settings.ms / 10.0f;
                 if (actSpeed > max_speed) {
                    moveValX *= (max_speed / actSpeed);
                    moveValY *= (max_speed / actSpeed);
+                   accelFactor *= 0.98;
                 }
                 
                 accumXpos+=moveValX;

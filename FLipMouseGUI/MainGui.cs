@@ -1,4 +1,4 @@
-﻿
+﻿    
 
 /* 
      FLipMouseGUI - Graphical user Interface for FlipMouse / FlipWare firmware
@@ -29,7 +29,7 @@ namespace MouseApp2
 {
     public partial class FLipMouseGUI : Form
     {
-        const string VERSION_STRING = "2.8.3";
+        const string VERSION_STRING = "2.9";
         const int MAX_KEYSTRING_LEN = 65;
 
         const int SENS_CHANGE_STEP = 1;
@@ -1288,13 +1288,13 @@ namespace MouseApp2
 
         private void upGainBar_Scroll(object sender, EventArgs e)
         {
-            upGainLabel.Text = upGainBar.Value.ToString();
+            verticalDriftGainLabel.Text = verticalDriftGainBar.Value.ToString();
         }
         private void incUpGain_Click(object sender, EventArgs e)
         {
-            if (upGainBar.Value <= upGainBar.Maximum - GAIN_CHANGE_STEP)
-                upGainBar.Value += GAIN_CHANGE_STEP;
-            upGainLabel.Text = upGainBar.Value.ToString();
+            if (verticalDriftGainBar.Value <= verticalDriftGainBar.Maximum - GAIN_CHANGE_STEP)
+                verticalDriftGainBar.Value += GAIN_CHANGE_STEP;
+            verticalDriftGainLabel.Text = verticalDriftGainBar.Value.ToString();
         }
         private void incUpGain_MouseHover(object sender, EventArgs e)
         {
@@ -1303,9 +1303,9 @@ namespace MouseApp2
         }
         private void decUpGain_Click(object sender, EventArgs e)
         {
-            if (upGainBar.Value >= upGainBar.Minimum + GAIN_CHANGE_STEP)
-                upGainBar.Value -= GAIN_CHANGE_STEP;
-            upGainLabel.Text = upGainBar.Value.ToString();
+            if (verticalDriftGainBar.Value >= verticalDriftGainBar.Minimum + GAIN_CHANGE_STEP)
+                verticalDriftGainBar.Value -= GAIN_CHANGE_STEP;
+            verticalDriftGainLabel.Text = verticalDriftGainBar.Value.ToString();
         }
         private void decUpGain_MouseHover(object sender, EventArgs e)
         {
@@ -1315,14 +1315,14 @@ namespace MouseApp2
 
         private void downGainBar_Scroll(object sender, EventArgs e)
         {
-            downGainLabel.Text = (100-downGainBar.Value).ToString();
+            verticalDriftRangeLabel.Text = (verticalDriftRangeBar.Value).ToString();
 
         }
         private void incDownGain_Click(object sender, EventArgs e)
         {
-            if (downGainBar.Value >= downGainBar.Minimum + GAIN_CHANGE_STEP)
-                downGainBar.Value -= GAIN_CHANGE_STEP;
-            downGainLabel.Text = (100-downGainBar.Value).ToString();
+            if (verticalDriftRangeBar.Value <= verticalDriftRangeBar.Maximum - GAIN_CHANGE_STEP)
+                verticalDriftRangeBar.Value += GAIN_CHANGE_STEP;
+            verticalDriftRangeLabel.Text = (verticalDriftRangeBar.Value).ToString();
         }
         private void incDownGain_MouseHover(object sender, EventArgs e)
         {
@@ -1331,9 +1331,9 @@ namespace MouseApp2
         }
         private void decDownGain_Click(object sender, EventArgs e)
         {
-            if (downGainBar.Value <= downGainBar.Maximum - GAIN_CHANGE_STEP)
-                downGainBar.Value += GAIN_CHANGE_STEP;
-            downGainLabel.Text = (100-downGainBar.Value).ToString();
+            if (verticalDriftRangeBar.Value >= verticalDriftRangeBar.Minimum + GAIN_CHANGE_STEP)
+                verticalDriftRangeBar.Value -= GAIN_CHANGE_STEP;
+            verticalDriftRangeLabel.Text = (verticalDriftRangeBar.Value).ToString();
         }
         private void decDownGain_MouseHover(object sender, EventArgs e)
         {
@@ -1343,13 +1343,13 @@ namespace MouseApp2
 
         private void leftGainBar_Scroll(object sender, EventArgs e)
         {
-            leftGainLabel.Text = leftGainBar.Value.ToString();
+            horizontalDriftGainLabel.Text = horizontalDriftGainBar.Value.ToString();
         }
         private void incLeftGain_Click(object sender, EventArgs e)
         {
-            if (leftGainBar.Value <= leftGainBar.Maximum - GAIN_CHANGE_STEP)
-                leftGainBar.Value += GAIN_CHANGE_STEP;
-            leftGainLabel.Text = leftGainBar.Value.ToString();
+            if (horizontalDriftGainBar.Value <= horizontalDriftGainBar.Maximum - GAIN_CHANGE_STEP)
+                horizontalDriftGainBar.Value += GAIN_CHANGE_STEP;
+            horizontalDriftGainLabel.Text = horizontalDriftGainBar.Value.ToString();
         }
         private void incLeftGain_MouseHover(object sender, EventArgs e)
         {
@@ -1358,9 +1358,9 @@ namespace MouseApp2
         }
         private void decLeftGain_Click(object sender, EventArgs e)
         {
-            if (leftGainBar.Value >= leftGainBar.Minimum + GAIN_CHANGE_STEP)
-                leftGainBar.Value -= GAIN_CHANGE_STEP;
-            leftGainLabel.Text = leftGainBar.Value.ToString();
+            if (horizontalDriftGainBar.Value >= horizontalDriftGainBar.Minimum + GAIN_CHANGE_STEP)
+                horizontalDriftGainBar.Value -= GAIN_CHANGE_STEP;
+            horizontalDriftGainLabel.Text = horizontalDriftGainBar.Value.ToString();
         }
         private void decLeftGain_MouseHover(object sender, EventArgs e)
         {
@@ -1370,13 +1370,13 @@ namespace MouseApp2
         
         private void rightGainBar_Scroll(object sender, EventArgs e)
         {
-            rightGainLabel.Text = rightGainBar.Value.ToString();
+            horizontalDriftRangeLabel.Text = horizontalDriftRangeBar.Value.ToString();
         }
         private void incRightGain_Click(object sender, EventArgs e)
         {
-            if (rightGainBar.Value <= rightGainBar.Maximum - GAIN_CHANGE_STEP)
-                rightGainBar.Value += GAIN_CHANGE_STEP;
-            rightGainLabel.Text = rightGainBar.Value.ToString();
+            if (horizontalDriftRangeBar.Value <= horizontalDriftRangeBar.Maximum - GAIN_CHANGE_STEP)
+                horizontalDriftRangeBar.Value += GAIN_CHANGE_STEP;
+            horizontalDriftRangeLabel.Text = horizontalDriftRangeBar.Value.ToString();
         }
         private void incRightGain_MouseHover(object sender, EventArgs e)
         {
@@ -1385,9 +1385,9 @@ namespace MouseApp2
         }
         private void decRightGain_Click(object sender, EventArgs e)
         {
-            if (rightGainBar.Value >= rightGainBar.Minimum + GAIN_CHANGE_STEP)
-                rightGainBar.Value -= GAIN_CHANGE_STEP;
-            rightGainLabel.Text = rightGainBar.Value.ToString();
+            if (horizontalDriftRangeBar.Value >= horizontalDriftRangeBar.Minimum + GAIN_CHANGE_STEP)
+                horizontalDriftRangeBar.Value -= GAIN_CHANGE_STEP;
+            horizontalDriftRangeLabel.Text = horizontalDriftRangeBar.Value.ToString();
         }
         private void decRightGain_MouseHover(object sender, EventArgs e)
         {
@@ -1515,5 +1515,113 @@ namespace MouseApp2
 
         }
 
+        private void showDriftCorrection_CheckedChanged(object sender, EventArgs e)
+        {
+            if (showDriftCorrection.Checked)
+            {
+                incVerticalDriftGain.Visible = true;
+                incVerticalDriftRange.Visible = true;
+                incHorizontalDriftRange.Visible = true;
+                incHorizontalDriftGain.Visible = true;
+                decVerticalDriftGain.Visible = true;
+                decVerticalDriftRange.Visible = true;
+                decHorizontalDriftRange.Visible = true;
+                decHorizontalDriftGain.Visible = true;
+                verticalDriftGainBar.Visible = true;
+                verticalDriftRangeBar.Visible = true;
+                horizontalDriftRangeBar.Visible = true;
+                horizontalDriftGainBar.Visible = true;
+                verticalDriftGainLabel.Visible = true;
+                verticalDriftGainCaption.Visible = true;
+                verticalDriftRangeLabel.Visible = true;
+                verticalDriftRangeCaption.Visible = true;
+                horizontalDriftGainLabel.Visible = true;
+                horizontalDriftGainCaption.Visible = true;
+                horizontalDriftRangeLabel.Visible = true;
+                horizontalDriftRangeCaption.Visible = true;
+
+                incVerticalDriftGain.Enabled = true;
+                incVerticalDriftRange.Enabled = true;
+                incHorizontalDriftRange.Enabled = true;
+                incHorizontalDriftGain.Enabled = true;
+                decVerticalDriftGain.Enabled = true;
+                decVerticalDriftRange.Enabled = true;
+                decHorizontalDriftRange.Enabled = true;
+                decHorizontalDriftGain.Enabled = true;
+                verticalDriftGainBar.Enabled = true;
+                verticalDriftRangeBar.Enabled = true;
+                horizontalDriftRangeBar.Enabled = true;
+                horizontalDriftGainBar.Enabled = true;
+                verticalDriftGainLabel.Enabled = true;
+                verticalDriftGainCaption.Enabled = true;
+                verticalDriftRangeLabel.Enabled = true;
+                verticalDriftRangeCaption.Enabled = true;
+                horizontalDriftGainLabel.Enabled = true;
+                horizontalDriftGainCaption.Enabled = true;
+                horizontalDriftRangeLabel.Enabled = true;
+                horizontalDriftRangeCaption.Enabled = true;
+
+                copy_driftCompensation.Visible = true;
+                copy_driftCompensation.Enabled = true;
+            }
+            else
+            {
+
+                incVerticalDriftGain.Visible = false;
+                incVerticalDriftRange.Visible = false;
+                incHorizontalDriftRange.Visible = false;
+                incHorizontalDriftGain.Visible = false;
+                decVerticalDriftGain.Visible = false;
+                decVerticalDriftRange.Visible = false;
+                decHorizontalDriftRange.Visible = false;
+                decHorizontalDriftGain.Visible = false;
+                verticalDriftGainBar.Visible = false;
+                verticalDriftRangeBar.Visible = false;
+                horizontalDriftRangeBar.Visible = false;
+                horizontalDriftGainBar.Visible = false;
+                verticalDriftGainLabel.Visible = false;
+                verticalDriftGainCaption.Visible = false;
+                verticalDriftRangeLabel.Visible = false;
+                verticalDriftRangeCaption.Visible = false;
+                horizontalDriftGainLabel.Visible = false;
+                horizontalDriftGainCaption.Visible = false;
+                horizontalDriftRangeLabel.Visible = false;
+                horizontalDriftRangeCaption.Visible = false;
+
+                incVerticalDriftGain.Enabled = false;
+                incVerticalDriftRange.Enabled = false;
+                incHorizontalDriftRange.Enabled = false;
+                incHorizontalDriftGain.Enabled = false;
+                decVerticalDriftGain.Enabled = false;
+                decVerticalDriftRange.Enabled = false;
+                decHorizontalDriftRange.Enabled = false;
+                decHorizontalDriftGain.Enabled = false;
+                verticalDriftGainBar.Enabled = false;
+                verticalDriftRangeBar.Enabled = false;
+                horizontalDriftRangeBar.Enabled = false;
+                horizontalDriftGainBar.Enabled = false;
+                verticalDriftGainLabel.Enabled = false;
+                verticalDriftGainCaption.Enabled = false;
+                verticalDriftRangeLabel.Enabled = false;
+                verticalDriftRangeCaption.Enabled = false;
+                horizontalDriftGainLabel.Enabled = false;
+                horizontalDriftGainCaption.Enabled = false;
+                horizontalDriftRangeLabel.Enabled = false;
+                horizontalDriftRangeCaption.Enabled = false;
+
+                copy_driftCompensation.Visible = false;
+                copy_driftCompensation.Enabled = false;
+            }
+
+        }
+
+        private void copy_driftCompensation_Click(object sender, EventArgs e)
+        {
+            storeSlot(actSlot);
+            copyToAllSlots(actSlot, "AT GV");
+            copyToAllSlots(actSlot, "AT RV");
+            copyToAllSlots(actSlot, "AT GH");
+            copyToAllSlots(actSlot, "AT RH");
+        }
     }
 }

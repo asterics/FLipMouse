@@ -38,6 +38,7 @@
             this.portStatus = new System.Windows.Forms.Label();
             this.tabControl = new System.Windows.Forms.TabControl();
             this.LipmouseTab = new System.Windows.Forms.TabPage();
+            this.copy_stickactions = new System.Windows.Forms.Button();
             this.singlePanel = new System.Windows.Forms.Panel();
             this.incSpeed = new System.Windows.Forms.Button();
             this.decSpeed = new System.Windows.Forms.Button();
@@ -119,6 +120,7 @@
             this.label13 = new System.Windows.Forms.Label();
             this.UpFunctionMenu = new System.Windows.Forms.ComboBox();
             this.SipPuffLevelsTab = new System.Windows.Forms.TabPage();
+            this.copy_levels = new System.Windows.Forms.Button();
             this.holdLevelIndicatorPanel = new System.Windows.Forms.Panel();
             this.sipLevelIndicatorPanel = new System.Windows.Forms.Panel();
             this.specialLevelIndicatorPanel = new System.Windows.Forms.Panel();
@@ -241,6 +243,7 @@
             this.label46 = new System.Windows.Forms.Label();
             this.StrongPuffUpFunctionBox = new System.Windows.Forms.ComboBox();
             this.ButtonsTab = new System.Windows.Forms.TabPage();
+            this.copy_buttons = new System.Windows.Forms.Button();
             this.clearButton3 = new System.Windows.Forms.Button();
             this.clearButton2 = new System.Windows.Forms.Button();
             this.clearButton1 = new System.Windows.Forms.Button();
@@ -264,23 +267,25 @@
             this.label6 = new System.Windows.Forms.Label();
             this.Button1FunctionBox = new System.Windows.Forms.ComboBox();
             this.RawValueTab = new System.Windows.Forms.TabPage();
-            this.incRightGain = new System.Windows.Forms.Button();
-            this.decRightGain = new System.Windows.Forms.Button();
-            this.rightGainLabel = new System.Windows.Forms.Label();
-            this.label28 = new System.Windows.Forms.Label();
-            this.rightGainBar = new System.Windows.Forms.TrackBar();
-            this.incDownGain = new System.Windows.Forms.Button();
-            this.decDownGain = new System.Windows.Forms.Button();
-            this.downGainLabel = new System.Windows.Forms.Label();
-            this.label25 = new System.Windows.Forms.Label();
-            this.incLeftGain = new System.Windows.Forms.Button();
-            this.decLeftGain = new System.Windows.Forms.Button();
-            this.leftGainLabel = new System.Windows.Forms.Label();
-            this.label26 = new System.Windows.Forms.Label();
-            this.incUpGain = new System.Windows.Forms.Button();
-            this.decUpGain = new System.Windows.Forms.Button();
-            this.upGainLabel = new System.Windows.Forms.Label();
-            this.label23 = new System.Windows.Forms.Label();
+            this.copy_driftCompensation = new System.Windows.Forms.Button();
+            this.showDriftCorrection = new System.Windows.Forms.CheckBox();
+            this.incHorizontalDriftRange = new System.Windows.Forms.Button();
+            this.decHorizontalDriftRange = new System.Windows.Forms.Button();
+            this.horizontalDriftRangeLabel = new System.Windows.Forms.Label();
+            this.horizontalDriftRangeCaption = new System.Windows.Forms.Label();
+            this.horizontalDriftRangeBar = new System.Windows.Forms.TrackBar();
+            this.incVerticalDriftRange = new System.Windows.Forms.Button();
+            this.decVerticalDriftRange = new System.Windows.Forms.Button();
+            this.verticalDriftRangeLabel = new System.Windows.Forms.Label();
+            this.verticalDriftRangeCaption = new System.Windows.Forms.Label();
+            this.incHorizontalDriftGain = new System.Windows.Forms.Button();
+            this.decHorizontalDriftGain = new System.Windows.Forms.Button();
+            this.horizontalDriftGainLabel = new System.Windows.Forms.Label();
+            this.horizontalDriftGainCaption = new System.Windows.Forms.Label();
+            this.incVerticalDriftGain = new System.Windows.Forms.Button();
+            this.decVerticalDriftGain = new System.Windows.Forms.Button();
+            this.verticalDriftGainLabel = new System.Windows.Forms.Label();
+            this.verticalDriftGainCaption = new System.Windows.Forms.Label();
             this.label22 = new System.Windows.Forms.Label();
             this.downSensorLabel = new System.Windows.Forms.Label();
             this.label19 = new System.Windows.Forms.Label();
@@ -293,9 +298,9 @@
             this.leftPanel = new System.Windows.Forms.Panel();
             this.downPanel = new System.Windows.Forms.Panel();
             this.upPanel = new System.Windows.Forms.Panel();
-            this.leftGainBar = new System.Windows.Forms.TrackBar();
-            this.downGainBar = new System.Windows.Forms.TrackBar();
-            this.upGainBar = new System.Windows.Forms.TrackBar();
+            this.horizontalDriftGainBar = new System.Windows.Forms.TrackBar();
+            this.verticalDriftRangeBar = new System.Windows.Forms.TrackBar();
+            this.verticalDriftGainBar = new System.Windows.Forms.TrackBar();
             this.IRTab = new System.Windows.Forms.TabPage();
             this.deleteAllIRButton = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
@@ -307,6 +312,8 @@
             this.recordIRButton = new System.Windows.Forms.Button();
             this.label24 = new System.Windows.Forms.Label();
             this.GeneralTab = new System.Windows.Forms.TabPage();
+            this.copy_btmode = new System.Windows.Forms.Button();
+            this.copy_orientation = new System.Windows.Forms.Button();
             this.irIdleSequenceBox = new System.Windows.Forms.ComboBox();
             this.label57 = new System.Windows.Forms.Label();
             this.clearIROffButton = new System.Windows.Forms.Button();
@@ -346,11 +353,6 @@
             this.label37 = new System.Windows.Forms.Label();
             this.label33 = new System.Windows.Forms.Label();
             this.StoreButton = new System.Windows.Forms.Button();
-            this.copy_orientation = new System.Windows.Forms.Button();
-            this.copy_buttons = new System.Windows.Forms.Button();
-            this.copy_btmode = new System.Windows.Forms.Button();
-            this.copy_levels = new System.Windows.Forms.Button();
-            this.copy_stickactions = new System.Windows.Forms.Button();
             this.tabControl.SuspendLayout();
             this.LipmouseTab.SuspendLayout();
             this.singlePanel.SuspendLayout();
@@ -395,10 +397,10 @@
             ((System.ComponentModel.ISupportInitialize)(this.Button2NumericParameter)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Button1NumericParameter)).BeginInit();
             this.RawValueTab.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.rightGainBar)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.leftGainBar)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.downGainBar)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.upGainBar)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.horizontalDriftRangeBar)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.horizontalDriftGainBar)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.verticalDriftRangeBar)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.verticalDriftGainBar)).BeginInit();
             this.IRTab.SuspendLayout();
             this.GeneralTab.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -514,6 +516,18 @@
             this.LipmouseTab.Size = new System.Drawing.Size(834, 361);
             this.LipmouseTab.TabIndex = 0;
             this.LipmouseTab.Text = "Stick Actions";
+            // 
+            // copy_stickactions
+            // 
+            this.copy_stickactions.ForeColor = System.Drawing.Color.Black;
+            this.copy_stickactions.Location = new System.Drawing.Point(679, 305);
+            this.copy_stickactions.Margin = new System.Windows.Forms.Padding(4);
+            this.copy_stickactions.Name = "copy_stickactions";
+            this.copy_stickactions.Size = new System.Drawing.Size(127, 30);
+            this.copy_stickactions.TabIndex = 162;
+            this.copy_stickactions.Text = "copy to all slots";
+            this.copy_stickactions.UseVisualStyleBackColor = true;
+            this.copy_stickactions.Click += new System.EventHandler(this.copy_stickactions_Click);
             // 
             // singlePanel
             // 
@@ -1623,6 +1637,18 @@
             this.SipPuffLevelsTab.Size = new System.Drawing.Size(834, 361);
             this.SipPuffLevelsTab.TabIndex = 5;
             this.SipPuffLevelsTab.Text = "Sip/Puff Levels";
+            // 
+            // copy_levels
+            // 
+            this.copy_levels.ForeColor = System.Drawing.Color.Black;
+            this.copy_levels.Location = new System.Drawing.Point(619, 302);
+            this.copy_levels.Margin = new System.Windows.Forms.Padding(4);
+            this.copy_levels.Name = "copy_levels";
+            this.copy_levels.Size = new System.Drawing.Size(127, 30);
+            this.copy_levels.TabIndex = 162;
+            this.copy_levels.Text = "copy to all slots";
+            this.copy_levels.UseVisualStyleBackColor = true;
+            this.copy_levels.Click += new System.EventHandler(this.copy_levels_Click);
             // 
             // holdLevelIndicatorPanel
             // 
@@ -3203,6 +3229,18 @@
             this.ButtonsTab.TabIndex = 1;
             this.ButtonsTab.Text = "Button Actions";
             // 
+            // copy_buttons
+            // 
+            this.copy_buttons.ForeColor = System.Drawing.Color.Black;
+            this.copy_buttons.Location = new System.Drawing.Point(653, 303);
+            this.copy_buttons.Margin = new System.Windows.Forms.Padding(4);
+            this.copy_buttons.Name = "copy_buttons";
+            this.copy_buttons.Size = new System.Drawing.Size(127, 30);
+            this.copy_buttons.TabIndex = 162;
+            this.copy_buttons.Text = "copy to all slots";
+            this.copy_buttons.UseVisualStyleBackColor = true;
+            this.copy_buttons.Click += new System.EventHandler(this.copy_buttons_Click);
+            // 
             // clearButton3
             // 
             this.clearButton3.Enabled = false;
@@ -3472,23 +3510,25 @@
             // RawValueTab
             // 
             this.RawValueTab.BackColor = System.Drawing.SystemColors.ButtonFace;
-            this.RawValueTab.Controls.Add(this.incRightGain);
-            this.RawValueTab.Controls.Add(this.decRightGain);
-            this.RawValueTab.Controls.Add(this.rightGainLabel);
-            this.RawValueTab.Controls.Add(this.label28);
-            this.RawValueTab.Controls.Add(this.rightGainBar);
-            this.RawValueTab.Controls.Add(this.incDownGain);
-            this.RawValueTab.Controls.Add(this.decDownGain);
-            this.RawValueTab.Controls.Add(this.downGainLabel);
-            this.RawValueTab.Controls.Add(this.label25);
-            this.RawValueTab.Controls.Add(this.incLeftGain);
-            this.RawValueTab.Controls.Add(this.decLeftGain);
-            this.RawValueTab.Controls.Add(this.leftGainLabel);
-            this.RawValueTab.Controls.Add(this.label26);
-            this.RawValueTab.Controls.Add(this.incUpGain);
-            this.RawValueTab.Controls.Add(this.decUpGain);
-            this.RawValueTab.Controls.Add(this.upGainLabel);
-            this.RawValueTab.Controls.Add(this.label23);
+            this.RawValueTab.Controls.Add(this.copy_driftCompensation);
+            this.RawValueTab.Controls.Add(this.showDriftCorrection);
+            this.RawValueTab.Controls.Add(this.incHorizontalDriftRange);
+            this.RawValueTab.Controls.Add(this.decHorizontalDriftRange);
+            this.RawValueTab.Controls.Add(this.horizontalDriftRangeLabel);
+            this.RawValueTab.Controls.Add(this.horizontalDriftRangeCaption);
+            this.RawValueTab.Controls.Add(this.horizontalDriftRangeBar);
+            this.RawValueTab.Controls.Add(this.incVerticalDriftRange);
+            this.RawValueTab.Controls.Add(this.decVerticalDriftRange);
+            this.RawValueTab.Controls.Add(this.verticalDriftRangeLabel);
+            this.RawValueTab.Controls.Add(this.verticalDriftRangeCaption);
+            this.RawValueTab.Controls.Add(this.incHorizontalDriftGain);
+            this.RawValueTab.Controls.Add(this.decHorizontalDriftGain);
+            this.RawValueTab.Controls.Add(this.horizontalDriftGainLabel);
+            this.RawValueTab.Controls.Add(this.horizontalDriftGainCaption);
+            this.RawValueTab.Controls.Add(this.incVerticalDriftGain);
+            this.RawValueTab.Controls.Add(this.decVerticalDriftGain);
+            this.RawValueTab.Controls.Add(this.verticalDriftGainLabel);
+            this.RawValueTab.Controls.Add(this.verticalDriftGainCaption);
             this.RawValueTab.Controls.Add(this.label22);
             this.RawValueTab.Controls.Add(this.downSensorLabel);
             this.RawValueTab.Controls.Add(this.label19);
@@ -3501,9 +3541,9 @@
             this.RawValueTab.Controls.Add(this.leftPanel);
             this.RawValueTab.Controls.Add(this.downPanel);
             this.RawValueTab.Controls.Add(this.upPanel);
-            this.RawValueTab.Controls.Add(this.leftGainBar);
-            this.RawValueTab.Controls.Add(this.downGainBar);
-            this.RawValueTab.Controls.Add(this.upGainBar);
+            this.RawValueTab.Controls.Add(this.horizontalDriftGainBar);
+            this.RawValueTab.Controls.Add(this.verticalDriftRangeBar);
+            this.RawValueTab.Controls.Add(this.verticalDriftGainBar);
             this.RawValueTab.Location = new System.Drawing.Point(4, 25);
             this.RawValueTab.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.RawValueTab.Name = "RawValueTab";
@@ -3511,264 +3551,290 @@
             this.RawValueTab.TabIndex = 4;
             this.RawValueTab.Text = "Force Levels";
             // 
+            // copy_driftCompensation
+            // 
+            this.copy_driftCompensation.Enabled = false;
+            this.copy_driftCompensation.ForeColor = System.Drawing.Color.Black;
+            this.copy_driftCompensation.Location = new System.Drawing.Point(27, 312);
+            this.copy_driftCompensation.Margin = new System.Windows.Forms.Padding(4);
+            this.copy_driftCompensation.Name = "copy_driftCompensation";
+            this.copy_driftCompensation.Size = new System.Drawing.Size(127, 30);
+            this.copy_driftCompensation.TabIndex = 162;
+            this.copy_driftCompensation.Text = "copy to all slots";
+            this.copy_driftCompensation.UseVisualStyleBackColor = true;
+            this.copy_driftCompensation.Visible = false;
+            this.copy_driftCompensation.Click += new System.EventHandler(this.copy_driftCompensation_Click);
+            // 
+            // showDriftCorrection
+            // 
+            this.showDriftCorrection.AutoSize = true;
+            this.showDriftCorrection.Location = new System.Drawing.Point(514, 322);
+            this.showDriftCorrection.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.showDriftCorrection.Name = "showDriftCorrection";
+            this.showDriftCorrection.Size = new System.Drawing.Size(302, 21);
+            this.showDriftCorrection.TabIndex = 135;
+            this.showDriftCorrection.Text = "edit drift compensation settings (advanced)";
+            this.showDriftCorrection.UseVisualStyleBackColor = true;
+            this.showDriftCorrection.CheckedChanged += new System.EventHandler(this.showDriftCorrection_CheckedChanged);
+            // 
             // incRightGain
             // 
-            this.incRightGain.Enabled = false;
-            this.incRightGain.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.incRightGain.ForeColor = System.Drawing.Color.Black;
-            this.incRightGain.Location = new System.Drawing.Point(508, 252);
-            this.incRightGain.Margin = new System.Windows.Forms.Padding(4);
-            this.incRightGain.Name = "incRightGain";
-            this.incRightGain.Size = new System.Drawing.Size(41, 37);
-            this.incRightGain.TabIndex = 10;
-            this.incRightGain.TabStop = false;
-            this.incRightGain.Text = "+";
-            this.incRightGain.UseVisualStyleBackColor = true;
-            this.incRightGain.Visible = false;
-            this.incRightGain.Click += new System.EventHandler(this.incRightGain_Click);
-            this.incRightGain.MouseLeave += new System.EventHandler(this.stop_ClickTimer);
-            this.incRightGain.MouseHover += new System.EventHandler(this.incRightGain_MouseHover);
+            this.incHorizontalDriftRange.Enabled = false;
+            this.incHorizontalDriftRange.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.incHorizontalDriftRange.ForeColor = System.Drawing.Color.Black;
+            this.incHorizontalDriftRange.Location = new System.Drawing.Point(762, 257);
+            this.incHorizontalDriftRange.Margin = new System.Windows.Forms.Padding(4);
+            this.incHorizontalDriftRange.Name = "incRightGain";
+            this.incHorizontalDriftRange.Size = new System.Drawing.Size(41, 37);
+            this.incHorizontalDriftRange.TabIndex = 10;
+            this.incHorizontalDriftRange.TabStop = false;
+            this.incHorizontalDriftRange.Text = "+";
+            this.incHorizontalDriftRange.UseVisualStyleBackColor = true;
+            this.incHorizontalDriftRange.Visible = false;
+            this.incHorizontalDriftRange.Click += new System.EventHandler(this.incRightGain_Click);
+            this.incHorizontalDriftRange.MouseLeave += new System.EventHandler(this.stop_ClickTimer);
+            this.incHorizontalDriftRange.MouseHover += new System.EventHandler(this.incRightGain_MouseHover);
             // 
             // decRightGain
             // 
-            this.decRightGain.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.decRightGain.Enabled = false;
-            this.decRightGain.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.decRightGain.ForeColor = System.Drawing.Color.Black;
-            this.decRightGain.Location = new System.Drawing.Point(460, 252);
-            this.decRightGain.Margin = new System.Windows.Forms.Padding(4);
-            this.decRightGain.Name = "decRightGain";
-            this.decRightGain.Size = new System.Drawing.Size(41, 37);
-            this.decRightGain.TabIndex = 11;
-            this.decRightGain.TabStop = false;
-            this.decRightGain.Text = "-";
-            this.decRightGain.UseVisualStyleBackColor = true;
-            this.decRightGain.Visible = false;
-            this.decRightGain.Click += new System.EventHandler(this.decRightGain_Click);
-            this.decRightGain.MouseLeave += new System.EventHandler(this.stop_ClickTimer);
-            this.decRightGain.MouseHover += new System.EventHandler(this.decRightGain_MouseHover);
+            this.decHorizontalDriftRange.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.decHorizontalDriftRange.Enabled = false;
+            this.decHorizontalDriftRange.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.decHorizontalDriftRange.ForeColor = System.Drawing.Color.Black;
+            this.decHorizontalDriftRange.Location = new System.Drawing.Point(492, 257);
+            this.decHorizontalDriftRange.Margin = new System.Windows.Forms.Padding(4);
+            this.decHorizontalDriftRange.Name = "decRightGain";
+            this.decHorizontalDriftRange.Size = new System.Drawing.Size(41, 37);
+            this.decHorizontalDriftRange.TabIndex = 11;
+            this.decHorizontalDriftRange.TabStop = false;
+            this.decHorizontalDriftRange.Text = "-";
+            this.decHorizontalDriftRange.UseVisualStyleBackColor = true;
+            this.decHorizontalDriftRange.Visible = false;
+            this.decHorizontalDriftRange.Click += new System.EventHandler(this.decRightGain_Click);
+            this.decHorizontalDriftRange.MouseLeave += new System.EventHandler(this.stop_ClickTimer);
+            this.decHorizontalDriftRange.MouseHover += new System.EventHandler(this.decRightGain_MouseHover);
             // 
             // rightGainLabel
             // 
-            this.rightGainLabel.AutoSize = true;
-            this.rightGainLabel.Enabled = false;
-            this.rightGainLabel.Location = new System.Drawing.Point(566, 274);
-            this.rightGainLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.rightGainLabel.Name = "rightGainLabel";
-            this.rightGainLabel.Size = new System.Drawing.Size(24, 17);
-            this.rightGainLabel.TabIndex = 134;
-            this.rightGainLabel.Text = "50";
-            this.rightGainLabel.Visible = false;
+            this.horizontalDriftRangeLabel.AutoSize = true;
+            this.horizontalDriftRangeLabel.Enabled = false;
+            this.horizontalDriftRangeLabel.Location = new System.Drawing.Point(741, 240);
+            this.horizontalDriftRangeLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.horizontalDriftRangeLabel.Name = "rightGainLabel";
+            this.horizontalDriftRangeLabel.Size = new System.Drawing.Size(24, 17);
+            this.horizontalDriftRangeLabel.TabIndex = 134;
+            this.horizontalDriftRangeLabel.Text = "20";
+            this.horizontalDriftRangeLabel.Visible = false;
             // 
-            // label28
+            // rightGainCaption
             // 
-            this.label28.AutoSize = true;
-            this.label28.Enabled = false;
-            this.label28.Location = new System.Drawing.Point(563, 254);
-            this.label28.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.label28.Name = "label28";
-            this.label28.Size = new System.Drawing.Size(67, 17);
-            this.label28.TabIndex = 132;
-            this.label28.Text = "right gain";
-            this.label28.Visible = false;
+            this.horizontalDriftRangeCaption.AutoSize = true;
+            this.horizontalDriftRangeCaption.Enabled = false;
+            this.horizontalDriftRangeCaption.Location = new System.Drawing.Point(535, 239);
+            this.horizontalDriftRangeCaption.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.horizontalDriftRangeCaption.Name = "rightGainCaption";
+            this.horizontalDriftRangeCaption.Size = new System.Drawing.Size(203, 17);
+            this.horizontalDriftRangeCaption.TabIndex = 132;
+            this.horizontalDriftRangeCaption.Text = "horizontal compensation range";
+            this.horizontalDriftRangeCaption.Visible = false;
             // 
             // rightGainBar
             // 
-            this.rightGainBar.Enabled = false;
-            this.rightGainBar.LargeChange = 10;
-            this.rightGainBar.Location = new System.Drawing.Point(449, 210);
-            this.rightGainBar.Margin = new System.Windows.Forms.Padding(4);
-            this.rightGainBar.Maximum = 100;
-            this.rightGainBar.Name = "rightGainBar";
-            this.rightGainBar.Size = new System.Drawing.Size(117, 56);
-            this.rightGainBar.TabIndex = 12;
-            this.rightGainBar.TickFrequency = 10;
-            this.rightGainBar.Value = 50;
-            this.rightGainBar.Visible = false;
-            this.rightGainBar.Scroll += new System.EventHandler(this.rightGainBar_Scroll);
+            this.horizontalDriftRangeBar.Enabled = false;
+            this.horizontalDriftRangeBar.LargeChange = 10;
+            this.horizontalDriftRangeBar.Location = new System.Drawing.Point(533, 262);
+            this.horizontalDriftRangeBar.Margin = new System.Windows.Forms.Padding(4);
+            this.horizontalDriftRangeBar.Maximum = 100;
+            this.horizontalDriftRangeBar.Name = "rightGainBar";
+            this.horizontalDriftRangeBar.Size = new System.Drawing.Size(227, 56);
+            this.horizontalDriftRangeBar.TabIndex = 12;
+            this.horizontalDriftRangeBar.TickFrequency = 10;
+            this.horizontalDriftRangeBar.Value = 20;
+            this.horizontalDriftRangeBar.Visible = false;
+            this.horizontalDriftRangeBar.Scroll += new System.EventHandler(this.rightGainBar_Scroll);
             // 
             // incDownGain
             // 
-            this.incDownGain.Enabled = false;
-            this.incDownGain.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.incDownGain.ForeColor = System.Drawing.Color.Black;
-            this.incDownGain.Location = new System.Drawing.Point(289, 272);
-            this.incDownGain.Margin = new System.Windows.Forms.Padding(4);
-            this.incDownGain.Name = "incDownGain";
-            this.incDownGain.Size = new System.Drawing.Size(41, 37);
-            this.incDownGain.TabIndex = 4;
-            this.incDownGain.TabStop = false;
-            this.incDownGain.Text = "+";
-            this.incDownGain.UseVisualStyleBackColor = true;
-            this.incDownGain.Visible = false;
-            this.incDownGain.Click += new System.EventHandler(this.incDownGain_Click);
-            this.incDownGain.MouseLeave += new System.EventHandler(this.stop_ClickTimer);
-            this.incDownGain.MouseHover += new System.EventHandler(this.incDownGain_MouseHover);
+            this.incVerticalDriftRange.Enabled = false;
+            this.incVerticalDriftRange.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.incVerticalDriftRange.ForeColor = System.Drawing.Color.Black;
+            this.incVerticalDriftRange.Location = new System.Drawing.Point(283, 254);
+            this.incVerticalDriftRange.Margin = new System.Windows.Forms.Padding(4);
+            this.incVerticalDriftRange.Name = "incDownGain";
+            this.incVerticalDriftRange.Size = new System.Drawing.Size(41, 37);
+            this.incVerticalDriftRange.TabIndex = 4;
+            this.incVerticalDriftRange.TabStop = false;
+            this.incVerticalDriftRange.Text = "+";
+            this.incVerticalDriftRange.UseVisualStyleBackColor = true;
+            this.incVerticalDriftRange.Visible = false;
+            this.incVerticalDriftRange.Click += new System.EventHandler(this.incDownGain_Click);
+            this.incVerticalDriftRange.MouseLeave += new System.EventHandler(this.stop_ClickTimer);
+            this.incVerticalDriftRange.MouseHover += new System.EventHandler(this.incDownGain_MouseHover);
             // 
             // decDownGain
             // 
-            this.decDownGain.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.decDownGain.Enabled = false;
-            this.decDownGain.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.decDownGain.ForeColor = System.Drawing.Color.Black;
-            this.decDownGain.Location = new System.Drawing.Point(289, 228);
-            this.decDownGain.Margin = new System.Windows.Forms.Padding(4);
-            this.decDownGain.Name = "decDownGain";
-            this.decDownGain.Size = new System.Drawing.Size(41, 37);
-            this.decDownGain.TabIndex = 5;
-            this.decDownGain.TabStop = false;
-            this.decDownGain.Text = "-";
-            this.decDownGain.UseVisualStyleBackColor = true;
-            this.decDownGain.Visible = false;
-            this.decDownGain.Click += new System.EventHandler(this.decDownGain_Click);
-            this.decDownGain.MouseLeave += new System.EventHandler(this.stop_ClickTimer);
-            this.decDownGain.MouseHover += new System.EventHandler(this.decDownGain_MouseHover);
+            this.decVerticalDriftRange.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.decVerticalDriftRange.Enabled = false;
+            this.decVerticalDriftRange.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.decVerticalDriftRange.ForeColor = System.Drawing.Color.Black;
+            this.decVerticalDriftRange.Location = new System.Drawing.Point(27, 254);
+            this.decVerticalDriftRange.Margin = new System.Windows.Forms.Padding(4);
+            this.decVerticalDriftRange.Name = "decDownGain";
+            this.decVerticalDriftRange.Size = new System.Drawing.Size(41, 37);
+            this.decVerticalDriftRange.TabIndex = 5;
+            this.decVerticalDriftRange.TabStop = false;
+            this.decVerticalDriftRange.Text = "-";
+            this.decVerticalDriftRange.UseVisualStyleBackColor = true;
+            this.decVerticalDriftRange.Visible = false;
+            this.decVerticalDriftRange.Click += new System.EventHandler(this.decDownGain_Click);
+            this.decVerticalDriftRange.MouseLeave += new System.EventHandler(this.stop_ClickTimer);
+            this.decVerticalDriftRange.MouseHover += new System.EventHandler(this.decDownGain_MouseHover);
             // 
             // downGainLabel
             // 
-            this.downGainLabel.AutoSize = true;
-            this.downGainLabel.Enabled = false;
-            this.downGainLabel.Location = new System.Drawing.Point(241, 268);
-            this.downGainLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.downGainLabel.Name = "downGainLabel";
-            this.downGainLabel.Size = new System.Drawing.Size(24, 17);
-            this.downGainLabel.TabIndex = 129;
-            this.downGainLabel.Text = "50";
-            this.downGainLabel.Visible = false;
+            this.verticalDriftRangeLabel.AutoSize = true;
+            this.verticalDriftRangeLabel.Enabled = false;
+            this.verticalDriftRangeLabel.Location = new System.Drawing.Point(258, 236);
+            this.verticalDriftRangeLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.verticalDriftRangeLabel.Name = "downGainLabel";
+            this.verticalDriftRangeLabel.Size = new System.Drawing.Size(24, 17);
+            this.verticalDriftRangeLabel.TabIndex = 129;
+            this.verticalDriftRangeLabel.Text = "20";
+            this.verticalDriftRangeLabel.Visible = false;
             // 
-            // label25
+            // downGainCaption
             // 
-            this.label25.AutoSize = true;
-            this.label25.Enabled = false;
-            this.label25.Location = new System.Drawing.Point(203, 250);
-            this.label25.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.label25.Name = "label25";
-            this.label25.Size = new System.Drawing.Size(72, 17);
-            this.label25.TabIndex = 127;
-            this.label25.Text = "down gain";
-            this.label25.Visible = false;
+            this.verticalDriftRangeCaption.AutoSize = true;
+            this.verticalDriftRangeCaption.Enabled = false;
+            this.verticalDriftRangeCaption.Location = new System.Drawing.Point(69, 234);
+            this.verticalDriftRangeCaption.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.verticalDriftRangeCaption.Name = "downGainCaption";
+            this.verticalDriftRangeCaption.Size = new System.Drawing.Size(186, 17);
+            this.verticalDriftRangeCaption.TabIndex = 127;
+            this.verticalDriftRangeCaption.Text = "vertical compensation range";
+            this.verticalDriftRangeCaption.Visible = false;
             // 
             // incLeftGain
             // 
-            this.incLeftGain.Enabled = false;
-            this.incLeftGain.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.incLeftGain.ForeColor = System.Drawing.Color.Black;
-            this.incLeftGain.Location = new System.Drawing.Point(267, 82);
-            this.incLeftGain.Margin = new System.Windows.Forms.Padding(4);
-            this.incLeftGain.Name = "incLeftGain";
-            this.incLeftGain.Size = new System.Drawing.Size(41, 37);
-            this.incLeftGain.TabIndex = 7;
-            this.incLeftGain.TabStop = false;
-            this.incLeftGain.Text = "+";
-            this.incLeftGain.UseVisualStyleBackColor = true;
-            this.incLeftGain.Visible = false;
-            this.incLeftGain.Click += new System.EventHandler(this.incLeftGain_Click);
-            this.incLeftGain.MouseLeave += new System.EventHandler(this.stop_ClickTimer);
-            this.incLeftGain.MouseHover += new System.EventHandler(this.incLeftGain_MouseHover);
+            this.incHorizontalDriftGain.Enabled = false;
+            this.incHorizontalDriftGain.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.incHorizontalDriftGain.ForeColor = System.Drawing.Color.Black;
+            this.incHorizontalDriftGain.Location = new System.Drawing.Point(762, 86);
+            this.incHorizontalDriftGain.Margin = new System.Windows.Forms.Padding(4);
+            this.incHorizontalDriftGain.Name = "incLeftGain";
+            this.incHorizontalDriftGain.Size = new System.Drawing.Size(41, 37);
+            this.incHorizontalDriftGain.TabIndex = 7;
+            this.incHorizontalDriftGain.TabStop = false;
+            this.incHorizontalDriftGain.Text = "+";
+            this.incHorizontalDriftGain.UseVisualStyleBackColor = true;
+            this.incHorizontalDriftGain.Visible = false;
+            this.incHorizontalDriftGain.Click += new System.EventHandler(this.incLeftGain_Click);
+            this.incHorizontalDriftGain.MouseLeave += new System.EventHandler(this.stop_ClickTimer);
+            this.incHorizontalDriftGain.MouseHover += new System.EventHandler(this.incLeftGain_MouseHover);
             // 
             // decLeftGain
             // 
-            this.decLeftGain.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.decLeftGain.Enabled = false;
-            this.decLeftGain.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.decLeftGain.ForeColor = System.Drawing.Color.Black;
-            this.decLeftGain.Location = new System.Drawing.Point(319, 82);
-            this.decLeftGain.Margin = new System.Windows.Forms.Padding(4);
-            this.decLeftGain.Name = "decLeftGain";
-            this.decLeftGain.Size = new System.Drawing.Size(41, 37);
-            this.decLeftGain.TabIndex = 8;
-            this.decLeftGain.TabStop = false;
-            this.decLeftGain.Text = "-";
-            this.decLeftGain.UseVisualStyleBackColor = true;
-            this.decLeftGain.Visible = false;
-            this.decLeftGain.Click += new System.EventHandler(this.decLeftGain_Click);
-            this.decLeftGain.MouseLeave += new System.EventHandler(this.stop_ClickTimer);
-            this.decLeftGain.MouseHover += new System.EventHandler(this.decLeftGain_MouseHover);
+            this.decHorizontalDriftGain.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.decHorizontalDriftGain.Enabled = false;
+            this.decHorizontalDriftGain.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.decHorizontalDriftGain.ForeColor = System.Drawing.Color.Black;
+            this.decHorizontalDriftGain.Location = new System.Drawing.Point(492, 86);
+            this.decHorizontalDriftGain.Margin = new System.Windows.Forms.Padding(4);
+            this.decHorizontalDriftGain.Name = "decLeftGain";
+            this.decHorizontalDriftGain.Size = new System.Drawing.Size(41, 37);
+            this.decHorizontalDriftGain.TabIndex = 8;
+            this.decHorizontalDriftGain.TabStop = false;
+            this.decHorizontalDriftGain.Text = "-";
+            this.decHorizontalDriftGain.UseVisualStyleBackColor = true;
+            this.decHorizontalDriftGain.Visible = false;
+            this.decHorizontalDriftGain.Click += new System.EventHandler(this.decLeftGain_Click);
+            this.decHorizontalDriftGain.MouseLeave += new System.EventHandler(this.stop_ClickTimer);
+            this.decHorizontalDriftGain.MouseHover += new System.EventHandler(this.decLeftGain_MouseHover);
             // 
             // leftGainLabel
             // 
-            this.leftGainLabel.AutoSize = true;
-            this.leftGainLabel.Enabled = false;
-            this.leftGainLabel.Location = new System.Drawing.Point(228, 100);
-            this.leftGainLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.leftGainLabel.Name = "leftGainLabel";
-            this.leftGainLabel.Size = new System.Drawing.Size(24, 17);
-            this.leftGainLabel.TabIndex = 124;
-            this.leftGainLabel.Text = "50";
-            this.leftGainLabel.Visible = false;
+            this.horizontalDriftGainLabel.AutoSize = true;
+            this.horizontalDriftGainLabel.Enabled = false;
+            this.horizontalDriftGainLabel.Location = new System.Drawing.Point(738, 69);
+            this.horizontalDriftGainLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.horizontalDriftGainLabel.Name = "leftGainLabel";
+            this.horizontalDriftGainLabel.Size = new System.Drawing.Size(24, 17);
+            this.horizontalDriftGainLabel.TabIndex = 124;
+            this.horizontalDriftGainLabel.Text = "40";
+            this.horizontalDriftGainLabel.Visible = false;
             // 
-            // label26
+            // leftGainCaption
             // 
-            this.label26.AutoSize = true;
-            this.label26.Enabled = false;
-            this.label26.Location = new System.Drawing.Point(203, 82);
-            this.label26.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.label26.Name = "label26";
-            this.label26.Size = new System.Drawing.Size(58, 17);
-            this.label26.TabIndex = 122;
-            this.label26.Text = "left gain";
-            this.label26.Visible = false;
+            this.horizontalDriftGainCaption.AutoSize = true;
+            this.horizontalDriftGainCaption.Enabled = false;
+            this.horizontalDriftGainCaption.Location = new System.Drawing.Point(535, 68);
+            this.horizontalDriftGainCaption.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.horizontalDriftGainCaption.Name = "leftGainCaption";
+            this.horizontalDriftGainCaption.Size = new System.Drawing.Size(190, 17);
+            this.horizontalDriftGainCaption.TabIndex = 122;
+            this.horizontalDriftGainCaption.Text = "horizontal drift compensation";
+            this.horizontalDriftGainCaption.Visible = false;
             // 
             // incUpGain
             // 
-            this.incUpGain.Enabled = false;
-            this.incUpGain.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.incUpGain.ForeColor = System.Drawing.Color.Black;
-            this.incUpGain.Location = new System.Drawing.Point(491, 55);
-            this.incUpGain.Margin = new System.Windows.Forms.Padding(4);
-            this.incUpGain.Name = "incUpGain";
-            this.incUpGain.Size = new System.Drawing.Size(41, 37);
-            this.incUpGain.TabIndex = 1;
-            this.incUpGain.TabStop = false;
-            this.incUpGain.Text = "+";
-            this.incUpGain.UseVisualStyleBackColor = true;
-            this.incUpGain.Visible = false;
-            this.incUpGain.Click += new System.EventHandler(this.incUpGain_Click);
-            this.incUpGain.MouseLeave += new System.EventHandler(this.stop_ClickTimer);
-            this.incUpGain.MouseHover += new System.EventHandler(this.incUpGain_MouseHover);
+            this.incVerticalDriftGain.Enabled = false;
+            this.incVerticalDriftGain.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.incVerticalDriftGain.ForeColor = System.Drawing.Color.Black;
+            this.incVerticalDriftGain.Location = new System.Drawing.Point(283, 89);
+            this.incVerticalDriftGain.Margin = new System.Windows.Forms.Padding(4);
+            this.incVerticalDriftGain.Name = "incUpGain";
+            this.incVerticalDriftGain.Size = new System.Drawing.Size(41, 37);
+            this.incVerticalDriftGain.TabIndex = 1;
+            this.incVerticalDriftGain.TabStop = false;
+            this.incVerticalDriftGain.Text = "+";
+            this.incVerticalDriftGain.UseVisualStyleBackColor = true;
+            this.incVerticalDriftGain.Visible = false;
+            this.incVerticalDriftGain.Click += new System.EventHandler(this.incUpGain_Click);
+            this.incVerticalDriftGain.MouseLeave += new System.EventHandler(this.stop_ClickTimer);
+            this.incVerticalDriftGain.MouseHover += new System.EventHandler(this.incUpGain_MouseHover);
             // 
             // decUpGain
             // 
-            this.decUpGain.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.decUpGain.Enabled = false;
-            this.decUpGain.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.decUpGain.ForeColor = System.Drawing.Color.Black;
-            this.decUpGain.Location = new System.Drawing.Point(491, 100);
-            this.decUpGain.Margin = new System.Windows.Forms.Padding(4);
-            this.decUpGain.Name = "decUpGain";
-            this.decUpGain.Size = new System.Drawing.Size(41, 37);
-            this.decUpGain.TabIndex = 2;
-            this.decUpGain.TabStop = false;
-            this.decUpGain.Text = "-";
-            this.decUpGain.UseVisualStyleBackColor = true;
-            this.decUpGain.Visible = false;
-            this.decUpGain.Click += new System.EventHandler(this.decUpGain_Click);
-            this.decUpGain.MouseLeave += new System.EventHandler(this.stop_ClickTimer);
-            this.decUpGain.MouseHover += new System.EventHandler(this.decUpGain_MouseHover);
+            this.decVerticalDriftGain.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.decVerticalDriftGain.Enabled = false;
+            this.decVerticalDriftGain.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.decVerticalDriftGain.ForeColor = System.Drawing.Color.Black;
+            this.decVerticalDriftGain.Location = new System.Drawing.Point(27, 89);
+            this.decVerticalDriftGain.Margin = new System.Windows.Forms.Padding(4);
+            this.decVerticalDriftGain.Name = "decUpGain";
+            this.decVerticalDriftGain.Size = new System.Drawing.Size(41, 37);
+            this.decVerticalDriftGain.TabIndex = 2;
+            this.decVerticalDriftGain.TabStop = false;
+            this.decVerticalDriftGain.Text = "-";
+            this.decVerticalDriftGain.UseVisualStyleBackColor = true;
+            this.decVerticalDriftGain.Visible = false;
+            this.decVerticalDriftGain.Click += new System.EventHandler(this.decUpGain_Click);
+            this.decVerticalDriftGain.MouseLeave += new System.EventHandler(this.stop_ClickTimer);
+            this.decVerticalDriftGain.MouseHover += new System.EventHandler(this.decUpGain_MouseHover);
             // 
             // upGainLabel
             // 
-            this.upGainLabel.AutoSize = true;
-            this.upGainLabel.Enabled = false;
-            this.upGainLabel.Location = new System.Drawing.Point(540, 103);
-            this.upGainLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.upGainLabel.Name = "upGainLabel";
-            this.upGainLabel.Size = new System.Drawing.Size(24, 17);
-            this.upGainLabel.TabIndex = 119;
-            this.upGainLabel.Text = "50";
-            this.upGainLabel.Visible = false;
+            this.verticalDriftGainLabel.AutoSize = true;
+            this.verticalDriftGainLabel.Enabled = false;
+            this.verticalDriftGainLabel.Location = new System.Drawing.Point(257, 72);
+            this.verticalDriftGainLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.verticalDriftGainLabel.Name = "upGainLabel";
+            this.verticalDriftGainLabel.Size = new System.Drawing.Size(24, 17);
+            this.verticalDriftGainLabel.TabIndex = 119;
+            this.verticalDriftGainLabel.Text = "40";
+            this.verticalDriftGainLabel.Visible = false;
             // 
-            // label23
+            // upGainCaption
             // 
-            this.label23.AutoSize = true;
-            this.label23.Enabled = false;
-            this.label23.Location = new System.Drawing.Point(539, 86);
-            this.label23.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.label23.Name = "label23";
-            this.label23.Size = new System.Drawing.Size(55, 17);
-            this.label23.TabIndex = 117;
-            this.label23.Text = "up gain";
-            this.label23.Visible = false;
+            this.verticalDriftGainCaption.AutoSize = true;
+            this.verticalDriftGainCaption.Enabled = false;
+            this.verticalDriftGainCaption.Location = new System.Drawing.Point(71, 72);
+            this.verticalDriftGainCaption.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.verticalDriftGainCaption.Name = "upGainCaption";
+            this.verticalDriftGainCaption.Size = new System.Drawing.Size(173, 17);
+            this.verticalDriftGainCaption.TabIndex = 117;
+            this.verticalDriftGainCaption.Text = "vertical drift compensation";
+            this.verticalDriftGainCaption.Visible = false;
             // 
             // label22
             // 
@@ -3896,54 +3962,49 @@
             // 
             // leftGainBar
             // 
-            this.leftGainBar.Enabled = false;
-            this.leftGainBar.LargeChange = 10;
-            this.leftGainBar.Location = new System.Drawing.Point(257, 126);
-            this.leftGainBar.Margin = new System.Windows.Forms.Padding(4);
-            this.leftGainBar.Maximum = 100;
-            this.leftGainBar.Name = "leftGainBar";
-            this.leftGainBar.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
-            this.leftGainBar.Size = new System.Drawing.Size(117, 56);
-            this.leftGainBar.TabIndex = 9;
-            this.leftGainBar.TickFrequency = 10;
-            this.leftGainBar.Value = 50;
-            this.leftGainBar.Visible = false;
-            this.leftGainBar.Scroll += new System.EventHandler(this.leftGainBar_Scroll);
+            this.horizontalDriftGainBar.Enabled = false;
+            this.horizontalDriftGainBar.LargeChange = 10;
+            this.horizontalDriftGainBar.Location = new System.Drawing.Point(537, 90);
+            this.horizontalDriftGainBar.Margin = new System.Windows.Forms.Padding(4);
+            this.horizontalDriftGainBar.Maximum = 100;
+            this.horizontalDriftGainBar.Name = "leftGainBar";
+            this.horizontalDriftGainBar.Size = new System.Drawing.Size(223, 56);
+            this.horizontalDriftGainBar.TabIndex = 9;
+            this.horizontalDriftGainBar.TickFrequency = 10;
+            this.horizontalDriftGainBar.Value = 40;
+            this.horizontalDriftGainBar.Visible = false;
+            this.horizontalDriftGainBar.Scroll += new System.EventHandler(this.leftGainBar_Scroll);
             // 
             // downGainBar
             // 
-            this.downGainBar.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.downGainBar.Enabled = false;
-            this.downGainBar.LargeChange = 10;
-            this.downGainBar.Location = new System.Drawing.Point(332, 205);
-            this.downGainBar.Margin = new System.Windows.Forms.Padding(4);
-            this.downGainBar.Maximum = 100;
-            this.downGainBar.Name = "downGainBar";
-            this.downGainBar.Orientation = System.Windows.Forms.Orientation.Vertical;
-            this.downGainBar.Size = new System.Drawing.Size(56, 106);
-            this.downGainBar.TabIndex = 6;
-            this.downGainBar.TickFrequency = 10;
-            this.downGainBar.Value = 50;
-            this.downGainBar.Visible = false;
-            this.downGainBar.Scroll += new System.EventHandler(this.downGainBar_Scroll);
+            this.verticalDriftRangeBar.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.verticalDriftRangeBar.Enabled = false;
+            this.verticalDriftRangeBar.LargeChange = 10;
+            this.verticalDriftRangeBar.Location = new System.Drawing.Point(70, 262);
+            this.verticalDriftRangeBar.Margin = new System.Windows.Forms.Padding(4);
+            this.verticalDriftRangeBar.Maximum = 100;
+            this.verticalDriftRangeBar.Name = "downGainBar";
+            this.verticalDriftRangeBar.Size = new System.Drawing.Size(210, 56);
+            this.verticalDriftRangeBar.TabIndex = 6;
+            this.verticalDriftRangeBar.TickFrequency = 10;
+            this.verticalDriftRangeBar.Value = 20;
+            this.verticalDriftRangeBar.Visible = false;
+            this.verticalDriftRangeBar.Scroll += new System.EventHandler(this.downGainBar_Scroll);
             // 
             // upGainBar
             // 
-            this.upGainBar.Enabled = false;
-            this.upGainBar.LargeChange = 10;
-            this.upGainBar.Location = new System.Drawing.Point(418, 46);
-            this.upGainBar.Margin = new System.Windows.Forms.Padding(4);
-            this.upGainBar.Maximum = 100;
-            this.upGainBar.Name = "upGainBar";
-            this.upGainBar.Orientation = System.Windows.Forms.Orientation.Vertical;
-            this.upGainBar.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
-            this.upGainBar.RightToLeftLayout = true;
-            this.upGainBar.Size = new System.Drawing.Size(56, 106);
-            this.upGainBar.TabIndex = 3;
-            this.upGainBar.TickFrequency = 10;
-            this.upGainBar.Value = 50;
-            this.upGainBar.Visible = false;
-            this.upGainBar.Scroll += new System.EventHandler(this.upGainBar_Scroll);
+            this.verticalDriftGainBar.Enabled = false;
+            this.verticalDriftGainBar.LargeChange = 10;
+            this.verticalDriftGainBar.Location = new System.Drawing.Point(70, 92);
+            this.verticalDriftGainBar.Margin = new System.Windows.Forms.Padding(4);
+            this.verticalDriftGainBar.Maximum = 100;
+            this.verticalDriftGainBar.Name = "upGainBar";
+            this.verticalDriftGainBar.Size = new System.Drawing.Size(210, 56);
+            this.verticalDriftGainBar.TabIndex = 3;
+            this.verticalDriftGainBar.TickFrequency = 10;
+            this.verticalDriftGainBar.Value = 40;
+            this.verticalDriftGainBar.Visible = false;
+            this.verticalDriftGainBar.Scroll += new System.EventHandler(this.upGainBar_Scroll);
             // 
             // IRTab
             // 
@@ -4086,6 +4147,30 @@
             this.GeneralTab.TabIndex = 7;
             this.GeneralTab.Text = "General";
             // 
+            // copy_btmode
+            // 
+            this.copy_btmode.ForeColor = System.Drawing.Color.Black;
+            this.copy_btmode.Location = new System.Drawing.Point(441, 165);
+            this.copy_btmode.Margin = new System.Windows.Forms.Padding(4);
+            this.copy_btmode.Name = "copy_btmode";
+            this.copy_btmode.Size = new System.Drawing.Size(127, 30);
+            this.copy_btmode.TabIndex = 162;
+            this.copy_btmode.Text = "copy to all slots";
+            this.copy_btmode.UseVisualStyleBackColor = true;
+            this.copy_btmode.Click += new System.EventHandler(this.copy_btmode_Click);
+            // 
+            // copy_orientation
+            // 
+            this.copy_orientation.ForeColor = System.Drawing.Color.Black;
+            this.copy_orientation.Location = new System.Drawing.Point(439, 72);
+            this.copy_orientation.Margin = new System.Windows.Forms.Padding(4);
+            this.copy_orientation.Name = "copy_orientation";
+            this.copy_orientation.Size = new System.Drawing.Size(127, 30);
+            this.copy_orientation.TabIndex = 161;
+            this.copy_orientation.Text = "copy to all slots";
+            this.copy_orientation.UseVisualStyleBackColor = true;
+            this.copy_orientation.Click += new System.EventHandler(this.copy_orientation_Click);
+            // 
             // irIdleSequenceBox
             // 
             this.irIdleSequenceBox.FormattingEnabled = true;
@@ -4156,7 +4241,7 @@
             this.label50.Size = new System.Drawing.Size(557, 17);
             this.label50.TabIndex = 154;
             this.label50.Text = "This setting defines if the mouse/keyboard activities are sent to USB, bluetooth " +
-    "or both ";
+                "or both ";
             // 
             // label43
             // 
@@ -4482,66 +4567,6 @@
             this.StoreButton.UseVisualStyleBackColor = true;
             this.StoreButton.Click += new System.EventHandler(this.StoreButton_Click);
             // 
-            // copy_orientation
-            // 
-            this.copy_orientation.ForeColor = System.Drawing.Color.Black;
-            this.copy_orientation.Location = new System.Drawing.Point(439, 72);
-            this.copy_orientation.Margin = new System.Windows.Forms.Padding(4);
-            this.copy_orientation.Name = "copy_orientation";
-            this.copy_orientation.Size = new System.Drawing.Size(127, 30);
-            this.copy_orientation.TabIndex = 161;
-            this.copy_orientation.Text = "copy to all slots";
-            this.copy_orientation.UseVisualStyleBackColor = true;
-            this.copy_orientation.Click += new System.EventHandler(this.copy_orientation_Click);
-            // 
-            // copy_buttons
-            // 
-            this.copy_buttons.ForeColor = System.Drawing.Color.Black;
-            this.copy_buttons.Location = new System.Drawing.Point(653, 303);
-            this.copy_buttons.Margin = new System.Windows.Forms.Padding(4);
-            this.copy_buttons.Name = "copy_buttons";
-            this.copy_buttons.Size = new System.Drawing.Size(127, 30);
-            this.copy_buttons.TabIndex = 162;
-            this.copy_buttons.Text = "copy to all slots";
-            this.copy_buttons.UseVisualStyleBackColor = true;
-            this.copy_buttons.Click += new System.EventHandler(this.copy_buttons_Click);
-            // 
-            // copy_btmode
-            // 
-            this.copy_btmode.ForeColor = System.Drawing.Color.Black;
-            this.copy_btmode.Location = new System.Drawing.Point(441, 165);
-            this.copy_btmode.Margin = new System.Windows.Forms.Padding(4);
-            this.copy_btmode.Name = "copy_btmode";
-            this.copy_btmode.Size = new System.Drawing.Size(127, 30);
-            this.copy_btmode.TabIndex = 162;
-            this.copy_btmode.Text = "copy to all slots";
-            this.copy_btmode.UseVisualStyleBackColor = true;
-            this.copy_btmode.Click += new System.EventHandler(this.copy_btmode_Click);
-            // 
-            // copy_levels
-            // 
-            this.copy_levels.ForeColor = System.Drawing.Color.Black;
-            this.copy_levels.Location = new System.Drawing.Point(619, 302);
-            this.copy_levels.Margin = new System.Windows.Forms.Padding(4);
-            this.copy_levels.Name = "copy_levels";
-            this.copy_levels.Size = new System.Drawing.Size(127, 30);
-            this.copy_levels.TabIndex = 162;
-            this.copy_levels.Text = "copy to all slots";
-            this.copy_levels.UseVisualStyleBackColor = true;
-            this.copy_levels.Click += new System.EventHandler(this.copy_levels_Click);
-            // 
-            // copy_stickactions
-            // 
-            this.copy_stickactions.ForeColor = System.Drawing.Color.Black;
-            this.copy_stickactions.Location = new System.Drawing.Point(679, 305);
-            this.copy_stickactions.Margin = new System.Windows.Forms.Padding(4);
-            this.copy_stickactions.Name = "copy_stickactions";
-            this.copy_stickactions.Size = new System.Drawing.Size(127, 30);
-            this.copy_stickactions.TabIndex = 162;
-            this.copy_stickactions.Text = "copy to all slots";
-            this.copy_stickactions.UseVisualStyleBackColor = true;
-            this.copy_stickactions.Click += new System.EventHandler(this.copy_stickactions_Click);
-            // 
             // FLipMouseGUI
             // 
             this.AccessibleDescription = "FlipMouseGUI";
@@ -4628,10 +4653,10 @@
             ((System.ComponentModel.ISupportInitialize)(this.Button1NumericParameter)).EndInit();
             this.RawValueTab.ResumeLayout(false);
             this.RawValueTab.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.rightGainBar)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.leftGainBar)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.downGainBar)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.upGainBar)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.horizontalDriftRangeBar)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.horizontalDriftGainBar)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.verticalDriftRangeBar)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.verticalDriftGainBar)).EndInit();
             this.IRTab.ResumeLayout(false);
             this.IRTab.PerformLayout();
             this.GeneralTab.ResumeLayout(false);
@@ -4724,28 +4749,28 @@
         private System.Windows.Forms.ToolStripMenuItem saveToFileMenuItem;
         private System.Windows.Forms.ToolStripMenuItem loadFromFileMenuItem;
         private System.Windows.Forms.ToolStripMenuItem exitMenuItem;
-        private System.Windows.Forms.Button incUpGain;
-        private System.Windows.Forms.Button decUpGain;
-        private System.Windows.Forms.Label upGainLabel;
-        private System.Windows.Forms.TrackBar upGainBar;
-        private System.Windows.Forms.Label label23;
-        private System.Windows.Forms.Button incLeftGain;
-        private System.Windows.Forms.Button decLeftGain;
-        private System.Windows.Forms.Label leftGainLabel;
-        private System.Windows.Forms.Label label26;
+        private System.Windows.Forms.Button incVerticalDriftGain;
+        private System.Windows.Forms.Button decVerticalDriftGain;
+        private System.Windows.Forms.Label verticalDriftGainLabel;
+        private System.Windows.Forms.TrackBar verticalDriftGainBar;
+        private System.Windows.Forms.Label verticalDriftGainCaption;
+        private System.Windows.Forms.Button incHorizontalDriftGain;
+        private System.Windows.Forms.Button decHorizontalDriftGain;
+        private System.Windows.Forms.Label horizontalDriftGainLabel;
+        private System.Windows.Forms.Label horizontalDriftGainCaption;
         private System.Windows.Forms.Label label19;
         private System.Windows.Forms.Label label10;
-        private System.Windows.Forms.TrackBar leftGainBar;
-        private System.Windows.Forms.Button incRightGain;
-        private System.Windows.Forms.Button decRightGain;
-        private System.Windows.Forms.Label rightGainLabel;
-        private System.Windows.Forms.Label label28;
-        private System.Windows.Forms.TrackBar rightGainBar;
-        private System.Windows.Forms.Button incDownGain;
-        private System.Windows.Forms.Button decDownGain;
-        private System.Windows.Forms.Label downGainLabel;
-        private System.Windows.Forms.Label label25;
-        private System.Windows.Forms.TrackBar downGainBar;
+        private System.Windows.Forms.TrackBar horizontalDriftGainBar;
+        private System.Windows.Forms.Button incHorizontalDriftRange;
+        private System.Windows.Forms.Button decHorizontalDriftRange;
+        private System.Windows.Forms.Label horizontalDriftRangeLabel;
+        private System.Windows.Forms.Label horizontalDriftRangeCaption;
+        private System.Windows.Forms.TrackBar horizontalDriftRangeBar;
+        private System.Windows.Forms.Button incVerticalDriftRange;
+        private System.Windows.Forms.Button decVerticalDriftRange;
+        private System.Windows.Forms.Label verticalDriftRangeLabel;
+        private System.Windows.Forms.Label verticalDriftRangeCaption;
+        private System.Windows.Forms.TrackBar verticalDriftRangeBar;
         private System.Windows.Forms.Button clearButton1;
         private System.Windows.Forms.Button clearButtonUp;
         private System.Windows.Forms.Button clearButton3;
@@ -4969,6 +4994,8 @@
         private System.Windows.Forms.Button copy_btmode;
         private System.Windows.Forms.Button copy_levels;
         private System.Windows.Forms.Button copy_stickactions;
+        private System.Windows.Forms.CheckBox showDriftCorrection;
+        private System.Windows.Forms.Button copy_driftCompensation;
     }
 }
 

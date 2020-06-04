@@ -48,8 +48,10 @@
 #include "bluetooth.h"
 #include "hid_hal.h"
 
-#define VERSION_STRING "Flipmouse v2.8.3"
+#define VERSION_STRING "Flipmouse v2.9"
 
+//  V2.9:  implemented drift correction for small deadzones, removed gain up/down/left/right,
+//          added AT commands for drift correction, modified calculation of acceleration
 //  V2.8.3: switched to semantic version numbering, increased acceleration factors
 //  V2.82: corrected memory bugs (index / heap overflows), added slot copy feature (in GUI) 
 //  V2.81: corrected bug in deadzone calculation for keyboard actions, improved stable time for strong sip/puff functions 
@@ -114,10 +116,10 @@ struct slotGeneralSettings {
   uint8_t  ws;     // wheel stepsize  
   uint16_t sp;     // threshold strong puff 
   uint16_t ss;     // threshold strong sip 
-  uint8_t  gu;     // gain up 
-  uint8_t  gd;     // gain down 
-  uint8_t  gl;     // gain left 
-  uint8_t  gr;     // gain right 
+  uint8_t  gv;     // gain vertical drift compensation 
+  uint8_t  rv;     // range vertical drift compensation
+  uint8_t  gh;     // gain horizontal drift compensation
+  uint8_t  rh;     // range horizontal drift compensation
   int16_t  cx;     // calib x
   int16_t  cy;     // calib y
   uint16_t ro;     // orientation (0,90,180,270)

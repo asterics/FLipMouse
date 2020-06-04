@@ -33,7 +33,7 @@ const struct atCommandType atCommands[] PROGMEM = {
     {"SW"  , PARTYPE_NONE },  {"SR"  , PARTYPE_NONE }, {"ER"  , PARTYPE_NONE }, {"CA"  , PARTYPE_NONE },  
     {"AX"  , PARTYPE_UINT },  {"AY"  , PARTYPE_UINT }, {"DX"  , PARTYPE_UINT }, {"DY"  , PARTYPE_UINT },  
     {"TS"  , PARTYPE_UINT },  {"TP"  , PARTYPE_UINT }, {"SP"  , PARTYPE_UINT }, {"SS"  , PARTYPE_UINT },  
-    {"GU"  , PARTYPE_UINT },  {"GD"  , PARTYPE_UINT }, {"GL"  , PARTYPE_UINT }, {"GR"  , PARTYPE_UINT },
+    {"GV"  , PARTYPE_UINT },  {"RV"  , PARTYPE_UINT }, {"GH"  , PARTYPE_UINT }, {"RH"  , PARTYPE_UINT },
     {"IR"  , PARTYPE_STRING}, {"IP"  , PARTYPE_STRING},{"IC"  , PARTYPE_STRING},{"IL"  , PARTYPE_NONE },
     {"E2"  , PARTYPE_NONE },  {"JX"  , PARTYPE_INT  }, {"JY"  , PARTYPE_INT  }, {"JZ"  , PARTYPE_INT  }, 
     {"JT"  , PARTYPE_INT  },  {"JS"  , PARTYPE_INT  }, {"JP"  , PARTYPE_INT  }, {"JR"  , PARTYPE_INT  },
@@ -59,10 +59,10 @@ void printCurrentSlot()
         Serial.print("AT SP "); Serial.println(settings.sp);
         Serial.print("AT SS "); Serial.println(settings.ss);
         Serial.print("AT MM "); Serial.println(settings.stickMode);
-        Serial.print("AT GU "); Serial.println(settings.gu);
-        Serial.print("AT GD "); Serial.println(settings.gd);
-        Serial.print("AT GL "); Serial.println(settings.gl);
-        Serial.print("AT GR "); Serial.println(settings.gr);
+        Serial.print("AT GV "); Serial.println(settings.gv);
+        Serial.print("AT RV "); Serial.println(settings.rv);
+        Serial.print("AT GH "); Serial.println(settings.gh);
+        Serial.print("AT RH "); Serial.println(settings.rh);
         Serial.print("AT RO "); Serial.println(settings.ro);
         Serial.print("AT BT "); Serial.println(settings.bt);
         Serial.print("AT II "); Serial.println(settings.ii);
@@ -252,8 +252,6 @@ void performCommand (uint8_t cmd, int16_t par1, char * keystring, int8_t periodi
                  // reportSlotParameters=REPORT_ONE_SLOT;
                  readFromEEPROM(keystring);
                  reportSlotParameters=REPORT_NONE;
-                 if ((settings.gu!=50)||(settings.gd!=50)||(settings.gl!=50)||(settings.gr!=50)) // TBD: improve ! 
-                 { cx=settings.cx; cy=settings.cy; }   // update calibration settings if gain settings are not default 
                }
             break;
         case CMD_LA:
@@ -384,17 +382,17 @@ void performCommand (uint8_t cmd, int16_t par1, char * keystring, int8_t periodi
         case CMD_SS:
                settings.ss=par1;
             break;
-        case CMD_GU:
-               settings.gu=par1;
+        case CMD_GV:
+               settings.gv=par1;
             break;
-        case CMD_GD:
-               settings.gd=par1;
+        case CMD_RV:
+               settings.rv=par1;
             break;
-        case CMD_GL:
-               settings.gl=par1;
+        case CMD_GH:
+               settings.gh=par1;
             break;
-        case CMD_GR:
-               settings.gr=par1;
+        case CMD_RH:
+               settings.rh=par1;
             break;
         case CMD_RO:
                settings.ro=par1;

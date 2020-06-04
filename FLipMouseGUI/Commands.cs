@@ -115,10 +115,10 @@
           AT TP <uint>    treshold for puff action (512-1023)
           AT SP <uint>    treshold for strong puff (512-1023)
           AT SS <uint>    treshold for strong sip (0-512)
-          AT GU <uint>    gain for up sensor (0-100)
-          AT GD <uint>    gain for down sensor (0-100)
-          AT GL <uint>    gain for left sensor (0-100)
-          AT GR <uint>    gain for right sensor (0-100)
+          AT GV <uint>    gain vertical drift compensation (0-100)
+          AT RV <uint>    range vertical drift compensation (0-100)
+          AT GH <uint>    gain horizontal drift compensation (0-100)
+          AT RH <uint>    range horizontal drift compensation (0-100)
   
     Infrared-specific commands:
 
@@ -251,10 +251,10 @@ namespace MouseApp2
             allCommands.add(new Command("AT TP", PARTYPE_UINT, "Theshold Puff", COMBOENTRY_NO, GUITYPE_SLIDER));
             allCommands.add(new Command("AT SP", PARTYPE_UINT, "Threshold StrongPuff", COMBOENTRY_NO, GUITYPE_SLIDER));
             allCommands.add(new Command("AT SS", PARTYPE_UINT, "Threshold StrongSip", COMBOENTRY_NO, GUITYPE_SLIDER));
-            allCommands.add(new Command("AT GU", PARTYPE_UINT, "Gain for Up Sensor", COMBOENTRY_NO, GUITYPE_SLIDER));
-            allCommands.add(new Command("AT GD", PARTYPE_UINT, "Gain for Down Sensor", COMBOENTRY_NO, GUITYPE_SLIDER));
-            allCommands.add(new Command("AT GL", PARTYPE_UINT, "Gain for Left Sensor", COMBOENTRY_NO, GUITYPE_SLIDER));
-            allCommands.add(new Command("AT GR", PARTYPE_UINT, "Gain for Right Sensor", COMBOENTRY_NO, GUITYPE_SLIDER));
+            allCommands.add(new Command("AT GV", PARTYPE_UINT, "gain vertical drift compensation", COMBOENTRY_NO, GUITYPE_SLIDER));
+            allCommands.add(new Command("AT RV", PARTYPE_UINT, "range vertical drift compensation", COMBOENTRY_NO, GUITYPE_SLIDER));
+            allCommands.add(new Command("AT GH", PARTYPE_UINT, "gain horizontal drift compensation", COMBOENTRY_NO, GUITYPE_SLIDER));
+            allCommands.add(new Command("AT RH", PARTYPE_UINT, "range horizontal drift compensation", COMBOENTRY_NO, GUITYPE_SLIDER));
             allCommands.add(new Command("AT IR", PARTYPE_STRING, "Record Infrared Command", COMBOENTRY_NO, GUITYPE_STANDARD));
             allCommands.add(new Command("AT IP", PARTYPE_STRING, "Play Infrared Command", COMBOENTRY_YES, GUITYPE_IRSELECT));
             allCommands.add(new Command("AT IH", PARTYPE_STRING, "Hold Infrared Command", COMBOENTRY_YES, GUITYPE_IRSELECT));
@@ -285,10 +285,10 @@ namespace MouseApp2
             commandGuiLinks.Add(new CommandGuiLink("AT TP", puffThresholdBar, puffThresholdLabel, "525"));
             commandGuiLinks.Add(new CommandGuiLink("AT SP", strongPuffThresholdBar, strongPuffThresholdLabel, "700"));
             commandGuiLinks.Add(new CommandGuiLink("AT SS", strongSipThresholdBar, stongSipThresholdLabel , "300"));
-            commandGuiLinks.Add(new CommandGuiLink("AT GU", upGainBar, upGainLabel, "50"));
-            commandGuiLinks.Add(new CommandGuiLink("AT GD", downGainBar, downGainLabel, "50"));
-            commandGuiLinks.Add(new CommandGuiLink("AT GL", leftGainBar, leftGainLabel, "50"));
-            commandGuiLinks.Add(new CommandGuiLink("AT GR", rightGainBar, rightGainLabel, "50"));
+            commandGuiLinks.Add(new CommandGuiLink("AT GV", verticalDriftGainBar, verticalDriftGainLabel, "40"));
+            commandGuiLinks.Add(new CommandGuiLink("AT RV", verticalDriftRangeBar, verticalDriftRangeLabel, "20"));
+            commandGuiLinks.Add(new CommandGuiLink("AT GH", horizontalDriftGainBar, horizontalDriftGainLabel, "40"));
+            commandGuiLinks.Add(new CommandGuiLink("AT RH", horizontalDriftRangeBar, horizontalDriftRangeLabel, "20"));
             commandGuiLinks.Add(new CommandGuiLink("AT MM", selectStick, selectJoystick, selectAlternative, "1"));
             commandGuiLinks.Add(new CommandGuiLink("AT BM 01", Button1FunctionBox, Button1ParameterText, Button1NumericParameter, Button1ComboBox, "AT NE"));
             commandGuiLinks.Add(new CommandGuiLink("AT BM 02", Button2FunctionBox, Button2ParameterText, Button2NumericParameter, Button2ComboBox, "AT NC "));

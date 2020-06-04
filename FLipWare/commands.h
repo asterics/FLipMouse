@@ -119,10 +119,10 @@
           AT TP <uint>    treshold for puff action (512-1023)
           AT SP <uint>    treshold for strong puff (512-1023)
           AT SS <uint>    treshold for strong sip (0-512)
-          AT GU <uint>    gain for up sensor (0-100)
-          AT GD <uint>    gain for down sensor (0-100)
-          AT GL <uint>    gain for left sensor (0-100)
-          AT GR <uint>    gain for right sensor (0-100)
+          AT GV <uint>    gain vertical drift compensation (0-100)
+          AT RV <uint>    range vertical drift compensation (0-100)
+          AT GH <uint>    gain horizontal drift compensation (0-100)
+          AT RH <uint>    range horizontal drift compensation (0-100)
   
     Infrared-specific commands:
 
@@ -169,7 +169,7 @@ enum atCommands {
   CMD_ID, CMD_BM, CMD_CL, CMD_CR, CMD_CM, CMD_CD, CMD_PL, CMD_PR, CMD_PM, CMD_RL, CMD_RR, CMD_RM,
   CMD_WU, CMD_WD, CMD_WS, CMD_MX, CMD_MY, CMD_KW, CMD_KP, CMD_KR, CMD_RA, CMD_SA, CMD_LO, CMD_LA,
   CMD_LI, CMD_NE, CMD_DE, CMD_NC, CMD_E1, CMD_E0, CMD_MM, CMD_SW, CMD_SR, CMD_ER, CMD_CA, CMD_AX,
-  CMD_AY, CMD_DX, CMD_DY, CMD_TS, CMD_TP, CMD_SP, CMD_SS, CMD_GU, CMD_GD, CMD_GL, CMD_GR, CMD_IR,
+  CMD_AY, CMD_DX, CMD_DY, CMD_TS, CMD_TP, CMD_SP, CMD_SS, CMD_GV, CMD_RV, CMD_GH, CMD_RH, CMD_IR,
   CMD_IP, CMD_IC, CMD_IL, CMD_E2, CMD_JX, CMD_JY, CMD_JZ, CMD_JT, CMD_JS, CMD_JP, CMD_JR, CMD_JH,
   CMD_IT, CMD_KH, CMD_MS, CMD_AC, CMD_MA, CMD_WA, CMD_RO, CMD_IW, CMD_BT, CMD_HL, CMD_HR, CMD_HM,
   CMD_TL, CMD_TR, CMD_TM, CMD_KT, CMD_IH, CMD_IS, CMD_II,

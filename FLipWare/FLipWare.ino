@@ -66,7 +66,7 @@ struct slotGeneralSettings settings = {      // default settings valus, for type
     40, 40, 20, 20, 50, 20,           // accx, accy, deadzone x, deadzone y, maxspeed, acceleration time
     400, 600, 3,                      // threshold sip, threshold puff, wheel step,
     800, 10,                          // threshold strong puff, threshold strong sip
-    50, 50, 50, 50 ,                  // gain up / down / left / right
+    40, 20, 40, 20 ,                  // gain and range drift compenstation( vertical, horizontal)
     0, 0,                             // offset x / y
     0,                                // orientation
     1,                                // bt-mode 1: USB, 2: Bluetooth, 3: both (2 & 3 need daughter board)) 
@@ -97,7 +97,7 @@ int up,down,left,right,tmp;
 int x,y;
 int pressure;
 double dz=0,force=0,angle=0;
-
+int xLocalMax=0, yLocalMax=0;
 int16_t  cx=0,cy=0;
 
 uint8_t blinkCount=0;
@@ -180,10 +180,10 @@ void loop() {
  
     pressure = analogRead(PRESSURE_SENSOR_PIN);
     
-    up =       (uint16_t)((uint32_t)analogRead(UP_SENSOR_PIN)  * settings.gd/50); if (up>1023) up=1023; if (up<0) up=0;
-    down =     (uint16_t)((uint32_t)analogRead(DOWN_SENSOR_PIN) * settings.gu/50); if (down>1023) down=1023; if (down<0) down=0;
-    left =     (uint16_t)((uint32_t)analogRead(LEFT_SENSOR_PIN) * settings.gr/50); if (left>1023) left=1023; if (left<0) left=0;
-    right =    (uint16_t)((uint32_t)analogRead(RIGHT_SENSOR_PIN) * settings.gl/50); if (right>1023) right=1023; if (right<0) right=0;
+    up =       analogRead(UP_SENSOR_PIN);
+    down =     analogRead(DOWN_SENSOR_PIN);
+    left =     analogRead(LEFT_SENSOR_PIN);
+    right =    analogRead(RIGHT_SENSOR_PIN);
 
     switch (settings.ro) {
       case 90: tmp=up; up=left; left=down; down=right; right=tmp; break;
@@ -211,9 +211,11 @@ void loop() {
                  settings.cy = (up-down);
                  cx=settings.cx;
                  cy=settings.cy;
+                 xLocalMax=0; yLocalMax=0;
               }
           }    
 
+          applyDriftCorrection();
           reportValues();     // send live data to serial 
           applyDeadzone();
           handleModeState(x, y, pressure);  // handle all mouse / joystick / button activities
@@ -250,9 +252,37 @@ void reportValues()
     }
 }
 
+void applyDriftCorrection() 
+{
+    // apply drift correction
+    if (((x<0) && (xLocalMax>0)) || ((x>0) && (xLocalMax<0)))  xLocalMax=0;
+    if (abs(x)>abs(xLocalMax)) {
+      xLocalMax=x;
+      //Serial.print("xLocalMax=");
+      //Serial.println(xLocalMax);
+    }
+    if (xLocalMax>settings.rh) xLocalMax=settings.rh;
+    if (xLocalMax<-settings.rh) xLocalMax=-settings.rh;
+   
+    if (((y<0) && (yLocalMax>0)) || ((y>0) && (yLocalMax<0)))  yLocalMax=0;
+    if (abs(y)>abs(yLocalMax)) {
+      yLocalMax=y;
+      //Serial.print("yLocalMax=");
+      //Serial.println(yLocalMax);
+    }
+    if (yLocalMax>settings.rv) yLocalMax=settings.rv;
+    if (yLocalMax<-settings.rv) yLocalMax=-settings.rv;
+
+    x-=xLocalMax*((double)settings.gh/250);
+    y-=yLocalMax*((double)settings.gv/250);
+}
+
 void applyDeadzone()
 {
     if (settings.stickMode == STICKMODE_ALTERNATIVE) {
+
+          // rectangular deadzone for alternative modes
+          
           if (x<-settings.dx) x+=settings.dx;  // apply deadzone values x direction
           else if (x>settings.dx) x-=settings.dx;
           else x=0;
@@ -260,12 +290,55 @@ void applyDeadzone()
           if (y<-settings.dy) y+=settings.dy;  // apply deadzone values y direction
           else if (y>settings.dy) y-=settings.dy;
           else y=0;
-    } else {
-  
-      double x2,y2;
-      char str[80];
-  
+
+    } else {     
+      
+      //  circular deadzone for mouse control
+
       force=sqrt(x*x+y*y);
+/*
+      // try to attenuate drifting (due to sensor inaccuracies) 
+      static uint16_t attenuationActive=0;
+      static float attenuate=1.0f;
+      static float biasedForce=0;
+
+      // assume that a high force is intentional!
+      if (force>15) {  
+        attenuationActive=0;
+        biasedForce=0.0f;
+        attenuate=1.0f;
+      } 
+      else {
+        attenuationActive++;
+
+        // after a certain time of low force, assume it is a biased value
+        if (attenuationActive>=200) {
+          biasedForce=force;
+        }
+      }
+
+      // attenuate invalid sensor values
+      if (biasedForce>0) {
+        // begin attenuation if actual force does not change
+        if (fabs(force-biasedForce) < 8) {
+          attenuate-=0.001;
+          if (attenuate < 0) {
+            attenuate=0;
+          }
+        }
+        // if actual force changes, assume intentional change an stop attenuation 
+        else {
+          attenuate+=0.002;
+          if (attenuate >= 0.9) {
+            attenuate=1.0;
+            biasedForce=0.0;
+          }          
+        }
+      }
+
+      force *= attenuate;
+*/
+
 
       if (force!=0) {
         angle = atan2 ((double)y/force, (double)x/force );
@@ -273,9 +346,9 @@ void applyDeadzone()
       }
       else { angle=0; dz=settings.dx; }
   
-      if (force<dz) force=0; else force-=dz;
-      
+      if (force<dz) force=0; else force-=dz;      
   
+      double x2,y2;
       y2=force*sin(angle);
       x2=force*cos(angle);
 

@@ -41,7 +41,8 @@ const struct atCommandType atCommands[] PROGMEM = {
     {"AC"  , PARTYPE_UINT },  {"MA"  , PARTYPE_STRING},{"WA"  , PARTYPE_UINT  },{"RO"  , PARTYPE_UINT },
     {"IW"  , PARTYPE_NONE },  {"BT"  , PARTYPE_UINT }, {"HL"  , PARTYPE_NONE }, {"HR"  , PARTYPE_NONE },
     {"HM"  , PARTYPE_NONE },  {"TL"  , PARTYPE_NONE }, {"TR"  , PARTYPE_NONE }, {"TM"  , PARTYPE_NONE },
-    {"KT"  , PARTYPE_STRING },{"IH"  , PARTYPE_STRING },{"IS"  , PARTYPE_NONE },{"II"  , PARTYPE_STRING }, 
+    {"KT"  , PARTYPE_STRING },{"IH"  , PARTYPE_STRING },{"IS"  , PARTYPE_NONE },{"II"  , PARTYPE_STRING },
+    {"BC"  , PARTYPE_STRING },
 };
 
 void printCurrentSlot()
@@ -443,7 +444,9 @@ void performCommand (uint8_t cmd, int16_t par1, char * keystring, int8_t periodi
         case CMD_IW:
             wipe_IR_commands();
             break;
-
+        case CMD_BC:
+			Serial_AUX.write(keystring);
+			break;
         case CMD_E2:
       			DebugOutput=DEBUG_FULLOUTPUT; 
 	      		eepromDebugLevel = EEPROM_FULL_DEBUG;

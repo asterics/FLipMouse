@@ -10,8 +10,7 @@ C3,C5:   Capacitor              10uf (0603)          Farnell: 2346889
 C6,C7:   Capacitor               1nf (0603)          Farnell: 2280655
 R1,R2:   Resistor                10k (0603)          Farnell: 2140192
 R3:      Resistor               330R (0603)          Farnell: 2502447
-D1:      LED SMD               green (0603)          Farnell: 2687486
-Sw1,SW2: Switch SMD             KMR6 (2N)            Farnell: 2845721
+D1:      LED 3mm               green (3mm)           Farnell: 1581123
 J1:      Socketstrip  SMD        5x2 (2,54mm)        Farnell: 2293771
 J2:      Pinheader               5x1 (2,54mm)        Farnell: 2356157
 

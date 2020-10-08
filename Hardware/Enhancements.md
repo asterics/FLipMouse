@@ -12,3 +12,4 @@
 * Re-route the program button. Mostly unused and could be more useful on a GPIO (e.g. for enabling the webinterface from BLE addon)
 * Overthink FSR soldering, many FSRs were destroyed by soldering...
 * If possible, use double-footprints for all parts (SMD & THT). Could be easier for panelized part assembly if SMD parts are used.
+* Smaller Buzzer

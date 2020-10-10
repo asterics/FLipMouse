@@ -339,6 +339,8 @@ namespace MouseApp2
             HIDComboBox.Items.Add("both (USB + BT)");
             HIDComboBox.SelectedIndex = 2;
 
+            pairingsComboBox.Items.Add("Unpair all");
+
             displaySlot(0);
 
             updateComPorts();
@@ -1622,6 +1624,34 @@ namespace MouseApp2
             copyToAllSlots(actSlot, "AT RV");
             copyToAllSlots(actSlot, "AT GH");
             copyToAllSlots(actSlot, "AT RH");
+        }
+
+        private void label23_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void backgroundWorker1_DoWork(object sender, DoWorkEventArgs e)
+        {
+
+        }
+
+        private void unpair_click(object sender, EventArgs e)
+        {
+            if (pairingsComboBox.Text.Length == 0) return;
+            
+            if (pairingsComboBox.SelectedIndex == 0)
+            {
+                sendBluetoothCommand("$DP");
+                addToLog("Unpair all");
+            } else {
+                sendBluetoothCommand("$DP" + pairingsComboBox.SelectedIndex);
+                addToLog("Unpair " + pairingsComboBox.Text);
+            }
+
+            pairingsComboBox.Items.Clear();
+            pairingsComboBox.Items.Add("Unpair all");
+            sendBluetoothCommand("$GP");
         }
     }
 }

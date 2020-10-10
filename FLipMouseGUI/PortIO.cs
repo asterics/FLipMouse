@@ -131,6 +131,10 @@ namespace MouseApp2
             {
                 gotIRCommandName(newLine);
             }
+            else if (newLine.ToUpper().StartsWith(PREFIX_PAIRINGS))  // ir command name received 
+            {
+                gotPairing(newLine);
+            }
             else if (newLine.ToUpper().StartsWith(PREFIX_IRCOMMAND_RECORDED))  // ir recording sucessful 
             {
                 gotIRCommandRecorded(newLine);
@@ -248,6 +252,15 @@ namespace MouseApp2
                 }
             }
         }
+        
+        public void gotPairing(String newPairedDevice)
+        {
+            newPairedDevice = newPairedDevice.Replace("\r", ""); newPairedDevice = newPairedDevice.Replace("\n", "");
+            newPairedDevice = newPairedDevice.Substring(newPairedDevice.IndexOf(":")+1);
+            Console.WriteLine("got Bluetooth Pairing:" + newPairedDevice);
+            pairingsComboBox.Items.Add(newPairedDevice);
+            pairingsComboBox.Text = newPairedDevice;
+        }
 
         public void gotIRCommandRecorded(String newIRCommandName)
         {
@@ -321,6 +334,7 @@ namespace MouseApp2
             if (serialPort1.IsOpen)
             {
                 sendEndReportingCommand();
+                sendBluetoothCommand("$GP"); //retreive paired devices of addon (if connected)
                 slotNames.Items.Clear();
                 slots.Clear();
                 actSlot = -1;

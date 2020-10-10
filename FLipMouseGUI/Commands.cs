@@ -180,6 +180,7 @@ namespace MouseApp2
         const string PREFIX_FLIPMOUSE_VERSION = "FLIPMOUSE ";
         const string PREFIX_REPORT_VALUES = "VALUES:";
         const string PREFIX_SLOT_NAME = "SLOT:";
+        const string PREFIX_PAIRINGS = "PAIRING:";
         const string PREFIX_AT_COMMAND = "AT ";
         const string PREFIX_END_OF_SLOTS = "END";
         const string PREFIX_IRCOMMAND_NAME = "IRCOMMAND";
@@ -399,6 +400,11 @@ namespace MouseApp2
         public void sendClearIRCommands()
         {
             sendCmd("AT IW");
+        }
+
+        public void sendBluetoothCommand(String command)
+        {
+            sendCmd("AT BC " + command);
         }
 
 

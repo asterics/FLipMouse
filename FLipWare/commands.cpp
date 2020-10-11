@@ -446,6 +446,7 @@ void performCommand (uint8_t cmd, int16_t par1, char * keystring, int8_t periodi
             break;
         case CMD_BC:
 			Serial_AUX.write(keystring);
+			Serial_AUX.write('\n'); //terminate command
 			break;
         case CMD_E2:
       			DebugOutput=DEBUG_FULLOUTPUT; 

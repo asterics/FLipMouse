@@ -1645,7 +1645,8 @@ namespace MouseApp2
                 sendBluetoothCommand("$DP");
                 addToLog("Unpair all");
             } else {
-                sendBluetoothCommand("$DP" + pairingsComboBox.SelectedIndex);
+				int i = pairingsComboBox.SelectedIndex-1;
+                sendBluetoothCommand("$DP" + i);
                 addToLog("Unpair " + pairingsComboBox.Text);
             }
 

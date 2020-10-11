@@ -33,7 +33,6 @@
    http://www.gnu.org/licenses/gpl-3.0.en.html
  
  */ 
-
 #include "FlipWare.h"        //  FABI command definitions
 #include <EEPROM.h>
 #include <Wire.h>        // for the external EEPROM
@@ -196,6 +195,10 @@ void loop() {
       inByte = Serial.read();
       parseByte (inByte);      // implemented in parser.cpp
     }
+    
+    //if incoming serial data on the addon board is available,
+    //just forward it to the host serial interface.
+    while (Serial_AUX.available() > 0) { Serial.write(Serial_AUX.read()); }
 
     if (StandAloneMode && (millis() >= updateStandaloneTimestamp+waitTime))  {
 

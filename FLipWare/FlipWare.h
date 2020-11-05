@@ -51,6 +51,7 @@
 #define VERSION_STRING "Flipmouse v2.10"
 
 //  V2.10: added AT BC command to send commands from GUI to addon board.
+//		   added AT UG command to bring up the addon board in download mode.
 //  V2.9:  implemented drift correction for small deadzones, removed gain up/down/left/right,
 //          added AT commands for drift correction, modified calculation of acceleration
 //  V2.8.3: switched to semantic version numbering, increased acceleration factors
@@ -137,6 +138,7 @@ struct atCommandType {                      // holds settings for a button funct
 
 extern uint8_t DebugOutput;
 extern uint8_t actSlot;
+extern uint8_t addonUpgrade;
 extern uint8_t reportSlotParameters;
 extern uint8_t reportRawValues;
 extern struct slotGeneralSettings settings;

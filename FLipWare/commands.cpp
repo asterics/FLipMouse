@@ -42,7 +42,7 @@ const struct atCommandType atCommands[] PROGMEM = {
     {"IW"  , PARTYPE_NONE },  {"BT"  , PARTYPE_UINT }, {"HL"  , PARTYPE_NONE }, {"HR"  , PARTYPE_NONE },
     {"HM"  , PARTYPE_NONE },  {"TL"  , PARTYPE_NONE }, {"TR"  , PARTYPE_NONE }, {"TM"  , PARTYPE_NONE },
     {"KT"  , PARTYPE_STRING },{"IH"  , PARTYPE_STRING },{"IS"  , PARTYPE_NONE },{"II"  , PARTYPE_STRING },
-    {"BC"  , PARTYPE_STRING },
+    {"BC"  , PARTYPE_STRING },{"UG"  , PARTYPE_NONE }
 };
 
 void printCurrentSlot()
@@ -447,6 +447,11 @@ void performCommand (uint8_t cmd, int16_t par1, char * keystring, int8_t periodi
         case CMD_BC:
 			Serial_AUX.write(keystring);
 			Serial_AUX.write('\n'); //terminate command
+			break;
+		case CMD_UG:
+			//we set this flag here, flushing & disabling serial port is done in loop()
+			addonUpgrade = 2;
+			Serial.println("Starting upgrade for BT addon!");
 			break;
         case CMD_E2:
       			DebugOutput=DEBUG_FULLOUTPUT; 

@@ -51,6 +51,9 @@
 #define UP_SENSOR_PIN       A7
 #define RIGHT_SENSOR_PIN    A8
 
+#define ADDON_GPIO0		11
+#define ADDON_RESET		13
+
 //Piezo Pin (for tone generation)
 #define TONE_PIN  9
 
@@ -80,6 +83,7 @@ int EmptySlotAddress = 0;
 uint8_t reportSlotParameters = REPORT_NONE;
 uint8_t reportRawValues = 0;
 uint8_t actSlot=0;
+uint8_t addonUpgrade = 0;
 
 uint16_t calib_now = 1;                       // calibrate zeropoint right at startup !
 											
@@ -141,6 +145,9 @@ void setup() {
 
    pinMode(IR_LED_PIN,OUTPUT);
    digitalWrite(LED_PIN,LOW);
+   
+   pinMode(ADDON_RESET,INPUT);
+   pinMode(ADDON_GPIO0,INPUT);
 
    for (int i=0; i<NUMBER_OF_PHYSICAL_BUTTONS; i++)   // initialize physical buttons and bouncers
       pinMode (input_map[i], INPUT_PULLUP);   // configure the pins for input mode with pullup resistors
@@ -175,7 +182,39 @@ void setup() {
 // Loop: the main program loop
 ///////////////////////////////
 
-void loop() { 
+void loop() {
+	
+	//check if we should go into addon upgrade mode
+	if(addonUpgrade != 0)
+	{
+		//update start
+		if(addonUpgrade == 2)
+		{
+			Serial_AUX.begin(500000); //switch to higher speed...
+			Serial.flush();
+			Serial_AUX.flush();
+			while(Serial.available()) Serial.read();
+			while(Serial_AUX.available()) Serial_AUX.read();
+			//trigger reset
+			pinMode(ADDON_GPIO0,OUTPUT);
+			digitalWrite(ADDON_GPIO0,LOW);
+			delay(2);
+			pinMode(ADDON_RESET,OUTPUT);
+			digitalWrite(ADDON_RESET,LOW);
+			delay(2);
+			digitalWrite(ADDON_RESET,HIGH);
+			pinMode(ADDON_RESET,INPUT);
+			addonUpgrade = 1;
+			return;
+		}
+		
+		if(addonUpgrade == 1)
+		{
+			while(Serial.available()) Serial_AUX.write(Serial.read());
+			while(Serial_AUX.available()) Serial.write(Serial_AUX.read());
+			return;
+		}
+	}
  
     pressure = analogRead(PRESSURE_SENSOR_PIN);
     

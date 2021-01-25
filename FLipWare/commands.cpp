@@ -98,11 +98,10 @@ void performCommand (uint8_t cmd, int16_t par1, char * keystring, int8_t periodi
 {
     if (actButton != 0)  // if last command was BM (set buttonmode): store current command for this button !!
     {
-        if (DebugOutput==DEBUG_FULLOUTPUT)
-        {  
+        #ifdef DEBUG_OUTPUT_FULL
           Serial.print("got new mode for button "); Serial.print(actButton);Serial.print(":");
           Serial.print(cmd);Serial.print(",");Serial.print(par1);Serial.print(",");Serial.println(keystring);
-        }
+        #endif
         buttons[actButton-1].mode=cmd;
         buttons[actButton-1].value=par1;
         deleteKeystringButton(actButton-1);
@@ -117,8 +116,9 @@ void performCommand (uint8_t cmd, int16_t par1, char * keystring, int8_t periodi
             break;
         case CMD_BM:
                release_all();
-               if (DebugOutput==DEBUG_FULLOUTPUT)  
-               {  Serial.print("set mode for button "); Serial.println(par1); }
+               #ifdef DEBUG_OUTPUT_FULL
+                 Serial.print("set mode for button "); Serial.println(par1); 
+               #endif  
                if ((par1>0) && (par1<=NUMBER_OF_BUTTONS))
                    actButton=par1;
                else  Serial.println("?");
@@ -271,17 +271,18 @@ void performCommand (uint8_t cmd, int16_t par1, char * keystring, int8_t periodi
                listSlots();
             break;
         case CMD_NE:
-               if (DebugOutput==DEBUG_FULLOUTPUT)  {
+               #ifdef DEBUG_OUTPUT_FULL
                  Serial.print("load next slot");
                  reportSlotParameters=REPORT_ONE_SLOT;
-               }
+               #endif
                release_all();
                readFromEEPROM(0);
                reportSlotParameters=REPORT_NONE;
                break;
         case CMD_DE:
-               if (DebugOutput==DEBUG_FULLOUTPUT)  
+               #ifdef DEBUG_OUTPUT_FULL
                  Serial.println("delete slots"); 
+               #endif
                release_all();
                // deleteIRCommand(0);      // removed to keep IR commands !
                deleteSlots();
@@ -291,18 +292,18 @@ void performCommand (uint8_t cmd, int16_t par1, char * keystring, int8_t periodi
 
         case CMD_MM:
                settings.stickMode=par1;
-               if (DebugOutput==DEBUG_FULLOUTPUT)
-               {  
+               #ifdef DEBUG_OUTPUT_FULL
                  if (settings.stickMode==STICKMODE_MOUSE)
                    Serial.println("mouse function activated");
                  else if(settings.stickMode>=STICKMODE_JOYSTICK_XY) 
                    Serial.println("joystick function activated");
                  else Serial.println("alternative functions activated");
-               }
+               #endif
             break;
         case CMD_SW:
-               if (DebugOutput==DEBUG_FULLOUTPUT)  
+               #ifdef DEBUG_OUTPUT_FULL
                  Serial.println("switch mouse / alternative function");
+               #endif
                initBlink(6,15);
                if (settings.stickMode==STICKMODE_ALTERNATIVE)  settings.stickMode=STICKMODE_MOUSE;
                else settings.stickMode=STICKMODE_ALTERNATIVE; 
@@ -314,8 +315,9 @@ void performCommand (uint8_t cmd, int16_t par1, char * keystring, int8_t periodi
               reportRawValues=0;
             break;
         case CMD_CA:
-               if (DebugOutput==DEBUG_FULLOUTPUT)  
+               #ifdef DEBUG_OUTPUT_FULL
                  Serial.println("start calibration");
+               #endif
                initBlink(10,20);
                calib_now=100;
                makeTone(TONE_CALIB,0);
@@ -343,8 +345,9 @@ void performCommand (uint8_t cmd, int16_t par1, char * keystring, int8_t periodi
                  char current[MAX_KEYSTRING_LEN];  // TBD: save memory here via improved command extraction ...
                  char *cmd_copy_ptr, backslash;
                  uint8_t len;
-                 if (DebugOutput==DEBUG_FULLOUTPUT)  
-                 {  Serial.print("execute macro:"); Serial.println(keystring); }
+                 #ifdef DEBUG_OUTPUT_FULL
+                    Serial.print("execute macro:"); Serial.println(keystring);
+                 #endif
 
                  // do the macro stuff: feed single commands to parser, seperator: ';'
                  cmd_copy_ptr=keystring;
@@ -402,33 +405,43 @@ void performCommand (uint8_t cmd, int16_t par1, char * keystring, int8_t periodi
             break;
 
         case CMD_IR:
-    				if (DebugOutput==DEBUG_FULLOUTPUT) Serial.println("record IR command");
+            #ifdef DEBUG_OUTPUT_FULL
+             Serial.println("record IR command");
+            #endif
     				if (keystring) { 
     				     if ((strlen(keystring)>0) && (strlen(keystring)< MAX_NAME_LEN)) 
     				         record_IR_command(keystring);
     				}
             break;
         case CMD_IP:
-    				if (DebugOutput==DEBUG_FULLOUTPUT) Serial.println("play IR command");
+            #ifdef DEBUG_OUTPUT_FULL
+             Serial.println("play IR command");
+            #endif
             if (keystring) 
                      play_IR_command(keystring);
             break;
         case CMD_II:
-            if (DebugOutput==DEBUG_FULLOUTPUT) Serial.println("set IR idle sequence command");
+            #ifdef DEBUG_OUTPUT_FULL
+             Serial.println("set IR idle sequence command");
+            #endif
             if (keystring) { 
                  if ((strlen(keystring)>0) && (strlen(keystring)< MAX_NAME_LEN)) 
                     strcpy(settings.ii,keystring);
             }
             break;
         case CMD_IH:
-            if (DebugOutput==DEBUG_FULLOUTPUT) Serial.println("hold IR command");
+            #ifdef DEBUG_OUTPUT_FULL
+             Serial.println("hold IR command");
+            #endif
             if (keystring) { 
                if ((strlen(keystring)>0) && (strlen(keystring)< MAX_NAME_LEN)) 
                   hold_IR_command(keystring);   
             }      
             break;
         case CMD_IS:
-            if (DebugOutput==DEBUG_FULLOUTPUT) Serial.println("stop IR command");
+            #ifdef DEBUG_OUTPUT_FULL
+              Serial.println("stop IR command");
+            #endif
             stop_IR_command();
             break;
         case CMD_IL:
@@ -443,21 +456,5 @@ void performCommand (uint8_t cmd, int16_t par1, char * keystring, int8_t periodi
         case CMD_IW:
             wipe_IR_commands();
             break;
-
-        case CMD_E2:
-      			DebugOutput=DEBUG_FULLOUTPUT; 
-	      		eepromDebugLevel = EEPROM_FULL_DEBUG;
-            Serial.println("extended debug echo on"); 
-      			break;
-        case CMD_E1:
-            DebugOutput=DEBUG_FULLOUTPUT; 
-            eepromDebugLevel = EEPROM_BASIC_DEBUG;
-            Serial.println("echo on"); 
-            break;
-        case CMD_E0:
-            DebugOutput=DEBUG_NOOUTPUT; 
-            eepromDebugLevel = EEPROM_NO_DEBUG;
-            break;
      }
 }
-

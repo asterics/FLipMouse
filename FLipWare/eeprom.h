@@ -59,12 +59,6 @@
 #define EEPROM_MAGIC_NUMBER_IR		0xBB66
 
 
-#define EEPROM_FULL_DEBUG 2
-#define EEPROM_BASIC_DEBUG 1
-#define EEPROM_NO_DEBUG 0
-
-extern uint8_t eepromDebugLevel;
-
 /**
  * Describing the header structure of memory, starting at 0x00.
  * Each slot is started at a fixed address in the EEPROM memory.

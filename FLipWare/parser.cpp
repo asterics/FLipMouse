@@ -64,16 +64,16 @@ void parseCommand (char * cmdstr)
     int8_t cmd=-1;
     int16_t num=0;
 
-    if (DebugOutput==DEBUG_FULLOUTPUT)  {
+    #ifdef DEBUG_OUTPUT_FULL
   		Serial.print("parseCommand:"); Serial.println(cmdstr); 
-    }
+    #endif
     char * actpos = strtok(cmdstr," ");   // see a nice explaination of strtok here:  http://www.reddit.com/r/arduino/comments/2h9l1l/using_the_strtok_function/
     
     if (actpos) 
     {
-        if (DebugOutput==DEBUG_FULLOUTPUT)  {
+        #ifdef DEBUG_OUTPUT_FULL
     			Serial.print("actpos:"); Serial.println(actpos);
-        }
+        #endif
         int i;
         strup(actpos);
         

@@ -92,9 +92,6 @@
           AT NE           next mode will be loaded (wrap around after last slot)
           AT DE           delete EEPROM content (delete all stored slots)
           AT NC           no command (idle operation)
-          AT E0           turn echo off (no debug output on serial console, default and GUI compatible)
-          AT E1           turn echo on (debug output on serial console)
-          AT E2           turn echo on (debug output on serial console), extended output
           AT BT <uint>    set bluetooth mode, 1=USB only, 2=BT only, 3=both(default) 
                           (e.g. AT BT 2 -> send HID commands only via BT if BT-daughter board is available)
           
@@ -168,9 +165,9 @@
 enum atCommands {
   CMD_ID, CMD_BM, CMD_CL, CMD_CR, CMD_CM, CMD_CD, CMD_PL, CMD_PR, CMD_PM, CMD_RL, CMD_RR, CMD_RM,
   CMD_WU, CMD_WD, CMD_WS, CMD_MX, CMD_MY, CMD_KW, CMD_KP, CMD_KR, CMD_RA, CMD_SA, CMD_LO, CMD_LA,
-  CMD_LI, CMD_NE, CMD_DE, CMD_NC, CMD_E1, CMD_E0, CMD_MM, CMD_SW, CMD_SR, CMD_ER, CMD_CA, CMD_AX,
+  CMD_LI, CMD_NE, CMD_DE, CMD_NC, CMD_MM, CMD_SW, CMD_SR, CMD_ER, CMD_CA, CMD_AX,
   CMD_AY, CMD_DX, CMD_DY, CMD_TS, CMD_TP, CMD_SP, CMD_SS, CMD_GV, CMD_RV, CMD_GH, CMD_RH, CMD_IR,
-  CMD_IP, CMD_IC, CMD_IL, CMD_E2, CMD_JX, CMD_JY, CMD_JZ, CMD_JT, CMD_JS, CMD_JP, CMD_JR, CMD_JH,
+  CMD_IP, CMD_IC, CMD_IL, CMD_JX, CMD_JY, CMD_JZ, CMD_JT, CMD_JS, CMD_JP, CMD_JR, CMD_JH,
   CMD_IT, CMD_KH, CMD_MS, CMD_AC, CMD_MA, CMD_WA, CMD_RO, CMD_IW, CMD_BT, CMD_HL, CMD_HR, CMD_HM,
   CMD_TL, CMD_TR, CMD_TM, CMD_KT, CMD_IH, CMD_IS, CMD_II,
   NUM_COMMANDS

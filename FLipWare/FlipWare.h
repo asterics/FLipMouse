@@ -48,8 +48,9 @@
 #include "bluetooth.h"
 #include "hid_hal.h"
 
-#define VERSION_STRING "Flipmouse v2.9"
+#define VERSION_STRING "Flipmouse v2.10"
 
+//  V2.10: code size reduction: using floating point math, removed debug level control via AT E0, AT E1 and AT E2
 //  V2.9:  implemented drift correction for small deadzones, removed gain up/down/left/right,
 //          added AT commands for drift correction, modified calculation of acceleration
 //  V2.8.3: switched to semantic version numbering, increased acceleration factors
@@ -65,6 +66,12 @@
 //  V2.2: added new EEPROM handling and IR-Command support
 //  V2.0: extended AT command set, TeensyLC support, external EEPROM
 //  V1.0: extended AT command set, GUI compatibility
+
+
+// Optional Debug Output Control
+
+// #define DEBUG_OUTPUT_FULL      // if full debug output is desired
+// #define DEBUG_OUTPUT_BASIC     // if basic debug output is desired (for eeprom)
 
 #define WORKINGMEM_SIZE    300        // reserved RAM for working memory (command parser, IR-rec/play)
 #define MAX_SLOTS          7          // maximum number of EEPROM memory slots
@@ -97,9 +104,6 @@
 
 #define DEFAULT_CLICK_TIME      8    // time for mouse click (loop iterations from press to release)
 // #define DOUBLECLICK_MULTIPLIER  5    // CLICK_TIME factor for double clicks
-
-#define DEBUG_NOOUTPUT 0
-#define DEBUG_FULLOUTPUT 1
 
 extern uint8_t workingmem[WORKINGMEM_SIZE];    // working memory  (command parser, IR-rec/play)
 
@@ -134,7 +138,6 @@ struct atCommandType {                      // holds settings for a button funct
   uint8_t  partype;
 };
 
-extern uint8_t DebugOutput;
 extern uint8_t actSlot;
 extern uint8_t reportSlotParameters;
 extern uint8_t reportRawValues;

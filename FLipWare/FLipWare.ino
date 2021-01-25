@@ -84,11 +84,6 @@ uint8_t actSlot=0;
 
 uint16_t calib_now = 1;                       // calibrate zeropoint right at startup !
 											
-//for chatty serial interface use: DEBUG_FULLOUTPUT (attention: not GUI compatible...)
-//if set to DEBUG_FULLOUTPUT please activate the following preprocessor warning
-uint8_t DebugOutput = DEBUG_NOOUTPUT;       
-//uint8_t DebugOutput = DEBUG_FULLOUTPUT;       
-//#warning "DEACTIVATE DEBUG_FULLOUTPUT AGAIN!!!"
 int waitTime=DEFAULT_WAIT_TIME;
 
 unsigned long updateStandaloneTimestamp;
@@ -129,8 +124,9 @@ void setup() {
    //initialise BT module, if available
    initBluetooth();
    
-   if (DebugOutput==DEBUG_FULLOUTPUT)  
+   #ifdef DEBUG_OUTPUT_FULL
      Serial.println("FLipMouse started, Flexible Assistive Button Interface ready !");
+   #endif
 
    Wire.begin();
    pinMode(IR_SENSOR_PIN,INPUT);
@@ -165,9 +161,10 @@ void setup() {
    readFromEEPROMSlotNumber(0,true);  // read slot from first EEPROM slot if available !  
 
    blinkCount=10;  blinkStartTime=25;
-   
-   if (DebugOutput==DEBUG_FULLOUTPUT) 
-   {   Serial.print("Free RAM:");  Serial.println(freeRam());}
+
+   #ifdef DEBUG_OUTPUT_FULL
+      Serial.print("Free RAM:");  Serial.println(freeRam());
+   #endif
 
    updateStandaloneTimestamp=millis();
 }

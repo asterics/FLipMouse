@@ -46,8 +46,7 @@ void mouseBT(int x, int y, uint8_t scroll)
     static int sendCnt=0;
     static int accuX=0, accuY=0;
     
-	if(DebugOutput == DEBUG_FULLOUTPUT)
-	{
+   #ifdef DEBUG_OUTPUT_FULL
 		Serial.println("BT mouse actions:");
 		Serial.print("buttons: 0x");
 		Serial.println(activeMouseButtons,HEX);
@@ -57,7 +56,7 @@ void mouseBT(int x, int y, uint8_t scroll)
 		Serial.print(y,DEC);
 		Serial.print("/");
 		Serial.println(scroll,DEC);
-	}
+   #endif
 		
     accuX+=x;
     accuY+=y;
@@ -149,8 +148,7 @@ boolean isMouseBTPressed(uint8_t mousebutton)
  */
 void sendBTKeyboardReport() 
 {
-	if(DebugOutput == DEBUG_FULLOUTPUT)
-	{
+   #ifdef DEBUG_OUTPUT_FULL
 		Serial.println("BT keyboard actions:");
 		Serial.print("modifier: 0x");
 		Serial.println(activeModifierKeys,HEX);
@@ -161,7 +159,8 @@ void sendBTKeyboardReport()
 		Serial.println(activeKeyCodes[3],HEX);
 		Serial.println(activeKeyCodes[4],HEX);
 		Serial.println(activeKeyCodes[5],HEX);
-	}
+   #endif
+   
 	Serial_AUX.write(0xFD);       			//raw HID
 	Serial_AUX.write(activeModifierKeys);  	//modifier keys
 	Serial_AUX.write(0x00); 				
@@ -324,7 +323,9 @@ void keyboardBTPrint(char * writeString)
  */
 void initBluetooth()
 {
-	if(DebugOutput==DEBUG_FULLOUTPUT) Serial.println("init Bluetooth");
+  #ifdef DEBUG_OUTPUT_FULL
+   Serial.println("init Bluetooth");
+  #endif
 
 	//start the AUX serial port 9600 8N1
 	Serial_AUX.begin(9600);

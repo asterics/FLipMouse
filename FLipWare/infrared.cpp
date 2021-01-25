@@ -36,7 +36,6 @@
 
 extern uint8_t IR_SENSOR_PIN;
 extern uint8_t IR_LED_PIN;
-extern uint8_t DebugOutput;
 
 uint32_t edge_timeout = 10000UL;  // timeout for IR code edge length in microseconds
 uint32_t state_time;
@@ -110,13 +109,12 @@ void record_IR_command(char * name)
 	makeTone(TONE_IR_REC,0);
 	
 	//full edge feedback, if full debug is enabled
-	if(DebugOutput == DEBUG_FULLOUTPUT)
-	{
+  #ifdef DEBUG_OUTPUT_FULL
 		Serial.println("START IR ----------");
 		for(uint8_t i = 0; i<edges; i++)
 			Serial.println(timings[i]);
 		Serial.println("END ----------");
-	}
+  #endif
 	
 	//return the recorded command name and the edge count
 	Serial.print("IR: recorded command ");
@@ -205,21 +203,22 @@ void start_IR_command_playback(char * name)
 	//no edges, no command -> cancel
 	if(edges == 0)
 	{
-		if(DebugOutput == DEBUG_FULLOUTPUT) Serial.println("No IR command found");
+    #ifdef DEBUG_OUTPUT_FULL
+     Serial.println("No IR command found");
+    #endif
 		return;
 	}
 	
 	//full edge feedback, if full debug is enabled
-	if(DebugOutput == DEBUG_FULLOUTPUT)
-	{
+	#ifdef DEBUG_OUTPUT_FULL
 		Serial.println("START IR ----------");
 		for(uint16_t i = 0; i<edges; i++)
 		{
 			Serial.println(timings[i]);
 		}
 		Serial.println("END ----------");
-	}
-
+  #endif
+  
   makeTone(TONE_IR,0);
   act_edge=0;
   output_state = 0;
@@ -255,4 +254,3 @@ void set_IR_timeout(uint16_t tout_ms)
 	if(tout_ms < 1) return;
    edge_timeout = (uint32_t)tout_ms * 1000;
 }
-

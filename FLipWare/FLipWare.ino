@@ -96,7 +96,7 @@ unsigned long updateStandaloneTimestamp;
 int up,down,left,right,tmp;
 int x,y;
 int pressure;
-double dz=0,force=0,angle=0;
+float dz=0,force=0,angle=0;
 int xLocalMax=0, yLocalMax=0;
 int16_t  cx=0,cy=0;
 
@@ -273,8 +273,8 @@ void applyDriftCorrection()
     if (yLocalMax>settings.rv) yLocalMax=settings.rv;
     if (yLocalMax<-settings.rv) yLocalMax=-settings.rv;
 
-    x-=xLocalMax*((double)settings.gh/250);
-    y-=yLocalMax*((double)settings.gv/250);
+    x-=xLocalMax*((float)settings.gh/250);
+    y-=yLocalMax*((float)settings.gv/250);
 }
 
 void applyDeadzone()
@@ -282,7 +282,7 @@ void applyDeadzone()
     if (settings.stickMode == STICKMODE_ALTERNATIVE) {
 
           // rectangular deadzone for alternative modes
-          
+        
           if (x<-settings.dx) x+=settings.dx;  // apply deadzone values x direction
           else if (x>settings.dx) x-=settings.dx;
           else x=0;
@@ -295,67 +295,19 @@ void applyDeadzone()
       
       //  circular deadzone for mouse control
 
-      force=sqrt(x*x+y*y);
-/*
-      // try to attenuate drifting (due to sensor inaccuracies) 
-      static uint16_t attenuationActive=0;
-      static float attenuate=1.0f;
-      static float biasedForce=0;
-
-      // assume that a high force is intentional!
-      if (force>15) {  
-        attenuationActive=0;
-        biasedForce=0.0f;
-        attenuate=1.0f;
-      } 
-      else {
-        attenuationActive++;
-
-        // after a certain time of low force, assume it is a biased value
-        if (attenuationActive>=200) {
-          biasedForce=force;
-        }
-      }
-
-      // attenuate invalid sensor values
-      if (biasedForce>0) {
-        // begin attenuation if actual force does not change
-        if (fabs(force-biasedForce) < 8) {
-          attenuate-=0.001;
-          if (attenuate < 0) {
-            attenuate=0;
-          }
-        }
-        // if actual force changes, assume intentional change an stop attenuation 
-        else {
-          attenuate+=0.002;
-          if (attenuate >= 0.9) {
-            attenuate=1.0;
-            biasedForce=0.0;
-          }          
-        }
-      }
-
-      force *= attenuate;
-*/
-
-
+      force=__ieee754_sqrtf(x*x+y*y);
       if (force!=0) {
-        angle = atan2 ((double)y/force, (double)x/force );
-        dz= settings.dx * (fabs((double)x)/force) + settings.dy * (fabs((double)y)/force);
+        angle = atan2f ((float)y/force, (float)x/force );
+        dz= settings.dx * (fabsf((float)x)/force) + settings.dy * (fabsf((float)y)/force);
       }
       else { angle=0; dz=settings.dx; }
   
       if (force<dz) force=0; else force-=dz;      
   
-      double x2,y2;
-      y2=force*sin(angle);
-      x2=force*cos(angle);
+      float x2,y2;
+      y2=force*sinf(angle);
+      x2=force*cosf(angle);
 
-      // Serial.print ("force=");Serial.print((int)(force*100)); Serial.print (", dz=");Serial.print((int)(dz*100));
-      // Serial.print ("x=");Serial.print(x); Serial.print (", y=");Serial.print(y);
-      // Serial.print (", x2=");Serial.print(x2); Serial.print (", y2=");Serial.println(y2);
-  
       x=int(x2);
       y=int(y2);
     }

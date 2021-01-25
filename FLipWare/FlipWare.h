@@ -150,8 +150,8 @@ extern int16_t  cx;
 extern int16_t  cy;
 extern int8_t moveX;       
 extern int8_t moveY;
-extern double force;
-extern double angle;
+extern float force;
+extern float angle;
 
 void performCommand (uint8_t cmd, int16_t par1, char * keystring, int8_t periodicMouseMovement);
 void saveToEEPROM(char * slotname);
@@ -183,6 +183,8 @@ void list_IR_commands();
 void delete_IR_command(char * name);
 void set_IR_timeout(uint16_t ms);
 void wipe_IR_commands();
+
+float __ieee754_sqrtf(float x);
 
 //set the correct strcpy/strcmp functions for TeensyLC / ARM)
 #define strcpy_FM   strcpy

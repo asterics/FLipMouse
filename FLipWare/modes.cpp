@@ -17,6 +17,84 @@
 
 #include "FlipWare.h"        
 
+
+typedef union
+{
+  float value;
+  uint32_t word;
+} ieee_float_shape_type;
+
+# define GET_FLOAT_WORD(i,d)                                        \
+do {                                                                \
+  ieee_float_shape_type gf_u;                                        \
+  gf_u.value = (d);                                                \
+  (i) = gf_u.word;                                                \
+} while (0)
+
+# define SET_FLOAT_WORD(d,i)                                        \
+do {                                                                \
+  ieee_float_shape_type sf_u;                                        \
+  sf_u.word = (i);                                                \
+  (d) = sf_u.value;                                                \
+} while (0)
+
+float __ieee754_sqrtf(float x)
+{
+  float z;
+  __uint32_t r,hx;
+  __int32_t ix,s,q,m,t,i;
+
+  GET_FLOAT_WORD(ix,x);
+  
+  hx = ix&0x7fffffff;
+
+  if(x==0) return 0;/* sqrt(+-0) = +-0 */
+  if(x<0)  return (x-x)/(x-x);    /* sqrt(-ve) = sNaN */
+
+    /* normalize x */
+  m = (ix>>23);
+  m -= 127; /* unbias exponent */
+  ix = (ix&0x007fffffL)|0x00800000L;
+  if(m&1) /* odd m, double x to make it even */
+      ix += ix;
+  m >>= 1;  /* m = [m/2] */
+
+    /* generate sqrt(x) bit by bit */
+  ix += ix;
+  q = s = 0;    /* q = sqrt(x) */
+  r = 0x01000000L;    /* r = moving bit from right to left */
+
+  while(r!=0) {
+    t = s+r; 
+    if(t<=ix) { 
+      s    = t+r; 
+      ix  -= t; 
+      q   += r; 
+    } 
+    ix += ix;
+    r>>=1;
+  }
+
+  float one = 1.0, tiny=1.0e-30;
+  /* use floating add to find out rounding direction */
+  if(ix!=0) {
+      z = one-tiny; /* trigger inexact flag */
+      if (z>=one) {
+        z = one+tiny;
+        if (z>one)
+           q += 2;
+        else
+           q += (q&1);
+      }
+  }
+  ix = (q>>1)+0x3f000000L;
+  ix += (m <<23);
+  SET_FLOAT_WORD(z,ix);
+  return z;
+}
+
+
+
 #define STRONGMODE_MOUSE_JOYSTICK_THRESHOLD  200
 #define STRONGMODE_STABLETIME        20
 #define STRONGMODE_EXIT_TIME        200
@@ -36,8 +114,8 @@ uint8_t modeState = MODESTATE_IDLE;
 
 uint8_t mouseMoveCount=0;
 float accelFactor;
-float accumXpos = 0.f;
-float accumYpos = 0.f;
+float accumXpos = 0;
+float accumYpos = 0;
 uint8_t pressureRising=0, pressureFalling=0;
 int previousPressure=512;
 
@@ -53,11 +131,12 @@ unsigned long time=0;
 
 void handleModeState(int x, int y, int pressure)
 {   
+  
     static int xo=0,yo=0;      
     static int waitStable=0;
     static int checkPairing=0;
     static uint8_t puffActive=0, sipActive=0, puffCount=0, sipCount=0;
-    static double accelMaxForce=0,lastAngle=0;
+    static float accelMaxForce=0,lastAngle=0;
     int strongDirThreshold;
     float moveValX,moveValY;
 
@@ -272,18 +351,18 @@ void handleModeState(int x, int y, int pressure)
 
                   if (force>accelMaxForce) accelMaxForce=force;
 
-                  if (force > accelMaxForce * 0.8)
+                  if (force > accelMaxForce * 0.8f)
                   {
-                      if (accelFactor < 1.0)
-                          accelFactor += ((float)settings.ac/5000000.0);                    
+                      if (accelFactor < 1.0f)
+                          accelFactor += ((float)settings.ac/5000000.0f);                    
                   }
-                  else if (accelMaxForce > 0) accelMaxForce *= 0.99;
+                  else if (accelMaxForce > 0) accelMaxForce *= 0.99f;
 
-                  if (force < accelMaxForce * 0.6)  accelFactor *= 0.995;
-                  if (force < accelMaxForce * 0.4)  accelFactor *= 0.99;
+                  if (force < accelMaxForce * 0.6f)  accelFactor *= 0.995f;
+                  if (force < accelMaxForce * 0.4f)  accelFactor *= 0.99f;
 
-                  double dampingFactor=fabs(x-xo)+fabs(y-yo);
-                  accelFactor *= (1.0-dampingFactor/1000.0);
+                  float dampingFactor=fabsf(x-xo)+fabsf(y-yo);
+                  accelFactor *= (1.0f-dampingFactor/1000.0f);
                   lastAngle=angle;
                   xo=x;yo=y;
                 }
@@ -291,12 +370,12 @@ void handleModeState(int x, int y, int pressure)
                 moveValX=x*(float)settings.ax*accelFactor;
                 moveValY=y*(float)settings.ay*accelFactor;
 
-                float actSpeed= sqrt (moveValX*moveValX + moveValY*moveValY);
-                float max_speed= settings.ms / 10.0f;
+                float actSpeed=  __ieee754_sqrtf (moveValX*moveValX + moveValY*moveValY);
+                float max_speed= settings.ms / 10;
                 if (actSpeed > max_speed) {
                    moveValX *= (max_speed / actSpeed);
                    moveValY *= (max_speed / actSpeed);
-                   accelFactor *= 0.98;
+                   accelFactor *= 0.98f;
                 }
                 
                 accumXpos+=moveValX;
@@ -319,10 +398,10 @@ void handleModeState(int x, int y, int pressure)
             }
             else  {                                          // handle joystick modes 2,3 and 4
               if (y==0) accumYpos = 512;
-              else accumYpos = 512+(float)y*settings.ay/50.0f;
+              else accumYpos = 512+(float)y*settings.ay/50;
               
               if (x==0) accumXpos = 512;
-              else  accumXpos = 512+(float)x*settings.ax/50.0f;
+              else  accumXpos = 512+(float)x*settings.ax/50;
   
               if (accumXpos<0) accumXpos=0; if (accumXpos>1023) accumXpos=1023;
               if (accumYpos<0) accumYpos=0; if (accumYpos>1023) accumYpos=1023;

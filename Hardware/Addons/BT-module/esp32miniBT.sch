@@ -148,7 +148,7 @@ U 1 1 5894AF56
 P 4500 1350
 F 0 "C2" H 4525 1450 50  0000 L CNN
 F 1 "0.1uf" H 4525 1250 50  0000 L CNN
-F 2 "Capacitor_SMD:C_0603_1608Metric_Pad1.05x0.95mm_HandSolder" H 4538 1200 50  0001 C CNN
+F 2 "Capacitor_SMD:C_0805_2012Metric_Pad1.18x1.45mm_HandSolder" H 4538 1200 50  0001 C CNN
 F 3 "" H 4500 1350 50  0000 C CNN
 	1    4500 1350
 	1    0    0    -1  
@@ -159,7 +159,7 @@ U 1 1 5894B158
 P 4850 1350
 F 0 "C3" H 4875 1450 50  0000 L CNN
 F 1 "10uf" H 4875 1250 50  0000 L CNN
-F 2 "Capacitor_SMD:C_0603_1608Metric_Pad1.05x0.95mm_HandSolder" H 4888 1200 50  0001 C CNN
+F 2 "Capacitor_SMD:C_0805_2012Metric_Pad1.18x1.45mm_HandSolder" H 4888 1200 50  0001 C CNN
 F 3 "" H 4850 1350 50  0000 C CNN
 	1    4850 1350
 	1    0    0    -1  
@@ -170,7 +170,7 @@ U 1 1 5894B1F6
 P 5700 1350
 F 0 "C4" H 5725 1450 50  0000 L CNN
 F 1 "0.1uf" H 5725 1250 50  0000 L CNN
-F 2 "Capacitor_SMD:C_0603_1608Metric_Pad1.05x0.95mm_HandSolder" H 5738 1200 50  0001 C CNN
+F 2 "Capacitor_SMD:C_0805_2012Metric_Pad1.18x1.45mm_HandSolder" H 5738 1200 50  0001 C CNN
 F 3 "" H 5700 1350 50  0000 C CNN
 	1    5700 1350
 	1    0    0    -1  
@@ -181,7 +181,7 @@ U 1 1 5894B24C
 P 6000 1350
 F 0 "C5" H 6025 1450 50  0000 L CNN
 F 1 "10uf" H 6025 1250 50  0000 L CNN
-F 2 "Capacitor_SMD:C_0603_1608Metric_Pad1.05x0.95mm_HandSolder" H 6038 1200 50  0001 C CNN
+F 2 "Capacitor_SMD:C_0805_2012Metric_Pad1.18x1.45mm_HandSolder" H 6038 1200 50  0001 C CNN
 F 3 "" H 6000 1350 50  0000 C CNN
 	1    6000 1350
 	1    0    0    -1  
@@ -260,7 +260,7 @@ U 1 1 58AAF2B1
 P 9200 4000
 F 0 "R3" V 9300 4000 50  0000 C CNN
 F 1 "330" V 9200 4000 50  0000 C CNN
-F 2 "Resistor_SMD:R_0603_1608Metric_Pad1.05x0.95mm_HandSolder" V 9130 4000 50  0001 C CNN
+F 2 "Resistor_SMD:R_0805_2012Metric_Pad1.20x1.40mm_HandSolder" V 9130 4000 50  0001 C CNN
 F 3 "" H 9200 4000 50  0000 C CNN
 	1    9200 4000
 	0    -1   -1   0   
@@ -284,7 +284,7 @@ U 1 1 58CD1E4D
 P 9650 6000
 F 0 "C7" H 9675 6100 50  0000 L CNN
 F 1 "1nf" H 9675 5900 50  0000 L CNN
-F 2 "Capacitor_SMD:C_0603_1608Metric_Pad1.05x0.95mm_HandSolder" H 9688 5850 50  0001 C CNN
+F 2 "Capacitor_SMD:C_0805_2012Metric_Pad1.18x1.45mm_HandSolder" H 9688 5850 50  0001 C CNN
 F 3 "" H 9650 6000 50  0000 C CNN
 	1    9650 6000
 	1    0    0    -1  
@@ -295,7 +295,7 @@ U 1 1 58CD2439
 P 8350 6000
 F 0 "C6" H 8375 6100 50  0000 L CNN
 F 1 "1nf" H 8375 5900 50  0000 L CNN
-F 2 "Capacitor_SMD:C_0603_1608Metric_Pad1.05x0.95mm_HandSolder" H 8388 5850 50  0001 C CNN
+F 2 "Capacitor_SMD:C_0805_2012Metric_Pad1.18x1.45mm_HandSolder" H 8388 5850 50  0001 C CNN
 F 3 "" H 8350 6000 50  0000 C CNN
 	1    8350 6000
 	1    0    0    -1  
@@ -381,13 +381,10 @@ Connection ~ 8350 5800
 Wire Wire Line
 	9600 5800 9650 5800
 Wire Wire Line
-	10450 5800 10450 6150
-Wire Wire Line
 	9650 5600 9650 5800
 Connection ~ 9650 5800
 Wire Wire Line
 	9650 6150 10450 6150
-Connection ~ 10450 6150
 Wire Wire Line
 	4150 1100 4150 1150
 Wire Wire Line
@@ -439,7 +436,7 @@ U 1 1 5B131D10
 P 8350 5500
 F 0 "R1" V 8430 5500 50  0000 C CNN
 F 1 "10K" V 8350 5500 50  0000 C CNN
-F 2 "Resistor_SMD:R_0603_1608Metric_Pad1.05x0.95mm_HandSolder" V 8280 5500 50  0001 C CNN
+F 2 "Resistor_SMD:R_0805_2012Metric_Pad1.20x1.40mm_HandSolder" V 8280 5500 50  0001 C CNN
 F 3 "" H 8350 5500 50  0000 C CNN
 	1    8350 5500
 	1    0    0    -1  
@@ -450,7 +447,7 @@ U 1 1 5B13208F
 P 9650 5450
 F 0 "R2" V 9730 5450 50  0000 C CNN
 F 1 "10K" V 9650 5450 50  0000 C CNN
-F 2 "Resistor_SMD:R_0603_1608Metric_Pad1.05x0.95mm_HandSolder" V 9580 5450 50  0001 C CNN
+F 2 "Resistor_SMD:R_0805_2012Metric_Pad1.20x1.40mm_HandSolder" V 9580 5450 50  0001 C CNN
 F 3 "" H 9650 5450 50  0000 C CNN
 	1    9650 5450
 	1    0    0    -1  
@@ -573,31 +570,12 @@ Wire Wire Line
 	4500 1150 4850 1150
 Wire Wire Line
 	4500 1600 4850 1600
-Wire Wire Line
-	9150 5800 9150 6150
 NoConn ~ 1950 3450
 NoConn ~ 1950 3250
 Text Notes 2650 3500 0    60   ~ 0
 TX
 Text Notes 1650 3500 0    60   ~ 0
 RX
-NoConn ~ 2350 4700
-NoConn ~ 2350 5100
-$Comp
-L Jumper:SolderJumper_2_Open J3
-U 1 1 5E33BF76
-P 1650 4600
-F 0 "J3" V 1604 4668 50  0000 L CNN
-F 1 "SolderJumper_2_Open" H 1200 4400 50  0000 L CNN
-F 2 "Jumper:SolderJumper-2_P1.3mm_Open_Pad1.0x1.5mm" H 1650 4600 50  0001 C CNN
-F 3 "~" H 1650 4600 50  0001 C CNN
-	1    1650 4600
-	0    1    1    0   
-$EndComp
-Wire Wire Line
-	1650 4350 1650 4450
-Wire Wire Line
-	1650 4750 1650 4800
 $Comp
 L Jumper:SolderJumper_2_Open J4
 U 1 1 5E341EC5
@@ -613,7 +591,6 @@ Wire Wire Line
 	8900 4450 9250 4450
 Wire Wire Line
 	9550 4450 9800 4450
-Connection ~ 9150 6150
 Wire Wire Line
 	9150 6150 9150 6200
 Text GLabel 700  7400 0    39   Input ~ 0
@@ -668,36 +645,6 @@ Wire Wire Line
 Wire Wire Line
 	4400 4350 4400 4450
 Connection ~ 4400 4450
-$Comp
-L Device:Jumper_NO_Small JP1
-U 1 1 5F327D6A
-P 8800 5800
-F 0 "JP1" H 8800 5985 50  0000 C CNN
-F 1 "Jumper_NO_Small" H 8800 5894 50  0000 C CNN
-F 2 "Connector_PinHeader_2.54mm:PinHeader_1x02_P2.54mm_Vertical" H 8800 5800 50  0001 C CNN
-F 3 "~" H 8800 5800 50  0001 C CNN
-	1    8800 5800
-	1    0    0    -1  
-$EndComp
-$Comp
-L Device:Jumper_NO_Small JP2
-U 1 1 5F32872F
-P 10100 5800
-F 0 "JP2" H 10100 5985 50  0000 C CNN
-F 1 "Jumper_NO_Small" H 10100 5894 50  0000 C CNN
-F 2 "Connector_PinHeader_2.54mm:PinHeader_1x02_P2.54mm_Vertical" H 10100 5800 50  0001 C CNN
-F 3 "~" H 10100 5800 50  0001 C CNN
-	1    10100 5800
-	1    0    0    -1  
-$EndComp
-Wire Wire Line
-	8900 5800 9150 5800
-Wire Wire Line
-	8350 5800 8700 5800
-Wire Wire Line
-	10200 5800 10450 5800
-Wire Wire Line
-	9650 5800 10000 5800
 Text Notes 8800 4950 0    60   ~ 0
 Programming Jumpers
 Wire Notes Line
@@ -843,4 +790,14 @@ F 3 "~" H 2250 3450 50  0001 C CNN
 $EndComp
 Text GLabel 2450 3350 2    39   Input ~ 0
 IO32
+Text GLabel 2150 4700 0    39   Input ~ 0
+EN
+Wire Wire Line
+	2350 4700 2150 4700
+Text GLabel 2150 5100 0    39   Input ~ 0
+IO0(boot)
+Wire Wire Line
+	2150 5100 2350 5100
+Wire Wire Line
+	1650 4350 1650 4800
 $EndSCHEMATC

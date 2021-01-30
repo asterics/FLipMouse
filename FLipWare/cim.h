@@ -7,25 +7,25 @@
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
    the Free Software Foundation.
-  
+
    This program is distributed in the hope that it will be useful,
-   but WITHOUT ANY WARRANTY; See the GNU General Public License: 
+   but WITHOUT ANY WARRANTY; See the GNU General Public License:
    http://www.gnu.org/licenses/gpl-3.0.en.html
- 
+
 
    AsTeRICS CIM Protocol Packet Frame:
    ===================================
 
    Packet ID       2 bytes "@T" (0x4054 )
-  ARE ID / CIM ID     2 bytes 
+  ARE ID / CIM ID     2 bytes
   Data Size       2 bytes 0x0000-0x0800
   Packet serial number  1 byte  0x00-0x7f (0x80-0xff for event-replies from CIM )
-  CIM-Feature address   2 bytes 
-  Request / Reply code  2 bytes 
+  CIM-Feature address   2 bytes
+  Request / Reply code  2 bytes
   -------------------------------------------> 11 bytes = minimum frame length
-  Optional data     0-2048 bytes  
+  Optional data     0-2048 bytes
   Optional CRC checksum 0 or 4 bytes CRC32
-  -------------------------------------------> 2063 bytes = maximum frame length  
+  -------------------------------------------> 2063 bytes = maximum frame length
 
 */
 
@@ -36,7 +36,7 @@
 
 #define CIM_HEADER_LEN      11
 #define CIM_FRAME_START     0x5440  // little endian
-#define CIM_ID_LIPMOUSE      0xa401  
+#define CIM_ID_LIPMOUSE      0xa401
 
 #define CMD_REQUEST_FEATURELIST   0x00
 #define CMD_REPLY_FEATURELIST     0x00
@@ -73,26 +73,26 @@
 
 
 struct ARE_frame_t {
-   uint16_t packet_id;
-   uint16_t are_id;
-   uint16_t data_size;
-   uint8_t  serial_number;
-   uint16_t cim_feature;
-   uint16_t request_code;
-   uint8_t  data[DATABUF_SIZE];
-   uint32_t crc; 
- };
+  uint16_t packet_id;
+  uint16_t are_id;
+  uint16_t data_size;
+  uint8_t  serial_number;
+  uint16_t cim_feature;
+  uint16_t request_code;
+  uint8_t  data[DATABUF_SIZE];
+  uint32_t crc;
+};
 
 struct CIM_frame_t {
-   uint16_t packet_id;
-   uint16_t cim_id;
-   uint16_t data_size;
-   uint8_t  serial_number;
-   uint16_t cim_feature;
-   uint16_t reply_code;
-   uint8_t  data[DATABUF_SIZE];
-   uint32_t crc; 
- };
+  uint16_t packet_id;
+  uint16_t cim_id;
+  uint16_t data_size;
+  uint8_t  serial_number;
+  uint16_t cim_feature;
+  uint16_t reply_code;
+  uint8_t  data[DATABUF_SIZE];
+  uint32_t crc;
+};
 
 
 
@@ -101,7 +101,7 @@ void parse_CIM_protocol(int);
 
 uint16_t adcval;
 uint16_t  ADC_Read(uint16_t);
-uint16_t sendCont; 
+uint16_t sendCont;
 
 uint8_t update_Buttonval();
 
@@ -117,4 +117,3 @@ void ADC_Init(void);
 uint16_t ADC_Read(uint16_t channel );
 
 #endif
-

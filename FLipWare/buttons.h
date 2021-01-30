@@ -1,5 +1,5 @@
-  
-/* 
+
+/*
       FLipWare - AsTeRICS Foundation
      For more info please visit: http://www.asterics-academy.net
 
@@ -8,13 +8,13 @@
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
    the Free Software Foundation.
-  
+
    This program is distributed in the hope that it will be useful,
-   but WITHOUT ANY WARRANTY; See the GNU General Public License: 
+   but WITHOUT ANY WARRANTY; See the GNU General Public License:
    http://www.gnu.org/licenses/gpl-3.0.en.html
 
- */
- 
+*/
+
 
 #ifndef _BUTTONS_H_
 #define _BUTTONS_H_
@@ -57,13 +57,13 @@ struct slotButtonSettings {                     // holds settings for a button f
   uint16_t value;
 };
 
-struct buttonDebouncerType {              // holds working data for button debouncing and longpress detection 
+struct buttonDebouncerType {              // holds working data for button debouncing and longpress detection
   uint8_t bounceCount;
   uint8_t bounceState;
   uint8_t stableState;
   uint8_t longPressed;
   uint32_t timestamp;
-} ; 
+} ;
 
 extern struct slotButtonSettings buttons[NUMBER_OF_BUTTONS];
 extern char* keystringButtons[NUMBER_OF_BUTTONS];
@@ -71,12 +71,12 @@ extern uint16_t keystringBufferLen;
 // extern char keystringBuffer[MAX_KEYSTRINGBUFFER_LEN];
 // extern struct buttonDebouncerType buttonDebouncers[NUMBER_OF_BUTTONS];
 
-// function declarations 
+// function declarations
 uint16_t storeKeystringButton(uint8_t buttonIndex, char * text);
 uint16_t deleteKeystringButton(uint8_t buttonIndex);
 void handlePress (int buttonIndex);      // a button was pressed
 void handleRelease (int buttonIndex);    // a button was released
-uint8_t handleButton(int i, uint8_t state);    // button debouncing and longpress detection  
+uint8_t handleButton(int i, uint8_t state);    // button debouncing and longpress detection
 uint8_t inHoldMode (int i);
 void initDebouncers();
 

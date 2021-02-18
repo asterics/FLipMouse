@@ -118,8 +118,6 @@ Text GLabel 5950 4800 3    39   Input ~ 0
 IO2
 Text GLabel 5850 4800 3    39   Input ~ 0
 IO15
-Text GLabel 5150 4800 3    39   Input ~ 0
-IO13
 $Comp
 L power:+3V3 #PWR06
 U 1 1 5894AD31
@@ -353,10 +351,9 @@ NoConn ~ 700  7600
 NoConn ~ 700  7700
 Text GLabel 700  6000 0    39   Input ~ 0
 IO2
-Text GLabel 700  6100 0    39   Input ~ 0
+Text GLabel 8100 2400 0    39   Input ~ 0
 IO13
 NoConn ~ 700  6000
-NoConn ~ 700  6100
 NoConn ~ 5750 2800
 Wire Wire Line
 	4550 4350 4400 4350
@@ -450,39 +447,6 @@ $EndComp
 Text Notes 4050 5750 0    60   ~ 0
 Needlebed-Programming
 $Comp
-L Connector:TestPoint TP5
-U 1 1 5F34263E
-P 5050 6100
-F 0 "TP5" H 5108 6218 50  0000 L CNN
-F 1 "TestPoint" H 5108 6127 50  0000 L CNN
-F 2 "TestPoint:TestPoint_Pad_1.0x1.0mm" H 5250 6100 50  0001 C CNN
-F 3 "~" H 5250 6100 50  0001 C CNN
-	1    5050 6100
-	1    0    0    -1  
-$EndComp
-$Comp
-L Connector:TestPoint TP4
-U 1 1 5F34232A
-P 4550 6100
-F 0 "TP4" H 4608 6218 50  0000 L CNN
-F 1 "TestPoint" H 4608 6127 50  0000 L CNN
-F 2 "TestPoint:TestPoint_Pad_1.0x1.0mm" H 4750 6100 50  0001 C CNN
-F 3 "~" H 4750 6100 50  0001 C CNN
-	1    4550 6100
-	1    0    0    -1  
-$EndComp
-$Comp
-L Connector:TestPoint TP2
-U 1 1 5F341DC6
-P 3650 6100
-F 0 "TP2" H 3708 6218 50  0000 L CNN
-F 1 "TestPoint" H 3708 6127 50  0000 L CNN
-F 2 "TestPoint:TestPoint_Pad_1.0x1.0mm" H 3850 6100 50  0001 C CNN
-F 3 "~" H 3850 6100 50  0001 C CNN
-	1    3650 6100
-	1    0    0    -1  
-$EndComp
-$Comp
 L Device:C C7
 U 1 1 58CD1E4D
 P 9650 6000
@@ -536,23 +500,6 @@ Wire Notes Line
 	10800 3500 10800 1400
 Wire Notes Line
 	7400 3500 10800 3500
-$Comp
-L CMM-4030D-261-I2S-TR:CMM-4030D-261-I2S-TR MK1
-U 1 1 601DCF77
-P 8800 2500
-F 0 "MK1" H 8800 3067 50  0000 C CNN
-F 1 "CMM-4030D-261-I2S-TR" H 8800 2976 50  0000 C CNN
-F 2 "components:MIC_CMM-4030D-261-I2S-TR" H 8800 2500 50  0001 L BNN
-F 3 "" H 8800 2500 50  0001 L BNN
-F 4 "1.0" H 8800 2500 50  0001 L BNN "PARTREV"
-F 5 "1.4 mm" H 8800 2500 50  0001 L BNN "MAXIMUM_PACKAGE_HEIGHT"
-F 6 "Manufacturer Recommendations" H 8800 2500 50  0001 L BNN "STANDARD"
-F 7 "CUI Devices" H 8800 2500 50  0001 L BNN "MANUFACTURER"
-	1    8800 2500
-	1    0    0    -1  
-$EndComp
-Wire Wire Line
-	7550 2400 8100 2400
 Text GLabel 10450 2600 2    60   Input ~ 0
 IO15
 Text GLabel 9850 2400 2    60   Input ~ 0
@@ -577,8 +524,6 @@ Wire Wire Line
 Wire Wire Line
 	9500 1800 7550 1800
 Connection ~ 7550 1800
-Wire Wire Line
-	7550 1800 7550 2400
 Wire Wire Line
 	9500 2400 9700 2400
 Wire Wire Line
@@ -607,9 +552,6 @@ Wire Wire Line
 Connection ~ 8100 3100
 Wire Wire Line
 	7550 3100 7550 3250
-Wire Wire Line
-	7550 2500 7550 2400
-Connection ~ 7550 2400
 Wire Wire Line
 	7550 2800 7550 3100
 Connection ~ 7550 3100
@@ -826,14 +768,36 @@ F 3 "" H 5550 6100 50  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L Connector:TestPoint TP1
-U 1 1 5F342834
-P 3200 6100
-F 0 "TP1" H 3258 6218 50  0000 L CNN
-F 1 "TestPoint" H 3258 6127 50  0000 L CNN
-F 2 "TestPoint:TestPoint_Pad_1.0x1.0mm" H 3400 6100 50  0001 C CNN
-F 3 "~" H 3400 6100 50  0001 C CNN
-	1    3200 6100
+L Connector:TestPoint TP6
+U 1 1 5F3420AF
+P 5550 6100
+F 0 "TP6" H 5608 6218 50  0000 L CNN
+F 1 "TestPoint" H 5608 6127 50  0000 L CNN
+F 2 "TestPoint:TestPoint_Pad_1.0x1.0mm" H 5750 6100 50  0001 C CNN
+F 3 "~" H 5750 6100 50  0001 C CNN
+	1    5550 6100
+	1    0    0    -1  
+$EndComp
+$Comp
+L Connector:TestPoint TP5
+U 1 1 5F34263E
+P 5050 6100
+F 0 "TP5" H 5108 6218 50  0000 L CNN
+F 1 "TestPoint" H 5108 6127 50  0000 L CNN
+F 2 "TestPoint:TestPoint_Pad_1.0x1.0mm" H 5250 6100 50  0001 C CNN
+F 3 "~" H 5250 6100 50  0001 C CNN
+	1    5050 6100
+	1    0    0    -1  
+$EndComp
+$Comp
+L Connector:TestPoint TP4
+U 1 1 5F34232A
+P 4550 6100
+F 0 "TP4" H 4608 6218 50  0000 L CNN
+F 1 "TestPoint" H 4608 6127 50  0000 L CNN
+F 2 "TestPoint:TestPoint_Pad_1.0x1.0mm" H 4750 6100 50  0001 C CNN
+F 3 "~" H 4750 6100 50  0001 C CNN
+	1    4550 6100
 	1    0    0    -1  
 $EndComp
 $Comp
@@ -848,14 +812,44 @@ F 3 "~" H 4300 6100 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L Connector:TestPoint TP6
-U 1 1 5F3420AF
-P 5550 6100
-F 0 "TP6" H 5608 6218 50  0000 L CNN
-F 1 "TestPoint" H 5608 6127 50  0000 L CNN
-F 2 "TestPoint:TestPoint_Pad_1.0x1.0mm" H 5750 6100 50  0001 C CNN
-F 3 "~" H 5750 6100 50  0001 C CNN
-	1    5550 6100
+L Connector:TestPoint TP2
+U 1 1 5F341DC6
+P 3650 6100
+F 0 "TP2" H 3708 6218 50  0000 L CNN
+F 1 "TestPoint" H 3708 6127 50  0000 L CNN
+F 2 "TestPoint:TestPoint_Pad_1.0x1.0mm" H 3850 6100 50  0001 C CNN
+F 3 "~" H 3850 6100 50  0001 C CNN
+	1    3650 6100
 	1    0    0    -1  
 $EndComp
+$Comp
+L Connector:TestPoint TP1
+U 1 1 5F342834
+P 3200 6100
+F 0 "TP1" H 3258 6218 50  0000 L CNN
+F 1 "TestPoint" H 3258 6127 50  0000 L CNN
+F 2 "TestPoint:TestPoint_Pad_1.0x1.0mm" H 3400 6100 50  0001 C CNN
+F 3 "~" H 3400 6100 50  0001 C CNN
+	1    3200 6100
+	1    0    0    -1  
+$EndComp
+Text GLabel 5150 4800 3    39   Input ~ 0
+IO13
+$Comp
+L CMM-4030D-261-I2S-TR:CMM-4030D-261-I2S-TR MK1
+U 1 1 601DCF77
+P 8800 2500
+F 0 "MK1" H 8800 3067 50  0000 C CNN
+F 1 "CMM-4030D-261-I2S-TR" H 8800 2976 50  0000 C CNN
+F 2 "I2S-MEMS-microphone-footprints-Lib:MIC_CMM-4030D-261-I2S-TR" H 8800 2500 50  0001 L BNN
+F 3 "" H 8800 2500 50  0001 L BNN
+F 4 "1.0" H 8800 2500 50  0001 L BNN "PARTREV"
+F 5 "1.4 mm" H 8800 2500 50  0001 L BNN "MAXIMUM_PACKAGE_HEIGHT"
+F 6 "Manufacturer Recommendations" H 8800 2500 50  0001 L BNN "STANDARD"
+F 7 "CUI Devices" H 8800 2500 50  0001 L BNN "MANUFACTURER"
+	1    8800 2500
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	7550 1800 7550 2500
 $EndSCHEMATC

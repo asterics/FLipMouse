@@ -51,6 +51,7 @@
 #define VERSION_STRING "Flipmouse v2.10"
 
 //  V2.10: code size reduction: using floating point math, removed debug level control via AT E0, AT E1 and AT E2
+//          added macro command description to the user manual
 //  V2.9:  implemented drift correction for small deadzones, removed gain up/down/left/right,
 //          added AT commands for drift correction, modified calculation of acceleration
 //  V2.8.3: switched to semantic version numbering, increased acceleration factors

@@ -2,7 +2,7 @@
 
 /* 
      FLipMouseGUI - Graphical user Interface for FlipMouse / FlipWare firmware
-     http://www.asterics-academy.net
+     https://www.asterics-foundation.org
    
      for a list of supported AT commands, see commands.cs
    

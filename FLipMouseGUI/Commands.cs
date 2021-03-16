@@ -88,9 +88,6 @@
           AT NE           next mode will be loaded (wrap around after last slot)
           AT DE           delete EEPROM content (delete all stored slots)
           AT NC           no command (idle operation)
-          AT E0           turn echo off (no debug output on serial console, default and GUI compatible)
-          AT E1           turn echo on (debug output on serial console)
-          AT E2           turn echo on (debug output on serial console), extended output
           AT BT <uint>    set bluetooth mode, 1=USB only, 2=BT only, 3=both(default) 
                           (e.g. AT BT 2 -> send HID commands only via BT if BT-daughter board is available)
           
@@ -196,9 +193,6 @@ namespace MouseApp2
             allCommands.add(new Command("AT CR", PARTYPE_NONE, "Click Right Mouse Button", COMBOENTRY_YES, GUITYPE_STANDARD));
             allCommands.add(new Command("AT CM", PARTYPE_NONE, "Click Middle Mouse Button", COMBOENTRY_YES, GUITYPE_STANDARD));
             allCommands.add(new Command("AT CD", PARTYPE_NONE, "Double Click Left Mouse Button", COMBOENTRY_YES, GUITYPE_STANDARD));
-            // allCommands.add(new Command("AT PL", PARTYPE_NONE, "Press Left Mouse Button", COMBOENTRY_YES, GUITYPE_STANDARD));
-            // allCommands.add(new Command("AT PR", PARTYPE_NONE, "Press Right Mouse Button", COMBOENTRY_YES, GUITYPE_STANDARD));
-            // allCommands.add(new Command("AT PM", PARTYPE_NONE, "Press Middle Mouse Button", COMBOENTRY_YES, GUITYPE_STANDARD));
             allCommands.add(new Command("AT TL", PARTYPE_NONE, "Toggle Left Mouse Button", COMBOENTRY_YES, GUITYPE_STANDARD));
             allCommands.add(new Command("AT TR", PARTYPE_NONE, "Toggle Right Mouse Button", COMBOENTRY_YES, GUITYPE_STANDARD));
             allCommands.add(new Command("AT TM", PARTYPE_NONE, "Toggle Middle Mouse Button", COMBOENTRY_YES, GUITYPE_STANDARD));

@@ -62,10 +62,10 @@
           AT JX <int>       set joystick x axis (e.g. "AT JX 512" sets the x-axis to middle position)
           AT JY <int>       set joystick y axis (e.g. "AT JY 1023" sets the y-axis to full up position)
           AT JZ <int>       set joystick z axis (e.g. "AT JZ 0" sets the z-axis to lowest position)
-          AT JT <int>       set joystick z turn axis (e.g. "AT JR 512" sets the rotation to middle position)
+          AT JT <int>       set joystick z turn axis (e.g. "AT JT 512" sets the rotation to middle position)
           AT JS <int>       set joystick slider position (e.g. "AT JS 512" sets the slider to middle position)
           AT JP <int>       press joystick button (e.g. "AT JP 1" presses joystick button 1)
-          AT JR <int>       release joystick button (e.g. "AT JP 2" releases joystick button 2)
+          AT JR <int>       release joystick button (e.g. "AT JR 2" releases joystick button 2)
           AT JH <int>       set joystick hat position (e.g. "AT JH 45" sets joystick hat to 45 degrees)
                             possible values are: 0, 45, 90, 135, 180, 225, 270, 315 and -1 to set center position)
 

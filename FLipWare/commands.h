@@ -11,7 +11,7 @@
           AT                returns "OK"
           AT ID             returns identification string (e.g. "FLipMouse V2.0")
           AT BC	<string>	sends parameter to external UART (mostly ESP32 Bluetooth Addon)
-          AT UG				puts Bluetooth addon into update mode & routes every USB serial byte to external Serial.
+          AT UG				puts Bluetooth addon into update mode (factory reset - mode) & routes every USB serial byte to external Serial.
 							Warning: cannot return from this mode, FLipMouse must be restarted then!
           AT BM <uint>      puts button into programming mode (e.g. "AT BM 2" -> next AT-command defines the new function for button 2)
                             for the FLipmouse, there are 11 buttons available (3 physical buttons, 8 virtual functions): 

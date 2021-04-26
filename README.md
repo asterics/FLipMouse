@@ -8,7 +8,7 @@ Additional features like built-in environmental control via infrared, optional b
 make the FlipMouse one of the most flexible alternative input devices available today.
 
 
-![Full euqipped FLipmouse with 2 external buttons attached. Mounted on Manfrotto mount](/img/FLipmouse2.jpg)
+![Fully euqipped FLipmouse with 2 external buttons attached. Mounted on Manfrotto mount](/img/FLipmouse2.jpg)
 
 The FlipMouse might be used as a full replacement of standard computer input devices and can also be used for accessing smartphones or tablets (via the standard HID support or accessibility features).
 It can be useful for people with motor disablities, computer gamers, musicians or people who want a hands-free computer access for other purposes.
@@ -50,7 +50,7 @@ More Information can be found in the user manual: [user manual](https://github.c
 
 # Links to related projects
 
-Most of the work for the FLipMouse has been accomplished at the UAS Technikum Wien in course of multiple research projects, see: ([AsTeRICS Academy homepage](http://www.asterics-academy.net)).
+Most of the work for the FLipMouse has been accomplished at the UAS Technikum Wien in course of multiple research projects, see: ([AsTeRICS Foundation homepage](https://www.asterics-foundation.org)).
 
 If the FLipMouse solution is not suitable for you, maybe you want to have a look at our other projects:
 

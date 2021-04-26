@@ -11,3 +11,5 @@ This folder here contains the KiCAD design files for PCB production.
 Please refer to [esp32_mouse_keyboard](https://github.com/asterics/esp32_mouse_keyboard) repository for the corresponding source code.
 
 This design was done in KiCAD __v5.1.2__. Please use a version equal or newer.
+
+__Note:__ If you are looking for the first revision of this board, open this [GIT tag](https://github.com/asterics/FLipMouse/tree/PCB_v0.3)

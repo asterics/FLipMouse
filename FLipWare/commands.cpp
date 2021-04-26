@@ -450,8 +450,12 @@ void performCommand (uint8_t cmd, int16_t par1, char * keystring, int8_t periodi
 			break;
 		case CMD_UG:
 			//we set this flag here, flushing & disabling serial port is done in loop()
-			addonUpgrade = 2;
+      addonUpgrade = 2;
 			Serial.println("Starting upgrade for BT addon!");
+      // Command for upgrade sent to ESP - triggering reset into factory reset mode
+      Serial_AUX.println("$UG");
+      // delaying to ensure that UART command is sent and received
+      delay(500);
 			break;
         case CMD_E2:
       			DebugOutput=DEBUG_FULLOUTPUT; 
@@ -469,4 +473,3 @@ void performCommand (uint8_t cmd, int16_t par1, char * keystring, int8_t periodi
             break;
      }
 }
-

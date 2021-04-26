@@ -121,6 +121,7 @@ extern void init_CIM_frame(void);
 extern uint8_t StandAloneMode;
 extern uint8_t CimMode;
 
+uint8_t readstate_f=0;
 
 ////////////////////////////////////////
 // Setup: program execution starts here
@@ -189,7 +190,7 @@ void loop() {
 	{
 		//update start
 		if(addonUpgrade == 2)
-		{
+		{ 
 			Serial_AUX.begin(500000); //switch to higher speed...
 			Serial.flush();
 			Serial_AUX.flush();
@@ -210,10 +211,38 @@ void loop() {
 		
 		if(addonUpgrade == 1)
 		{
-			while(Serial.available()) Serial_AUX.write(Serial.read());
-			while(Serial_AUX.available()) Serial.write(Serial_AUX.read());
-			return;
-		}
+      while(Serial.available()) Serial_AUX.write(Serial.read());
+      while(Serial_AUX.available()) {
+        inByte = Serial_AUX.read();
+        Serial.write(inByte);
+        switch (readstate_f) {
+          case 0: 
+                  if (inByte=='$') readstate_f++;
+               break;
+          case 1: 
+                  if (inByte=='F') readstate_f++; else readstate_f=0;
+              break;
+          case 2: 
+                  if (inByte=='I') readstate_f++; else readstate_f=0;
+              break;
+          case 3: 
+                  if (inByte=='N') {
+                    addonUpgrade = 0; 
+                    readstate_f=0;
+                    Serial_AUX.begin(9600); //switch to lower speed...
+                    Serial.flush();
+                    Serial_AUX.flush();
+                    Serial.println('\n');
+                    Serial.println("Update of Add-on is complete");
+                    Serial.println('\n');
+                    Serial.println("Ending update mode and returning to regular functionality"); 
+                  } else readstate_f=0;
+              break; 
+          default: readstate_f=0;
+        } 
+      }
+      return;
+    }
 	}
  
     pressure = analogRead(PRESSURE_SENSOR_PIN);

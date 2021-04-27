@@ -142,6 +142,7 @@ struct atCommandType {                      // holds settings for a button funct
 extern uint8_t actSlot;
 extern uint8_t reportSlotParameters;
 extern uint8_t reportRawValues;
+extern uint32_t buttonStates;
 extern struct slotGeneralSettings settings;
 extern char slotName[MAX_NAME_LEN];
 extern int EmptySlotAddress;

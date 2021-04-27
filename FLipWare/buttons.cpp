@@ -94,11 +94,13 @@ void initButtons() {
 
 void handlePress (int buttonIndex)   // a button was pressed
 {
+  buttonStates |= (1<<buttonIndex); //save for reporting
   performCommand(buttons[buttonIndex].mode, buttons[buttonIndex].value, keystringButtons[buttonIndex], 1);
 }
 
 void handleRelease (int buttonIndex)    // a button was released: deal with "sticky"-functions
 {
+  buttonStates &= ~(1<<buttonIndex); //save for reporting
   switch (buttons[buttonIndex].mode) {
     case CMD_PL:
     case CMD_HL:
@@ -135,12 +137,14 @@ uint8_t handleButton(int i, uint8_t state)    // button debouncing and press det
           buttonDebouncers[i].stableState = state;
           if (state == 1) {      // new stable state: pressed !
             //if (inHoldMode(i))
+            buttonStates |= (1<<i); //save for reporting
             handlePress(i);
             buttonDebouncers[i].timestamp = millis(); // start measuring time
           }
           else {   // new stable state: released !
             // if (!inHoldMode(i))
             //   handlePress(i);
+            buttonStates &= ~(1<<i); //save for reporting
             if (inHoldMode(i))
               handleRelease(i);
             return (1);        // indicate that button action has been performed !

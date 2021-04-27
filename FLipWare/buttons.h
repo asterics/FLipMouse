@@ -20,7 +20,7 @@
 #define _BUTTONS_H_
 
 // Constants and Macro definitions
-#define NUMBER_OF_BUTTONS  19         // number of physical + virtual switches
+#define NUMBER_OF_BUTTONS  19         // number of physical + virtual switches. Note: if higher than 32, change buttonStates to uint64_t!
 #define NUMBER_OF_PHYSICAL_BUTTONS 3  // number of physical switches
 #define NUMBER_OF_LEDS     3          // number of connected leds
 

@@ -80,6 +80,9 @@ char slotName[MAX_NAME_LEN] = "empty";
 int EmptySlotAddress = 0;
 uint8_t reportSlotParameters = REPORT_NONE;
 uint8_t reportRawValues = 0;
+/** current button states for reporting raw values (AT SR)
+ * @note If NUMBER_OF_BUTTONS is more than 32, change type to uint64_t! */
+uint32_t buttonStates = 0;
 uint8_t actSlot = 0;
 
 uint16_t calib_now = 1;                       // calibrate zeropoint right at startup !
@@ -234,7 +237,13 @@ void reportValues()
     Serial.print("VALUES:"); Serial.print(pressure); Serial.print(",");
     Serial.print(up); Serial.print(","); Serial.print(down); Serial.print(",");
     Serial.print(left); Serial.print(","); Serial.print(right); Serial.print(",");
-    Serial.print(x); Serial.print(","); Serial.println(y);
+    Serial.print(x); Serial.print(","); Serial.print(y); Serial.print(",");
+    for(uint8_t i = 0; i<NUMBER_OF_BUTTONS; i++)
+    {
+		if(buttonStates & (1<<i)) Serial.print("1");
+		else Serial.print("0");
+	}
+	Serial.println("");
     /*
       Serial.print("AnalogRAW:");
       Serial.print(analogRead(UP_SENSOR_PIN));

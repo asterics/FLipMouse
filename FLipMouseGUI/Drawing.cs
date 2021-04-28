@@ -15,10 +15,8 @@ namespace MouseApp2
             if (newValues.Length == 0)
                 return;
 
-            // Console.WriteLine(newValues);
-
             String[] values = newValues.Split(',');
-            if (values.Length == 8)
+            if (values.Length >= 8)
             {
                 Int32 value = Convert.ToInt32(values[0]); //1023-Convert.ToInt32(values[0]);
                 pressureLabel.Text = value.ToString();
@@ -130,6 +128,16 @@ namespace MouseApp2
                 else
                     g.FillRectangle(brush2, 0, 0, button3IndicatorPanel.Width - 1, button3IndicatorPanel.Height - 1);
 
+                int goToSlot = Convert.ToInt32(values[8]);
+                if ((slots.Count > goToSlot) && (goToSlot >= 0))
+                {
+                    actSlot = goToSlot;
+                    displaySlot(actSlot);
+                }
+                else
+                {
+                    Console.WriteLine("got unknown VALUES:" + newValues);
+                }
             }
         }
     }

@@ -238,12 +238,14 @@ void reportValues()
     Serial.print(up); Serial.print(","); Serial.print(down); Serial.print(",");
     Serial.print(left); Serial.print(","); Serial.print(right); Serial.print(",");
     Serial.print(x); Serial.print(","); Serial.print(y); Serial.print(",");
-    for(uint8_t i = 0; i<NUMBER_OF_BUTTONS; i++)
+    for (uint8_t i = 0; i < NUMBER_OF_BUTTONS; i++)
     {
-		if(buttonStates & (1<<i)) Serial.print("1");
-		else Serial.print("0");
-	}
-	Serial.println("");
+      if (buttonStates & (1 << i)) Serial.print("1");
+      else Serial.print("0");
+    }
+    Serial.print(",");
+    Serial.print(actSlot);
+    Serial.println("");
     /*
       Serial.print("AnalogRAW:");
       Serial.print(analogRead(UP_SENSOR_PIN));

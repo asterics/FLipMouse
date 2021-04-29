@@ -15,10 +15,8 @@ namespace MouseApp2
             if (newValues.Length == 0)
                 return;
 
-            //  Console.WriteLine(newValues);
-
             String[] values = newValues.Split(',');
-            if (values.Length == 7)
+            if (values.Length >= 8)
             {
                 Int32 value = Convert.ToInt32(values[0]); //1023-Convert.ToInt32(values[0]);
                 pressureLabel.Text = value.ToString();
@@ -111,6 +109,35 @@ namespace MouseApp2
                     g.FillRectangle(brush, 0, 0, leftIndicatorPanel.Width - 1, leftIndicatorPanel.Height - 1);
                 else
                     g.FillRectangle(brush2, 0, 0, leftIndicatorPanel.Width - 1, leftIndicatorPanel.Height - 1);
+
+                g = button1IndicatorPanel.CreateGraphics();
+                if (values[7].Substring(0,1) == "1")
+                    g.FillRectangle(brush, 0, 0, button1IndicatorPanel.Width - 1, button1IndicatorPanel.Height - 1);
+                else
+                    g.FillRectangle(brush2, 0, 0, button1IndicatorPanel.Width - 1, button1IndicatorPanel.Height - 1);
+
+                g = button2IndicatorPanel.CreateGraphics();
+                if (values[7].Substring(1, 1) == "1")
+                    g.FillRectangle(brush, 0, 0, button2IndicatorPanel.Width - 1, button2IndicatorPanel.Height - 1);
+                else
+                    g.FillRectangle(brush2, 0, 0, button2IndicatorPanel.Width - 1, button2IndicatorPanel.Height - 1);
+
+                g = button3IndicatorPanel.CreateGraphics();
+                if (values[7].Substring(2, 1) == "1")
+                    g.FillRectangle(brush, 0, 0, button3IndicatorPanel.Width - 1, button3IndicatorPanel.Height - 1);
+                else
+                    g.FillRectangle(brush2, 0, 0, button3IndicatorPanel.Width - 1, button3IndicatorPanel.Height - 1);
+
+                int goToSlot = Convert.ToInt32(values[8]);
+                if ((slots.Count > goToSlot) && (goToSlot >= 0))
+                {
+                    actSlot = goToSlot;
+                    displaySlot(actSlot);
+                }
+                else
+                {
+                    Console.WriteLine("got unknown VALUES:" + newValues);
+                }
             }
         }
     }

@@ -415,13 +415,13 @@ namespace MouseApp2
         private void LipmouseGUI_Load(object sender, EventArgs e)
         {
             this.stringReceivedDelegate = new StringReceivedDelegate(stringReceived);
-            BeginInvoke(this.stringReceivedDelegate, new Object[] { "VALUES:512,512,512,512,512" });
+            BeginInvoke(this.stringReceivedDelegate, new Object[] { "VALUES:512,512,512,512,512,0,0,0000000000000,1" });
         }
 
         // update paint areas if tabs are changed
         private void tabControl_SelectedIndexChanged(object sender, EventArgs e)
         {
-            BeginInvoke(this.stringReceivedDelegate, new Object[] { "VALUES:512,512,512,512,512" });
+            BeginInvoke(this.stringReceivedDelegate, new Object[] { "VALUES:512,512,512,512,512,0,0,0000000000000,1" });
         }
 
 

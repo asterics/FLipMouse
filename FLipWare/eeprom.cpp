@@ -101,6 +101,7 @@ void saveToEEPROM(char * slotname)
 #endif
         return saveToEEPROMSlotNumber(i, slotname);
       } else {
+        //TODO: what is this code doing?
         addr = header.startSlotAddress[i];
         if (readEEPROM(addr++) != (EEPROM_MAGIC_NUMBER_SLOT & 0x00FF))
         {
@@ -115,6 +116,8 @@ void saveToEEPROM(char * slotname)
         }
       }
     }
+  } else {
+    return saveToEEPROMSlotNumber(nr, slotname);
   }
 }
 
@@ -122,6 +125,7 @@ void saveToEEPROM(char * slotname)
    Store current slot data to the EEPROM.
    The slot is identified by the slot number. If the nr parameter is -1,
    a new slot will be created (at the first possible position)
+   //TODO: stimmt das mit "new slot will be crated"? Wenn ja, bräuchte es ja oben nicht das "search for the first adress which is "0""
  * */
 void saveToEEPROMSlotNumber(int8_t nr, char * slotname)
 {

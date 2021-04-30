@@ -131,8 +131,8 @@ namespace MouseApp2
                 int goToSlot = Convert.ToInt32(values[8]);
                 if ((slots.Count > goToSlot) && (goToSlot >= 0))
                 {
-                    actSlot = goToSlot;
-                    displaySlot(actSlot);
+                    // actSlot = goToSlot;
+                    // displaySlot(actSlot);
                 }
                 else
                 {

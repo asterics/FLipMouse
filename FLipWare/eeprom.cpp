@@ -26,6 +26,9 @@
 
 /** Device address of the EEPROM **/
 #define deviceaddress 0x50
+#define pageSize 64
+#define EEPROM_PAGEWRITE
+
 
 /**
    Local copy of all slot and ir command start adresses
@@ -38,12 +41,26 @@ uint8_t currentSlot;
  * */
 void writeEEPROM(unsigned int eeaddress, byte data )
 {
+    uint32_t timeout;
+    //wait for the EEPROM device to complete a prior write, or 10ms
+    timeout = millis();
+    bool ready = false;
+    while (!ready && (millis() - timeout < 10)) {
+      Wire.beginTransmission((uint8_t)deviceaddress);
+      ready = (Wire.endTransmission(true) == 0); // wait for device to become ready!
+    }
+    if (!ready) { // chip either does not exist, is hung, or died
+      Serial.print(deviceaddress, HEX);
+      Serial.println(F(" chip timeout"));
+      return;
+    }
+  
   Wire.beginTransmission(deviceaddress);
   Wire.send((int)(eeaddress >> 8));   // MSB
   Wire.send((int)(eeaddress & 0xFF)); // LSB
   Wire.send(data);
   Wire.endTransmission();
-  delay(5);
+  //delay(5);
 
 #ifdef DEBUG_OUTPUT_FULL
   Serial.print("EEPROM w@");
@@ -52,6 +69,73 @@ void writeEEPROM(unsigned int eeaddress, byte data )
   Serial.println(data);
 #endif
 }
+
+// EEPROM page write - write multiple bytes to I2C EEPROM
+// thanks to CuckTodd:
+// https://forum.arduino.cc/t/faster-way-to-write-to-external-eeprom/429356/5
+
+bool writeEEPROMBin(uint16_t adr, char data[], const uint16_t len) {
+#ifdef DEBUG_OUTPUT_FULL
+    Serial.print("writeBin(0x");
+    Serial.print(deviceaddress,HEX);
+    Serial.print(",0x");
+    Serial.print(adr,HEX);
+    Serial.print(",len=");
+    Serial.println(len,DEC);
+#endif
+  uint16_t bk = len;
+  bool abort = false;
+  uint8_t i;
+  uint16_t j = 0;
+  uint32_t timeout;
+  uint16_t mask = pageSize - 1;
+  while ((bk > 0) && !abort) {
+    i = 30; // maximum data bytes that Wire.h can send in one transaction
+    if (i > bk) i = bk; // data block is bigger than Wire.h can handle in one transaction
+    if (((adr) & ~mask) != ((((adr) + i) - 1) & ~mask)) { // over page! block would wrap around page
+      i = (((adr) | mask) - (adr)) + 1; // shrink the block until it stops at the end of the current page
+    }
+    //wait for the EEPROM device to complete a prior write, or 10ms
+    timeout = millis();
+    bool ready = false;
+    while (!ready && (millis() - timeout < 10)) {
+      Wire.beginTransmission((uint8_t)deviceaddress);
+      ready = (Wire.endTransmission(true) == 0); // wait for device to become ready!
+    }
+    if (!ready) { // chip either does not exist, is hung, or died
+      abort = true;
+      Serial.print(deviceaddress, HEX);
+      Serial.println(F(" chip timeout"));
+      break;
+    }
+    // start sending this current block
+    Wire.beginTransmission((uint8_t)deviceaddress);
+    Wire.write((uint8_t)highByte(adr));
+    Wire.write((uint8_t)lowByte(adr));
+
+    bk = bk - i;
+    adr = (adr) + i;
+
+    while (i > 0) {
+      // Serial.print(" ");
+      // Serial.print((uint8_t)data[j],HEX);
+      Wire.write((uint8_t)data[j++]);
+      i--;
+    }
+
+    uint8_t err = Wire.endTransmission();
+    if (err != 0) {
+      Serial.print(F("write Failure="));
+      Serial.println(err, DEC);
+      abort = true;
+      break;
+    }
+  }
+  return !abort;
+}
+
+
+
 
 /**
    Read one byte from the EEPROM
@@ -215,36 +299,61 @@ void saveToEEPROMSlotNumber(int8_t nr, char * slotname)
 
   //save the general settings to the global settings struct
   p = (uint8_t *)&settings;
-  for (uint16_t t = 0; t < sizeof(slotGeneralSettings); t++) writeEEPROM(addr++, *(p + t));
+  #ifndef EEPROM_PAGEWRITE
+    for (uint16_t t = 0; t < sizeof(slotGeneralSettings); t++) 
+       writeEEPROM(addr++, *(p + t));
+  #else
+    writeEEPROMBin(addr, p, sizeof(slotGeneralSettings));
+    addr += sizeof(slotGeneralSettings);
+  #endif
 
   //write '\0' seperator
   writeEEPROM(addr++, '\0');
 
   //write the slotname
   addr2 = 0;
-  do {
-    writeEEPROM(addr++, *(slotname + addr2));
-    addr2++;
-  } while (*(slotname + addr2 - 1) != '\0');
+  #ifndef EEPROM_PAGEWRITE
+    do {
+      writeEEPROM(addr++, *(slotname + addr2));
+      addr2++;
+    } while (*(slotname + addr2 - 1) != '\0');
+  #else
+    writeEEPROMBin(addr, slotname, strlen(slotname));
+    addr += strlen(slotname);
+    //write '\0' seperator
+    writeEEPROM(addr++, '\0');
+  #endif
 
   //load all button settings
   for (uint8_t i = 0; i < NUMBER_OF_BUTTONS; i++)
   {
     //load struct slotButtonSettings
     p = (uint8_t *)&buttons[i];
-    for (uint16_t t = 0; t < sizeof(slotButtonSettings); t++) writeEEPROM(addr++, *(p + t));
+    #ifndef EEPROM_PAGEWRITE
+      for (uint16_t t = 0; t < sizeof(slotButtonSettings); t++) 
+        writeEEPROM(addr++, *(p + t));
+    #else
+      writeEEPROMBin(addr, p, sizeof(slotButtonSettings));
+      addr += sizeof(slotButtonSettings);
+    #endif
 
     //write '\0' seperator
     writeEEPROM(addr++, 0);
 
     //add additional payload
     p = (uint8_t *)keystringButtons[i];
-    for (uint16_t t = 0; t < MAX_KEYSTRING_LEN; t++)
-    {
-      writeEEPROM(addr++, *(p + t));
-      if (*(p + t) == 0) break;
-    }
-
+    #ifndef EEPROM_PAGEWRITE
+      for (uint16_t t = 0; t < MAX_KEYSTRING_LEN; t++)
+      {
+        writeEEPROM(addr++, *(p + t));
+        if (*(p + t) == 0) break;
+      }
+    #else
+      writeEEPROMBin(addr, p, strlen(p));
+      addr += strlen(p);
+      //write '\0' seperator
+      writeEEPROM(addr++, '\0');
+    #endif
   }
 
   /** update the header table */
@@ -266,10 +375,14 @@ void saveToEEPROMSlotNumber(int8_t nr, char * slotname)
 
 
   //store the storageheader permanently to the EEPROM
-  for (uint16_t i = 0; i < sizeof(storageHeader); i++)
-  {
-    writeEEPROM(i, *((uint8_t*)&header + i));
-  }
+  #ifndef EEPROM_PAGEWRITE  
+    for (uint16_t i = 0; i < sizeof(storageHeader); i++)
+    {
+      writeEEPROM(i, *((uint8_t*)&header + i));
+    }
+  #else
+    writeEEPROMBin(0, (uint8_t*)&header, sizeof(storageHeader));
+  #endif    
 }
 
 /**

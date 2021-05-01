@@ -20,7 +20,7 @@
    0x0000-0x008F	struct storageHeader
    0x0090-0xXXXX	setting slots:
 
-   Magic Number: 0xBB66
+   Magic Number: 0xA55A
    struct slotGeneralSettings
    '\0'
    char * slotName ('\0')
@@ -32,7 +32,8 @@
    ////// repeated for NUMBER_OF_BUTTONS
 
 
-   0xXXXX-0x8000	IR slot (EEPROM max address in this case for 256kbit):
+   0xXXXX-0x7FFF	IR slot (0x7FFF is the max address in case of a 256kbit EEPROM)
+   Note that the IR slots start stored from max address (top->down)
 
    Magic Number: 0xBB66
    char * slotName ('\0')
@@ -55,7 +56,7 @@
 #define EEPROM_MAX_ADDRESS 0x7FFF
 
 
-#define EEPROM_MAGIC_NUMBER_SLOT 	0x0270
+#define EEPROM_MAGIC_NUMBER_SLOT 	0xA55A
 #define EEPROM_MAGIC_NUMBER_IR		0xBB66
 
 
@@ -70,9 +71,9 @@
  * */
 struct storageHeader {
   uint16_t	startSlotAddress[EEPROM_COUNT_SLOTS];
+  uint16_t  endSlotAddress[EEPROM_COUNT_SLOTS];
   uint16_t	startIRAddress[EEPROM_COUNT_IRCOMMAND];
   uint16_t  versionID;
-  uint16_t	endSlotAddress;
 };
 
 

@@ -72,7 +72,7 @@
 // Optional Debug Output Control
 
 // #define DEBUG_OUTPUT_FULL      // if full debug output is desired
-// #define DEBUG_OUTPUT_BASIC     // if basic debug output is desired (for eeprom)
+#define DEBUG_OUTPUT_BASIC     // if basic debug output is desired (for eeprom)
 
 #define WORKINGMEM_SIZE    300        // reserved RAM for working memory (command parser, IR-rec/play)
 #define MAX_SLOTS          7          // maximum number of EEPROM memory slots

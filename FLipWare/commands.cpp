@@ -244,6 +244,7 @@ void performCommand (uint8_t cmd, int16_t par1, char * keystring, int8_t periodi
       if (keystring) {
         if ((strlen(keystring) > 0) && (strlen(keystring) < MAX_NAME_LEN))
           saveToEEPROM(keystring);
+        makeTone(TONE_INDICATE_PUFF, 0);
       }
       break;
     case CMD_LO:

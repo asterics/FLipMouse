@@ -48,7 +48,8 @@
 #define _EEPROM_H_
 
 #include "FlipWare.h"
-#include <Wire.h>
+// #include "Wirelib/Wire.h"
+#include "i2c_t3.h"
 #include <EEPROM.h>
 
 #define EEPROM_COUNT_SLOTS 7

@@ -309,6 +309,7 @@ namespace MouseApp2
                 addToLog("The settings were stored!");
                 displaySlot(0);
                 sendLoadSlotCommand(slots[0].slotName);
+                sendCalibrationCommand();
                 sendStartReportingCommand();
                 Thread.Sleep(1000);  // time to activate config in flipmouse
                 Cursor.Current = Cursors.Default;

@@ -36,7 +36,7 @@
 
 #include "FlipWare.h"        //  FABI command definitions
 #include <EEPROM.h>
-#include <Wire.h>        // for the external EEPROM
+#include "i2c_t3.h"        // for the external EEPROM
 #include "math.h"
 
 // Constants and Macro definitions
@@ -132,6 +132,7 @@ void setup() {
 #endif
 
   Wire.begin();
+  Wire.setClock(400000);
   pinMode(IR_SENSOR_PIN, INPUT);
   analogWriteFrequency(IR_LED_PIN, 38000);  // TBD: flexible carrier frequency for IR, not only 38kHz !
 

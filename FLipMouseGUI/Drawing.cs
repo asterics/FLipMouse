@@ -131,12 +131,8 @@ namespace MouseApp2
                 int goToSlot = Convert.ToInt32(values[8]);
                 if ((slots.Count > goToSlot) && (goToSlot >= 0))
                 {
-                    // actSlot = goToSlot;
-                    // displaySlot(actSlot);
-                }
-                else
-                {
-                    Console.WriteLine("got unknown VALUES:" + newValues);
+                    // TBD: eventually handle live slot change (if in synced state)
+                    // if (actSlot != goToSlot) { actSlot=goToSlot;  displaySlot(actSlot);  }
                 }
             }
         }

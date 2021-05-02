@@ -55,7 +55,7 @@ namespace MouseApp2
         System.Windows.Forms.Timer IdTimer = new System.Windows.Forms.Timer();
 
 
-        const int MAX_SLOTS = 5;
+        const int MAX_SLOTS = 7;
         public List<Slot> slots = new List<Slot>();
 
         public void initSlots()
@@ -557,6 +557,7 @@ namespace MouseApp2
             {
                 sendEndReportingCommand();
                 sendApplyCommands();
+                sendSaveSlotCommands(slots[actSlot].slotName);   // Note: Save / overwrite slot for testing purposes!
                 sendCalibrationCommand();
                 sendStartReportingCommand();
                 addToLog("The selected settings have been applied to the FLipmouse");

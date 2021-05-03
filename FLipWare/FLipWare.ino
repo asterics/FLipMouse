@@ -19,7 +19,7 @@
                   optional: FlipMouse Bluetooth daughter board
 
         SW-requirements:
-                  Teensyduino AddOn for Arduino IDE
+                  Teensyduino AddOn for Arduino IDE, see https://www.pjrc.com/teensy/td_download.html
                   USB-type set to USB composite device (Serial + Keyboard + Mouse + Joystick)
 
    For a list of supported AT commands, see commands.h / commands.cpp

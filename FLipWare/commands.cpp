@@ -75,6 +75,7 @@ void printCurrentSlot()
     Serial.print("AT ");
     int actCmd = buttons[i].mode;
     char cmdStr[4];
+        
     strcpy_FM(cmdStr, (uint_farptr_t_FM)atCommands[actCmd].atCmd);
     Serial.print(cmdStr);
     switch (pgm_read_byte_near(&(atCommands[actCmd].partype)))
@@ -257,15 +258,7 @@ void performCommand (uint8_t cmd, int16_t par1, char * keystring, int8_t periodi
       break;
     case CMD_LA:
       release_all();
-      reportSlotParameters = REPORT_ALL_SLOTS;
-      //necessary, because we load via slot numbers
-      bootstrapSlotAddresses();
-      for (uint8_t i = 0; i < EEPROM_COUNT_SLOTS; i++)
-      {
-        readFromEEPROMSlotNumber(i, false, false);
-      }
-      reportSlotParameters = REPORT_NONE;
-      readFromEEPROMSlotNumber(0, true);
+      printAllSlots();
       break;
     case CMD_LI:
       release_all();
@@ -458,4 +451,5 @@ void performCommand (uint8_t cmd, int16_t par1, char * keystring, int8_t periodi
       wipe_IR_commands();
       break;
   }
+  // Serial.println("OK");  // send AT command acknowledge
 }

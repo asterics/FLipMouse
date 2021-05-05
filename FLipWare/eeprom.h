@@ -53,12 +53,10 @@
 #include <EEPROM.h>
 
 #define EEPROM_COUNT_SLOTS 7
-#define EEPROM_COUNT_IRCOMMAND 63
+#define EEPROM_COUNT_IRCOMMAND 20
+
 #define EEPROM_MAX_ADDRESS 0x7FFF
-
-
-#define EEPROM_MAGIC_NUMBER_SLOT 	0xA55A
-#define EEPROM_MAGIC_NUMBER_IR		0xBB66
+#define EEPROM_MAGIC_NUMBER 	0x78
 
 
 /**
@@ -74,6 +72,7 @@ struct storageHeader {
   uint16_t	startSlotAddress[EEPROM_COUNT_SLOTS];
   uint16_t  endSlotAddress[EEPROM_COUNT_SLOTS];
   uint16_t	startIRAddress[EEPROM_COUNT_IRCOMMAND];
+  uint16_t  endIRAddress[EEPROM_COUNT_IRCOMMAND];
   uint16_t  versionID;
 };
 
@@ -136,33 +135,20 @@ uint16_t readIRFromEEPROM(char * name, uint16_t *timings, uint8_t maxEdges);
 void deleteSlots();
 
 
+void printAllSlots(void);
+
 /**
    Print out all slotnames to the serial interface
    Used by the PC-GUI to load all available slot names
  * */
 void listSlots();
 
-
 /**
    Read one slot data from the EEPROM to the global variables
    The slot is identified by the slot number.
-   If the search flag is set, this function loads the next possible slot, if
-   the current one is not valid
-   ATTENTION: if this method is not called from another function (e.g. readFromEEPROM()),
-   it is necessary to preload the start adresses via bootstrapSlotAddresses()!
- * */
-void readFromEEPROMSlotNumber(uint8_t nr, bool search);
-
-/**
-   Read one slot data from the EEPROM to the global variables
-   The slot is identified by the slot number.
-   If the search flag is set, this function loads the next possible slot, if
-   the current one is not valid
    if the playTone flag is set, a tone according to the current slot number will be played
-   ATTENTION: if this method is not called from another function (e.g. readFromEEPROM()),
-   it is necessary to preload the start adresses via bootstrapSlotAddresses()!
  * */
-void readFromEEPROMSlotNumber(uint8_t nr, bool search, bool playTone);
+void readFromEEPROMSlotNumber(uint8_t nr,  bool playTone);
 
 /**
    Read one slot data from the EEPROM to the global variables

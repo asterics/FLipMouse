@@ -304,7 +304,7 @@ namespace MouseApp2
                     sendApplyCommands();
                     sendSaveSlotCommands(slots[slotCounter].slotName);
                     addToLog("Slot " + slots[slotCounter].slotName + " is stored into FLipmouse.");
-                    Thread.Sleep(1000);  // time to store slot in flipmouse
+                    Thread.Sleep(200);  // time to store slot in flipmouse
                 }
                 addToLog("The settings were stored!");
                 displaySlot(0);

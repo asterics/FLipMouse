@@ -243,6 +243,13 @@
             this.label46 = new System.Windows.Forms.Label();
             this.StrongPuffUpFunctionBox = new System.Windows.Forms.ComboBox();
             this.ButtonsTab = new System.Windows.Forms.TabPage();
+            this.label28 = new System.Windows.Forms.Label();
+            this.label26 = new System.Windows.Forms.Label();
+            this.label25 = new System.Windows.Forms.Label();
+            this.label23 = new System.Windows.Forms.Label();
+            this.button3IndicatorPanel = new System.Windows.Forms.Panel();
+            this.button2IndicatorPanel = new System.Windows.Forms.Panel();
+            this.button1IndicatorPanel = new System.Windows.Forms.Panel();
             this.copy_buttons = new System.Windows.Forms.Button();
             this.clearButton3 = new System.Windows.Forms.Button();
             this.clearButton2 = new System.Windows.Forms.Button();
@@ -353,13 +360,6 @@
             this.label37 = new System.Windows.Forms.Label();
             this.label33 = new System.Windows.Forms.Label();
             this.StoreButton = new System.Windows.Forms.Button();
-            this.button1IndicatorPanel = new System.Windows.Forms.Panel();
-            this.button2IndicatorPanel = new System.Windows.Forms.Panel();
-            this.button3IndicatorPanel = new System.Windows.Forms.Panel();
-            this.label23 = new System.Windows.Forms.Label();
-            this.label25 = new System.Windows.Forms.Label();
-            this.label26 = new System.Windows.Forms.Label();
-            this.label28 = new System.Windows.Forms.Label();
             this.tabControl.SuspendLayout();
             this.LipmouseTab.SuspendLayout();
             this.singlePanel.SuspendLayout();
@@ -1248,10 +1248,10 @@
             this.AlternativeTab.Controls.Add(this.DownFunctionMenu);
             this.AlternativeTab.Controls.Add(this.label13);
             this.AlternativeTab.Controls.Add(this.UpFunctionMenu);
-            this.AlternativeTab.Location = new System.Drawing.Point(4, 54);
+            this.AlternativeTab.Location = new System.Drawing.Point(4, 29);
             this.AlternativeTab.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.AlternativeTab.Name = "AlternativeTab";
-            this.AlternativeTab.Size = new System.Drawing.Size(939, 430);
+            this.AlternativeTab.Size = new System.Drawing.Size(939, 455);
             this.AlternativeTab.TabIndex = 3;
             this.AlternativeTab.Text = "Alternative Actions";
             // 
@@ -1639,11 +1639,11 @@
             this.SipPuffLevelsTab.Controls.Add(this.sipThresholdLabel);
             this.SipPuffLevelsTab.Controls.Add(this.sipThresholdBar);
             this.SipPuffLevelsTab.Controls.Add(this.thresholdLabelForSip);
-            this.SipPuffLevelsTab.Location = new System.Drawing.Point(4, 54);
+            this.SipPuffLevelsTab.Location = new System.Drawing.Point(4, 29);
             this.SipPuffLevelsTab.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.SipPuffLevelsTab.Name = "SipPuffLevelsTab";
             this.SipPuffLevelsTab.Padding = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.SipPuffLevelsTab.Size = new System.Drawing.Size(939, 430);
+            this.SipPuffLevelsTab.Size = new System.Drawing.Size(939, 455);
             this.SipPuffLevelsTab.TabIndex = 5;
             this.SipPuffLevelsTab.Text = "Sip/Puff Levels";
             // 
@@ -2032,10 +2032,10 @@
             // 
             this.SipPuffTab.BackColor = System.Drawing.SystemColors.ButtonFace;
             this.SipPuffTab.Controls.Add(this.sipPuffSelections);
-            this.SipPuffTab.Location = new System.Drawing.Point(4, 54);
+            this.SipPuffTab.Location = new System.Drawing.Point(4, 29);
             this.SipPuffTab.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.SipPuffTab.Name = "SipPuffTab";
-            this.SipPuffTab.Size = new System.Drawing.Size(939, 430);
+            this.SipPuffTab.Size = new System.Drawing.Size(939, 455);
             this.SipPuffTab.TabIndex = 2;
             this.SipPuffTab.Text = "Sip/Puff Actions";
             // 
@@ -3249,6 +3249,76 @@
             this.ButtonsTab.TabIndex = 1;
             this.ButtonsTab.Text = "Button Actions";
             // 
+            // label28
+            // 
+            this.label28.AutoSize = true;
+            this.label28.Location = new System.Drawing.Point(382, 366);
+            this.label28.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label28.Name = "label28";
+            this.label28.Size = new System.Drawing.Size(29, 20);
+            this.label28.TabIndex = 169;
+            this.label28.Text = "B3";
+            // 
+            // label26
+            // 
+            this.label26.AutoSize = true;
+            this.label26.Location = new System.Drawing.Point(321, 365);
+            this.label26.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label26.Name = "label26";
+            this.label26.Size = new System.Drawing.Size(29, 20);
+            this.label26.TabIndex = 168;
+            this.label26.Text = "B2";
+            // 
+            // label25
+            // 
+            this.label25.AutoSize = true;
+            this.label25.Location = new System.Drawing.Point(264, 366);
+            this.label25.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label25.Name = "label25";
+            this.label25.Size = new System.Drawing.Size(29, 20);
+            this.label25.TabIndex = 167;
+            this.label25.Text = "B1";
+            // 
+            // label23
+            // 
+            this.label23.AutoSize = true;
+            this.label23.Location = new System.Drawing.Point(78, 393);
+            this.label23.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label23.Name = "label23";
+            this.label23.Size = new System.Drawing.Size(169, 20);
+            this.label23.TabIndex = 166;
+            this.label23.Text = "Current Button States:";
+            // 
+            // button3IndicatorPanel
+            // 
+            this.button3IndicatorPanel.BackColor = System.Drawing.SystemColors.ButtonFace;
+            this.button3IndicatorPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.button3IndicatorPanel.Location = new System.Drawing.Point(377, 391);
+            this.button3IndicatorPanel.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.button3IndicatorPanel.Name = "button3IndicatorPanel";
+            this.button3IndicatorPanel.Size = new System.Drawing.Size(38, 32);
+            this.button3IndicatorPanel.TabIndex = 165;
+            // 
+            // button2IndicatorPanel
+            // 
+            this.button2IndicatorPanel.BackColor = System.Drawing.SystemColors.ButtonFace;
+            this.button2IndicatorPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.button2IndicatorPanel.Location = new System.Drawing.Point(317, 390);
+            this.button2IndicatorPanel.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.button2IndicatorPanel.Name = "button2IndicatorPanel";
+            this.button2IndicatorPanel.Size = new System.Drawing.Size(38, 32);
+            this.button2IndicatorPanel.TabIndex = 164;
+            // 
+            // button1IndicatorPanel
+            // 
+            this.button1IndicatorPanel.BackColor = System.Drawing.SystemColors.ButtonFace;
+            this.button1IndicatorPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.button1IndicatorPanel.Location = new System.Drawing.Point(260, 390);
+            this.button1IndicatorPanel.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.button1IndicatorPanel.Name = "button1IndicatorPanel";
+            this.button1IndicatorPanel.Size = new System.Drawing.Size(38, 32);
+            this.button1IndicatorPanel.TabIndex = 163;
+            // 
             // copy_buttons
             // 
             this.copy_buttons.ForeColor = System.Drawing.Color.Black;
@@ -3564,10 +3634,10 @@
             this.RawValueTab.Controls.Add(this.horizontalDriftGainBar);
             this.RawValueTab.Controls.Add(this.verticalDriftRangeBar);
             this.RawValueTab.Controls.Add(this.verticalDriftGainBar);
-            this.RawValueTab.Location = new System.Drawing.Point(4, 54);
+            this.RawValueTab.Location = new System.Drawing.Point(4, 29);
             this.RawValueTab.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.RawValueTab.Name = "RawValueTab";
-            this.RawValueTab.Size = new System.Drawing.Size(939, 430);
+            this.RawValueTab.Size = new System.Drawing.Size(939, 455);
             this.RawValueTab.TabIndex = 4;
             this.RawValueTab.Text = "Force Levels";
             // 
@@ -4038,10 +4108,10 @@
             this.IRTab.Controls.Add(this.playIRButton);
             this.IRTab.Controls.Add(this.recordIRButton);
             this.IRTab.Controls.Add(this.label24);
-            this.IRTab.Location = new System.Drawing.Point(4, 54);
+            this.IRTab.Location = new System.Drawing.Point(4, 29);
             this.IRTab.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.IRTab.Name = "IRTab";
-            this.IRTab.Size = new System.Drawing.Size(939, 430);
+            this.IRTab.Size = new System.Drawing.Size(939, 455);
             this.IRTab.TabIndex = 6;
             this.IRTab.Text = "IR-Remote";
             // 
@@ -4161,10 +4231,10 @@
             this.GeneralTab.Controls.Add(this.HIDComboBox);
             this.GeneralTab.Controls.Add(this.label47);
             this.GeneralTab.Controls.Add(this.orientationBox);
-            this.GeneralTab.Location = new System.Drawing.Point(4, 54);
+            this.GeneralTab.Location = new System.Drawing.Point(4, 29);
             this.GeneralTab.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.GeneralTab.Name = "GeneralTab";
-            this.GeneralTab.Size = new System.Drawing.Size(939, 430);
+            this.GeneralTab.Size = new System.Drawing.Size(939, 455);
             this.GeneralTab.TabIndex = 7;
             this.GeneralTab.Text = "General";
             // 
@@ -4349,7 +4419,6 @@
             this.aboutToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Padding = new System.Windows.Forms.Padding(6, 2, 0, 2);
             this.menuStrip1.Size = new System.Drawing.Size(1036, 33);
             this.menuStrip1.TabIndex = 77;
             this.menuStrip1.Text = "menuStrip1";
@@ -4589,76 +4658,6 @@
             this.StoreButton.Text = "Store settings";
             this.StoreButton.UseVisualStyleBackColor = true;
             this.StoreButton.Click += new System.EventHandler(this.StoreButton_Click);
-            // 
-            // button1IndicatorPanel
-            // 
-            this.button1IndicatorPanel.BackColor = System.Drawing.SystemColors.ButtonFace;
-            this.button1IndicatorPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.button1IndicatorPanel.Location = new System.Drawing.Point(260, 390);
-            this.button1IndicatorPanel.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.button1IndicatorPanel.Name = "button1IndicatorPanel";
-            this.button1IndicatorPanel.Size = new System.Drawing.Size(38, 32);
-            this.button1IndicatorPanel.TabIndex = 163;
-            // 
-            // button2IndicatorPanel
-            // 
-            this.button2IndicatorPanel.BackColor = System.Drawing.SystemColors.ButtonFace;
-            this.button2IndicatorPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.button2IndicatorPanel.Location = new System.Drawing.Point(317, 390);
-            this.button2IndicatorPanel.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.button2IndicatorPanel.Name = "button2IndicatorPanel";
-            this.button2IndicatorPanel.Size = new System.Drawing.Size(38, 32);
-            this.button2IndicatorPanel.TabIndex = 164;
-            // 
-            // button3IndicatorPanel
-            // 
-            this.button3IndicatorPanel.BackColor = System.Drawing.SystemColors.ButtonFace;
-            this.button3IndicatorPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.button3IndicatorPanel.Location = new System.Drawing.Point(377, 391);
-            this.button3IndicatorPanel.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.button3IndicatorPanel.Name = "button3IndicatorPanel";
-            this.button3IndicatorPanel.Size = new System.Drawing.Size(38, 32);
-            this.button3IndicatorPanel.TabIndex = 165;
-            // 
-            // label23
-            // 
-            this.label23.AutoSize = true;
-            this.label23.Location = new System.Drawing.Point(78, 393);
-            this.label23.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.label23.Name = "label23";
-            this.label23.Size = new System.Drawing.Size(169, 20);
-            this.label23.TabIndex = 166;
-            this.label23.Text = "Current Button States:";
-            // 
-            // label25
-            // 
-            this.label25.AutoSize = true;
-            this.label25.Location = new System.Drawing.Point(264, 366);
-            this.label25.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.label25.Name = "label25";
-            this.label25.Size = new System.Drawing.Size(29, 20);
-            this.label25.TabIndex = 167;
-            this.label25.Text = "B1";
-            // 
-            // label26
-            // 
-            this.label26.AutoSize = true;
-            this.label26.Location = new System.Drawing.Point(321, 365);
-            this.label26.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.label26.Name = "label26";
-            this.label26.Size = new System.Drawing.Size(29, 20);
-            this.label26.TabIndex = 168;
-            this.label26.Text = "B2";
-            // 
-            // label28
-            // 
-            this.label28.AutoSize = true;
-            this.label28.Location = new System.Drawing.Point(382, 366);
-            this.label28.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.label28.Name = "label28";
-            this.label28.Size = new System.Drawing.Size(29, 20);
-            this.label28.TabIndex = 169;
-            this.label28.Text = "B3";
             // 
             // FLipMouseGUI
             // 

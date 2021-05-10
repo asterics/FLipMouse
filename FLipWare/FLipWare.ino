@@ -52,9 +52,6 @@
 #define UP_SENSOR_PIN       A7
 #define RIGHT_SENSOR_PIN    A8
 
-#define ADDON_GPIO0		11
-#define ADDON_RESET		13
-
 //Piezo Pin (for tone generation)
 #define TONE_PIN  9
 
@@ -194,53 +191,42 @@ void loop() {
 			Serial_AUX.flush();
 			while(Serial.available()) Serial.read();
 			while(Serial_AUX.available()) Serial_AUX.read();
-			//trigger reset
-			pinMode(ADDON_GPIO0,OUTPUT);
-			digitalWrite(ADDON_GPIO0,LOW);
-			delay(2);
-			pinMode(ADDON_RESET,OUTPUT);
-			digitalWrite(ADDON_RESET,LOW);
-			delay(2);
-			digitalWrite(ADDON_RESET,HIGH);
-			pinMode(ADDON_RESET,INPUT);
 			addonUpgrade = 1;
 			return;
 		}
 
 		if(addonUpgrade == 1)
 		{
-      while(Serial.available()) Serial_AUX.write(Serial.read());
-      while(Serial_AUX.available()) {
-        inByte = Serial_AUX.read();
-        Serial.write(inByte);
-        switch (readstate_f) {
-          case 0:
-                  if (inByte=='$') readstate_f++;
-               break;
-          case 1:
-                  if (inByte=='F') readstate_f++; else readstate_f=0;
-              break;
-          case 2:
-                  if (inByte=='I') readstate_f++; else readstate_f=0;
-              break;
-          case 3:
-                  if (inByte=='N') {
-                    addonUpgrade = 0;
-                    readstate_f=0;
-                    Serial_AUX.begin(9600); //switch to lower speed...
-                    Serial.flush();
-                    Serial_AUX.flush();
-                    Serial.println('\n');
-                    Serial.println("Update of Add-on is complete");
-                    Serial.println('\n');
-                    Serial.println("Ending update mode and returning to regular functionality");
-                  } else readstate_f=0;
-              break;
-          default: readstate_f=0;
-        }
-      }
-      return;
-    }
+			while(Serial.available()) Serial_AUX.write(Serial.read());
+			while(Serial_AUX.available()) {
+				inByte = Serial_AUX.read();
+				Serial.write(inByte);
+				switch (readstate_f) {
+				  case 0:
+						  if (inByte=='$') readstate_f++;
+					   break;
+				  case 1:
+						  if (inByte=='F') readstate_f++; else readstate_f=0;
+					  break;
+				  case 2:
+						  if (inByte=='I') readstate_f++; else readstate_f=0;
+					  break;
+				  case 3:
+						  if (inByte=='N') {
+							addonUpgrade = 0;
+							readstate_f=0;
+							Serial_AUX.begin(9600); //switch to lower speed...
+							Serial.flush();
+							Serial_AUX.flush();
+							Serial.println('\n');
+							Serial.println("OTA:finished");
+						  } else readstate_f=0;
+					  break;
+				  default: readstate_f=0;
+				}
+			}
+		return;
+		}
 	}
  
     pressure = analogRead(PRESSURE_SENSOR_PIN);

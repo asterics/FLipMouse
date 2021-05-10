@@ -141,9 +141,6 @@ void setup() {
   pinMode(IR_LED_PIN, OUTPUT);
   digitalWrite(LED_PIN, LOW);
 
-  pinMode(ADDON_RESET,INPUT);
-  pinMode(ADDON_GPIO0,INPUT);
-
   for (int i = 0; i < NUMBER_OF_PHYSICAL_BUTTONS; i++) // initialize physical buttons and bouncers
     pinMode (input_map[i], INPUT_PULLUP);   // configure the pins for input mode with pullup resistors
 
@@ -215,11 +212,12 @@ void loop() {
 						  if (inByte=='N') {
 							addonUpgrade = 0;
 							readstate_f=0;
+							delay(50);
+							//get any left feedback messages
+							while(Serial_AUX.available()) Serial.write(Serial_AUX.read());
 							Serial_AUX.begin(9600); //switch to lower speed...
 							Serial.flush();
 							Serial_AUX.flush();
-							Serial.println('\n');
-							Serial.println("OTA:finished");
 						  } else readstate_f=0;
 					  break;
 				  default: readstate_f=0;

@@ -50,13 +50,14 @@
 
 #define VERSION_STRING "Flipmouse v2.10"
 
+//  V2.11: eeprom access optimization and support for deletion / update of individual slots
 //  V2.10: code size reduction: using floating point math, removed debug level control via AT E0, AT E1 and AT E2
 //          added macro command description to the user manual
 //  V2.9:  implemented drift correction for small deadzones, removed gain up/down/left/right,
 //          added AT commands for drift correction, modified calculation of acceleration
 //  V2.8.3: switched to semantic version numbering, increased acceleration factors
-//  V2.82: corrected memory bugs (index / heap overflows), added slot copy feature (in GUI)
-//  V2.81: corrected bug in deadzone calculation for keyboard actions, improved stable time for strong sip/puff functions
+//  V2.8.2: corrected memory bugs (index / heap overflows), added slot copy feature (in GUI)
+//  V2.8.1: corrected bug in deadzone calculation for keyboard actions, improved stable time for strong sip/puff functions
 //  V2.8: improved cursor control by using polar coordinates and damping
 //  V2.7: improved IR command recording and playback (IR hold repeats codes, optionally append off-sequence)
 //  V2.6: updated API for KEY commands (added KT, changed KP) and Mouse Click commands (added toggle clicks)
@@ -129,7 +130,6 @@ struct slotGeneralSettings {
   int16_t  cy;     // calib y
   uint16_t ro;     // orientation (0,90,180,270)
   uint8_t  bt;     // bt-mode (0,1,2)
-  char     ii[MAX_NAME_LEN]; // infrared idle sequence name
 };
 
 

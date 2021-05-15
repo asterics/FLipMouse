@@ -140,6 +140,15 @@ void storeHeader(void) {
   #else
     writeEEPROMBin(0, (uint8_t*)&header, sizeof(storageHeader));
   #endif
+
+/*
+  Serial.println("Stored:");
+  for (int i=0;i<EEPROM_COUNT_IRCOMMAND;i++) {
+    Serial.print("IRCommand"); Serial.print(i); Serial.print(":"); 
+    Serial.println(header.startIRAddress[i]);
+  }
+*/
+  
 }
 
 /**
@@ -351,6 +360,11 @@ void saveToEEPROMSlotNumber(int8_t nr, char * slotname)
   #endif
 
   // write all button settings
+
+  // writeEEPROMBin(addr, (char*)buttons, sizeof(slotButtonSettings)*NUMBER_OF_BUTTONS);
+  // addr += sizeof(slotButtonSettings)*NUMBER_OF_BUTTONS; 
+
+
   for (uint8_t i = 0; i < NUMBER_OF_BUTTONS; i++) {
     //load struct slotButtonSettings
     #ifndef EEPROM_PAGEWRITE
@@ -756,10 +770,12 @@ void listIRCommands()
   for (uint8_t i = 0; i < EEPROM_COUNT_IRCOMMAND; i++) {
     //load the base address for the current slot
     address = header.startIRAddress[i];
-    //print out the slot name
-    Serial.print("IRCommand"); Serial.print(i); Serial.print(":");
-    while ((b = readEEPROM(address--)) && b != 0) Serial.write(b); // print slot name
-    Serial.println();
+    if (address) {
+      //print out the slot name
+      Serial.print("IRCommand"); Serial.print(i); Serial.print(":");
+      while ((b = readEEPROM(address--)) && b != 0) Serial.write(b); // print slot name
+      Serial.println();
+    }
   }
 }
 

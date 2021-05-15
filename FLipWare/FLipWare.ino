@@ -70,7 +70,6 @@ struct slotGeneralSettings settings = {      // default settings valus, for type
   0, 0,                             // offset x / y
   0,                                // orientation
   1,                                // bt-mode 1: USB, 2: Bluetooth, 3: both (2 & 3 need daughter board))
-  "",                               // no ir idle code
 };
 
 

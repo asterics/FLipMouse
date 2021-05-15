@@ -48,7 +48,7 @@
 #include "bluetooth.h"
 #include "hid_hal.h"
 
-#define VERSION_STRING "Flipmouse v2.10"
+#define VERSION_STRING "Flipmouse v2.11"
 
 //  V2.11: eeprom access optimization and support for deletion / update of individual slots
 //  V2.10: code size reduction: using floating point math, removed debug level control via AT E0, AT E1 and AT E2
@@ -73,7 +73,7 @@
 // Optional Debug Output Control
 
 // #define DEBUG_OUTPUT_FULL      // if full debug output is desired
-#define DEBUG_OUTPUT_BASIC     // if basic debug output is desired (for eeprom)
+// #define DEBUG_OUTPUT_BASIC     // if basic debug output is desired (for eeprom)
 
 #define WORKINGMEM_SIZE    300        // reserved RAM for working memory (command parser, IR-rec/play)
 #define MAX_SLOTS          7          // maximum number of EEPROM memory slots
@@ -108,8 +108,13 @@
 // #define DOUBLECLICK_MULTIPLIER  5    // CLICK_TIME factor for double clicks
 
 extern uint8_t workingmem[WORKINGMEM_SIZE];    // working memory  (command parser, IR-rec/play)
+extern char keystringBuffer[MAX_KEYSTRINGBUFFER_LEN];  // storage for all button string parameters of a slot
 
 struct slotGeneralSettings {
+
+  char slotName[MAX_NAME_LEN];   // slotname
+  uint16_t keystringBufferLen;   
+  
   uint8_t  stickMode;  // alternative (0) mouse (1) or joystick (2,3,4) mode
   uint8_t  ax;     // acceleration x
   uint8_t  ay;     // acceleration y
@@ -144,7 +149,6 @@ extern uint8_t reportSlotParameters;
 extern uint8_t reportRawValues;
 extern uint32_t buttonStates;
 extern struct slotGeneralSettings settings;
-extern char slotName[MAX_NAME_LEN];
 extern int EmptySlotAddress;
 
 extern const struct atCommandType atCommands[];

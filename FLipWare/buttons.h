@@ -66,14 +66,14 @@ struct buttonDebouncerType {              // holds working data for button debou
 } ;
 
 extern struct slotButtonSettings buttons[NUMBER_OF_BUTTONS];
-extern char* keystringButtons[NUMBER_OF_BUTTONS];
-extern uint16_t keystringBufferLen;
-// extern char keystringBuffer[MAX_KEYSTRINGBUFFER_LEN];
+extern char* buttonKeystrings[NUMBER_OF_BUTTONS];
+
 // extern struct buttonDebouncerType buttonDebouncers[NUMBER_OF_BUTTONS];
 
 // function declarations
-uint16_t storeKeystringButton(uint8_t buttonIndex, char * text);
-uint16_t deleteKeystringButton(uint8_t buttonIndex);
+void initButtonKeystrings();
+char * getButtonKeystring(int num);
+uint16_t setButtonKeystring(uint8_t buttonIndex, char * text);
 void handlePress (int buttonIndex);      // a button was pressed
 void handleRelease (int buttonIndex);    // a button was released
 uint8_t handleButton(int i, uint8_t state);    // button debouncing and longpress detection

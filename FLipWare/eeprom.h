@@ -23,7 +23,6 @@
 
    layout of one slot:
      struct slotGeneralSettings
-     char slotName[len] ('\0' terminated string)
      struct slotButtonSettings[NUMBER_OF_BUTTONS]
      char buttonParameter[len][NUMBER_OF_BUTTONS] ('\0' terminated strings)
 
@@ -31,8 +30,9 @@
    Note that the IR slots start at the top address (0x7FFE, top->down)
 
    layout of one IR command slot:
-     uint8_t countEdges
-     uint8_t timings[edges]
+     char irSlotName[MAX_NAME_LEN]  ('\0' terminated string)
+     uint8_t countEdges     
+     uint16_t timings[countEdges]
 
    0x7FFF  Magic Byte to indicate valid EEPROM content   
 
@@ -42,7 +42,6 @@
 #define _EEPROM_H_
 
 #include "FlipWare.h"
-// #include "Wirelib/Wire.h"
 #include "i2c_t3.h"
 #include <EEPROM.h>
 
@@ -50,16 +49,13 @@
 #define EEPROM_COUNT_IRCOMMAND 20
 
 #define EEPROM_MAX_ADDRESS 0x7FFF
-#define EEPROM_MAGIC_NUMBER 	0x13
-
+#define EEPROM_MAGIC_NUMBER 	0x21
+#define MAX_NAME_LEN  15 
 
 /**
-   Describing the header structure of memory, starting at 0x00.
-   Each slot is started at a fixed address in the EEPROM memory.
-   To reduce the read requests to find slot data, these start addresses
-   are initialized once (it is updated, if something is changed).
-   In adddition, infrared commands are available, which are stored at
-   the end of the memory.
+   header structure, starts at adress 0x00 in EEPROM,
+   contains start and end adresses of configuration slots
+   and IR commands (the IR commands are stored top-down)
 
  * */
 struct storageHeader {
@@ -70,7 +66,10 @@ struct storageHeader {
   uint16_t  versionID;
 };
 
-
+struct irCommandHeader {
+  char irName[MAX_NAME_LEN];
+  uint8_t edges;
+};
 
 /**
    Load the EEPROM header, which contains all start addresses of the
@@ -111,14 +110,6 @@ void listIRCommands();
 
 /**
    Replay one IR command from the EEPROM.
-   The slot is identified by the slot number
-   ATTENTION: if this method is not called from another function (e.g. readIRFromEEPROM()),
-   it is necessary to preload the start adresses via bootstrapSlotAddresses()!!!
- * */
-uint16_t readIRFromEEPROMSlotNumber(uint8_t slotNr, uint16_t *timings, uint8_t maxEdges);
-
-/**
-   Replay one IR command from the EEPROM.
    The slot is identified by the slot name
  * */
 uint16_t readIRFromEEPROM(char * name, uint16_t *timings, uint8_t maxEdges);
@@ -152,11 +143,7 @@ void readFromEEPROM(char * slotname);
 
 
 /**
-   Matcher function to determine the slot number for a given slot name.
-   Currently the GUI is handling all slot assignments via the name.
-   For future implementations, it may base on numbers.
-   To make the development easy, the parsing of slotnames to slot numbers
-   is done in this method (used by read and save functions)
+   Determines the slot number for a given slot name.
  * */
 int8_t slotnameToNumber(char * slotname);
 

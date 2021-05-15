@@ -27,13 +27,14 @@
 /** Device address of the EEPROM **/
 #define deviceaddress 0x50
 #define EEPROM_PAGESIZE 64
-#define EEPROM_PAGEWRITE
-#define I2C_MAX_TRANSFER 64
+#define I2C_WRITE_BUFFER_LEN 64
+#define I2C_READ_BUFFER_LEN  16
 
 /**
    Local copy of all slot and ir command start adresses
  * */
 struct storageHeader header;
+struct irCommandHeader irCommand;
 uint8_t currentSlot;
 
 /**
@@ -68,7 +69,7 @@ void writeEEPROM(unsigned int eeaddress, byte data )
   Wire.send((int)(eeaddress & 0xFF)); // LSB
   Wire.send(data);
   Wire.endTransmission();
-  // delay(5);
+
   #ifdef DEBUG_OUTPUT_FULL
     Serial.print("EEPROM w@");
     Serial.print(eeaddress);
@@ -98,7 +99,7 @@ bool writeEEPROMBin(uint16_t adr, char data[], const uint16_t len) {
   uint32_t timeout;
   uint16_t mask = EEPROM_PAGESIZE - 1;
   while ((bk > 0) && !abort) {
-    i = I2C_MAX_TRANSFER; // maximum data bytes that Wire.h can send in one transaction
+    i = I2C_WRITE_BUFFER_LEN; // maximum data bytes that Wire.h can send in one transaction
     if (i > bk) i = bk; // data block is bigger than Wire.h can handle in one transaction
     if (((adr) & ~mask) != ((((adr) + i) - 1) & ~mask)) { // over page! block would wrap around page
       i = (((adr) | mask) - (adr)) + 1; // shrink the block until it stops at the end of the current page
@@ -129,31 +130,8 @@ bool writeEEPROMBin(uint16_t adr, char data[], const uint16_t len) {
   return !abort;
 }
 
-
-/**
-   store the storageheader permanently to the EEPROM
- * */
-void storeHeader(void) {
-  #ifndef EEPROM_PAGEWRITE
-    for (uint16_t i = 0; i < sizeof(storageHeader); i++)
-      writeEEPROM(i, *((uint8_t*)&header + i));
-  #else
-    writeEEPROMBin(0, (uint8_t*)&header, sizeof(storageHeader));
-  #endif
-
-/*
-  Serial.println("Stored:");
-  for (int i=0;i<EEPROM_COUNT_IRCOMMAND;i++) {
-    Serial.print("IRCommand"); Serial.print(i); Serial.print(":"); 
-    Serial.println(header.startIRAddress[i]);
-  }
-*/
-  
-}
-
 /**
    Read one byte from the EEPROM
-   TODO: add another read function for more than one byte
  * */
 byte readEEPROM(unsigned int eeaddress )
 {
@@ -175,12 +153,39 @@ byte readEEPROM(unsigned int eeaddress )
 }
 
 /**
+   Read multiple bytes from the EEPROM
+ * */
+int readEEPROMBin(char * data, unsigned int eeaddress, int length) {
+    uint16_t bytes_received = 0;
+
+    while (length>0) {
+      if (!eeprom_waitReady()) return(0);
+      Wire.beginTransmission(deviceaddress);
+      Wire.send((uint8_t)(eeaddress >> 8));
+      Wire.send((uint8_t)(eeaddress & 0xff));
+      Wire.endTransmission();
+
+      uint16_t bytes_requested = min(length,I2C_READ_BUFFER_LEN);
+      Wire.requestFrom(deviceaddress,bytes_requested);
+  
+      while (Wire.available() && bytes_requested--) {
+          *data++ = Wire.receive();
+          length--;
+          eeaddress++;
+      }
+    }
+
+    return bytes_received;
+}
+
+
+/**
    move multiple slots in EEPROM 
    nr: the first slot which should be moved 
    bytesToMove: postive (increase slot size) or negative (shrink slot size)
  * */
 void moveSlotsInEEPROM(int nr, int bytesToMove) {
-  uint8_t pagebuf[I2C_MAX_TRANSFER];
+  uint8_t pagebuf[I2C_WRITE_BUFFER_LEN];
   uint16_t targetAdr, b;
 
   if (bytesToMove > 0) {
@@ -197,9 +202,9 @@ void moveSlotsInEEPROM(int nr, int bytesToMove) {
         #endif
         for (int t = header.startSlotAddress[i]; t < header.endSlotAddress[i]; t++) {
           pagebuf[b++] = readEEPROM(t);
-          if (b == I2C_MAX_TRANSFER) {
-            writeEEPROMBin(targetAdr, pagebuf, I2C_MAX_TRANSFER);
-            targetAdr += I2C_MAX_TRANSFER;
+          if (b == I2C_WRITE_BUFFER_LEN) {
+            writeEEPROMBin(targetAdr, pagebuf, I2C_WRITE_BUFFER_LEN);
+            targetAdr += I2C_WRITE_BUFFER_LEN;
             b = 0;
           }
         }
@@ -217,12 +222,8 @@ void moveSlotsInEEPROM(int nr, int bytesToMove) {
     #endif
     for (int i = EEPROM_COUNT_SLOTS - 1; i > nr; i--) {
       if (header.startSlotAddress[i] != 0) {
-
-        // for (int t = header.endSlotAddress[i] - 1; t >= header.startSlotAddress[i]; t--)
-        //   writeEEPROM(t + bytesToMove, readEEPROM(t));
-
         targetAdr = header.endSlotAddress[i] + bytesToMove;
-        b = I2C_MAX_TRANSFER;
+        b = I2C_WRITE_BUFFER_LEN;
         #ifdef DEBUG_OUTPUT_BASIC
           Serial.print("move slot "); Serial.println(i);
         #endif
@@ -230,11 +231,11 @@ void moveSlotsInEEPROM(int nr, int bytesToMove) {
           targetAdr--; b--;
           pagebuf[b] = readEEPROM(t);
           if (b == 0) {
-            writeEEPROMBin(targetAdr, pagebuf, I2C_MAX_TRANSFER);
-            b = I2C_MAX_TRANSFER;
+            writeEEPROMBin(targetAdr, pagebuf, I2C_WRITE_BUFFER_LEN);
+            b = I2C_WRITE_BUFFER_LEN;
           }
         }
-        if (b < I2C_MAX_TRANSFER) writeEEPROMBin(targetAdr, pagebuf + b, I2C_MAX_TRANSFER - b);
+        if (b < I2C_WRITE_BUFFER_LEN) writeEEPROMBin(targetAdr, pagebuf + b, I2C_WRITE_BUFFER_LEN - b);
 
         header.startSlotAddress[i] += bytesToMove;
         header.endSlotAddress[i] += bytesToMove;
@@ -243,6 +244,12 @@ void moveSlotsInEEPROM(int nr, int bytesToMove) {
   }
 }
 
+/**
+   store the storageheader permanently to the EEPROM
+ * */
+void storeHeader(void) {
+  writeEEPROMBin(0, (uint8_t*)&header, sizeof(storageHeader));
+}
 
 
 /**
@@ -293,24 +300,20 @@ void saveToEEPROM(char * slotname)
 void saveToEEPROMSlotNumber(int8_t nr, char * slotname)
 {
   uint16_t size = 0;
-  uint16_t addr = 0; //address pointer 1
-  uint16_t addr2 = 0; //address pointer 2
+  uint16_t addr = 0; //address pointer
   uint8_t* p = (uint8_t *)&settings; //pointer to the global settings
 
-  //determine the size of this slot
+  // determine the size of this slot
   size += sizeof(slotGeneralSettings);
-  size += (strlen(slotname)+1);  // count slotname lenght (incl. '\0')
   size += sizeof(slotButtonSettings)*NUMBER_OF_BUTTONS;
-
-  for (uint8_t i = 0; i < NUMBER_OF_BUTTONS; i++)
-    size += (strlen(keystringButtons[i])+1);
+  size += settings.keystringBufferLen;
 
   #ifdef DEBUG_OUTPUT_BASIC
     Serial.print("Slotsize:");
     Serial.println(size);
   #endif
 
-  //if slot is not empty: overwrite (eventually move other slots)
+  // if slot is not empty: overwrite (eventually move other slots)
   if (header.startSlotAddress[nr] != 0) {
     int old_size = header.endSlotAddress[nr] - header.startSlotAddress[nr];
     #ifdef DEBUG_OUTPUT_BASIC
@@ -324,11 +327,9 @@ void saveToEEPROMSlotNumber(int8_t nr, char * slotname)
   }
 
   /** save this slot **/
-  //first slot, start right after the storage header
-  if (nr == 0)
-    addr = sizeof(storageHeader);
-  else
-    addr = header.endSlotAddress[nr - 1];
+  // first slot, start right after the storage header
+  if (nr == 0)  addr = sizeof(storageHeader);
+  else addr = header.endSlotAddress[nr - 1];
 
   header.startSlotAddress[nr] = addr;
 
@@ -337,57 +338,17 @@ void saveToEEPROMSlotNumber(int8_t nr, char * slotname)
     Serial.println(addr);
   #endif
 
-  //save the general settings to the global settings struct
-  #ifndef EEPROM_PAGEWRITE
-    p = (uint8_t *)&settings;
-    for (uint16_t t = 0; t < sizeof(slotGeneralSettings); t++)
-      writeEEPROM(addr++, *(p + t));
-  #else
-    writeEEPROMBin(addr, (uint8_t *)&settings, sizeof(slotGeneralSettings));
-    addr += sizeof(slotGeneralSettings);
-  #endif
-
-  //write the slotname
-  #ifndef EEPROM_PAGEWRITE
-    addr2 = 0;
-    do {
-      writeEEPROM(addr++, *(slotname + addr2));
-      addr2++;
-    } while (*(slotname + addr2 - 1) != '\0');
-  #else
-    writeEEPROMBin(addr, slotname, strlen(slotname)+1);
-    addr += (strlen(slotname)+1);
-  #endif
+  // save the general settings to the global settings struct
+  writeEEPROMBin(addr, (uint8_t *)&settings, sizeof(slotGeneralSettings));
+  addr += sizeof(slotGeneralSettings);
 
   // write all button settings
+  writeEEPROMBin(addr, (char*)buttons, sizeof(slotButtonSettings)*NUMBER_OF_BUTTONS);
+  addr += sizeof(slotButtonSettings)*NUMBER_OF_BUTTONS; 
 
-  // writeEEPROMBin(addr, (char*)buttons, sizeof(slotButtonSettings)*NUMBER_OF_BUTTONS);
-  // addr += sizeof(slotButtonSettings)*NUMBER_OF_BUTTONS; 
-
-
-  for (uint8_t i = 0; i < NUMBER_OF_BUTTONS; i++) {
-    //load struct slotButtonSettings
-    #ifndef EEPROM_PAGEWRITE
-      p = (uint8_t *)&buttons[i];
-      for (uint16_t t = 0; t < sizeof(slotButtonSettings); t++)
-        writeEEPROM(addr++, *(p + t));
-    #else
-      writeEEPROMBin(addr, (uint8_t *)&buttons[i], sizeof(slotButtonSettings));
-      addr += sizeof(slotButtonSettings); 
-    #endif
-
-    //add additional payload
-    #ifndef EEPROM_PAGEWRITE
-      p = (uint8_t *)keystringButtons[i];
-      for (uint16_t t = 0; t < MAX_KEYSTRING_LEN; t++) {
-        writeEEPROM(addr++, *(p + t));
-        if (*(p + t) == 0) break;
-      }
-    #else
-      writeEEPROMBin(addr, keystringButtons[i], strlen(keystringButtons[i])+1);
-      addr += strlen(keystringButtons[i])+1;
-    #endif
-  }
+  // write all keystrings
+  writeEEPROMBin(addr, keystringBuffer, settings.keystringBufferLen);
+  addr += settings.keystringBufferLen;
 
   /** update the header table */
   header.endSlotAddress[nr] = addr;
@@ -406,123 +367,34 @@ void saveToEEPROMSlotNumber(int8_t nr, char * slotname)
 }
 
 /**
-   Matcher function to determine the slot number for a given slot name.
-   Currently the GUI is handling all slot assignments via the name.
-   For future implementations, it may base on numbers.
-   To make the development easy, the parsing of slotnames to slot numbers
-   is done in this method (used by read and save functions)
+   slotnameToNumber(char * slotname)
+   Determines the slot number for a given slot name
  * */
 int8_t slotnameToNumber(char * slotname)
 {
   uint16_t address; //current EEPROM address
-  uint8_t matches;
+  char tmp[MAX_NAME_LEN];
 
   //iterate all possible slots
   for (uint8_t i = 0; (i < EEPROM_COUNT_SLOTS) && header.startSlotAddress[i]; i++) {
     //load the base address for the current slot
     address = header.startSlotAddress[i];
-    //skip the general settings, we only need the slot names
-    address += sizeof(slotGeneralSettings);
-    //reset the match flag
-    matches = 1;
     //compare the slotname
-    for (unsigned int t = 0; t < MAX_NAME_LEN; t++) {
-      //compare byte for byte
-      if (*(slotname + t) != readEEPROM(address + t)) {
-        //if one byte doesn't match, reset match flag and break the for loop
-        matches = 0;
-        #ifdef DEBUG_OUTPUT_FULL
-          Serial.print("Names don't match @");
-          Serial.print(t);
-          Serial.print(" ");
-          Serial.print(*(slotname + t));
-          Serial.print("!=");
-          Serial.println(readEEPROM(address + t));
-        #endif
-        break;
-      }
-      //if the end of the string is reached, break the for loop
-      if (*(slotname + t) == '\0') break;
-    }
-
-    //if it matches, return the number
-    if (matches) return i;
+    readEEPROMBin(tmp, address, MAX_NAME_LEN);
+    if (!strncmp(tmp, slotname,MAX_NAME_LEN)) 
+      return i;   // name found!
   }
   #ifdef DEBUG_OUTPUT_BASIC
     Serial.print("No slot found for ");
     Serial.println(slotname);
   #endif
   return -1;
-}
-
-/**
-   Matcher function to determine the slot number for a given slot name (IR command)
-   Currently the GUI is handling all slot assignments via the name.
-   For future implementations, it may base on numbers.
-   To make the development easy, the parsing of slotnames to slot numbers
-   is done in this method (used by read and save functions)
- * */
-int8_t slotnameIRToNumber(char * slotname)
-{
-  uint16_t address; //current EEPROM address
-  uint8_t matches;
-
-  //iterate all possible slots
-  for (uint8_t i = 0; (i < EEPROM_COUNT_IRCOMMAND) && header.startIRAddress[i]; i++)  {
-    //load the base address for the current slot
-    address = header.startIRAddress[i];
-
-    //reset the match flag
-    matches = 1;
-
-    //compare the slotname
-    for (unsigned int t = 0; t < MAX_NAME_LEN; t++) {
-      //compare byte for byte
-      if (*(slotname + t) != readEEPROM(address - t)) {
-        //if one byte doesn't match, reset match flag and break the for loop
-        matches = 0;
-        #ifdef DEBUG_OUTPUT_FULL
-          Serial.print("Names don't match @");
-          Serial.print(t);
-          Serial.print(" ");
-          Serial.print(*(slotname + t));
-          Serial.print("!=");
-          Serial.println(readEEPROM(address - t));
-        #endif
-        break;
-      }
-      //if the end of the string is reached, break the for loop
-      if (*(slotname + t) == '\0') break;
-    }
-
-    //if it matches, return the number
-    if (matches) return i;
-  }
-  #ifdef DEBUG_OUTPUT_BASIC
-    Serial.print("No slot found for ");
-    Serial.println(slotname);
-  #endif
-  return -1;
-}
-
-/**
-   print all slot settings and button mode to serial 
- * */
-void printAllSlots(void) {
-  uint8_t actSlot=0;
-  reportSlotParameters = REPORT_ALL_SLOTS;
-  while (header.startSlotAddress[actSlot]) {
-    readFromEEPROMSlotNumber(actSlot, false);
-    actSlot++;
-  }
-  reportSlotParameters = REPORT_NONE;
-  readFromEEPROMSlotNumber(0, true);
 }
 
 
 /**
    Load one slot by the given slotname
-   If there is no slotname give, load next slot...
+   If there is no slotname given: load next slot...
  * */
 void readFromEEPROM(char * slotname)
 {
@@ -547,7 +419,7 @@ void readFromEEPROM(char * slotname)
  * */
 void readFromEEPROMSlotNumber(uint8_t nr, bool playTone)
 {
-  uint8_t* p = (uint8_t *)&settings;
+  uint8_t* p;
   uint16_t address;
 
   //fence the slot number, avoiding out of array index problems
@@ -556,37 +428,21 @@ void readFromEEPROMSlotNumber(uint8_t nr, bool playTone)
 
   actSlot=nr;
   address = header.startSlotAddress[nr];
-   
-  //save the general settings to the global settings struct
-  for (uint16_t t = 0; t < sizeof(slotGeneralSettings); t++)
-    *p++ = readEEPROM(address++);
 
-  //read the slotname
-  p = (uint8_t *)&slotName;
-  do {
-    *p++ = readEEPROM(address++);
-  } while (*(p - 1) != '\0');
-
-  #ifdef DEBUG_OUTPUT_FULL
-    Serial.print("found slotname "); Serial.println(slotName);
+  // load the general settings struct
+  readEEPROMBin((uint8_t *)&settings, address, sizeof(slotGeneralSettings));
+  address+=sizeof(slotGeneralSettings);
+  #ifdef DEBUG_OUTPUT_BASIC
+    Serial.print("read slotname "); Serial.println(settings.slotName);
   #endif
 
-  //load all button settings
-  for (uint8_t i = 0; i < NUMBER_OF_BUTTONS; i++) {
-    //load struct slotButtonSettings
-    p = (uint8_t *)&buttons[i];
-    for (uint16_t t = 0; t < sizeof(slotButtonSettings); t++)
-      *(p + t) = readEEPROM(address++);
+  // load all button settings
+  readEEPROMBin((char *)buttons, address, sizeof(slotButtonSettings)*NUMBER_OF_BUTTONS);
+  address+=sizeof(slotButtonSettings)*NUMBER_OF_BUTTONS;
 
-    //load additional payload
-    p = (uint8_t *)workingmem;
-    uint8_t val;
-    do {
-      val=readEEPROM(address++);
-      *p++ = val; 
-    } while (val);
-    storeKeystringButton(i, (char *) workingmem);
-  }
+  // load keystring buffer
+  readEEPROMBin(keystringBuffer, address, settings.keystringBufferLen);
+  initButtonKeystrings();
 
   if (reportSlotParameters != REPORT_NONE)
     printCurrentSlot();
@@ -600,22 +456,35 @@ void readFromEEPROMSlotNumber(uint8_t nr, bool playTone)
     Serial.println("END");   // important: end marker for slot parameter list (command "load all" - AT LA)
 }
 
-/**
-   This function deletes all configuration slots in EEPROM
- * */
-void deleteSlots()
-{
-  #ifdef DEBUG_OUTPUT_BASIC
-    Serial.println("Deleting all slots");
-  #endif
 
-  // TBD: delete individual slot / move other slots
-  for (uint8_t i = 0; i < EEPROM_COUNT_SLOTS; i++)  {
-    header.startSlotAddress[i] = 0;
-    header.endSlotAddress[i] = 0;
+//
+//  Infrared Code Storage
+//
+
+/**
+   Determines the irSlot number for a given ir Name
+ * */
+int8_t slotnameIRToNumber(char * irName)
+{
+  uint16_t address; //current EEPROM address
+
+  //iterate all possible slots
+  for (uint8_t i = 0; (i < EEPROM_COUNT_IRCOMMAND) && header.startIRAddress[i]; i++)  {
+    //load the base address for the current slot
+    address = header.startIRAddress[i] - sizeof (irCommand);
+    readEEPROMBin((uint8_t *)&irCommand, address, sizeof (irCommand));
+    //compare the slotname
+    if (!strcmp(irCommand.irName, irName))
+      return i;  // IR slotname found!
   }
-  storeHeader();
+  #ifdef DEBUG_OUTPUT_BASIC
+    Serial.print("No IR slotName found for ");
+    Serial.println(irName);
+  #endif
+  return -1;
 }
+
+
 
 /**
    This function deletes one IR command
@@ -696,13 +565,10 @@ void saveIRToEEPROM(char * name, uint16_t *timings, uint8_t cntEdges)
 void saveIRToEEPROMSlotNumber(uint8_t nr, char * name, uint16_t *timings, uint8_t cntEdges)
 {
   uint16_t size;
-  uint16_t addr = 0; //address pointer 1
-  uint16_t addr2 = 0; //address pointer 2
+  uint16_t addr = 0; 
 
   //determine the size of this slot
-  size = strlen(name)+1;
-  size++;  // count edges field
-  size += cntEdges * 2;
+  size = sizeof (irCommand) + cntEdges * 2;
 
   #ifdef DEBUG_OUTPUT_BASIC
     Serial.print("IR slot size:");
@@ -710,8 +576,7 @@ void saveIRToEEPROMSlotNumber(uint8_t nr, char * name, uint16_t *timings, uint8_
   #endif
 
   //if IR slot is not empty: overwrite (eventually move other IR slots)
-  if (header.startIRAddress[nr] != 0)
-  {
+  if (header.startIRAddress[nr] != 0)  {
     int old_size = header.startIRAddress[nr] - header.endIRAddress[nr];
     #ifdef DEBUG_OUTPUT_BASIC
       Serial.print("old IR slotsize:");
@@ -735,22 +600,16 @@ void saveIRToEEPROMSlotNumber(uint8_t nr, char * name, uint16_t *timings, uint8_
     Serial.println(addr);
   #endif
 
-  // TBD: improve efficiency / reverse order / page writes?
-  //write the slotname
-  addr2 = 0;
-  do {
-    writeEEPROM(addr--, *(name + addr2));
-    addr2++;
-  } while (*(name + addr2 - 1) != '\0');
+  strcpy(irCommand.irName, name);
+  irCommand.edges=cntEdges;
 
-  //write count of edges
-  writeEEPROM(addr--, cntEdges);
+  // write name and edgecount
+  addr-=sizeof(irCommand);
+  writeEEPROMBin(addr, (uint8_t *)&irCommand, sizeof(irCommand));
 
-  //write all edges  
-  for (uint8_t i = 0; i < cntEdges; i++)  {
-    writeEEPROM(addr--, (uint8_t) ((*(timings + i)) & 0xff));
-    writeEEPROM(addr--, (uint8_t) ((*(timings + i)) >> 8));
-  }
+  // write all edges  
+  addr-=cntEdges*2;
+  writeEEPROMBin(addr, (uint8_t *)timings, cntEdges*2);
 
   /** update the header table */
   header.endIRAddress[nr] = addr;
@@ -758,87 +617,35 @@ void saveIRToEEPROMSlotNumber(uint8_t nr, char * name, uint16_t *timings, uint8_
 }
 
 /**
-   Print out all slotnames to the serial interface
-   Used by the PC-GUI to load all available slot names
- * */
-void listIRCommands()
-{
-  uint16_t address; //current EEPROM address
-  uint8_t b;
-
-  //iterate all possible slots
-  for (uint8_t i = 0; i < EEPROM_COUNT_IRCOMMAND; i++) {
-    //load the base address for the current slot
-    address = header.startIRAddress[i];
-    if (address) {
-      //print out the slot name
-      Serial.print("IRCommand"); Serial.print(i); Serial.print(":");
-      while ((b = readEEPROM(address--)) && b != 0) Serial.write(b); // print slot name
-      Serial.println();
-    }
-  }
-}
-
-/**
-   Read one IR command from the EEPROM.
-   The IR command is identified by irNr,
-   The timing values are read from EEPROM and stored into the timings array
- * */
-uint16_t readIRFromEEPROMSlotNumber(uint8_t irNr, uint16_t *timings, uint8_t maxEdges)
-{
-  uint8_t* p;
-  uint8_t irEdges = 0;
-  uint16_t address = header.startIRAddress[irNr];
-
-  if (irNr > EEPROM_COUNT_IRCOMMAND) return 0;
-  #ifdef DEBUG_OUTPUT_BASIC
-    Serial.print("Load IR command by nr: ");
-    Serial.print(irNr);
-    Serial.print(" from address: ");
-    Serial.println(address);
-  #endif
-
-  while (readEEPROM(address--)) ;   // skip IR name
-  
-  irEdges = readEEPROM(address--);  // read edges count
-
-  //load all IR command edges
-  for (uint8_t i = 0; i < maxEdges; i++)
-  {
-    if (i == irEdges) break;
-    *(timings + i) = (uint16_t) readEEPROM(address--);
-    *(timings + i) +=  ((uint16_t)readEEPROM(address--)) << 8;
-  }
-
-  //return the count of available edges (used by the IR parser)
-  return irEdges;
-}
-
-/**
-   Replay one IR command from the EEPROM.
-   The slot is identified by the slot name
+   Load one IR command from the EEPROM.
+   identified by the command name
  * */
 uint16_t readIRFromEEPROM(char * name, uint16_t *timings, uint8_t maxEdges)
 {
   int8_t nr = slotnameIRToNumber(name);
 
-  if (nr >= 0) {
+  if (nr < 0) {
     #ifdef DEBUG_OUTPUT_FULL
-      Serial.print("Load IR command ");
-      Serial.print(name);
-      Serial.print("@");
-      Serial.println(nr);
-  #endif
-
-    //call the method which loads the data
-    return readIRFromEEPROMSlotNumber(nr, timings, maxEdges);
-  } else {
-    #ifdef DEBUG_OUTPUT_FULL
-      Serial.print("Could not Load IR command ");
+      Serial.print("Could not find IR command ");
       Serial.println(name);
     #endif
     return 0;
   }
+
+  uint16_t address = header.startIRAddress[nr];
+
+  #ifdef DEBUG_OUTPUT_BASIC
+    Serial.print("Load IR command by nr: ");
+    Serial.print(nr);
+    Serial.print(" from address: ");
+    Serial.println(address);
+  #endif
+
+  address-=sizeof(irCommand)+irCommand.edges*2 ;   // set address to ir data start!
+  readEEPROMBin((uint8_t *) timings, address, irCommand.edges);
+
+  //return the count of available edges (used by the IR parser)
+  return irCommand.edges;
 }
 
 
@@ -848,24 +655,22 @@ uint16_t readIRFromEEPROM(char * name, uint16_t *timings, uint8_t maxEdges)
  * */
 void bootstrapSlotAddresses()
 {
-  uint16_t versionID = 0;
   uint8_t init_needed = 0;
+  uint16_t versionID = 0;
 
-  for (uint16_t i = 0; i < sizeof(storageHeader); i++)
-    *((uint8_t *)&header + i) = readEEPROM(i);
- 
-  for (uint8_t i = 0; i < strlen(VERSION_STRING); i++)
-    versionID += VERSION_STRING[i];     // create version ID from version string
-
-  // check if we need to initialize EEPROM 
-  // no magic byte found:
+  // check if we need to initialize EEPROM (magic byte not found)
   if (readEEPROM(EEPROM_MAX_ADDRESS) != EEPROM_MAGIC_NUMBER)
     init_needed=1;
 
-  // firmware version changed:
-  // if (versionID != header.versionID)
-  //   init_needed=1;
-  
+  for (uint8_t i = 0; i < strlen(VERSION_STRING); i++)
+    versionID += VERSION_STRING[i];     // create version ID from version string
+
+  /*
+  // check if firmware version changed:
+    if (versionID != header.versionID)
+      init_needed=1;
+  */
+
   if (init_needed) {
     makeTone(TONE_CHANGESLOT, 4);
     Serial.println("Initializing EEPROM!");
@@ -874,24 +679,45 @@ void bootstrapSlotAddresses()
     saveToEEPROMSlotNumber(0, "mouse");   // save default settings to first slot
     writeEEPROM(EEPROM_MAX_ADDRESS,EEPROM_MAGIC_NUMBER);  // store magic number!
   }
+  else {
+    // load header from EEPROM storage!
+    readEEPROMBin((uint8_t *)&header,0,sizeof(storageHeader));
+  }
 
   #ifdef DEBUG_OUTPUT_BASIC
     Serial.println("EEPROM slot address struct:");
     for (uint8_t i = 0; (i < EEPROM_COUNT_SLOTS) && header.startSlotAddress[i]; i++) {
-      Serial.print(i);
-      Serial.print(": ");
+      Serial.print(i); Serial.print(": ");
       Serial.println(header.startSlotAddress[i]);
     }
   #endif
   #ifdef DEBUG_OUTPUT_FULL
     Serial.println("EEPROM IR address struct:");
     for (uint8_t i = 0; (i < EEPROM_COUNT_IRCOMMAND) && header.startIRAddress[i]; i++) {
-      Serial.print(i);
-      Serial.print(": ");
+      Serial.print(i); Serial.print(": ");
       Serial.println(header.startIRAddress[i]);
     }
   #endif
 }
+
+
+/**
+   This function deletes all configuration slots in EEPROM
+ * */
+void deleteSlots()
+{
+  #ifdef DEBUG_OUTPUT_BASIC
+    Serial.println("Deleting all slots");
+  #endif
+
+  // TBD: delete individual slot / move other slots
+  for (uint8_t i = 0; i < EEPROM_COUNT_SLOTS; i++)  {
+    header.startSlotAddress[i] = 0;
+    header.endSlotAddress[i] = 0;
+  }
+  storeHeader();
+}
+
 
 /**
    Print out all slotnames to the serial interface
@@ -900,17 +726,54 @@ void bootstrapSlotAddresses()
 void listSlots()
 {
   uint16_t address; //current EEPROM address
-  uint8_t b;
+  char tmp[MAX_NAME_LEN];
 
   //iterate all possible slots
   for (uint8_t i = 0; (i < EEPROM_COUNT_SLOTS) && header.startSlotAddress[i]; i++)  {
-    //load the base address for the current slot
+    // load the base address for the current slot
     address = header.startSlotAddress[i];
-    //skip the general settings, we only need the slot names
-    address += sizeof(slotGeneralSettings);
-    //print out the slot name
+    // print out the slot name (assumed to be located at the beginning of general settings)
     Serial.print("Slot"); Serial.print(i); Serial.print(":");
-    while ((b = readEEPROM(address++)) && b != 0) Serial.write(b); // print slot name
-    Serial.println();
+    readEEPROMBin(tmp, address, MAX_NAME_LEN);
+    Serial.println(tmp);
   }
+}
+
+
+/**
+   Print out all slotnames to the serial interface
+   Used by the PC-GUI to load all available slot names
+ * */
+void listIRCommands()
+{
+  uint16_t address; //current EEPROM address
+  char tmp[MAX_NAME_LEN];
+
+  //iterate all possible slots
+  for (uint8_t i = 0; i < EEPROM_COUNT_IRCOMMAND; i++) {
+    //load the base address for the current slot
+    address = header.startIRAddress[i];
+    if (address) {
+      //print out the irSlot name
+      Serial.print("IRCommand"); Serial.print(i); Serial.print(":");
+      address-=sizeof(irCommand);
+      readEEPROMBin(tmp, address, MAX_NAME_LEN);
+      Serial.println(tmp);
+    }
+  }
+}
+
+
+/**
+   print all slot settings and button mode to serial 
+ * */
+void printAllSlots(void) {
+  uint8_t actSlot=0;
+  reportSlotParameters = REPORT_ALL_SLOTS;
+  while (header.startSlotAddress[actSlot]) {
+    readFromEEPROMSlotNumber(actSlot, false);
+    actSlot++;
+  }
+  reportSlotParameters = REPORT_NONE;
+  readFromEEPROMSlotNumber(0, true);
 }

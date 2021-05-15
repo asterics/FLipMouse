@@ -46,7 +46,7 @@ const struct atCommandType atCommands[] PROGMEM = {
 
 void printCurrentSlot()
 {
-  Serial.print("Slot:");  Serial.println(slotName);
+  Serial.print("Slot:");  Serial.println(settings.slotName);
   Serial.print("AT AX "); Serial.println(settings.ax);
   Serial.print("AT AY "); Serial.println(settings.ay);
   Serial.print("AT DX "); Serial.println(settings.dx);
@@ -74,8 +74,6 @@ void printCurrentSlot()
     Serial.print("AT ");
     int actCmd = buttons[i].mode;
     char cmdStr[4];
-    // Serial.print("mode ");
-    // Serial.println(actCmd);
         
     strcpy_FM(cmdStr, (uint_farptr_t_FM)atCommands[actCmd].atCmd);
     Serial.print(cmdStr);
@@ -83,7 +81,7 @@ void printCurrentSlot()
     {
       case PARTYPE_UINT:
       case PARTYPE_INT:  Serial.print(" "); Serial.print(buttons[i].value); break;
-      case PARTYPE_STRING: Serial.print(" "); Serial.print(keystringButtons[i]); break;
+      case PARTYPE_STRING: Serial.print(" "); Serial.print(buttonKeystrings[i]); break;
     }
     Serial.println("");
   }
@@ -106,8 +104,7 @@ void performCommand (uint8_t cmd, int16_t par1, char * keystring, int8_t periodi
 #endif
     buttons[actButton - 1].mode = cmd;
     buttons[actButton - 1].value = par1;
-    deleteKeystringButton(actButton - 1);
-    if (keystring != 0) storeKeystringButton(actButton - 1, keystring);
+    setButtonKeystring(actButton - 1, keystring);
     actButton = 0;
     return;  // do not actually execute the command (just store it)
   }
@@ -244,8 +241,10 @@ void performCommand (uint8_t cmd, int16_t par1, char * keystring, int8_t periodi
     case CMD_SA:
       release_all();
       if (keystring) {
-        if ((strlen(keystring) > 0) && (strlen(keystring) < MAX_NAME_LEN))
+        if ((strlen(keystring) > 0) && (strlen(keystring) < MAX_NAME_LEN-1)) {
+          strcpy (settings.slotName, keystring);  // store current slot name
           saveToEEPROM(keystring);
+        }
         makeTone(TONE_INDICATE_PUFF, 0);
         Serial.println("OK");
       }
@@ -253,7 +252,6 @@ void performCommand (uint8_t cmd, int16_t par1, char * keystring, int8_t periodi
     case CMD_LO:
       if (keystring) {
         release_all();
-        // reportSlotParameters=REPORT_ONE_SLOT;
         readFromEEPROM(keystring);
         reportSlotParameters = REPORT_NONE;
       }
@@ -407,7 +405,7 @@ void performCommand (uint8_t cmd, int16_t par1, char * keystring, int8_t periodi
       Serial.println("record IR command");
 #endif
       if (keystring) {
-        if ((strlen(keystring) > 0) && (strlen(keystring) < MAX_NAME_LEN))
+        if ((strlen(keystring) > 0) && (strlen(keystring) < MAX_NAME_LEN-1))
           record_IR_command(keystring);
       }
       break;

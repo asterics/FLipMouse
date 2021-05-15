@@ -187,6 +187,7 @@ namespace MouseApp2
         const string PREFIX_IRCOMMAND_NAME = "IRCOMMAND";
         const string PREFIX_IRCOMMAND_RECORDED = "IR: RECORDED ";
         const string PREFIX_IRCOMMAND_TIMEOUT = "IR_TIMEOUT:";
+        const string PREFIX_ACKNOWLEDGE_MESSAGE = "OK";
 
 
         public AllCommands allCommands = new AllCommands();

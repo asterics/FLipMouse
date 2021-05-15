@@ -143,6 +143,10 @@ namespace MouseApp2
             {
                 gotID(newLine);
             }
+            else if (newLine.ToUpper().Contains(PREFIX_ACKNOWLEDGE_MESSAGE))  // read flipmouse ID 
+            {
+                gotOK(newLine);
+            }
             else addToLog(newLine);
 
         }
@@ -258,7 +262,10 @@ namespace MouseApp2
         {
             addToLog("Timeout ! No IR Command recorded ..." + newIRCommandName);
         }
-
+        public void gotOK(String newATCommand)
+        {
+            acknowledge = true;
+        }
 
         private void disconnect()
         {
@@ -290,6 +297,7 @@ namespace MouseApp2
         {
             if (serialPort1.IsOpen)
             {
+                int temp = actSlot;
                 Cursor.Current = Cursors.WaitCursor;
                 sendEndReportingCommand();
                 sendClearCommand();  // delete all slots on FlipMouse
@@ -297,15 +305,20 @@ namespace MouseApp2
                 slotCounter = 0;
                 for (slotCounter = 0; slotCounter < slots.Count; slotCounter++)
                 {
+                    acknowledge = false;
                     displaySlot(slotCounter);
                     sendApplyCommands();
                     sendSaveSlotCommands(slots[slotCounter].slotName);
                     addToLog("Slot " + slots[slotCounter].slotName + " is stored into FLipmouse.");
-                    Thread.Sleep(200);  // time to store slot in flipmouse
+//                    while (!acknowledge) { 
+//                       Thread.Sleep(10);  // time to store slot in flipmouse
+//                       Application.DoEvents();
+//                    }
                 }
                 addToLog("The settings were stored!");
-                displaySlot(0);
-                sendLoadSlotCommand(slots[0].slotName);
+                actSlot = temp;
+                displaySlot(actSlot);
+                sendLoadSlotCommand(slots[actSlot].slotName);
                 sendCalibrationCommand();
                 sendStartReportingCommand();
                 Thread.Sleep(1000);  // time to activate config in flipmouse

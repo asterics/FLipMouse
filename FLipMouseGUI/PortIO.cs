@@ -195,7 +195,6 @@ namespace MouseApp2
             }
 
             irCommandBox.Items.Clear();
-            irIdleSequenceBox.Items.Clear();
             sendListIRCommand();
             sendStartReportingCommand();   // start reporting raw values !
 
@@ -231,7 +230,6 @@ namespace MouseApp2
             irCommandBox.Items.Add(newIRCommandName);
             irCommandBox.Text = newIRCommandName;
             //irCommandBox.SelectedIndex=0;
-            irIdleSequenceBox.Items.Add(newIRCommandName);
 
             // update all infrared code selection boxes
             // TDB: improve this ... (should be performed only once, after the last received ir-code)
@@ -253,7 +251,6 @@ namespace MouseApp2
         {
             addToLog(newIRCommandName);
             irCommandBox.Items.Clear();
-            irIdleSequenceBox.Items.Clear();
             sendListIRCommand();
         }
 

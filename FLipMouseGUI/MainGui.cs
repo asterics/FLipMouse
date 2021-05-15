@@ -142,10 +142,6 @@ namespace MouseApp2
                 }
                 slots[slotNumber].settingStrings.Add(actSettingString);
             }
-            if (irIdleSequenceBox.Text != "")
-            {
-                slots[slotNumber].settingStrings.Add("AT IO " + irIdleSequenceBox.Text);
-            }
         }
 
         public void displaySlot(int slotNumber)
@@ -1436,10 +1432,8 @@ namespace MouseApp2
         {
             if (irCommandBox.Text.Length == 0) return;
             addToLog("Playing IR Command " + irCommandBox.Text);
-            sendPlayIRCommand(irCommandBox.Text);
-            
+            sendPlayIRCommand(irCommandBox.Text);       
         }
-
 
         private void deleteIRButton_Click(object sender, EventArgs e)
         {
@@ -1448,7 +1442,6 @@ namespace MouseApp2
             sendClearIRCommand(irCommandBox.Text);
 
             irCommandBox.Items.Clear();
-            irIdleSequenceBox.Items.Clear();
             sendListIRCommand();
         }
 
@@ -1458,7 +1451,6 @@ namespace MouseApp2
             sendClearIRCommands();
 
             irCommandBox.Items.Clear();
-            irIdleSequenceBox.Items.Clear();
             sendListIRCommand();
         }
 
@@ -1466,11 +1458,6 @@ namespace MouseApp2
         {
             storeSlot(actSlot);
             storeSettingsToFLipmouse();
-        }
-
-        private void clearIROffButton_Click(object sender, EventArgs e)
-        {
-            irIdleSequenceBox.Text = "";
         }
 
         private void copy_orientation_Click(object sender, EventArgs e)

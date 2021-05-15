@@ -127,7 +127,6 @@
           AT IW           wipe infrared memory (clear all codes)
           AT IL           lists all stored infrared command names
           AT IT <uint>    set code timeout value for IR Recording (e.g. "AT IT 10" sets 10 milliseconds timeout)
-          AT II           set IR - idle sequence command name (e.g. "AT II idlecode")
 
    supported key identifiers for key commands (AT KP/KH/KR/KT):
  
@@ -260,7 +259,6 @@ namespace MouseApp2
             allCommands.add(new Command("AT IH", PARTYPE_STRING, "Hold Infrared Command", COMBOENTRY_YES, GUITYPE_IRSELECT));
             allCommands.add(new Command("AT IC", PARTYPE_STRING, "Clear Infrared Command", COMBOENTRY_NO, GUITYPE_STANDARD));
             allCommands.add(new Command("AT IL", PARTYPE_NONE,   "List Infrared Commands", COMBOENTRY_NO, GUITYPE_STANDARD));
-            allCommands.add(new Command("AT II", PARTYPE_STRING, "Set Infrared Idle Sequence", COMBOENTRY_NO, GUITYPE_COMBO_ONLY));
             allCommands.add(new Command("AT RO", PARTYPE_UINT, "Rotate orientation", COMBOENTRY_NO, GUITYPE_COMBO_ONLY));
             allCommands.add(new Command("AT BT", PARTYPE_UINT, "HID / Bluetooth mode", COMBOENTRY_NO, GUITYPE_COMBO_INDEX));
 
@@ -279,7 +277,6 @@ namespace MouseApp2
             commandGuiLinks.Add(new CommandGuiLink("AT AC", accelerationBar, accelerationLabel, "20"));
             commandGuiLinks.Add(new CommandGuiLink("AT RO", orientationBox, "0"));
             commandGuiLinks.Add(new CommandGuiLink("AT BT", HIDComboBox, 1));
-            commandGuiLinks.Add(new CommandGuiLink("AT II", irIdleSequenceBox, ""));
 
             commandGuiLinks.Add(new CommandGuiLink("AT TS", sipThresholdBar, sipThresholdLabel, "500"));
             commandGuiLinks.Add(new CommandGuiLink("AT TP", puffThresholdBar, puffThresholdLabel, "525"));

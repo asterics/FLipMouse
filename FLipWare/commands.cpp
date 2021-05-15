@@ -41,7 +41,7 @@ const struct atCommandType atCommands[] PROGMEM = {
   {"AC"  , PARTYPE_UINT },  {"MA"  , PARTYPE_STRING}, {"WA"  , PARTYPE_UINT  }, {"RO"  , PARTYPE_UINT },
   {"IW"  , PARTYPE_NONE },  {"BT"  , PARTYPE_UINT }, {"HL"  , PARTYPE_NONE }, {"HR"  , PARTYPE_NONE },
   {"HM"  , PARTYPE_NONE },  {"TL"  , PARTYPE_NONE }, {"TR"  , PARTYPE_NONE }, {"TM"  , PARTYPE_NONE },
-  {"KT"  , PARTYPE_STRING }, {"IH"  , PARTYPE_STRING }, {"IS"  , PARTYPE_NONE }, {"II"  , PARTYPE_STRING },
+  {"KT"  , PARTYPE_STRING }, {"IH"  , PARTYPE_STRING }, {"IS"  , PARTYPE_NONE }, 
 };
 
 void printCurrentSlot()
@@ -65,7 +65,6 @@ void printCurrentSlot()
   Serial.print("AT RH "); Serial.println(settings.rh);
   Serial.print("AT RO "); Serial.println(settings.ro);
   Serial.print("AT BT "); Serial.println(settings.bt);
-  Serial.print("AT II "); Serial.println(settings.ii);
 
   for (int i = 0; i < NUMBER_OF_BUTTONS; i++)
   {
@@ -75,6 +74,8 @@ void printCurrentSlot()
     Serial.print("AT ");
     int actCmd = buttons[i].mode;
     char cmdStr[4];
+    // Serial.print("mode ");
+    // Serial.println(actCmd);
         
     strcpy_FM(cmdStr, (uint_farptr_t_FM)atCommands[actCmd].atCmd);
     Serial.print(cmdStr);
@@ -246,6 +247,7 @@ void performCommand (uint8_t cmd, int16_t par1, char * keystring, int8_t periodi
         if ((strlen(keystring) > 0) && (strlen(keystring) < MAX_NAME_LEN))
           saveToEEPROM(keystring);
         makeTone(TONE_INDICATE_PUFF, 0);
+        Serial.println("OK");
       }
       break;
     case CMD_LO:
@@ -263,6 +265,7 @@ void performCommand (uint8_t cmd, int16_t par1, char * keystring, int8_t periodi
     case CMD_LI:
       release_all();
       listSlots();
+      Serial.println("OK");  // send AT command acknowledge
       break;
     case CMD_NE:
 #ifdef DEBUG_OUTPUT_FULL
@@ -280,6 +283,7 @@ void performCommand (uint8_t cmd, int16_t par1, char * keystring, int8_t periodi
       release_all();
       // deleteIRCommand(0);      // removed to keep IR commands !
       deleteSlots();
+      Serial.println("OK");    // send AT command acknowledge      
       break;
     case CMD_NC:
       break;
@@ -414,15 +418,6 @@ void performCommand (uint8_t cmd, int16_t par1, char * keystring, int8_t periodi
       if (keystring)
         play_IR_command(keystring);
       break;
-    case CMD_II:
-#ifdef DEBUG_OUTPUT_FULL
-      Serial.println("set IR idle sequence command");
-#endif
-      if (keystring) {
-        if ((strlen(keystring) > 0) && (strlen(keystring) < MAX_NAME_LEN))
-          strcpy(settings.ii, keystring);
-      }
-      break;
     case CMD_IH:
 #ifdef DEBUG_OUTPUT_FULL
       Serial.println("hold IR command");
@@ -440,16 +435,20 @@ void performCommand (uint8_t cmd, int16_t par1, char * keystring, int8_t periodi
       break;
     case CMD_IL:
       list_IR_commands();
+      Serial.println("OK");  // send AT command acknowledge
       break;
     case CMD_IC:
-      if (keystring) delete_IR_command(keystring);
+      if (keystring) {
+        delete_IR_command(keystring);
+        Serial.println("OK");  // send AT command acknowledge
+      }
       break;
     case CMD_IT:
       set_IR_timeout(par1);
       break;
     case CMD_IW:
       wipe_IR_commands();
+      Serial.println("OK");  // send AT command acknowledge
       break;
   }
-  // Serial.println("OK");  // send AT command acknowledge
 }

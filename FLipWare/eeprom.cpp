@@ -171,6 +171,7 @@ int readEEPROMBin(char * data, unsigned int eeaddress, int length) {
       while (Wire.available() && bytes_requested--) {
           *data++ = Wire.receive();
           length--;
+          bytes_received++;
           eeaddress++;
       }
     }
@@ -640,9 +641,9 @@ uint16_t readIRFromEEPROM(char * name, uint16_t *timings, uint8_t maxEdges)
     Serial.print(" from address: ");
     Serial.println(address);
   #endif
-
+ 
   address-=sizeof(irCommand)+irCommand.edges*2 ;   // set address to ir data start!
-  readEEPROMBin((uint8_t *) timings, address, irCommand.edges);
+  readEEPROMBin((uint8_t *) timings, address, irCommand.edges*2);
 
   //return the count of available edges (used by the IR parser)
   return irCommand.edges;

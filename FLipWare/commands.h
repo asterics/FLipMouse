@@ -90,7 +90,7 @@
           AT LA           load all slots (displays names and settings of all stored slots)
           AT LI           list all saved mode names
           AT NE           next mode will be loaded (wrap around after last slot)
-          AT DE           delete EEPROM content (delete all stored slots)
+          AT DE <string>  delete slot of given name (deletes all stored slots if no string parameter is given)
           AT NC           no command (idle operation)
           AT BT <uint>    set bluetooth mode, 1=USB only, 2=BT only, 3=both(default)
                           (e.g. AT BT 2 -> send HID commands only via BT if BT-daughter board is available)

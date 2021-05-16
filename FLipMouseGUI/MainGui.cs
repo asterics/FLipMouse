@@ -150,6 +150,12 @@ namespace MouseApp2
             CommandGuiLink actButtonLink = null;
             String strValue="";
 
+            if (slots.Count < 1)
+            {
+                initSlots();
+                return;
+            }
+
             slotNames.Text = slots[slotNumber].slotName;
             foreach (String settingString in slots[slotNumber].settingStrings)
             {

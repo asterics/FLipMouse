@@ -28,7 +28,7 @@ const struct atCommandType atCommands[] PROGMEM = {
   {"WU"  , PARTYPE_NONE },  {"WD"  , PARTYPE_NONE }, {"WS"  , PARTYPE_UINT }, {"MX"  , PARTYPE_INT  },
   {"MY"  , PARTYPE_INT  },  {"KW"  , PARTYPE_STRING}, {"KP"  , PARTYPE_STRING}, {"KR"  , PARTYPE_STRING},
   {"RA"  , PARTYPE_NONE },  {"SA"  , PARTYPE_STRING}, {"LO"  , PARTYPE_STRING}, {"LA"  , PARTYPE_NONE },
-  {"LI"  , PARTYPE_NONE },  {"NE"  , PARTYPE_NONE }, {"DE"  , PARTYPE_NONE }, {"NC"  , PARTYPE_NONE },
+  {"LI"  , PARTYPE_NONE },  {"NE"  , PARTYPE_NONE }, {"DE"  , PARTYPE_STRING }, {"NC"  , PARTYPE_NONE },
   {"MM"  , PARTYPE_UINT },
   {"SW"  , PARTYPE_NONE },  {"SR"  , PARTYPE_NONE }, {"ER"  , PARTYPE_NONE }, {"CA"  , PARTYPE_NONE },
   {"AX"  , PARTYPE_UINT },  {"AY"  , PARTYPE_UINT }, {"DX"  , PARTYPE_UINT }, {"DY"  , PARTYPE_UINT },
@@ -280,8 +280,7 @@ void performCommand (uint8_t cmd, int16_t par1, char * keystring, int8_t periodi
       Serial.println("delete slots");
 #endif
       release_all();
-      // deleteIRCommand(0);      // removed to keep IR commands !
-      deleteSlots();
+      deleteSlot(keystring);
       Serial.println("OK");    // send AT command acknowledge      
       break;
     case CMD_NC:

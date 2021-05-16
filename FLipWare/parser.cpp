@@ -67,6 +67,7 @@ void parseCommand (char * cmdstr)
   int8_t cmd = -1;
   int16_t num = 0;
 
+  cmdstr[strlen(cmdstr)+1]=0;  // to prevent exceeing the actual commandstring (when emptry string parameters are passed!)
 #ifdef DEBUG_OUTPUT_FULL
   Serial.print("parseCommand:"); Serial.println(cmdstr);
 #endif
@@ -96,8 +97,8 @@ void parseCommand (char * cmdstr)
   }
 
   if (cmd > -1) {
-    // Serial.print("cmd:");Serial.print(cmd);Serial.print("numpar:");
-    // Serial.print(num);Serial.print("stringpar:");Serial.println(actpos);
+    //Serial.print("cmd:");Serial.print(cmd);Serial.print("numpar:");
+    //Serial.print(num);Serial.print("stringpar:");Serial.println(actpos);
     performCommand(cmd, num, actpos, 0);
   }
   else Serial.println("???");       // command not recognized!
@@ -137,7 +138,7 @@ void parseByte (int newByte)  // parse an incoming commandbyte from serial inter
         else goto err;
         break;
       case 3:
-        if ((newByte == '\r') || (newByte == '\n') || (cmdlen >= WORKINGMEM_SIZE - 4))
+        if ((newByte == '\r') || (newByte == '\n') || (cmdlen >= WORKINGMEM_SIZE - 5))
         { workingmem[cmdlen] = 0;  parseCommand((char *)workingmem);
           readstate = 0;
         }

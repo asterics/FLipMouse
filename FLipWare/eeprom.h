@@ -49,7 +49,7 @@
 #define EEPROM_COUNT_IRCOMMAND 20
 
 #define EEPROM_MAX_ADDRESS 0x7FFF
-#define EEPROM_MAGIC_NUMBER 	0x26
+#define EEPROM_MAGIC_NUMBER 	0x29
 #define MAX_NAME_LEN  15 
 
 /**
@@ -115,15 +115,20 @@ void listIRCommands();
 uint16_t readIRFromEEPROM(char * name, uint16_t *timings, uint8_t maxEdges);
 
 /**
-   This function deletes all slots by deleting the magic number (reset to 0xFF)
+   This function deletes the slot from EEPROM.
+   if an empty string is given as parameter, all slots are deleted!
  * */
-void deleteSlots();
+void deleteSlot(char * name);
 
 /**
    get the first free address for slot data  
  * */
-uint16_t getTopSlotAddress(void);
+uint16_t getFreeSlotAddress(void);
 
+/**
+   get the index of the lat slot which holds data  
+ * */
+int8_t getLastSlotIndex(void);
 
 /**
    Print out all slot data  to the serial interface

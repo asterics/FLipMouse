@@ -293,7 +293,7 @@ void saveToEEPROMSlotNumber(int8_t nr, char * slotname)
   #endif
 
   // if slot is not empty: overwrite (eventually move other slots)
-  if ((header.startSlotAddress[nr] != 0) && (header.endSlotAddress[nr]<getTopSlotAddress())) {
+  if ((header.startSlotAddress[nr] != 0) && (nr!=getLastSlotIndex())) {
     int old_size = header.endSlotAddress[nr] - header.startSlotAddress[nr];
     #ifdef DEBUG_OUTPUT_BASIC
       Serial.print("old Slotsize:");
@@ -314,12 +314,12 @@ void saveToEEPROMSlotNumber(int8_t nr, char * slotname)
         Serial.print("Move slot "); Serial.print(nr+1); 
         Serial.print(" starting ");  Serial.print(sourceAddress); 
         Serial.print(" to "); Serial.print(sourceAddress+bytesToMove); 
-        Serial.print(", count= "); Serial.print(getTopSlotAddress()-sourceAddress); 
+        Serial.print(", count= "); Serial.print(getFreeSlotAddress()-sourceAddress); 
         Serial.println(" bytes");
       #endif
       
       //  moveSlotsInEEPROM(nr, bytesToMove);
-      moveEEPROM (sourceAddress+bytesToMove, sourceAddress, getTopSlotAddress()-sourceAddress);
+      moveEEPROM (sourceAddress+bytesToMove, sourceAddress, getFreeSlotAddress()-sourceAddress);
 
       // update header addresses
       for (int i=nr+1; i<EEPROM_COUNT_SLOTS;i++) {
@@ -707,19 +707,63 @@ void bootstrapSlotAddresses()
 
 
 /**
-   This function deletes all configuration slots in EEPROM
+   This function deletes a slot from EEPROM.
+   if an empty string is given as parameter, all slots are deleted!
  * */
-void deleteSlots()
+void deleteSlot(char * name)
 {
-  #ifdef DEBUG_OUTPUT_BASIC
-    Serial.println("Deleting all slots");
-  #endif
-
-  // TBD: delete individual slot / move other slots
-  for (uint8_t i = 0; i < EEPROM_COUNT_SLOTS; i++)  {
-    header.startSlotAddress[i] = 0;
-    header.endSlotAddress[i] = 0;
+  int size=0;
+  
+  if (!strlen(name)) {
+    #ifdef DEBUG_OUTPUT_BASIC
+        Serial.println("Deleting all slots");
+    #endif
+    for (uint8_t i = 0; i < EEPROM_COUNT_SLOTS; i++)  {
+      header.startSlotAddress[i] = 0;
+      header.endSlotAddress[i] = 0;
+    }
+    storeHeader();
+    return;
   }
+
+  #ifdef DEBUG_OUTPUT_BASIC
+    Serial.print("Deleting slot ");
+    Serial.println(name);      
+  #endif
+  
+  int8_t nr = slotnameToNumber(name);
+  if (nr < 0) return;  // slot name does not exist
+
+  int lastSlot= getLastSlotIndex();
+  if (nr != lastSlot) {
+    // we must move slot data!
+    size = header.endSlotAddress[nr] - header.startSlotAddress[nr];
+    uint16_t sourceAddress=header.startSlotAddress[nr+1];
+    uint16_t count=getFreeSlotAddress()-sourceAddress;
+    
+    #ifdef DEBUG_OUTPUT_BASIC
+      Serial.print("Slotsize:"); Serial.println(size);
+      Serial.print("Move slot "); Serial.print(nr+1); 
+      Serial.print(" starting ");  Serial.print(sourceAddress); 
+      Serial.print(" to "); Serial.print(sourceAddress-size); 
+      Serial.print(", count= "); Serial.print(count); 
+      Serial.println(" bytes");
+    #endif
+
+    // move all following slots
+    moveEEPROM (header.startSlotAddress[nr], sourceAddress, count);
+
+    // update header addresses
+    for (int i=nr; i<EEPROM_COUNT_SLOTS-1;i++) {
+      if (header.startSlotAddress[i]) {
+        Serial.print("update header ");  Serial.print(i);
+        header.startSlotAddress[i]=header.startSlotAddress[i+1]-size;
+        header.endSlotAddress[i]=header.endSlotAddress[i+1]-size;
+      }
+    }
+  }
+  header.startSlotAddress[lastSlot]=0;
+  header.endSlotAddress[lastSlot]=0;
   storeHeader();
 }
 
@@ -740,7 +784,7 @@ void listSlots()
     // print out the slot name (assumed to be located at the beginning of general settings)
     Serial.print("Slot"); Serial.print(i); Serial.print(":");
     readEEPROMBin(tmp, address, MAX_NAME_LEN);
-    Serial.println(tmp);
+    Serial.println(tmp);    
   }
 }
 
@@ -769,17 +813,22 @@ void listIRCommands()
 }
 
 /**
+   get the index of the last slot which holds data  
+ * */
+int8_t getLastSlotIndex(void) {
+  int8_t actSlot=0;
+  while (header.startSlotAddress[actSlot]) actSlot++;
+  return(actSlot-1);
+}
+
+/**
    get the first free address for slot data  
  * */
-uint16_t getTopSlotAddress(void) {
-  uint8_t actSlot=0;
-  uint16_t topAddress=0;
-  while (header.startSlotAddress[actSlot]) {
-    topAddress=header.endSlotAddress[actSlot];
-    actSlot++;
-  }
-  return(topAddress);
+uint16_t getFreeSlotAddress(void) {
+  return(header.endSlotAddress[getLastSlotIndex()]);
 }
+
+
 
 /**
    print all slot settings and button mode to serial 

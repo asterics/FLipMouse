@@ -45,11 +45,11 @@
 #include "i2c_t3.h"
 #include <EEPROM.h>
 
-#define EEPROM_COUNT_SLOTS 7
+#define EEPROM_COUNT_SLOTS 10
 #define EEPROM_COUNT_IRCOMMAND 20
 
 #define EEPROM_MAX_ADDRESS 0x7FFF
-#define EEPROM_MAGIC_NUMBER 	0x29
+#define EEPROM_MAGIC_NUMBER 	0x38
 #define MAX_NAME_LEN  15 
 
 /**

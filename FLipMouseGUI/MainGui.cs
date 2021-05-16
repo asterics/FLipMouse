@@ -56,7 +56,7 @@ namespace MouseApp2
         System.Windows.Forms.Timer IdTimer = new System.Windows.Forms.Timer();
 
 
-        const int MAX_SLOTS = 7;
+        const int MAX_SLOTS = 10;
         public List<Slot> slots = new List<Slot>();
 
         public void initSlots()

@@ -18,7 +18,6 @@
 /**
    TODO:
    -) implement overwrite/move for IR commands
-   -) implement delete for individual slots
    -) implement a "memory full" command
  * */
 

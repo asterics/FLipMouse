@@ -35,7 +35,6 @@
  * */
 struct storageHeader header;
 struct irCommandHeader irCommand;
-uint8_t currentSlot;
 
 /**
    check if EEPROM is ready
@@ -181,69 +180,44 @@ int readEEPROMBin(char * data, unsigned int eeaddress, int length) {
 
 
 /**
-   move multiple slots in EEPROM 
-   nr: the first slot which should be moved 
-   bytesToMove: postive (increase slot size) or negative (shrink slot size)
+   move multiple bytes in EEPROM 
+   targetAdr: start address for writing bytes 
+   sourceAdr: start address for reading bytes 
+   count: number of bytes to move
+   moving overlapping regions is possible
  * */
-void moveSlotsInEEPROM(int nr, int bytesToMove) {
+void moveEEPROM(uint16_t targetAdr, uint16_t sourceAdr, int count) {
   uint8_t pagebuf[I2C_WRITE_BUFFER_LEN];
-  uint16_t targetAdr, b;
+  uint16_t b;
 
-  if (bytesToMove > 0) {
-    #ifdef DEBUG_OUTPUT_BASIC    
-      Serial.print("old slot size is bigger: decrease addresses of higher slots by ");
-      Serial.print(bytesToMove); Serial.println(" bytes ");
-    #endif
-    for (int i = nr + 1; i < EEPROM_COUNT_SLOTS; i++) {
-      if (header.startSlotAddress[i] != 0) {
-        targetAdr = header.startSlotAddress[i] - bytesToMove;
-        b=0;
-        #ifdef DEBUG_OUTPUT_BASIC
-          Serial.print("move slot "); Serial.println(i);
-        #endif
-        for (int t = header.startSlotAddress[i]; t < header.endSlotAddress[i]; t++) {
-          pagebuf[b++] = readEEPROM(t);
-          if (b == I2C_WRITE_BUFFER_LEN) {
-            writeEEPROMBin(targetAdr, pagebuf, I2C_WRITE_BUFFER_LEN);
-            targetAdr += I2C_WRITE_BUFFER_LEN;
-            b = 0;
-          }
-        }
-        if (b) writeEEPROMBin(targetAdr, pagebuf, b);
-        header.startSlotAddress[i] -= bytesToMove;
-        header.endSlotAddress[i] -= bytesToMove;
+  if (sourceAdr > targetAdr) {  // forward copy
+    b=0;
+    while (count--) {
+      pagebuf[b++] = readEEPROM(sourceAdr++);
+      if (b == I2C_WRITE_BUFFER_LEN) {
+        writeEEPROMBin(targetAdr, pagebuf, I2C_WRITE_BUFFER_LEN);
+        targetAdr += I2C_WRITE_BUFFER_LEN;
+        b = 0;
       }
     }
+    if (b) writeEEPROMBin(targetAdr, pagebuf, b);
   }
-  else {
-    bytesToMove = -bytesToMove;
-    #ifdef DEBUG_OUTPUT_BASIC    
-      Serial.print("new slot size is bigger: increase addresses of higher slots by ");
-      Serial.print(bytesToMove); Serial.println(" bytes ");
-    #endif
-    for (int i = EEPROM_COUNT_SLOTS - 1; i > nr; i--) {
-      if (header.startSlotAddress[i] != 0) {
-        targetAdr = header.endSlotAddress[i] + bytesToMove;
+  else {  // backward copy
+    sourceAdr+=count-1;
+    targetAdr+=count;
+    b = I2C_WRITE_BUFFER_LEN;
+    while (count--) {
+      b--;targetAdr--;
+      pagebuf[b] = readEEPROM(sourceAdr--);
+      if (b == 0) {
+        writeEEPROMBin(targetAdr, pagebuf, I2C_WRITE_BUFFER_LEN);
         b = I2C_WRITE_BUFFER_LEN;
-        #ifdef DEBUG_OUTPUT_BASIC
-          Serial.print("move slot "); Serial.println(i);
-        #endif
-        for (int t = header.endSlotAddress[i] - 1; t >= header.startSlotAddress[i]; t--) {
-          targetAdr--; b--;
-          pagebuf[b] = readEEPROM(t);
-          if (b == 0) {
-            writeEEPROMBin(targetAdr, pagebuf, I2C_WRITE_BUFFER_LEN);
-            b = I2C_WRITE_BUFFER_LEN;
-          }
-        }
-        if (b < I2C_WRITE_BUFFER_LEN) writeEEPROMBin(targetAdr, pagebuf + b, I2C_WRITE_BUFFER_LEN - b);
-
-        header.startSlotAddress[i] += bytesToMove;
-        header.endSlotAddress[i] += bytesToMove;
       }
     }
+    if (b < I2C_WRITE_BUFFER_LEN) writeEEPROMBin(targetAdr, pagebuf + b, I2C_WRITE_BUFFER_LEN - b);
   }
 }
+
 
 /**
    store the storageheader permanently to the EEPROM
@@ -281,7 +255,7 @@ void saveToEEPROM(char * slotname)
     #ifdef DEBUG_OUTPUT_BASIC
       Serial.print("Overwrite Slot ");
       Serial.print(slotname);
-      Serial.print(" at position ");
+      Serial.print(", slot index= ");
       Serial.println(nr);
     #endif
     saveToEEPROMSlotNumber(nr, slotname);
@@ -295,8 +269,12 @@ void saveToEEPROM(char * slotname)
 
 /**
    Store current slot data to the EEPROM.
-   The slot is identified by the slot number. If the nr parameter is -1,
-   a new slot will be created (at the first possible position)
+   nr: the slot number.
+   If the start address of the given slot is != 0, the slot will be 
+   overwritten (other slot data will be moved if necessary).
+   If the start address of the slot is 0 (first free slot), 
+   a new slot will be created, starting at the end address of 
+   the previous slot. 
  * */
 void saveToEEPROMSlotNumber(int8_t nr, char * slotname)
 {
@@ -315,20 +293,46 @@ void saveToEEPROMSlotNumber(int8_t nr, char * slotname)
   #endif
 
   // if slot is not empty: overwrite (eventually move other slots)
-  if (header.startSlotAddress[nr] != 0) {
+  if ((header.startSlotAddress[nr] != 0) && (header.endSlotAddress[nr]<getTopSlotAddress())) {
     int old_size = header.endSlotAddress[nr] - header.startSlotAddress[nr];
     #ifdef DEBUG_OUTPUT_BASIC
       Serial.print("old Slotsize:");
       Serial.println(old_size);
     #endif
     if (old_size != size) {
-      int bytesToMove = old_size - size;
-      moveSlotsInEEPROM(nr, bytesToMove);
+      int bytesToMove = size - old_size;
+      int sourceAddress=header.startSlotAddress[nr+1];
+      
+      #ifdef DEBUG_OUTPUT_BASIC    
+        if (bytesToMove < 0) {
+          Serial.print("old slot size is bigger: decrease addresses of higher slots by ");
+          Serial.print(-bytesToMove); Serial.println(" bytes ");
+        } else {
+          Serial.print("old slot size is smaller: increase addresses of higher slots by ");
+          Serial.print(bytesToMove); Serial.println(" bytes ");
+        }
+        Serial.print("Move slot "); Serial.print(nr+1); 
+        Serial.print(" starting ");  Serial.print(sourceAddress); 
+        Serial.print(" to "); Serial.print(sourceAddress+bytesToMove); 
+        Serial.print(", count= "); Serial.print(getTopSlotAddress()-sourceAddress); 
+        Serial.println(" bytes");
+      #endif
+      
+      //  moveSlotsInEEPROM(nr, bytesToMove);
+      moveEEPROM (sourceAddress+bytesToMove, sourceAddress, getTopSlotAddress()-sourceAddress);
+
+      // update header addresses
+      for (int i=nr+1; i<EEPROM_COUNT_SLOTS;i++) {
+        if (header.startSlotAddress[i]) {
+          header.startSlotAddress[i]+=bytesToMove;
+          header.endSlotAddress[i]+=bytesToMove;
+        }
+      }  
     }
   }
 
   /** save this slot **/
-  // first slot, start right after the storage header
+  // if first slot, start right after the storage header
   if (nr == 0)  addr = sizeof(storageHeader);
   else addr = header.endSlotAddress[nr - 1];
 
@@ -764,6 +768,18 @@ void listIRCommands()
   }
 }
 
+/**
+   get the first free address for slot data  
+ * */
+uint16_t getTopSlotAddress(void) {
+  uint8_t actSlot=0;
+  uint16_t topAddress=0;
+  while (header.startSlotAddress[actSlot]) {
+    topAddress=header.endSlotAddress[actSlot];
+    actSlot++;
+  }
+  return(topAddress);
+}
 
 /**
    print all slot settings and button mode to serial 

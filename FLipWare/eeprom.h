@@ -49,7 +49,7 @@
 #define EEPROM_COUNT_IRCOMMAND 20
 
 #define EEPROM_MAX_ADDRESS 0x7FFF
-#define EEPROM_MAGIC_NUMBER 	0x21
+#define EEPROM_MAGIC_NUMBER 	0x26
 #define MAX_NAME_LEN  15 
 
 /**
@@ -119,7 +119,15 @@ uint16_t readIRFromEEPROM(char * name, uint16_t *timings, uint8_t maxEdges);
  * */
 void deleteSlots();
 
+/**
+   get the first free address for slot data  
+ * */
+uint16_t getTopSlotAddress(void);
 
+
+/**
+   Print out all slot data  to the serial interface
+ * */
 void printAllSlots(void);
 
 /**

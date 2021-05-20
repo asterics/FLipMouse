@@ -674,18 +674,21 @@ void bootstrapSlotAddresses()
     if (versionID != header.versionID)
       init_needed=1;
   */
+  
+  header.versionID = versionID;         // store version ID
 
   if (init_needed) {
     makeTone(TONE_CHANGESLOT, 4);
     Serial.println("Initializing EEPROM!");
     memset(&header, 0, sizeof(header));     // delete all slots, initialize with 0
-    header.versionID = versionID;         // store version ID
     saveToEEPROMSlotNumber(0, "mouse");   // save default settings to first slot
     writeEEPROM(EEPROM_MAX_ADDRESS,EEPROM_MAGIC_NUMBER);  // store magic number!
   }
   else {
     // load header from EEPROM storage!
     readEEPROMBin((uint8_t *)&header,0,sizeof(storageHeader));
+    if (!header.startSlotAddress[0])  // in case no slot is available 
+      saveToEEPROMSlotNumber(0, "mouse");   // save default settings to first slot
   }
 
   #ifdef DEBUG_OUTPUT_BASIC
@@ -840,5 +843,7 @@ void printAllSlots(void) {
     actSlot++;
   }
   reportSlotParameters = REPORT_NONE;
-  readFromEEPROMSlotNumber(0, true);
+  if (header.startSlotAddress[0])
+    readFromEEPROMSlotNumber(0, true);
+  else Serial.println("END"); 
 }

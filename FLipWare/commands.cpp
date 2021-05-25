@@ -289,6 +289,7 @@ void performCommand (uint8_t cmd, int16_t par1, char * keystring, int8_t periodi
       initButtons(); //reset buttons
       saveToEEPROM(settings.slotName); //save default slot to default name
       readFromEEPROM(0); //load this slot
+      Serial.println("OK");    // send AT command acknowledge
       break;
     case CMD_NC:
       break;

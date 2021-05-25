@@ -107,6 +107,11 @@
 #define DEFAULT_CLICK_TIME      8    // time for mouse click (loop iterations from press to release)
 // #define DOUBLECLICK_MULTIPLIER  5    // CLICK_TIME factor for double clicks
 
+//defines for software restart, see https://forum.pjrc.com/threads/44857-How-to-Reset-Restart-Teensy-3-5-using-sotware?p=145990&viewfull=1#post145990
+#define RESTART_ADDR 0xE000ED0C
+#define READ_RESTART() (*(volatile uint32_t *)RESTART_ADDR)
+#define WRITE_RESTART(val) ((*(volatile uint32_t *)RESTART_ADDR) = (val))
+
 extern uint8_t workingmem[WORKINGMEM_SIZE];    // working memory  (command parser, IR-rec/play)
 extern char keystringBuffer[MAX_KEYSTRINGBUFFER_LEN];  // storage for all button string parameters of a slot
 

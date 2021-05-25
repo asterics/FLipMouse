@@ -61,7 +61,7 @@ int8_t  led_map[NUMBER_OF_LEDS] = {5, 16, 17};              	//  maps leds pins
 uint8_t LED_PIN = 13;                                   	//  Led output pin, ATTENTION: if SPI (AUX header) is used, this pin is also SCK!!!
 uint8_t IR_LED_PIN = 6;                                 	//  IR-Led output pin
 
-struct slotGeneralSettings settings = {      // default settings valus, for type definition see fabi.h
+const struct slotGeneralSettings defaultSettings = {      // default settings valus, for type definition see fabi.h
   "mouse",                          // initial slot name
   0,                                // initial keystringbuffer length
   1,                                // stickMode: Mouse cursor movement active
@@ -74,6 +74,7 @@ struct slotGeneralSettings settings = {      // default settings valus, for type
   1,                                // bt-mode 1: USB, 2: Bluetooth, 3: both (2 & 3 need daughter board))
 };
 
+struct slotGeneralSettings settings;
 
 uint8_t workingmem[WORKINGMEM_SIZE];     // working memory (command parser, IR-rec/play)
 
@@ -122,6 +123,8 @@ extern uint8_t CimMode;
 ////////////////////////////////////////
 
 void setup() {
+  //load settings
+  memcpy(&settings,&defaultSettings,sizeof(struct slotGeneralSettings));
   Serial.begin(115200);
   delay(1000);
   

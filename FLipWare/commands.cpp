@@ -285,7 +285,11 @@ void performCommand (uint8_t cmd, int16_t par1, char * keystring, int8_t periodi
       break;
     case CMD_RS:
       deleteSlot(""); // delete all slots
-      WRITE_RESTART(0x5FA0004); //reboot by software, see https://forum.pjrc.com/threads/44857-How-to-Reset-Restart-Teensy-3-5-using-sotware?p=145990&viewfull=1#post145990
+      memcpy(&settings,&defaultSettings,sizeof(struct slotGeneralSettings)); //load default values from flash
+      initButtons(); //reset buttons
+      saveToEEPROM(settings.slotName); //save default slot to default name
+      readFromEEPROM(0); //load this slot
+      break;
     case CMD_NC:
       break;
 

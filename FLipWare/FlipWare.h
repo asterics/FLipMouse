@@ -164,10 +164,6 @@ extern float force;
 extern float angle;
 
 void performCommand (uint8_t cmd, int16_t par1, char * keystring, int8_t periodicMouseMovement);
-void saveToEEPROM(char * slotname);
-void readFromEEPROM(char * slotname);
-void deleteSlots();
-void listSlots();
 void initButtons();
 void printCurrentSlot();
 void initBlink(uint8_t count, uint8_t startTime);
@@ -190,7 +186,7 @@ void play_IR_command(char * name);
 void hold_IR_command(char * name);
 void stop_IR_command();
 void list_IR_commands();
-void delete_IR_command(char * name);
+uint8_t delete_IR_command(char * name);
 void set_IR_timeout(uint16_t ms);
 void wipe_IR_commands();
 

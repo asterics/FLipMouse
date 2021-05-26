@@ -81,8 +81,9 @@ void bootstrapSlotAddresses();
 /**
    This function deletes one IR command by deleting the magic number (reset to 0xFF)
    If the "name" parameter is set to \0, all IR commands will be deleted
+   returns 1 if successful, 0 otherwise
  * */
-void deleteIRCommand(char * name);
+uint8_t deleteIRCommand(char * name);
 
 /**
    Save one IR command to the EEPROM. If the name is already assigned,
@@ -117,8 +118,9 @@ uint16_t readIRFromEEPROM(char * name, uint16_t *timings, uint8_t maxEdges);
 /**
    This function deletes the slot from EEPROM.
    if an empty string is given as parameter, all slots are deleted!
+   returns 1 if successful, 0 otherwise
  * */
-void deleteSlot(char * name);
+uint8_t deleteSlot(char * name);
 
 /**
    get the first free address for slot data  
@@ -145,20 +147,29 @@ void listSlots();
    Read one slot data from the EEPROM to the global variables
    The slot is identified by the slot number.
    if the playTone flag is set, a tone according to the current slot number will be played
+   returns 1 if successful, 0 otherwise
  * */
-void readFromEEPROMSlotNumber(uint8_t nr,  bool playTone);
+uint8_t readFromEEPROMSlotNumber(uint8_t nr,  bool playTone);
 
 /**
    Read one slot data from the EEPROM to the global variables
    The slot is identified by the slot name
+   returns 1 if successful, 0 otherwise
  * */
-void readFromEEPROM(char * slotname);
+uint8_t readFromEEPROM(char * slotname);
 
 
 /**
    Determines the slot number for a given slot name.
  * */
 int8_t slotnameToNumber(char * slotname);
+
+/**
+   Save the current slot by the given slotname.
+   If there is no slot existing with this name,
+   it will be saved to a new slot.
+ * */
+void saveToEEPROM(char * slotname);
 
 /**
    Store current slot data to the EEPROM.

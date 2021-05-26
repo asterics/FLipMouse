@@ -16,10 +16,13 @@
 */
 
 #include "FlipWare.h"
+#include "eeprom.h"
 
 uint8_t actButton = 0;
 
 extern void parseCommand (char * cmdstr);
+
+const char ERRORMESSAGE_NOT_FOUND[] = "E: not found";
 
 const struct atCommandType atCommands[] PROGMEM = {
   {"ID"  , PARTYPE_NONE },  {"BM"  , PARTYPE_UINT }, {"CL"  , PARTYPE_NONE }, {"CR"  , PARTYPE_NONE },
@@ -252,9 +255,8 @@ void performCommand (uint8_t cmd, int16_t par1, char * keystring, int8_t periodi
     case CMD_LO:
       if (keystring) {
         release_all();
-        readFromEEPROM(keystring);
-        reportSlotParameters = REPORT_NONE;
-        Serial.println("OK");
+        if (readFromEEPROM(keystring)) Serial.println("OK");
+        else Serial.println(ERRORMESSAGE_NOT_FOUND);
       }
       break;
     case CMD_LA:
@@ -269,26 +271,24 @@ void performCommand (uint8_t cmd, int16_t par1, char * keystring, int8_t periodi
     case CMD_NE:
 #ifdef DEBUG_OUTPUT_FULL
       Serial.print("load next slot");
-      reportSlotParameters = REPORT_ONE_SLOT;
 #endif
       release_all();
-      readFromEEPROM(0);
-      reportSlotParameters = REPORT_NONE;
+      if (!readFromEEPROM("")) Serial.println(ERRORMESSAGE_NOT_FOUND);
       break;
     case CMD_DE:
 #ifdef DEBUG_OUTPUT_FULL
       Serial.println("delete slots");
 #endif
       release_all();
-      deleteSlot(keystring);
-      Serial.println("OK");    // send AT command acknowledge      
+      if (deleteSlot(keystring))  Serial.println("OK");    // send AT command acknowledge      
+      else Serial.println(ERRORMESSAGE_NOT_FOUND);
       break;
     case CMD_RS:
       deleteSlot(""); // delete all slots
       memcpy(&settings,&defaultSettings,sizeof(struct slotGeneralSettings)); //load default values from flash
       initButtons(); //reset buttons
       saveToEEPROM(settings.slotName); //save default slot to default name
-      readFromEEPROM(0); //load this slot
+      readFromEEPROM(""); //load this slot
       Serial.println("OK");    // send AT command acknowledge
       break;
     case CMD_NC:
@@ -445,8 +445,8 @@ void performCommand (uint8_t cmd, int16_t par1, char * keystring, int8_t periodi
       break;
     case CMD_IC:
       if (keystring) {
-        delete_IR_command(keystring);
-        Serial.println("OK");  // send AT command acknowledge
+        if (delete_IR_command(keystring)) Serial.println("OK");  // send AT command acknowledge
+        else Serial.println(ERRORMESSAGE_NOT_FOUND);
       }
       break;
     case CMD_IT:

@@ -399,8 +399,9 @@ int8_t slotnameToNumber(char * slotname)
 /**
    Load one slot by the given slotname
    If there is no slotname given: load next slot...
+   returns 1 if successful, 0 otherwise
  * */
-void readFromEEPROM(char * slotname)
+uint8_t readFromEEPROM(char * slotname)
 {
   if (*slotname == 0) return readFromEEPROMSlotNumber(actSlot + 1, true);
 
@@ -420,15 +421,20 @@ void readFromEEPROM(char * slotname)
    Read one slot data from the EEPROM to the global variables
    The slot is identified by the slot number.
    if the playTone flag is set, a tone according to the current slot number will be played
+   returns 1 if successful, 0 otherwise   
  * */
-void readFromEEPROMSlotNumber(uint8_t nr, bool playTone)
+uint8_t readFromEEPROMSlotNumber(uint8_t nr, bool playTone)
 {
   uint8_t* p;
   uint16_t address;
 
   //fence the slot number, avoiding out of array index problems
   if (nr >= EEPROM_COUNT_SLOTS) return;
-  if (header.startSlotAddress[nr]==0)  nr=0;  // wrap around at last slot / free slot!
+  if (header.startSlotAddress[nr]==0)  nr=0;    // wrap around at last slot / free slot!
+  if (header.startSlotAddress[nr]==0)  {
+    // not even the first slot exists -> nothing to load!
+    return (0);  
+  }
 
   actSlot=nr;
   address = header.startSlotAddress[nr];
@@ -458,6 +464,7 @@ void readFromEEPROMSlotNumber(uint8_t nr, bool playTone)
 
   if (reportSlotParameters)
     Serial.println("END");   // important: end marker for slot parameter list (command "load all" - AT LA)
+  return(1);
 }
 
 
@@ -493,11 +500,13 @@ int8_t slotnameIRToNumber(char * irName)
 /**
    This function deletes one IR command
    If the "name" parameter is set to \0, all IR commands will be deleted.
+   returns 1 if successful, 0 otherwise
+
  * */
-void deleteIRCommand(char * name)
+uint8_t deleteIRCommand(char * name)
 {
-  uint8_t nr;
-  if (name[0] != 0) {
+  int8_t nr;
+  if (strlen(name)) {
     nr = slotnameIRToNumber(name);
     #ifdef DEBUG_OUTPUT_BASIC
       Serial.print("Deleting slot ");
@@ -511,7 +520,7 @@ void deleteIRCommand(char * name)
         header.startIRAddress[i] = header.startIRAddress[i+1];
         header.endIRAddress[i] = header.endIRAddress[i+1];
       }
-    }
+    } else return(0);
   } else {
     #ifdef DEBUG_OUTPUT_BASIC
       Serial.println("Deleting all IR slots");
@@ -522,6 +531,7 @@ void deleteIRCommand(char * name)
     }
   }
   storeHeader();
+  return(1);
 }
 
 /**
@@ -711,8 +721,9 @@ void bootstrapSlotAddresses()
 /**
    This function deletes a slot from EEPROM.
    if an empty string is given as parameter, all slots are deleted!
+   returns 1 if successful, 0 otherwise
  * */
-void deleteSlot(char * name)
+uint8_t deleteSlot(char * name)
 {
   int size=0;
   
@@ -725,7 +736,7 @@ void deleteSlot(char * name)
       header.endSlotAddress[i] = 0;
     }
     storeHeader();
-    return;
+    return (1);
   }
 
   #ifdef DEBUG_OUTPUT_BASIC
@@ -734,7 +745,8 @@ void deleteSlot(char * name)
   #endif
   
   int8_t nr = slotnameToNumber(name);
-  if (nr < 0) return;  // slot name does not exist
+  if (nr < 0) return (0);  // slot name does not exist
+  
 
   int lastSlot= getLastSlotIndex();
   if (nr != lastSlot) {
@@ -767,6 +779,7 @@ void deleteSlot(char * name)
   header.startSlotAddress[lastSlot]=0;
   header.endSlotAddress[lastSlot]=0;
   storeHeader();
+  return(1);
 }
 
 

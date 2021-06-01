@@ -23,14 +23,15 @@
                               8: Sip (pressure lower than sip threshold)
                               9: Strong Sip
                               10: Puff (pressure bigger than puff threshold)
-                              11: StrongSip + Up
-                              12: StrongSip + Down
-                              13: StrongSip + Left
-                              14: StrongSip + Right
-                              15: StrongPuff + Up
-                              16: StrongPuff + Down
-                              17: StrongPuff + Left
-                              18: StrongPuff + Right
+                              11_ Strong Puff
+                              12: StrongSip + Up
+                              13: StrongSip + Down
+                              14: StrongSip + Left
+                              15: StrongSip + Right
+                              16: StrongPuff + Up
+                              17: StrongPuff + Down
+                              18: StrongPuff + Left
+                              19: StrongPuff + Right
 
     USB HID commands:
 

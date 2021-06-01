@@ -16,30 +16,25 @@
 
 /**
    General EEPROM memory layout:
+   (0x7FFF is the max address in case of a 256kbit EEPROM)
 
-   0x0000-0x008F	struct storageHeader
-   0x0090-0xXXXX	setting slots:
+   0x0000-0x006D	struct storageHeader
+   0x006E-0xXXXX	setting slots
 
-   Magic Number: 0xBB66
-   struct slotGeneralSettings
-   '\0'
-   char * slotName ('\0')
-   //////////////////////////
-   struct slotButtonSettings
-   '\0'
-   uint8_t * buttonParameter
-   '\0'
-   ////// repeated for NUMBER_OF_BUTTONS
+   layout of one slot:
+     struct slotGeneralSettings
+     struct slotButtonSettings[NUMBER_OF_BUTTONS]
+     char buttonParameter[len][NUMBER_OF_BUTTONS] ('\0' terminated strings)
 
+   0x7FFE-0xXXXX	IR code storage 
+   Note that the IR slots start at the top address (0x7FFE, top->down)
 
-   0xXXXX-0x8000	IR slot (EEPROM max address in this case for 256kbit):
+   layout of one IR command slot:
+     char irSlotName[MAX_NAME_LEN]  ('\0' terminated string)
+     uint8_t countEdges     
+     uint16_t timings[countEdges]
 
-   Magic Number: 0xBB66
-   char * slotName ('\0')
-   uint8_t countEdges
-   uint8_t timings[]
-   '\0'
-
+   0x7FFF  Magic Byte to indicate valid EEPROM content   
 
  * */
 
@@ -47,35 +42,34 @@
 #define _EEPROM_H_
 
 #include "FlipWare.h"
-#include <Wire.h>
+#include "i2c_t3.h"
 #include <EEPROM.h>
 
-#define EEPROM_COUNT_SLOTS 7
-#define EEPROM_COUNT_IRCOMMAND 63
+#define EEPROM_COUNT_SLOTS 10
+#define EEPROM_COUNT_IRCOMMAND 20
+
 #define EEPROM_MAX_ADDRESS 0x7FFF
-
-
-#define EEPROM_MAGIC_NUMBER_SLOT 	0x0270
-#define EEPROM_MAGIC_NUMBER_IR		0xBB66
-
+#define EEPROM_MAGIC_NUMBER 	0x3b
+#define MAX_NAME_LEN  15 
 
 /**
-   Describing the header structure of memory, starting at 0x00.
-   Each slot is started at a fixed address in the EEPROM memory.
-   To reduce the read requests to find slot data, these start addresses
-   are initialized once (it is updated, if something is changed).
-   In adddition, infrared commands are available, which are stored at
-   the end of the memory.
+   header structure, starts at adress 0x00 in EEPROM,
+   contains start and end adresses of configuration slots
+   and IR commands (the IR commands are stored top-down)
 
  * */
 struct storageHeader {
   uint16_t	startSlotAddress[EEPROM_COUNT_SLOTS];
+  uint16_t  endSlotAddress[EEPROM_COUNT_SLOTS];
   uint16_t	startIRAddress[EEPROM_COUNT_IRCOMMAND];
+  uint16_t  endIRAddress[EEPROM_COUNT_IRCOMMAND];
   uint16_t  versionID;
-  uint16_t	endSlotAddress;
 };
 
-
+struct irCommandHeader {
+  char irName[MAX_NAME_LEN];
+  uint8_t edges;
+};
 
 /**
    Load the EEPROM header, which contains all start addresses of the
@@ -87,8 +81,9 @@ void bootstrapSlotAddresses();
 /**
    This function deletes one IR command by deleting the magic number (reset to 0xFF)
    If the "name" parameter is set to \0, all IR commands will be deleted
+   returns 1 if successful, 0 otherwise
  * */
-void deleteIRCommand(char * name);
+uint8_t deleteIRCommand(char * name);
 
 /**
    Save one IR command to the EEPROM. If the name is already assigned,
@@ -116,23 +111,31 @@ void listIRCommands();
 
 /**
    Replay one IR command from the EEPROM.
-   The slot is identified by the slot number
-   ATTENTION: if this method is not called from another function (e.g. readIRFromEEPROM()),
-   it is necessary to preload the start adresses via bootstrapSlotAddresses()!!!
- * */
-uint16_t readIRFromEEPROMSlotNumber(uint8_t slotNr, uint16_t *timings, uint8_t maxEdges);
-
-/**
-   Replay one IR command from the EEPROM.
    The slot is identified by the slot name
  * */
 uint16_t readIRFromEEPROM(char * name, uint16_t *timings, uint8_t maxEdges);
 
 /**
-   This function deletes all slots by deleting the magic number (reset to 0xFF)
+   This function deletes the slot from EEPROM.
+   if an empty string is given as parameter, all slots are deleted!
+   returns 1 if successful, 0 otherwise
  * */
-void deleteSlots();
+uint8_t deleteSlot(char * name);
 
+/**
+   get the first free address for slot data  
+ * */
+uint16_t getFreeSlotAddress(void);
+
+/**
+   get the index of the lat slot which holds data  
+ * */
+int8_t getLastSlotIndex(void);
+
+/**
+   Print out all slot data  to the serial interface
+ * */
+void printAllSlots(void);
 
 /**
    Print out all slotnames to the serial interface
@@ -140,43 +143,33 @@ void deleteSlots();
  * */
 void listSlots();
 
-
 /**
    Read one slot data from the EEPROM to the global variables
    The slot is identified by the slot number.
-   If the search flag is set, this function loads the next possible slot, if
-   the current one is not valid
-   ATTENTION: if this method is not called from another function (e.g. readFromEEPROM()),
-   it is necessary to preload the start adresses via bootstrapSlotAddresses()!
- * */
-void readFromEEPROMSlotNumber(uint8_t nr, bool search);
-
-/**
-   Read one slot data from the EEPROM to the global variables
-   The slot is identified by the slot number.
-   If the search flag is set, this function loads the next possible slot, if
-   the current one is not valid
    if the playTone flag is set, a tone according to the current slot number will be played
-   ATTENTION: if this method is not called from another function (e.g. readFromEEPROM()),
-   it is necessary to preload the start adresses via bootstrapSlotAddresses()!
+   returns 1 if successful, 0 otherwise
  * */
-void readFromEEPROMSlotNumber(uint8_t nr, bool search, bool playTone);
+uint8_t readFromEEPROMSlotNumber(uint8_t nr,  bool playTone);
 
 /**
    Read one slot data from the EEPROM to the global variables
    The slot is identified by the slot name
+   returns 1 if successful, 0 otherwise
  * */
-void readFromEEPROM(char * slotname);
+uint8_t readFromEEPROM(char * slotname);
 
 
 /**
-   Matcher function to determine the slot number for a given slot name.
-   Currently the GUI is handling all slot assignments via the name.
-   For future implementations, it may base on numbers.
-   To make the development easy, the parsing of slotnames to slot numbers
-   is done in this method (used by read and save functions)
+   Determines the slot number for a given slot name.
  * */
 int8_t slotnameToNumber(char * slotname);
+
+/**
+   Save the current slot by the given slotname.
+   If there is no slot existing with this name,
+   it will be saved to a new slot.
+ * */
+void saveToEEPROM(char * slotname);
 
 /**
    Store current slot data to the EEPROM.

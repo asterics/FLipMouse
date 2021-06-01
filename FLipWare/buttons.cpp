@@ -15,87 +15,101 @@
 
 */
 
-
 #include "FlipWare.h"        //  FABI command definitions
 
-// Constants and Macro definitions
-
-#define DEFAULT_DEBOUNCING_TIME 7   // debouncing interval for button-press / release
-
-
 struct slotButtonSettings buttons [NUMBER_OF_BUTTONS];   // array for all buttons - type definition see FlipWare.h
-char * keystringButtons[NUMBER_OF_BUTTONS];              // pointers to keystring parameters
-char keystringBuffer[MAX_KEYSTRINGBUFFER_LEN];           // storage for keystring parameters for all buttons
-uint16_t keystringBufferLen = 0;
+char * buttonKeystrings[NUMBER_OF_BUTTONS];              // pointers to keystring parameters
+char keystringBuffer[MAX_KEYSTRINGBUFFER_LEN]={0};       // storage for keystring parameters for all buttons
 struct buttonDebouncerType buttonDebouncers [NUMBER_OF_BUTTONS];   // array for all buttonsDebouncers - type definition see fabi.h
 
-uint16_t deleteKeystringButton(uint8_t buttonIndex)
+void initButtonKeystrings()
 {
-  char * startaddress;
-  uint16_t len;
-  startaddress = keystringButtons[buttonIndex];
-  if (!startaddress) return (0);
-  len = strlen(startaddress) + 1;
-  // Serial.print("delete:");Serial.println(startaddress);
-
-  uint16_t num = keystringBuffer + MAX_KEYSTRINGBUFFER_LEN - (startaddress + len);
-  memmove(startaddress, startaddress + len, num);
-  keystringButtons[buttonIndex] = 0;
-  for (int i = 0; i < NUMBER_OF_BUTTONS; i++)
-  {
-    if (keystringButtons[i] > startaddress) keystringButtons[i] -= len;
+  settings.keystringBufferLen=0;
+  for (int i=0;i<NUMBER_OF_BUTTONS;i++) {
+    buttonKeystrings[i]=keystringBuffer + settings.keystringBufferLen;
+    while (keystringBuffer[settings.keystringBufferLen++]) ; 
   }
-  keystringBufferLen -= len;
+#ifdef DEBUG_OUTPUT_FULL
+  Serial.print("Init ButtonKeystrings, bufferlen ="); 
+  Serial.println(settings.keystringBufferLen);
+#endif
+}
 
-  //Serial.print("bytes deleted:");Serial.println(len);
-  //Serial.print("bytes left:");Serial.println(MAX_KEYSTRINGBUFFER_LEN-keystringBufferLen);
-
-  return (MAX_KEYSTRINGBUFFER_LEN - keystringBufferLen);
+char * getButtonKeystring(int num)
+{
+  char * str = keystringBuffer;
+  for (int i=0;i<num;i++) {
+    while (*str++);    
+  }
+  return(str);
 }
 
 
-uint16_t storeKeystringButton(uint8_t buttonIndex, char * text)
+void printKeystrings()
 {
-  char * targetaddress;
-  deleteKeystringButton(buttonIndex);
-  if (keystringBufferLen + strlen(text) >= MAX_KEYSTRINGBUFFER_LEN - 1) return (0);
-  targetaddress = keystringBuffer + keystringBufferLen;
-  strcpy (targetaddress, text);
-  keystringButtons[buttonIndex] = targetaddress;
-  keystringBufferLen += strlen(text) + 1;
-  // Serial.print("allocated stringbuffer:");Serial.println(keystringButtons[buttonIndex]);
-  // Serial.print("bytes left:");Serial.println(MAX_KEYSTRINGBUFFER_LEN-keystringBufferLen);
-  return (MAX_KEYSTRINGBUFFER_LEN - keystringBufferLen);
+  char * x = keystringBuffer;
+  for (int i=0;i<NUMBER_OF_BUTTONS;i++) {
+    if (*x) {
+      Serial.print("Keystring ");
+      Serial.print(i);
+      Serial.print(" = ");
+      Serial.println(x);
+      while (*x++);
+    } else x++;
+  }
+}
+uint16_t setButtonKeystring(uint8_t buttonIndex, char * newKeystring)
+{
+  char * keystringAddress = getButtonKeystring(buttonIndex);
+  
+  int oldKeyStringLen = strlen (keystringAddress);
+  char * sourceAddress = keystringAddress + oldKeyStringLen +1;
+  
+  if (settings.keystringBufferLen - oldKeyStringLen + strlen(newKeystring) >= MAX_KEYSTRINGBUFFER_LEN - 1) 
+    return (0);   // new keystring does not fit into buffer !
+
+  uint16_t bytesToMove = keystringBuffer + settings.keystringBufferLen - sourceAddress;
+  int delta = strlen(newKeystring) - oldKeyStringLen;  // if positive: expand keystringBuffer!
+  char * targetAddress = sourceAddress + delta;
+  if (delta) {
+     memmove(targetAddress, sourceAddress, bytesToMove);    
+  }
+    
+  strcpy (keystringAddress, newKeystring);  // store the new keystring!
+  buttonKeystrings[buttonIndex] = keystringAddress;  // remember it's address
+  settings.keystringBufferLen += delta;  // update buffer length
+  
+#ifdef DEBUG_OUTPUT_FULL
+  printKeystrings();
+  Serial.print("bytes left:");Serial.println(MAX_KEYSTRINGBUFFER_LEN-settings.keystringBufferLen);
+#endif
+  return (MAX_KEYSTRINGBUFFER_LEN - settings.keystringBufferLen);
 }
 
 
 void initButtons() {
+
+  initButtonKeystrings();
+  for (int i=0;i<NUMBER_OF_BUTTONS;i++) {
+    buttons[i].value = 0;
+    buttons[i].mode = CMD_NC;
+  }
+  
   buttons[0].mode = CMD_NE; // default function for first button: switch to next slot
-  buttons[1].mode = CMD_NC; // no command
-  buttons[2].mode = CMD_NC; // no command
-  buttons[3].mode = CMD_KP; storeKeystringButton(3, "KEY_UP ");
-  buttons[4].mode = CMD_KP; storeKeystringButton(4, "KEY_DOWN ");
-  buttons[5].mode = CMD_KP; storeKeystringButton(5, "KEY_LEFT ");
-  buttons[6].mode = CMD_KP; storeKeystringButton(6, "KEY_RIGHT ");
+  buttons[3].mode = CMD_KP; setButtonKeystring(3, "KEY_UP ");
+  buttons[4].mode = CMD_KP; setButtonKeystring(4, "KEY_DOWN ");
+  buttons[5].mode = CMD_KP; setButtonKeystring(5, "KEY_LEFT ");
+  buttons[6].mode = CMD_KP; setButtonKeystring(6, "KEY_RIGHT ");
   buttons[7].mode = CMD_HL; // hold left mouse button
-  buttons[8].mode = CMD_NC; // no command
   buttons[9].mode = CMD_CR; // click right
   buttons[10].mode = CMD_CA; // calibrate
-  buttons[11].mode = CMD_NC; // no command
-  buttons[12].mode = CMD_NC;
-  buttons[13].mode = CMD_NC;
-  buttons[14].mode = CMD_NC;
-  buttons[15].mode = CMD_NC;
-  buttons[16].mode = CMD_NC;
-  buttons[17].mode = CMD_NC;
-  buttons[18].mode = CMD_NC;
 }
 
 
 void handlePress (int buttonIndex)   // a button was pressed
 {
   buttonStates |= (1<<buttonIndex); //save for reporting
-  performCommand(buttons[buttonIndex].mode, buttons[buttonIndex].value, keystringButtons[buttonIndex], 1);
+  performCommand(buttons[buttonIndex].mode, buttons[buttonIndex].value, buttonKeystrings[buttonIndex], 1);
 }
 
 void handleRelease (int buttonIndex)    // a button was released: deal with "sticky"-functions
@@ -117,7 +131,7 @@ void handleRelease (int buttonIndex)    // a button was released: deal with "sti
     case CMD_JP: Joystick.button(buttons[buttonIndex].value, 0); break;
     case CMD_MX: moveX = 0; break;
     case CMD_MY: moveY = 0; break;
-    case CMD_KH: releaseKeys(keystringButtons[buttonIndex]); break;
+    case CMD_KH: releaseKeys(buttonKeystrings[buttonIndex]); break;
     case CMD_IH:
       stop_IR_command();
       break;

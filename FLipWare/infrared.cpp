@@ -28,7 +28,8 @@
 // minimum count of signal edges which are necessary to accept a command
 #define IR_EDGE_REC_MIN 5
 
-// name of the stop code command
+// name of the idle code command (played after other ir commands if it exists)
+#define IDLESEQUENCE_NAME "idle"
 #define IDLESEQUENCE_REPEAT 1
 
 // maximum time interval which can be stored in high precision (microseconds) format
@@ -139,10 +140,11 @@ void list_IR_commands()
 /**
    Delete one IR command identified by a given name.
    If you want to clear all IR commands, use '\0' as name
+   returns 1 is successful, 0 otherwise
  * */
-void delete_IR_command(char * name)
+uint8_t delete_IR_command(char * name)
 {
-  deleteIRCommand(name);
+  return deleteIRCommand(name);
 }
 
 void generate_next_IR_phase(void)
@@ -163,7 +165,7 @@ void generate_next_IR_phase(void)
       if (idlesequenceCounter > 0) {
         idlesequenceCounter--;
         delayMicroseconds(IR_REPEAT_GAP);  // pause before next idlesequence (TBD: make that non-blocking)
-        start_IR_command_playback(settings.ii);  // in case the idlesequence command exists: play it!
+        start_IR_command_playback(IDLESEQUENCE_NAME);  // in case the idlesequence command exists: play it!
       }
     }
   }

@@ -86,7 +86,7 @@
           AT LA           load all slots (displays names and settings of all stored slots) 
           AT LI           list all saved mode names 
           AT NE           next mode will be loaded (wrap around after last slot)
-          AT DE           delete EEPROM content (delete all stored slots)
+          AT DE <string>  delete slot of given name (deletes all stored slots if no string parameter is given)
           AT NC           no command (idle operation)
           AT BT <uint>    set bluetooth mode, 1=USB only, 2=BT only, 3=both(default) 
                           (e.g. AT BT 2 -> send HID commands only via BT if BT-daughter board is available)
@@ -127,7 +127,6 @@
           AT IW           wipe infrared memory (clear all codes)
           AT IL           lists all stored infrared command names
           AT IT <uint>    set code timeout value for IR Recording (e.g. "AT IT 10" sets 10 milliseconds timeout)
-          AT II           set IR - idle sequence command name (e.g. "AT II idlecode")
 
    supported key identifiers for key commands (AT KP/KH/KR/KT):
  
@@ -188,6 +187,7 @@ namespace MouseApp2
         const string PREFIX_IRCOMMAND_NAME = "IRCOMMAND";
         const string PREFIX_IRCOMMAND_RECORDED = "IR: RECORDED ";
         const string PREFIX_IRCOMMAND_TIMEOUT = "IR_TIMEOUT:";
+        const string PREFIX_ACKNOWLEDGE_MESSAGE = "OK";
 
 
         public AllCommands allCommands = new AllCommands();
@@ -260,7 +260,6 @@ namespace MouseApp2
             allCommands.add(new Command("AT IH", PARTYPE_STRING, "Hold Infrared Command", COMBOENTRY_YES, GUITYPE_IRSELECT));
             allCommands.add(new Command("AT IC", PARTYPE_STRING, "Clear Infrared Command", COMBOENTRY_NO, GUITYPE_STANDARD));
             allCommands.add(new Command("AT IL", PARTYPE_NONE,   "List Infrared Commands", COMBOENTRY_NO, GUITYPE_STANDARD));
-            allCommands.add(new Command("AT II", PARTYPE_STRING, "Set Infrared Idle Sequence", COMBOENTRY_NO, GUITYPE_COMBO_ONLY));
             allCommands.add(new Command("AT RO", PARTYPE_UINT, "Rotate orientation", COMBOENTRY_NO, GUITYPE_COMBO_ONLY));
             allCommands.add(new Command("AT BT", PARTYPE_UINT, "HID / Bluetooth mode", COMBOENTRY_NO, GUITYPE_COMBO_INDEX));
 
@@ -279,7 +278,6 @@ namespace MouseApp2
             commandGuiLinks.Add(new CommandGuiLink("AT AC", accelerationBar, accelerationLabel, "20"));
             commandGuiLinks.Add(new CommandGuiLink("AT RO", orientationBox, "0"));
             commandGuiLinks.Add(new CommandGuiLink("AT BT", HIDComboBox, 1));
-            commandGuiLinks.Add(new CommandGuiLink("AT II", irIdleSequenceBox, ""));
 
             commandGuiLinks.Add(new CommandGuiLink("AT TS", sipThresholdBar, sipThresholdLabel, "500"));
             commandGuiLinks.Add(new CommandGuiLink("AT TP", puffThresholdBar, puffThresholdLabel, "525"));

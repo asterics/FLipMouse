@@ -36,7 +36,7 @@
 
 #include "FlipWare.h"        //  FABI command definitions
 #include <EEPROM.h>
-#include <Wire.h>        // for the external EEPROM
+#include "i2c_t3.h"        // for the external EEPROM
 #include "math.h"
 
 // Constants and Macro definitions
@@ -61,7 +61,9 @@ int8_t  led_map[NUMBER_OF_LEDS] = {5, 16, 17};              	//  maps leds pins
 uint8_t LED_PIN = 13;                                   	//  Led output pin, ATTENTION: if SPI (AUX header) is used, this pin is also SCK!!!
 uint8_t IR_LED_PIN = 6;                                 	//  IR-Led output pin
 
-struct slotGeneralSettings settings = {      // default settings valus, for type definition see fabi.h
+const struct slotGeneralSettings defaultSettings = {      // default settings valus, for type definition see fabi.h
+  "mouse",                          // initial slot name
+  0,                                // initial keystringbuffer length
   1,                                // stickMode: Mouse cursor movement active
   40, 40, 20, 20, 50, 20,           // accx, accy, deadzone x, deadzone y, maxspeed, acceleration time
   400, 600, 3,                      // threshold sip, threshold puff, wheel step,
@@ -70,13 +72,12 @@ struct slotGeneralSettings settings = {      // default settings valus, for type
   0, 0,                             // offset x / y
   0,                                // orientation
   1,                                // bt-mode 1: USB, 2: Bluetooth, 3: both (2 & 3 need daughter board))
-  "",                               // no ir idle code
 };
 
+struct slotGeneralSettings settings;
 
 uint8_t workingmem[WORKINGMEM_SIZE];     // working memory (command parser, IR-rec/play)
 
-char slotName[MAX_NAME_LEN] = "empty";
 int EmptySlotAddress = 0;
 uint8_t reportSlotParameters = REPORT_NONE;
 uint8_t reportRawValues = 0;
@@ -122,19 +123,18 @@ extern uint8_t CimMode;
 ////////////////////////////////////////
 
 void setup() {
+  //load settings
+  memcpy(&settings,&defaultSettings,sizeof(struct slotGeneralSettings));
   Serial.begin(115200);
-
+  delay(1000);
+  
   //initialise BT module, if available
   initBluetooth();
 
-#ifdef DEBUG_OUTPUT_FULL
-  Serial.println("FLipMouse started, Flexible Assistive Button Interface ready !");
-#endif
-
   Wire.begin();
+  Wire.setClock(400000);
   pinMode(IR_SENSOR_PIN, INPUT);
   analogWriteFrequency(IR_LED_PIN, 38000);  // TBD: flexible carrier frequency for IR, not only 38kHz !
-
 
   pinMode(LED_PIN, OUTPUT);
   digitalWrite(LED_PIN, LOW);
@@ -149,24 +149,19 @@ void setup() {
     pinMode (led_map[i], OUTPUT);   // configure the pins for input mode with pullup resistors
 
   release_all();
-  initDebouncers();
-  for (int i = 0; i < NUMBER_OF_BUTTONS; i++) // initialize button array
-  {
-    buttons[i].value = 0;
-    keystringButtons[i] = 0;
-    keystringBufferLen = 0;
-  }
-
-  init_CIM_frame();  // for AsTeRICS CIM protocol compatibility
   initButtons();
+  initDebouncers();
+  init_CIM_frame();  // for AsTeRICS CIM protocol compatibility
 
   bootstrapSlotAddresses();
   readFromEEPROMSlotNumber(0, true); // read slot from first EEPROM slot if available !
 
-  blinkCount = 10;  blinkStartTime = 25;
+  blinkCount = 10;
+  blinkStartTime = 25;
 
 #ifdef DEBUG_OUTPUT_FULL
   Serial.print("Free RAM:");  Serial.println(freeRam());
+  Serial.println("FLipMouse ready !");
 #endif
 
   updateStandaloneTimestamp = millis();

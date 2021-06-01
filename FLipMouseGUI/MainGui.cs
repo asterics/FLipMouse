@@ -29,8 +29,7 @@ namespace MouseApp2
 {
     public partial class FLipMouseGUI : Form
     {
-        const string VERSION_STRING = "2.10";
-        const int MAX_KEYSTRING_LEN = 65;
+        const string VERSION_STRING = "2.11";
 
         const int SENS_CHANGE_STEP = 1;
         const int DEADZONE_CHANGE_STEP = 1;
@@ -39,6 +38,8 @@ namespace MouseApp2
         const int GAIN_CHANGE_STEP = 1;
 
         Boolean readDone = false;
+        Boolean acknowledge = false;
+
         static int slotCounter = 0;
         static int actSlot = 0;
         static int checkVersion = 1;
@@ -55,7 +56,7 @@ namespace MouseApp2
         System.Windows.Forms.Timer IdTimer = new System.Windows.Forms.Timer();
 
 
-        const int MAX_SLOTS = 5;
+        const int MAX_SLOTS = 10;
         public List<Slot> slots = new List<Slot>();
 
         public void initSlots()
@@ -142,16 +143,18 @@ namespace MouseApp2
                 }
                 slots[slotNumber].settingStrings.Add(actSettingString);
             }
-            if (irIdleSequenceBox.Text != "")
-            {
-                slots[slotNumber].settingStrings.Add("AT IO " + irIdleSequenceBox.Text);
-            }
         }
 
         public void displaySlot(int slotNumber)
         {
             CommandGuiLink actButtonLink = null;
             String strValue="";
+
+            if (slots.Count < 1)
+            {
+                initSlots();
+                return;
+            }
 
             slotNames.Text = slots[slotNumber].slotName;
             foreach (String settingString in slots[slotNumber].settingStrings)
@@ -557,6 +560,7 @@ namespace MouseApp2
             {
                 sendEndReportingCommand();
                 sendApplyCommands();
+                sendSaveSlotCommands(slots[actSlot].slotName);   // Note: Save / overwrite slot for testing purposes!
                 sendCalibrationCommand();
                 sendStartReportingCommand();
                 addToLog("The selected settings have been applied to the FLipmouse");
@@ -1435,10 +1439,8 @@ namespace MouseApp2
         {
             if (irCommandBox.Text.Length == 0) return;
             addToLog("Playing IR Command " + irCommandBox.Text);
-            sendPlayIRCommand(irCommandBox.Text);
-            
+            sendPlayIRCommand(irCommandBox.Text);       
         }
-
 
         private void deleteIRButton_Click(object sender, EventArgs e)
         {
@@ -1447,7 +1449,6 @@ namespace MouseApp2
             sendClearIRCommand(irCommandBox.Text);
 
             irCommandBox.Items.Clear();
-            irIdleSequenceBox.Items.Clear();
             sendListIRCommand();
         }
 
@@ -1457,7 +1458,6 @@ namespace MouseApp2
             sendClearIRCommands();
 
             irCommandBox.Items.Clear();
-            irIdleSequenceBox.Items.Clear();
             sendListIRCommand();
         }
 
@@ -1465,11 +1465,6 @@ namespace MouseApp2
         {
             storeSlot(actSlot);
             storeSettingsToFLipmouse();
-        }
-
-        private void clearIROffButton_Click(object sender, EventArgs e)
-        {
-            irIdleSequenceBox.Text = "";
         }
 
         private void copy_orientation_Click(object sender, EventArgs e)

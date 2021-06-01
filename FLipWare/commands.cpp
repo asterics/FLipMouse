@@ -16,10 +16,13 @@
 */
 
 #include "FlipWare.h"
+#include "eeprom.h"
 
 uint8_t actButton = 0;
 
 extern void parseCommand (char * cmdstr);
+
+const char ERRORMESSAGE_NOT_FOUND[] = "E: not found";
 
 const struct atCommandType atCommands[] PROGMEM = {
   {"ID"  , PARTYPE_NONE },  {"BM"  , PARTYPE_UINT }, {"CL"  , PARTYPE_NONE }, {"CR"  , PARTYPE_NONE },
@@ -28,8 +31,8 @@ const struct atCommandType atCommands[] PROGMEM = {
   {"WU"  , PARTYPE_NONE },  {"WD"  , PARTYPE_NONE }, {"WS"  , PARTYPE_UINT }, {"MX"  , PARTYPE_INT  },
   {"MY"  , PARTYPE_INT  },  {"KW"  , PARTYPE_STRING}, {"KP"  , PARTYPE_STRING}, {"KR"  , PARTYPE_STRING},
   {"RA"  , PARTYPE_NONE },  {"SA"  , PARTYPE_STRING}, {"LO"  , PARTYPE_STRING}, {"LA"  , PARTYPE_NONE },
-  {"LI"  , PARTYPE_NONE },  {"NE"  , PARTYPE_NONE }, {"DE"  , PARTYPE_NONE }, {"NC"  , PARTYPE_NONE },
-  {"MM"  , PARTYPE_UINT },
+  {"LI"  , PARTYPE_NONE },  {"NE"  , PARTYPE_NONE }, {"DE"  , PARTYPE_STRING }, {"RS"  , PARTYPE_NONE },
+  {"NC"  , PARTYPE_NONE },  {"MM"  , PARTYPE_UINT },
   {"SW"  , PARTYPE_NONE },  {"SR"  , PARTYPE_NONE }, {"ER"  , PARTYPE_NONE }, {"CA"  , PARTYPE_NONE },
   {"AX"  , PARTYPE_UINT },  {"AY"  , PARTYPE_UINT }, {"DX"  , PARTYPE_UINT }, {"DY"  , PARTYPE_UINT },
   {"TS"  , PARTYPE_UINT },  {"TP"  , PARTYPE_UINT }, {"SP"  , PARTYPE_UINT }, {"SS"  , PARTYPE_UINT },
@@ -41,12 +44,12 @@ const struct atCommandType atCommands[] PROGMEM = {
   {"AC"  , PARTYPE_UINT },  {"MA"  , PARTYPE_STRING}, {"WA"  , PARTYPE_UINT  }, {"RO"  , PARTYPE_UINT },
   {"IW"  , PARTYPE_NONE },  {"BT"  , PARTYPE_UINT }, {"HL"  , PARTYPE_NONE }, {"HR"  , PARTYPE_NONE },
   {"HM"  , PARTYPE_NONE },  {"TL"  , PARTYPE_NONE }, {"TR"  , PARTYPE_NONE }, {"TM"  , PARTYPE_NONE },
-  {"KT"  , PARTYPE_STRING }, {"IH"  , PARTYPE_STRING }, {"IS"  , PARTYPE_NONE }, {"II"  , PARTYPE_STRING },
+  {"KT"  , PARTYPE_STRING }, {"IH"  , PARTYPE_STRING }, {"IS"  , PARTYPE_NONE }, 
 };
 
 void printCurrentSlot()
 {
-  Serial.print("Slot:");  Serial.println(slotName);
+  Serial.print("Slot:");  Serial.println(settings.slotName);
   Serial.print("AT AX "); Serial.println(settings.ax);
   Serial.print("AT AY "); Serial.println(settings.ay);
   Serial.print("AT DX "); Serial.println(settings.dx);
@@ -65,7 +68,6 @@ void printCurrentSlot()
   Serial.print("AT RH "); Serial.println(settings.rh);
   Serial.print("AT RO "); Serial.println(settings.ro);
   Serial.print("AT BT "); Serial.println(settings.bt);
-  Serial.print("AT II "); Serial.println(settings.ii);
 
   for (int i = 0; i < NUMBER_OF_BUTTONS; i++)
   {
@@ -75,13 +77,14 @@ void printCurrentSlot()
     Serial.print("AT ");
     int actCmd = buttons[i].mode;
     char cmdStr[4];
+        
     strcpy_FM(cmdStr, (uint_farptr_t_FM)atCommands[actCmd].atCmd);
     Serial.print(cmdStr);
     switch (pgm_read_byte_near(&(atCommands[actCmd].partype)))
     {
       case PARTYPE_UINT:
       case PARTYPE_INT:  Serial.print(" "); Serial.print(buttons[i].value); break;
-      case PARTYPE_STRING: Serial.print(" "); Serial.print(keystringButtons[i]); break;
+      case PARTYPE_STRING: Serial.print(" "); Serial.print(buttonKeystrings[i]); break;
     }
     Serial.println("");
   }
@@ -104,8 +107,7 @@ void performCommand (uint8_t cmd, int16_t par1, char * keystring, int8_t periodi
 #endif
     buttons[actButton - 1].mode = cmd;
     buttons[actButton - 1].value = par1;
-    deleteKeystringButton(actButton - 1);
-    if (keystring != 0) storeKeystringButton(actButton - 1, keystring);
+    setButtonKeystring(actButton - 1, keystring);
     actButton = 0;
     return;  // do not actually execute the command (just store it)
   }
@@ -242,50 +244,52 @@ void performCommand (uint8_t cmd, int16_t par1, char * keystring, int8_t periodi
     case CMD_SA:
       release_all();
       if (keystring) {
-        if ((strlen(keystring) > 0) && (strlen(keystring) < MAX_NAME_LEN))
+        if ((strlen(keystring) > 0) && (strlen(keystring) < MAX_NAME_LEN-1)) {
+          strcpy (settings.slotName, keystring);  // store current slot name
           saveToEEPROM(keystring);
+        }
+        makeTone(TONE_INDICATE_PUFF, 0);
+        Serial.println("OK");
       }
       break;
     case CMD_LO:
       if (keystring) {
         release_all();
-        // reportSlotParameters=REPORT_ONE_SLOT;
-        readFromEEPROM(keystring);
-        reportSlotParameters = REPORT_NONE;
+        if (readFromEEPROM(keystring)) Serial.println("OK");
+        else Serial.println(ERRORMESSAGE_NOT_FOUND);
       }
       break;
     case CMD_LA:
       release_all();
-      reportSlotParameters = REPORT_ALL_SLOTS;
-      //necessary, because we load via slot numbers
-      bootstrapSlotAddresses();
-      for (uint8_t i = 0; i < EEPROM_COUNT_SLOTS; i++)
-      {
-        readFromEEPROMSlotNumber(i, false, false);
-      }
-      reportSlotParameters = REPORT_NONE;
-      readFromEEPROMSlotNumber(0, true);
+      printAllSlots();
       break;
     case CMD_LI:
       release_all();
       listSlots();
+      Serial.println("OK");  // send AT command acknowledge
       break;
     case CMD_NE:
 #ifdef DEBUG_OUTPUT_FULL
       Serial.print("load next slot");
-      reportSlotParameters = REPORT_ONE_SLOT;
 #endif
       release_all();
-      readFromEEPROM(0);
-      reportSlotParameters = REPORT_NONE;
+      if (!readFromEEPROM("")) Serial.println(ERRORMESSAGE_NOT_FOUND);
       break;
     case CMD_DE:
 #ifdef DEBUG_OUTPUT_FULL
       Serial.println("delete slots");
 #endif
       release_all();
-      // deleteIRCommand(0);      // removed to keep IR commands !
-      deleteSlots();
+      if (deleteSlot(keystring))  Serial.println("OK");    // send AT command acknowledge      
+      else Serial.println(ERRORMESSAGE_NOT_FOUND);
+      break;
+    case CMD_RS:
+      deleteSlot(""); // delete all slots
+      memcpy(&settings,&defaultSettings,sizeof(struct slotGeneralSettings)); //load default values from flash
+      initButtons(); //reset buttons
+      saveToEEPROM(settings.slotName); //save default slot to default name
+      readFromEEPROM(""); //load this slot
+      Serial.println("OK");    // send AT command acknowledge
       break;
     case CMD_NC:
       break;
@@ -409,7 +413,7 @@ void performCommand (uint8_t cmd, int16_t par1, char * keystring, int8_t periodi
       Serial.println("record IR command");
 #endif
       if (keystring) {
-        if ((strlen(keystring) > 0) && (strlen(keystring) < MAX_NAME_LEN))
+        if ((strlen(keystring) > 0) && (strlen(keystring) < MAX_NAME_LEN-1))
           record_IR_command(keystring);
       }
       break;
@@ -419,15 +423,6 @@ void performCommand (uint8_t cmd, int16_t par1, char * keystring, int8_t periodi
 #endif
       if (keystring)
         play_IR_command(keystring);
-      break;
-    case CMD_II:
-#ifdef DEBUG_OUTPUT_FULL
-      Serial.println("set IR idle sequence command");
-#endif
-      if (keystring) {
-        if ((strlen(keystring) > 0) && (strlen(keystring) < MAX_NAME_LEN))
-          strcpy(settings.ii, keystring);
-      }
       break;
     case CMD_IH:
 #ifdef DEBUG_OUTPUT_FULL
@@ -446,15 +441,20 @@ void performCommand (uint8_t cmd, int16_t par1, char * keystring, int8_t periodi
       break;
     case CMD_IL:
       list_IR_commands();
+      Serial.println("OK");  // send AT command acknowledge
       break;
     case CMD_IC:
-      if (keystring) delete_IR_command(keystring);
+      if (keystring) {
+        if (delete_IR_command(keystring)) Serial.println("OK");  // send AT command acknowledge
+        else Serial.println(ERRORMESSAGE_NOT_FOUND);
+      }
       break;
     case CMD_IT:
       set_IR_timeout(par1);
       break;
     case CMD_IW:
       wipe_IR_commands();
+      Serial.println("OK");  // send AT command acknowledge
       break;
   }
 }

@@ -48,15 +48,16 @@
 #include "bluetooth.h"
 #include "hid_hal.h"
 
-#define VERSION_STRING "Flipmouse v2.10"
+#define VERSION_STRING "Flipmouse v2.11"
 
+//  V2.11: eeprom access optimization and support for deletion / update of individual slots
 //  V2.10: code size reduction: using floating point math, removed debug level control via AT E0, AT E1 and AT E2
 //          added macro command description to the user manual
 //  V2.9:  implemented drift correction for small deadzones, removed gain up/down/left/right,
 //          added AT commands for drift correction, modified calculation of acceleration
 //  V2.8.3: switched to semantic version numbering, increased acceleration factors
-//  V2.82: corrected memory bugs (index / heap overflows), added slot copy feature (in GUI)
-//  V2.81: corrected bug in deadzone calculation for keyboard actions, improved stable time for strong sip/puff functions
+//  V2.8.2: corrected memory bugs (index / heap overflows), added slot copy feature (in GUI)
+//  V2.8.1: corrected bug in deadzone calculation for keyboard actions, improved stable time for strong sip/puff functions
 //  V2.8: improved cursor control by using polar coordinates and damping
 //  V2.7: improved IR command recording and playback (IR hold repeats codes, optionally append off-sequence)
 //  V2.6: updated API for KEY commands (added KT, changed KP) and Mouse Click commands (added toggle clicks)
@@ -107,8 +108,13 @@
 // #define DOUBLECLICK_MULTIPLIER  5    // CLICK_TIME factor for double clicks
 
 extern uint8_t workingmem[WORKINGMEM_SIZE];    // working memory  (command parser, IR-rec/play)
+extern char keystringBuffer[MAX_KEYSTRINGBUFFER_LEN];  // storage for all button string parameters of a slot
 
 struct slotGeneralSettings {
+
+  char slotName[MAX_NAME_LEN];   // slotname
+  uint16_t keystringBufferLen;   
+  
   uint8_t  stickMode;  // alternative (0) mouse (1) or joystick (2,3,4) mode
   uint8_t  ax;     // acceleration x
   uint8_t  ay;     // acceleration y
@@ -129,7 +135,6 @@ struct slotGeneralSettings {
   int16_t  cy;     // calib y
   uint16_t ro;     // orientation (0,90,180,270)
   uint8_t  bt;     // bt-mode (0,1,2)
-  char     ii[MAX_NAME_LEN]; // infrared idle sequence name
 };
 
 
@@ -144,7 +149,7 @@ extern uint8_t reportSlotParameters;
 extern uint8_t reportRawValues;
 extern uint32_t buttonStates;
 extern struct slotGeneralSettings settings;
-extern char slotName[MAX_NAME_LEN];
+extern const struct slotGeneralSettings defaultSettings;
 extern int EmptySlotAddress;
 
 extern const struct atCommandType atCommands[];
@@ -159,10 +164,6 @@ extern float force;
 extern float angle;
 
 void performCommand (uint8_t cmd, int16_t par1, char * keystring, int8_t periodicMouseMovement);
-void saveToEEPROM(char * slotname);
-void readFromEEPROM(char * slotname);
-void deleteSlots();
-void listSlots();
 void initButtons();
 void printCurrentSlot();
 void initBlink(uint8_t count, uint8_t startTime);
@@ -185,7 +186,7 @@ void play_IR_command(char * name);
 void hold_IR_command(char * name);
 void stop_IR_command();
 void list_IR_commands();
-void delete_IR_command(char * name);
+uint8_t delete_IR_command(char * name);
 void set_IR_timeout(uint16_t ms);
 void wipe_IR_commands();
 

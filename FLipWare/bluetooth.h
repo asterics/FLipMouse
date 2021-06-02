@@ -24,6 +24,13 @@
 //RX/TX3 are used to communicate with an addon board (mounted on AUX header)
 #define Serial_AUX Serial3
 
+/** BT module upgrade: inactive/idle */
+#define BTMODULE_UPGRADE_IDLE 0
+/** BT module upgrade: starting (waiting for ESP32 to switch into OTA mode) */
+#define BTMODULE_UPGRADE_START 1
+/** BT module upgrade: running (data is transmitted) */
+#define BTMODULE_UPGRADE_RUNNING 2
+
 /**
 
    name: mouseBT
@@ -141,6 +148,17 @@ bool isBluetoothAvailable();
    @note Not implemented
 */
 bool startBTPairing();
+
+
+/**
+
+   name: performAddonUpgrade
+   @param none
+   @return none
+
+   handle states and data transfer for BT-Addon firmware update
+*/
+void performAddonUpgrade();
 
 
 #endif

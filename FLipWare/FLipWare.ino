@@ -85,7 +85,7 @@ uint8_t reportRawValues = 0;
  * @note If NUMBER_OF_BUTTONS is more than 32, change type to uint64_t! */
 uint32_t buttonStates = 0;
 uint8_t actSlot = 0;
-
+uint8_t addonUpgrade = BTMODULE_UPGRADE_IDLE; // if not "idle": we are upgrading the addon module
 uint16_t calib_now = 1;                       // calibrate zeropoint right at startup !
 
 int waitTime = DEFAULT_WAIT_TIME;
@@ -125,11 +125,11 @@ extern uint8_t CimMode;
 void setup() {
   //load settings
   memcpy(&settings,&defaultSettings,sizeof(struct slotGeneralSettings));
+  //initialise BT module, if available (must be done early!)
+  initBluetooth();
+  
   Serial.begin(115200);
   delay(1000);
-  
-  //initialise BT module, if available
-  initBluetooth();
 
   Wire.begin();
   Wire.setClock(400000);
@@ -172,6 +172,12 @@ void setup() {
 ///////////////////////////////
 
 void loop() {
+	
+  //check if we should go into addon upgrade mode
+	if(addonUpgrade != BTMODULE_UPGRADE_IDLE) {
+    performAddonUpgrade();
+    return;
+	}
 
   pressure = analogRead(PRESSURE_SENSOR_PIN);
 
@@ -190,6 +196,11 @@ void loop() {
     // get incoming byte:
     inByte = Serial.read();
     parseByte (inByte);      // implemented in parser.cpp
+  }
+  
+  // if incoming data from BT-addOn: forward it to host serial interface
+  while (Serial_AUX.available() > 0) {
+    Serial.write(Serial_AUX.read());
   }
 
   if (StandAloneMode && (millis() >= updateStandaloneTimestamp + waitTime))  {

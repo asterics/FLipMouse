@@ -44,7 +44,8 @@ const struct atCommandType atCommands[] PROGMEM = {
   {"AC"  , PARTYPE_UINT },  {"MA"  , PARTYPE_STRING}, {"WA"  , PARTYPE_UINT  }, {"RO"  , PARTYPE_UINT },
   {"IW"  , PARTYPE_NONE },  {"BT"  , PARTYPE_UINT }, {"HL"  , PARTYPE_NONE }, {"HR"  , PARTYPE_NONE },
   {"HM"  , PARTYPE_NONE },  {"TL"  , PARTYPE_NONE }, {"TR"  , PARTYPE_NONE }, {"TM"  , PARTYPE_NONE },
-  {"KT"  , PARTYPE_STRING }, {"IH"  , PARTYPE_STRING }, {"IS"  , PARTYPE_NONE }, 
+  {"KT"  , PARTYPE_STRING }, {"IH"  , PARTYPE_STRING }, {"IS"  , PARTYPE_NONE }, {"UG", PARTYPE_NONE },
+  {"BC"  , PARTYPE_STRING},
 };
 
 void printCurrentSlot()
@@ -456,5 +457,20 @@ void performCommand (uint8_t cmd, int16_t par1, char * keystring, int8_t periodi
       wipe_IR_commands();
       Serial.println("OK");  // send AT command acknowledge
       break;
+    case CMD_BC:
+      if (isBluetoothAvailable()) {
+        Serial_AUX.write(keystring);
+        Serial_AUX.write('\n'); //terminate command
+      }
+      break;
+    case CMD_UG:
+      //we set this flag here, flushing & disabling serial port is done in loop()
+      addonUpgrade = BTMODULE_UPGRADE_START;
+      Serial.println("Starting upgrade for BT addon!");
+      // Command for upgrade sent to ESP - triggering reset into factory reset mode
+      Serial_AUX.println("$UG");
+      // delaying to ensure that UART command is sent and received
+      delay(500);
+      break;  
   }
 }

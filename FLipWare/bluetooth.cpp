@@ -27,6 +27,8 @@ uint8_t activeModifierKeys = 0;
 uint8_t activeMouseButtons = 0;
 
 long btsendTimestamp = millis();
+long upgradeTimestamp = 0;          // eventually come back to AT mode from an unsuccessful BT module upgrade !
+uint8_t readstate_f=0;              // needed to track the return value status during addon upgrade mode
 
 /**
 
@@ -333,7 +335,7 @@ void initBluetooth()
 
   ///@todo send identifier to BT module & check response. With BT addon this is much faster and reliable
   bt_esp32addon = EZKEY;
-  Serial_AUX.println("$ID");
+  //Serial_AUX.println("$ID");
   //set BT name to FLipMouse
   Serial_AUX.println("$NAME FLipMouse");
 }
@@ -365,4 +367,77 @@ bool startBTPairing()
   //we will send a command to the BT addon board here.
   ///@todo which command & implement on BT addon
   return true;
+}
+
+
+/**
+
+   name: performAddonUpgrade
+   @param none
+   @return none
+
+   handle states and data transfer for BT-Addon firmware update
+*/
+void performAddonUpgrade() 
+{
+  //update start
+  if(addonUpgrade == BTMODULE_UPGRADE_START)
+  {
+    Serial_AUX.end();
+    Serial_AUX.begin(500000); //switch to higher speed...
+    Serial.flush();
+    Serial_AUX.flush();
+    //remove everything from buffers...
+    while(Serial.available()) Serial.read();
+    while(Serial_AUX.available()) Serial_AUX.read();
+    addonUpgrade = BTMODULE_UPGRADE_RUNNING;
+    upgradeTimestamp=millis();
+    return;
+  }
+
+  if(addonUpgrade == BTMODULE_UPGRADE_RUNNING)
+  {
+    if(Serial.available()) upgradeTimestamp=millis();   // incoming data: assume working upgrade!
+    else {
+      // 20 seconds no data -> return to AT mode !
+      if (millis()-upgradeTimestamp > 20000) {
+        addonUpgrade = BTMODULE_UPGRADE_IDLE;
+        Serial_AUX.begin(9600); //switch to lower speed...
+        Serial.flush();
+        Serial_AUX.flush();
+        return;
+      }
+    }
+        
+    while(Serial.available()) Serial_AUX.write(Serial.read());
+    while(Serial_AUX.available()) {
+      int inByte = Serial_AUX.read();
+      Serial.write(inByte);
+      switch (readstate_f) {
+        case 0:
+            if (inByte=='$') readstate_f++;
+           break;
+        case 1:
+            if (inByte=='F') readstate_f++; else readstate_f=0;
+          break;
+        case 2:
+            if (inByte=='I') readstate_f++; else readstate_f=0;
+          break;
+        case 3:
+            if (inByte=='N') {
+            addonUpgrade = BTMODULE_UPGRADE_IDLE;
+            bt_available = 1;
+            readstate_f=0;
+            delay(50);
+            Serial_AUX.begin(9600); //switch to lower speed...
+            Serial.flush();
+            Serial_AUX.flush();
+            } else readstate_f=0;
+          break;
+        default: 
+        readstate_f=0;
+      }
+    }
+    return;
+  }
 }

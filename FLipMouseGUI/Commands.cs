@@ -179,7 +179,7 @@ namespace MouseApp2
         const int GUITYPE_COMBO_INDEX = 8;
         const int GUITYPE_IRSELECT = 9;
 
-        const string PREFIX_FLIPMOUSE_VERSION = "FLIPMOUSE ";
+        const string PREFIX_FLIPMOUSE_VERSION = "FLIPMOUSE V";
         const string PREFIX_REPORT_VALUES = "VALUES:";
         const string PREFIX_SLOT_NAME = "SLOT:";
         const string PREFIX_AT_COMMAND = "AT ";
@@ -188,6 +188,8 @@ namespace MouseApp2
         const string PREFIX_IRCOMMAND_RECORDED = "IR: RECORDED ";
         const string PREFIX_IRCOMMAND_TIMEOUT = "IR_TIMEOUT:";
         const string PREFIX_ACKNOWLEDGE_MESSAGE = "OK";
+        const string PREFIX_START_UPGRADE = "OTA:READY";
+
 
 
         public AllCommands allCommands = new AllCommands();

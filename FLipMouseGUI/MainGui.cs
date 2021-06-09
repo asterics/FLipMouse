@@ -22,7 +22,8 @@ using System.Threading;
 using System.Windows.Forms;
 using System.IO;
 using System.Text.RegularExpressions;
-
+using System.Net;
+using System.Runtime.InteropServices;
 
 
 namespace MouseApp2
@@ -39,6 +40,7 @@ namespace MouseApp2
 
         Boolean readDone = false;
         Boolean acknowledge = false;
+        Boolean firmwareUpdate_running = false;
 
         static int slotCounter = 0;
         static int actSlot = 0;
@@ -54,6 +56,11 @@ namespace MouseApp2
 
         System.Windows.Forms.Timer clickTimer = new System.Windows.Forms.Timer();
         System.Windows.Forms.Timer IdTimer = new System.Windows.Forms.Timer();
+        System.Windows.Forms.Timer COMAliveTimer = new System.Windows.Forms.Timer();
+        System.Windows.Forms.Timer FirmwareUpdateTimer = new System.Windows.Forms.Timer();
+
+        Stream updateFirmwareStream = null;
+        string downloadPath;
 
 
         const int MAX_SLOTS = 10;
@@ -267,6 +274,12 @@ namespace MouseApp2
             clickTimer.Interval = 500; // specify interval time as you want
             clickTimer.Tick += new EventHandler(timer_Tick);
 
+            COMAliveTimer.Interval = 1000;
+            COMAliveTimer.Tick += new EventHandler(comAlive_Tick);
+
+            FirmwareUpdateTimer.Interval = 20000;
+            FirmwareUpdateTimer.Tick += new EventHandler(firmwareUpdate_Tick);
+
             IdTimer.Tick += new EventHandler(IdTimer_Tick);
 
             Text += VERSION_STRING;
@@ -388,6 +401,7 @@ namespace MouseApp2
                         IdTimer.Interval = 1500;
                         IdTimer.Start();
                         Console.WriteLine("IdTimer started!");
+                        serialPort1.DiscardInBuffer();
 
                         readDone = false;
                         Thread thread = new Thread(new ThreadStart(WorkThreadFunction));
@@ -1405,6 +1419,29 @@ namespace MouseApp2
              functionPointer(this, null);
         }
 
+        void comAlive_Tick(object sender, EventArgs e)
+        {
+            if (!serialPort1.IsOpen)
+            {
+                disconnnectComButton_Click(null, null);
+                COMAliveTimer.Stop();
+            }
+        }
+
+
+        void firmwareUpdate_Tick(object sender, EventArgs e)
+        {
+            FirmwareUpdateTimer.Stop();
+            if (!firmwareUpdate_running)
+            {
+                updateFirmwareStream.Close();
+                MessageBox.Show("Could not connect to Bluetooth Module ...\nPlease ensure that a BT-Module is connected.", "Information", MessageBoxButtons.OK);
+                addToLog("Could not connect to Bluetooth Module ...");
+                updateAddOnButton.Enabled = true;
+                pBar1.Visible = false;
+            }
+        }
+
         private void stop_ClickTimer(object sender, EventArgs e)
         {
             clickTimer.Stop();
@@ -1618,5 +1655,130 @@ namespace MouseApp2
             copyToAllSlots(actSlot, "AT GH");
             copyToAllSlots(actSlot, "AT RH");
         }
+
+
+        public static bool IsLinux
+        {
+            get
+            {
+                int p = (int)Environment.OSVersion.Platform;
+                return (p == 4) || (p == 6) || (p == 128);
+            }
+        }
+
+        [DllImport("Shell32.dll")]
+        private static extern int SHGetKnownFolderPath(
+            [MarshalAs(UnmanagedType.LPStruct)] Guid rfid, uint dwFlags, IntPtr hToken,
+            out IntPtr ppszPath);
+
+        private void updateAddOnButton_Click(object sender, EventArgs e)
+        {
+            if (!serialPort1.IsOpen)
+            {
+                MessageBox.Show("Please Connect the FlipMouse Device", "Information");
+                return;
+            }
+
+
+            if (!IsLinux)
+            {
+                // Find private downloads folder
+                IntPtr outPath;
+                int result = SHGetKnownFolderPath(new Guid("{374DE290-123F-4565-9164-39C4925E467B}"), (uint)0x00004000, new IntPtr(0), out outPath);
+
+                if (result < 0)
+                {
+                    MessageBox.Show("Could not access Download folder", "Error", MessageBoxButtons.OK);
+                    return;
+                }
+
+                downloadPath = Marshal.PtrToStringUni(outPath) + "\\esp32_mouse_keyboard.bin";
+                Marshal.FreeCoTaskMem(outPath);
+            }
+            else
+            {
+                downloadPath = "~\\esp32_mouse_keyboard.bin";
+                Console.WriteLine("Using Linux Folder: " + downloadPath);
+            }
+
+            pBar1.Minimum = 0;
+            pBar1.Maximum = 100;
+            pBar1.Visible = true;
+
+            // Download latest firmware binary
+            WebClient wc = new WebClient();
+            wc.DownloadProgressChanged += wc_DownloadProgressChanged;
+            wc.DownloadFileCompleted += wc_DownloadFileCompleted;
+
+            try
+            {
+                ServicePointManager.SecurityProtocol = (SecurityProtocolType)3072;
+                wc.DownloadFileAsync(
+                    // Param1 = Link of file
+                    new System.Uri("https://github.com/asterics/esp32_mouse_keyboard/releases/latest/download/esp32_mouse_keyboard.bin"),
+                    // Param2 = Path to save
+                    downloadPath
+                );
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Download Error: " + ex.Message);
+                addToLog("Could not download the binary firmware image file, aborting!");
+                return;
+            }
+            // Event to track the progress
+            addToLog("Downloading binary firmware image file...");
+        }
+        void wc_DownloadProgressChanged(object sender, DownloadProgressChangedEventArgs e)
+        {
+            pBar1.Value = e.ProgressPercentage;
+        }
+
+        void wc_DownloadFileCompleted(object sender, AsyncCompletedEventArgs e)
+        {
+            bool fileValid = false;
+
+            if (File.Exists(downloadPath))
+            {
+                long len = new FileInfo(downloadPath).Length;
+                if ((len > 500000) && (len < 5000000)) fileValid = true;
+            }
+
+            if (!fileValid)
+            {
+                MessageBox.Show("BT module firmware file could not be downloaded ... Aborting...", "Upgrade Firmware Failed", MessageBoxButtons.OK);
+                return;
+            }
+
+            DialogResult dialogResult = MessageBox.Show("Are you sure to upgrade the BT module firmware ? \nused binary: " + downloadPath, "Upgrade Firmware ?", MessageBoxButtons.YesNo);
+            if (dialogResult == DialogResult.Yes)
+            {
+                updateAddOnButton.Enabled = false;
+
+                try
+                {
+                    Console.WriteLine("Try to open firmware file ...");
+                    updateFirmwareStream = File.Open(downloadPath, FileMode.Open);
+
+                    sendCmd("AT UG");
+                    pBar1.Value = 0;                     // reset the ProgressBar control.
+                    addToLog("Starting Upgrade Process, please wait ...");
+
+                    Console.WriteLine("waiting for BT-module response ...");
+                    firmwareUpdate_running = false;
+                    FirmwareUpdateTimer.Enabled = true;
+                    FirmwareUpdateTimer.Start();
+                }
+                catch (Exception ex)
+                {
+                    addToLog("Could not open Firmware .bin file!");
+                    MessageBox.Show("Could not open Firmware .bin file ...\nPlease put the file here:\n" + downloadPath, "File Error", MessageBoxButtons.OK);
+                    updateAddOnButton.Enabled = true;
+                    pBar1.Visible = false;
+
+                }
+            }
+        }
+
     }
 }

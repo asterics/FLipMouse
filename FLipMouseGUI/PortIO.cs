@@ -147,6 +147,10 @@ namespace MouseApp2
             {
                 gotOK(newLine);
             }
+            else if (newLine.ToUpper().Contains(PREFIX_START_UPGRADE))  // upgrate BT module firmware
+            {
+                gotUpgradeReady();
+            }
             else addToLog(newLine);
 
         }
@@ -168,7 +172,8 @@ namespace MouseApp2
         public void gotID(String newLine)
         {
             DialogResult dialogResult;
-            addToLog("Connected device: " + newLine);
+            Console.WriteLine(newLine);
+            addToLog("Connected device: " + newLine.Trim());
             IdTimer.Stop();
             if (!(newLine.Contains("Flipmouse")))
             {
@@ -203,7 +208,63 @@ namespace MouseApp2
             sendStartReportingCommand();   // start reporting raw values !
 
 
+            COMAliveTimer.Enabled = true;
+            COMAliveTimer.Start();
         }
+
+        public void gotUpgradeReady()
+        {
+            firmwareUpdate_running = true;
+            addToLog("Upgrade Process running ...");
+            Console.WriteLine("Upgrade Process running ...");
+
+            // Set Minimum to 1 to represent the first file being copied.
+            pBar1.Minimum = 1;
+            // Set Maximum to the total number of files to copy.
+            try
+            {
+                if (updateFirmwareStream != null)
+                {
+                    byte[] buf;
+                    int count = 0;
+                    System.IO.BinaryReader file = new System.IO.BinaryReader(updateFirmwareStream);
+
+                    pBar1.Maximum = (int)updateFirmwareStream.Length;
+                    // Set the initial value of the ProgressBar.
+                    pBar1.Value = 1;
+                    // Set the Step property to a value of 1 to represent each file being copied.
+                    pBar1.Step = 1;
+
+                    buf = file.ReadBytes(128);
+                    while (buf.Length != 0)
+                    {
+                        serialPort1.Write(buf, 0, buf.Length);
+                        count += buf.Length;
+                        pBar1.Value = count;
+                        pBar1.Invalidate();
+                        pBar1.Update();
+                        pBar1.Refresh();
+                        Application.DoEvents();
+                        // Console.WriteLine(count);
+                        Thread.Sleep(10);
+                        buf = file.ReadBytes(128);
+                    }
+                    file.Close();
+                    updateFirmwareStream.Close();
+                    addToLog("Done.");
+                    Console.WriteLine("Done.");
+                    File.Delete(downloadPath);
+                }
+            }
+            catch (Exception ex)
+            {
+                addToLog("Error: Could not read file from disk. Original error: " + ex.Message);
+            }
+            pBar1.Visible = false;
+            updateAddOnButton.Enabled = true;
+
+        }
+
 
         public void gotSlotNames(String newSlotName)
         {
@@ -269,6 +330,7 @@ namespace MouseApp2
 
         private void disconnect()
         {
+            COMAliveTimer.Stop();
             readDone = true;
             if (serialPort1.IsOpen)
             {

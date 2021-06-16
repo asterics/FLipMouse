@@ -23,6 +23,7 @@ uint8_t actButton = 0;
 extern void parseCommand (char * cmdstr);
 
 const char ERRORMESSAGE_NOT_FOUND[] = "E: not found";
+const char ERRORMESSAGE_EEPROM_FULL[] = "E: eeprom full";
 
 const struct atCommandType atCommands[] PROGMEM = {
   {"ID"  , PARTYPE_NONE },  {"BM"  , PARTYPE_UINT }, {"CL"  , PARTYPE_NONE }, {"CR"  , PARTYPE_NONE },
@@ -247,10 +248,11 @@ void performCommand (uint8_t cmd, int16_t par1, char * keystring, int8_t periodi
       if (keystring) {
         if ((strlen(keystring) > 0) && (strlen(keystring) < MAX_NAME_LEN-1)) {
           strcpy (settings.slotName, keystring);  // store current slot name
-          saveToEEPROM(keystring);
+          if (saveToEEPROM(keystring)) Serial.println("OK");
+          else Serial.println(ERRORMESSAGE_EEPROM_FULL);
         }
         makeTone(TONE_INDICATE_PUFF, 0);
-        Serial.println("OK");
+        
       }
       break;
     case CMD_LO:

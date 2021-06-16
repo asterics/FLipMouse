@@ -45,8 +45,8 @@
 #include "i2c_t3.h"
 #include <EEPROM.h>
 
-#define EEPROM_COUNT_SLOTS 10
-#define EEPROM_COUNT_IRCOMMAND 20
+#define MAX_SLOTS_IN_EERPOM 10
+#define MAX_IRCOMMANDS_IN_EERPOM 20
 
 #define EEPROM_MAX_ADDRESS 0x7FFF
 #define EEPROM_MAGIC_NUMBER 	0x3b
@@ -59,10 +59,10 @@
 
  * */
 struct storageHeader {
-  uint16_t	startSlotAddress[EEPROM_COUNT_SLOTS];
-  uint16_t  endSlotAddress[EEPROM_COUNT_SLOTS];
-  uint16_t	startIRAddress[EEPROM_COUNT_IRCOMMAND];
-  uint16_t  endIRAddress[EEPROM_COUNT_IRCOMMAND];
+  uint16_t	startSlotAddress[MAX_SLOTS_IN_EERPOM];
+  uint16_t  endSlotAddress[MAX_SLOTS_IN_EERPOM];
+  uint16_t	startIRAddress[MAX_IRCOMMANDS_IN_EERPOM];
+  uint16_t  endIRAddress[MAX_IRCOMMANDS_IN_EERPOM];
   uint16_t  versionID;
 };
 
@@ -168,8 +168,10 @@ int8_t slotnameToNumber(char * slotname);
    Save the current slot by the given slotname.
    If there is no slot existing with this name,
    it will be saved to a new slot.
+   returns 1 if successful, 0 if max slot count is reached
+
  * */
-void saveToEEPROM(char * slotname);
+uint8_t saveToEEPROM(char * slotname);
 
 /**
    Store current slot data to the EEPROM.

@@ -54,7 +54,7 @@
 
 struct slotButtonSettings {                     // holds settings for a button function
   uint16_t mode;
-  uint16_t value;
+  int16_t value;
 };
 
 struct buttonDebouncerType {              // holds working data for button debouncing and longpress detection

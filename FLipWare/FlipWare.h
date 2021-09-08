@@ -48,7 +48,7 @@
 #include "bluetooth.h"
 #include "hid_hal.h"
 
-#define VERSION_STRING "Flipmouse v2.11"
+#define VERSION_STRING "Flipmouse v2.11.1"
 
 //  V2.11: eeprom access optimization and support for deletion / update of individual slots
 //  V2.10: code size reduction: using floating point math, removed debug level control via AT E0, AT E1 and AT E2

@@ -97,6 +97,7 @@ int x, y;
 int pressure;
 float dz = 0, force = 0, angle = 0;
 int xLocalMax = 0, yLocalMax = 0;
+int xDriftComp = 0, yDriftComp = 0;
 int16_t  cx = 0, cy = 0;
 
 uint8_t blinkCount = 0;
@@ -251,6 +252,10 @@ void reportValues()
     }
     Serial.print(",");
     Serial.print(actSlot);
+    Serial.print(",");
+    Serial.print(xDriftComp);
+    Serial.print(",");
+    Serial.print(yDriftComp);
     Serial.println("");
     /*
       Serial.print("AnalogRAW:");
@@ -287,8 +292,10 @@ void applyDriftCorrection()
   if (yLocalMax > settings.rv) yLocalMax = settings.rv;
   if (yLocalMax < -settings.rv) yLocalMax = -settings.rv;
 
-  x -= xLocalMax * ((float)settings.gh / 250);
-  y -= yLocalMax * ((float)settings.gv / 250);
+  xDriftComp = xLocalMax * ((float)settings.gh / 250);
+  yDriftComp = yLocalMax * ((float)settings.gv / 250);
+  x -= xDriftComp;
+  y -= yDriftComp;
 }
 
 void applyDeadzone()

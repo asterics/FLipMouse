@@ -103,6 +103,7 @@ The optional BlueTooth add-on module allows connection of the FLipMouse as a Blu
 # Instructions for proper mounting and use
 
 **1. Attach the "hygienic stick**
+
 ![hygienic stick](./Bilder/f7.PNG)
 
 *Figure 7*: Attaching the hygienic stick
@@ -336,7 +337,7 @@ A negative value for the Y direction moves the mouse pointer up.*
 
 #### Action category: Joystick
 
-**Joystick set x-/y-/z-axis/slider **
+**Joystick set x-/y-/z-axis/slider**
 These actions can be used to send a desired value to the joystick axis. The selectable joystick axes are: X / Y / Z / Z-Turn / slider. The joystick is moved back to middle position when the associated user activity ends.
 
 **Press Joystick Button**
@@ -524,15 +525,16 @@ Saliva filters and *Hygienic Sticks* can be directly ordered from the [*Quadjoy*
 ## Hygienic considerations and risks
 
 If the mouthpiece is actuated with the lips, it is important to respect the following hygienic precautions: 
-a.    One mouthpiece must be used exclusively by one person
-b.    The filter tip must be replaced whenever saliva or dirt have formed
-c.    The mouthpiece must be cleaned whenever saliva or dirt have formed
+1. One mouthpiece must be used exclusively by one person
+2. The filter tip must be replaced whenever saliva or dirt have formed
+3. The mouthpiece must be cleaned whenever saliva or dirt have formed
 (see chapter “Cleaning and Maintenance”)
 
 With the lack of hygiene concerning the mouthpiece, especially when the mouthpiece is used by more than one person, it is possible that 
-•    skin rash arises
-•    viruses and bacteria are transmitted causing diseases
-•    dirt formats in the mouthpiece, which is dangerous to health
+
+1. skin rash arises
+2. viruses and bacteria are transmitted causing diseases
+3. dirt formats in the mouthpiece, which is dangerous to health
 
 With wrong positioning of the FLipMouse there is the risk of feeling uncomfortable after longer periods of use, and it is possible to get muscle cramps or muscle pain due to unusual head positioning – pay attention to a convenient position and schedule pauses if you work for longer time periods!
 
@@ -543,8 +545,10 @@ In addition to the possibility of updating the FLipMouse firmware via the config
 ![Teensy Loader](./Bilder/fig35.PNG)
 
 *Figure 35: Teensy Loader Step 1*
+
 The Teensy Loader user interface should look as on the picture above (Figure 35). If there is any security warning (related to Windows User Access Control), please ensure that the Publisher is “PJRC.COM, LLC” and click on “Run”.
 As next step, activate the “download mode” of the FLipMouse by using some pointed tool (needle, small screwdriver, …) to press the reset button which is accessible via the small hole on the bottom side. After a few seconds (driver installation), the Teensy Loader GUI should indicate connection to the FLipMouse as shown here in Figure 36:
+
 ![Teensy Loader](./Bilder/fig36.PNG)
 
 *Figure 36: Teensy Loader Step 2*
@@ -645,13 +649,19 @@ Please note that certain commands for adjusting FLipMouse settings are not shown
 # Contact Information
 
 University of Applied Sciences Technikum Wien
+  
 Faculty of Electronic Engineering
+  
 Höchstädtplatz 6
+  
 A-1200 Wien
+  
 AUSTRIA
 
 AsTeRICS Foundation
+  
 Webpage: [www.asterics-foundation.org](http://www.asterics-foundation.org)
+  
 Email: <office@asterics-foundation.org>
 
 # Disclaimer

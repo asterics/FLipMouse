@@ -376,7 +376,7 @@ The “Write word” action allows typing a particular text/phrase whenever an u
 
 *Figure 25: Write word function*
 
-In this example, "Hello" will be written eacht time button 2 of the FLipMouse is pressed.
+In this example, "Hello" will be written each time button 2 of the FLipMouse is pressed.
 
 #### Action category: Device
 
@@ -658,6 +658,8 @@ A-1200 Wien
   
 AUSTRIA
 
+  
+  
 AsTeRICS Foundation
   
 Webpage: [www.asterics-foundation.org](http://www.asterics-foundation.org)

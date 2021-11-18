@@ -8,7 +8,7 @@
 
 #### AsTeRICS Foundation
 
-![Logos](./Bilder/Logo.PNG)
+![Logos](./Bilder/logo.PNG)
 
 ____
 
@@ -31,6 +31,7 @@ The AsTeRICS Foundation
 
 The FLipMouse is available with a 3d-printed enclosure. Design files for the 3d-printed case are available in the [Github repository](https://github.com/asterics/FLipMouse/tree/master/Hardware/case-design/3D_printer). The primary method for using the FLipMouse is the transparent stick (“Hygienic Stick” or “mouthpiece”) which is attached to the front of the FLipMouse. Additionally, two external momentary switches can be attached to extend interaction capabilities:
 ![FLipMouse 3D-printed](./Bilder/f1.PNG)
+
 *Figure 1*: FLipMouse 3D-printed
 
 The *Hygienic Stick* is made by the company *QuadJoy*.  Replacement sticks can be ordered via the homepage: [www.quadjoy.com](http://www.quadjoy.com). We want to thank Bill and Debra Street of *QuadJoy* for letting us use their mouthpiece for our FLipMouse construction kit! 

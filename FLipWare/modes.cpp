@@ -128,6 +128,13 @@ float timeDifference;
 uint32_t timeStamp = 0;
 unsigned long time = 0;
 
+extern int resetPadDirectionStates;
+
+int useAbsolutePadValues() {
+  if ((settings.stickMode==STICKMODE_PAD) || (settings.stickMode==STICKMODE_PAD_ALTERNATIVE))
+    return(1);
+  return(0);
+}
 
 void handleModeState(int x, int y, int pressure)
 {
@@ -396,7 +403,46 @@ void handleModeState(int x, int y, int pressure)
       handleButton(LEFT_BUTTON,  x < 0 ? 1 : 0);
       handleButton(RIGHT_BUTTON,  x > 0 ? 1 : 0);
     }
-    else  {                                          // handle joystick modes 2,3 and 4
+    else if (settings.stickMode == STICKMODE_PAD) {
+
+      moveValX = x * (float)settings.ax /100;
+      moveValY = y * (float)settings.ay /100;
+
+      float actSpeed =  __ieee754_sqrtf (moveValX * moveValX + moveValY * moveValY);
+      float max_speed = settings.ms / 4;
+      if (actSpeed > max_speed) {
+        moveValX *= (max_speed / actSpeed);
+        moveValY *= (max_speed / actSpeed);
+        accelFactor *= 0.98f;
+      }
+
+      accumXpos += moveValX;
+      accumYpos += moveValY;
+
+      int xMove = (int)accumXpos;
+      int yMove = (int)accumYpos;
+
+      if ((xMove != 0) || (yMove != 0))
+        mouseMove(xMove, yMove);
+
+      accumXpos -= xMove;
+      accumYpos -= yMove;
+    }
+    else if (settings.stickMode == STICKMODE_PAD_ALTERNATIVE) {
+      static int upState=0,downState=0,leftState=0,rightState=0;
+      if (y>settings.dy){downState=1;upState=0;}
+      if (y<-settings.dy) {upState=1; downState=0;}
+      if (x>settings.dx) {rightState=1; leftState=0;}
+      if (x<-settings.dx) {rightState=0; leftState=1;}
+
+      if (resetPadDirectionStates) {upState=downState=leftState=rightState=resetPadDirectionStates=0;}
+      
+      handleButton(UP_BUTTON,  upState);
+      handleButton(DOWN_BUTTON,  downState);
+      handleButton(LEFT_BUTTON,  leftState);
+      handleButton(RIGHT_BUTTON,  rightState);    
+    }    
+    else  {  // handle joystick modes
       if (y == 0) accumYpos = 512;
       else accumYpos = 512 + (float)y * settings.ay / 50;
 

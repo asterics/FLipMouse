@@ -28,10 +28,14 @@
 
 #define STICKMODE_ALTERNATIVE      0
 #define STICKMODE_MOUSE            1
-#define STICKMODE_JOYSTICK_XY      2
-#define STICKMODE_JOYSTICK_ZR      3
-#define STICKMODE_JOYSTICK_SLIDERS 4
+#define STICKMODE_PAD              2  // TBD: use correct values 5,6.. / update GUI
+#define STICKMODE_PAD_ALTERNATIVE  3     
+#define STICKMODE_JOYSTICK_XY      4  // TBD: joystick modes should stay 2,3,4
+#define STICKMODE_JOYSTICK_ZR      5
+#define STICKMODE_JOYSTICK_SLIDERS 6
 
+void handleModeState(int x, int y, int pressure);
+int useAbsolutePadValues();
 void handleModeState(int x, int y, int pressure);
 
 // extern uint8_t holdMode =HOLD_IDLE;

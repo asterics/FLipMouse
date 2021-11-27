@@ -38,6 +38,7 @@
 #include <EEPROM.h>
 #include "i2c_t3.h"        // for the external EEPROM
 #include "math.h"
+#include "cirque.h"
 
 // Constants and Macro definitions
 
@@ -118,6 +119,8 @@ extern void init_CIM_frame(void);
 extern uint8_t StandAloneMode;
 extern uint8_t CimMode;
 
+int cirqueInstalled=0;
+int padX=0,padY=0;
 
 ////////////////////////////////////////
 // Setup: program execution starts here
@@ -160,6 +163,8 @@ void setup() {
   blinkCount = 10;
   blinkStartTime = 25;
 
+  cirqueInstalled=initCirque();
+
 #ifdef DEBUG_OUTPUT_FULL
   Serial.print("Free RAM:");  Serial.println(freeRam());
   Serial.println("FLipMouse ready !");
@@ -181,18 +186,20 @@ void loop() {
 	}
 
   pressure = analogRead(PRESSURE_SENSOR_PIN);
-
-  up =       analogRead(UP_SENSOR_PIN);
-  down =     analogRead(DOWN_SENSOR_PIN);
-  left =     analogRead(LEFT_SENSOR_PIN);
-  right =    analogRead(RIGHT_SENSOR_PIN);
-
-  switch (settings.ro) {
-    case 90: tmp = up; up = left; left = down; down = right; right = tmp; break;
-    case 180: tmp = up; up = down; down = tmp; tmp = right; right = left; left = tmp; break;
-    case 270: tmp = up; up = right; right = down; down = left; left = tmp; break;
+  if (cirqueInstalled) updateCirquePad(&padX,&padY); 
+  else {
+    up =       analogRead(UP_SENSOR_PIN);
+    down =     analogRead(DOWN_SENSOR_PIN);
+    left =     analogRead(LEFT_SENSOR_PIN);
+    right =    analogRead(RIGHT_SENSOR_PIN);
+  
+    switch (settings.ro) {
+      case 90: tmp = up; up = left; left = down; down = right; right = tmp; break;
+      case 180: tmp = up; up = down; down = tmp; tmp = right; right = left; left = tmp; break;
+      case 270: tmp = up; up = right; right = down; down = left; left = tmp; break;
+    }
   }
-
+  
   while (Serial.available() > 0) {
     // get incoming byte:
     inByte = Serial.read();
@@ -207,24 +214,32 @@ void loop() {
   if (StandAloneMode && (millis() >= updateStandaloneTimestamp + waitTime))  {
 
     updateStandaloneTimestamp = millis();
-    if (calib_now == 0)  {      // no calibration, use current values for x and y offset !
-      x = (left - right) - cx;
-      y = (up - down) - cy;
+    if (cirqueInstalled) {
+      x=padX;
+      y=padY;
     }
-    else  {
-      calib_now--;           // wait for calibration
-      if (calib_now == 0) {  // calibrate now !! get new offset values
-        settings.cx = (left - right);
-        settings.cy = (up - down);
-        cx = settings.cx;
-        cy = settings.cy;
-        xLocalMax = 0; yLocalMax = 0;
+    else {
+      if (calib_now == 0)  {      // no calibration, use current values for x and y offset !
+        x = (left - right) - cx;
+        y = (up - down) - cy;
       }
+      else  {
+        calib_now--;           // wait for calibration
+        if (calib_now == 0) {  // calibrate now !! get new offset values
+          settings.cx = (left - right);
+          settings.cy = (up - down);
+          cx = settings.cx;
+          cy = settings.cy;
+          xLocalMax = 0; yLocalMax = 0;
+        }
+      }
+      applyDriftCorrection();
     }
-
-    applyDriftCorrection();
+    
     reportValues();     // send live data to serial
-    applyDeadzone();
+    if (!useAbsolutePadValues())
+      applyDeadzone();
+
     handleModeState(x, y, pressure);  // handle all mouse / joystick / button activities
     UpdateLeds();
     UpdateTones();

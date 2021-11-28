@@ -16,7 +16,8 @@
                   3 slot indication LEDs connected to GPIO pins 5,16,17
                   1 TSOP 38kHz IR-receiver connected to GPIO pin 4
                   1 high current IR-LED connected to GPIO pin 6 via MOSEFT
-                  optional: FlipMouse Bluetooth daughter board
+                  optional: FlipMouse Bluetooth daughter board connected to 10-pin expansion port
+                  optional: Cirque Pinnacle Trackpad (connected via I2C) replaces FSRs, Hall-Sensor connected to pin A1
 
         SW-requirements:
                   Teensyduino AddOn for Arduino IDE, see https://www.pjrc.com/teensy/td_download.html
@@ -34,11 +35,11 @@
 
 */
 
-#include "FlipWare.h"        //  FABI command definitions
+#include "FlipWare.h"
 #include <EEPROM.h>
-#include "i2c_t3.h"        // for the external EEPROM
+#include "i2c_t3.h"        // I2C library, replaces "Wire.h" for Teensy 3/LC series
 #include "math.h"
-#include "cirque.h"
+#include "cirque.h"        // for pinnacle trackpad 
 
 // Constants and Macro definitions
 
@@ -46,8 +47,9 @@
 
 // Global variables
 
-// Analog input pins (4FSRs + 1 pressure sensor)
+// Analog input pins (4FSRs + 1 pressure sensor, optional 1 hall sensor for FlipPad configuration)
 #define PRESSURE_SENSOR_PIN A0
+#define HALL_SENSOR_PIN     A1
 #define DOWN_SENSOR_PIN     A6
 #define LEFT_SENSOR_PIN     A9
 #define UP_SENSOR_PIN       A7
@@ -120,7 +122,7 @@ extern uint8_t StandAloneMode;
 extern uint8_t CimMode;
 
 int cirqueInstalled=0;
-int padX=0,padY=0;
+int padX=0,padY=0,padState=0;
 
 ////////////////////////////////////////
 // Setup: program execution starts here
@@ -185,9 +187,13 @@ void loop() {
     return;
 	}
 
-  pressure = analogRead(PRESSURE_SENSOR_PIN);
-  if (cirqueInstalled) updateCirquePad(&padX,&padY); 
+
+  if (cirqueInstalled) {
+    pressure = analogRead(PRESSURE_SENSOR_PIN);   // TBD: use hall sensor pin here
+    padState=updateCirquePad(&padX,&padY); 
+  }
   else {
+    pressure = analogRead(PRESSURE_SENSOR_PIN);
     up =       analogRead(UP_SENSOR_PIN);
     down =     analogRead(DOWN_SENSOR_PIN);
     left =     analogRead(LEFT_SENSOR_PIN);
@@ -211,15 +217,16 @@ void loop() {
     Serial.write(Serial_AUX.read());
   }
 
-  if (StandAloneMode && (millis() >= updateStandaloneTimestamp + waitTime))  {
+  if (StandAloneMode && ((millis() >= updateStandaloneTimestamp + waitTime) || padState))  {
 
     updateStandaloneTimestamp = millis();
-    if (cirqueInstalled) {
+    if (cirqueInstalled) {     //  is trackpad active?
       x=padX;
       y=padY;
+      handleTapClicks(padState,200);  // TBD: make this configurable !
     }
-    else {
-      if (calib_now == 0)  {      // no calibration, use current values for x and y offset !
+    else {                     // FSR/stick is active -> apply calibration and drift correction
+      if (calib_now == 0)  {   // no new calibration, use current values for x and y offset !
         x = (left - right) - cx;
         y = (up - down) - cy;
       }
@@ -236,10 +243,10 @@ void loop() {
       applyDriftCorrection();
     }
     
-    reportValues();     // send live data to serial
     if (!useAbsolutePadValues())
       applyDeadzone();
 
+    reportValues();     // send live data to serial
     handleModeState(x, y, pressure);  // handle all mouse / joystick / button activities
     UpdateLeds();
     UpdateTones();

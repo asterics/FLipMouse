@@ -23,8 +23,9 @@
 #define CIRQUE_STATE_HOVERING 2
 #define CIRQUE_STATE_VALID    3
 
-void updateCirquePad(int * x, int * y);
+int updateCirquePad(int * x, int * y);
 int initCirque();
 int useAbsolutePadValues();
+void handleTapClicks(int state,int tapTime);
 
 #endif

@@ -16,6 +16,7 @@
 */
 
 #include <Arduino.h>
+#include "FlipWare.h"
 #include "i2c_t3.h"
 #include "cirque.h"
 
@@ -428,7 +429,7 @@ int getPadData(int * xRaw, int * yRaw) {
 
 int resetPadDirectionStates=0;
 
-void updateCirquePad(int *x, int * y) {
+int updateCirquePad(int *x, int * y) {
   int padXraw,padYraw;
   int state= getPadData(&padXraw,&padYraw);
   
@@ -462,4 +463,36 @@ void updateCirquePad(int *x, int * y) {
     }
     lastState=state;    
   }
+  return(state);
+}
+
+void handleTapClicks(int state,int tapTime) {
+   static uint32_t liftTimeStamp=0;
+   static uint32_t setTimeStamp=0;
+   static uint8_t lastState=0;
+
+   switch(state) {
+      case   CIRQUE_STATE_LIFTOFF:
+          if (lastState!=CIRQUE_STATE_LIFTOFF) {
+            Serial.println("liftoff");
+            liftTimeStamp=millis();
+            if (liftTimeStamp - setTimeStamp < tapTime)  {
+              // Serial.println("click!");
+              mousePress(MOUSE_LEFT);
+              delay(DEFAULT_CLICK_TIME);
+              mouseRelease(MOUSE_LEFT);
+            }
+          }
+          break;
+      case   CIRQUE_STATE_HOVERING:
+          // Serial.print("-");
+          break;
+      case   CIRQUE_STATE_VALID:
+          if (lastState !=CIRQUE_STATE_VALID) {
+            // Serial.println("valid");
+            setTimeStamp=millis();
+          }
+          break;
+   }
+   if (state) lastState=state;  
 }

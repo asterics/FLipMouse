@@ -100,6 +100,7 @@ int RAP_Init()
   delay(200);
   // Set up I2C peripheral
   Wire1.begin();
+  Wire1.setDefaultTimeout(10000); // 10ms
   Wire1.setSDA(23);
   Wire1.setSCL(22);
   Wire1.setClock(400000);
@@ -474,7 +475,7 @@ void handleTapClicks(int state,int tapTime) {
    switch(state) {
       case   CIRQUE_STATE_LIFTOFF:
           if (lastState!=CIRQUE_STATE_LIFTOFF) {
-            Serial.println("liftoff");
+            // Serial.println("liftoff");
             liftTimeStamp=millis();
             if (liftTimeStamp - setTimeStamp < tapTime)  {
               // Serial.println("click!");

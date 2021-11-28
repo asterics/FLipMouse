@@ -166,6 +166,7 @@ void setup() {
   blinkStartTime = 25;
 
   cirqueInstalled=initCirque();
+  // if (cirqueInstalled) Serial.println("Cirque Trackpad found!");
 
 #ifdef DEBUG_OUTPUT_FULL
   Serial.print("Free RAM:");  Serial.println(freeRam());

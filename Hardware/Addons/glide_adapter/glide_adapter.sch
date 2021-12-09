@@ -21,6 +21,7 @@ F 0 "J2" H 1900 3800 50  0000 L CNN
 F 1 "Conn_01x12_Female" V 2150 2750 50  0000 L CNN
 F 2 "Connector_FFC-FPC:Hirose_FH12-12S-0.5SH_1x12-1MP_P0.50mm_Horizontal" H 2100 3150 50  0001 C CNN
 F 3 "~" H 2100 3150 50  0001 C CNN
+F 4 "798-FH12-12S-0.5SH55" H 2100 3150 50  0001 C CNN "Mouser"
 	1    2100 3150
 	1    0    0    -1  
 $EndComp
@@ -34,6 +35,7 @@ F 0 "J1" H 4378 1226 50  0000 L CNN
 F 1 "Conn_01x05_Female" H 4000 1550 50  0000 L CNN
 F 2 "Connector_PinSocket_2.54mm:PinSocket_1x05_P2.54mm_Vertical" H 4350 1200 50  0001 C CNN
 F 3 "~" H 4350 1200 50  0001 C CNN
+F 4 "DON'T ORDER (437-8018700510001101)" H 4350 1200 50  0001 C CNN "Mouser"
 	1    4350 1200
 	1    0    0    -1  
 $EndComp
@@ -45,6 +47,7 @@ F 0 "R1" H 1220 1346 50  0000 L CNN
 F 1 "4k7" H 1220 1255 50  0000 L CNN
 F 2 "Resistor_SMD:R_0805_2012Metric_Pad1.20x1.40mm_HandSolder" V 1080 1300 50  0001 C CNN
 F 3 "~" H 1150 1300 50  0001 C CNN
+F 4 "603-AC0805FR-7W4K7" H 1150 1300 50  0001 C CNN "Mouser"
 	1    1150 1300
 	1    0    0    -1  
 $EndComp
@@ -97,6 +100,7 @@ F 0 "J3" H 2750 1767 50  0000 C CNN
 F 1 "Conn_02x05_Odd_Even" H 2750 1676 50  0000 C CNN
 F 2 "Connector_PinSocket_2.54mm:PinSocket_2x05_P2.54mm_Vertical_SMD" H 2700 1350 50  0001 C CNN
 F 3 "~" H 2700 1350 50  0001 C CNN
+F 4 "DON'T ORDER" H 2700 1350 50  0001 C CNN "Mouser"
 	1    2700 1350
 	1    0    0    -1  
 $EndComp
@@ -108,6 +112,7 @@ F 0 "R2" H 1570 1346 50  0000 L CNN
 F 1 "4k7" H 1570 1255 50  0000 L CNN
 F 2 "Resistor_SMD:R_0805_2012Metric_Pad1.20x1.40mm_HandSolder" V 1430 1300 50  0001 C CNN
 F 3 "~" H 1500 1300 50  0001 C CNN
+F 4 "603-AC0805FR-7W4K7L" H 1500 1300 50  0001 C CNN "Mouser"
 	1    1500 1300
 	1    0    0    -1  
 $EndComp
@@ -266,6 +271,7 @@ F 0 "C1" H 3215 3246 50  0000 L CNN
 F 1 "1u" H 3215 3155 50  0000 L CNN
 F 2 "Capacitor_SMD:C_0805_2012Metric_Pad1.18x1.45mm_HandSolder" H 3138 3050 50  0001 C CNN
 F 3 "~" H 3100 3200 50  0001 C CNN
+F 4 "710-885012207051" H 3100 3200 50  0001 C CNN "Mouser"
 	1    3100 3200
 	1    0    0    -1  
 $EndComp
@@ -296,7 +302,7 @@ DRDY
 Text Notes 6000 3050 0    50   ~ 10
 Glidepoint/Cirque Trackpad to FLipMouse Adapter
 Text Notes 6000 4050 0    50   ~ 0
-compatible devices:\nTM023023\nTM035035\nTM040040\n\nmost common use case:\nattach this adapter instead\nof the sensor PCB to the FLipMouse PCB.\n\nsecond possibility:\nattach this adapter to the AUX header on \nthe FLipMouse.\n
+compatible devices:\nTM023023\nTM035035\nTM040040\n(only available @Mouser)\n\nmost common use case:\nattach this adapter instead\nof the sensor PCB to the FLipMouse PCB.\n\nsecond possibility:\nattach this adapter to the AUX header on \nthe FLipMouse.\n
 Wire Notes Line
 	5950 2900 7950 2900
 Wire Notes Line

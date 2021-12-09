@@ -3,6 +3,18 @@
 This folder contains any additional piece of software hardware or gadget to increase the usability of the FLipmouse.
 Since there is are 2 extension headers on the FLipmouse PCB, it is easy to extend the functionality.
 
+## Glidepoint/Cirque Trackpad adapter
+
+If the force actuated mouthpiece is not sufficient for your use case, it is possible
+to combine the FLipMouse PCB with another type of input sensors:
+
+A trackpad manufactured by Glidepoint.
+
+An adapter PCB is available here, where it is possible to attach a different type of sensor.
+
+__Note:__ As of December 2021, there is no stable firmware support. Due to limited flash memory available,
+you have to flash a different firmware on your PCB (but the API is compatible with the configuration GUI).
+
 
 ## BT-module
 

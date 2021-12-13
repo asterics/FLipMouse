@@ -323,4 +323,51 @@ Wire Notes Line
 	8100 4350 8100 2900
 Text Notes 8150 4200 0    50   ~ 0
 * different FM firmware is necessary\n* normally I2C is used \n(attached instead of FSR sensors)\n* Teensy D21 pin must be: OUTPUT & LOW, \notherwise no GND here.\n* I2C1 (Wire1) is used for this device\n* data ready pin is Teensy D20\n\n* Solder the resistor on the Glide pad\ncorrespondingly! (R1 missing -> I2C;\nR1 = 470k -> SPI)\n\n* SPI can be used as well, but not preferred\n(no ESP32 addon possible)
+$Comp
+L Connector:Conn_01x04_Female J4
+U 1 1 61B70E3E
+P 4350 2800
+F 0 "J4" H 4242 2375 50  0000 C CNN
+F 1 "Conn_01x04_Female" H 4242 2466 50  0000 C CNN
+F 2 "Connector_PinSocket_2.54mm:PinSocket_1x04_P2.54mm_Horizontal" H 4350 2800 50  0001 C CNN
+F 3 "~" H 4350 2800 50  0001 C CNN
+	1    4350 2800
+	1    0    0    1   
+$EndComp
+$Comp
+L power:GND #PWR09
+U 1 1 61B71A08
+P 4150 2900
+F 0 "#PWR09" H 4150 2650 50  0001 C CNN
+F 1 "GND" H 4155 2727 50  0000 C CNN
+F 2 "" H 4150 2900 50  0001 C CNN
+F 3 "" H 4150 2900 50  0001 C CNN
+	1    4150 2900
+	1    0    0    -1  
+$EndComp
+$Comp
+L power:+3V3 #PWR08
+U 1 1 61B71CDF
+P 4150 2800
+F 0 "#PWR08" H 4150 2650 50  0001 C CNN
+F 1 "+3V3" H 4165 2973 50  0000 C CNN
+F 2 "" H 4150 2800 50  0001 C CNN
+F 3 "" H 4150 2800 50  0001 C CNN
+	1    4150 2800
+	0    -1   -1   0   
+$EndComp
+Text Label 4150 2600 2    50   ~ 0
+SDA
+Text Label 4150 2700 2    50   ~ 0
+SCL
+Text Notes 3650 2150 0    50   ~ 10
+I2C display (SSD1306)
+Wire Notes Line
+	3600 3200 3600 2000
+Wire Notes Line
+	4900 2000 4900 3200
+Wire Notes Line
+	3600 3200 4900 3200
+Wire Notes Line
+	3600 2000 4900 2000
 $EndSCHEMATC

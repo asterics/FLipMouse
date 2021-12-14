@@ -93,18 +93,6 @@ MISO
 Text Label 1900 3750 2    50   ~ 0
 SCK
 $Comp
-L Connector_Generic:Conn_02x05_Odd_Even J3
-U 1 1 61B23C89
-P 2700 1350
-F 0 "J3" H 2750 1767 50  0000 C CNN
-F 1 "Conn_02x05_Odd_Even" H 2750 1676 50  0000 C CNN
-F 2 "Connector_PinSocket_2.54mm:PinSocket_2x05_P2.54mm_Vertical_SMD" H 2700 1350 50  0001 C CNN
-F 3 "~" H 2700 1350 50  0001 C CNN
-F 4 "DON'T ORDER" H 2700 1350 50  0001 C CNN "Mouser"
-	1    2700 1350
-	1    0    0    -1  
-$EndComp
-$Comp
 L Device:R R2
 U 1 1 61B24538
 P 1500 1300
@@ -152,16 +140,6 @@ Wire Notes Line
 	700  1850 700  650 
 Text Notes 750  750  0    50   ~ 10
 I2C pullups
-Wire Notes Line
-	2150 650  3450 650 
-Wire Notes Line
-	2150 1850 2150 650 
-Text Notes 2200 750  0    50   ~ 10
-FM connector - SPI (AUX)
-Wire Notes Line
-	2150 1850 3450 1850
-Wire Notes Line
-	3450 650  3450 1850
 Wire Notes Line
 	3600 650  4900 650 
 Wire Notes Line
@@ -212,57 +190,6 @@ Text Label 4150 1000 2    50   ~ 0
 DRDY
 Text Notes 3700 1800 0    50   ~ 0
 pin 4 (Teensy D21) is used\nas GND, because it has 20mA\ncurrent capability
-NoConn ~ 2500 1550
-$Comp
-L power:GND #PWR0102
-U 1 1 61B387A6
-P 3000 1550
-F 0 "#PWR0102" H 3000 1300 50  0001 C CNN
-F 1 "GND" H 3005 1377 50  0000 C CNN
-F 2 "" H 3000 1550 50  0001 C CNN
-F 3 "" H 3000 1550 50  0001 C CNN
-	1    3000 1550
-	1    0    0    -1  
-$EndComp
-$Comp
-L power:GND #PWR0103
-U 1 1 61B38B6A
-P 3100 1350
-F 0 "#PWR0103" H 3100 1100 50  0001 C CNN
-F 1 "GND" V 3105 1222 50  0000 R CNN
-F 2 "" H 3100 1350 50  0001 C CNN
-F 3 "" H 3100 1350 50  0001 C CNN
-	1    3100 1350
-	0    -1   -1   0   
-$EndComp
-Wire Wire Line
-	3100 1350 3000 1350
-Text Label 2500 1150 2    50   ~ 0
-MISO
-$Comp
-L power:+3V3 #PWR0104
-U 1 1 61B393B2
-P 3100 1150
-F 0 "#PWR0104" H 3100 1000 50  0001 C CNN
-F 1 "+3V3" V 3115 1278 50  0000 L CNN
-F 2 "" H 3100 1150 50  0001 C CNN
-F 3 "" H 3100 1150 50  0001 C CNN
-	1    3100 1150
-	0    1    1    0   
-$EndComp
-Text Notes 2300 1600 0    25   ~ 0
-VUSB
-NoConn ~ 3000 1450
-Text Notes 3050 1500 0    25   ~ 0
-RX/TX
-Text Label 2500 1350 2    50   ~ 0
-CS
-Text Label 2500 1250 2    50   ~ 0
-SCK
-Text Label 3000 1250 0    50   ~ 0
-MOSI
-Wire Wire Line
-	3100 1150 3000 1150
 $Comp
 L Device:C C1
 U 1 1 61B4FED6
@@ -297,12 +224,10 @@ F 3 "" H 3100 3350 50  0001 C CNN
 	1    3100 3350
 	1    0    0    -1  
 $EndComp
-Text Label 2500 1450 2    50   ~ 0
-DRDY
 Text Notes 6000 3050 0    50   ~ 10
 Glidepoint/Cirque Trackpad to FLipMouse Adapter
-Text Notes 6000 4050 0    50   ~ 0
-compatible devices:\nTM023023\nTM035035\nTM040040\n(only available @Mouser)\n\nmost common use case:\nattach this adapter instead\nof the sensor PCB to the FLipMouse PCB.\n\nsecond possibility:\nattach this adapter to the AUX header on \nthe FLipMouse.\n
+Text Notes 6000 3900 0    50   ~ 0
+compatible devices:\nTM023023\nTM035035\nTM040040\n(only available @Mouser)\n\nuse case:\nattach this adapter instead\nof the sensor PCB to the FLipMouse PCB,\nand use the different case from this addon folder
 Wire Notes Line
 	5950 2900 7950 2900
 Wire Notes Line
@@ -321,53 +246,91 @@ Wire Notes Line
 	10050 4350 8100 4350
 Wire Notes Line
 	8100 4350 8100 2900
-Text Notes 8150 4200 0    50   ~ 0
-* different FM firmware is necessary\n* normally I2C is used \n(attached instead of FSR sensors)\n* Teensy D21 pin must be: OUTPUT & LOW, \notherwise no GND here.\n* I2C1 (Wire1) is used for this device\n* data ready pin is Teensy D20\n\n* Solder the resistor on the Glide pad\ncorrespondingly! (R1 missing -> I2C;\nR1 = 470k -> SPI)\n\n* SPI can be used as well, but not preferred\n(no ESP32 addon possible)
+Text Notes 8150 3900 0    50   ~ 0
+* different FM firmware is necessary\n* attached instead of FSR sensors\n* Teensy D21 pin must be: OUTPUT & LOW, \notherwise no GND here.\n* I2C1 (Wire1) is used for this device\n* data ready pin is Teensy D20\n\n* Remove the resistor on the Glide pad\ncorrespondingly! (R1 missing -> I2C;\nR1 = 470k -> SPI)
 $Comp
-L Connector:Conn_01x04_Female J4
+L Connector:Conn_01x04_Female J3
 U 1 1 61B70E3E
-P 4350 2800
-F 0 "J4" H 4242 2375 50  0000 C CNN
-F 1 "Conn_01x04_Female" H 4242 2466 50  0000 C CNN
-F 2 "Connector_PinSocket_2.54mm:PinSocket_1x04_P2.54mm_Horizontal" H 4350 2800 50  0001 C CNN
-F 3 "~" H 4350 2800 50  0001 C CNN
-	1    4350 2800
+P 2900 1450
+F 0 "J3" H 2792 1025 50  0000 C CNN
+F 1 "Conn_01x04_Female" H 2792 1116 50  0000 C CNN
+F 2 "Connector_PinSocket_2.54mm:PinSocket_1x04_P2.54mm_Horizontal" H 2900 1450 50  0001 C CNN
+F 3 "~" H 2900 1450 50  0001 C CNN
+	1    2900 1450
 	1    0    0    1   
 $EndComp
 $Comp
 L power:GND #PWR09
 U 1 1 61B71A08
-P 4150 2900
-F 0 "#PWR09" H 4150 2650 50  0001 C CNN
-F 1 "GND" H 4155 2727 50  0000 C CNN
-F 2 "" H 4150 2900 50  0001 C CNN
-F 3 "" H 4150 2900 50  0001 C CNN
-	1    4150 2900
+P 2700 1550
+F 0 "#PWR09" H 2700 1300 50  0001 C CNN
+F 1 "GND" H 2705 1377 50  0000 C CNN
+F 2 "" H 2700 1550 50  0001 C CNN
+F 3 "" H 2700 1550 50  0001 C CNN
+	1    2700 1550
 	1    0    0    -1  
 $EndComp
 $Comp
 L power:+3V3 #PWR08
 U 1 1 61B71CDF
-P 4150 2800
-F 0 "#PWR08" H 4150 2650 50  0001 C CNN
-F 1 "+3V3" H 4165 2973 50  0000 C CNN
-F 2 "" H 4150 2800 50  0001 C CNN
-F 3 "" H 4150 2800 50  0001 C CNN
-	1    4150 2800
+P 2700 1450
+F 0 "#PWR08" H 2700 1300 50  0001 C CNN
+F 1 "+3V3" H 2715 1623 50  0000 C CNN
+F 2 "" H 2700 1450 50  0001 C CNN
+F 3 "" H 2700 1450 50  0001 C CNN
+	1    2700 1450
 	0    -1   -1   0   
 $EndComp
-Text Label 4150 2600 2    50   ~ 0
+Text Label 2700 1250 2    50   ~ 0
 SDA
-Text Label 4150 2700 2    50   ~ 0
+Text Label 2700 1350 2    50   ~ 0
 SCL
-Text Notes 3650 2150 0    50   ~ 10
+Text Notes 2200 800  0    50   ~ 10
 I2C display (SSD1306)
 Wire Notes Line
-	3600 3200 3600 2000
+	2150 1850 2150 650 
 Wire Notes Line
-	4900 2000 4900 3200
+	3450 650  3450 1850
 Wire Notes Line
-	3600 3200 4900 3200
+	2150 1850 3450 1850
 Wire Notes Line
-	3600 2000 4900 2000
+	2150 650  3450 650 
+Text Label 1050 3300 2    50   ~ 0
+MOSI
+Text Label 1050 3400 2    50   ~ 0
+CS
+Text Label 1050 3500 2    50   ~ 0
+MISO
+Text Label 1050 3600 2    50   ~ 0
+SCK
+NoConn ~ 1050 3600
+NoConn ~ 1050 3500
+NoConn ~ 1050 3400
+NoConn ~ 1050 3300
+Text Notes 850  3850 1    50   ~ 0
+SPI interface is unused.
+$Comp
+L power:PWR_FLAG #FLG0101
+U 1 1 61B90D39
+P 3100 3050
+F 0 "#FLG0101" H 3100 3125 50  0001 C CNN
+F 1 "PWR_FLAG" V 3100 3177 50  0000 L CNN
+F 2 "" H 3100 3050 50  0001 C CNN
+F 3 "~" H 3100 3050 50  0001 C CNN
+	1    3100 3050
+	0    -1   -1   0   
+$EndComp
+Connection ~ 3100 3050
+$Comp
+L power:PWR_FLAG #FLG0102
+U 1 1 61B91308
+P 3100 3350
+F 0 "#FLG0102" H 3100 3425 50  0001 C CNN
+F 1 "PWR_FLAG" V 3100 3477 50  0000 L CNN
+F 2 "" H 3100 3350 50  0001 C CNN
+F 3 "~" H 3100 3350 50  0001 C CNN
+	1    3100 3350
+	0    -1   -1   0   
+$EndComp
+Connection ~ 3100 3350
 $EndSCHEMATC

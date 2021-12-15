@@ -2,7 +2,7 @@
 
 #### Alternative Computer Input Device
 
-![FLipMouseLogo](./Bilder/flipmouseLogo.PNG)
+![FLipMouseLogo](./Bilder/flipmouseLogo.svg)
 
 # User Manual v3.1
 

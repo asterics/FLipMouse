@@ -8,7 +8,7 @@
 
 #### AsTeRICS Foundation
 
-![Logos](./Bilder/logo.PNG)
+![Logos](./Bilder/logo.svg)
 
 ____
 
@@ -25,14 +25,16 @@ All design files for the electronics and the 3d-printed enclosure - as well as t
 The AsTeRICS Foundation
 [www.asterics-foundation.org](https://asterics-foundation.org/)
 
-![flip](./Bilder/flip.PNG)
+![flip](./Bilder/flip1.svg)
 
 # Hardware overview
 
 The FLipMouse is available with a 3d-printed enclosure. Design files for the 3d-printed case are provided in the [Github repository](https://github.com/asterics/FLipMouse/tree/master/Hardware/case-design/3D_printer). The primary method for interacting with the FLipMouse is the transparent stick (“Hygienic Stick” or “mouthpiece”) which is attached to the front of the FLipMouse. Additionally, two external momentary switches can be attached to the jack plug connectors on the left side of the FlipMouse enclosure:
-![FLipMouse 3D-printed](./Bilder/f1.PNG)
+![FLipMouse 3D-printed](./Bilder/f1.svg)
 
 *Figure 1*: FLipMouse 3D-printed
+(a) The *Hygienic Stick* can be actuated with fingers or lips. The mouthpiece also offers sip/puff input
+(b) 3 LEDs. On the opposite side of the 3 LEDs are 3.5mm jack plug connectors for external switches (Button2 and Button3). Button 1 is a built-in button. 
 
 The *Hygienic Stick* is made by the company *QuadJoy*.  Replacement sticks can be ordered via the homepage: [www.quadjoy.com](http://www.quadjoy.com). We want to thank Bill and Debra Street of *QuadJoy* for letting us use their mouthpiece for our FLipMouse construction kit! (Please note the cleaning instructions in the dedicated section of this manual.)
 
@@ -89,7 +91,6 @@ Two 3,5mm Jack Plug sockets marked (B2) and (B3) allow the connection of externa
 *Figure 5*: FLipMouse 3D-printed enclosure 
 
 Different alternatives for the FLipMouse housing are available, e.g. an acrylic version. The recommended version is the 3d printed enclosure, which is also documented in the construction manual.  The 3D-design files can be downloaded from the [Github repository](https://github.com/asterics/FLipMouse/tree/master/Hardware/case-design/3D_printer). Please note that the electronic components and PCB are the same as for the former acrylic housing variant – and the devices offer exactly the same functionality.
-
 
 ## Bluetooth – Add-On Module
 
@@ -179,10 +180,10 @@ To connect the device, follow these steps:
 
 *Figure 15: FLipMouse Configuration Manager*
 
-
 ## Changing Settings and Features
 
 ### Operational modes – “memory slots”
+
 The FLipMouse Configuration Manager allows adjustment of all important settings (operational modes). The settings are stored in individual **memory slots** (for example one slot for fast mouse operation, one slot for slow mouse operation, one slot for keyboard key generation etc.). All settings can be stored into (or loaded from) the FLipMouse device. The settings can also be saved to (or loaded from) a file on your computer. 
 Settings which were stored into the FLipMouse stay valid also if the power supply / USB cable is removed. When the FLipMouse is plugged in the next time, the settings will be available – also if you use another computer or operating system!
 
@@ -291,6 +292,7 @@ The SIP AND PUFF tab allows to define additional threshold values for StrongSip 
 ### Assignment of different actions (Tab ACTIONS)
 
 The ACTIONS tab allows the mapping of user activities to desired FlipMouse functions (actions). The user activities are:
+
 * pressing or releasing the 3 buttons (built-in button 1 or external button 2 or 3)
 * stick movements (up/down/left/right) which exceed the deadzone threshold value
 * sip and puff activities (see section StrongSip and StrongPuff).
@@ -319,7 +321,7 @@ Creates mouse button clicks. (The left/right or middle mouse button is pressed a
 Creates a double click with the left mouse button. 
 
 **Toggle Left / Middle / Right Mouse Button**
-The *toggle* action changes the state of a mouse button from pressed to not pressed and vice vera. This is useful e.g. if keeping a user activity up for a longer time (e.g. for dragging an item or for keeping a key pressed while other keys are pressed/released).
+The *toggle* action changes the state of a mouse button from pressed to not pressed and vice versa. This is useful e.g. if keeping a user activity up for a longer time (e.g. for dragging an item or for keeping a key pressed while other keys are pressed/released).
 
 **Wheel Up / Down**
 The actions *Wheel up* or *Wheel down* emulate the mouse scroll wheel. Triggering the *Wheel up* action results in upwards scrolling, while *wheel down* results in downward scrolling. This action is useful for example for reading documents or web sites.
@@ -424,8 +426,7 @@ The settings of the current slot will be stored and remembered when changing to 
 A slot can be removed using the *Delete* button next to the according slot.
 
 **Loading and saving the configuration to/from file**
-The button *Download all slots* allows transferring all current slots to a settings file (.set) which is the stored on your computer. All settings can thus be transferred to the same or to another FLipMouse device. Multiple setups (for example for individual users or use-cases) can be kept on a computer and applied with a single click. A file chooser window will be opened which allows selection of the desired filename for saving or loading the configuration.
-
+The button *Download all slots* allows transferring all current slots to a setting file (.set) which is the stored on your computer. All settings can thus be transferred to the same or to another FLipMouse device. Multiple setups (for example for individual users or use-cases) can be kept on a computer and applied with a single click. A file chooser window will be opened which allows selection of the desired filename for saving or loading the configuration.
 
 ### General Settings (Tab GENERAL)
 
@@ -443,13 +444,13 @@ This setting is only relevant if a Bluetooth Add-On module is used (see [FLipMou
 
 Here you can see the installed version and the available version of the FLipMouse software (firmware). If the installed version is older than the version which is available online in the FLipMouse Github repository, the button caption shows “UPDATE FIRMWARE”. Clicking the button will attempt to download the latest firmware and install it. If the installed version is newer or the same as the available version, the button caption shows “OVERWRITE FIRMWARE” - clicking the button will also download and install the version which is availbale online.
 
-#### Firmware Bluetooth-Addon (“UPDATE BLUETOOTH FIRMWARE”)
+#### Firmware Bluetooth-Add-on (“UPDATE BLUETOOTH FIRMWARE”)
 
 Here you can see the installed version and the available version of the Bluetooth Add-On moduleÄs firmware. Similar to the FlipMouse firmware update you can click the button “UPDATE / OVERWRITE BLUETOOTH FIRMWARE”, which will attempt to download the latest software (firmware) for the Bluetooth module and install it on the module. This process can take a few minutes and is only possible if a Bluetooth module is connected to the FLipMouse. If there is no Bluetooth module connected to the FLipMouse, a message will indicate that the installed version is unknown. 
 
 ### View Force Levels (Tab VISUALIZATION)
 
-The FLipMouse stick is attached to four force sensors – one for each movement direction (up, down, left, right). The numeric value of each of those sensors is displayed in the “VISUALIZATION” tab. The live values can be monitored when the FLipMouse device is connected. Whenever the stick is moved, the sensor values change. Specifically, a movement in each direction increases the respective sensor value. The sensor values also depend on the use of the adjustment screws which change the force which is applied to the sensor pads via 4 metal springs. Therefore, when assembling the FLipMouse, the live sensor values should be used as guidance. **When not touching the stick, the values should look similar to screenshot below. All values should decrease and raise similarily when moving the stick. Significant deviation in one direction indicates a sensor problem. The sensors should be checked and might need to be replaced.**
+The FLipMouse stick is attached to four force sensors – one for each movement direction (up, down, left, right). The numeric value of each of those sensors is displayed in the “VISUALIZATION” tab. The live values can be monitored when the FLipMouse device is connected. Whenever the stick is moved, the sensor values change. Specifically, a movement in each direction increases the respective sensor value. The sensor values also depend on the use of the adjustment screws which change the force which is applied to the sensor pads via 4 metal springs. Therefore, when assembling the FLipMouse, the live sensor values should be used as guidance. **When not touching the stick, the values should look similar to screenshot below. All values should decrease and raise similarly when moving the stick. Significant deviation in one direction indicates a sensor problem. The sensors should be checked and might need to be replaced.**
 
 ![visualisation](./Bilder/fig12.PNG)
 
@@ -464,9 +465,10 @@ The FLipMouse device includes an infrared remote control receiver module and a h
 *Figure 30: Infrared Code Recording*
 
 To record a new IR code, go to the tab ACTIONS. Click the desired action and select the action category “**Infrared**” in the popup-window. There, three different types of IR-actions can be selected from the combo box:
+
 * *Play infrared command*: sends the recorded code once
-*  *Hold infrared command*: repeats the code until the user activity ends
-*  *Stop infrared command*: stops a currently plaing IR-code
+* *Hold infrared command*: repeats the code until the user activity ends
+* *Stop infrared command*: stops a currently plaing IR-code
 
 The existing commands can be chosen from the drop-down menu.
 
@@ -478,7 +480,7 @@ In this window you can also manage IR commands. Next to *New IR Command*, you ca
 
 # Using the Bluetooth module
 
-The optional Bluetooth Add-On module allows connection and control of cell phones, tablets and computers with Bluetooth capability. If the FLipMouse is attached to a PC or laptop via USB, users may switch to Bluetooth operation and back to USB on demand. The Bluetooth module is available separately from the AsTeRICS Foundation or included in the appropriate version of the FLipMouse kit. 
+The optional Bluetooth Add-on module allows connection and control of cell phones, tablets and computers with Bluetooth capability. If the FLipMouse is attached to a PC or laptop via USB, users may switch to Bluetooth operation and back to USB on demand. The Bluetooth module is available separately from the AsTeRICS Foundation or included in the appropriate version of the FLipMouse kit. 
 
 #### Installation of the Bluetooth module
 
@@ -494,7 +496,6 @@ The host device could be a cell phone with Android or iOS operating system, for 
 The FLipMouse can be connected to a host device only if no device is currently connected, and thus pairing mode is active. In order to connect a device, open the Bluetooth settings of your Android or iOS device, enable BT, choose *add a new BT-device* and select the FLipMouse from the list of availabe devices.  Then, open the GENERAL tab and activate Bluetooth operation for the desired slots (see section General Settings).
 
 Note:  If the Bluetooth module is in paring mode, the module's LED flashed fast (approx twice per second). If a connection is established, the LED flashes slowly (approx. once every 2 seconds). The LED can only be seen if the enclosure of the FLipMouse is opened.
-
 
 # Mod your Mouthpiece?
 
@@ -527,10 +528,11 @@ Saliva filters and *Hygienic Sticks* can be directly ordered from the [*Quadjoy*
 ## Hygienic considerations and risks
 
 If the mouthpiece is actuated with the lips, it is important to respect the following hygienic precautions: 
+
 1. One mouthpiece must be used exclusively by one person
 2. The filter tip must be replaced whenever saliva or dirt have formed
 3. The mouthpiece must be cleaned whenever saliva or dirt have formed
-(see chapter “Cleaning and Maintenance”)
+   (see chapter “Cleaning and Maintenance”)
 
 With the lack of hygiene concerning the mouthpiece, especially when the mouthpiece is used by more than one person, it is possible that 
 
@@ -608,7 +610,7 @@ For further instruction and troubleshooting please refer to the [GitHub Wiki of 
 | HL               | hold the left mouse button                                                                                                     |                                                                                                                                 |
 | HR               | hold the right mouse button                                                                                                    |                                                                                                                                 |
 | HM               | hold the middle mouse button                                                                                                   |                                                                                                                                 |
-| TL               | toggle left mouse button                                                                                                       | Ändert: gedrückt <-> nicht gedrückt                                                                                             |
+| TL               | toggle left mouse button                                                                                                       | changes the state of the mouse button                                                                                           |
 | TM               | toggle middle mouse button                                                                                                     |                                                                                                                                 |
 | TR               | toggle right mouse button                                                                                                      |                                                                                                                                 |
 | RL               | release the left mouse button                                                                                                  |                                                                                                                                 |
@@ -618,6 +620,7 @@ For further instruction and troubleshooting please refer to the [GitHub Wiki of 
 | WD               | move mouse wheel down                                                                                                          |                                                                                                                                 |
 | MX <int>         | move mouse in x direction                                                                                                      | MX 4 -> moves cursor 4 pixels to the right                                                                                      |
 | MY <int>         | move mouse in y direction                                                                                                      | MY -10 -> moves cursor 10 pixels up                                                                                             |
+| RO <int>         | rotate stick orientation                                                                                                       | RO 180 -> flips x and y movements of stick/mouthpiece                                                                           |
 | KW <string>      | keyboard write string                                                                                                          | KW Hello! -> writes "Hello!" on the keyboard                                                                                    |
 | KP <string>      | key press: Press keyboard keys (once). Keys are identified by keyboard shortcuts (see list below)                              | KP KEY_UP -> presses the "Cursor-Up" key; KP KEY_CTRL KEY_ALT KEY_DELETE presses all 3 keys                                     |
 | KH <string>      | key hold: hold keyboard keys                                                                                                   | sKH KEY_LEFT -> holds the "Cursor-Left" key                                                                                     |
@@ -636,7 +639,7 @@ For further instruction and troubleshooting please refer to the [GitHub Wiki of 
 | JP <int>         | press joystick button                                                                                                          | JP 1 -> presses joystick button 1                                                                                               |
 | JR <int>         | release joystick button                                                                                                        | JR 2 -> releases joystick button 2                                                                                              |
 | JH <int>         | set joystick hat position                                                                                                      | JH 45 -> sets joystick hat to 45 degrees; possible values are: 0, 45, 90, 135, 180, 225, 270, 315 and -1 to set center position |
-| MM <int>         | mouse mode: cursor on (int=1) or alternative functions on (int=0)                                                            | MM1 -> switches to mouse mode                                                                                                   |
+| MM <int>         | mouse mode: cursor on (int=1) or alternative functions on (int=0)                                                              | MM1 -> switches to mouse mode                                                                                                   |
 | CA               | Calibrate zero position                                                                                                        | calibrates stick / mouthpiece middle position                                                                                   |
 | IP <string>      | play infrared command                                                                                                          | IP channelUp; plays infrared command "channelUp" (if this IR-command name has been recorded)                                    |
 
@@ -651,21 +654,19 @@ Please note that certain commands for adjusting FLipMouse settings are not shown
 # Contact Information
 
 University of Applied Sciences Technikum Wien
-  
+
 Faculty of Electronic Engineering
-  
+
 Höchstädtplatz 6
-  
+
 A-1200 Wien
-  
+
 AUSTRIA
 
-  
-  
 AsTeRICS Foundation
-  
+
 Webpage: [www.asterics-foundation.org](http://www.asterics-foundation.org)
-  
+
 Email: <office@asterics-foundation.org>
 
 # Disclaimer
@@ -677,7 +678,7 @@ Additionally, the UAS TW is not liable for any damages to health due to the use 
 # Acknowledgement
 
 This project was partly funded by the City of Vienna, 
-Municipal department of Economic Affairs, Labour and Statistics (MA 23), 
+Municipal department of Economic Affairs, Labor and Statistics (MA 23), 
 in course of the projects AsTeRICS Academy (14-02), ToRaDes (18-04) 
 and Wissensdrehscheibe für Barrierefreie Technologien (26-02) 
 

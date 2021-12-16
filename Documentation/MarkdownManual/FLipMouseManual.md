@@ -33,7 +33,9 @@ The FLipMouse is available with a 3d-printed enclosure. Design files for the 3d-
 ![FLipMouse 3D-printed](./Bilder/f1.svg)
 
 *Figure 1*: FLipMouse 3D-printed
+
 (a) The *Hygienic Stick* can be actuated with fingers or lips. The mouthpiece also offers sip/puff input
+
 (b) 3 LEDs. On the opposite side of the 3 LEDs are 3.5mm jack plug connectors for external switches (Button2 and Button3). Button 1 is a built-in button. 
 
 The *Hygienic Stick* is made by the company *QuadJoy*.  Replacement sticks can be ordered via the homepage: [www.quadjoy.com](http://www.quadjoy.com). We want to thank Bill and Debra Street of *QuadJoy* for letting us use their mouthpiece for our FLipMouse construction kit! (Please note the cleaning instructions in the dedicated section of this manual.)

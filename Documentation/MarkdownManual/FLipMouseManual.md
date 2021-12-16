@@ -29,21 +29,15 @@ The AsTeRICS Foundation
 
 # Hardware overview
 
-The FLipMouse is available with a 3d-printed enclosure. Design files for the 3d-printed case are provided in the [Github repository](https://github.com/asterics/FLipMouse/tree/master/Hardware/case-design/3D_printer). The primary method for interacting with the FLipMouse is the transparent stick (“Hygienic Stick” or “mouthpiece”) which is attached to the front of the FLipMouse. Additionally, two external momentary switches can be attached to the jack plug connectors on the left side of the FlipMouse enclosure:
+The FLipMouse is available with a 3d-printed enclosure. Design files for the 3d-printed case are provided in the [Github repository](https://github.com/asterics/FLipMouse/tree/master/Hardware/case-design/3D_printer). The primary method for interacting with the FLipMouse is the transparent stick (“Hygienic Stick” or “mouthpiece”) which is attached to the front of the FLipMouse. The *Hygienic Stick* is made by the company *QuadJoy*.  Replacement sticks can be ordered via the homepage: [www.quadjoy.com](http://www.quadjoy.com). We want to thank Bill and Debra Street of *QuadJoy* for letting us use their mouthpiece for our FLipMouse construction kit! (Please note the cleaning instructions in the dedicated section of this manual.)
 
 <p align="center" width="100%">
-    <img width="100%" src="./Bilder/f1.svg">
+    <img width="100%" src="./Bilder/f2.svg">
 </p>
 
-![FLipMouse 3D-printed](./Bilder/f1.svg)
+*Figure 2*: Using the FLipMouse for computer control via lip interaction
 
-*Figure 1*: FLipMouse 3D-printed
-
-(a) The *Hygienic Stick* can be actuated with fingers or lips. The mouthpiece also offers sip/puff input
-
-(b) 3 LEDs. On the opposite side of the 3 LEDs are 3.5mm jack plug connectors for external switches (Button2 and Button3). Button 1 is a built-in button. 
-
-The *Hygienic Stick* is made by the company *QuadJoy*.  Replacement sticks can be ordered via the homepage: [www.quadjoy.com](http://www.quadjoy.com). We want to thank Bill and Debra Street of *QuadJoy* for letting us use their mouthpiece for our FLipMouse construction kit! (Please note the cleaning instructions in the dedicated section of this manual.)
+Additionally, two external momentary switches can be attached to the jack plug connectors on the left side of the FlipMouse enclosure.
 
 **Users can interact with the FLipMouse in several ways:**
 
@@ -52,48 +46,55 @@ The *Hygienic Stick* is made by the company *QuadJoy*.  Replacement sticks can b
 3. by actuating (up to) 3 momentary switches / pushbuttons
 4. if desired, a longer plastic tube can be attached to the pressure sensor so that the joystick can be used with a finger and a separate mouthpiece allows sip/puff control. Alternatively, pressure can be influenced by attaching a rubber ball to the plastic tube (pillow switch / soft switch).
 
-![flip](./Bilder/f2.PNG)
+**The hardware features of the FLipMouse:** (see pictures at the bottom of this list)
 
-*Figure 2*: FLipMouse via lip interaction
+(a)    “Zero-way”-joystick / mouthpiece: 
+        very low forces are sufficient to create up/down/left/right movement
 
-**The hardware features of the FLipMouse:**
+        o    The zero-way-joystick can be used with fingers or toes etc. 
 
-1. “Zero-way”-joystick / mouthpiece: 
-   very low forces are sufficient to create up/down/left/right movement
-   o    The zero-way-joystick can be used with fingers or toes etc. 
-   o    It can also be used as a mouthpiece (actuated by lips / mouth movements) 
-   o    If desired, sip / puff activities into the mouthpiece can trigger additional functions
+        o    It can also be used as a mouthpiece (actuated by lips / mouth movements) 
 
-2. One built-in switch (“Button 1 / B1”) on the device, e.g. to change the active configuration (functions)
+        o    If desired, sip / puff activities into the mouthpiece can trigger additional                functions
 
-3. Two 3.5mm jack plug sockets for attaching external switches to trigger additional functions (“Button 2 / B2” and “Button 3 / B3”)
+(b)    One built-in switch (“Button 1 / B1”) on the device, e.g. to change the active         configuration (functions)
 
-4. 3 Indicator Light Emitting Diodes (LEDs) for showing the active configuration, calibration procedure etc.
+(c)    Two 3.5mm jack plug sockets for attaching external switches to trigger additional         functions (“Button 2 / B2” and “Button 3 / B3”)
 
-5. Universal infrared remote control receiver and transmitter
+(d)    3 Indicator Light Emitting Diodes (LEDs) for showing the active configuration,         calibration procedure etc.
 
-6. “Hot Shoe” Adapter for mounting to a Manfrotto Magic Arm or similar mounting system
+(e)    Universal infrared remote control receiver and transmitter
 
-7. Firmware upgrade via FLipMouse web application on [flipmouse.asterics.eu](flipmouse.asterics.eu)
+(f)    “Hot Shoe” Adapter for mounting to a Manfrotto Magic Arm or similar mounting         system
 
-8. Optional add-on board for Bluetooth (e.g. to control smartphones or iOS devices)
+(g)    Firmware upgrade via FLipMouse web application on [flipmouse.asterics.eu](flipmouse.asterics.eu)
 
-![flip](./Bilder/f3.PNG)
+(h)    Optional add-on board for Bluetooth (e.g. to control smartphones or iOS devices)
+
+(i)     Reset button
+
+<p align="center" width="100%">
+    <img width="100%" src="./Bilder/f3.svg">
+</p>
 
 *Figure 3*: FLipMouse right side
 
-On one side of the FLipMouse enclosure, 3 LEDs indicate the current mode of operation (which can be changed to activate different speed settings or functional options). Furthermore, the Infrared (IR-) receiver module is accessible here. This modules can be used for recording arbitrary infrared remote control commands (for example to change volume or channel settings of a TV-set). The IR-signals can then be replayed from the IR-emitting diode at the rear side of the FlipMouse.
-
-![flip](./Bilder/f4.PNG)
+<p align="center" width="100%">
+    <img width="100%" src="./Bilder/f4.svg">
+</p>
 
 *Figure 4*: FLipMouse left side
+
+On the right side of the FLipMouse enclosure, 3 LEDs indicate the current mode of operation (which can be changed to activate different speed settings or functional options). Furthermore, the Infrared (IR-) receiver module is accessible here. This modules can be used for recording arbitrary infrared remote control commands (for example to change volume or channel settings of a TV-set). The IR-signals can then be replayed from the IR-emitting diode at the rear side of the FLipMouse.
 
 The left side of the FLipMouse gives access to a button (B1) which offers a configurable function (for example changing the operational mode). Next to this button is a hole which gives access to the reset-button of the FlipMouse (usually not needed). 
 Two 3,5mm Jack Plug sockets marked (B2) and (B3) allow the connection of external momentary switches. Standard switches with 3,5mm mono jack plugs can be used.
 
 ## 3D-Printed Housing
 
-![flip3d](./Bilder/f5.JPG)
+<p align="center" width="100%">
+    <img width="60%" src="./Bilder/f5.JPG">
+</p>
 
 *Figure 5*: FLipMouse 3D-printed enclosure 
 
@@ -102,7 +103,10 @@ Different alternatives for the FLipMouse housing are available, e.g. an acrylic 
 ## Bluetooth – Add-On Module
 
 The optional Bluetooth Add-On module allows connection of the FLipMouse as a Bluetooth mouse/keyboard to various mobile devices (smartphones, tablets, IOs devices). If this module is not contained in the DIY-Kit, it can be ordered individually from the AsTeRICS Foundation or built from the hardware design files available on Github (parts must be ordered individually). If you are interested in this feature, have a look at the [FLipMouse Wiki](https://github.com/asterics/FLipMouse/wiki) where construction of the Add-On module is explained.
-![bluetooth](./Bilder/f6.JPG)
+
+<p align="center" width="100%">
+    <img width="50%" src="./Bilder/f6.JPG">
+</p>
 
 *Figure 6*: Bluetooth Add-on Module
 

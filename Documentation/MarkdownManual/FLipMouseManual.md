@@ -31,6 +31,9 @@ The AsTeRICS Foundation
 
 The FLipMouse is available with a 3d-printed enclosure. Design files for the 3d-printed case are provided in the [Github repository](https://github.com/asterics/FLipMouse/tree/master/Hardware/case-design/3D_printer). The primary method for interacting with the FLipMouse is the transparent stick (“Hygienic Stick” or “mouthpiece”) which is attached to the front of the FLipMouse. Additionally, two external momentary switches can be attached to the jack plug connectors on the left side of the FlipMouse enclosure:
 
+<p align="center" width="100%">
+    <img width="100%" src="./Bilder/f1.svg">
+</p>
 
 ![FLipMouse 3D-printed](./Bilder/f1.svg)
 

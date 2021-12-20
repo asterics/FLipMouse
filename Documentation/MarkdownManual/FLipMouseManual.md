@@ -75,13 +75,13 @@ Additionally, two external momentary switches can be attached to the jack plug c
 (i)     Reset button
 
 <p align="left" width="100%">
-    <img width="60%" src="./Bilder/f3.svg">
+    <img width="55%" src="./Bilder/f3.svg">
 </p>
 
 *Figure 3*: FLipMouse right side
 
 <p align="left" width="100%">
-    <img width="60%" src="./Bilder/f4.svg">
+    <img width="55%" src="./Bilder/f4.svg">
 </p>
 
 *Figure 4*: FLipMouse left side
@@ -220,6 +220,7 @@ The FLipMouse is mounted using a HotShoe 3/8” mounting screw which is located 
 <p align="left" width="100%">
     <img width="100%" src="./Bilder/fig3.svg">
 </p>
+
 *Figure 16: FLipMouse Configuration Manager: Tab STICK-CONFIG, Scroll bars*
 
 The scroll bars allow changing the parameters of the stick and the behavior of the mouse cursor according to the preferences of the user. The behavior of the following characteristics can be changed: 
@@ -287,7 +288,7 @@ Please note that the joystick function must be supported by software application
 The joystick controller provided by the FLipMouse is called *“Serial+Keyboard+Mouse+Joystick”*. When you select this device in the “*joy.cpl*” utility, click on the properties to display its preferences. The live values of the joystick axis and button activities will be displayed in a window similar to the one shown here: 
 
 <p align="left" width="100%">
-    <img width="60%" src="./Bilder/fig21.PNG">
+    <img width="30%" src="./Bilder/fig21.PNG">
 </p>
 
 *Figure 20: Joy.cpl Properties*
@@ -432,6 +433,8 @@ The following list shows the color codes of the LEDs for each slot position:
 | Position 6 will be displayed as 2 shining bulbs | yellow, green              |
 | Position 7 will be displayed as 3 shining bulbs | red, yellow, green         |
 
+Figure 26 shows the same list but the shining bulbs in the correct colors for the visual people.
+
 ![buttons](./Bilder/22.PNG)
 
 *Figure 26: Color codes of the LEDs*
@@ -517,7 +520,9 @@ The existing commands can be chosen from the drop-down menu.
 
 In this window you can also manage IR commands. Next to *New IR Command*, you can enter a name and then click RECORD - point your IR remote to the side of the FLipMouse where the LEDs stick out and send the IR command (there is a 10 seconds time limit for the recording phase). The new command is now stored in the FLipMouse and can be chosen and replayed by selecting it's name in the drop down menu. If the command is not correctly replayed, try to increase the IR-Code timeout – for example to 250 milliseconds. Using *Delete IR command* commands can be deleted. 
 
-![infrared](./Bilder/fig13.PNG)
+<p align="left" width="100%">
+    <img width="80%" src="./Bilder/fig13.PNG">
+</p>
 
 *Figure 31: Infrared Recording and Replay Configuration Manager*
 
@@ -529,7 +534,9 @@ The optional Bluetooth Add-on module allows connection and control of cell phone
 
 The Bluetooth module is plugged onto the internal 10-pin connector of the FLipMouse. To do this, open the FLipMouse housing and push the module onto the pin header as far as possible:
 
-![bluetooth](./Bilder/fig31.JPG)
+<p align="left" width="100%">
+    <img width="60%" src="./Bilder/fig31.JPG">
+</p>
 
 *Figure 32: Bluetooth module*
 
@@ -558,9 +565,23 @@ If the mouthpiece is used to actuate the cursor movements via lip/mouth movement
 **Exchanging the saliva filter:**
 The saliva filter is placed inside the *Hygienic Stick*. Usually, no (or nearly no) saliva should enter the stick – but it strongly depends on the person using the mouthpiece and his/her condition. If saliva enters the *Hygienic Stick*, the saliva filters prevents the moisture entering the inner parts of the FLipMouse (respectively the pressure sensor). The filter can be replaced as shown below:
 
-![mouthpiece1](./Bilder/fig34.PNG)
+<p align="left" width="100%">
+    <img width="60%" src="./Bilder/fig34.1.JPG">
+</p>
 
-*Figure 34: Exchanging the filter*
+*Figure 34.1: Removal of the saliva filter, using a normal screw to grab the filter*
+
+<p align="left" width="100%">
+    <img width="60%" src="./Bilder/fig34.2.JPG">
+</p>
+
+*Figure 34.2: The removed filter*
+
+<p align="left" width="100%">
+    <img width="60%" src="./Bilder/fig34.3.JPG">
+</p>
+
+*Figure 34.3: Inserting a new filter (pushing it back into the hygienic stick)*
 
 **Disinfection of the mouthpiece/hygienic stick:**
 To disinfect a mouthpiece, use boiling water. Place the *Hygienic Stick* (without saliva filter) in boiling water for at least five minutes. Then let the *Hygienic Stick* dry before the next application.
@@ -589,14 +610,18 @@ With wrong positioning of the FLipMouse there is the risk of feeling uncomfortab
 
 In addition to the possibility of updating the FLipMouse firmware via the configuration manager, the firmware can also be updated via the Arduino IDE and the Teensyduino add-on / loader application. Find the most recent versions in the latest release package on [Github](https://github.com/asterics/FLipMouse/releases). Unzip the FLipMouse.zip package and start the teensy.exe program (the Teensy Loader).
 
-![Teensy Loader](./Bilder/fig35.PNG)
+<p align="left" width="100%">
+    <img width="60%" src="./Bilder/fig35.PNG">
+</p>
 
 *Figure 35: Teensy Loader Step 1*
 
 The Teensy Loader user interface should look as on the picture above (Figure 35). If there is any security warning (related to Windows User Access Control), please ensure that the Publisher is “PJRC.COM, LLC” and click on “Run”.
 As next step, activate the “download mode” of the FLipMouse by using some pointed tool (needle, small screwdriver, …) to press the reset button which is accessible via the small hole on the bottom side. After a few seconds (driver installation), the Teensy Loader GUI should indicate connection to the FLipMouse as shown here in Figure 36:
 
-![Teensy Loader](./Bilder/fig36.PNG)
+<p align="left" width="100%">
+    <img width="60%" src="./Bilder/fig36.PNG">
+</p>
 
 *Figure 36: Teensy Loader Step 2*
 
@@ -604,14 +629,18 @@ Choose “File → Open HEX file” and select the file “FLipWare.hex” from 
 
 Select “Operation → Program”. After a few seconds, you should see the notification “Download complete”, as on the next picture (Figure 37). (If this step does not work in the first place, try to unplug and replug the FLipMouse and restart the Teensy Loader software.)
 
-![Teensy Loader](./Bilder/fig37.PNG)
+<p align="left" width="100%">
+    <img width="60%" src="./Bilder/fig37.PNG">
+</p>
 
 *Figure 37: Teensy Loader Step 3*
 
 To finish the firmware installation, select “Operation → Reboot”.
 You should read “Reboot” and the FLipMouse should beep for a short time.
 
-![Teensy Loader](./Bilder/fig38.PNG)
+<p align="left" width="100%">
+    <img width="60%" src="./Bilder/fig38.PNG">
+</p>
 
 *Figure 38: Teensy Loader Step 4*
 
@@ -725,4 +754,6 @@ Municipal department of Economic Affairs, Labor and Statistics (MA 23),
 in course of the projects AsTeRICS Academy (14-02), ToRaDes (18-04) 
 and Wissensdrehscheibe für Barrierefreie Technologien (26-02) 
 
-![MA34](./Bilder/fig40.PNG)
+<p align="left" width="100%">
+    <img width="20%" src="./Bilder/fig40.JPG">
+</p>

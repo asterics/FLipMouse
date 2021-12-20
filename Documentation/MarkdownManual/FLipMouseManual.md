@@ -33,7 +33,7 @@ The AsTeRICS Foundation
 
 The FLipMouse is available with a 3d-printed enclosure. Design files for the 3d-printed case are provided in the [Github repository](https://github.com/asterics/FLipMouse/tree/master/Hardware/case-design/3D_printer). The primary method for interacting with the FLipMouse is the transparent stick (“Hygienic Stick” or “mouthpiece”) which is attached to the front of the FLipMouse. The *Hygienic Stick* is made by the company *QuadJoy*.  Replacement sticks can be ordered via the homepage: [www.quadjoy.com](http://www.quadjoy.com). We want to thank Bill and Debra Street of *QuadJoy* for letting us use their mouthpiece for our FLipMouse construction kit! (Please note the cleaning instructions in the dedicated section of this manual.)
 
-<p align="center" width="100%">
+<p align="left" width="100%">
     <img width="80%" src="./Bilder/f2.svg">
 </p>
 
@@ -74,13 +74,13 @@ Additionally, two external momentary switches can be attached to the jack plug c
 
 (i)     Reset button
 
-<p align="center" width="100%">
+<p align="left" width="100%">
     <img width="60%" src="./Bilder/f3.svg">
 </p>
 
 *Figure 3*: FLipMouse right side
 
-<p align="center" width="100%">
+<p align="left" width="100%">
     <img width="60%" src="./Bilder/f4.svg">
 </p>
 
@@ -93,7 +93,7 @@ Two 3,5mm Jack Plug sockets marked (B2) and (B3) allow the connection of externa
 
 ## 3D-Printed Housing
 
-<p align="center" width="100%">
+<p align="left" width="100%">
     <img width="60%" src="./Bilder/f5.JPG">
 </p>
 
@@ -105,7 +105,7 @@ Different alternatives for the FLipMouse housing are available, e.g. an acrylic 
 
 The optional Bluetooth Add-On module allows connection of the FLipMouse as a Bluetooth mouse/keyboard to various mobile devices (smartphones, tablets, IOs devices). If this module is not contained in the DIY-Kit, it can be ordered individually from the AsTeRICS Foundation or built from the hardware design files available on Github (parts must be ordered individually). If you are interested in this feature, have a look at the [FLipMouse Wiki](https://github.com/asterics/FLipMouse/wiki) where construction of the Add-On module is explained.
 
-<p align="center" width="100%">
+<p align="left" width="100%">
     <img width="40%" src="./Bilder/f6.JPG">
 </p>
 
@@ -173,9 +173,9 @@ The Bluetooth – Add-On-module for the FLipMouse allows wireless mouse/keyboard
 The [FLipMouse Configuration Manager](flipmouse.asterics.eu) offers a Graphical User Interface (GUI) to change and store settings of the FLipMouse device so that all features and functions can be adapted to personal preferences and needs. **Currently, the Google Chrome browser (or a Chromium-based browser) must be used.** The Configuration Manager is accessible by entering the following website: **flipmouse.asterics.eu**. The FLipMouse Configuration Manager sends and receives information from/to the FLipMouse. This information transfer occurs through a communication port (COM port). 
 Please note that the old FLipMouse Settings Manager was a configuration system that was not web-based and was only available for Windows. If you still want to use it, the **Manual of the FLipMouse Settings Manager** can be found [here](https://github.com/asterics/FLipMouse/blob/master/UserManualFlipMouse.pdf).
 
-Figure 1 shows the welcome page of the FLipmouse Configuration Manager. 
+Figure 14 shows the welcome page of the FLipmouse Configuration Manager. 
 
-<p align="center" width="100%">
+<p align="left" width="100%">
     <img width="70%" src="./Bilder/fig1.PNG">
 </p>
 
@@ -217,7 +217,7 @@ When using the stick for cursor movement, the cursor should stay in place when t
 
 The FLipMouse is mounted using a HotShoe 3/8” mounting screw which is located on the side of the FLipMouse case. The orientation can be changed according to the user’s preferences. If the FLipMouse is mounted e.g. upside-down, the stick orientation can be selected accordingly so that the up/down/left/right movements are still interpreted correctly. A click on “ROTATE RIGHT” changes the orientation by 90°. Orientation settings for 0 / 90 / 180 and 270 degrees are possible, so that any mounting orientation is possible.
 
-<p align="center" width="100%">
+<p align="left" width="100%">
     <img width="100%" src="./Bilder/fig3.svg">
 </p>
 *Figure 16: FLipMouse Configuration Manager: Tab STICK-CONFIG, Scroll bars*
@@ -236,7 +236,7 @@ The *deadzone* setting defines a passive zone for the stick movements: when the 
 
 If desired, the sensitivity- and deadzone-values for horizontal or vertical movements can be changed individually. In order to do that, select “*show x/y separately*”, as shown below: 
 
-<p align="center" width="100%">
+<p align="left" width="100%">
     <img width="100%" src="./Bilder/fig3.1.svg">
 </p>
 
@@ -260,7 +260,7 @@ Due to mechanical reasons, the force sensors of the FLipMouse show small inaccur
 The “drift compensation gain” value represents the level of correction, whereas the “compensation range” value represents the amount of force which is taken into account for the calculation. 
 Each of these values has a corresponding slider. It is also possible to set different values for the x-axis und the y-axis after clicking “*show x/y separately*” (see Figure 18).
 
-<p align="center" width="100%">
+<p align="left" width="100%">
     <img width="100%" src="./Bilder/fig4.1.svg">
 </p>
 

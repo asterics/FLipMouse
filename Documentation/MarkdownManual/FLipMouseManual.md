@@ -721,9 +721,9 @@ Please note that certain commands for adjusting FLipMouse settings are not shown
 
 ## Supported Key Identifiers:
 
-| **Supported KEY Identifiers:**                                                                                                                                                                                                                                                                                        |
+| **Supported KEY Identifiers:**                                                                                                                                                                                                                                                                     |
 | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-|**Letters**|
+| **Letters**                                                                                                                                                                                                                                                                                        |
 | KEY_A  KEY_B  KEY_C  KEY_D  KEY_E  KEY_F  KEY_G  KEY_H  <br/>KEY_I  KEY_J  KEY_K  KEY_L  KEY_M  KEY_N  KEY_O  KEY_P  <br/>KEY_Q  KEY_R  KEY_S  KEY_T  KEY_U  KEY_V  KEY_W  KEY_X                                                                                                                   |
 | **Digits**                                                                                                                                                                                                                                                                                         |
 | KEY_1  KEY_2  KEY_3  KEY_4  KEY_5  KEY_6  KEY_7  KEY_8  KEY_9  KEY_0                                                                                                                                                                                                                               |

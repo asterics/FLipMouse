@@ -278,7 +278,7 @@ For example:
 If you select one of the joystick modes in the STICK-CONFIG tab, moving the FLipMouse stick up / down / left / right will result in joystick activities. The FLipMouse will behave like a gamepad with 6 axes (*X/Y*, *Z/Z-Turn* and *Slider1/Slider2*). As the FLipMouse stick can only deliver 2 axes of information at a time, the desired joystick axis must be selected.
 
 <p align="center" width="100%">
-    <img width="100%" src="./Bilder/fig20.1.svg">
+    <img width="80%" src="./Bilder/fig20.1.svg">
 </p>
 
 *Figure 19: Set stick configuration for joystick movement*
@@ -332,7 +332,7 @@ The actions can be changed via clicking the entry in the action configuration ta
 *Figure 22: Assign different actions to user activities*
 
 <p align="left" width="100%">
-    <img width="100%" src="./Bilder/fig7.PNG">
+    <img width="80%" src="./Bilder/fig7.PNG">
 </p>
 
 *Figure 23: Pop-up window for choice of desired action*
@@ -395,7 +395,7 @@ For a list of all supported key identifiers, see appendix
 or have a look at the [FLipMouse Wiki / Github pages](https://github.com/asterics/FLipMouse/wiki/at-api).
 
 <p align="left" width="100%">
-    <img width="100%" src="./Bilder/fig8.1.svg">
+    <img width="80%" src="./Bilder/fig8.1.svg">
 </p>
 
 *Figure 24: Add keys for the action press / hold / toggle keys*
@@ -403,7 +403,9 @@ or have a look at the [FLipMouse Wiki / Github pages](https://github.com/asteric
 **Write Word**
 The *Write word* action allows typing a particular text/phrase whenever a user activity occurs (for example: write “Hello” whenever you move the FLipMouse stick up). Selecting this action displays a blank text box under the drop-down menu where the text can be entered, as shown below:
 
-![actionsAddKey](./Bilder/fig9.PNG)
+<p align="left" width="100%">
+    <img width="80%" src="./Bilder/fig9.PNG">
+</p>
 
 *Figure 25: Write word function*
 
@@ -521,7 +523,7 @@ The existing commands can be chosen from the drop-down menu.
 In this window you can also manage IR commands. Next to *New IR Command*, you can enter a name and then click RECORD - point your IR remote to the side of the FLipMouse where the LEDs stick out and send the IR command (there is a 10 seconds time limit for the recording phase). The new command is now stored in the FLipMouse and can be chosen and replayed by selecting it's name in the drop down menu. If the command is not correctly replayed, try to increase the IR-Code timeout – for example to 250 milliseconds. Using *Delete IR command* commands can be deleted. 
 
 <p align="left" width="100%">
-    <img width="80%" src="./Bilder/fig13.PNG">
+    <img width="70%" src="./Bilder/fig13.PNG">
 </p>
 
 *Figure 31: Infrared Recording and Replay Configuration Manager*
@@ -535,7 +537,7 @@ The optional Bluetooth Add-on module allows connection and control of cell phone
 The Bluetooth module is plugged onto the internal 10-pin connector of the FLipMouse. To do this, open the FLipMouse housing and push the module onto the pin header as far as possible:
 
 <p align="left" width="100%">
-    <img width="60%" src="./Bilder/fig31.JPG">
+    <img width="45%" src="./Bilder/fig31.JPG">
 </p>
 
 *Figure 32: Bluetooth module*
@@ -566,19 +568,19 @@ If the mouthpiece is used to actuate the cursor movements via lip/mouth movement
 The saliva filter is placed inside the *Hygienic Stick*. Usually, no (or nearly no) saliva should enter the stick – but it strongly depends on the person using the mouthpiece and his/her condition. If saliva enters the *Hygienic Stick*, the saliva filters prevents the moisture entering the inner parts of the FLipMouse (respectively the pressure sensor). The filter can be replaced as shown below:
 
 <p align="left" width="100%">
-    <img width="60%" src="./Bilder/fig34.1.JPG">
+    <img width="60%" src="./Bilder/fig34.1.jpg">
 </p>
 
 *Figure 34.1: Removal of the saliva filter, using a normal screw to grab the filter*
 
 <p align="left" width="100%">
-    <img width="60%" src="./Bilder/fig34.2.JPG">
+    <img width="60%" src="./Bilder/fig34.2.jpg">
 </p>
 
 *Figure 34.2: The removed filter*
 
 <p align="left" width="100%">
-    <img width="60%" src="./Bilder/fig34.3.JPG">
+    <img width="60%" src="./Bilder/fig34.3.jpg">
 </p>
 
 *Figure 34.3: Inserting a new filter (pushing it back into the hygienic stick)*
@@ -611,7 +613,7 @@ With wrong positioning of the FLipMouse there is the risk of feeling uncomfortab
 In addition to the possibility of updating the FLipMouse firmware via the configuration manager, the firmware can also be updated via the Arduino IDE and the Teensyduino add-on / loader application. Find the most recent versions in the latest release package on [Github](https://github.com/asterics/FLipMouse/releases). Unzip the FLipMouse.zip package and start the teensy.exe program (the Teensy Loader).
 
 <p align="left" width="100%">
-    <img width="60%" src="./Bilder/fig35.PNG">
+    <img width="50%" src="./Bilder/fig35.PNG">
 </p>
 
 *Figure 35: Teensy Loader Step 1*
@@ -620,7 +622,7 @@ The Teensy Loader user interface should look as on the picture above (Figure 35)
 As next step, activate the “download mode” of the FLipMouse by using some pointed tool (needle, small screwdriver, …) to press the reset button which is accessible via the small hole on the bottom side. After a few seconds (driver installation), the Teensy Loader GUI should indicate connection to the FLipMouse as shown here in Figure 36:
 
 <p align="left" width="100%">
-    <img width="60%" src="./Bilder/fig36.PNG">
+    <img width="50%" src="./Bilder/fig36.PNG">
 </p>
 
 *Figure 36: Teensy Loader Step 2*
@@ -630,7 +632,7 @@ Choose “File → Open HEX file” and select the file “FLipWare.hex” from 
 Select “Operation → Program”. After a few seconds, you should see the notification “Download complete”, as on the next picture (Figure 37). (If this step does not work in the first place, try to unplug and replug the FLipMouse and restart the Teensy Loader software.)
 
 <p align="left" width="100%">
-    <img width="60%" src="./Bilder/fig37.PNG">
+    <img width="50%" src="./Bilder/fig37.PNG">
 </p>
 
 *Figure 37: Teensy Loader Step 3*
@@ -639,7 +641,7 @@ To finish the firmware installation, select “Operation → Reboot”.
 You should read “Reboot” and the FLipMouse should beep for a short time.
 
 <p align="left" width="100%">
-    <img width="60%" src="./Bilder/fig38.PNG">
+    <img width="50%" src="./Bilder/fig38.PNG">
 </p>
 
 *Figure 38: Teensy Loader Step 4*
@@ -755,5 +757,5 @@ in course of the projects AsTeRICS Academy (14-02), ToRaDes (18-04)
 and Wissensdrehscheibe für Barrierefreie Technologien (26-02) 
 
 <p align="left" width="100%">
-    <img width="20%" src="./Bilder/fig40.JPG">
+    <img width="20%" src="./Bilder/fig40.jpg">
 </p>

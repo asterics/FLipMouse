@@ -25,7 +25,9 @@ All design files for the electronics and the 3d-printed enclosure - as well as t
 The AsTeRICS Foundation
 [www.asterics-foundation.org](https://asterics-foundation.org/)
 
-![flip](./Bilder/flip1.svg)
+<p align="center" width="100%">
+    <img width="33%" src="./Bilder/flip1.svg" alt="Flip, the vagabound grasshopper cartoon character">
+</p>
 
 # Hardware overview
 

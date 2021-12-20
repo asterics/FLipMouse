@@ -6,7 +6,7 @@
    width="700.60004"
    height="360.02667"
    viewBox="0 0 700.60004 360.02667"
-   sodipodi:docname="fig4.svg"
+   sodipodi:docname="fig4.1.svg"
    inkscape:version="1.1.1 (3bf5ae0d25, 2021-09-20)"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
@@ -490,9 +490,6 @@
        transform="scale(1,-1)"
        preserveAspectRatio="none"
        id="image1056" /><path
-       style="fill:none;stroke:#000000;stroke-width:2.25;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-start:url(#Arrow1Mstart)"
-       d="M 483.70307,-15.894222 451.30463,-69.323233"
-       id="path1255" /><path
        style="fill:none;stroke:#0000e9;stroke-width:2.25;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:8;stroke-dasharray:none;stroke-opacity:1"
        d="M 460.67151,7.1751072 V -10.889451 h 58.42811 V 7.1751072 Z"
        id="path4297" /></g></svg>

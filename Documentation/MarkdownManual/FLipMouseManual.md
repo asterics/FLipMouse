@@ -537,7 +537,7 @@ The optional Bluetooth Add-on module allows connection and control of cell phone
 The Bluetooth module is plugged onto the internal 10-pin connector of the FLipMouse. To do this, open the FLipMouse housing and push the module onto the pin header as far as possible:
 
 <p align="left" width="100%">
-    <img width="45%" src="./Bilder/fig31.JPG">
+    <img width="40%" src="./Bilder/fig31.JPG">
 </p>
 
 *Figure 32: Bluetooth module*
@@ -568,19 +568,19 @@ If the mouthpiece is used to actuate the cursor movements via lip/mouth movement
 The saliva filter is placed inside the *Hygienic Stick*. Usually, no (or nearly no) saliva should enter the stick – but it strongly depends on the person using the mouthpiece and his/her condition. If saliva enters the *Hygienic Stick*, the saliva filters prevents the moisture entering the inner parts of the FLipMouse (respectively the pressure sensor). The filter can be replaced as shown below:
 
 <p align="left" width="100%">
-    <img width="60%" src="./Bilder/fig34.1.jpg">
+    <img width="50%" src="./Bilder/fig34.1.jpg">
 </p>
 
 *Figure 34.1: Removal of the saliva filter, using a normal screw to grab the filter*
 
 <p align="left" width="100%">
-    <img width="60%" src="./Bilder/fig34.2.jpg">
+    <img width="50%" src="./Bilder/fig34.2.jpg">
 </p>
 
 *Figure 34.2: The removed filter*
 
 <p align="left" width="100%">
-    <img width="60%" src="./Bilder/fig34.3.jpg">
+    <img width="50%" src="./Bilder/fig34.3.jpg">
 </p>
 
 *Figure 34.3: Inserting a new filter (pushing it back into the hygienic stick)*
@@ -613,7 +613,7 @@ With wrong positioning of the FLipMouse there is the risk of feeling uncomfortab
 In addition to the possibility of updating the FLipMouse firmware via the configuration manager, the firmware can also be updated via the Arduino IDE and the Teensyduino add-on / loader application. Find the most recent versions in the latest release package on [Github](https://github.com/asterics/FLipMouse/releases). Unzip the FLipMouse.zip package and start the teensy.exe program (the Teensy Loader).
 
 <p align="left" width="100%">
-    <img width="50%" src="./Bilder/fig35.PNG">
+    <img width="30%" src="./Bilder/fig35.PNG">
 </p>
 
 *Figure 35: Teensy Loader Step 1*
@@ -622,7 +622,7 @@ The Teensy Loader user interface should look as on the picture above (Figure 35)
 As next step, activate the “download mode” of the FLipMouse by using some pointed tool (needle, small screwdriver, …) to press the reset button which is accessible via the small hole on the bottom side. After a few seconds (driver installation), the Teensy Loader GUI should indicate connection to the FLipMouse as shown here in Figure 36:
 
 <p align="left" width="100%">
-    <img width="50%" src="./Bilder/fig36.PNG">
+    <img width="30%" src="./Bilder/fig36.PNG">
 </p>
 
 *Figure 36: Teensy Loader Step 2*
@@ -632,7 +632,7 @@ Choose “File → Open HEX file” and select the file “FLipWare.hex” from 
 Select “Operation → Program”. After a few seconds, you should see the notification “Download complete”, as on the next picture (Figure 37). (If this step does not work in the first place, try to unplug and replug the FLipMouse and restart the Teensy Loader software.)
 
 <p align="left" width="100%">
-    <img width="50%" src="./Bilder/fig37.PNG">
+    <img width="30%" src="./Bilder/fig37.PNG">
 </p>
 
 *Figure 37: Teensy Loader Step 3*
@@ -641,7 +641,7 @@ To finish the firmware installation, select “Operation → Reboot”.
 You should read “Reboot” and the FLipMouse should beep for a short time.
 
 <p align="left" width="100%">
-    <img width="50%" src="./Bilder/fig38.PNG">
+    <img width="30%" src="./Bilder/fig38.PNG">
 </p>
 
 *Figure 38: Teensy Loader Step 4*

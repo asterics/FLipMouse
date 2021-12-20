@@ -21,6 +21,17 @@
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" /></cc:Work></rdf:RDF></metadata><defs
      id="defs6"><marker
        style="overflow:visible"
+       id="EmptyTriangleInM"
+       refX="0.0"
+       refY="0.0"
+       orient="auto"
+       inkscape:stockid="EmptyTriangleInM"
+       inkscape:isstock="true"><path
+         transform="scale(-0.4) translate(-4.5,0)"
+         style="fill-rule:evenodd;fill:context-fill;stroke:context-stroke;stroke-width:1.0pt"
+         d="M 5.77,0.0 L -2.88,5.0 L -2.88,-5.0 L 5.77,0.0 z "
+         id="path1133" /></marker><marker
+       style="overflow:visible"
        id="marker1631"
        refX="0"
        refY="0"
@@ -517,7 +528,7 @@
        style="fill:none;stroke:#0000e9;stroke-width:2.25;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:8;stroke-dasharray:none;stroke-opacity:1"
        d="m 260.82504,141.85827 v -18.06456 h 58.42811 v 18.06456 z"
        id="path4297" /><path
-       style="fill:none;stroke:#000000;stroke-width:2.25;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-start:url(#Arrow1Mstart)"
+       style="fill:none;stroke:#000000;stroke-width:2.25;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-start:url(#EmptyTriangleInM)"
        d="m 324.71213,133.95653 18.07334,16.91266"
        id="path1657" /><text
        xml:space="preserve"

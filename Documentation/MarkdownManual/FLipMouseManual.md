@@ -34,7 +34,7 @@ The AsTeRICS Foundation
 The FLipMouse is available with a 3d-printed enclosure. Design files for the 3d-printed case are provided in the [Github repository](https://github.com/asterics/FLipMouse/tree/master/Hardware/case-design/3D_printer). The primary method for interacting with the FLipMouse is the transparent stick (“Hygienic Stick” or “mouthpiece”) which is attached to the front of the FLipMouse. The *Hygienic Stick* is made by the company *QuadJoy*.  Replacement sticks can be ordered via the homepage: [www.quadjoy.com](http://www.quadjoy.com). We want to thank Bill and Debra Street of *QuadJoy* for letting us use their mouthpiece for our FLipMouse construction kit! (Please note the cleaning instructions in the dedicated section of this manual.)
 
 <p align="left" width="100%">
-    <img width="80%" src="./Bilder/f2.svg">
+    <img width="60%" src="./Bilder/f2.svg">
 </p>
 
 *Figure 2*: Using the FLipMouse for computer control via lip interaction
@@ -277,7 +277,7 @@ For example:
 
 If you select one of the joystick modes in the STICK-CONFIG tab, moving the FLipMouse stick up / down / left / right will result in joystick activities. The FLipMouse will behave like a gamepad with 6 axes (*X/Y*, *Z/Z-Turn* and *Slider1/Slider2*). As the FLipMouse stick can only deliver 2 axes of information at a time, the desired joystick axis must be selected.
 
-<p align="center" width="100%">
+<p align="left" width="100%">
     <img width="80%" src="./Bilder/fig20.1.svg">
 </p>
 
@@ -435,7 +435,7 @@ The following list shows the color codes of the LEDs for each slot position:
 | Position 6 will be displayed as 2 shining bulbs | yellow, green              |
 | Position 7 will be displayed as 3 shining bulbs | red, yellow, green         |
 
-Figure 26 shows the same list but the shining bulbs in the correct colors for the visual people.
+The next figure (Figure 26) shows the same list but the shining bulbs in the correct colors for the visual people.
 
 ![buttons](./Bilder/22.PNG)
 
@@ -613,7 +613,7 @@ With wrong positioning of the FLipMouse there is the risk of feeling uncomfortab
 In addition to the possibility of updating the FLipMouse firmware via the configuration manager, the firmware can also be updated via the Arduino IDE and the Teensyduino add-on / loader application. Find the most recent versions in the latest release package on [Github](https://github.com/asterics/FLipMouse/releases). Unzip the FLipMouse.zip package and start the teensy.exe program (the Teensy Loader).
 
 <p align="left" width="100%">
-    <img width="30%" src="./Bilder/fig35.PNG">
+    <img width="10%" src="./Bilder/fig35.PNG">
 </p>
 
 *Figure 35: Teensy Loader Step 1*
@@ -622,7 +622,7 @@ The Teensy Loader user interface should look as on the picture above (Figure 35)
 As next step, activate the “download mode” of the FLipMouse by using some pointed tool (needle, small screwdriver, …) to press the reset button which is accessible via the small hole on the bottom side. After a few seconds (driver installation), the Teensy Loader GUI should indicate connection to the FLipMouse as shown here in Figure 36:
 
 <p align="left" width="100%">
-    <img width="30%" src="./Bilder/fig36.PNG">
+    <img width="10%" src="./Bilder/fig36.PNG">
 </p>
 
 *Figure 36: Teensy Loader Step 2*
@@ -632,7 +632,7 @@ Choose “File → Open HEX file” and select the file “FLipWare.hex” from 
 Select “Operation → Program”. After a few seconds, you should see the notification “Download complete”, as on the next picture (Figure 37). (If this step does not work in the first place, try to unplug and replug the FLipMouse and restart the Teensy Loader software.)
 
 <p align="left" width="100%">
-    <img width="30%" src="./Bilder/fig37.PNG">
+    <img width="10%" src="./Bilder/fig37.PNG">
 </p>
 
 *Figure 37: Teensy Loader Step 3*
@@ -641,7 +641,7 @@ To finish the firmware installation, select “Operation → Reboot”.
 You should read “Reboot” and the FLipMouse should beep for a short time.
 
 <p align="left" width="100%">
-    <img width="30%" src="./Bilder/fig38.PNG">
+    <img width="10%" src="./Bilder/fig38.PNG">
 </p>
 
 *Figure 38: Teensy Loader Step 4*

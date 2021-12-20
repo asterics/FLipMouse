@@ -48,24 +48,23 @@ Additionally, two external momentary switches can be attached to the jack plug c
 
 **The hardware features of the FLipMouse:** (see pictures at the bottom of this list)
 
-(a)    “Zero-way”-joystick / mouthpiece: 
-        very low forces are sufficient to create up/down/left/right movement
+(a)    “Zero-way”-joystick / mouthpiece: very low forces are sufficient to create up/down/left/right movement
 
         o    The zero-way-joystick can be used with fingers or toes etc. 
 
         o    It can also be used as a mouthpiece (actuated by lips / mouth movements) 
 
-        o    If desired, sip / puff activities into the mouthpiece can trigger additional                functions
+        o    If desired, sip / puff activities into the mouthpiece can trigger additional functions
 
-(b)    One built-in switch (“Button 1 / B1”) on the device, e.g. to change the active         configuration (functions)
+(b)    One built-in switch (“Button 1 / B1”) on the device, e.g. to change the active configuration (functions)
 
-(c)    Two 3.5mm jack plug sockets for attaching external switches to trigger additional         functions (“Button 2 / B2” and “Button 3 / B3”)
+(c)    Two 3.5mm jack plug sockets for attaching external switches to trigger additional functions (“Button 2 / B2” and “Button 3 / B3”)
 
-(d)    3 Indicator Light Emitting Diodes (LEDs) for showing the active configuration,         calibration procedure etc.
+(d)    3 Indicator Light Emitting Diodes (LEDs) for showing the active configuration, calibration procedure etc.
 
 (e)    Universal infrared remote control receiver and transmitter
 
-(f)    “Hot Shoe” Adapter for mounting to a Manfrotto Magic Arm or similar mounting         system
+(f)    “Hot Shoe” Adapter for mounting to a Manfrotto Magic Arm or similar mounting system
 
 (g)    Firmware upgrade via FLipMouse web application on [flipmouse.asterics.eu](flipmouse.asterics.eu)
 
@@ -174,7 +173,9 @@ Please note that the old FLipMouse Settings Manager was a configuration system t
 
 Figure 1 shows the welcome page of the FLipmouse Configuration Manager. 
 
-![welcomePage](./Bilder/fig1.PNG)
+<p align="center" width="100%">
+    <img width="70%" src="./Bilder/fig1.PNG">
+</p>
 
 *Figure 14: Welcome page of the FLipMouse Configuration Manager*
 
@@ -214,8 +215,9 @@ When using the stick for cursor movement, the cursor should stay in place when t
 
 The FLipMouse is mounted using a HotShoe 3/8” mounting screw which is located on the side of the FLipMouse case. The orientation can be changed according to the user’s preferences. If the FLipMouse is mounted e.g. upside-down, the stick orientation can be selected accordingly so that the up/down/left/right movements are still interpreted correctly. A click on “ROTATE RIGHT” changes the orientation by 90°. Orientation settings for 0 / 90 / 180 and 270 degrees are possible, so that any mounting orientation is possible.
 
-![STICK-CONFIG](./Bilder/fig3.PNG)
-
+<p align="center" width="100%">
+    <img width="100%" src="./Bilder/fig3.svg">
+</p>
 *Figure 16: FLipMouse Configuration Manager: Tab STICK-CONFIG, Scroll bars*
 
 The scroll bars allow changing the parameters of the stick and the behavior of the mouse cursor according to the preferences of the user. The behavior of the following characteristics can be changed: 
@@ -232,7 +234,9 @@ The *deadzone* setting defines a passive zone for the stick movements: when the 
 
 If desired, the sensitivity- and deadzone-values for horizontal or vertical movements can be changed individually. In order to do that, select “*show x/y separately*”, as shown below: 
 
-![STICK-CONFIG](./Bilder/fig3.1.PNG)
+<p align="center" width="100%">
+    <img width="100%" src="./Bilder/fig3.1.svg">
+</p>
 
 *Figure 17: FLipMouse Configuration Manager: Tab STICK-CONFIG, splitting x/y*
 
@@ -254,7 +258,9 @@ Due to mechanical reasons, the force sensors of the FLipMouse show small inaccur
 The “drift compensation gain” value represents the level of correction, whereas the “compensation range” value represents the amount of force which is taken into account for the calculation. 
 Each of these values has a corresponding slider. It is also possible to set different values for the x-axis und the y-axis after clicking “*show x/y separately*” (see Figure 18).
 
-![STICK-CONFIG](./Bilder/fig4.1.PNG)
+<p align="center" width="100%">
+    <img width="100%" src="./Bilder/fig4.1.svg">
+</p>
 
 *Figure 18: FLipMouse Configuration Manager: Tab STICK-CONFIG, separate x/y*
 
@@ -268,7 +274,9 @@ For example:
 
 If you select one of the joystick modes in the STICK-CONFIG tab, moving the FLipMouse stick up / down / left / right will result in joystick activities. The FLipMouse will behave like a gamepad with 6 axes (*X/Y*, *Z/Z-Turn* and *Slider1/Slider2*). As the FLipMouse stick can only deliver 2 axes of information at a time, the desired joystick axis must be selected.
 
-![joystick](./Bilder/fig20.1.PNG)
+<p align="center" width="100%">
+    <img width="100%" src="./Bilder/fig20.1.svg">
+</p>
 
 *Figure 19: Set stick configuration for joystick movement*
 
@@ -276,7 +284,9 @@ Please note that the joystick function must be supported by software application
 
 The joystick controller provided by the FLipMouse is called *“Serial+Keyboard+Mouse+Joystick”*. When you select this device in the “*joy.cpl*” utility, click on the properties to display its preferences. The live values of the joystick axis and button activities will be displayed in a window similar to the one shown here: 
 
-![joystick1](./Bilder/21.PNG)
+<p align="left" width="100%">
+    <img width="60%" src="./Bilder/fig21.PNG">
+</p>
 
 *Figure 20: Joy.cpl Properties*
 
@@ -287,7 +297,9 @@ Desired joystick button activities can be created using sip/puff or other intera
 When using the FLipMouse stick with the mouth, the user can trigger actions by sipping or puffing into the mouthpiece. The tube is connected to a pressure sensor, which outputs a value that corresponds to the detected pressure. When the user sips, the sensor value decreases, and when the user puffs, the value increases. 
 You may assign actions for sipping or puffing using the tab “ACTIONS”, as will be explained in the next section. You can select the thresholds for sipping and puffing as desired, using the tab “SIP AND PUFF”. When the FLipMouse is connected, you can also monitor the current pressure values and the triggering of sip/puff actions in this tab: 
 
-![sipPuff](./Bilder/fig5.1.PNG)
+<p align="left" width="100%">
+    <img width="100%" src="./Bilder/fig5.1.svg">
+</p>
 
 *Figure 21: Tab SIP AND PUFF*
 
@@ -310,11 +322,15 @@ The ACTIONS tab allows the mapping of user activities to desired FlipMouse funct
 
 The actions can be changed via clicking the entry in the action configuration table (see red arrow in figure 22). The table shows the actions for all user activities, either only for the currently active slot, or for all slots (which gives an overview of all actions). When clicking one particular action,  a window pops up where you can change the action category (here for Button 1: Device) and the action itself (here: Load next slot), see Figure 23.
 
-![actions](./Bilder/fig6.1.PNG)
+<p align="left" width="100%">
+    <img width="100%" src="./Bilder/fig6.1.svg">
+</p>
 
 *Figure 22: Assign different actions to user activities*
 
-![actionsWindow](./Bilder/fig7.PNG)
+<p align="left" width="100%">
+    <img width="100%" src="./Bilder/fig7.PNG">
+</p>
 
 *Figure 23: Pop-up window for choice of desired action*
 
@@ -361,7 +377,7 @@ The joystick hat is moved back to middle position when the associated user activ
 #### Action category: Keyboard
 
 **Press / Hold / Toggle Keys**
-The *Press Keys* action allows pressing one or multiple keyboard keys. A second drop-down menu with possible key identifiers is displayed. **When a key is selected from this menu, it has to be added (Click ADD)** to the *Insert keys text* field. Thus, multiple keyboard keys can be pressed simultaneously. The keys are released when the associated user activity ends. If you would like to remove or change the assigned keys, you must clear the currently assigned keys by pressing the “CLEAR” button next to the Insert keys field. 
+The *Press Keys* action allows pressing one or multiple keyboard keys. A second drop-down menu with possible key identifiers is displayed (***Add keys***). **When a key is selected from this menu, it has to be added (Click ADD)** to the *Insert keys text* field. Thus, multiple keyboard keys can be pressed simultaneously. The keys are released when the associated user activity ends. If you would like to remove or change the assigned keys, you must clear the currently assigned keys by pressing the “CLEAR” button next to the Insert keys field. 
 
 Common key combinations include: 
 KEY_CTRL + Z: triggers undo function
@@ -375,7 +391,9 @@ The *Toggle Key* action changes the key state from pressed to not pressed and vi
 For a list of all supported key identifiers, see appendix 
 or have a look at the [FLipMouse Wiki / Github pages](https://github.com/asterics/FLipMouse/wiki/at-api).
 
-![actionsAddKey](./Bilder/fig8.1.PNG)
+<p align="left" width="100%">
+    <img width="100%" src="./Bilder/fig8.1.svg">
+</p>
 
 *Figure 24: Add keys for the action press / hold / toggle keys*
 
@@ -402,6 +420,16 @@ Additionally to the LEDs, an acoustic signal will indicate the change of the slo
 
 The following list shows the color codes of the LEDs for each slot position:
 
+| **Position**                                    | **Color of shining bulbs** |
+| ----------------------------------------------- | -------------------------- |
+| Position 1  will be displayed as 1 shining bulb | red                        |
+| Position 2 will be displayed as 1 shining bulb  | yellow                     |
+| Position 3 will be displayed as 2 shining bulbs | red, yellow                |
+| Position 4 will be displayed as 1 shining bulb  | green                      |
+| Position 5 will be displayed as 2 shining bulbs | red, green                 |
+| Position 6 will be displayed as 2 shining bulbs | yellow, green              |
+| Position 7 will be displayed as 3 shining bulbs | red, yellow, green         |
+
 ![buttons](./Bilder/22.PNG)
 
 *Figure 26: Color codes of the LEDs*
@@ -426,7 +454,9 @@ This action allows running a so-called command macro which consists of several i
 
 In the SLOTS tab you can create new slots, delete existing slots, download a single or all slots and upload a file containing a complete configuration with multiple slots. After starting the FLipMouse Configuration Manager, only one default slot named “mouse” exists. When you create a slot using the “CREATE SLOT” button, **the current slot is copied and appended** after the last existing slot. Before creating the new slot, assign a name in the corresponding field (“insert name for new slot”) that will help you remember the slot’s purpose:
 
-![buttons](./Bilder/fig10.1.PNG)
+<p align="left" width="100%">
+    <img width="100%" src="./Bilder/fig10.1.svg">
+</p>
 
 *Figure 27: FLipMouse Configuration Manager: Tab SLOTS*
 

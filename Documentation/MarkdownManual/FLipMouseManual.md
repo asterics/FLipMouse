@@ -423,17 +423,17 @@ There are three built in LEDs (red, yellow-orange, green), which will display th
 
 Additionally to the LEDs, an acoustic signal will indicate the change of the slot.
 
-The following list shows the color codes of the LEDs for each slot position:
+The following list shows the color codes and the acoustic signals of the LEDs for each slot position:
 
-| **Position**                                    | **Color of shining bulbs** |
-| ----------------------------------------------- | -------------------------- |
-| Position 1  will be displayed as 1 shining bulb | red                        |
-| Position 2 will be displayed as 1 shining bulb  | yellow                     |
-| Position 3 will be displayed as 2 shining bulbs | red, yellow                |
-| Position 4 will be displayed as 1 shining bulb  | green                      |
-| Position 5 will be displayed as 2 shining bulbs | red, green                 |
-| Position 6 will be displayed as 2 shining bulbs | yellow, green              |
-| Position 7 will be displayed as 3 shining bulbs | red, yellow, green         |
+| **Active Slot** | **Acoustic Signal** | **Shining LEDs**   |
+| --------------- | ------------------- | ------------------ |
+| Slot 1          | one beep tone       | red                |
+| Slot 2          | two beep tones      | yellow             |
+| Slot 3          | three beep tones    | red, yellow        |
+| Slot 4          | four beep tones     | green              |
+| Slot 5          | five beep tones     | red, green         |
+| Slot 6          | six beep tones      | yellow, green      |
+| Slot 7          | seven beep tones    | red, yellow, green |
 
 The next figure (Figure 26) shows the same list but the shining bulbs in the correct colors for the visual people.
 

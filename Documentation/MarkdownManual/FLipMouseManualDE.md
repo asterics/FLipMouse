@@ -23,6 +23,7 @@ Darüber hinaus enthält dieses Handbuch wichtige Richtlinien für die Verwendun
 Alle Designdateien für die Elektronik und das 3d-gedruckte Gehäuse - sowie der Software-Quellcode - sind Open Source verfügbar und werden über die Website der AsTeRICS Foundation und über GitHub verbreitet. Der Bausatz für die FLipMouse kann bei [Hackerspaceshop.com](https://hackerspaceshop.com/collections/flipmouse) erworben werden. Detaillierte Anleitungen sind in der [FlipMouse-Bauanleitung](https://github.com/asterics/FLipMouse/blob/master/ConstructionKit/ConstructionManual.pdf) enthalten. Viel Spaß beim Bauen und Benutzen deiner FLipMouse!
 
 Die AsTeRICS Foundation
+
 [www.asterics-foundation.org](https://asterics-foundation.org/)
 
 <p align="center" width="100%">

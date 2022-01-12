@@ -21,10 +21,10 @@
 #include "cirque.h"
 
 // Hardware pin-number labels
-#define SDA_PIN   18
-#define SCL_PIN   19
-#define DR_PIN    21
-#define GND_PIN   20
+#define SDA_PIN   23
+#define SCL_PIN   22
+#define DR_PIN    20
+#define GND_PIN   21
 
 // Cirque's 7-bit I2C Slave Address
 #define SLAVE_ADDR  0x2A

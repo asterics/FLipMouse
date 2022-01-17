@@ -224,7 +224,8 @@ void loop() {
     if (cirqueInstalled) {     //  is trackpad active?
       x=padX;
       y=padY;
-      handleTapClicks(padState,200);  // TBD: make this configurable !
+      if (settings.gv) 
+        handleTapClicks(padState, settings.gv*10);  // tap-time for left click: up to 1 second 
     }
     else {                     // FSR/stick is active -> apply calibration and drift correction
       if (calib_now == 0)  {   // no new calibration, use current values for x and y offset !

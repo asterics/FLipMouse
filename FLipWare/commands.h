@@ -118,9 +118,9 @@
           AT TP <uint>    treshold for puff action (512-1023)
           AT SP <uint>    treshold for strong puff (512-1023)
           AT SS <uint>    treshold for strong sip (0-512)
-          AT GV <uint>    gain vertical drift compensation (0-100)
-          AT RV <uint>    range vertical drift compensation (0-100)
-          AT GH <uint>    gain horizontal drift compensation (0-100)
+          AT GV <uint>    gain vertical drift compensation (0-100)  (Note: for FlipPad mode, this parameter represents tap threshold time for left clicks (0=disable)!)
+          AT RV <uint>    range vertical drift compensation (0-100)  (Note: for FlipPad mode, this parameter represents trackpad sensitivity!)
+          AT GH <uint>    gain horizontal drift compensation (0-100)  
           AT RH <uint>    range horizontal drift compensation (0-100)
 
     Infrared-specific commands:

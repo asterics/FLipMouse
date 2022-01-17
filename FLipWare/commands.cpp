@@ -116,6 +116,7 @@ void performCommand (uint8_t cmd, int16_t par1, char * keystring, int8_t periodi
 
   switch (cmd) {
     case CMD_ID:
+      if (!cirqueInstalled) Serial.print("Flipmouse "); else Serial.print("Flippad ");
       Serial.println(VERSION_STRING);
       break;
     case CMD_BM:

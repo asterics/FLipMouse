@@ -48,7 +48,7 @@
 #include "bluetooth.h"
 #include "hid_hal.h"
 
-#define VERSION_STRING "Flipmouse v2.12"
+#define VERSION_STRING "v2.12"
 
 //  V2.12: added support for cirque trackpads as alternative to FSR sensor daughterboard
 //  V2.11: eeprom access optimization and support for deletion / update of individual slots
@@ -144,6 +144,7 @@ struct atCommandType {                      // holds settings for a button funct
   uint8_t  partype;
 };
 
+extern int cirqueInstalled;
 extern uint8_t actSlot;
 extern uint8_t addonUpgrade;
 extern uint8_t reportSlotParameters;

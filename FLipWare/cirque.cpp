@@ -101,8 +101,8 @@ int RAP_Init()
   // Set up I2C peripheral
   Wire1.begin();
   Wire1.setDefaultTimeout(10000); // 10ms
-  Wire1.setSDA(23);
-  Wire1.setSCL(22);
+  Wire1.setSDA(SDA_PIN);
+  Wire1.setSCL(SCL_PIN);
   Wire1.setClock(400000);
   Wire1.beginTransmission(SLAVE_ADDR);  
   return(Wire1.endTransmission());

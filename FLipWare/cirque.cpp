@@ -453,8 +453,13 @@ int updateCirquePad(int *x, int * y) {
           // Serial.print("ZP:");Serial.print(x0);Serial.print(",");Serial.println(y0);
         }
         if (lastState==CIRQUE_STATE_VALID) {
-          *x=padXraw-x0;  *y=padYraw-y0;
-          // Serial.print(padX);Serial.print(",");Serial.println(padY);
+          switch (settings.ro) {
+            case 0:   *x=padXraw-x0;  *y=padYraw-y0; break;
+            case 90:  *x=y0-padYraw;  *y=padXraw-x0; break;
+            case 270: *x=padYraw-y0;  *y=x0-padXraw; break;
+            case 180: *x=x0-padXraw;  *y=y0-padYraw; break;
+          }
+          // Serial.print(*x);Serial.print(",");Serial.println(*y);
         }
         if (useAbsolutePadValues()) {
           x0=padXraw;

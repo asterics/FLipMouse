@@ -28,7 +28,7 @@
        inkscape:stockid="EmptyTriangleInM"
        inkscape:isstock="true"><path
          transform="scale(-0.4) translate(-4.5,0)"
-         style="fill-rule:evenodd;fill:context-fill;stroke:#f4f4f4;stroke-width:1pt;stroke-opacity:1"
+         style="fill-rule:evenodd;fill:context-fill;stroke:#ffffff;stroke-width:1pt;stroke-opacity:1"
          d="M 5.77,0.0 L -2.88,5.0 L -2.88,-5.0 L 5.77,0.0 z "
          id="path1496" /></marker><marker
        style="overflow:visible"
@@ -72,7 +72,7 @@
        inkscape:stockid="EmptyTriangleInM"
        inkscape:isstock="true"><path
          transform="scale(-0.4) translate(-4.5,0)"
-         style="fill-rule:evenodd;fill:context-fill;stroke:#e8e8e8;stroke-width:1pt;stroke-opacity:1"
+         style="fill-rule:evenodd;fill:context-fill;stroke:#ffffff;stroke-width:1pt;stroke-opacity:1"
          d="M 5.77,0.0 L -2.88,5.0 L -2.88,-5.0 L 5.77,0.0 z "
          id="path1166" /></marker><marker
        style="overflow:visible"
@@ -83,7 +83,7 @@
        inkscape:stockid="EmptyTriangleOutM"
        inkscape:isstock="true"><path
          transform="scale(0.4) translate(-4.5,0)"
-         style="fill-rule:evenodd;fill:context-fill;stroke:#dcdcdc;stroke-width:1pt;stroke-opacity:1"
+         style="fill-rule:evenodd;fill:context-fill;stroke:#ffffff;stroke-width:1pt;stroke-opacity:1"
          d="M 5.77,0.0 L -2.88,5.0 L -2.88,-5.0 L 5.77,0.0 z "
          id="path1175" /></marker><marker
        style="overflow:visible"
@@ -422,7 +422,7 @@
      showgrid="false"
      inkscape:zoom="1.9919729"
      inkscape:cx="221.13471"
-     inkscape:cy="96.88887"
+     inkscape:cy="137.05006"
      inkscape:window-x="1912"
      inkscape:window-y="-8"
      inkscape:window-maximized="1"
@@ -558,7 +558,7 @@
            dy="0"
            style="font-style:normal;font-variant:normal;font-weight:400;font-size:11.0625px;font-family:Calibri;fill:#000000;stroke-width:0.75"
            id="tspan4289"> </tspan></tspan></text><path
-       style="fill:none;stroke:#000000;stroke-width:0.75;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:8;stroke-dasharray:none;stroke-opacity:1"
+       style="fill:#ffffff;stroke:#000000;stroke-width:0.75;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:8;stroke-dasharray:none;stroke-opacity:1"
        d="M 264.84123,5.4593 V -28.57515 H 438.13974 V 5.4593 Z"
        id="path4297" /><text
        xml:space="preserve"
@@ -576,10 +576,10 @@
            dy="0"
            style="font-style:normal;font-variant:normal;font-weight:400;font-size:11.0625px;font-family:Calibri;fill:#000000;stroke-width:0.75"
            id="tspan4341"> </tspan></tspan></text><path
-       style="fill:none;stroke:#000000;stroke-width:0.75000002;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:8;stroke-dasharray:none;stroke-opacity:1"
+       style="fill:#ffffff;stroke:#000000;stroke-width:0.75000002;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:8;stroke-dasharray:none;stroke-opacity:1"
        d="M 7.809949,5.5731056 V -20.105829 H 157.97471 V 5.5731056 Z"
        id="path4349" /><path
-       style="fill:none;stroke:#000000;stroke-width:0.75000002;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:8;stroke-dasharray:none;stroke-opacity:1"
+       style="fill:#ffffff;stroke:#000000;stroke-width:0.75000002;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:8;stroke-dasharray:none;stroke-opacity:1"
        d="M 165.07007,4.8685664 V -31.06234 h 95.26657 V 4.8685664 Z"
        id="path4349-6" /><text
        xml:space="preserve"
@@ -631,12 +631,12 @@
          id="tspan1974"
          x="168.22635"
          y="25.9748">switch access</tspan></text><path
-       style="fill:none;stroke:#dcdcdc;stroke-width:2.25000006;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#EmptyTriangleOutM)"
+       style="fill:none;stroke:#ffffff;stroke-width:2.25000006;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#EmptyTriangleOutM)"
        d="M 98.318022,13.820327 135.17576,87.423538"
        id="path1256" /><path
-       style="fill:none;stroke:#e8e8e8;stroke-width:2.25000006;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-start:url(#EmptyTriangleInM)"
+       style="fill:none;stroke:#ffffff;stroke-width:2.25000006;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-start:url(#EmptyTriangleInM)"
        d="M 163.4709,90.43204 163.01959,11.831024"
        id="path1324" /><path
-       style="fill:none;stroke:#f4f4f4;stroke-width:2.25000006;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-start:url(#marker1686);stroke-miterlimit:4;stroke-dasharray:none"
+       style="fill:none;stroke:#ffffff;stroke-width:2.25000006;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-start:url(#marker1686);stroke-miterlimit:4;stroke-dasharray:none"
        d="M 206.32693,89.779865 292.72277,5.6575902"
        id="path1340" /></g></svg>

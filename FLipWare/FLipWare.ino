@@ -36,8 +36,6 @@
 */
 
 #include "FlipWare.h"
-#include <EEPROM.h>
-#include "i2c_t3.h"        // I2C library, replaces "Wire.h" for Teensy 3/LC series
 #include "math.h"
 #include "cirque.h"        // for pinnacle trackpad 
 
@@ -138,7 +136,7 @@ void setup() {
   delay(1000);
 
   Wire.begin();
-  Wire.setClock(400000);
+  Wire.setClock(100000);
   pinMode(IR_SENSOR_PIN, INPUT);
   analogWriteFrequency(IR_LED_PIN, 38000);  // TBD: flexible carrier frequency for IR, not only 38kHz !
 
@@ -166,7 +164,9 @@ void setup() {
   blinkStartTime = 25;
 
   cirqueInstalled=initCirque();
-  // if (cirqueInstalled) Serial.println("Cirque Trackpad found!");
+  if (cirqueInstalled) {
+    initDisplay();
+  }
 
 #ifdef DEBUG_OUTPUT_FULL
   Serial.print("Free RAM:");  Serial.println(freeRam());

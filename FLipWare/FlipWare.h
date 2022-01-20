@@ -39,6 +39,8 @@
 #define _FLIPWARE_H_
 
 #include <Arduino.h>
+#include <Wire.h>
+#include <EEPROM.h>
 #include <string.h>
 #include <stdint.h>
 #include "commands.h"
@@ -115,7 +117,7 @@ struct slotGeneralSettings {
   char slotName[MAX_NAME_LEN];   // slotname
   uint16_t keystringBufferLen;   
   
-  uint8_t  stickMode;  // alternative (0) mouse (1) or joystick (2,3,4) mode
+  uint8_t  stickMode;  // alternative(0), mouse(1), joystick (2,3,4) or pad (5,6) mode
   uint8_t  ax;     // acceleration x
   uint8_t  ay;     // acceleration y
   int16_t  dx;     // deadzone x
@@ -171,6 +173,8 @@ void printCurrentSlot();
 void initBlink(uint8_t count, uint8_t startTime);
 void makeTone(uint8_t kind, uint8_t param);
 
+void initDisplay (void);
+void updateDisplayMessage(char * msg);
 
 void BlinkLed();
 int  freeRam ();

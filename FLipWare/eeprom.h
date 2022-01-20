@@ -42,8 +42,6 @@
 #define _EEPROM_H_
 
 #include "FlipWare.h"
-#include "i2c_t3.h"
-#include <EEPROM.h>
 
 #define MAX_SLOTS_IN_EERPOM 10
 #define MAX_IRCOMMANDS_IN_EERPOM 20

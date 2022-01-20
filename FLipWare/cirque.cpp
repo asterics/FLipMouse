@@ -17,7 +17,6 @@
 
 #include <Arduino.h>
 #include "FlipWare.h"
-#include "i2c_t3.h"
 #include "cirque.h"
 
 // Hardware pin-number labels
@@ -100,7 +99,7 @@ int RAP_Init()
   delay(200);
   // Set up I2C peripheral
   Wire1.begin();
-  Wire1.setDefaultTimeout(10000); // 10ms
+//  Wire1.setDefaultTimeout(10000); // 10ms
   Wire1.setSDA(SDA_PIN);
   Wire1.setSCL(SCL_PIN);
   Wire1.setClock(400000);

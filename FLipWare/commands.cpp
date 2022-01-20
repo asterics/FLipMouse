@@ -76,10 +76,16 @@ void printCurrentSlot()
     Serial.print("AT BM ");
     if (i < 9) Serial.print("0"); // leading zero for button numbers !
     Serial.println(i + 1);
-    Serial.print("AT ");
     int actCmd = buttons[i].mode;
     char cmdStr[4];
-        
+
+    if ((actCmd <0 ) || (actCmd>=NUM_COMMANDS)) {
+      Serial.print("E: buttonmode =");
+      Serial.println(actCmd);
+      actCmd=CMD_NC;
+    }
+    
+    Serial.print("AT ");
     strcpy_FM(cmdStr, (uint_farptr_t_FM)atCommands[actCmd].atCmd);
     Serial.print(cmdStr);
     switch (pgm_read_byte_near(&(atCommands[actCmd].partype)))
@@ -261,6 +267,7 @@ void performCommand (uint8_t cmd, int16_t par1, char * keystring, int8_t periodi
         release_all();
         if (readFromEEPROM(keystring)) Serial.println("OK");
         else Serial.println(ERRORMESSAGE_NOT_FOUND);
+        if (cirqueInstalled) updateDisplayMessage(settings.slotName);
       }
       break;
     case CMD_LA:
@@ -278,6 +285,7 @@ void performCommand (uint8_t cmd, int16_t par1, char * keystring, int8_t periodi
 #endif
       release_all();
       if (!readFromEEPROM("")) Serial.println(ERRORMESSAGE_NOT_FOUND);
+      if (cirqueInstalled) updateDisplayMessage(settings.slotName);
       break;
     case CMD_DE:
 #ifdef DEBUG_OUTPUT_FULL

@@ -26,7 +26,7 @@
 /** Device address of the EEPROM **/
 #define deviceaddress 0x50
 #define EEPROM_PAGESIZE 64
-#define I2C_WRITE_BUFFER_LEN 64
+#define I2C_WRITE_BUFFER_LEN 16  // 64   Note: smaller i2c buffer size in Wire Library than in i2c_t3! -> adjust?
 #define I2C_READ_BUFFER_LEN  16
 
 /**

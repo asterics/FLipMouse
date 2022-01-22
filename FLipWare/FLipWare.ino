@@ -2,28 +2,30 @@
 /*
      FLipWare - AsTeRICS Foundation
      For more info please visit: https://www.asterics-foundation.org
+     https://github.com/asterics/FLipMouse
 
      Module: FLipWare.ino  (main module)
 
-        This firmware allows control of HID functions via FLipmouse module and/or AT-commands
+        This is the firmware for the FlipMouse/FLipPad module, 
+        it supports HID device emulation via USB and/or Bluetooth via connected sensors and/or serial AT-commands
         For a description of the supported commands see: commands.h
 
         HW-requirements:
-                  TeensyLC with external EEPROM (see FlipMouse board schematics)
-                  4 FSR force sensors connected via voltage dividers to ADC pins A6-A9
+                  TeensyLC with external EEPROM (see board schematics)
+                  for Flippad operation: 4 FSR force sensors connected via voltage dividers to ADC pins A6-A9
+                  for Flippad operation: Cirque Glidepoint Trackpad connected via I2C-2
                   1 pressure sensor connected to ADC pin A0
                   3 momentary switches connected to GPIO pins 0,1,2
                   3 slot indication LEDs connected to GPIO pins 5,16,17
                   1 TSOP 38kHz IR-receiver connected to GPIO pin 4
                   1 high current IR-LED connected to GPIO pin 6 via MOSEFT
                   optional: FlipMouse Bluetooth daughter board connected to 10-pin expansion port
-                  optional: Cirque Pinnacle Trackpad (connected via I2C) replaces FSRs, Hall-Sensor connected to pin A1
+                  optional: SSD1306 display (connected via I2C-1 for FlipMouse or I2C-2 for Flippad)
 
         SW-requirements:
                   Teensyduino AddOn for Arduino IDE, see https://www.pjrc.com/teensy/td_download.html
                   USB-type set to USB composite device (Serial + Keyboard + Mouse + Joystick)
-
-   For a list of supported AT commands, see commands.h / commands.cpp
+                  SSD1306Ascii-library by Bill Greiman, see https://github.com/greiman/SSD1306Ascii
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -247,11 +249,12 @@ void loop() {
       }
       applyDriftCorrection();
     }
-    
+
+    reportValues();     // send live data to serial
     if (!useAbsolutePadValues())
       applyDeadzone();
 
-    reportValues();     // send live data to serial
+
     handleModeState(x, y, pressure);  // handle all mouse / joystick / button activities
     UpdateLeds();
     UpdateTones();
@@ -327,7 +330,7 @@ void applyDriftCorrection()
 
 void applyDeadzone()
 {
-  if (settings.stickMode == STICKMODE_ALTERNATIVE) {
+  if ((settings.stickMode == STICKMODE_ALTERNATIVE) || (settings.stickMode == STICKMODE_PAD_ALTERNATIVE)) {
 
     // rectangular deadzone for alternative modes
 

@@ -70,7 +70,7 @@ typedef struct _absData
   bool hovering;
 } absData_t;
 
-uint8_t cirqueInstalled=0;
+uint8_t cirqueInstalled = 0;
 absData_t touchData;
 
 //const uint16_t ZONESCALE = 256;
@@ -91,14 +91,14 @@ const uint8_t ZVALUE_MAP[ROWS_Y][COLS_X] =
 };
 
 /*
-{
+  {
   {0, 0,  0,  0,  0,  0, 0, 0},
   {0, 2,  3,  5,  5,  3, 2, 0},
   {0, 3,  5, 15, 15,  5, 2, 0},
   {0, 3,  5, 15, 15,  5, 3, 0},
   {0, 2,  3,  5,  5,  3, 2, 0},
   {0, 0,  0,  0,  0,  0, 0, 0},
-};
+  };
 */
 
 void Pinnacle_EnableFeed(bool feedEnable);
@@ -111,12 +111,12 @@ int RAP_Init()
   delay(200);
   // Set up I2C peripheral
   Wire1.begin();
-//  Wire1.setDefaultTimeout(10000); // 10ms
+  //  Wire1.setDefaultTimeout(10000); // 10ms
   Wire1.setSDA(SDA_PIN);
   Wire1.setSCL(SCL_PIN);
   Wire1.setClock(400000);
-  Wire1.beginTransmission(SLAVE_ADDR);  
-  return(Wire1.endTransmission());
+  Wire1.beginTransmission(SLAVE_ADDR);
+  return (Wire1.endTransmission());
 }
 
 // Reads <count> Pinnacle registers starting at <address>
@@ -130,7 +130,7 @@ void RAP_ReadBytes(byte address, byte * data, byte count)
   Wire1.endTransmission(true);           // I2C stop condition
 
   Wire1.requestFrom((uint8_t)SLAVE_ADDR, count, (uint8_t)true);  // Read <count> bytes from I2C slave
-  while(Wire1.available())
+  while (Wire1.available())
   {
     data[i++] = Wire1.read();
   }
@@ -161,7 +161,7 @@ void ERA_ReadBytes(uint16_t address, uint8_t * data, uint16_t count)
   RAP_Write(0x1C, (uint8_t)(address >> 8));     // Send upper byte of ERA address
   RAP_Write(0x1D, (uint8_t)(address & 0x00FF)); // Send lower byte of ERA address
 
-  for(uint16_t i = 0; i < count; i++)
+  for (uint16_t i = 0; i < count; i++)
   {
     RAP_Write(0x1E, 0x05);  // Signal ERA-read (auto-increment) to Pinnacle
 
@@ -169,7 +169,7 @@ void ERA_ReadBytes(uint16_t address, uint8_t * data, uint16_t count)
     do
     {
       RAP_ReadBytes(0x1E, &ERAControlValue, 1);
-    } while(ERAControlValue != 0x00);
+    } while (ERAControlValue != 0x00);
 
     RAP_ReadBytes(0x1B, data + i, 1);
 
@@ -195,7 +195,7 @@ void ERA_WriteByte(uint16_t address, uint8_t data)
   do
   {
     RAP_ReadBytes(0x1E, &ERAControlValue, 1);
-  } while(ERAControlValue != 0x00);
+  } while (ERAControlValue != 0x00);
 
   Pinnacle_ClearFlags();
 }
@@ -205,7 +205,7 @@ void ERA_WriteByte(uint16_t address, uint8_t data)
 /*  Pinnacle-based TM0XX0XX Functions  */
 int Pinnacle_Init()
 {
-  if (RAP_Init()) return(0);
+  if (RAP_Init()) return (0);
   pinMode(DR_PIN, INPUT);
 
   // Host clears SW_CC flag
@@ -220,14 +220,14 @@ int Pinnacle_Init()
 
   // Host sets z-idle packet count to 5 (default is 30)
   RAP_Write(0x0A, Z_IDLE_COUNT);
-  return(1);
+  return (1);
 }
 
 // Reads XYZ data from Pinnacle registers 0x14 through 0x17
 // Stores result in absData_t struct with xValue, yValue, and zValue members
 void Pinnacle_GetAbsolute(absData_t * result)
 {
-  uint8_t data[6] = { 0,0,0,0,0,0 };
+  uint8_t data[6] = { 0, 0, 0, 0, 0, 0 };
   RAP_ReadBytes(0x12, data, 6);
 
   Pinnacle_ClearFlags();
@@ -260,7 +260,7 @@ void Pinnacle_EnableFeed(bool feedEnable)
 
   RAP_ReadBytes(0x04, &temp, 1);  // Store contents of FeedConfig1 register
 
-  if(feedEnable)
+  if (feedEnable)
   {
     temp |= 0x01;                 // Set Feed Enable bit
     RAP_Write(0x04, temp);
@@ -310,7 +310,7 @@ void Pinnacle_CheckValidTouch(absData_t * touchData)
   // touchData->hovering = !(touchData->zValue > ZVALUE_MAP[zone_y][zone_x]);
   // touchData->hovering = !(touchData->zValue > 10);
 
-  if (  touchData->zValue <=  ZVALUE_MAP[zone_y][zone_x] * 500 / (50+settings.rv) )   // apply trackpad sensitivity setting
+  if (  touchData->zValue <=  ZVALUE_MAP[zone_y][zone_x] * 500 / (50 + settings.rv) ) // apply trackpad sensitivity setting
     touchData->hovering = true;
   else  touchData->hovering = false;
 
@@ -324,19 +324,19 @@ void Pinnacle_CheckValidTouch(absData_t * touchData)
 // NOTE: values outside this window can only appear as a result of noise
 void ClipCoordinates(absData_t * coordinates)
 {
-  if(coordinates->xValue < PINNACLE_X_LOWER)
+  if (coordinates->xValue < PINNACLE_X_LOWER)
   {
     coordinates->xValue = PINNACLE_X_LOWER;
   }
-  else if(coordinates->xValue > PINNACLE_X_UPPER)
+  else if (coordinates->xValue > PINNACLE_X_UPPER)
   {
     coordinates->xValue = PINNACLE_X_UPPER;
   }
-  if(coordinates->yValue < PINNACLE_Y_LOWER)
+  if (coordinates->yValue < PINNACLE_Y_LOWER)
   {
     coordinates->yValue = PINNACLE_Y_LOWER;
   }
-  else if(coordinates->yValue > PINNACLE_Y_UPPER)
+  else if (coordinates->yValue > PINNACLE_Y_UPPER)
   {
     coordinates->yValue = PINNACLE_Y_UPPER;
   }
@@ -364,7 +364,7 @@ void ScaleData(absData_t * coordinates, uint16_t xResolution, uint16_t yResoluti
 
 void AssertSensorLED(bool state)
 {
-//  digitalWrite(LED_0, !state);
+  //  digitalWrite(LED_0, !state);
 }
 
 bool DR_Asserted()
@@ -378,17 +378,17 @@ uint32_t calibTs;
 int initCirque()
 {
   pinMode(GND_PIN, OUTPUT);
-  digitalWrite(GND_PIN,LOW);
+  digitalWrite(GND_PIN, LOW);
   delay (100);  // time to startup cirque module
 
-  if (!Pinnacle_Init()) return(0);
+  if (!Pinnacle_Init()) return (0);
   // These functions are required for use with thick overlays (curved)
-  setAdcAttenuation(ADC_ATTENUATE_1X);  
+  setAdcAttenuation(ADC_ATTENUATE_1X);
   tuneEdgeSensitivity();
   Pinnacle_EnableFeed(true);
-  waitForCalib=1;
-  calibTs=millis();
-  return(1);
+  waitForCalib = 1;
+  calibTs = millis();
+  return (1);
 }
 
 #define MAG_THRESHOLD 2300
@@ -397,156 +397,182 @@ int initCirque()
 
 
 int getHallSensorState() {
- /*
-  static uint32_t printADCTimestamp=0;
-  static int hallSensorState=0;
-  static int magValue=0
+  /*
+    static uint32_t printADCTimestamp=0;
+    static int hallSensorState=0;
+    static int magValue=0
 
-  //  analogReadRes(12);
+    //  analogReadRes(12);
 
-  magValue=analogRead(A1);
-  if (magValue>MAG_THRESHOLD-MAG_HYSTERESIS) {
-     if (millis()-printADCTimestamp > PRINT_MAGVALUES_PERIOD) {
-      printADCTimestamp=millis();
-      Serial.print("Mag. ADC-Value A1=");
-      Serial.println(magValue);
-    }      
-  }
-  
-  if (magValue>MAG_THRESHOLD) {
-    if (!(hallSensorState & 1)) {
-      hallSensorState|=1;
-      Mouse.set_buttons(1, 0, 0);
+    magValue=analogRead(A1);
+    if (magValue>MAG_THRESHOLD-MAG_HYSTERESIS) {
+      if (millis()-printADCTimestamp > PRINT_MAGVALUES_PERIOD) {
+       printADCTimestamp=millis();
+       Serial.print("Mag. ADC-Value A1=");
+       Serial.println(magValue);
+     }
     }
-  } else if (magValue<MAG_THRESHOLD-MAG_HYSTERESIS) {
-    if (hallSensorState & 1) {
-      Mouse.set_buttons(0, 0, 0);
-      hallSensorState&=~1;
+
+    if (magValue>MAG_THRESHOLD) {
+     if (!(hallSensorState & 1)) {
+       hallSensorState|=1;
+       Mouse.set_buttons(1, 0, 0);
+     }
+    } else if (magValue<MAG_THRESHOLD-MAG_HYSTERESIS) {
+     if (hallSensorState & 1) {
+       Mouse.set_buttons(0, 0, 0);
+       hallSensorState&=~1;
+     }
     }
-  }
   */
 }
 
 
 int getPadData(int * xRaw, int * yRaw) {
-  int state=CIRQUE_STATE_INVALID;
-  
+  int state = CIRQUE_STATE_INVALID;
+
   getHallSensorState();
-  
-  if(DR_Asserted())
+
+  if (DR_Asserted())
   {
-    calibTs=millis();
+    calibTs = millis();
     Pinnacle_GetAbsolute(&touchData);
     Pinnacle_CheckValidTouch(&touchData);     // Checks for "hover" caused by curved overlays
     ScaleData(&touchData, 1500, 1500);      // Scale coordinates to arbitrary X, Y resolution
-   
-    if(Pinnacle_zIdlePacket(&touchData)) state=CIRQUE_STATE_LIFTOFF;
-    else if(touchData.hovering) state=CIRQUE_STATE_HOVERING;
-    else state=CIRQUE_STATE_VALID ;
-    *xRaw=touchData.xValue;
-    *yRaw=touchData.yValue;
-/*
-    static uint32_t Ts=0;
-    static int cnt=0;
-    cnt++;
-    if (millis()-Ts>1000) {
-      Ts=millis();
-      Serial.print (cnt); Serial.print (", x=");
-      Serial.print (touchData.xValue); Serial.print (", y=");Serial.print (touchData.yValue);
-      Serial.print (", state=");Serial.println (state);
-      cnt=0;
-    }        
+
+    if (Pinnacle_zIdlePacket(&touchData)) state = CIRQUE_STATE_LIFTOFF;
+    else if (touchData.hovering) state = CIRQUE_STATE_HOVERING;
+    else state = CIRQUE_STATE_VALID ;
+    *xRaw = touchData.xValue;
+    *yRaw = touchData.yValue;
+    /*
+        static uint32_t Ts=0;
+        static int cnt=0;
+        cnt++;
+        if (millis()-Ts>1000) {
+          Ts=millis();
+          Serial.print (cnt); Serial.print (", x=");
+          Serial.print (touchData.xValue); Serial.print (", y=");Serial.print (touchData.yValue);
+          Serial.print (", state=");Serial.println (state);
+          cnt=0;
+        }
     */
   }
 
   if (waitForCalib) {
-    if (millis()-calibTs < 100) {
-      static uint16_t cnt=0;
+    if (millis() - calibTs < 100) {
+      static uint16_t cnt = 0;
       if (!cnt++) displayCalibRequest();
-      *xRaw=*yRaw=state=0;     
+      *xRaw = *yRaw = state = 0;
     }
     else {
       displayUpdate();
-      waitForCalib=0;
+      waitForCalib = 0;
     }
   }
-  return(state);
+  return (state);
 }
 
 // Serial.print(touchData.buttonFlags);
 // AssertSensorLED(touchData.touchDown);
 
-int resetPadDirectionStates=0;
+int resetPadDirectionStates = 0;
 
 int updateCirquePad(int *x, int * y) {
-  int padXraw,padYraw;
-  int state= getPadData(&padXraw,&padYraw);
-  
+  int padXraw, padYraw;
+  int state = getPadData(&padXraw, &padYraw);
+
   if (state) {
-    static int lastState=-1,setZeroPoint=1;
-    static int x0=-1,y0=-1;
+    static int lastState = -1, setZeroPoint = 1;
+    static int x0 = -1, y0 = -1;
     switch (state) {
       case CIRQUE_STATE_LIFTOFF:
-      case CIRQUE_STATE_HOVERING: 
-         setZeroPoint=1;
-         *x=0;*y=0;
-         resetPadDirectionStates=1;
+      case CIRQUE_STATE_HOVERING:
+        setZeroPoint = 1;
+        *x = 0; *y = 0;
+        resetPadDirectionStates = 1;
         break;
-  
+
       case CIRQUE_STATE_VALID :
         if (setZeroPoint && (!useAbsolutePadValues())) {
-          x0=padXraw;
-          y0=padYraw;
-          setZeroPoint=0;
+          x0 = padXraw;
+          y0 = padYraw;
+          setZeroPoint = 0;
           // Serial.print("ZP:");Serial.print(x0);Serial.print(",");Serial.println(y0);
         }
-        if (lastState==CIRQUE_STATE_VALID) {
+        if (lastState == CIRQUE_STATE_VALID) {
           switch (settings.ro) {
-            case 0:   *x=padXraw-x0;  *y=padYraw-y0; break;
-            case 90:  *x=y0-padYraw;  *y=padXraw-x0; break;
-            case 270: *x=padYraw-y0;  *y=x0-padXraw; break;
-            case 180: *x=x0-padXraw;  *y=y0-padYraw; break;
+            case 0:   *x = padXraw - x0;  *y = padYraw - y0; break;
+            case 90:  *x = y0 - padYraw;  *y = padXraw - x0; break;
+            case 270: *x = padYraw - y0;  *y = x0 - padXraw; break;
+            case 180: *x = x0 - padXraw;  *y = y0 - padYraw; break;
           }
           // Serial.print(*x);Serial.print(",");Serial.println(*y);
         }
         if (useAbsolutePadValues()) {
-          x0=padXraw;
-          y0=padYraw;      
+          x0 = padXraw;
+          y0 = padYraw;
         }
-        break;              
+        break;
     }
-    lastState=state;    
+    lastState = state;
   }
-  return(state);
+  return (state);
 }
 
-void handleTapClicks(int state,int tapTime) {
-   static uint32_t liftTimeStamp=0;
-   static uint32_t setTimeStamp=0;
-   static uint8_t lastState=0;
 
-   switch(state) {
-      case   CIRQUE_STATE_LIFTOFF:
-          if (lastState!=CIRQUE_STATE_LIFTOFF) {
-            // Serial.println("liftoff");
-            liftTimeStamp=millis();
-            if (liftTimeStamp - setTimeStamp < tapTime)  {
-              // Serial.println("click!");
-              mousePress(MOUSE_LEFT);
-              delay(DEFAULT_CLICK_TIME);
-              mouseRelease(MOUSE_LEFT);
-            }
+void handleTapClicks(int state, int tapTime) {
+  static uint32_t liftTimeStamp = 0;
+  static uint32_t setTimeStamp = 0;
+  static uint8_t lastState = 0;
+  static uint32_t clickBeginTimestamp = 0;
+  static uint8_t dragging = 0;
+
+
+  switch (state) {
+    case   CIRQUE_STATE_HOVERING:
+    //  Serial.print("-");
+    case   CIRQUE_STATE_LIFTOFF:
+      if (lastState == CIRQUE_STATE_VALID) {
+        //   Serial.println("liftoff");
+        liftTimeStamp = millis();
+        if (liftTimeStamp - setTimeStamp < tapTime)  {
+          //  Serial.println("click!");
+          if (dragging) {
+            dragging = 0;
+            mouseRelease(MOUSE_LEFT);
+            // Serial.println("cancel drag!");
           }
-          break;
-      case   CIRQUE_STATE_HOVERING:
-          // Serial.print("-");
-          break;
-      case   CIRQUE_STATE_VALID:
-          if (lastState !=CIRQUE_STATE_VALID) {
-            // Serial.println("valid");
-            setTimeStamp=millis();
-          }
-          break;
-   }
-   if (state) lastState=state;  
+          mousePress(MOUSE_LEFT);
+          clickBeginTimestamp = millis();
+        }
+      }
+      if (dragging) {
+        dragging = 0;
+        mouseRelease(MOUSE_LEFT);
+        // Serial.println("drag released!");
+      }
+      break;
+
+    case   CIRQUE_STATE_VALID:
+      if (lastState != CIRQUE_STATE_VALID) {
+        // Serial.println("valid");
+        setTimeStamp = millis();
+        if (setTimeStamp - clickBeginTimestamp < tapTime) {
+          // Serial.println("drag detected");
+          clickBeginTimestamp = 0;
+          dragging = 1;
+        }
+      }
+      break;
+  }
+  if (state) lastState = state;
+
+  if (clickBeginTimestamp) {
+    if (millis() - clickBeginTimestamp > tapTime) {
+      clickBeginTimestamp = 0;
+      mouseRelease(MOUSE_LEFT);
+      // Serial.println("release!");
+    }
+  }
 }

@@ -17,6 +17,7 @@
 
 #include "FlipWare.h"
 #include "eeprom.h"
+#include "display.h"
 
 uint8_t actButton = 0;
 
@@ -122,7 +123,7 @@ void performCommand (uint8_t cmd, int16_t par1, char * keystring, int8_t periodi
 
   switch (cmd) {
     case CMD_ID:
-      if (!cirqueInstalled) Serial.print("Flipmouse "); else Serial.print("Flippad ");
+      Serial.print(moduleName); Serial.print(" ");
       Serial.println(VERSION_STRING);
       break;
     case CMD_BM:
@@ -267,7 +268,7 @@ void performCommand (uint8_t cmd, int16_t par1, char * keystring, int8_t periodi
         release_all();
         if (readFromEEPROM(keystring)) Serial.println("OK");
         else Serial.println(ERRORMESSAGE_NOT_FOUND);
-        if (cirqueInstalled) updateDisplayMessage(settings.slotName);
+        displayUpdate();
       }
       break;
     case CMD_LA:
@@ -285,7 +286,7 @@ void performCommand (uint8_t cmd, int16_t par1, char * keystring, int8_t periodi
 #endif
       release_all();
       if (!readFromEEPROM("")) Serial.println(ERRORMESSAGE_NOT_FOUND);
-      if (cirqueInstalled) updateDisplayMessage(settings.slotName);
+      displayUpdate();
       break;
     case CMD_DE:
 #ifdef DEBUG_OUTPUT_FULL
@@ -308,6 +309,8 @@ void performCommand (uint8_t cmd, int16_t par1, char * keystring, int8_t periodi
 
     case CMD_MM:
       settings.stickMode = par1;
+      displayUpdate();
+      
 #ifdef DEBUG_OUTPUT_FULL
       if (settings.stickMode == STICKMODE_MOUSE)
         Serial.println("mouse function activated");
@@ -415,9 +418,11 @@ void performCommand (uint8_t cmd, int16_t par1, char * keystring, int8_t periodi
       break;
     case CMD_RO:
       settings.ro = par1;
+      displayUpdate();
       break;
     case CMD_BT:
       settings.bt = par1;
+      displayUpdate();
       break;
 
     case CMD_IR:

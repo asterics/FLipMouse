@@ -37,7 +37,8 @@
 
 #include "FlipWare.h"
 #include "math.h"
-#include "cirque.h"        // for pinnacle trackpad 
+#include "cirque.h"        // for Cirque Glidepoint trackpad 
+#include "display.h"       // for SSD1306 I2C-Oled display
 
 // Constants and Macro definitions
 
@@ -55,6 +56,9 @@
 
 //Piezo Pin (for tone generation)
 #define TONE_PIN  9
+
+char moduleName[]="Flipmouse";   // module name for ID string & BT-name
+                                 // changed to "Flippad" if Cirque Glidepoint trackpad available
 
 int8_t  input_map[NUMBER_OF_PHYSICAL_BUTTONS] = {0, 2, 1};  	//  maps physical button pins to button index 0,1,2
 uint8_t IR_SENSOR_PIN = 4;								//  input pin of the TSOP IR receiver
@@ -119,7 +123,6 @@ extern void init_CIM_frame(void);
 extern uint8_t StandAloneMode;
 extern uint8_t CimMode;
 
-int cirqueInstalled=0;
 int padX=0,padY=0,padState=0;
 
 ////////////////////////////////////////
@@ -163,14 +166,16 @@ void setup() {
   blinkCount = 10;
   blinkStartTime = 25;
 
-  cirqueInstalled=initCirque();
-  if (cirqueInstalled) {
-    initDisplay();
-  }
+  cirqueInstalled=initCirque();      // check if i2c-trackpad connected, if possible: init and activate Flippad mode
+  if (cirqueInstalled) strcpy(moduleName,"Flippad");
 
+  setBTName(moduleName);             // if BT-module installed: set advertising name
+  
+  displayInstalled=displayInit(cirqueInstalled);   // check if i2c-display connected, if possible: init 
+ 
 #ifdef DEBUG_OUTPUT_FULL
   Serial.print("Free RAM:");  Serial.println(freeRam());
-  Serial.println("FLipMouse ready !");
+  Serial.print(moduleName); Serial.println(" ready !");
 #endif
 
   updateStandaloneTimestamp = millis();
@@ -187,7 +192,6 @@ void loop() {
     performAddonUpgrade();
     return;
 	}
-
 
   if (cirqueInstalled) {
     pressure = analogRead(PRESSURE_SENSOR_PIN);   // TBD: use hall sensor pin here
@@ -219,7 +223,6 @@ void loop() {
   }
 
   if (StandAloneMode && ((millis() >= updateStandaloneTimestamp + waitTime) || padState))  {
-
     updateStandaloneTimestamp = millis();
     if (cirqueInstalled) {     //  is trackpad active?
       x=padX;

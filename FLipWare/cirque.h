@@ -23,6 +23,8 @@
 #define CIRQUE_STATE_HOVERING 2
 #define CIRQUE_STATE_VALID    3
 
+extern uint8_t cirqueInstalled;
+
 int updateCirquePad(int * x, int * y);
 int initCirque();
 int useAbsolutePadValues();

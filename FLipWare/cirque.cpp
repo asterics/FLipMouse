@@ -18,6 +18,7 @@
 #include <Arduino.h>
 #include "FlipWare.h"
 #include "cirque.h"
+#include "display.h"
 
 // Hardware pin-number labels
 #define SDA_PIN   23
@@ -69,6 +70,7 @@ typedef struct _absData
   bool hovering;
 } absData_t;
 
+uint8_t cirqueInstalled=0;
 absData_t touchData;
 
 //const uint16_t ZONESCALE = 256;
@@ -80,6 +82,16 @@ absData_t touchData;
 // The values present are not guaranteed to work for all HW configurations.
 const uint8_t ZVALUE_MAP[ROWS_Y][COLS_X] =
 {
+  {1, 1,  1,  1,  1,  1, 1, 1},
+  {1, 1,  2,  3,  3,  2, 1, 1},
+  {1, 2,  3,  5,  5,  3, 2, 1},
+  {1, 2,  3,  5,  5,  3, 2, 1},
+  {1, 1,  2,  3,  3,  2, 1, 1},
+  {1, 1,  1,  1,  1,  1, 1, 1},
+};
+
+/*
+{
   {0, 0,  0,  0,  0,  0, 0, 0},
   {0, 2,  3,  5,  5,  3, 2, 0},
   {0, 3,  5, 15, 15,  5, 2, 0},
@@ -87,7 +99,7 @@ const uint8_t ZVALUE_MAP[ROWS_Y][COLS_X] =
   {0, 2,  3,  5,  5,  3, 2, 0},
   {0, 0,  0,  0,  0,  0, 0, 0},
 };
-
+*/
 
 void Pinnacle_EnableFeed(bool feedEnable);
 void Pinnacle_ClearFlags();
@@ -295,8 +307,15 @@ void Pinnacle_CheckValidTouch(absData_t * touchData)
   //eliminate hovering
   zone_x = touchData->xValue / ZONESCALE;
   zone_y = touchData->yValue / ZONESCALE;
-  touchData->hovering = !(touchData->zValue > ZVALUE_MAP[zone_y][zone_x]);
+  // touchData->hovering = !(touchData->zValue > ZVALUE_MAP[zone_y][zone_x]);
+  // touchData->hovering = !(touchData->zValue > 10);
+
+  if (  touchData->zValue <=  ZVALUE_MAP[zone_y][zone_x] * 500 / (50+settings.rv) )   // apply trackpad sensitivity setting
+    touchData->hovering = true;
+  else  touchData->hovering = false;
+
 }
+
 
 
 
@@ -353,6 +372,9 @@ bool DR_Asserted()
   return digitalRead(DR_PIN);
 }
 
+uint8_t waitForCalib;
+uint32_t calibTs;
+
 int initCirque()
 {
   pinMode(GND_PIN, OUTPUT);
@@ -361,9 +383,11 @@ int initCirque()
 
   if (!Pinnacle_Init()) return(0);
   // These functions are required for use with thick overlays (curved)
-  setAdcAttenuation(ADC_ATTENUATE_2X);  
+  setAdcAttenuation(ADC_ATTENUATE_1X);  
   tuneEdgeSensitivity();
   Pinnacle_EnableFeed(true);
+  waitForCalib=1;
+  calibTs=millis();
   return(1);
 }
 
@@ -411,15 +435,40 @@ int getPadData(int * xRaw, int * yRaw) {
   
   if(DR_Asserted())
   {
+    calibTs=millis();
     Pinnacle_GetAbsolute(&touchData);
     Pinnacle_CheckValidTouch(&touchData);     // Checks for "hover" caused by curved overlays
     ScaleData(&touchData, 1500, 1500);      // Scale coordinates to arbitrary X, Y resolution
-    
+   
     if(Pinnacle_zIdlePacket(&touchData)) state=CIRQUE_STATE_LIFTOFF;
     else if(touchData.hovering) state=CIRQUE_STATE_HOVERING;
     else state=CIRQUE_STATE_VALID ;
     *xRaw=touchData.xValue;
     *yRaw=touchData.yValue;
+/*
+    static uint32_t Ts=0;
+    static int cnt=0;
+    cnt++;
+    if (millis()-Ts>1000) {
+      Ts=millis();
+      Serial.print (cnt); Serial.print (", x=");
+      Serial.print (touchData.xValue); Serial.print (", y=");Serial.print (touchData.yValue);
+      Serial.print (", state=");Serial.println (state);
+      cnt=0;
+    }        
+    */
+  }
+
+  if (waitForCalib) {
+    if (millis()-calibTs < 100) {
+      static uint16_t cnt=0;
+      if (!cnt++) displayCalibRequest();
+      *xRaw=*yRaw=state=0;     
+    }
+    else {
+      displayUpdate();
+      waitForCalib=0;
+    }
   }
   return(state);
 }

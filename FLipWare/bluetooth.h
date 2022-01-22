@@ -83,6 +83,19 @@ boolean isMouseBTPressed(uint8_t mousebutton);
 */
 void initBluetooth();
 
+
+/**
+
+   name: setBTName
+   @param char * BTName: module name for BT-advertising
+   @return none
+
+   sets the BT module name for advertising/pairing.
+
+*/
+void setBTName(char * BTName);
+
+
 /**
 
    name: keyboardBTPrint

@@ -146,7 +146,8 @@ struct atCommandType {                      // holds settings for a button funct
   uint8_t  partype;
 };
 
-extern int cirqueInstalled;
+extern char moduleName[];
+
 extern uint8_t actSlot;
 extern uint8_t addonUpgrade;
 extern uint8_t reportSlotParameters;
@@ -172,9 +173,6 @@ void initButtons();
 void printCurrentSlot();
 void initBlink(uint8_t count, uint8_t startTime);
 void makeTone(uint8_t kind, uint8_t param);
-
-void initDisplay (void);
-void updateDisplayMessage(char * msg);
 
 void BlinkLed();
 int  freeRam ();

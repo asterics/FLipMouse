@@ -335,9 +335,22 @@ void initBluetooth()
 
   ///@todo send identifier to BT module & check response. With BT addon this is much faster and reliable
   bt_esp32addon = EZKEY;
-  //Serial_AUX.println("$ID");
-  //set BT name to FLipMouse
-  Serial_AUX.println("$NAME FLipMouse");
+
+}
+
+/**
+
+   name: setBTName
+   @param char * BTName: module name for BT-advertising
+   @return none
+
+   sets the BT module name for advertising/pairing.
+
+*/
+void setBTName(char * BTName) {
+  //set moduel name for BT advertising
+  Serial_AUX.print("$NAME ");
+  Serial_AUX.println(BTName);  
 }
 
 /**

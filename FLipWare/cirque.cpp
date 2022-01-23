@@ -559,10 +559,10 @@ uint8_t handleTapClicks(int state, int tapTime) {
         liftTimeStamp = millis();
 
         if ((dragging) && (liftTimeStamp-dragBeginTimestamp < DRAG_ACTION_TIMELIMIT)) {  // check slot change action!
-           if (dragDistanceX > DRAG_ACTION_DISTANCE) { endDrag(); return(2);}
-           else if (dragDistanceX < -DRAG_ACTION_DISTANCE){ endDrag();return(3); }
-           else if (dragDistanceY > DRAG_ACTION_DISTANCE) { endDrag();return(4); }
-           else if (dragDistanceY < -DRAG_ACTION_DISTANCE){ endDrag();return(1); }
+           if (dragDistanceY < -DRAG_ACTION_DISTANCE){ endDrag(); return(DRAG_ACTION_UP); }
+           else if (dragDistanceY > DRAG_ACTION_DISTANCE) { endDrag(); return(DRAG_ACTION_DOWN); }
+           else if (dragDistanceX < -DRAG_ACTION_DISTANCE){ endDrag(); return(DRAG_ACTION_LEFT); }
+           else if (dragDistanceX > DRAG_ACTION_DISTANCE) { endDrag(); return(DRAG_ACTION_RIGHT);}
         }
         
         if (liftTimeStamp - setTimeStamp < tapTime)  {

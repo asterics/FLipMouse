@@ -229,11 +229,11 @@ void loop() {
     if (cirqueInstalled) {     //  is trackpad active?
       x=padX;
       y=padY;
-      int changeSlot=handleTapClicks(padState, settings.gv*10);  // tap-time for left click: up to 1 second 
-      if (changeSlot) {
-        release_all();
-        readFromEEPROMSlotNumber(changeSlot-1,  true);
-        displayUpdate();
+      switch (handleTapClicks(padState, settings.gv*10)) {  // perform clicks and drag actions when in pad mode, note: tap-time for left click in settings.gv, 0-100 10ms 
+        case DRAG_ACTION_UP: handlePress(STRONGPUFF_UP_BUTTON); handleRelease(STRONGPUFF_UP_BUTTON); break;
+        case DRAG_ACTION_DOWN: handlePress(STRONGPUFF_DOWN_BUTTON); handleRelease(STRONGPUFF_DOWN_BUTTON); break;
+        case DRAG_ACTION_LEFT: handlePress(STRONGPUFF_LEFT_BUTTON); handleRelease(STRONGPUFF_LEFT_BUTTON); break;
+        case DRAG_ACTION_RIGHT: handlePress(STRONGPUFF_RIGHT_BUTTON); handleRelease(STRONGPUFF_RIGHT_BUTTON); break;
       }
     }
     else {                     // FSR/stick is active -> apply calibration and drift correction

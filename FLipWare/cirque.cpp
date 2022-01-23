@@ -381,7 +381,10 @@ int initCirque()
   digitalWrite(GND_PIN, LOW);
   delay (100);  // time to startup cirque module
 
-  if (!Pinnacle_Init()) return (0);
+  if (!Pinnacle_Init()) {
+    pinMode (GND_PIN, INPUT);
+    return (0);
+  }
   // These functions are required for use with thick overlays (curved)
   setAdcAttenuation(ADC_ATTENUATE_1X);
   tuneEdgeSensitivity();

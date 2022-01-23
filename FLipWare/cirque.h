@@ -25,10 +25,10 @@
 
 #define DRAG_DISABLED    0
 #define DRAG_NORMAL      1
-#define DRAG_CHANGESLOT  2
 
 #define DRAG_ACTION_DISTANCE 75
 #define DRAG_AUTOMOVE_SPEED 3
+#define DRAG_ACTION_TIMELIMIT 200
 
 extern uint8_t cirqueInstalled;
 

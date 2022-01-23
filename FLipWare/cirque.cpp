@@ -70,6 +70,12 @@ typedef struct _absData
   bool hovering;
 } absData_t;
 
+
+uint8_t dragMode = DRAG_CHANGESLOT;
+uint8_t dragging = 0;
+int dragDistanceX=0,dragDistanceY=0;
+
+
 uint8_t cirqueInstalled = 0;
 absData_t touchData;
 
@@ -511,6 +517,16 @@ int updateCirquePad(int *x, int * y) {
             case 180: *x = x0 - padXraw;  *y = y0 - padYraw; break;
           }
           // Serial.print(*x);Serial.print(",");Serial.println(*y);
+          if (dragging) {
+            dragDistanceX+=*x;
+            dragDistanceY+=*y;
+            if (dragMode==DRAG_NORMAL) {
+              if ((dragDistanceX > DRAG_ACTION_DISTANCE) && (*x==0)) *x=DRAG_AUTOMOVE_SPEED;
+              else if ((dragDistanceX < -DRAG_ACTION_DISTANCE) && (*x==0)) *x=-DRAG_AUTOMOVE_SPEED;
+              if ((dragDistanceY > DRAG_ACTION_DISTANCE) && (*y==0)) *y=DRAG_AUTOMOVE_SPEED;
+              else if ((dragDistanceY < -DRAG_ACTION_DISTANCE) && (*y==0)) *y=-DRAG_AUTOMOVE_SPEED;
+            }
+          }
         }
         if (useAbsolutePadValues()) {
           x0 = padXraw;
@@ -523,14 +539,17 @@ int updateCirquePad(int *x, int * y) {
   return (state);
 }
 
+void endDrag() {
+  dragging = 0;
+  dragDistanceX=dragDistanceY=0;
+}
 
-void handleTapClicks(int state, int tapTime) {
+uint8_t handleTapClicks(int state, int tapTime) {
   static uint32_t liftTimeStamp = 0;
   static uint32_t setTimeStamp = 0;
   static uint8_t lastState = 0;
   static uint32_t clickBeginTimestamp = 0;
-  static uint8_t dragging = 0;
-
+  uint8_t r=0;
 
   switch (state) {
     case   CIRQUE_STATE_HOVERING:
@@ -541,19 +560,22 @@ void handleTapClicks(int state, int tapTime) {
         liftTimeStamp = millis();
         if (liftTimeStamp - setTimeStamp < tapTime)  {
           //  Serial.println("click!");
-          if (dragging) {
-            dragging = 0;
+          if (dragging) {     // cancel drag, perform double click instead!
+            endDrag();
             mouseRelease(MOUSE_LEFT);
-            // Serial.println("cancel drag!");
+            Serial.println("double click (cancel drag)");
           }
-          mousePress(MOUSE_LEFT);
+          
+          if ((settings.stickMode== STICKMODE_PAD) || (settings.stickMode== STICKMODE_MOUSE)) 
+             mousePress(MOUSE_LEFT);
+             
           clickBeginTimestamp = millis();
         }
       }
       if (dragging) {
-        dragging = 0;
+        endDrag();
         mouseRelease(MOUSE_LEFT);
-        // Serial.println("drag released!");
+        Serial.println("drag released!");
       }
       break;
 
@@ -562,10 +584,17 @@ void handleTapClicks(int state, int tapTime) {
         // Serial.println("valid");
         setTimeStamp = millis();
         if (setTimeStamp - clickBeginTimestamp < tapTime) {
-          // Serial.println("drag detected");
+          Serial.println("start drag");
           clickBeginTimestamp = 0;
           dragging = 1;
+          if (dragMode!=DRAG_NORMAL) mouseRelease(MOUSE_LEFT);          
         }
+      }
+      if ((dragging) && (dragMode == DRAG_CHANGESLOT)) {  // check slot change action!
+         if (dragDistanceX > DRAG_ACTION_DISTANCE) { Serial.println("drag change slot: 2"); r=2; endDrag(); }
+         else if (dragDistanceX < -DRAG_ACTION_DISTANCE){ Serial.println("drag change slot: 3"); r=3; endDrag(); }
+         else if (dragDistanceY > DRAG_ACTION_DISTANCE) { Serial.println("drag change slot: 4"); r=4; endDrag(); }
+         else if (dragDistanceY < -DRAG_ACTION_DISTANCE){ Serial.println("drag change slot: 1"); r=1; endDrag(); }
       }
       break;
   }
@@ -578,4 +607,5 @@ void handleTapClicks(int state, int tapTime) {
       // Serial.println("release!");
     }
   }
+  return(r);
 }

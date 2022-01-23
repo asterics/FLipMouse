@@ -23,11 +23,18 @@
 #define CIRQUE_STATE_HOVERING 2
 #define CIRQUE_STATE_VALID    3
 
+#define DRAG_DISABLED    0
+#define DRAG_NORMAL      1
+#define DRAG_CHANGESLOT  2
+
+#define DRAG_ACTION_DISTANCE 75
+#define DRAG_AUTOMOVE_SPEED 3
+
 extern uint8_t cirqueInstalled;
 
 int updateCirquePad(int * x, int * y);
 int initCirque();
 int useAbsolutePadValues();
-void handleTapClicks(int state,int tapTime);
+uint8_t handleTapClicks(int state,int tapTime);
 
 #endif

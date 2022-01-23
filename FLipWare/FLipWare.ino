@@ -141,7 +141,7 @@ void setup() {
   delay(1000);
 
   Wire.begin();
-  Wire.setClock(100000);
+  Wire.setClock(400000);
   pinMode(IR_SENSOR_PIN, INPUT);
   analogWriteFrequency(IR_LED_PIN, 38000);  // TBD: flexible carrier frequency for IR, not only 38kHz !
 
@@ -229,8 +229,12 @@ void loop() {
     if (cirqueInstalled) {     //  is trackpad active?
       x=padX;
       y=padY;
-      if (settings.gv) 
-        handleTapClicks(padState, settings.gv*10);  // tap-time for left click: up to 1 second 
+      int changeSlot=handleTapClicks(padState, settings.gv*10);  // tap-time for left click: up to 1 second 
+      if (changeSlot) {
+        release_all();
+        readFromEEPROMSlotNumber(changeSlot-1,  true);
+        displayUpdate();
+      }
     }
     else {                     // FSR/stick is active -> apply calibration and drift correction
       if (calib_now == 0)  {   // no new calibration, use current values for x and y offset !

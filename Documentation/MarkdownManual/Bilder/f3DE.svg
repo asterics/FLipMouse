@@ -520,8 +520,8 @@
        style="fill:none;stroke:#ffffff;stroke-width:2.18609;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#EmptyTriangleOutM)"
        d="M 279.64711,140.53024 273.39478,85.801111"
        id="path1609" /><path
-       style="fill:none;stroke:#ffffff;stroke-width:2.98308;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#marker1029)"
-       d="M 235.8808,-0.76684558 238.15437,72.728052"
+       style="fill:none;stroke:#ffffff;stroke-width:3.06007;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#marker1029)"
+       d="m 235.8808,-4.6094625 2.27357,77.3375145"
        id="path1688" /><path
        style="fill:none;stroke:#000000;stroke-width:2.25;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#marker1266)"
        d="M 386.41609,87.478394 361.1543,87.002623"
@@ -542,7 +542,7 @@
            style="font-style:normal;font-variant:normal;font-weight:400;font-size:11.0625px;font-family:Calibri;fill:#000000;stroke-width:0.75"
            id="tspan4341"> </tspan></tspan></text><path
        style="fill:#ffffff;stroke:#000000;stroke-width:0.779414;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:8;stroke-dasharray:none;stroke-opacity:1"
-       d="M 118.68153,-1.9171182 V -21.314851 H 333.0459 v 19.3977328 z"
+       d="M 118.68153,-4.9171182 V -24.314851 H 333.0459 v 19.3977328 z"
        id="path4349" /><path
        style="fill:#ffffff;stroke:#000000;stroke-width:0.898506px;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:8;stroke-dasharray:none;stroke-opacity:1"
        d="M 361.73578,80.51423 V 43.267525 H 523.11559 V 80.51423 Z"
@@ -550,13 +550,13 @@
        xml:space="preserve"
        style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:14px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.75"
        x="122.40724"
-       y="15.026342"
+       y="18.026342"
        id="text36338"
        transform="scale(1,-1)"><tspan
          sodipodi:role="line"
          id="tspan1174"
          x="122.40724"
-         y="15.026342">(e) Infrarot Empfängermodul</tspan></text><text
+         y="18.026342">(e) Infrarot Empfängermodul</tspan></text><text
        xml:space="preserve"
        style="font-style:normal;font-weight:normal;font-size:30px;line-height:1.25;font-family:sans-serif;fill:#bababa;fill-opacity:1;stroke:none;stroke-width:0.75"
        x="180.18082"
@@ -588,9 +588,9 @@
        style="font-size:18.6667px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';white-space:pre;shape-inside:url(#rect2840);font-weight:normal;font-style:normal;font-stretch:normal;font-variant:normal;font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal"><tspan
          x="-400.90625"
          y="48.102462"
-         id="tspan1145">(d) 3 Leuchtdioden
+         id="tspan1141">(d) 3 Leuchtdioden
 </tspan><tspan
          x="-400.90625"
          y="71.435836"
-         id="tspan1147">(rot, gelb, grün)
+         id="tspan1143">(rot, gelb, grün)
 </tspan></text></g></svg>

@@ -573,18 +573,18 @@
        id="text62178"
        transform="scale(1,-1)"><tspan
          sodipodi:role="line"
-         id="tspan1063">(e) Infrared </tspan><tspan
+         id="tspan1045">(e) Infrared </tspan><tspan
          sodipodi:role="line"
-         id="tspan1065">transmitter LED</tspan></text><text
+         id="tspan1047">transmitter LED</tspan></text><text
        xml:space="preserve"
        transform="matrix(0.75000002,0,0,-0.75000002,479.72431,200.61664)"
        id="text2838"
        style="font-size:18.6667px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';white-space:pre;shape-inside:url(#rect2840);font-weight:normal;font-style:normal;font-stretch:normal;font-variant:normal;font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal"><tspan
          x="-400.90625"
          y="48.102462"
-         id="tspan1199">(d) 3 indicator LEDs
+         id="tspan1163">(d) 3 indicator LEDs
 </tspan><tspan
          x="-400.90625"
          y="71.435836"
-         id="tspan1201">(red, yellow, green)
+         id="tspan1165">(red, yellow, green)
 </tspan></text></g></svg>

@@ -358,7 +358,7 @@
      inkscape:document-rotation="0"
      showgrid="false"
      inkscape:zoom="1.1973561"
-     inkscape:cx="362.46527"
+     inkscape:cx="362.88285"
      inkscape:cy="258.90376"
      inkscape:window-x="-11"
      inkscape:window-y="-11"
@@ -525,11 +525,11 @@
        transform="scale(1,-1)"
        preserveAspectRatio="none"
        id="image1068" /><path
-       style="fill:none;stroke:#0000e9;stroke-width:2.25;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:8;stroke-dasharray:none;stroke-opacity:1"
-       d="m 260.82504,141.85827 v -18.06456 h 58.42811 v 18.06456 z"
+       style="fill:none;stroke:#f00000;stroke-width:2.25;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:8;stroke-dasharray:none;stroke-opacity:1"
+       d="m 256.32504,143.35827 v -18.06456 h 58.42811 v 18.06456 z"
        id="path4297" /><path
        style="fill:none;stroke:#000000;stroke-width:2.25;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-start:url(#EmptyTriangleInM)"
-       d="m 324.71213,133.95653 18.07334,16.91266"
+       d="m 320.21213,141.45653 18.07334,16.91266"
        id="path1657" /><text
        xml:space="preserve"
        style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:13px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;stroke-width:0.75"

@@ -254,8 +254,9 @@ U 1 1 61B70E3E
 P 2900 1450
 F 0 "J3" H 2792 1025 50  0000 C CNN
 F 1 "Conn_01x04_Female" H 2792 1116 50  0000 C CNN
-F 2 "Connector_PinSocket_2.54mm:PinSocket_1x04_P2.54mm_Horizontal" H 2900 1450 50  0001 C CNN
+F 2 "Connector_Harwin:Harwin_M20-89004xx_1x04_P2.54mm_Horizontal" H 2900 1450 50  0001 C CNN
 F 3 "~" H 2900 1450 50  0001 C CNN
+F 4 "801-87-004-40-002101" H 2900 1450 50  0001 C CNN "Mouser"
 	1    2900 1450
 	1    0    0    1   
 $EndComp

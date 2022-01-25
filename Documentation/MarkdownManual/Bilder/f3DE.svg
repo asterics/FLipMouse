@@ -518,7 +518,7 @@
        d="M 279.64711,140.53024 273.39478,85.801111"
        id="path1609" /><path
        style="fill:#ffffff;stroke:#f00000;stroke-width:3.00000008;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:8;stroke-dasharray:none;stroke-opacity:1"
-       d="M 175.55943,177.7012 V 138.28243 H 344.01117 V 177.7012 Z"
+       d="m 173.42385,179.26838 v -45.3951 h 174.42807 v 45.3951 z"
        id="path4297" /><path
        style="fill:none;stroke:#ffffff;stroke-width:2.25000006;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#marker1029)"
        d="m 235.8808,-4.6094625 2.27357,77.3375145"
@@ -591,14 +591,10 @@
        id="text2838"
        style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:18.3896px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;white-space:pre;shape-inside:url(#rect2840)"><tspan
          x="-400.90625"
-         y="47.84968"
-         id="tspan1240"><tspan
-           style="font-size:18.3896px"
-           id="tspan1238">(d) 3 Leuchtdioden
-</tspan></tspan><tspan
+         y="47.849656"
+         id="tspan1147">(d) 3 Leuchtdioden
+</tspan><tspan
          x="-400.90625"
-         y="70.836714"
-         id="tspan1244"><tspan
-           style="font-size:18.3896px"
-           id="tspan1242">(rot, gelb, grün)
-</tspan></tspan></text></g></svg>
+         y="70.836655"
+         id="tspan1149">(rot, gelb, grün)
+</tspan></text></g></svg>

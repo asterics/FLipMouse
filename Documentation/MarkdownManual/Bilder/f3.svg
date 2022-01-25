@@ -514,13 +514,13 @@
            dy="0"
            style="font-style:normal;font-variant:normal;font-weight:400;font-size:11.0625px;font-family:Calibri;fill:#000000;stroke-width:0.75"
            id="tspan4289"> </tspan></tspan></text><path
-       style="fill:#ffffff;stroke:#000000;stroke-width:0.778439;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:8;stroke-dasharray:none;stroke-opacity:1"
+       style="fill:#ffffff;stroke:#f00000;stroke-width:2.25000006;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:8;stroke-dasharray:none;stroke-opacity:1"
        d="m 175.38239,177.87824 v -35.22569 h 148.34365 v 35.22569 z"
        id="path4297" /><path
-       style="fill:none;stroke:#ffffff;stroke-width:2.18609;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#EmptyTriangleOutM)"
+       style="fill:none;stroke:#ffffff;stroke-width:2.25000006;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#EmptyTriangleOutM)"
        d="M 279.64711,140.53024 273.39478,85.801111"
        id="path1609" /><path
-       style="fill:none;stroke:#ffffff;stroke-width:2.98308;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#marker1029)"
+       style="fill:none;stroke:#ffffff;stroke-width:2.25000006;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#marker1029)"
        d="M 235.8808,-0.76684558 238.15437,72.728052"
        id="path1688" /><path
        style="fill:none;stroke:#000000;stroke-width:2.25;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#marker1266)"
@@ -541,10 +541,10 @@
            dy="0"
            style="font-style:normal;font-variant:normal;font-weight:400;font-size:11.0625px;font-family:Calibri;fill:#000000;stroke-width:0.75"
            id="tspan4341"> </tspan></tspan></text><path
-       style="fill:#ffffff;stroke:#000000;stroke-width:0.779414;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:8;stroke-dasharray:none;stroke-opacity:1"
-       d="M 118.68153,-1.9171182 V -21.314851 H 333.0459 v 19.3977328 z"
+       style="fill:#ffffff;stroke:#f00000;stroke-width:2.25000006;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:8;stroke-dasharray:none;stroke-opacity:1"
+       d="M 118.68153,-0.90751415 V -21.314851 H 333.0459 v 20.40733685 z"
        id="path4349" /><path
-       style="fill:#ffffff;stroke:#000000;stroke-width:0.81326px;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:8;stroke-dasharray:none;stroke-opacity:1"
+       style="fill:#ffffff;stroke:#f00000;stroke-width:2.25000006;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:8;stroke-dasharray:none;stroke-opacity:1"
        d="M 361.69316,80.556853 V 43.224902 h 131.90858 v 37.331951 z"
        id="path4349-6" /><text
        xml:space="preserve"
@@ -582,9 +582,9 @@
        style="font-size:18.6667px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';white-space:pre;shape-inside:url(#rect2840);font-weight:normal;font-style:normal;font-stretch:normal;font-variant:normal;font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal"><tspan
          x="-400.90625"
          y="48.102462"
-         id="tspan1163">(d) 3 indicator LEDs
+         id="tspan1195">(d) 3 indicator LEDs
 </tspan><tspan
          x="-400.90625"
          y="71.435836"
-         id="tspan1165">(red, yellow, green)
+         id="tspan1197">(red, yellow, green)
 </tspan></text></g></svg>

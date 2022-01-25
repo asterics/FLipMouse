@@ -598,13 +598,13 @@
        d="M 46.296266,9.2973197 85.51675,93.182083"
        id="path1256" /><path
        style="fill:#ffffff;stroke:#f00000;stroke-width:3.23192;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:8;stroke-dasharray:none;stroke-opacity:1"
-       d="M 5.8824267,10.172474 V -31.142155 H 141.18548 v 41.314629 z"
+       d="M 4.3824267,10.172474 V -31.142155 H 139.68548 v 41.314629 z"
        id="path4349" /><path
        style="fill:none;stroke:#ffffff;stroke-width:2.25;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-start:url(#EmptyTriangleInM)"
        d="M 117.74609,100.91325 155.43753,8.7332832"
        id="path1324" /><path
        style="fill:#ffffff;stroke:#f00000;stroke-width:3;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:8;stroke-dasharray:none;stroke-opacity:1"
-       d="M 148.2425,7.710836 V -16.609275 H 270.67892 V 7.710836 Z"
+       d="M 146.7425,7.710836 V -16.609275 H 269.17892 V 7.710836 Z"
        id="path4349-6" /><text
        xml:space="preserve"
        style="font-style:normal;font-weight:normal;font-size:30px;line-height:1.25;font-family:sans-serif;fill:#bababa;fill-opacity:1;stroke:none;stroke-width:0.75"
@@ -618,23 +618,23 @@
          x="180.18082"
          y="85.853806" /></text><text
        xml:space="preserve"
-       transform="matrix(0.75000002,0,0,-0.75000002,117.17355,-40.648772)"
+       transform="matrix(0.75000002,0,0,-0.75000002,115.67355,-40.648772)"
        id="text2071"
        style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:21.3333px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;white-space:pre;shape-inside:url(#rect2073)"><tspan
          x="-144.07812"
          y="-47.304562"
-         id="tspan1195">(b) eingebauter 
+         id="tspan1187">(b) eingebauter 
 </tspan><tspan
          x="-144.07812"
          y="-20.637936"
-         id="tspan1197">Schalter B1</tspan></text><text
+         id="tspan1189">Schalter B1</tspan></text><text
        xml:space="preserve"
        transform="matrix(0.95884525,0,0,-0.95884525,177.63286,-99.856163)"
        id="text4301"
        style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:16.6867px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;white-space:pre;shape-inside:url(#rect4303)"><tspan
          x="-30.121094"
          y="-94.21567"
-         id="tspan1199">(i) Reset-Taste
+         id="tspan1191">(i) Reset-Taste
 </tspan></text><text
        xml:space="preserve"
        transform="matrix(0.75000002,0,0,-0.75000002,455.14759,-88.872424)"
@@ -642,8 +642,8 @@
        style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:21.3333px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;white-space:pre;shape-inside:url(#rect11819)"><tspan
          x="-232.43359"
          y="-109.05261"
-         id="tspan1201">(c) zwei Anschlüsse für 
+         id="tspan1193">(c) zwei Anschlüsse für 
 </tspan><tspan
          x="-232.43359"
          y="-82.385983"
-         id="tspan1203">externe Schalter (B2, B3)</tspan></text></g></svg>
+         id="tspan1195">externe Schalter (B2, B3)</tspan></text></g></svg>

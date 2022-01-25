@@ -69,7 +69,7 @@ Zusätzlich können zwei externe Taster an die Klinkenbuchsen auf der linken Sei
 
 (f)    "Hot Shoe"-Adapter zur Montage an einem Manfrotto Magic Arm oder einem ähnlichen Montagesystem
 
-(g)    Firmware-Aktualisierung über die FLipMouse-Webanwendung auf [flipmouse.asterics.eu](flipmouse.asterics.eu)
+(g)    Firmware-Aktualisierung über die FLipMouse-Webanwendung auf [flipmouse.asterics.eu](https://flipmouse.asterics.eu/index_fm.htm)
 
 (h)    Optionale Zusatzplatine für Bluetooth (z. B. zur Steuerung von Smartphones oder iOS-Geräten)
 
@@ -171,7 +171,7 @@ Das Bluetooth - Zusatzmodul für die FLipMouse ermöglicht die kabellose Maus-/T
 
 # FLipMouse-Konfigurationsmanager
 
-Der [FLipMouse Konfigurationsmanager](flipmouse.asterics.eu) bietet eine grafische Benutzeroberfläche (GUI) zum Ändern und Speichern von Einstellungen des FLipMouse-Geräts, sodass alle Merkmale und Funktionen an persönliche Vorlieben und Bedürfnisse angepasst werden können. **Derzeit muss der Google Chrome-Browser (oder ein Chromium-basierter Browser) verwendet werden.** Der Konfigurationsmanager ist über die folgende Website zugänglich: **flipmouse.asterics.eu**. Der FLipMouse-Konfigurationsmanager sendet und empfängt Informationen von/zu der FLipMouse. Diese Informationsübertragung erfolgt über einen Kommunikationsanschluss (COM-Anschluss). 
+Der [FLipMouse Konfigurationsmanager](https://flipmouse.asterics.eu/index_fm.htm) bietet eine grafische Benutzeroberfläche (GUI) zum Ändern und Speichern von Einstellungen des FLipMouse-Geräts, sodass alle Merkmale und Funktionen an persönliche Vorlieben und Bedürfnisse angepasst werden können. **Derzeit muss der Google Chrome-Browser (oder ein Chromium-basierter Browser) verwendet werden.** Der Konfigurationsmanager ist über die folgende Website zugänglich: **flipmouse.asterics.eu**. Der FLipMouse-Konfigurationsmanager sendet und empfängt Informationen von/zu der FLipMouse. Diese Informationsübertragung erfolgt über einen Kommunikationsanschluss (COM-Anschluss). 
 Bitte beachten Sie, dass der alte FLipMouse-Einstellungsmanager ein Konfigurationssystem war, das nicht webbasiert und nur für Windows verfügbar war. Wenn Sie es dennoch verwenden möchten, finden Sie das **Handbuch des FLipMouse-Einstellungsmanagers** [hier](https://github.com/asterics/FLipMouse/blob/master/UserManualFlipMouse.pdf).
 
 Die folgende Abbildung zeigt die Begrüßungsseite des FLipmouse-Konfigurationsmanagers.

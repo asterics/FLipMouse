@@ -32,7 +32,7 @@ Die AsTeRICS Foundation
 
 # Hardware Übersicht
 
-Die FLipMouse ist mit einem 3d-gedruckten Gehäuse erhältlich. Designdateien für das 3d-gedruckte Gehäuse werden im [Github-Repository](https://github.com/asterics/FLipMouse/tree/master/Hardware/case-design/3D_printer) bereitgestellt. Die primäre Methode zur Interaktion mit der FLipMouse ist der transparente Stick ("Hygienic Stick" oder "Mundstück"), der an der Vorderseite der FLipMouse angebracht ist. Der *Hygienic Stick* wird von der Firma *QuadJoy* hergestellt. Ersatzstäbchen können über die Homepage bestellt werden: [www.quadjoy.com](http://www.quadjoy.com). Wir bedanken uns bei Bill und Debra Street von *QuadJoy*, dass wir ihr Mundstück für unseren FLipMouse-Baukasten verwenden durften! (Bitte beachten Sie die Reinigungshinweise im entsprechenden Abschnitt dieser Anleitung).
+Die FLipMouse ist mit einem 3d-gedruckten Gehäuse erhältlich. Designdateien für das 3d-gedruckte Gehäuse werden im [Github-Repository](https://github.com/asterics/FLipMouse/tree/master/Hardware/case-design/3D_printer) bereitgestellt. Die primäre Methode zur Interaktion mit der FLipMouse ist der transparente Stick ("Hygienic Stick" oder "Mundstück"), der an der Vorderseite der FLipMouse angebracht ist. Der *Hygienic Stick* wird von der Firma *QuadJoy* hergestellt. Ersatzstäbchen können über die Homepage bestellt werden: [quad.life](https://quad.life/). Wir bedanken uns bei Bill und Debra Street von *QuadJoy*, dass wir ihr Mundstück für unseren FLipMouse-Baukasten verwenden durften! (Bitte beachten Sie die Reinigungshinweise im entsprechenden Abschnitt dieser Anleitung).
 
 <p align="left" width="100%">
     <img width="60%" src="./Bilder/f2.svg">
@@ -127,7 +127,7 @@ Verwenden Sie einen sauberen "Hygienic Stick", stecken Sie ihn auf den vorderen 
 
 *Abbildung 7*: Montieren der FlipMouse
 
-Das Bild zeigt eine Kombination aus "Manfrotto Gelenkarm" + "SuperClamp" Halterung. Sie können auch den [Manfrotto Magic Arm](http://www.manfrotto.com/magic-arm-kit) oder eine andere Befestigungslösung verwenden, die auf den HotShoe-Adapter der FLipMouse passt. Seien Sie vorsichtig, wenn Sie die Halterung an der 3/8"-Schraube des HotShoe-Adapters befestigen: Bei starker Krafteinwirkung kann das Gehäuse des Geräts brechen.
+Das Bild zeigt eine Kombination aus "[Manfrotto Gelenkarm](https://www.manfrotto.com/global/single-arm-2-section-196ab-2/)" + "[SuperClamp](https://www.manfrotto.com/global/super-photo-clamp-without-stud-aluminium-035/)" Halterung. Sie können auch den [Manfrotto Magic Arm](https://www.manfrotto.com/global/magic-photo-arm-smart-centre-lever-and-flexible-extension-143n/) oder eine andere Befestigungslösung verwenden, die auf den HotShoe-Adapter der FLipMouse passt. Seien Sie vorsichtig, wenn Sie die Halterung an der 3/8"-Schraube des HotShoe-Adapters befestigen: Bei starker Krafteinwirkung kann das Gehäuse des Geräts brechen.
 
 ![Lips](./Bilder/f9.PNG)
 
@@ -588,7 +588,7 @@ Der Speichelfilter befindet sich im Inneren des *Hygienic Stick*. Normalerweise 
 Verwenden Sie zum Desinfizieren eines Mundstücks kochendes Wasser. Legen Sie den *Hygienic Stick* (ohne Speichelfilter) für mindestens fünf Minuten in kochendes Wasser. Dann lassen Sie den *Hygienic Stick* vor der nächsten Anwendung trocknen.
 
 **Ersatzsticks und Filter bestellen:**
-Speichelfilter und *Hygienic Sticks* können direkt im [*Quadjoy* online shop](https://quadjoy.com/shop) bestellt werden. Wir möchten Bill und Debra Street dafür danken, dass wir ihren *Quadjoy Hygienic Stick* zusammen mit unserem FLipMouse-Gerät verwenden durften - ihr seid großartig!
+Speichelfilter (Saliva Filters) und *Hygienic Sticks* können direkt im [*Quadjoy* online shop](https://quad.life/product) bestellt werden. Wir möchten Bill und Debra Street dafür danken, dass wir ihren *QuadJoy Hygienic Stick* zusammen mit unserem FLipMouse-Gerät verwenden durften - ihr seid großartig!
 
 ## Hygienische Überlegungen und Risiken
 

@@ -520,12 +520,13 @@ uint8_t handleTapClicks(int state, int tapTime) {
   static uint32_t liftTimeStamp = 0;
   static uint32_t setTimeStamp = 0;
   static uint8_t lastState = 0;
-  static uint32_t clickBeginTimestamp = 0;
+  static uint32_t tapReleaseTimestamp = 0;
+  static uint32_t requestMouseButtonTimestamp = 0;
   
   switch (state) {
     case   CIRQUE_STATE_HOVERING:
     //  Serial.print("-");
-    case   CIRQUE_STATE_LIFTOFF:
+    case   CIRQUE_STATE_LIFTOFF:   
       if (lastState == CIRQUE_STATE_VALID) {
         //   Serial.println("liftoff");
         liftTimeStamp = millis();
@@ -534,23 +535,25 @@ uint8_t handleTapClicks(int state, int tapTime) {
           if (liftTimeStamp-dragBeginTimestamp < DRAG_ACTION_TIMELIMIT) {  // check drag actions 
              uint8_t d = findDragAction();
              
-             if (d) { endDrag(); Serial.print ("Drag Action:");Serial.println(d); return(d); }
-             else  Serial.println ("drag too small");
+             if (d) { endDrag(); Serial.print ("perform drag action:");Serial.println(d); return(d); }
+             else  Serial.println ("drag too small for action");
           }
-          else  Serial.println ("drag too slow");
+          else  Serial.println ("drag too slow for action");
         }
         
         if (liftTimeStamp - setTimeStamp < tapTime)  {
-          //  Serial.println("click!");
           if (dragging) {     // cancel drag, perform double click instead!
             endDrag();
             // Serial.println("double click (cancel drag)");
           }
           
-          if ((settings.stickMode== STICKMODE_PAD) || (settings.stickMode== STICKMODE_MOUSE)) 
+          if ((settings.stickMode== STICKMODE_PAD) || (settings.stickMode== STICKMODE_MOUSE))  {
+             Serial.println("click request!");
              mousePress(MOUSE_LEFT);
+             requestMouseButtonTimestamp=millis();          
+          }
              
-          clickBeginTimestamp = millis();
+          tapReleaseTimestamp = millis();
         }
       }
       if (dragging) {
@@ -563,9 +566,9 @@ uint8_t handleTapClicks(int state, int tapTime) {
       if (lastState != CIRQUE_STATE_VALID) {
         // Serial.println("valid");
         setTimeStamp = millis();
-        if (setTimeStamp - clickBeginTimestamp < tapTime) {
-           Serial.println("start drag");
-          clickBeginTimestamp = 0;
+        if (setTimeStamp - tapReleaseTimestamp < tapTime) {
+          Serial.println("start drag");
+          tapReleaseTimestamp = 0;
           dragging = 1;
           dragBeginTimestamp = millis();
           if (dragMode!=DRAG_NORMAL) mouseRelease(MOUSE_LEFT);          
@@ -575,9 +578,20 @@ uint8_t handleTapClicks(int state, int tapTime) {
   }
   if (state) lastState = state;
 
-  if (clickBeginTimestamp) {
-    if (millis() - clickBeginTimestamp > tapTime) {
-      clickBeginTimestamp = 0;
+/*
+
+  if (requestMouseButtonTimestamp) {
+    if ((millis()-requestMouseButtonTimestamp) > 300) {
+      Serial.println("perform click!");
+      requestMouseButtonTimestamp=0; 
+      mousePress(MOUSE_LEFT);
+    }
+  }        
+*/
+
+  if (tapReleaseTimestamp) {
+    if (millis() - tapReleaseTimestamp > tapTime) {
+      tapReleaseTimestamp = 0;
       mouseRelease(MOUSE_LEFT);
       // Serial.println("release!");
     }

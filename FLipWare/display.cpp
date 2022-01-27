@@ -46,10 +46,9 @@ uint8_t displayInit (uint8_t useWire1) {
   oled->begin(&Adafruit128x32, SCREEN_ADDRESS);
   oled->setFont(Adafruit5x7);
   //oled->setFont(Arial_bold_14);
-
-  displayClear();
-  oled->set2X();
-  oled->print(moduleName);
+  //displayClear();
+  //oled->set2X();
+  //oled->print(moduleName);
   return (true);
 }
 
@@ -83,21 +82,6 @@ void displayMessage(char * msg) {
   oled->set2X();
   oled->setCursor(5,1);
   oled->print(msg);  
-}
-
-/**
-   name: displayCalibRequest
-   @param none
-   @return none
-
-   display calibration request message (called in trackpad claibration phase) 
-*/
-void displayCalibRequest() {
-  if (!displayInstalled) return;
-    oled->set1X();
-    oled->setCursor(10,3);
-    oled->setInvertMode (!oled->invertMode());
-    oled->print(" please touch ");  
 }
 
 /**

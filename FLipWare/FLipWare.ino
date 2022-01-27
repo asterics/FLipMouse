@@ -173,7 +173,8 @@ void setup() {
 
   setBTName(moduleName);             // if BT-module installed: set advertising name
   
-  displayInstalled=displayInit(cirqueInstalled);   // check if i2c-display connected, if possible: init 
+  displayInstalled=displayInit(cirqueInstalled);   // check if i2c-display connected, if possible: init
+  displayUpdate();
  
 #ifdef DEBUG_OUTPUT_FULL
   Serial.print("Free RAM:");  Serial.println(freeRam());

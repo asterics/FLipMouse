@@ -21,7 +21,6 @@ extern uint8_t displayInstalled;
 uint8_t displayInit (uint8_t useWire1);
 void displayClear(void);
 void displayUpdate(void);
-void displayCalibRequest(void);
 void displayMessage(char * msg);
 
 #endif

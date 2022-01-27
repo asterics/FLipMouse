@@ -77,7 +77,6 @@ uint32_t dragBeginTimestamp = 0;
 
 uint8_t cirqueInstalled = 0;
 absData_t touchData;
-uint8_t initDone=0;
 
 
 //const uint16_t ZONESCALE = 256;
@@ -369,77 +368,14 @@ void ScaleData(absData_t * coordinates, uint16_t xResolution, uint16_t yResoluti
   coordinates->yValue = (uint16_t)(yTemp * yResolution / PINNACLE_Y_RANGE);
 }
 
-void AssertSensorLED(bool state)
-{
-  //  digitalWrite(LED_0, !state);
-}
-
-bool DR_Asserted()
-{
-  return digitalRead(DR_PIN);
-}
-
-uint8_t waitForCalib;
-uint32_t calibTs;
-
-int initCirque()
-{
-  pinMode(GND_PIN, OUTPUT);
-  digitalWrite(GND_PIN, LOW);
-  delay (100);  // time to startup cirque module
-
-  if (!Pinnacle_Init()) {
-    pinMode (GND_PIN, INPUT);
-    return (0);
-  }
-  // These functions are required for use with thick overlays (curved)
-  setAdcAttenuation(ADC_ATTENUATE_1X);
-  tuneEdgeSensitivity();
-  Pinnacle_EnableFeed(true);
-  //waitForCalib = 1;
-  calibTs = millis();
-  return (1);
-}
-
-#define MAG_THRESHOLD 2300
-#define MAG_HYSTERESIS 50
-#define PRINT_MAGVALUES_PERIOD 100
 
 
-int getHallSensorState() {
-  /*
-    static uint32_t printADCTimestamp=0;
-    static int hallSensorState=0;
-    static int magValue=0
 
-    //  analogReadRes(12);
-
-    magValue=analogRead(A1);
-    if (magValue>MAG_THRESHOLD-MAG_HYSTERESIS) {
-      if (millis()-printADCTimestamp > PRINT_MAGVALUES_PERIOD) {
-       printADCTimestamp=millis();
-       Serial.print("Mag. ADC-Value A1=");
-       Serial.println(magValue);
-     }
-    }
-
-    if (magValue>MAG_THRESHOLD) {
-     if (!(hallSensorState & 1)) {
-       hallSensorState|=1;
-       Mouse.set_buttons(1, 0, 0);
-     }
-    } else if (magValue<MAG_THRESHOLD-MAG_HYSTERESIS) {
-     if (hallSensorState & 1) {
-       Mouse.set_buttons(0, 0, 0);
-       hallSensorState&=~1;
-     }
-    }
-  */
-}
-
+// Forces Pinnacle to re-calibrate. If the touchpad is reporting touches when
+// no fingers are on the pad then calibration (compensation) is wrong.
+// Calling this function will fix the problem. Warning, re-enable the feed after calling this.
 void Pinnacle_forceCalibration(void)
 {
-  Serial.println("force Recalib!");
   uint8_t CalConfig1Value = 0x00;
 
   Pinnacle_EnableFeed(false);
@@ -454,27 +390,46 @@ void Pinnacle_forceCalibration(void)
   while(CalConfig1Value & 0x01);
 
   Pinnacle_ClearFlags();
-  Pinnacle_EnableFeed(true);
-  initDone=1;
 }
+
+
+void AssertSensorLED(bool state)
+{
+  //  digitalWrite(LED_0, !state);
+}
+
+bool DR_Asserted()
+{
+  return digitalRead(DR_PIN);
+}
+
+
+int initCirque()
+{
+  pinMode(GND_PIN, OUTPUT);
+  digitalWrite(GND_PIN, LOW);
+  delay (100);  // time to startup cirque module
+
+  if (!Pinnacle_Init()) {
+    pinMode (GND_PIN, INPUT);
+    return (0);
+  }
+  // These functions are required for use with thick overlays (curved)
+  setAdcAttenuation(ADC_ATTENUATE_1X);
+  Pinnacle_forceCalibration();  
+  tuneEdgeSensitivity();
+  Pinnacle_EnableFeed(true);
+  return (1);
+}
+
 
 int getPadData(int * xRaw, int * yRaw) {
   int state = CIRQUE_STATE_INVALID;
 
-  getHallSensorState();
-
-/*
-  uint8_t data;
-  RAP_ReadBytes(0x07, &data, 1);
-  Serial.println(data);
-  RAP_Write(0x07, (1<<6)|data);
-*/
+  // getHallSensorState();
 
   if (DR_Asserted())
-  {
-    if (!initDone) Pinnacle_forceCalibration();
-    
-    calibTs = millis();
+  {   
     Pinnacle_GetAbsolute(&touchData);
     Pinnacle_CheckValidTouch(&touchData);     // Checks for "hover" caused by curved overlays
     ScaleData(&touchData, 1500, 1500);      // Scale coordinates to arbitrary X, Y resolution
@@ -484,40 +439,11 @@ int getPadData(int * xRaw, int * yRaw) {
     else state = CIRQUE_STATE_VALID ;
     *xRaw = touchData.xValue;
     *yRaw = touchData.yValue;
-    /*
-        static uint32_t Ts=0;
-        static int cnt=0;
-        cnt++;
-        if (millis()-Ts>1000) {
-          Ts=millis();
-          Serial.print (cnt); Serial.print (", x=");
-          Serial.print (touchData.xValue); Serial.print (", y=");Serial.print (touchData.yValue);
-          Serial.print (", state=");Serial.println (state);
-          cnt=0;
-        }
-    */
-  }
 
-/*
-  if (waitForCalib) {
-    if (millis() - calibTs < 100) {
-      static uint16_t cnt = 0;
-      if (!cnt++) displayCalibRequest();
-      *xRaw = *yRaw = state = 0;
-    }
-    else {
-      displayUpdate();
-      waitForCalib = 0;
-    }
-  }
-
-  */
-  
+  } 
   return (state);
 }
 
-// Serial.print(touchData.buttonFlags);
-// AssertSensorLED(touchData.touchDown);
 
 int resetPadDirectionStates = 0;
 
@@ -658,3 +584,41 @@ uint8_t handleTapClicks(int state, int tapTime) {
   }
   return(0);
 }
+
+
+
+/*
+
+#define MAG_THRESHOLD 2300
+#define MAG_HYSTERESIS 50
+#define PRINT_MAGVALUES_PERIOD 100
+
+int getHallSensorState() {
+    static uint32_t printADCTimestamp=0;
+    static int hallSensorState=0;
+    static int magValue=0
+
+    //  analogReadRes(12);
+
+    magValue=analogRead(A1);
+    if (magValue>MAG_THRESHOLD-MAG_HYSTERESIS) {
+      if (millis()-printADCTimestamp > PRINT_MAGVALUES_PERIOD) {
+       printADCTimestamp=millis();
+       Serial.print("Mag. ADC-Value A1=");
+       Serial.println(magValue);
+     }
+    }
+
+    if (magValue>MAG_THRESHOLD) {
+     if (!(hallSensorState & 1)) {
+       hallSensorState|=1;
+       Mouse.set_buttons(1, 0, 0);
+     }
+    } else if (magValue<MAG_THRESHOLD-MAG_HYSTERESIS) {
+     if (hallSensorState & 1) {
+       Mouse.set_buttons(0, 0, 0);
+       hallSensorState&=~1;
+     }
+    }
+}
+*/

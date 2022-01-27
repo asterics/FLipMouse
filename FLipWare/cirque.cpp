@@ -77,6 +77,8 @@ uint32_t dragBeginTimestamp = 0;
 
 uint8_t cirqueInstalled = 0;
 absData_t touchData;
+uint8_t initDone=0;
+
 
 //const uint16_t ZONESCALE = 256;
 //const uint16_t ROWS_Y = 6;
@@ -119,7 +121,7 @@ int RAP_Init()
   //  Wire1.setDefaultTimeout(10000); // 10ms
   Wire1.setSDA(SDA_PIN);
   Wire1.setSCL(SCL_PIN);
-  Wire1.setClock(400000);
+  Wire1.setClock(100000);
   Wire1.beginTransmission(SLAVE_ADDR);
   return (Wire1.endTransmission());
 }
@@ -394,7 +396,7 @@ int initCirque()
   setAdcAttenuation(ADC_ATTENUATE_1X);
   tuneEdgeSensitivity();
   Pinnacle_EnableFeed(true);
-  waitForCalib = 1;
+  //waitForCalib = 1;
   calibTs = millis();
   return (1);
 }
@@ -435,14 +437,43 @@ int getHallSensorState() {
   */
 }
 
+void Pinnacle_forceCalibration(void)
+{
+  Serial.println("force Recalib!");
+  uint8_t CalConfig1Value = 0x00;
+
+  Pinnacle_EnableFeed(false);
+  RAP_ReadBytes(0x07, &CalConfig1Value, 1);
+  CalConfig1Value |= 0x01;
+  RAP_Write(0x07, CalConfig1Value);
+
+  do
+  {
+    RAP_ReadBytes(0x07, &CalConfig1Value, 1);
+  }
+  while(CalConfig1Value & 0x01);
+
+  Pinnacle_ClearFlags();
+  Pinnacle_EnableFeed(true);
+  initDone=1;
+}
 
 int getPadData(int * xRaw, int * yRaw) {
   int state = CIRQUE_STATE_INVALID;
 
   getHallSensorState();
 
+/*
+  uint8_t data;
+  RAP_ReadBytes(0x07, &data, 1);
+  Serial.println(data);
+  RAP_Write(0x07, (1<<6)|data);
+*/
+
   if (DR_Asserted())
   {
+    if (!initDone) Pinnacle_forceCalibration();
+    
     calibTs = millis();
     Pinnacle_GetAbsolute(&touchData);
     Pinnacle_CheckValidTouch(&touchData);     // Checks for "hover" caused by curved overlays
@@ -467,6 +498,7 @@ int getPadData(int * xRaw, int * yRaw) {
     */
   }
 
+/*
   if (waitForCalib) {
     if (millis() - calibTs < 100) {
       static uint16_t cnt = 0;
@@ -478,6 +510,9 @@ int getPadData(int * xRaw, int * yRaw) {
       waitForCalib = 0;
     }
   }
+
+  */
+  
   return (state);
 }
 
@@ -544,6 +579,17 @@ void endDrag() {
   mouseRelease(MOUSE_LEFT);
 }
 
+uint8_t findDragAction() {
+   int mx=abs(dragDistanceX), my=abs(dragDistanceY);
+
+   if ( (mx > my) && (mx > DRAG_ACTION_DISTANCE))
+     return((dragDistanceX>0) ? DRAG_ACTION_RIGHT  : DRAG_ACTION_LEFT);
+   if ( my > DRAG_ACTION_DISTANCE)
+     return((dragDistanceY>0) ? DRAG_ACTION_DOWN  : DRAG_ACTION_UP);
+
+   return(0);
+}
+
 uint8_t handleTapClicks(int state, int tapTime) {
   static uint32_t liftTimeStamp = 0;
   static uint32_t setTimeStamp = 0;
@@ -558,11 +604,14 @@ uint8_t handleTapClicks(int state, int tapTime) {
         //   Serial.println("liftoff");
         liftTimeStamp = millis();
 
-        if ((dragging) && (liftTimeStamp-dragBeginTimestamp < DRAG_ACTION_TIMELIMIT)) {  // check slot change action!
-           if (dragDistanceY < -DRAG_ACTION_DISTANCE){ endDrag(); return(DRAG_ACTION_UP); }
-           else if (dragDistanceY > DRAG_ACTION_DISTANCE) { endDrag(); return(DRAG_ACTION_DOWN); }
-           else if (dragDistanceX < -DRAG_ACTION_DISTANCE){ endDrag(); return(DRAG_ACTION_LEFT); }
-           else if (dragDistanceX > DRAG_ACTION_DISTANCE) { endDrag(); return(DRAG_ACTION_RIGHT);}
+        if (dragging) {
+          if (liftTimeStamp-dragBeginTimestamp < DRAG_ACTION_TIMELIMIT) {  // check drag actions 
+             uint8_t d = findDragAction();
+             
+             if (d) { endDrag(); Serial.print ("Drag Action:");Serial.println(d); return(d); }
+             else  Serial.println ("drag too small");
+          }
+          else  Serial.println ("drag too slow");
         }
         
         if (liftTimeStamp - setTimeStamp < tapTime)  {
@@ -580,7 +629,7 @@ uint8_t handleTapClicks(int state, int tapTime) {
       }
       if (dragging) {
         endDrag();
-        //Serial.println("drag released!");
+        Serial.println("drag released!");
       }
       break;
 
@@ -589,7 +638,7 @@ uint8_t handleTapClicks(int state, int tapTime) {
         // Serial.println("valid");
         setTimeStamp = millis();
         if (setTimeStamp - clickBeginTimestamp < tapTime) {
-          // Serial.println("start drag");
+           Serial.println("start drag");
           clickBeginTimestamp = 0;
           dragging = 1;
           dragBeginTimestamp = millis();

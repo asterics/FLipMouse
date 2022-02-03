@@ -19,6 +19,13 @@
 
 #include "FlipWare.h"
 
+#define DRAG_RECORDING_IDLE 0
+#define DRAG_RECORDING_ACTIVE 1
+
+extern uint8_t dragRecordingState;
+extern int16_t dragRecordingX;
+extern int16_t dragRecordingY;
+
 /*
 
    name: keyboardPrint

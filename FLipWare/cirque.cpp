@@ -516,6 +516,16 @@ uint8_t findDragAction() {
    return(0);
 }
 
+void resetDrag() {
+    //Serial.print("reset drag: ");
+    //Serial.print(-dragRecordingX);
+    //Serial.print(",");
+    //Serial.println(-dragRecordingY);
+    dragRecordingState = DRAG_RECORDING_IDLE;
+    mouseMove(-dragRecordingX,-dragRecordingY);
+    dragRecordingX=dragRecordingY=0;
+}
+
 uint8_t handleTapClicks(int state, int tapTime) {
   static uint32_t liftTimeStamp = 0;
   static uint32_t setTimeStamp = 0;
@@ -535,20 +545,26 @@ uint8_t handleTapClicks(int state, int tapTime) {
           if (liftTimeStamp-dragBeginTimestamp < DRAG_ACTION_TIMELIMIT) {  // check drag actions 
              uint8_t d = findDragAction();
              
-             if (d) { endDrag(); Serial.print ("perform drag action:");Serial.println(d); return(d); }
-             else  Serial.println ("drag too small for action");
+             if (d) { 
+               //Serial.print ("perform drag action:");Serial.println(d); 
+               resetDrag();
+               endDrag(); 
+               return(d); 
+             }
+             //else  Serial.println ("drag too small for action");
           }
-          else  Serial.println ("drag too slow for action");
+          //else  Serial.println ("drag too slow for action");
         }
         
         if (liftTimeStamp - setTimeStamp < tapTime)  {
           if (dragging) {     // cancel drag, perform double click instead!
             endDrag();
-            // Serial.println("double click (cancel drag)");
+            //Serial.println("double click");
           }
           
           if ((settings.stickMode== STICKMODE_PAD) || (settings.stickMode== STICKMODE_MOUSE))  {
-             Serial.println("click request!");
+             //Serial.println("click request!");
+             resetDrag();
              mousePress(MOUSE_LEFT);
              requestMouseButtonTimestamp=millis();          
           }
@@ -558,16 +574,22 @@ uint8_t handleTapClicks(int state, int tapTime) {
       }
       if (dragging) {
         endDrag();
-        Serial.println("drag released!");
+        //Serial.println("drag released!");
       }
+      dragRecordingState=DRAG_RECORDING_IDLE;
       break;
 
     case   CIRQUE_STATE_VALID:
       if (lastState != CIRQUE_STATE_VALID) {
         // Serial.println("valid");
+        if (dragRecordingState == DRAG_RECORDING_IDLE) {
+          //Serial.println("start recording");
+          dragRecordingState=DRAG_RECORDING_ACTIVE;
+          dragRecordingX=dragRecordingY=0;
+        }
         setTimeStamp = millis();
         if (setTimeStamp - tapReleaseTimestamp < tapTime) {
-          Serial.println("start drag");
+          //Serial.println("start drag");
           tapReleaseTimestamp = 0;
           dragging = 1;
           dragBeginTimestamp = millis();

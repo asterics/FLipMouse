@@ -15,6 +15,10 @@
 
 #include "hid_hal.h"
 
+uint8_t dragRecordingState=DRAG_RECORDING_IDLE;
+int16_t dragRecordingX=0;
+int16_t dragRecordingY=0;
+
 void mouseRelease(uint8_t button)
 {
   if (settings.bt & 1)
@@ -58,6 +62,10 @@ void mouseScroll(int8_t steps)
 
 void mouseMove(int x, int y)
 {
+  if (dragRecordingState == DRAG_RECORDING_ACTIVE) {
+    dragRecordingX+=x;
+    dragRecordingY+=y;
+  }
   while (x < -128) {
     if (settings.bt & 1)
       Mouse.move(-128, 0);

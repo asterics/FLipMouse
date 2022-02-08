@@ -44,8 +44,10 @@ For more information about (modifying) the FLipMouse firmware see https://github
 
 The configuration settings of the FLipMouse can be changed via the **FlipmouseGUI settings manager**. Currently, the settings manager runs on Windows platfroms only (although Wine can be used to run it under Linux). 
 Using the settings manager, you can assign different actions to all hardware inputs of the FLipMouse (mouthpiece, sip and puff, external buttons,...).
-More Information can be found in the user manual: [user manual](https://github.com/asterics/FLipMouse/blob/master/UserManualFlipMouse.pdf)
 
+More Information can be found in the user manual: 
+[user manual (english)](https://github.com/asterics/FLipMouse/blob/master/Documentation/UserManual/FLipMouseUserManual.pdf)
+[user manual (german)](https://github.com/asterics/FLipMouse/blob/master/Documentation/UserManual/FLipMouseAnwendungsanleitung.pdf)
 
 
 # Links to related projects
@@ -91,7 +93,7 @@ This problem may have different causes. Please visit the wiki for further inform
 
 ## **Cleaning**
 
-**IMPORTANT:** Due to the principle of using the FLipmouse either as finger or lip mouse, the mouthpiece is exposed saliva or other things from your body. Please clean/replace the mouthpiece (or its filter) on a regular basis! further information is available in the wiki: [Cleaning](https://github.com/asterics/FLipMouse/wiki/cleaning)
+**IMPORTANT:** Due to the principle of using the FLipmouse either as finger or lip mouse, the mouthpiece is exposed saliva or other things from your body. Please clean/replace the mouthpiece (or its filter) on a regular basis! further information is available in the wiki: [Cleaning](https://github.com/asterics/FLipMouse/blob/master/Documentation/Cleaning_instructions.pdf)
 
 
 ## Other problems?

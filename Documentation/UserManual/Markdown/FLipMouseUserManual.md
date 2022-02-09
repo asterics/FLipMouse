@@ -2,13 +2,9 @@
 
 #### User Manual v3.1, AsTeRICS Foundation
 
-
-
 ![FLipMouseLogo](./Bilder/flipmouseLogo.svg)
 
 # 
-
-
 
 ![Logos](./Bilder/logo.svg)
 
@@ -24,7 +20,11 @@ Furthermore, this manual covers important guidelines for using the FLipMouse, in
 
 All design files for the electronics and the 3d-printed enclosure - as well as the software source code - are available as open source and are distributed via the AsTeRICS Foundation website and via GitHub. The construction kit for the FLipMouse can be purchased from [Hackerspaceshop.com](https://hackerspaceshop.com/collections/flipmouse). Detailed instructions are provided in the [FlipMouse construction manual](https://github.com/asterics/FLipMouse/blob/master/ConstructionKit/ConstructionManual.pdf). Have fun building and using your FLipMouse!
 
+
+
 The AsTeRICS Foundation
+
+
 [www.asterics-foundation.org](https://asterics-foundation.org/)
 
 <p align="center" width="100%">
@@ -547,7 +547,7 @@ The Bluetooth module is plugged onto the internal 10-pin connector of the FLipMo
 #### Connecting with a Bluetooth host device (pairing)
 
 The host device could be a cell phone with Android or iOS operating system, for example. 
-The FLipMouse can be connected to a host device only if no device is currently connected, and thus pairing mode is active. In order to connect a device, open the Bluetooth settings of your Android or iOS device, enable BT, choose *add a new BT-device* and select the FLipMouse from the list of availabe devices.  Then, open the GENERAL tab and activate Bluetooth operation for the desired slots (see section [*General Settings*](https://github.com/asterics/FLipMouse/blob/master/Documentation/UserManual/Markdown/FLipMouseUserManual.md#general-settings-tab-general).
+The FLipMouse can be connected to a host device only if no device is currently connected, and thus pairing mode is active. In order to connect a device, open the Bluetooth settings of your Android or iOS device, enable BT, choose *add a new BT-device* and select the FLipMouse from the list of availabe devices.  Then, open the GENERAL tab and activate Bluetooth operation for the desired slots (see section [*General Settings*](https://github.com/asterics/FLipMouse/blob/master/Documentation/UserManual/Markdown/FLipMouseUserManual.md#general-settings-tab-general)).
 
 Note:  If the Bluetooth module is in paring mode, the module's LED flashed fast (approx twice per second). If a connection is established, the LED flashes slowly (approx. once every 2 seconds). The LED can only be seen if the enclosure of the FLipMouse is opened.
 

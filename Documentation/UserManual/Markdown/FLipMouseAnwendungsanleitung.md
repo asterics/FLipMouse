@@ -2,15 +2,9 @@
 
 #### Anwendungsanleitung v3.1, AsTeRICS Foundation
 
-
-
-
-
 ![FLipMouseLogo](./Bilder/flipmouseLogo.svg)
 
 #### 
-
-
 
 ![Logos](./Bilder/logo.svg)
 
@@ -296,7 +290,7 @@ Der von der FLipMouse bereitgestellte Joystick-Controller heißt *"Serial+Keyboa
 
 *Abbildung 19: Joy.cpl Eigenschaften*
 
-Gewünschte Joystick-Tasten-Aktivitäten können mit Saug/Puste- oder anderen Interaktionsereignissen erstellt werden, indem Sie "*Joystick ... setzen"* aus dem Aktionsmenü wählen, wie im Abschnitt [*Zuweisung verschiedener Aktionen*](https://github.com/asterics/FLipMouse/blob/master/Documentation/UserManual/Markdown/FLipMouseAnwendungsanleitung.md#zuweisung-von-verschiedenen-aktionen-tab-aktionen)) beschrieben.
+Gewünschte Joystick-Tasten-Aktivitäten können mit Saug/Puste- oder anderen Interaktionsereignissen erstellt werden, indem Sie "*Joystick ... setzen"* aus dem Aktionsmenü wählen, wie im Abschnitt [*Zuweisung von verschiedenen Aktionen*](https://github.com/asterics/FLipMouse/blob/master/Documentation/UserManual/Markdown/FLipMouseAnwendungsanleitung.md#zuweisung-von-verschiedenen-aktionen-tab-aktionen)) beschrieben.
 
 ### Saug/Puste Aktionen and Schwellenwerte (Tab SAUG-PUSTE-Steuerung)
 

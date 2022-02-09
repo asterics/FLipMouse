@@ -167,7 +167,7 @@ Die FLipMouse sollte mit allen Betriebssystemen funktionieren, die USB-HID-Gerä
 
 ## Verwendung der FLipMouse über Bluetooth - zum Beispiel mit einem Android- oder iOS-Gerät (iPhone oder iPad)
 
-Das Bluetooth - Zusatzmodul für die FLipMouse ermöglicht die kabellose Maus-/Tastatursteuerung von Computern, Tablets und Smartphones. Darüber hinaus können iPhones oder iPads über VoiceOver & Assistive-Switch-Unterstützung genutzt werden. Weitere Informationen finden Sie im Kapitel *Benutzung des Bluetooth-Moduls*.
+Das Bluetooth - Zusatzmodul für die FLipMouse ermöglicht die kabellose Maus-/Tastatursteuerung von Computern, Tablets und Smartphones. Darüber hinaus können iPhones oder iPads über VoiceOver & Assistive-Switch-Unterstützung genutzt werden. Weitere Informationen finden Sie im Kapitel [*Verwendung des Bluetooth-Moduls*](https://github.com/asterics/FLipMouse/blob/master/Documentation/UserManual/Markdown/FLipMouseAnwendungsanleitung.md#verwendung-des-bluetooth-moduls).
 
 # FLipMouse-Konfigurationsmanager
 
@@ -206,7 +206,7 @@ Im Tab STICK-CONFIG des FLipMouse-Konfigurationsmanagers können Sie die *Sensit
 
 #### Stick-Verwendung definieren (“Verwende Stick für”)
 
-Im Tab STICK-CONFIG ganz oben kann die Hauptfunktion des Sticks ausgewählt werden. Standardmäßig erzeugt der Stick Mausbewegungen. Der Stick kann jedoch auch für alternative Aktionen verwendet werden (z. B. Drücken der Taste 'A', wenn der Stick nach oben gedrückt wird), die im Tab ACTIONS festgelegt werden können (siehe Abschnitt *Zuweisung verschiedener Aktionen*). Außerdem kann der Stick einen echten Joystick oder ein Gamepad nachahmen (siehe *Abschnitt Verwendung des Sticks für Joystick-Bewegungen*).
+Im Tab STICK-CONFIG ganz oben kann die Hauptfunktion des Sticks ausgewählt werden. Standardmäßig erzeugt der Stick Mausbewegungen. Der Stick kann jedoch auch für alternative Aktionen verwendet werden (z. B. Drücken der Taste 'A', wenn der Stick nach oben gedrückt wird), die im Tab ACTIONS festgelegt werden können (siehe Abschnitt [*Zuweisung von verschiedenen Aktionen*](https://github.com/asterics/FLipMouse/blob/master/Documentation/UserManual/Markdown/FLipMouseAnwendungsanleitung.md#zuweisung-von-verschiedenen-aktionen-tab-aktionen). Außerdem kann der Stick einen echten Joystick oder ein Gamepad nachahmen (siehe Abschnitt [*Verwendung des Sticks für Joystick-Bewegungen*](https://github.com/asterics/FLipMouse/blob/master/Documentation/UserManual/Markdown/FLipMouseAnwendungsanleitung.md#verwenden-des-sticks-f%C3%BCr-joystick-bewegungen).
 
 #### Kalibrierung der Mittelposition des Sticks
 
@@ -292,7 +292,7 @@ Der von der FLipMouse bereitgestellte Joystick-Controller heißt *"Serial+Keyboa
 
 *Abbildung 19: Joy.cpl Eigenschaften*
 
-Gewünschte Joystick-Tasten-Aktivitäten können mit Saug/Puste- oder anderen Interaktionsereignissen erstellt werden, indem Sie "*Joystick ... setzen"* aus dem Aktionsmenü wählen, wie im Abschnitt *Zuweisung verschiedener Aktionen* beschrieben.
+Gewünschte Joystick-Tasten-Aktivitäten können mit Saug/Puste- oder anderen Interaktionsereignissen erstellt werden, indem Sie "*Joystick ... setzen"* aus dem Aktionsmenü wählen, wie im Abschnitt [*Zuweisung verschiedener Aktionen*](https://github.com/asterics/FLipMouse/blob/master/Documentation/UserManual/Markdown/FLipMouseAnwendungsanleitung.md#zuweisung-von-verschiedenen-aktionen-tab-aktionen)) beschrieben.
 
 ### Saug/Puste Aktionen and Schwellenwerte (Tab SAUG-PUSTE-Steuerung)
 
@@ -312,7 +312,7 @@ Mit den Schiebereglern kann der Schwellendruck für Saugen und Pusten eingestell
 
 #### Stark (An)saugen and Stark Pusten
 
-Im Tab SAUG-PUSTE-STEUERUNG können zusätzliche Schwellenwerte für starkes Saugen und starkes Pusten definiert werden, die dann unterschiedliche Aktionen auslösen können. Zum Beispiel könnte der nächste Slot durch starkes Pusten aktiviert werden. Um die Funktionalität der FLipMouse insbesondere für Personen zu erweitern, die nicht auf externe Schalter zugreifen können, sind noch zusätzliche Aktionen verfügbar, die mit starkem Saugen oder starkem Pusten ausgelöst werden. Diese Gesten ermöglichen das Auslösen von Aktionen durch starken Saugen oder starkes Pusten, gefolgt von einer Stick-Bewegung (rauf / runter / links / rechts). Starkes Saugen oder starkes Pusten wird durch ein akustisches Signal (hoher Ton) angezeigt. Wird der Stick innerhalb einer Sekunde bewegt, wird die entsprechende Aktion (z.B. "Stark ansaugen + nach oben") ausgelöst. Wird der Stick nicht innerhalb einer Sekunde bewegt, wird die einzelne Satrk pusten- oder Stark ansaugen-Aktion ausgelöst. Insgesamt können also 10 zusätzliche Aktionen ausgeführt werden.
+Im Tab SAUG-PUSTE-STEUERUNG können zusätzliche Schwellenwerte für starkes Saugen und starkes Pusten definiert werden, die dann unterschiedliche Aktionen auslösen können. Zum Beispiel könnte der nächste Slot durch starkes Pusten aktiviert werden. Um die Funktionalität der FLipMouse insbesondere für Personen zu erweitern, die nicht auf externe Schalter zugreifen können, sind noch zusätzliche Aktionen verfügbar, die mit starkem Saugen oder starkem Pusten ausgelöst werden. Diese Gesten ermöglichen das Auslösen von Aktionen durch starken Saugen oder starkes Pusten, gefolgt von einer Stick-Bewegung (rauf / runter / links / rechts). Starkes Saugen oder starkes Pusten wird durch ein akustisches Signal (hoher Ton) angezeigt. Wird der Stick innerhalb einer Sekunde bewegt, wird die entsprechende Aktion (z.B. "Stark ansaugen + nach oben") ausgelöst. Wird der Stick nicht innerhalb einer Sekunde bewegt, wird die einzelne Stark pusten- oder Stark ansaugen-Aktion ausgelöst. Insgesamt können also 10 zusätzliche Aktionen ausgeführt werden.
 
 ### Zuweisung von verschiedenen Aktionen (Tab AKTIONEN)
 
@@ -391,7 +391,7 @@ KEY_CTRL + KEY_ALT + KEY_ DELETE
 Die Aktion *Taste(n) halten (für Dauer der Eingabe-Aktion)* hält die Taste gedrückt, bis die Benutzeraktivität beendet ist.
 Die Aktion *Taste(n) drücken oder auslassen (umschalten)* wechselt bei jeder Benutzeraktivität den Zustand der Taste von gedrückt zu nicht gedrückt und umgekehrt.
 
-Eine Liste aller unterstützten Tastenbezeichner finden Sie im Anhang 
+Eine Liste aller unterstützten Tastenbezeichner finden Sie im [Anhang](https://github.com/asterics/FLipMouse/blob/master/Documentation/UserManual/Markdown/FLipMouseAnwendungsanleitung.md#liste-der-k%C3%BCrzel-f%C3%BCr-keybord-tasten) 
 oder werfen Sie einen Blick auf die [FLipMouse Wiki / Github Seiten](https://github.com/asterics/FLipMouse/wiki/at-api).
 
 <p align="left" width="100%">
@@ -445,17 +445,17 @@ Die nächste Abbildung (Abbildung 25) zeigt eine ähnliche Liste, aber die leuch
 Mit dieser Aktion wird der Konfigurations-Slot mit dem angegebenen Namen aktiviert. Der Name kann im Drop-Down Menü ausgewählt werden. Diese Aktion ist nur relevant, wenn Sie mehrere FLipMouse-Konfigurations-Slots gespeichert haben. Die LEDs zeigen die Slotnummer wie oben beschrieben an.
 
 **Stick-Mittelposition kalibrieren**
-Diese Aktion startet die Kalibrierungssequenz für die mittlere Position des Sticks. Bitte beachten Sie die Beschreibung "*Kalibrierung der Mittelposition des Sticks*".
+Diese Aktion startet die Kalibrierungssequenz für die mittlere Position des Sticks. Bitte beachten Sie die Beschreibung ["*Kalibrierung der Mittelposition des Sticks*"](https://github.com/asterics/FLipMouse/blob/master/Documentation/UserManual/Markdown/FLipMouseAnwendungsanleitung.md#kalibrierung-der-mittelposition-des-sticks).
 
 #### Aktionskategorie: "Infrarot"
 
 **Infrarot-Kommando abspielen / halten**
-Diese Aktion gibt den Infrarot (IR-)Code mit dem angegebenen Befehlsnamen wieder. Die vorhandenen (aufgezeichneten) IR-Befehle können aus dem Dropdown-Menü ausgewählt werden. Die Aktion *Infrarot-Kommando abspielen* sendet den aufgezeichneten Code einmal, während die Aktion *Infrarot-Kommando halten* den Code wiederholt, bis die Benutzeraktivität beendet ist. Weitere Informationen zu Infrarot-Codes finden Sie im Abschnitt "*Infrarot-Code-Aufzeichnung und -Wiedergabe*".
+Diese Aktion gibt den Infrarot (IR-)Code mit dem angegebenen Befehlsnamen wieder. Die vorhandenen (aufgezeichneten) IR-Befehle können aus dem Dropdown-Menü ausgewählt werden. Die Aktion *Infrarot-Kommando abspielen* sendet den aufgezeichneten Code einmal, während die Aktion *Infrarot-Kommando halten* den Code wiederholt, bis die Benutzeraktivität beendet ist. Weitere Informationen zu Infrarot-Codes finden Sie im Abschnitt ["*Infrarot-Code-Aufzeichnung und -Wiedergabe*"](https://github.com/asterics/FLipMouse/blob/master/Documentation/UserManual/Markdown/FLipMouseAnwendungsanleitung.md#infrarot-code-aufzeichnung-und--wiedergabe).
 
 #### Aktionskategorie: Makro
 
 **Benutzderdefiniertes Makro**
-Diese Aktion ermöglicht das Ausführen eines sogenannten benutzerdefiniertem Makro, das aus mehreren Einzelaktionen besteht. Damit kann eine gewünschte Abfolge von Aktionen ausgeführt werden, die z.B. aus einer Anzahl von Mausbewegungen, Mausklicks, Texteingaben oder Tastendrücken besteht. Diese Aktion ist mächtig, aber auch etwas komplizierter, da die einzelnen Aktionen in Form von sogenannten AT-Befehlen angegeben werden müssen, die durch Semikolons getrennt sind. Ein Beispiel: Das folgende Befehlsmakro bewegt den Mauszeiger 100 Schritte nach links, 20 Schritte nach oben, wartet dann 100 Millisekunden und führt dann einen linken Mausklick aus: "MX 100; MY -20; WA 100; CL". Eine Liste und detaillierte Erklärung aller unterstützten AT-Befehle finden Sie im Anhang oder auf den [FLipMouse Wiki / Github Seiten](https://github.com/asterics/FLipMouse/wiki/at-api).
+Diese Aktion ermöglicht das Ausführen eines sogenannten benutzerdefiniertem Makro, das aus mehreren Einzelaktionen besteht. Damit kann eine gewünschte Abfolge von Aktionen ausgeführt werden, die z.B. aus einer Anzahl von Mausbewegungen, Mausklicks, Texteingaben oder Tastendrücken besteht. Diese Aktion ist mächtig, aber auch etwas komplizierter, da die einzelnen Aktionen in Form von sogenannten AT-Befehlen angegeben werden müssen, die durch Semikolons getrennt sind. Ein Beispiel: Das folgende Befehlsmakro bewegt den Mauszeiger 100 Schritte nach links, 20 Schritte nach oben, wartet dann 100 Millisekunden und führt dann einen linken Mausklick aus: "MX 100; MY -20; WA 100; CL". Eine Liste und detaillierte Erklärung aller unterstützten AT-Befehle finden Sie im [Anhang](https://github.com/asterics/FLipMouse/blob/master/Documentation/UserManual/Markdown/FLipMouseAnwendungsanleitung.md#liste-der-unterst%C3%BCtzten-makrokommandos) oder auf den [FLipMouse Wiki / Github Seiten](https://github.com/asterics/FLipMouse/wiki/at-api).
 
 ### Tab SLOTS
 
@@ -544,7 +544,7 @@ Das Bluetooth-Modul wird auf den internen 10-poligen Anschluss der FLipMouse ges
 #### Verbinden mit einem Bluetooth-Host-Gerät (Pairing)
 
 Das Host-Gerät kann z. B. ein Mobiltelefon mit Android- oder iOS-Betriebssystem sein. 
-Die FLipMouse kann nur dann mit einem Host-Gerät verbunden werden, wenn derzeit kein Gerät verbunden ist und somit der Pairing-Modus aktiv ist. Um ein Gerät zu verbinden, öffnen Sie die Bluetooth-Einstellungen Ihres Android- oder iOS-Geräts, aktivieren Sie BT, wählen Sie *neues BT-Gerät hinzufügen* und wählen Sie die FLipMouse aus der Liste der verfügbaren Geräte aus. Öffnen Sie dann die Registerkarte ALLGEMEIN und aktivieren Sie den Bluetooth-Betrieb für die gewünschten Slots (siehe Abschnitt *Allgemeine Einstellungen*).
+Die FLipMouse kann nur dann mit einem Host-Gerät verbunden werden, wenn derzeit kein Gerät verbunden ist und somit der Pairing-Modus aktiv ist. Um ein Gerät zu verbinden, öffnen Sie die Bluetooth-Einstellungen Ihres Android- oder iOS-Geräts, aktivieren Sie BT, wählen Sie *neues BT-Gerät hinzufügen* und wählen Sie die FLipMouse aus der Liste der verfügbaren Geräte aus. Öffnen Sie dann die Registerkarte ALLGEMEIN und aktivieren Sie den Bluetooth-Betrieb für die gewünschten Slots (siehe Abschnitt [*Allgemeine Einstellungen*](https://github.com/asterics/FLipMouse/blob/master/Documentation/UserManual/Markdown/FLipMouseAnwendungsanleitung.md#allgemeine-einstellungen-tab-allgemein).
 
 Hinweis: Wenn sich das Bluetooth-Modul im Paring-Modus befindet, blinkt die LED des Moduls schnell (ca. zweimal pro Sekunde). Wenn eine Verbindung hergestellt ist, blinkt die LED langsam (ca. einmal alle 2 Sekunden). Die LED ist nur zu sehen, wenn das Gehäuse der FLipMouse geöffnet ist.
 
@@ -597,7 +597,7 @@ Wenn das Mundstück mit den Lippen betätigt wird, ist es wichtig, die folgenden
 1. Ein Mundstück darf nur von einer Person benutzt werden
 2. Die Filterspitze muss ausgetauscht werden, wenn sich Speichel oder Schmutz gebildet hat
 3. Das Mundstück muss gereinigt werden, wenn sich Speichel oder Schmutz gebildet hat
-   (siehe Kapitel "Reinigung und Wartung")
+   (siehe Kapitel "[Hinweise zur Reinigung und Wartung](https://github.com/asterics/FLipMouse/blob/master/Documentation/UserManual/Markdown/FLipMouseAnwendungsanleitung.md#hinweise-zur-reinigung-und-wartung)")
 
 Bei mangelnder Hygiene des Mundstücks, insbesondere wenn das Mundstück von mehreren Personen benutzt wird, ist es möglich, dass
 

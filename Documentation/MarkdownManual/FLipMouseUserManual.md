@@ -166,7 +166,7 @@ The FLipMouse should work with any operating system which supports USB HID (Mous
 
 ## Using the FLipMouse via Bluetooth – for example with an Android or iOS device (iPhone or iPad)
 
-The Bluetooth – Add-On-module for the FLipMouse allows wireless mouse/keyboard control of computers, tablets and smart phones. Furthermore, iPhones or iPads can be used via VoiceOver & assistive switch support. For more inforamtion see chapter *Using the Bluetooth Module*.
+The Bluetooth – Add-On-module for the FLipMouse allows wireless mouse/keyboard control of computers, tablets and smart phones. Furthermore, iPhones or iPads can be used via VoiceOver & assistive switch support. For more inforamtion see chapter [*Using the Bluetooth Module*](https://github.com/asterics/FLipMouse/blob/master/Documentation/UserManual/Markdown/FLipMouseUserManual.md#using-the-bluetooth-module).
 
 # The FLipMouse Configuration Manager
 
@@ -207,7 +207,7 @@ Using the STICK-CONFIG tab of the FLipMouse Configuration Manager, you will be a
 
 #### Define stick usage (“Use stick for”)
 
-On the top of the STICK-CONFIG tab, the primary function of the stick can be chosen. By default, the stick is creating mouse cursor movements. However, the stick can also be used for alternative actions (such as pressing the key ‘A’ when the stick is pushed up), which can be specified in the ACTIONS tab (see section *Assignment of different actions*). Furthermore, the stick can emulate a real joystick or gamepad  (see *section Using the stick for Joystick movement*). 
+On the top of the STICK-CONFIG tab, the primary function of the stick can be chosen. By default, the stick is creating mouse cursor movements. However, the stick can also be used for alternative actions (such as pressing the key ‘A’ when the stick is pushed up), which can be specified in the ACTIONS tab (see section [*Assignment of different actions*](https://github.com/asterics/FLipMouse/blob/master/Documentation/UserManual/Markdown/FLipMouseUserManual.md#assignment-of-different-actions-tab-actions). Furthermore, the stick can emulate a real joystick or gamepad  (see section [*Using the stick for Joystick movement*](https://github.com/asterics/FLipMouse/blob/master/Documentation/UserManual/Markdown/FLipMouseUserManual.md#using-the-stick-for-joystick-movement). 
 
 #### Calibration of the stick’s middle position
 
@@ -293,7 +293,7 @@ The joystick controller provided by the FLipMouse is called *“Serial+Keyboard+
 
 *Figure 19: Joy.cpl Properties*
 
-Desired joystick button activities can be created using sip/puff or other interaction events by choosing “*Press Joystick Button*” from the action menu as described in the section *Assignment of different actions*.
+Desired joystick button activities can be created using sip/puff or other interaction events by choosing “*Press Joystick Button*” from the action menu as described in the section [*Assignment of different actions*](https://github.com/asterics/FLipMouse/blob/master/Documentation/UserManual/Markdown/FLipMouseUserManual.md#assignment-of-different-actions-tab-actions).
 
 ### Sip/Puff Actions and Levels (Tab SIP AND PUFF)
 
@@ -391,7 +391,7 @@ KEY_CTRL + KEY_ALT + KEY_ DELETE
 The *Hold Key* action keeps the key pressed until the user activity ends.
 The *Toggle Key* action changes the key state from pressed to not pressed and vice versa with each user activity.
 
-For a list of all supported key identifiers, see appendix 
+For a list of all supported key identifiers, see [appendix](https://github.com/asterics/FLipMouse/blob/master/Documentation/UserManual/Markdown/FLipMouseUserManual.md#supported-key-identifiers) 
 or have a look at the [FLipMouse Wiki / Github pages](https://github.com/asterics/FLipMouse/wiki/at-api).
 
 <p align="left" width="100%">
@@ -445,17 +445,17 @@ The next figure (Figure 25) shows a similar list but the shining bulbs in the ac
 This action activates the configuration slot with the given name (if it exists). The name can be specified in the text field. This action is only relevant if you have stored multiple FLipMouse configuration slots. The LEDs indicate the slot number as described above.
 
 **Calibrate middle position**
-This action starts the calibration sequence for the middle position of the stick. Please refer to the description “*Calibration of the stick’s middle position*”.
+This action starts the calibration sequence for the middle position of the stick. Please refer to the description [“*Calibration of the stick’s middle position*”](https://github.com/asterics/FLipMouse/blob/master/Documentation/UserManual/Markdown/FLipMouseUserManual.md#calibration-of-the-sticks-middle-position).
 
 #### Action category: Infrared
 
 **Play / Hold / Stop Infrared Command**
-This action replays the infrared (IR-)code with the given command name. The existing (recorded) IR-commands can be selected from the drop-down menu. The *play* action sends the recorded code once, whereas the *hold* action repeats the code until the user activity ends. For more information about infrared codes please refer to section “*Infrared Code Recording and Replay*”.
+This action replays the infrared (IR-)code with the given command name. The existing (recorded) IR-commands can be selected from the drop-down menu. The *play* action sends the recorded code once, whereas the *hold* action repeats the code until the user activity ends. For more information about infrared codes please refer to section [“*Infrared Code Recording and Replay*”](https://github.com/asterics/FLipMouse/blob/master/Documentation/UserManual/Markdown/FLipMouseUserManual.md#infrared-code-recording-and-replay).
 
 #### Action category: Macro
 
 **Execute Command Macro**
-This action allows running a so-called command macro which consists of several individual actions. Thus, a desired sequence of actions can be performed which consists for example of a number of mouse moves, mouse clicks, text inputs or key presses. This action is powerful, but also a bit more complicated because the individual actions must be specified in form of so-called AT-commands which are separated by semicolons. For example: the following command macro will move the mouse cursor 100 steps to the left, 20 steps up, then wait 100 milliseconds and then perform a left mouse click: “MX 100; MY -20; WA 100; CL”. For a list and detailed explanation of all supported AT-commands, see appendix or have a look at the [FLipMouse Wiki / Github pages](https://github.com/asterics/FLipMouse/wiki/at-api).
+This action allows running a so-called command macro which consists of several individual actions. Thus, a desired sequence of actions can be performed which consists for example of a number of mouse moves, mouse clicks, text inputs or key presses. This action is powerful, but also a bit more complicated because the individual actions must be specified in form of so-called AT-commands which are separated by semicolons. For example: the following command macro will move the mouse cursor 100 steps to the left, 20 steps up, then wait 100 milliseconds and then perform a left mouse click: “MX 100; MY -20; WA 100; CL”. For a list and detailed explanation of all supported AT-commands see [appendix](https://github.com/asterics/FLipMouse/blob/master/Documentation/UserManual/Markdown/FLipMouseUserManual.md#supported-macro-commands) or have a look at the [FLipMouse Wiki / Github pages](https://github.com/asterics/FLipMouse/wiki/at-api).
 
 ### Tab SLOTS
 
@@ -545,7 +545,7 @@ The Bluetooth module is plugged onto the internal 10-pin connector of the FLipMo
 #### Connecting with a Bluetooth host device (pairing)
 
 The host device could be a cell phone with Android or iOS operating system, for example. 
-The FLipMouse can be connected to a host device only if no device is currently connected, and thus pairing mode is active. In order to connect a device, open the Bluetooth settings of your Android or iOS device, enable BT, choose *add a new BT-device* and select the FLipMouse from the list of availabe devices.  Then, open the GENERAL tab and activate Bluetooth operation for the desired slots (see section General Settings).
+The FLipMouse can be connected to a host device only if no device is currently connected, and thus pairing mode is active. In order to connect a device, open the Bluetooth settings of your Android or iOS device, enable BT, choose *add a new BT-device* and select the FLipMouse from the list of availabe devices.  Then, open the GENERAL tab and activate Bluetooth operation for the desired slots (see section [*General Settings*](https://github.com/asterics/FLipMouse/blob/master/Documentation/UserManual/Markdown/FLipMouseUserManual.md#general-settings-tab-general).
 
 Note:  If the Bluetooth module is in paring mode, the module's LED flashed fast (approx twice per second). If a connection is established, the LED flashes slowly (approx. once every 2 seconds). The LED can only be seen if the enclosure of the FLipMouse is opened.
 
@@ -598,7 +598,7 @@ If the mouthpiece is actuated with the lips, it is important to respect the foll
 1. One mouthpiece must be used exclusively by one person
 2. The filter tip must be replaced whenever saliva or dirt have formed
 3. The mouthpiece must be cleaned whenever saliva or dirt have formed
-   (see chapter “Cleaning and Maintenance”)
+   (see chapter “[Instructions for cleaning and maintenance](https://github.com/asterics/FLipMouse/blob/master/Documentation/UserManual/Markdown/FLipMouseUserManual.md#instructions-for-cleaning-and-maintenance)”)
 
 With the lack of hygiene concerning the mouthpiece, especially when the mouthpiece is used by more than one person, it is possible that 
 

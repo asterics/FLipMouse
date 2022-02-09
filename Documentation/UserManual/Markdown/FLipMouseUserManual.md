@@ -1,12 +1,14 @@
 # FLipMouse - Finger & Lip Mouse
 
-#### User Manual v3.1, AsTeRICS Foundation
+**User Manual v3.1, AsTeRICS Foundation**
+
+
 
 ![FLipMouseLogo](./Bilder/flipmouseLogo.svg)
 
-# 
+**Table of Contents**
 
-![Logos](./Bilder/logo.svg)
+[TOC]
 
 ____
 
@@ -20,16 +22,14 @@ Furthermore, this manual covers important guidelines for using the FLipMouse, in
 
 All design files for the electronics and the 3d-printed enclosure - as well as the software source code - are available as open source and are distributed via the AsTeRICS Foundation website and via GitHub. The construction kit for the FLipMouse can be purchased from [Hackerspaceshop.com](https://hackerspaceshop.com/collections/flipmouse). Detailed instructions are provided in the [FlipMouse construction manual](https://github.com/asterics/FLipMouse/blob/master/ConstructionKit/ConstructionManual.pdf). Have fun building and using your FLipMouse!
 
-
-
 The AsTeRICS Foundation
-
 
 [www.asterics-foundation.org](https://asterics-foundation.org/)
 
-<p align="center" width="100%">
-    <img width="33%" src="./Bilder/flip1.svg" alt="Flip, the vagabound grasshopper cartoon character">
-</p>
+
+
+
+
 
 # Hardware overview
 
@@ -103,6 +103,8 @@ Two 3,5mm Jack Plug sockets marked (B2) and (B3) allow the connection of externa
 
 Different alternatives for the FLipMouse housing are available, e.g. an acrylic version. The recommended version is the 3d printed enclosure, which is also documented in the construction manual.  The 3D-design files can be downloaded from the [Github repository](https://github.com/asterics/FLipMouse/tree/master/Hardware/case-design/3D_printer). Please note that the electronic components and PCB are the same as for the former acrylic housing variant – and the devices offer exactly the same functionality.
 
+
+
 ## Bluetooth – Add-On Module
 
 The optional Bluetooth Add-On module allows connection of the FLipMouse as a Bluetooth mouse/keyboard to various mobile devices (smartphones, tablets, IOs devices). If this module is not contained in the DIY-Kit, it can be ordered individually from the AsTeRICS Foundation or built from the hardware design files available on Github (parts must be ordered individually). If you are interested in this feature, have a look at the [FLipMouse Wiki](https://github.com/asterics/FLipMouse/wiki) where construction of the Add-On module is explained.
@@ -112,6 +114,10 @@ The optional Bluetooth Add-On module allows connection of the FLipMouse as a Blu
 </p>
 
 *Figure 5*: Bluetooth Add-on Module
+
+
+
+
 
 # Instructions for proper mounting and use
 
@@ -158,7 +164,7 @@ When connecting the FLipMouse via the provided USB-micro cable, do not touch the
 
 **Please note** that every time you apply power to the FLipMouse device (respectively when you plug it in) the **zero-calibration is performed which is indicated by blinking all 3 LEDs**. It is important that you do not touch the joystick / mouthpiece until the LEDs stopped blinking. 
 
-## Using the FLipMouse with Smart Phones or Tablets that provide USB-OTG
+#### Using the FLipMouse with Smart Phones or Tablets that provide USB-OTG
 
 The FLipMouse should work with any operating system which supports USB HID (Mouse/Keyboard/Joystick) devices, such as Windows, Linux or MacOS. Several Android devices provide an USB port with USB-OTG (“on-the-go”) functionality. If your device supports “OTG” you can attach the FLipMouse using an USB-OTG-adapter (see picture below) and it should work as a normal mouse (you will get a mouse cursor) or keyboard. You can test if your Android phone or tablet features the USB-OTG function with the “OTG checker” app.
 
@@ -166,16 +172,17 @@ The FLipMouse should work with any operating system which supports USB HID (Mous
 
 *Figure 12*: Using the FLipMouse with the Smart Phone
 
-## Using the FLipMouse via Bluetooth – for example with an Android or iOS device (iPhone or iPad)
+#### Using the FLipMouse via Bluetooth
 
 The Bluetooth – Add-On-module for the FLipMouse allows wireless mouse/keyboard control of computers, tablets and smart phones. Furthermore, iPhones or iPads can be used via VoiceOver & assistive switch support. For more inforamtion see chapter [*Using the Bluetooth Module*](https://github.com/asterics/FLipMouse/blob/master/Documentation/UserManual/Markdown/FLipMouseUserManual.md#using-the-bluetooth-module).
+
+
 
 # The FLipMouse Configuration Manager
 
 The [FLipMouse Configuration Manager](flipmouse.asterics.eu) offers a Graphical User Interface (GUI) to change and store settings of the FLipMouse device so that all features and functions can be adapted to personal preferences and needs. **Currently, the Google Chrome browser (or a Chromium-based browser) must be used.** The Configuration Manager is accessible by entering the following website: **flipmouse.asterics.eu**. The FLipMouse Configuration Manager sends and receives information from/to the FLipMouse. This information transfer occurs through a communication port (COM port). 
-Please note that the old FLipMouse Settings Manager was a configuration system that was not web-based and was only available for Windows. If you still want to use it, the **Manual of the FLipMouse Settings Manager** can be found [here](https://github.com/asterics/FLipMouse/blob/master/UserManualFlipMouse.pdf).
 
-The following figure shows the welcome page of the FLipmouse Configuration Manager. 
+The following figure shows the welcome page of the FLipmouse Configuration Manager: 
 
 <p align="left" width="100%">
     <img width="70%" src="./Bilder/fig1.PNG">
@@ -459,7 +466,7 @@ This action replays the infrared (IR-)code with the given command name. The exis
 **Execute Command Macro**
 This action allows running a so-called command macro which consists of several individual actions. Thus, a desired sequence of actions can be performed which consists for example of a number of mouse moves, mouse clicks, text inputs or key presses. This action is powerful, but also a bit more complicated because the individual actions must be specified in form of so-called AT-commands which are separated by semicolons. For example: the following command macro will move the mouse cursor 100 steps to the left, 20 steps up, then wait 100 milliseconds and then perform a left mouse click: “MX 100; MY -20; WA 100; CL”. For a list and detailed explanation of all supported AT-commands see [appendix](https://github.com/asterics/FLipMouse/blob/master/Documentation/UserManual/Markdown/FLipMouseUserManual.md#supported-macro-commands) or have a look at the [FLipMouse Wiki / Github pages](https://github.com/asterics/FLipMouse/wiki/at-api).
 
-### Tab SLOTS
+### Using Configuration Slots (Tab SLOTS)
 
 In the SLOTS tab you can create new slots, delete existing slots, download a single or all slots and upload a file containing a complete configuration with multiple slots. After starting the FLipMouse Configuration Manager, only one default slot named “mouse” exists. When you create a slot using the “CREATE SLOT” button, **the current slot is copied and appended** after the last existing slot. Before creating the new slot, assign a name in the corresponding field (“insert name for new slot”) that will help you remember the slot’s purpose:
 
@@ -530,6 +537,8 @@ In this window you can also manage IR commands. Next to *New IR Command*, you ca
 
 *Figure 30: Infrared Recording and Replay Configuration Manager*
 
+
+
 # Using the Bluetooth module
 
 The optional Bluetooth Add-on module allows connection and control of cell phones, tablets and computers with Bluetooth capability. If the FLipMouse is attached to a PC or laptop via USB, users may switch to Bluetooth operation and back to USB on demand. The Bluetooth module is available separately from the AsTeRICS Foundation or included in the appropriate version of the FLipMouse kit. 
@@ -551,6 +560,8 @@ The FLipMouse can be connected to a host device only if no device is currently c
 
 Note:  If the Bluetooth module is in paring mode, the module's LED flashed fast (approx twice per second). If a connection is established, the LED flashes slowly (approx. once every 2 seconds). The LED can only be seen if the enclosure of the FLipMouse is opened.
 
+
+
 # Mod your Mouthpiece?
 
 Several users reported that they would prefer a different shape of the mouthpiece. It is of course possible to apply your own modifications and extensions which feel comfortable to you. Here we want to give some suggestions using affordable, disposable cigarette holders. The link between the *Hygienic Stick* and the cigarette holder is established with a small brass tube. It is also possible to cut the cigarette holder and insert it into the *Hygienic Stick* so that a tight fit is ensured.
@@ -561,6 +572,8 @@ Several users reported that they would prefer a different shape of the mouthpiec
 *Figure 32: Modified shape of the mouthpiece*
 
 Regardless of your desired mouthpiece modifications: Always take care for a hygienic operation and apply the cleaning procedures as described in the following chapter!
+
+
 
 # Instructions for cleaning and maintenance
 
@@ -609,6 +622,8 @@ With the lack of hygiene concerning the mouthpiece, especially when the mouthpie
 3. dirt formats in the mouthpiece, which is dangerous to health
 
 With wrong positioning of the FLipMouse there is the risk of feeling uncomfortable after longer periods of use, and it is possible to get muscle cramps or muscle pain due to unusual head positioning – pay attention to a convenient position and schedule pauses if you work for longer time periods!
+
+
 
 # Updating the Firmware via Arduino IDE
 
@@ -669,9 +684,13 @@ If you want to adapt the software (firmware) of the FLipMouse, follow these step
    
    *Figure 38: Adapting the Firmware*
 
+
+
 # Further instructions and troubleshooting
 
 For further instruction and troubleshooting please refer to the [GitHub Wiki of the FLipMouse project](https://github.com/asterics/FLipMouse/wiki). 
+
+
 
 # Appendix: Macro commands and Key codes
 
@@ -740,6 +759,8 @@ Please note that certain commands for adjusting FLipMouse settings are not shown
 | **Keys for alternative functions**                                                                                                                                                                                                                                                                 |
 | KEY_SHIFT  KEY_CTRL  KEY_ALT  KEY_RIGHT_ALT  KEY_GUI  KEY_RIGHT_GUI                                                                                                                                                                                                                                |
 
+
+
 # Contact Information
 
 University of Applied Sciences Technikum Wien
@@ -758,11 +779,17 @@ Webpage: [www.asterics-foundation.org](http://www.asterics-foundation.org)
 
 Email: <office@asterics-foundation.org>
 
+
+
+
+
 # Disclaimer
 
 The University of Applied Sciences Technikum Wien and the AsTeRICS Foundation do not assume any warranty and liability for the functionality of the described devices, software and the correctness of the documents handed over.
 
 Additionally, the UAS TW is not liable for any damages to health due to the use of described hardware or software. The provided software applications and hardware modules are to be used at own risk!
+
+
 
 # Acknowledgement
 
@@ -771,6 +798,5 @@ Municipal department of Economic Affairs, Labor and Statistics (MA 23),
 in course of the projects AsTeRICS Academy (14-02), ToRaDes (18-04) 
 and Wissensdrehscheibe für Barrierefreie Technologien (26-02) 
 
-<p align="left" width="100%">
-    <img width="20%" src="./Bilder/fig40.jpg">
-</p>
+![Logos](./Bilder/logo.svg)
+

@@ -46,8 +46,8 @@ The configuration settings of the FLipMouse can be changed via the **FlipmouseGU
 Using the settings manager, you can assign different actions to all hardware inputs of the FLipMouse (mouthpiece, sip and puff, external buttons,...).
 
 More Information can be found in the user manual: 
-[user manual (english)](https://github.com/asterics/FLipMouse/blob/master/Documentation/UserManual/FLipMouseUserManual.pdf)
-[user manual (german)](https://github.com/asterics/FLipMouse/blob/master/Documentation/UserManual/FLipMouseAnwendungsanleitung.pdf)
+[user manual (english)](https://github.com/asterics/FLipMouse/blob/master/Documentation/UserManual/Markdown/FLipMouseUserManual.md)
+[user manual (german)](https://github.com/asterics/FLipMouse/blob/master/Documentation/UserManual/Markdown/FLipMouseAnwendungsanleitung.md)
 
 
 # Links to related projects
@@ -102,3 +102,4 @@ Please visit the [wiki](https://github.com/asterics/FLipMouse/wiki).
 
 
 ![Front view of 3 FLipmice in different colors (black, pink and transparent orange)](/img/FLipmouse1.jpg)
+

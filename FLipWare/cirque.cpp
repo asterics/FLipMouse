@@ -18,6 +18,7 @@
 #include <Arduino.h>
 #include "FlipWare.h"
 #include "cirque.h"
+#include "buttons.h"
 #include "display.h"
 
 // Hardware pin-number labels
@@ -52,7 +53,7 @@
 #define ROWS_Y ((PINNACLE_YMAX + 1) / ZONESCALE)
 #define COLS_X ((PINNACLE_XMAX + 1) / ZONESCALE)
 
-// ADC-attenuation settings (held in BIT_7 and BIT_6)
+// ADC-attenuation slotSettings (held in BIT_7 and BIT_6)
 // 1X = most sensitive, 4X = least sensitive
 #define ADC_ATTENUATE_1X   0x00
 #define ADC_ATTENUATE_2X   0x40
@@ -316,7 +317,7 @@ void Pinnacle_CheckValidTouch(absData_t * touchData)
   // touchData->hovering = !(touchData->zValue > ZVALUE_MAP[zone_y][zone_x]);
   // touchData->hovering = !(touchData->zValue > 10);
 
-  if (  touchData->zValue <=  ZVALUE_MAP[zone_y][zone_x] * 500 / (50 + settings.rv) ) // apply trackpad sensitivity setting
+  if (  touchData->zValue <=  ZVALUE_MAP[zone_y][zone_x] * 500 / (50 + slotSettings.rv) ) // apply trackpad sensitivity setting
     touchData->hovering = true;
   else  touchData->hovering = false;
 
@@ -470,7 +471,7 @@ int updateCirquePad(int *x, int * y) {
           // Serial.print("ZP:");Serial.print(x0);Serial.print(",");Serial.println(y0);
         }
         if (lastState == CIRQUE_STATE_VALID) {
-          switch (settings.ro) {
+          switch (slotSettings.ro) {
             case 0:   *x = padXraw - x0;  *y = padYraw - y0; break;
             case 90:  *x = y0 - padYraw;  *y = padXraw - x0; break;
             case 270: *x = padYraw - y0;  *y = x0 - padXraw; break;
@@ -481,10 +482,10 @@ int updateCirquePad(int *x, int * y) {
             dragDistanceX+=*x;
             dragDistanceY+=*y;
             if ((dragMode==DRAG_NORMAL) && (millis()-dragBeginTimestamp>DRAG_ACTION_TIMELIMIT)) {
-              if ((dragDistanceX > DRAG_ACTION_DISTANCE) && (*x==0)) *x=DRAG_AUTOMOVE_SPEED;
-              else if ((dragDistanceX < -DRAG_ACTION_DISTANCE) && (*x==0)) *x=-DRAG_AUTOMOVE_SPEED;
-              if ((dragDistanceY > DRAG_ACTION_DISTANCE) && (*y==0)) *y=DRAG_AUTOMOVE_SPEED;
-              else if ((dragDistanceY < -DRAG_ACTION_DISTANCE) && (*y==0)) *y=-DRAG_AUTOMOVE_SPEED;
+              if ((dragDistanceX > DRAG_AUTOMOVE_DISTANCE) && (*x==0)) *x=DRAG_AUTOMOVE_SPEED;
+              else if ((dragDistanceX < -DRAG_AUTOMOVE_DISTANCE) && (*x==0)) *x=-DRAG_AUTOMOVE_SPEED;
+              if ((dragDistanceY > DRAG_AUTOMOVE_DISTANCE) && (*y==0)) *y=DRAG_AUTOMOVE_SPEED;
+              else if ((dragDistanceY < -DRAG_AUTOMOVE_DISTANCE) && (*y==0)) *y=-DRAG_AUTOMOVE_SPEED;
             }
           }
         }
@@ -500,24 +501,36 @@ int updateCirquePad(int *x, int * y) {
 }
 
 void endDrag() {
+  // Serial.println("release drag");
   dragging = 0;
   dragDistanceX=dragDistanceY=0;
-  mouseRelease(MOUSE_LEFT);
+  handleRelease(TAP_BUTTON);
 }
 
 uint8_t findDragAction() {
-   int mx=abs(dragDistanceX), my=abs(dragDistanceY);
+  if (sensorData.force<DRAG_ACTION_FORCE) {
+    // Serial.print("drag too small for action: "); Serial.println(sensorData.force);
+    return(0); 
+  }
+  switch (sensorData.dir) {   // sticky direction keys
+    case DIR_E: return(DRAG_ACTION_LEFT); break;
+    case DIR_N: return(DRAG_ACTION_UP); break;
+    case DIR_W: return(DRAG_ACTION_RIGHT); break;
+    case DIR_S: return(DRAG_ACTION_DOWN); break;
+  } 
+  return(0);
 
-   if ( (mx > my) && (mx > DRAG_ACTION_DISTANCE))
-     return((dragDistanceX>0) ? DRAG_ACTION_RIGHT  : DRAG_ACTION_LEFT);
-   if ( my > DRAG_ACTION_DISTANCE)
-     return((dragDistanceY>0) ? DRAG_ACTION_DOWN  : DRAG_ACTION_UP);
-
-   return(0);
+  /*
+     int mx=abs(dragDistanceX), my=abs(dragDistanceY);
+     if ( (mx > my) && (mx > DRAG_ACTION_DISTANCE))
+       return((dragDistanceX>0) ? DRAG_ACTION_RIGHT : DRAG_ACTION_LEFT);
+     if ( my > DRAG_ACTION_DISTANCE)
+       return((dragDistanceY>0) ? DRAG_ACTION_DOWN : DRAG_ACTION_UP);
+  */
 }
 
 void resetDrag() {
-    //Serial.print("reset drag: ");
+    //Serial.print("reset drag movement: ");
     //Serial.print(-dragRecordingX);
     //Serial.print(",");
     //Serial.println(-dragRecordingY);
@@ -526,12 +539,21 @@ void resetDrag() {
     dragRecordingX=dragRecordingY=0;
 }
 
-uint8_t handleTapClicks(int state, int tapTime) {
+void performDragAction(uint8_t d) 
+{
+  switch(d) {
+      case DRAG_ACTION_UP: handlePress(DRAG_UP_BUTTON); handleRelease(DRAG_UP_BUTTON); break;
+      case DRAG_ACTION_DOWN: handlePress(DRAG_DOWN_BUTTON); handleRelease(DRAG_DOWN_BUTTON); break;
+      case DRAG_ACTION_LEFT: handlePress(DRAG_LEFT_BUTTON); handleRelease(DRAG_LEFT_BUTTON); break;
+      case DRAG_ACTION_RIGHT: handlePress(DRAG_RIGHT_BUTTON); handleRelease(DRAG_RIGHT_BUTTON); break;    
+  }
+}
+
+void handleTapClicks(int state, int tapTime) {
   static uint32_t liftTimeStamp = 0;
   static uint32_t setTimeStamp = 0;
   static uint8_t lastState = 0;
   static uint32_t tapReleaseTimestamp = 0;
-  static uint32_t requestMouseButtonTimestamp = 0;
   
   switch (state) {
     case   CIRQUE_STATE_HOVERING:
@@ -546,35 +568,29 @@ uint8_t handleTapClicks(int state, int tapTime) {
              uint8_t d = findDragAction();
              
              if (d) { 
-               //Serial.print ("perform drag action:");Serial.println(d); 
+               //Serial.print ("perform drag action:"); Serial.println(d); 
                resetDrag();
                endDrag(); 
-               return(d); 
-             }
-             //else  Serial.println ("drag too small for action");
+               performDragAction(d); 
+             }             
           }
           //else  Serial.println ("drag too slow for action");
         }
         
         if (liftTimeStamp - setTimeStamp < tapTime)  {
-          if (dragging) {     // cancel drag, perform double click instead!
+          if (dragging) {   // cancel drag, perform double tap instead!
             endDrag();
-            //Serial.println("double click");
+            // Serial.println("double tap");
           }
           
-          if ((settings.stickMode== STICKMODE_PAD) || (settings.stickMode== STICKMODE_MOUSE))  {
-             //Serial.println("click request!");
-             resetDrag();
-             mousePress(MOUSE_LEFT);
-             requestMouseButtonTimestamp=millis();          
-          }
-             
+          // Serial.println("perform tap!");
+          resetDrag();
+          handlePress(TAP_BUTTON);   // create tap action!
           tapReleaseTimestamp = millis();
         }
       }
       if (dragging) {
         endDrag();
-        //Serial.println("drag released!");
       }
       dragRecordingState=DRAG_RECORDING_IDLE;
       break;
@@ -593,32 +609,20 @@ uint8_t handleTapClicks(int state, int tapTime) {
           tapReleaseTimestamp = 0;
           dragging = 1;
           dragBeginTimestamp = millis();
-          if (dragMode!=DRAG_NORMAL) mouseRelease(MOUSE_LEFT);          
+          if (dragMode!=DRAG_NORMAL) handleRelease(TAP_BUTTON);
         }
       }
       break;
   }
   if (state) lastState = state;
 
-/*
-
-  if (requestMouseButtonTimestamp) {
-    if ((millis()-requestMouseButtonTimestamp) > 300) {
-      Serial.println("perform click!");
-      requestMouseButtonTimestamp=0; 
-      mousePress(MOUSE_LEFT);
-    }
-  }        
-*/
-
   if (tapReleaseTimestamp) {
     if (millis() - tapReleaseTimestamp > tapTime) {
       tapReleaseTimestamp = 0;
-      mouseRelease(MOUSE_LEFT);
-      // Serial.println("release!");
+      // Serial.println("release tap");
+      handleRelease(TAP_BUTTON);
     }
   }
-  return(0);
 }
 
 

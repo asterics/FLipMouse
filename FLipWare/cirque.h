@@ -26,20 +26,22 @@
 #define DRAG_DISABLED    0
 #define DRAG_NORMAL      1
 
+#define DRAG_ACTION_TIMELIMIT 500
+#define DRAG_ACTION_FORCE 20
+
 #define DRAG_ACTION_UP    1
 #define DRAG_ACTION_DOWN  2
 #define DRAG_ACTION_LEFT  3
 #define DRAG_ACTION_RIGHT 4
 
-#define DRAG_ACTION_DISTANCE 30
-#define DRAG_AUTOMOVE_SPEED 3
-#define DRAG_ACTION_TIMELIMIT 500
+#define DRAG_AUTOMOVE_DISTANCE 20
+#define DRAG_AUTOMOVE_SPEED 1
 
 extern uint8_t cirqueInstalled;
 
 int updateCirquePad(int * x, int * y);
 int initCirque();
 int useAbsolutePadValues();
-uint8_t handleTapClicks(int state,int tapTime);
+void handleTapClicks(int state,int tapTime);
 
 #endif

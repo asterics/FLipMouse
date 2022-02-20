@@ -89,6 +89,17 @@ void release_all_keys()
 }
 
 
+void release_all()  // releases all previously pressed keys and stop mouse actions
+{
+  release_all_keys();
+  mouseRelease(MOUSE_LEFT);
+  mouseRelease(MOUSE_MIDDLE);
+  mouseRelease(MOUSE_RIGHT);
+  sensorData.autoMoveX = 0;
+  sensorData.autoMoveY = 0;
+}
+
+
 void add_to_keybuffer(int key)
 {
   for (int i = 0; i < KEYPRESS_BUFFERSIZE; i++)

@@ -31,6 +31,7 @@
 
 
 #include "FlipWare.h"
+#include "gpio.h"
 #include "cim.h"
 #include <avr/io.h>
 #include <stdlib.h>
@@ -38,11 +39,6 @@
 
 #define ARE_MINIMAL_VERSION 1
 
-extern int pressure;
-extern int down;
-extern int left;
-extern int up;
-extern int right;
 extern  int8_t  led_map[];              //  maps leds pins
 
 //const uint32_t LIPMOUSE_CIM_UNIQUE_NUMBER = 0x12345678;
@@ -245,15 +241,15 @@ void generate_ADCFrame()
 {
   uint16_t adcval;
 
-  adcval = left - right;
+  adcval = sensorData.left - sensorData.right;
   CIM_frame.data[0] = adcval & 0xff;
   CIM_frame.data[1] = adcval >> 8;
 
-  adcval = up - down;
+  adcval = sensorData.up - sensorData.down;
   CIM_frame.data[2] = adcval & 0xff;
   CIM_frame.data[3] = adcval >> 8;
 
-  adcval = pressure;
+  adcval = sensorData.pressure;
   CIM_frame.data[4] = adcval & 0xff;
   CIM_frame.data[5] = adcval >> 8;
 

@@ -15,28 +15,8 @@
 */
 
 #include "FlipWare.h"
-
-//Time until the record command will be canceled (in milliseconds)
-#define IR_USER_TIMEOUT_MS 10000
-
-// ir code repeat gap (in microseconds)
-#define IR_REPEAT_GAP 10000
-
-// Maximum count of uint16_t edges for one IR-command
-#define IR_EDGE_REC_MAX 250
-
-// minimum count of signal edges which are necessary to accept a command
-#define IR_EDGE_REC_MIN 5
-
-// name of the idle code command (played after other ir commands if it exists)
-#define IDLESEQUENCE_NAME "idle"
-#define IDLESEQUENCE_REPEAT 1
-
-// maximum time interval which can be stored in high precision (microseconds) format
-#define MAX_HIGHPRECISION_DURATION 64000
-
-extern uint8_t IR_SENSOR_PIN;
-extern uint8_t IR_LED_PIN;
+#include "infrared.h"
+#include "tone.h"
 
 uint32_t edge_timeout = 10000UL;  // timeout for IR code edge length in microseconds
 uint32_t state_time;
@@ -55,6 +35,16 @@ IntervalTimer playTimer;
 
 void start_IR_command_playback(char * name);
 
+/**
+   Initialize GPIO pin for IR receive/transmit,
+   Set Carrier Frequency for PWM
+ * */
+void initIR() {
+  pinMode(IR_SENSOR_PIN, INPUT);
+  analogWriteFrequency(IR_LED_PIN, 38000);  // TBD: flexible carrier frequency for IR, not only 38kHz !
+  pinMode(IR_LED_PIN, OUTPUT);
+  digitalWrite(IR_LED_PIN, LOW);
+}
 
 /**
    Record an infrared remote command with a given name.

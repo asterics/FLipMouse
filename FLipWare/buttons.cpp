@@ -16,22 +16,25 @@
 */
 
 #include "FlipWare.h"        //  FABI command definitions
+#include "infrared.h"
+#include "keys.h"
 
 struct slotButtonSettings buttons [NUMBER_OF_BUTTONS];   // array for all buttons - type definition see FlipWare.h
 char * buttonKeystrings[NUMBER_OF_BUTTONS];              // pointers to keystring parameters
 char keystringBuffer[MAX_KEYSTRINGBUFFER_LEN]={0};       // storage for keystring parameters for all buttons
 struct buttonDebouncerType buttonDebouncers [NUMBER_OF_BUTTONS];   // array for all buttonsDebouncers - type definition see fabi.h
+uint32_t buttonStates = 0;  // current button states for reporting raw values (AT SR)
 
 void initButtonKeystrings()
 {
-  settings.keystringBufferLen=0;
+  slotSettings.keystringBufferLen=0;
   for (int i=0;i<NUMBER_OF_BUTTONS;i++) {
-    buttonKeystrings[i]=keystringBuffer + settings.keystringBufferLen;
-    while (keystringBuffer[settings.keystringBufferLen++]) ; 
+    buttonKeystrings[i]=keystringBuffer + slotSettings.keystringBufferLen;
+    while (keystringBuffer[slotSettings.keystringBufferLen++]) ; 
   }
 #ifdef DEBUG_OUTPUT_FULL
   Serial.print("Init ButtonKeystrings, bufferlen ="); 
-  Serial.println(settings.keystringBufferLen);
+  Serial.println(slotSettings.keystringBufferLen);
 #endif
 }
 
@@ -65,10 +68,10 @@ uint16_t setButtonKeystring(uint8_t buttonIndex, char * newKeystring)
   int oldKeyStringLen = strlen (keystringAddress);
   char * sourceAddress = keystringAddress + oldKeyStringLen +1;
   
-  if (settings.keystringBufferLen - oldKeyStringLen + strlen(newKeystring) >= MAX_KEYSTRINGBUFFER_LEN - 1) 
+  if (slotSettings.keystringBufferLen - oldKeyStringLen + strlen(newKeystring) >= MAX_KEYSTRINGBUFFER_LEN - 1) 
     return (0);   // new keystring does not fit into buffer !
 
-  uint16_t bytesToMove = keystringBuffer + settings.keystringBufferLen - sourceAddress;
+  uint16_t bytesToMove = keystringBuffer + slotSettings.keystringBufferLen - sourceAddress;
   int delta = strlen(newKeystring) - oldKeyStringLen;  // if positive: expand keystringBuffer!
   char * targetAddress = sourceAddress + delta;
   if (delta) {
@@ -77,13 +80,13 @@ uint16_t setButtonKeystring(uint8_t buttonIndex, char * newKeystring)
     
   strcpy (keystringAddress, newKeystring);  // store the new keystring!
   buttonKeystrings[buttonIndex] = keystringAddress;  // remember it's address
-  settings.keystringBufferLen += delta;  // update buffer length
+  slotSettings.keystringBufferLen += delta;  // update buffer length
   
 #ifdef DEBUG_OUTPUT_FULL
   printKeystrings();
-  Serial.print("bytes left:");Serial.println(MAX_KEYSTRINGBUFFER_LEN-settings.keystringBufferLen);
+  Serial.print("bytes left:");Serial.println(MAX_KEYSTRINGBUFFER_LEN-slotSettings.keystringBufferLen);
 #endif
-  return (MAX_KEYSTRINGBUFFER_LEN - settings.keystringBufferLen);
+  return (MAX_KEYSTRINGBUFFER_LEN - slotSettings.keystringBufferLen);
 }
 
 
@@ -129,8 +132,8 @@ void handleRelease (int buttonIndex)    // a button was released: deal with "sti
       mouseRelease(MOUSE_MIDDLE);
       break;
     case CMD_JP: Joystick.button(buttons[buttonIndex].value, 0); break;
-    case CMD_MX: moveX = 0; break;
-    case CMD_MY: moveY = 0; break;
+    case CMD_MX: sensorData.autoMoveX = 0; break;
+    case CMD_MY: sensorData.autoMoveY = 0; break;
     case CMD_KH: releaseKeys(buttonKeystrings[buttonIndex]); break;
     case CMD_IH:
       stop_IR_command();

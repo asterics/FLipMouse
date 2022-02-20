@@ -62,7 +62,7 @@ uint8_t displayInit (uint8_t useWire1) {
 */
 void displayClear(void) {
   oled->clear();
-  if (settings.ro>90)
+  if (slotSettings.ro>90)
     oled->displayRemap(true);
   else oled->displayRemap(false);
   oled->setInvertMode(false);
@@ -96,11 +96,11 @@ void displayUpdate(void) {
   displayClear();
   oled->set2X();
   oled->setCursor(5,1);
-  oled->print(settings.slotName);  
+  oled->print(slotSettings.slotName);  
 
   oled->set1X();
   oled->setCursor(100,0);
-  switch (settings.stickMode) {
+  switch (slotSettings.stickMode) {
     case 0:
     case 6: oled->print("Alt"); break;
     case 1: oled->print("Stk"); break;
@@ -111,7 +111,7 @@ void displayUpdate(void) {
   }
 
   oled->setCursor(100,3);
-  switch (settings.bt) {
+  switch (slotSettings.bt) {
     case 1: oled->print("USB"); break;
     case 2: oled->print("BT"); break;
     case 3: oled->print("both"); break;

@@ -39,14 +39,18 @@
 
 #include "FlipWare.h"
 #include "math.h"
+#include "gpio.h"      
+#include "infrared.h"      
 #include "cirque.h"        // for Cirque Glidepoint trackpad 
 #include "display.h"       // for SSD1306 I2C-Oled display
+#include "modes.h"
+#include "tone.h"
+#include "parser.h"  
+#include "utils.h"         
 
 // Constants and Macro definitions
 
-#define DEFAULT_WAIT_TIME       5   // wait time for one loop interation in milliseconds
-
-// Global variables
+#define UPDATE_INTERVAL     5   // update interval for performing HID actions (in milliseconds)
 
 // Analog input pins (4FSRs + 1 pressure sensor, optional 1 hall sensor for FlipPad configuration)
 #define PRESSURE_SENSOR_PIN A0
@@ -56,19 +60,13 @@
 #define UP_SENSOR_PIN       A7
 #define RIGHT_SENSOR_PIN    A8
 
-//Piezo Pin (for tone generation)
-#define TONE_PIN  9
+// Global variables
 
 char moduleName[]="Flipmouse";   // module name for ID string & BT-name
                                  // changed to "Flippad" if Cirque Glidepoint trackpad available
 
-int8_t  input_map[NUMBER_OF_PHYSICAL_BUTTONS] = {0, 2, 1};  	//  maps physical button pins to button index 0,1,2
-uint8_t IR_SENSOR_PIN = 4;								//  input pin of the TSOP IR receiver
-int8_t  led_map[NUMBER_OF_LEDS] = {5, 16, 17};              	//  maps leds pins
-uint8_t LED_PIN = 13;                                   	//  Led output pin, ATTENTION: if SPI (AUX header) is used, this pin is also SCK!!!
-uint8_t IR_LED_PIN = 6;                                 	//  IR-Led output pin
 
-const struct slotGeneralSettings defaultSettings = {      // default settings valus, for type definition see fabi.h
+const struct SlotSettings defaultSlotSettings = {      // default slotSettings valus, for type definition see fabi.h
   "mouse",                          // initial slot name
   0,                                // initial keystringbuffer length
   1,                                // stickMode: Mouse cursor movement active
@@ -81,43 +79,28 @@ const struct slotGeneralSettings defaultSettings = {      // default settings va
   1,                                // bt-mode 1: USB, 2: Bluetooth, 3: both (2 & 3 need daughter board))
 };
 
-struct slotGeneralSettings settings;
-
+struct SlotSettings slotSettings;
 uint8_t workingmem[WORKINGMEM_SIZE];     // working memory (command parser, IR-rec/play)
 
-int EmptySlotAddress = 0;
-uint8_t reportSlotParameters = REPORT_NONE;
-uint8_t reportRawValues = 0;
-/** current button states for reporting raw values (AT SR)
- * @note If NUMBER_OF_BUTTONS is more than 32, change type to uint64_t! */
-uint32_t buttonStates = 0;
 uint8_t actSlot = 0;
 uint8_t addonUpgrade = BTMODULE_UPGRADE_IDLE; // if not "idle": we are upgrading the addon module
-uint16_t calib_now = 1;                       // calibrate zeropoint right at startup !
+unsigned long lastInteractionUpdate;
 
-int waitTime = DEFAULT_WAIT_TIME;
+struct SensorData sensorData {
+  .x=0, .y=0, .pressure=0, 
+  .dz=0, .force=0, .angle=0, .dir=0,
+  .autoMoveX=0, .autoMoveY=0,
+  .up=0, .down=0, .left=0, .right=0,
+  .calib_now=1,    // calibrate zeropoint right at startup !
+  .cx=0, .cy=0,
+  .xDriftComp=0, .yDriftComp=0,
+  .xLocalMax=0, .yLocalMax=0
+};
 
-unsigned long updateStandaloneTimestamp;
-
-int up, down, left, right, tmp;
-int x, y;
-int pressure;
-float dz = 0, force = 0, angle = 0;
-int xLocalMax = 0, yLocalMax = 0;
-int xDriftComp = 0, yDriftComp = 0;
-int16_t  cx = 0, cy = 0;
-
-uint8_t blinkCount = 0;
-uint8_t blinkTime = 0;
-uint8_t blinkStartTime = 0;
-
-int inByte = 0;
-char * keystring = 0;
 
 // function declarations
-void UpdateLeds();
-void UpdateTones();
-void reportValues();
+void applyCalibration(); 
+void applyDriftCorrection();
 void applyDeadzone();
 
 extern void handleCimMode(void);
@@ -132,8 +115,9 @@ int padX=0,padY=0,padState=0;
 ////////////////////////////////////////
 
 void setup() {
-  //load settings
-  memcpy(&settings,&defaultSettings,sizeof(struct slotGeneralSettings));
+  //load slotSettings
+  memcpy(&slotSettings,&defaultSlotSettings,sizeof(struct SlotSettings));
+
   //initialise BT module, if available (must be done early!)
   initBluetooth();
   
@@ -142,22 +126,9 @@ void setup() {
 
   Wire.begin();
   Wire.setClock(400000);
-  pinMode(IR_SENSOR_PIN, INPUT);
-  analogWriteFrequency(IR_LED_PIN, 38000);  // TBD: flexible carrier frequency for IR, not only 38kHz !
 
-  pinMode(LED_PIN, OUTPUT);
-  digitalWrite(LED_PIN, LOW);
-
-  pinMode(IR_LED_PIN, OUTPUT);
-  digitalWrite(LED_PIN, LOW);
-
-  for (int i = 0; i < NUMBER_OF_PHYSICAL_BUTTONS; i++) // initialize physical buttons and bouncers
-    pinMode (input_map[i], INPUT_PULLUP);   // configure the pins for input mode with pullup resistors
-
-  for (int i = 0; i < NUMBER_OF_LEDS; i++) // initialize physical buttons and bouncers
-    pinMode (led_map[i], OUTPUT);   // configure the pins for input mode with pullup resistors
-
-  release_all();
+  initGPIO();
+  initIR();
   initButtons();
   initDebouncers();
   init_CIM_frame();  // for AsTeRICS CIM protocol compatibility
@@ -165,8 +136,7 @@ void setup() {
   bootstrapSlotAddresses();
   readFromEEPROMSlotNumber(0, true); // read slot from first EEPROM slot if available !
 
-  blinkCount = 10;
-  blinkStartTime = 25;
+  initBlink(10,25);
 
   cirqueInstalled=initCirque();      // check if i2c-trackpad connected, if possible: init and activate Flippad mode
   if (cirqueInstalled) strcpy(moduleName,"Flippad");
@@ -181,7 +151,7 @@ void setup() {
   Serial.print(moduleName); Serial.println(" ready !");
 #endif
 
-  updateStandaloneTimestamp = millis();
+  lastInteractionUpdate = millis();
 }
 
 ///////////////////////////////
@@ -196,28 +166,10 @@ void loop() {
     return;
 	}
 
-  if (cirqueInstalled) {
-    pressure = analogRead(PRESSURE_SENSOR_PIN);   // TBD: use hall sensor pin here
-    padState=updateCirquePad(&padX,&padY); 
-  }
-  else {
-    pressure = analogRead(PRESSURE_SENSOR_PIN);
-    up =       analogRead(UP_SENSOR_PIN);
-    down =     analogRead(DOWN_SENSOR_PIN);
-    left =     analogRead(LEFT_SENSOR_PIN);
-    right =    analogRead(RIGHT_SENSOR_PIN);
-  
-    switch (settings.ro) {
-      case 90: tmp = up; up = left; left = down; down = right; right = tmp; break;
-      case 180: tmp = up; up = down; down = tmp; tmp = right; right = left; left = tmp; break;
-      case 270: tmp = up; up = right; right = down; down = left; left = tmp; break;
-    }
-  }
-  
+  // handle incoming serial data (AT-commands)
   while (Serial.available() > 0) {
-    // get incoming byte:
-    inByte = Serial.read();
-    parseByte (inByte);      // implemented in parser.cpp
+    // send incoming bytes to parser
+    parseByte (Serial.read());      // implemented in parser.cpp
   }
   
   // if incoming data from BT-addOn: forward it to host serial interface
@@ -225,42 +177,62 @@ void loop() {
     Serial.write(Serial_AUX.read());
   }
 
-  if (StandAloneMode && ((millis() >= updateStandaloneTimestamp + waitTime) || padState))  {
-    updateStandaloneTimestamp = millis();
-    if (cirqueInstalled) {     //  is trackpad active?
-      x=padX;
-      y=padY;
-      switch (handleTapClicks(padState, settings.gv*10)) {  // perform clicks and drag actions when in pad mode, note: tap-time for left click in settings.gv, 0-100 10ms 
-        case DRAG_ACTION_UP: handlePress(STRONGPUFF_UP_BUTTON); handleRelease(STRONGPUFF_UP_BUTTON); break;
-        case DRAG_ACTION_DOWN: handlePress(STRONGPUFF_DOWN_BUTTON); handleRelease(STRONGPUFF_DOWN_BUTTON); break;
-        case DRAG_ACTION_LEFT: handlePress(STRONGPUFF_LEFT_BUTTON); handleRelease(STRONGPUFF_LEFT_BUTTON); break;
-        case DRAG_ACTION_RIGHT: handlePress(STRONGPUFF_RIGHT_BUTTON); handleRelease(STRONGPUFF_RIGHT_BUTTON); break;
-      }
+  // get current sensor values
+  sensorData.pressure = analogRead(PRESSURE_SENSOR_PIN);
+
+  if (cirqueInstalled) {
+    padState=updateCirquePad(&padX,&padY); 
+  }
+  else {
+    sensorData.up =    analogRead(UP_SENSOR_PIN);
+    sensorData.down =  analogRead(DOWN_SENSOR_PIN);
+    sensorData.left =  analogRead(LEFT_SENSOR_PIN);
+    sensorData.right = analogRead(RIGHT_SENSOR_PIN);
+  
+    switch (slotSettings.ro) {
+      int tmp;
+      case 90: tmp = sensorData.up; sensorData.up = sensorData.left; sensorData.left = sensorData.down; 
+               sensorData.down = sensorData.right; sensorData.right = tmp; 
+               break;
+      case 180: tmp = sensorData.up; sensorData.up = sensorData.down; sensorData.down = tmp; tmp = sensorData.right; 
+                sensorData.right = sensorData.left; sensorData.left = tmp; 
+                break;
+      case 270: tmp = sensorData.up; sensorData.up = sensorData.right; sensorData.right = sensorData.down; 
+                sensorData.down = sensorData.left; sensorData.left = tmp; 
+                break;
     }
-    else {                     // FSR/stick is active -> apply calibration and drift correction
-      if (calib_now == 0)  {   // no new calibration, use current values for x and y offset !
-        x = (left - right) - cx;
-        y = (up - down) - cy;
-      }
-      else  {
-        calib_now--;           // wait for calibration
-        if (calib_now == 0) {  // calibrate now !! get new offset values
-          settings.cx = (left - right);
-          settings.cy = (up - down);
-          cx = settings.cx;
-          cy = settings.cy;
-          xLocalMax = 0; yLocalMax = 0;
-        }
-      }
+  }
+
+  // perform periodic updates  
+  if (StandAloneMode && ((millis() >= lastInteractionUpdate + UPDATE_INTERVAL) || padState))  {
+    lastInteractionUpdate = millis();
+    
+    if (cirqueInstalled) {     //  Trackpad active -> apply coordinates and handle tap gestures
+      sensorData.x=padX;
+      sensorData.y=padY;
+      handleTapClicks(padState, slotSettings.gv*10);  // perform clicks and drag actions when in pad mode, note: tap-time for left click in slotSettings.gv, 0-100 10ms 
+    }
+    else {                     // FSR/stick active -> apply calibration and drift correction
+      applyCalibration();
       applyDriftCorrection();
     }
 
-    reportValues();     // send live data to serial
+    // calculate angular direction and force
+    sensorData.force = __ieee754_sqrtf(sensorData.x * sensorData.x + sensorData.y * sensorData.y);
+    if (sensorData.force !=0) {
+      sensorData.angle = atan2f ((float)sensorData.y / sensorData.force, (float)sensorData.x / sensorData.force );
+      
+      // get 8 directions
+      sensorData.dir=(202+(int)(sensorData.angle*57.29578))/45+1;  // translate rad to deg, then make 8 sections
+      if (sensorData.dir>8) sensorData.dir=1;  
+    }
+    
     if (!useAbsolutePadValues())
       applyDeadzone();
 
+    handleUserInteraction();  // handle all mouse / joystick / button activities
 
-    handleModeState(x, y, pressure);  // handle all mouse / joystick / button activities
+    reportValues();     // send live data to serial
     UpdateLeds();
     UpdateTones();
   }
@@ -270,246 +242,79 @@ void loop() {
   }
 }
 
-void reportValues()
+void applyCalibration() 
 {
-  static uint8_t valueReportCount = 0;
-  if (!reportRawValues)   return;
-
-  if (valueReportCount++ > 10) {                    // report raw values !
-    Serial.print("VALUES:"); Serial.print(pressure); Serial.print(",");
-    Serial.print(up); Serial.print(","); Serial.print(down); Serial.print(",");
-    Serial.print(left); Serial.print(","); Serial.print(right); Serial.print(",");
-    Serial.print(x); Serial.print(","); Serial.print(y); Serial.print(",");
-    for (uint8_t i = 0; i < NUMBER_OF_BUTTONS; i++)
-    {
-      if (buttonStates & (1 << i)) Serial.print("1");
-      else Serial.print("0");
+  if (sensorData.calib_now == 0)  {   // no new calibration, use current values for x and y offset !
+    sensorData.x = (sensorData.left - sensorData.right) - sensorData.cx;
+    sensorData.y = (sensorData.up - sensorData.down) - sensorData.cy;
+  }
+  else  {
+    sensorData.calib_now--;           // wait for calibration
+    if (sensorData.calib_now == 0) {  // calibrate now !! get new offset values
+      slotSettings.cx = (sensorData.left - sensorData.right);
+      slotSettings.cy = (sensorData.up - sensorData.down);
+      sensorData.cx = slotSettings.cx;
+      sensorData.cy = slotSettings.cy;
+      sensorData.xLocalMax = 0; sensorData.yLocalMax = 0;
     }
-    Serial.print(",");
-    Serial.print(actSlot);
-    Serial.print(",");
-    Serial.print(xDriftComp);
-    Serial.print(",");
-    Serial.print(yDriftComp);
-    Serial.println("");
-    /*
-      Serial.print("AnalogRAW:");
-      Serial.print(analogRead(UP_SENSOR_PIN));
-      Serial.print(",");
-      Serial.print(analogRead(DOWN_SENSOR_PIN));
-      Serial.print(",");
-      Serial.print(analogRead(LEFT_SENSOR_PIN));
-      Serial.print(",");
-      Serial.println(analogRead(RIGHT_SENSOR_PIN));
-    */
-    valueReportCount = 0;
   }
 }
 
 void applyDriftCorrection()
 {
   // apply drift correction
-  if (((x < 0) && (xLocalMax > 0)) || ((x > 0) && (xLocalMax < 0)))  xLocalMax = 0;
-  if (abs(x) > abs(xLocalMax)) {
-    xLocalMax = x;
+  if (((sensorData.x < 0) && (sensorData.xLocalMax > 0)) || ((sensorData.x > 0) && (sensorData.xLocalMax < 0)))  
+     sensorData.xLocalMax = 0;
+  if (abs(sensorData.x) > abs(sensorData.xLocalMax)) {
+    sensorData.xLocalMax = sensorData.x;
     //Serial.print("xLocalMax=");
     //Serial.println(xLocalMax);
   }
-  if (xLocalMax > settings.rh) xLocalMax = settings.rh;
-  if (xLocalMax < -settings.rh) xLocalMax = -settings.rh;
+  if (sensorData.xLocalMax > slotSettings.rh) sensorData.xLocalMax = slotSettings.rh;
+  if (sensorData.xLocalMax < -slotSettings.rh) sensorData.xLocalMax = -slotSettings.rh;
 
-  if (((y < 0) && (yLocalMax > 0)) || ((y > 0) && (yLocalMax < 0)))  yLocalMax = 0;
-  if (abs(y) > abs(yLocalMax)) {
-    yLocalMax = y;
+  if (((sensorData.y < 0) && (sensorData.yLocalMax > 0)) || ((sensorData.y > 0) && (sensorData.yLocalMax < 0)))
+    sensorData.yLocalMax = 0;
+  if (abs(sensorData.y) > abs(sensorData.yLocalMax)) {
+    sensorData.yLocalMax = sensorData.y;
     //Serial.print("yLocalMax=");
     //Serial.println(yLocalMax);
   }
-  if (yLocalMax > settings.rv) yLocalMax = settings.rv;
-  if (yLocalMax < -settings.rv) yLocalMax = -settings.rv;
+  if (sensorData.yLocalMax > slotSettings.rv) sensorData.yLocalMax = slotSettings.rv;
+  if (sensorData.yLocalMax < -slotSettings.rv) sensorData.yLocalMax = -slotSettings.rv;
 
-  xDriftComp = xLocalMax * ((float)settings.gh / 250);
-  yDriftComp = yLocalMax * ((float)settings.gv / 250);
-  x -= xDriftComp;
-  y -= yDriftComp;
+  sensorData.xDriftComp = sensorData.xLocalMax * ((float)slotSettings.gh / 250);
+  sensorData.yDriftComp = sensorData.yLocalMax * ((float)slotSettings.gv / 250);
+  sensorData.x -= sensorData.xDriftComp;
+  sensorData.y -= sensorData.yDriftComp;
 }
 
 void applyDeadzone()
 {
-  if ((settings.stickMode == STICKMODE_ALTERNATIVE) || (settings.stickMode == STICKMODE_PAD_ALTERNATIVE)) {
-
+  if ((slotSettings.stickMode == STICKMODE_ALTERNATIVE) || (slotSettings.stickMode == STICKMODE_PAD_ALTERNATIVE)) {
     // rectangular deadzone for alternative modes
+    if (sensorData.x < -slotSettings.dx) sensorData.x += slotSettings.dx; // apply deadzone values x direction
+    else if (sensorData.x > slotSettings.dx) sensorData.x -= slotSettings.dx;
+    else sensorData.x = 0;
 
-    if (x < -settings.dx) x += settings.dx; // apply deadzone values x direction
-    else if (x > settings.dx) x -= settings.dx;
-    else x = 0;
-
-    if (y < -settings.dy) y += settings.dy; // apply deadzone values y direction
-    else if (y > settings.dy) y -= settings.dy;
-    else y = 0;
+    if (sensorData.y < -slotSettings.dy) sensorData.y += slotSettings.dy; // apply deadzone values y direction
+    else if (sensorData.y > slotSettings.dy) sensorData.y -= slotSettings.dy;
+    else sensorData.y = 0;
 
   } else {
-
     //  circular deadzone for mouse control
-
-    force = __ieee754_sqrtf(x * x + y * y);
-    if (force != 0) {
-      angle = atan2f ((float)y / force, (float)x / force );
-      dz = settings.dx * (fabsf((float)x) / force) + settings.dy * (fabsf((float)y) / force);
-    }
-    else {
-      angle = 0;
-      dz = settings.dx;
-    }
-
-    if (force < dz) force = 0; else force -= dz;
+    if (sensorData.force != 0) 
+      sensorData.dz = slotSettings.dx * (fabsf((float)sensorData.x) / sensorData.force) + 
+                    slotSettings.dy * (fabsf((float)sensorData.y) / sensorData.force);
+    else sensorData.dz = slotSettings.dx;
+    
+    if (sensorData.force < sensorData.dz) sensorData.force = 0; else sensorData.force -= sensorData.dz;
 
     float x2, y2;
-    y2 = force * sinf(angle);
-    x2 = force * cosf(angle);
+    y2 = sensorData.force * sinf(sensorData.angle);
+    x2 = sensorData.force * cosf(sensorData.angle);
 
-    x = int(x2);
-    y = int(y2);
+    sensorData.x = int(x2);
+    sensorData.y = int(y2);
   }
-}
-
-void release_all()  // releases all previously pressed keys
-{
-  release_all_keys();
-  mouseRelease(MOUSE_LEFT);
-  mouseRelease(MOUSE_MIDDLE);
-  mouseRelease(MOUSE_RIGHT);
-  moveX = 0;
-  moveY = 0;
-}
-
-void initBlink(uint8_t  count, uint8_t startTime)
-{
-  blinkCount = count;
-  blinkStartTime = startTime;
-}
-
-void UpdateLeds()
-{
-  if (StandAloneMode)
-  {
-    digitalWrite(LED_PIN, LOW);
-
-    if (blinkCount == 0) {
-      if ((actSlot + 1) & 1) digitalWrite (led_map[0], LOW); else digitalWrite (led_map[0], HIGH);
-      if ((actSlot + 1) & 2) digitalWrite (led_map[1], LOW); else digitalWrite (led_map[1], HIGH);
-      if ((actSlot + 1) & 4) digitalWrite (led_map[2], LOW); else digitalWrite (led_map[2], HIGH);
-    }
-    else {
-      if (blinkTime == 0)
-      {
-        blinkTime = blinkStartTime;
-        blinkCount--;
-        if (blinkCount % 2) {
-          digitalWrite (led_map[0], LOW); digitalWrite (led_map[1], LOW); digitalWrite (led_map[2], LOW);
-        }
-        else {
-          digitalWrite (led_map[0], HIGH); digitalWrite (led_map[1], HIGH); digitalWrite (led_map[2], HIGH);
-        }
-      } else blinkTime--;
-    }
-  }
-  else
-    digitalWrite(LED_PIN, HIGH);
-}
-
-uint16_t toneHeight;
-uint16_t toneOnTime;
-uint16_t toneOffTime;
-uint16_t toneCount = 0;
-
-void UpdateTones()
-{
-  static uint16_t toneState = 0;
-  static uint16_t cnt = 0;
-
-  if (!toneCount) return;
-
-  uint8_t tonePin = TONE_PIN;
-
-  switch (toneState) {
-    case 0:
-      tone(tonePin, toneHeight, toneOnTime);
-      toneState++;
-      break;
-    case 1:
-      if (++cnt > (toneOnTime + toneOffTime) / 5 )  {
-        toneCount--;
-        toneState = 0;
-        cnt = 0;
-      }
-      break;
-  }
-}
-
-
-void makeTone(uint8_t kind, uint8_t param)
-{
-  uint8_t tonePin = TONE_PIN;
-
-  switch (kind) {
-    case TONE_ENTER_STRONGPUFF:
-      tone(tonePin, 400, 200);
-      break;
-    case TONE_EXIT_STRONGPUFF:
-      tone(tonePin, 400, 100);
-      break;
-    case TONE_CALIB:
-      tone(tonePin, 200, 400);
-      break;
-    case TONE_CHANGESLOT:
-      if (!toneCount) {
-        toneHeight = 2000 + 200 * param;
-        toneOnTime = 150;
-        toneOffTime = 50;
-        toneCount = param + 1;
-      }
-      break;
-    case TONE_ENTER_STRONGSIP:
-      tone(tonePin, 300, 200);
-      break;
-    case TONE_EXIT_STRONGSIP:
-      tone(tonePin, 300, 100);
-      break;
-    case TONE_IR:
-      tone(tonePin, 2500, 30);
-      break;
-    case TONE_IR_REC:
-      tone(tonePin, 350, 500);
-      break;
-    case TONE_INDICATE_SIP:
-      tone(tonePin, 5000, 5);
-      break;
-    case TONE_INDICATE_PUFF:
-      tone(tonePin, 4000, 5);
-      break;
-    case TONE_BT_PAIRING:
-      tone(tonePin, 230, 4000);
-      break;
-  }
-}
-
-//source of code for free ram:
-//https://github.com/mpflaga/Arduino-MemoryFree/blob/master/MemoryFree.cpp
-#ifdef __arm__
-// should use uinstd.h to define sbrk but Due causes a conflict
-extern "C" char* sbrk(int incr);
-#else  // __ARM__
-extern char *__brkval;
-#endif  // __arm__
-
-int freeRam()
-{
-  char top;
-#ifdef __arm__
-  return &top - reinterpret_cast<char*>(sbrk(0));
-#elif defined(CORE_TEENSY) || (ARDUINO > 103 && ARDUINO != 151)
-  return &top - __brkval;
-#else  // __arm__
-  return __brkval ? &top - __brkval : &top - __malloc_heap_start;
-#endif  // __arm__
 }

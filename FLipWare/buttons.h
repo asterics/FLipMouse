@@ -21,8 +21,6 @@
 
 // Constants and Macro definitions
 #define NUMBER_OF_BUTTONS  19         // number of physical + virtual switches. Note: if higher than 32, change buttonStates to uint64_t!
-#define NUMBER_OF_PHYSICAL_BUTTONS 3  // number of physical switches
-#define NUMBER_OF_LEDS     3          // number of connected leds
 
 #define DEFAULT_DEBOUNCING_TIME 5   // debouncing interval for button-press / release
 
@@ -49,10 +47,17 @@
 #define STRONGPUFF_LEFT_BUTTON  17
 #define STRONGPUFF_RIGHT_BUTTON 18
 
+// define equivalent butto functions for Trackpad action (Note: strongpuff actions not available for trackpad!)
+#define TAP_BUTTON        STRONGPUFF_BUTTON
+#define DRAG_UP_BUTTON    STRONGPUFF_UP_BUTTON
+#define DRAG_DOWN_BUTTON  STRONGPUFF_DOWN_BUTTON
+#define DRAG_LEFT_BUTTON  STRONGPUFF_LEFT_BUTTON
+#define DRAG_RIGHT_BUTTON STRONGPUFF_RIGHT_BUTTON
+
 
 // data structures for the buttons
 
-struct slotButtonSettings {                     // holds settings for a button function
+struct slotButtonSettings {                     // holds slotSettings for a button function
   uint16_t mode;
   int16_t value;
 };
@@ -67,10 +72,11 @@ struct buttonDebouncerType {              // holds working data for button debou
 
 extern struct slotButtonSettings buttons[NUMBER_OF_BUTTONS];
 extern char* buttonKeystrings[NUMBER_OF_BUTTONS];
+extern uint32_t buttonStates;
 
-// extern struct buttonDebouncerType buttonDebouncers[NUMBER_OF_BUTTONS];
 
 // function declarations
+void initButtons();
 void initButtonKeystrings();
 char * getButtonKeystring(int num);
 uint16_t setButtonKeystring(uint8_t buttonIndex, char * text);

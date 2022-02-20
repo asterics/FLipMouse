@@ -86,9 +86,9 @@
 
     Housekeeping commands:
 
-          AT SA <string>  save settings and current button modes to next free eeprom slot under given name (e.g. "AT SA mouse1")
+          AT SA <string>  save slotSettings and current button modes to next free eeprom slot under given name (e.g. "AT SA mouse1")
           AT LO <string>  load button modes from eeprom slot (e.g. AT LOAD mouse1 -> loads profile named "mouse1")
-          AT LA           load all slots (displays names and settings of all stored slots)
+          AT LA           load all slots (displays names and slotSettings of all stored slots)
           AT LI           list all saved mode names
           AT NE           next mode will be loaded (wrap around after last slot)
           AT DE <string>  delete slot of given name (deletes all stored slots if no string parameter is given)
@@ -97,7 +97,7 @@
           AT BT <uint>    set bluetooth mode, 1=USB only, 2=BT only, 3=both(default)
                           (e.g. AT BT 2 -> send HID commands only via BT if BT-daughter board is available)
 
-    FLipMouse-specific settings and commands:
+    FLipMouse-specific slotSettings and commands:
 
           AT MM <uint>    mouse mode: cursor on (uint==1) or alternative functions on (uint==0)
           AT SW           switch between mouse cursor and alternative functions
@@ -184,5 +184,13 @@ enum atCommands {
   CMD_TL, CMD_TR, CMD_TM, CMD_KT, CMD_IH, CMD_IS, CMD_UG, CMD_BC,
   NUM_COMMANDS
 };
+
+struct atCommandType {   // holds AT command string and paramter type identifiers
+    char atCmd[3];
+    uint8_t  partype;
+};
+
+extern const struct atCommandType atCommands[];
+void performCommand (uint8_t cmd, int16_t par1, char * keystring, int8_t periodicMouseMovement);
 
 #endif

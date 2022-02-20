@@ -46,7 +46,6 @@
 #include "commands.h"
 #include "eeprom.h"
 #include "buttons.h"
-#include "modes.h"
 #include "bluetooth.h"
 #include "hid_hal.h"
 
@@ -78,41 +77,24 @@
 // #define DEBUG_OUTPUT_FULL      // if full debug output is desired
 // #define DEBUG_OUTPUT_BASIC     // if basic debug output is desired (for eeprom)
 
+#define DEFAULT_CLICK_TIME      8    // time for mouse click (loop iterations from press to release)
+
 #define WORKINGMEM_SIZE    300        // reserved RAM for working memory (command parser, IR-rec/play)
 #define MAX_KEYSTRING_LEN (WORKINGMEM_SIZE-3)   // maximum length for AT command parameters
 #define MAX_NAME_LEN  15              // maximum length for a slotname or ir name
 #define MAX_KEYSTRINGBUFFER_LEN 500   // maximum length for all string parameters of one slot
 
-#define PARTYPE_NONE  0
-#define PARTYPE_UINT  1
-#define PARTYPE_INT   2
-#define PARTYPE_STRING  3
+// direction identifiers
+#define DIR_E   1   // east
+#define DIR_NE  2   // north-east
+#define DIR_N   3   // north
+#define DIR_NW  4   // north-west
+#define DIR_W   5   // west
+#define DIR_SW  6   // sout-west
+#define DIR_S   7   // south
+#define DIR_SE  8   // south-east
 
-#define REPORT_NONE  0
-#define REPORT_ONE_SLOT  1
-#define REPORT_ALL_SLOTS 2
-
-#define TONE_CALIB            1
-#define TONE_CHANGESLOT       2
-#define TONE_ENTER_STRONGSIP  3
-#define TONE_EXIT_STRONGSIP   4
-#define TONE_ENTER_STRONGPUFF 5
-#define TONE_EXIT_STRONGPUFF  6
-#define TONE_INDICATE_SIP     7
-#define TONE_INDICATE_PUFF    8
-#define TONE_IR			          9
-#define TONE_BT_PAIRING      10
-#define TONE_IR_REC          11
-
-#define BUTTON1_PRESS_TIME_FOR_PAIRING 800
-
-#define DEFAULT_CLICK_TIME      8    // time for mouse click (loop iterations from press to release)
-// #define DOUBLECLICK_MULTIPLIER  5    // CLICK_TIME factor for double clicks
-
-extern uint8_t workingmem[WORKINGMEM_SIZE];    // working memory  (command parser, IR-rec/play)
-extern char keystringBuffer[MAX_KEYSTRINGBUFFER_LEN];  // storage for all button string parameters of a slot
-
-struct slotGeneralSettings {
+struct SlotSettings {
 
   char slotName[MAX_NAME_LEN];   // slotname
   uint16_t keystringBufferLen;   
@@ -139,66 +121,33 @@ struct slotGeneralSettings {
   uint8_t  bt;     // bt-mode (0,1,2)
 };
 
-
-
-struct atCommandType {                      // holds settings for a button function
-  char atCmd[3];
-  uint8_t  partype;
+struct SensorData {
+  int x, y;
+  int pressure;
+  float dz, force, angle;
+  uint8_t dir;
+  int8_t autoMoveX,autoMoveY;
+  int up, down, left, right;
+  uint8_t calib_now;
+  int16_t  cx, cy;
+  int xDriftComp, yDriftComp;
+  int xLocalMax, yLocalMax;  
 };
-
+  
 extern char moduleName[];
-
 extern uint8_t actSlot;
 extern uint8_t addonUpgrade;
-extern uint8_t reportSlotParameters;
-extern uint8_t reportRawValues;
-extern uint32_t buttonStates;
-extern struct slotGeneralSettings settings;
-extern const struct slotGeneralSettings defaultSettings;
-extern int EmptySlotAddress;
 
-extern const struct atCommandType atCommands[];
-extern int8_t  input_map[NUMBER_OF_PHYSICAL_BUTTONS];
+extern struct SensorData sensorData;
+extern struct SlotSettings slotSettings; 
+extern const struct SlotSettings defaultSlotSettings;
 
-extern uint16_t calib_now;
-extern int16_t  cx;
-extern int16_t  cy;
-extern int8_t moveX;
-extern int8_t moveY;
-extern float force;
-extern float angle;
-
-void performCommand (uint8_t cmd, int16_t par1, char * keystring, int8_t periodicMouseMovement);
-void initButtons();
-void printCurrentSlot();
-void initBlink(uint8_t count, uint8_t startTime);
-void makeTone(uint8_t kind, uint8_t param);
-
-void BlinkLed();
-int  freeRam ();
-void parseByte (int newByte);
-
-void pressKeys(char* text); // presses individual keys
-void holdKeys(char* text);  // holds individual keys
-void toggleKeys(char* text);  // toggles individual keys
-void releaseKeys(char* text);  // releases individual keys
-void release_all_keys();       // releases all previously pressed keys
-void release_all();            // releases all previously pressed keys and buttons
-
-void record_IR_command(char * name);
-void play_IR_command(char * name);
-void hold_IR_command(char * name);
-void stop_IR_command();
-void list_IR_commands();
-uint8_t delete_IR_command(char * name);
-void set_IR_timeout(uint16_t ms);
-void wipe_IR_commands();
-
-float __ieee754_sqrtf(float x);
+extern uint8_t workingmem[WORKINGMEM_SIZE];            // working memory  (command parser, IR-rec/play)
+extern char keystringBuffer[MAX_KEYSTRINGBUFFER_LEN];  // storage for all button string parameters of a slot
 
 //set the correct strcpy/strcmp functions for TeensyLC / ARM)
 #define strcpy_FM   strcpy
 #define strcmp_FM   strcmp
 typedef char* uint_farptr_t_FM;
 
-#endif
+ #endif

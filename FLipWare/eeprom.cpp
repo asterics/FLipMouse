@@ -22,7 +22,7 @@
  * */
 
 #include "eeprom.h"
-#include "parser.h"
+#include "reporting.h"
 #include "tone.h"
 
 /** Device address of the EEPROM **/

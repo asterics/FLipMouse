@@ -23,6 +23,7 @@
 #include "modes.h"
 #include "keys.h"
 #include "parser.h"
+#include "reporting.h"
 #include "utils.h"
 
 uint8_t actButton = 0;

@@ -46,6 +46,7 @@
 #include "modes.h"
 #include "tone.h"
 #include "parser.h"  
+#include "reporting.h"
 #include "utils.h"         
 
 // Constants and Macro definitions

@@ -347,7 +347,7 @@ void handleMovement()
       break;
       
     case STICKMODE_PAD_ALTERNATIVE:    // handle alternative actions pad mode  
-      if (sensorData.force>slotSettings.dx) 
+      if (sensorData.forceRaw>slotSettings.dx) 
         switch (sensorData.dir) {   // sticky direction keys
           case DIR_E: leftState=1; rightState=0; break;
           case DIR_NE: upState=leftState=1; rightState=downState=0; break;

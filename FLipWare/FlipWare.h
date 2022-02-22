@@ -122,9 +122,9 @@ struct SlotSettings {
 };
 
 struct SensorData {
-  int x, y;
+  int x, y, xRaw,yRaw;
   int pressure;
-  float dz, force, angle;
+  float deadZone, force, forceRaw, angle;
   uint8_t dir;
   int8_t autoMoveX,autoMoveY;
   int up, down, left, right;

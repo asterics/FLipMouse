@@ -508,8 +508,8 @@ void endDrag() {
 }
 
 uint8_t findDragAction() {
-  if (sensorData.force<DRAG_ACTION_FORCE) {
-    // Serial.print("drag too small for action: "); Serial.println(sensorData.force);
+  if (sensorData.forceRaw<DRAG_ACTION_FORCE) {
+    // Serial.print("drag too small for action: "); Serial.println(sensorData.forceRaw);
     return(0); 
   }
   switch (sensorData.dir) {   // sticky direction keys

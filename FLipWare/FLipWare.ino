@@ -87,8 +87,9 @@ uint8_t addonUpgrade = BTMODULE_UPGRADE_IDLE; // if not "idle": we are upgrading
 unsigned long lastInteractionUpdate;
 
 struct SensorData sensorData {
-  .x=0, .y=0, .pressure=0, 
-  .dz=0, .force=0, .angle=0, .dir=0,
+  .x=0, .y=0, .xRaw=0, .yRaw=0, .pressure=0, 
+  .deadZone=0, .force=0, .forceRaw=0, .angle=0,
+  .dir=0,
   .autoMoveX=0, .autoMoveY=0,
   .up=0, .down=0, .left=0, .right=0,
   .calib_now=1,    // calibrate zeropoint right at startup !
@@ -207,26 +208,31 @@ void loop() {
   if (StandAloneMode && ((millis() >= lastInteractionUpdate + UPDATE_INTERVAL) || padState))  {
     lastInteractionUpdate = millis();
     
-    if (cirqueInstalled) {     //  Trackpad active -> apply coordinates and handle tap gestures
-      sensorData.x=padX;
-      sensorData.y=padY;
+    if (cirqueInstalled) {     //  Trackpad active -> get coordinates and handle tap gestures
+      sensorData.xRaw=sensorData.x=padX;
+      sensorData.yRaw=sensorData.y=padY;
       handleTapClicks(padState, slotSettings.gv*10);  // perform clicks and drag actions when in pad mode, note: tap-time for left click in slotSettings.gv, 0-100 10ms 
     }
     else {                     // FSR/stick active -> apply calibration and drift correction
-      applyCalibration();
-      applyDriftCorrection();
+      if (sensorData.calib_now)
+        applyCalibration();              
+      else  {   // no new calibration, use current values for x and y offset !
+        sensorData.xRaw = (sensorData.left - sensorData.right) - sensorData.cx;
+        sensorData.yRaw = (sensorData.up - sensorData.down) - sensorData.cy;
+        applyDriftCorrection();
+      } 
     }
 
     // calculate angular direction and force
-    sensorData.force = __ieee754_sqrtf(sensorData.x * sensorData.x + sensorData.y * sensorData.y);
-    if (sensorData.force !=0) {
-      sensorData.angle = atan2f ((float)sensorData.y / sensorData.force, (float)sensorData.x / sensorData.force );
+    sensorData.forceRaw = __ieee754_sqrtf(sensorData.xRaw * sensorData.xRaw + sensorData.yRaw * sensorData.yRaw);
+    if (sensorData.forceRaw !=0) {
+      sensorData.angle = atan2f ((float)sensorData.yRaw / sensorData.forceRaw, (float)sensorData.xRaw / sensorData.forceRaw );
       
       // get 8 directions
-      sensorData.dir=(202+(int)(sensorData.angle*57.29578))/45+1;  // translate rad to deg, then make 8 sections
+      sensorData.dir=(180+22+(int)(sensorData.angle*57.29578))/45+1;  // translate rad to deg and make 8 sections
       if (sensorData.dir>8) sensorData.dir=1;  
     }
-    
+       
     if (!useAbsolutePadValues())
       applyDeadzone();
 
@@ -244,39 +250,34 @@ void loop() {
 
 void applyCalibration() 
 {
-  if (sensorData.calib_now == 0)  {   // no new calibration, use current values for x and y offset !
-    sensorData.x = (sensorData.left - sensorData.right) - sensorData.cx;
-    sensorData.y = (sensorData.up - sensorData.down) - sensorData.cy;
-  }
-  else  {
-    sensorData.calib_now--;           // wait for calibration
-    if (sensorData.calib_now == 0) {  // calibrate now !! get new offset values
-      slotSettings.cx = (sensorData.left - sensorData.right);
-      slotSettings.cy = (sensorData.up - sensorData.down);
-      sensorData.cx = slotSettings.cx;
-      sensorData.cy = slotSettings.cy;
-      sensorData.xLocalMax = 0; sensorData.yLocalMax = 0;
-    }
+  sensorData.xRaw=sensorData.yRaw=0;
+  sensorData.calib_now--;           // wait for calibration moment
+  if (sensorData.calib_now == 0) {  // calibrate now !! get new offset values
+    slotSettings.cx = (sensorData.left - sensorData.right);
+    slotSettings.cy = (sensorData.up - sensorData.down);
+    sensorData.cx = slotSettings.cx;
+    sensorData.cy = slotSettings.cy;
+    sensorData.xLocalMax = 0; sensorData.yLocalMax = 0;
   }
 }
 
 void applyDriftCorrection()
 {
   // apply drift correction
-  if (((sensorData.x < 0) && (sensorData.xLocalMax > 0)) || ((sensorData.x > 0) && (sensorData.xLocalMax < 0)))  
+  if (((sensorData.xRaw < 0) && (sensorData.xLocalMax > 0)) || ((sensorData.xRaw > 0) && (sensorData.xLocalMax < 0)))  
      sensorData.xLocalMax = 0;
-  if (abs(sensorData.x) > abs(sensorData.xLocalMax)) {
-    sensorData.xLocalMax = sensorData.x;
+  if (abs(sensorData.xRaw) > abs(sensorData.xLocalMax)) {
+    sensorData.xLocalMax = sensorData.xRaw;
     //Serial.print("xLocalMax=");
     //Serial.println(xLocalMax);
   }
   if (sensorData.xLocalMax > slotSettings.rh) sensorData.xLocalMax = slotSettings.rh;
   if (sensorData.xLocalMax < -slotSettings.rh) sensorData.xLocalMax = -slotSettings.rh;
 
-  if (((sensorData.y < 0) && (sensorData.yLocalMax > 0)) || ((sensorData.y > 0) && (sensorData.yLocalMax < 0)))
+  if (((sensorData.yRaw < 0) && (sensorData.yLocalMax > 0)) || ((sensorData.yRaw > 0) && (sensorData.yLocalMax < 0)))
     sensorData.yLocalMax = 0;
-  if (abs(sensorData.y) > abs(sensorData.yLocalMax)) {
-    sensorData.yLocalMax = sensorData.y;
+  if (abs(sensorData.yRaw) > abs(sensorData.yLocalMax)) {
+    sensorData.yLocalMax = sensorData.yRaw;
     //Serial.print("yLocalMax=");
     //Serial.println(yLocalMax);
   }
@@ -285,36 +286,41 @@ void applyDriftCorrection()
 
   sensorData.xDriftComp = sensorData.xLocalMax * ((float)slotSettings.gh / 250);
   sensorData.yDriftComp = sensorData.yLocalMax * ((float)slotSettings.gv / 250);
-  sensorData.x -= sensorData.xDriftComp;
-  sensorData.y -= sensorData.yDriftComp;
+  sensorData.xRaw -= sensorData.xDriftComp;
+  sensorData.yRaw -= sensorData.yDriftComp;
 }
 
 void applyDeadzone()
 {
   if ((slotSettings.stickMode == STICKMODE_ALTERNATIVE) || (slotSettings.stickMode == STICKMODE_PAD_ALTERNATIVE)) {
     // rectangular deadzone for alternative modes
-    if (sensorData.x < -slotSettings.dx) sensorData.x += slotSettings.dx; // apply deadzone values x direction
-    else if (sensorData.x > slotSettings.dx) sensorData.x -= slotSettings.dx;
+    if (sensorData.xRaw < -slotSettings.dx) 
+      sensorData.x = sensorData.xRaw + slotSettings.dx; // apply deadzone values x direction
+    else if (sensorData.xRaw > slotSettings.dx) 
+      sensorData.x = sensorData.xRaw - slotSettings.dx;
     else sensorData.x = 0;
 
-    if (sensorData.y < -slotSettings.dy) sensorData.y += slotSettings.dy; // apply deadzone values y direction
-    else if (sensorData.y > slotSettings.dy) sensorData.y -= slotSettings.dy;
+    if (sensorData.yRaw < -slotSettings.dy)
+      sensorData.y = sensorData.yRaw + slotSettings.dy; // apply deadzone values y direction
+    else if (sensorData.yRaw > slotSettings.dy)
+      sensorData.y = sensorData.yRaw - slotSettings.dy;
     else sensorData.y = 0;
 
   } else {
     //  circular deadzone for mouse control
-    if (sensorData.force != 0) 
-      sensorData.dz = slotSettings.dx * (fabsf((float)sensorData.x) / sensorData.force) + 
-                    slotSettings.dy * (fabsf((float)sensorData.y) / sensorData.force);
-    else sensorData.dz = slotSettings.dx;
-    
-    if (sensorData.force < sensorData.dz) sensorData.force = 0; else sensorData.force -= sensorData.dz;
+    if (sensorData.forceRaw != 0) {     
+      float a= slotSettings.dx>0 ? slotSettings.dx : 1 ;
+      float b= slotSettings.dy>0 ? slotSettings.dy : 1 ;      
+      float s=sinf(sensorData.angle);
+      float c=cosf(sensorData.angle);
+      sensorData.deadZone =  a*b / __ieee754_sqrtf(a*a*s*s + b*b*c*c);  // ellipse equation, polar form
+    }
+    else sensorData.deadZone = slotSettings.dx;
 
-    float x2, y2;
-    y2 = sensorData.force * sinf(sensorData.angle);
-    x2 = sensorData.force * cosf(sensorData.angle);
+    sensorData.force = (sensorData.forceRaw < sensorData.deadZone) ? 0 : sensorData.forceRaw - sensorData.deadZone;
 
-    sensorData.x = int(x2);
-    sensorData.y = int(y2);
+    sensorData.x = (int) (sensorData.force * cosf(sensorData.angle));
+    sensorData.y = (int) (sensorData.force * sinf(sensorData.angle));
+
   }
 }

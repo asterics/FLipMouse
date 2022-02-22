@@ -93,19 +93,21 @@ uint16_t setButtonKeystring(uint8_t buttonIndex, char * newKeystring)
 void initButtons() {
 
   initButtonKeystrings();
+
+  // set default functions
   for (int i=0;i<NUMBER_OF_BUTTONS;i++) {
     buttons[i].value = 0;
-    buttons[i].mode = CMD_NC;
+    buttons[i].mode = CMD_NC;  // no command
   }
   
-  buttons[0].mode = CMD_NE; // default function for first button: switch to next slot
+  buttons[0].mode = CMD_NE; // button1: switch to next slot
   buttons[3].mode = CMD_KP; setButtonKeystring(3, "KEY_UP ");
   buttons[4].mode = CMD_KP; setButtonKeystring(4, "KEY_DOWN ");
-  buttons[5].mode = CMD_KP; setButtonKeystring(5, "KEY_LEFT ");
+  buttons[5].mode = CMD_KP; setButtonKeystring(5, "KEY_LEFT "); 
   buttons[6].mode = CMD_KP; setButtonKeystring(6, "KEY_RIGHT ");
-  buttons[7].mode = CMD_HL; // hold left mouse button
-  buttons[9].mode = CMD_CR; // click right
-  buttons[10].mode = CMD_CA; // calibrate
+  buttons[7].mode = CMD_HL; // sip: hold left mouse button
+  buttons[9].mode = CMD_CR; // puff: click right
+  buttons[10].mode = CMD_CA; // strong puff: calibrate
 }
 
 

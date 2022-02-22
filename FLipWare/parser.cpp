@@ -212,7 +212,7 @@ void reportValues()
     Serial.print("VALUES:"); Serial.print(sensorData.pressure); Serial.print(",");
     Serial.print(sensorData.up); Serial.print(","); Serial.print(sensorData.down); Serial.print(",");
     Serial.print(sensorData.left); Serial.print(","); Serial.print(sensorData.right); Serial.print(",");
-    Serial.print(sensorData.x); Serial.print(","); Serial.print(sensorData.y); Serial.print(",");
+    Serial.print(sensorData.xRaw); Serial.print(","); Serial.print(sensorData.yRaw); Serial.print(",");
     for (uint8_t i = 0; i < NUMBER_OF_BUTTONS; i++)
     {
       if (buttonStates & (1 << i)) Serial.print("1");

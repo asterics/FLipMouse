@@ -96,6 +96,18 @@ void initBluetooth();
 void setBTName(char * BTName);
 
 
+
+/**
+
+   name: unpairAllBT
+   @return none
+
+   forget all paired devices
+
+*/
+void unpairAllBT();
+
+
 /**
 
    name: keyboardBTPrint

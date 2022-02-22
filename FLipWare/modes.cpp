@@ -53,18 +53,15 @@ void handleUserInteraction()
   for (int i = 0; i < NUMBER_OF_PHYSICAL_BUTTONS; i++) // update button press / release events
   handleButton(i, digitalRead(input_map[i]) == LOW ? 1 : 0);
 
-  // check "long-press" of internal button for BT pairing / unpairing 
-  // NOTE: currently not implemented (done by BT-module)
-  /*
-    if (digitalRead(input_map[0]) == LOW) {
-      checkPairing++;
-      if (checkPairing == 800) {   // approx 4 sec.
-        makeTone(TONE_BT_PAIRING, 0);
-        startBTPairing();    
-        checkPairing = 0;
-      }
-    } else checkPairing = 0;
-  */
+  // check "long-press" of internal button unpairing all BT hosts
+  if (digitalRead(input_map[0]) == LOW) {
+    checkPairing++;
+    if (checkPairing == 800) {   // approx 4 sec.
+      makeTone(TONE_BT_PAIRING, 0);
+      unpairAllBT();
+      checkPairing = 0;
+    }
+  } else checkPairing = 0;
   
   
   // check sip/puff activities
@@ -293,7 +290,7 @@ void acceleratedMouseMove(float accelFactor) {
   float moveValX = sensorData.x * (float)slotSettings.ax * accelFactor;
   float moveValY = sensorData.y * (float)slotSettings.ay * accelFactor;
   float actSpeed =  __ieee754_sqrtf (moveValX * moveValX + moveValY * moveValY);
-  float max_speed = slotSettings.ms / 10;
+  float max_speed = (float)slotSettings.ms / 10.0f;
 
   if (actSpeed > max_speed) {
     moveValX *= (max_speed / actSpeed);

@@ -355,6 +355,19 @@ void setBTName(char * BTName) {
 
 /**
 
+   name: unpairAllBT
+   @return none
+
+   forget all paired devices
+
+*/
+void unpairAllBT() {
+  Serial_AUX.println("$DP");
+}
+
+
+/**
+
    name: isBluetoothAvailable
    @param none
    @return true, if the BT module is available, false if not

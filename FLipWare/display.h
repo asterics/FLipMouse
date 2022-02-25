@@ -4,7 +4,7 @@
 
      Module: display.h - implementation of the Oled display functions 
 
-     Note: Oled display connects to I2C-1 (Wire) for FlipMouse of I2C-2 (Wire1) for FlipPad
+     Note: Oled display connects to I2C-1 (Wire) for FlipMouse
      The utilized library is https://github.com/greiman/SSD1306Ascii
 
    This program is distributed in the hope that it will be useful,

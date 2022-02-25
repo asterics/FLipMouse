@@ -50,13 +50,6 @@
 #define STRONGPUFF_LEFT_BUTTON  17
 #define STRONGPUFF_RIGHT_BUTTON 18
 
-// define equivalent button functions for Trackpad action (Note: strongpuff actions not available for trackpad!)
-#define TAP_BUTTON        STRONGPUFF_BUTTON
-#define DRAG_UP_BUTTON    STRONGPUFF_UP_BUTTON
-#define DRAG_DOWN_BUTTON  STRONGPUFF_DOWN_BUTTON
-#define DRAG_LEFT_BUTTON  STRONGPUFF_LEFT_BUTTON
-#define DRAG_RIGHT_BUTTON STRONGPUFF_RIGHT_BUTTON
-
 
 /**
    slotButtonSettings struct

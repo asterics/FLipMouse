@@ -6,21 +6,20 @@
 
      Module: FLipWare.ino  (main module)
 
-        This is the firmware for the FlipMouse/FLipPad module, 
+        This is the firmware for the FlipMouse module, 
         it supports HID device emulation via USB and/or Bluetooth via connected sensors and/or serial AT-commands
         For a description of the supported commands see: commands.h
 
         HW-requirements:
                   TeensyLC with external EEPROM (see board schematics)
-                  for Flippad operation: 4 FSR force sensors connected via voltage dividers to ADC pins A6-A9
-                  for Flippad operation: Cirque Glidepoint Trackpad connected via I2C-2
+                  4 FSR force sensors connected via voltage dividers to ADC pins A6-A9
                   1 pressure sensor connected to ADC pin A0
                   3 momentary switches connected to GPIO pins 0,1,2
                   3 slot indication LEDs connected to GPIO pins 5,16,17
                   1 TSOP 38kHz IR-receiver connected to GPIO pin 4
                   1 high current IR-LED connected to GPIO pin 6 via MOSEFT
-                  optional: FlipMouse Bluetooth daughter board connected to 10-pin expansion port
-                  optional: SSD1306 display (connected via I2C-1 for FlipMouse or I2C-2 for Flippad)
+                  optional: Bluetooth daughter board connected to 10-pin expansion port
+                  optional: SSD1306 display (connected via I2C-1)
 
         SW-requirements:
                   Teensyduino AddOn for Arduino IDE, see https://www.pjrc.com/teensy/td_download.html
@@ -40,7 +39,6 @@
 #include "FlipWare.h"
 #include "gpio.h"      
 #include "infrared.h"      
-#include "cirque.h"        // for Cirque Glidepoint trackpad 
 #include "display.h"       // for SSD1306 I2C-Oled display
 #include "modes.h"
 #include "tone.h"
@@ -51,7 +49,6 @@
 
 /**
    device name for ID string & BT-pairing
-   (changed to "Flippad" if Cirque Glidepoint trackpad available)
 */
 char moduleName[]="Flipmouse";   
 
@@ -94,7 +91,6 @@ uint8_t actSlot = 0;                          // number of current slot
 unsigned long lastInteractionUpdate;          // timestamp for HID interaction updates
 uint8_t addonUpgrade = BTMODULE_UPGRADE_IDLE; // if not "idle": we are upgrading the addon module
 
-int padX=0,padY=0,padState=0;  // trackpad data
 
 // forward declaration of functions for sensor data processing
 void applyCalibration(); 
@@ -130,13 +126,9 @@ void setup() {
 
   initBlink(10,25);  // first signs of life!
 
-  cirqueInstalled=initCirque();      // check if i2c-trackpad connected
-                                     // if possible: init and activate Flippad mode
-  if (cirqueInstalled) strcpy(moduleName,"Flippad");  // update module name
-
   setBTName(moduleName);             // if BT-module installed: set advertising name
   
-  displayInstalled=displayInit(cirqueInstalled);   // check if i2c-display connected, if possible: init
+  displayInstalled=displayInit(0);   // check if i2c-display connected, if possible: init
   displayUpdate();
  
 #ifdef DEBUG_OUTPUT_FULL
@@ -174,48 +166,37 @@ void loop() {
   // get current sensor values
   sensorData.pressure = analogRead(PRESSURE_SENSOR_PIN);
 
-  if (cirqueInstalled) {
-    padState=updateCirquePad(&padX,&padY); 
-  }
-  else {
-    sensorData.up =    analogRead(UP_SENSOR_PIN);
-    sensorData.down =  analogRead(DOWN_SENSOR_PIN);
-    sensorData.left =  analogRead(LEFT_SENSOR_PIN);
-    sensorData.right = analogRead(RIGHT_SENSOR_PIN);
+  sensorData.up =    analogRead(UP_SENSOR_PIN);
+  sensorData.down =  analogRead(DOWN_SENSOR_PIN);
+  sensorData.left =  analogRead(LEFT_SENSOR_PIN);
+  sensorData.right = analogRead(RIGHT_SENSOR_PIN);
 
-    // apply rotation if needed
-    switch (slotSettings.ro) {
-      int tmp;
-      case 90: tmp = sensorData.up; sensorData.up = sensorData.left; sensorData.left = sensorData.down; 
-               sensorData.down = sensorData.right; sensorData.right = tmp; 
-               break;
-      case 180: tmp = sensorData.up; sensorData.up = sensorData.down; sensorData.down = tmp; tmp = sensorData.right; 
-                sensorData.right = sensorData.left; sensorData.left = tmp; 
-                break;
-      case 270: tmp = sensorData.up; sensorData.up = sensorData.right; sensorData.right = sensorData.down; 
-                sensorData.down = sensorData.left; sensorData.left = tmp; 
-                break;
-    }
+  // apply rotation if needed
+  switch (slotSettings.ro) {
+    int tmp;
+    case 90: tmp = sensorData.up; sensorData.up = sensorData.left; sensorData.left = sensorData.down; 
+             sensorData.down = sensorData.right; sensorData.right = tmp; 
+             break;
+    case 180: tmp = sensorData.up; sensorData.up = sensorData.down; sensorData.down = tmp; tmp = sensorData.right; 
+              sensorData.right = sensorData.left; sensorData.left = tmp; 
+              break;
+    case 270: tmp = sensorData.up; sensorData.up = sensorData.right; sensorData.right = sensorData.down; 
+              sensorData.down = sensorData.left; sensorData.left = tmp; 
+              break;
   }
 
   // perform periodic updates  
-  if (StandAloneMode && ((millis() >= lastInteractionUpdate + UPDATE_INTERVAL) || padState))  {
+  if (StandAloneMode && (millis() >= lastInteractionUpdate + UPDATE_INTERVAL))  {
     lastInteractionUpdate = millis();
     
-    if (cirqueInstalled) {     //  Trackpad active -> get coordinates and handle tap gestures
-      sensorData.xRaw=sensorData.x=padX;
-      sensorData.yRaw=sensorData.y=padY;
-      handleTapClicks(padState, slotSettings.gv*10);  // perform clicks and drag actions when in pad mode
-    }
-    else {                     // FSR/stick active -> apply calibration and drift correction
-      if (sensorData.calib_now)
-        applyCalibration();              
-      else  {   // no new calibration, use current values for x and y offset !
-        sensorData.xRaw = (sensorData.left - sensorData.right) - sensorData.cx;
-        sensorData.yRaw = (sensorData.up - sensorData.down) - sensorData.cy;
-        applyDriftCorrection();
-      } 
-    }
+    // apply calibration and drift correction
+    if (sensorData.calib_now)
+      applyCalibration();              
+    else  {   // no new calibration, use current values for x and y offset !
+      sensorData.xRaw = (sensorData.left - sensorData.right) - sensorData.cx;
+      sensorData.yRaw = (sensorData.up - sensorData.down) - sensorData.cy;
+      applyDriftCorrection();
+    } 
 
     // calculate angular direction and force
     sensorData.forceRaw = __ieee754_sqrtf(sensorData.xRaw * sensorData.xRaw + sensorData.yRaw * sensorData.yRaw);
@@ -228,8 +209,7 @@ void loop() {
     }
 
     // calculate updated x/y/force values according to deadzone
-    if (!useAbsolutePadValues())
-      applyDeadzone();
+    applyDeadzone();
 
     handleUserInteraction();  // handle all mouse / joystick / button activities
 
@@ -304,7 +284,7 @@ void applyDriftCorrection()
 */
 void applyDeadzone()
 {
-  if ((slotSettings.stickMode == STICKMODE_ALTERNATIVE) || (slotSettings.stickMode == STICKMODE_PAD_ALTERNATIVE)) {
+  if (slotSettings.stickMode == STICKMODE_ALTERNATIVE) {
 
     // rectangular deadzone for alternative modes
     if (sensorData.xRaw < -slotSettings.dx) 

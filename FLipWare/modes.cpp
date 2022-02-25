@@ -28,22 +28,11 @@ uint8_t mouseMoveCount = 0;
 unsigned long currentTime;
 unsigned long previousTime = 0;
 
-/**
-   extern declaration of static variables
-   which shall be accessed from other modules
-*/
-extern int resetPadDirectionStates;
 
 /**
    forward declarations of module-internal functions
 */
 void handleMovement(); 
-
-int useAbsolutePadValues() {
-  if ((slotSettings.stickMode==STICKMODE_PAD) || (slotSettings.stickMode==STICKMODE_PAD_ALTERNATIVE))
-    return(1);
-  return(0);
-}
 
 void handleUserInteraction()
 {
@@ -256,7 +245,7 @@ void handleUserInteraction()
         }
     }
 
-    // now handle stick or pad movements!
+    // now handle stick movements!
     handleMovement();
   }
 }
@@ -365,10 +354,6 @@ void handleMovement()
       acceleratedMouseMove(getAccelFactor());
       break; 
      
-    case STICKMODE_PAD:   // handle mouse pad mode 
-      acceleratedMouseMove(0.01);
-      break;
-
     case STICKMODE_ALTERNATIVE:  // handle alternative actions stick mode
       handleButton(UP_BUTTON,  sensorData.y < 0 ? 1 : 0);
       handleButton(DOWN_BUTTON,  sensorData.y > 0 ? 1 : 0);
@@ -376,40 +361,6 @@ void handleMovement()
       handleButton(RIGHT_BUTTON,  sensorData.x > 0 ? 1 : 0);
       break;
       
-    case STICKMODE_PAD_ALTERNATIVE:    // handle alternative actions pad mode  
-      if (sensorData.forceRaw>slotSettings.dx) 
-        switch (sensorData.dir) {   // sticky direction keys
-          case DIR_E: leftState=1; rightState=0; break;
-          case DIR_NE: upState=leftState=1; rightState=downState=0; break;
-          case DIR_N: upState=1;  downState=0; break;
-          case DIR_NW: upState=rightState=1; leftState=downState=0; break;
-          case DIR_W: rightState=1; leftState=0; break;
-          case DIR_SW: downState=rightState=1; upState=leftState=0; break;
-          case DIR_S: downState=1; upState=0;break;
-          case DIR_SE: downState=leftState=1; upState=rightState=0;break;        
-        } 
-        /*
-        switch (sensorData.dir) {   // non-sticky direction keys
-          case DIR_E: leftState=1; rightState=upState=downState=0;break;
-          case DIR_NE: upState=leftState=1; rightState=downState=0; break;
-          case DIR_N: upState=1;  downState=leftState=rightState=0; break;
-          case DIR_NW: upState=rightState=1; leftState=downState=0; break;
-          case DIR_W: rightState=1; leftState=upState=downState=0; break;
-          case DIR_SW: downState=rightState=1; upState=leftState=0; break;
-          case DIR_S: downState=1; upState=leftState=rightState=0;break;
-          case DIR_SE: downState=leftState=1; upState=rightState=0;break;        
-        } */
-      
-      if (resetPadDirectionStates) {
-        upState=downState=leftState=rightState=resetPadDirectionStates=0;
-      }
-      
-      handleButton(UP_BUTTON,  upState);
-      handleButton(DOWN_BUTTON,  downState);
-      handleButton(LEFT_BUTTON,  leftState);
-      handleButton(RIGHT_BUTTON,  rightState);    
-      break; 
-
     case STICKMODE_JOYSTICK_XY:
       Joystick.X (scaleJoystickAxis((float)sensorData.x * slotSettings.ax));
       Joystick.Y (scaleJoystickAxis((float)sensorData.y * slotSettings.ay));

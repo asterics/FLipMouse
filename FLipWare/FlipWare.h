@@ -8,20 +8,6 @@
         This firmware allows control of HID functions via FLipmouse module and/or AT-commands
         For a description of the supported commands see: commands.h
 
-        HW-requirements:
-                  TeensyLC with external EEPROM (see FlipMouse board schematics)
-                  4 FSR force sensors connected via voltage dividers to ADC pins A6-A9
-                  1 pressure sensor connected to ADC pin A0
-                  3 momentary switches connected to GPIO pins 0,1,2
-                  3 slot indication LEDs connected to GPIO pins 5,16,17
-                  1 TSOP 38kHz IR-receiver connected to GPIO pin 4
-                  1 high current IR-LED connected to GPIO pin 6 via MOSEFT
-                  optional: FlipMouse Bluetooth daughter board
-
-        SW-requirements:
-                  Teensyduino AddOn for Arduino IDE
-                  USB-type set to USB composite device (Serial + Keyboard + Mouse + Joystick)
-
    For a list of supported AT commands, see commands.h / commands.cpp
 
    This program is free software; you can redistribute it and/or modify
@@ -51,7 +37,7 @@
 
 #define VERSION_STRING "v2.12"
 
-//  V2.12: added support for cirque trackpads as alternative to FSR sensor daughterboard
+//  V2.12: improved modularisation and source code documentation, added LC-display support and elliptical deadzone
 //  V2.11: eeprom access optimization and support for deletion / update of individual slots
 //  V2.10: code size reduction: using floating point math, removed debug level control via AT E0, AT E1 and AT E2
 //          added macro command description to the user manual
@@ -83,7 +69,7 @@
 #define UPDATE_INTERVAL     5    // update interval for performing HID actions (in milliseconds)
 #define DEFAULT_CLICK_TIME  8    // time for mouse click (loop iterations from press to release)
 
-// Analog input pins (4FSRs + 1 pressure sensor, optional 1 hall sensor for FlipPad configuration)
+// Analog input pins (4FSRs + 1 pressure sensor)
 #define PRESSURE_SENSOR_PIN A0
 #define HALL_SENSOR_PIN     A1
 #define DOWN_SENSOR_PIN     A6
@@ -116,7 +102,7 @@ struct SlotSettings {
   char slotName[MAX_NAME_LEN];   // slotname
   uint16_t keystringBufferLen;   
   
-  uint8_t  stickMode;  // alternative(0), mouse(1), joystick (2,3,4) or pad (5,6) mode
+  uint8_t  stickMode;  // alternative(0), mouse(1), joystick (2,3,4)
   uint8_t  ax;     // acceleration x
   uint8_t  ay;     // acceleration y
   int16_t  dx;     // deadzone x

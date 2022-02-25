@@ -4,7 +4,7 @@
 
      Module: display.cpp - implementation of the Oled display functions 
 
-     Note: Oled display connects to I2C-1 (Wire) for FlipMouse of I2C-2 (Wire1) for FlipPad
+     Note: Oled display connects to I2C-1 (Wire) for FlipMouse
      The utilized library is https://github.com/greiman/SSD1306Ascii
 
    This program is distributed in the hope that it will be useful,
@@ -102,12 +102,10 @@ void displayUpdate(void) {
   oled->setCursor(100,0);
   switch (slotSettings.stickMode) {
     case 0:
-    case 6: oled->print("Alt"); break;
     case 1: oled->print("Stk"); break;
     case 2:
     case 3:
     case 4: oled->print("Joy"); break;
-    case 5: oled->print("Pad"); break;
   }
 
   oled->setCursor(100,3);

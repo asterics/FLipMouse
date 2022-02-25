@@ -53,8 +53,6 @@
 #define STICKMODE_JOYSTICK_XY      2
 #define STICKMODE_JOYSTICK_ZR      3
 #define STICKMODE_JOYSTICK_SLIDERS 4
-#define STICKMODE_PAD              5
-#define STICKMODE_PAD_ALTERNATIVE  6     
 
 /**
    @name handleUserInteraction
@@ -63,9 +61,4 @@
 */
 void handleUserInteraction();
 
-/**
-   @name useAbsolutePadValues
-   @return true if pad is operated in "absolute coordinate" mode, or false otherwise
-*/
-int useAbsolutePadValues();
 #endif

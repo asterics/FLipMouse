@@ -13,12 +13,20 @@
 #ifndef _UTILS_H_
 #define _UTILS_H_
 
+/**
+   @name __ieee754_sqrtf
+   @brief customized version of float square root function (saving flash memory)
+   @param x a float value
+   @return the square root of the value
+*/
 float __ieee754_sqrtf(float x);
-int  freeRam ();
 
-void initBlink(uint8_t count, uint8_t startTime);
-void makeTone(uint8_t kind, uint8_t param);
-void BlinkLed();
+/**
+   @name freeRam
+   @brief returns the free RAM byte
+   @return number of free bytes in RAM
+*/
+int  freeRam ();
 
 
 #endif

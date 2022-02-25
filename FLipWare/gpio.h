@@ -13,12 +13,38 @@
 #ifndef _GPIO_H_
 #define _GPIO_H_
 
+/**
+   constant definitions
+*/
 #define NUMBER_OF_PHYSICAL_BUTTONS 3  // number of physical switches
 #define NUMBER_OF_LEDS     3          // number of connected leds
 
-extern int8_t  input_map[NUMBER_OF_PHYSICAL_BUTTONS];
+/**
+   extern declaration of static variables
+   which shall be accessed from other modules
+*/
+extern int8_t  input_map[NUMBER_OF_PHYSICAL_BUTTONS];  // maps the button number to physical pin
 
+/**
+   @name initGPIO
+   @brief initializes data direction of gpio pins
+   @return none
+*/
 void initGPIO();
-void UpdateLeds();
+
+/**
+   @name initBlink
+   @brief initializes an LED blinking sequence
+   @return none
+*/
+void initBlink(uint8_t count, uint8_t startTime);
+
+
+/**
+   @name updateLeds
+   @brief update leds according to current slot number / blinking actions
+   @return none
+*/
+void updateLeds();
 
 #endif

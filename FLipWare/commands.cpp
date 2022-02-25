@@ -19,6 +19,7 @@
 #include "eeprom.h"
 #include "display.h"
 #include "infrared.h"
+#include "gpio.h"
 #include "tone.h"
 #include "modes.h"
 #include "keys.h"
@@ -26,13 +27,12 @@
 #include "reporting.h"
 #include "utils.h"
 
-uint8_t actButton = 0;
 
-extern void parseCommand (char * cmdstr);
-
-const char ERRORMESSAGE_NOT_FOUND[] = "E: not found";
-const char ERRORMESSAGE_EEPROM_FULL[] = "E: eeprom full";
-
+/**
+   atCommands this is the array containing all supported AT commands,
+   it consists of the AT command identifier (e.g. "ID" for command "AT ID")
+   and the identifier for the parameter data type of this command (e.g. PARTYPE_STRING)
+*/
 const struct atCommandType atCommands[] PROGMEM = {
   {"ID"  , PARTYPE_NONE },  {"BM"  , PARTYPE_UINT }, {"CL"  , PARTYPE_NONE }, {"CR"  , PARTYPE_NONE },
   {"CM"  , PARTYPE_NONE },  {"CD"  , PARTYPE_NONE }, {"PL"  , PARTYPE_NONE }, {"PR"  , PARTYPE_NONE },
@@ -57,12 +57,26 @@ const struct atCommandType atCommands[] PROGMEM = {
   {"BC"  , PARTYPE_STRING},
 };
 
-// perform a command  (called from parser.cpp)
-//   cmd: command identifier
-//   par1: optional numeric parameter
-//   periodicMouseMovement: if true, mouse will continue moving - if false: only one movement
+/**
+   error messages for handling EEPROM problems
+*/
+const char ERRORMESSAGE_NOT_FOUND[] = "E: not found";
+const char ERRORMESSAGE_EEPROM_FULL[] = "E: eeprom full";
+
+
+/**
+   @name performCommand (called from parser.cpp)
+   @brief performs a particular action/AT command
+   @param cmd AT command identifier
+   @param par1 numeric parameter for the command
+   @param keystring string parameter for the command
+   @param periodicMouseMovement if true, mouse will continue moving after action, otherwise only one movement
+   @return none
+*/
 void performCommand (uint8_t cmd, int16_t par1, char * keystring, int8_t periodicMouseMovement)
 {
+  static uint8_t actButton = 0;   // to remember the button number for the button-mode-assignment AT command "AT BM"
+  
   if (actButton != 0)  // if last command was BM (set buttonmode): store current command for this button !!
   {
 #ifdef DEBUG_OUTPUT_FULL

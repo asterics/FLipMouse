@@ -172,8 +172,10 @@
 #define _COMMANDS_H_
 
 
-// command identifiers
-
+/**
+   atCommands
+   enumeration of AT command identifiers
+*/
 enum atCommands {
   CMD_ID, CMD_BM, CMD_CL, CMD_CR, CMD_CM, CMD_CD, CMD_PL, CMD_PR, CMD_PM, CMD_RL, CMD_RR, CMD_RM,
   CMD_WU, CMD_WD, CMD_WS, CMD_MX, CMD_MY, CMD_KW, CMD_KP, CMD_KR, CMD_RA, CMD_SA, CMD_LO, CMD_LA,
@@ -185,12 +187,30 @@ enum atCommands {
   NUM_COMMANDS
 };
 
-struct atCommandType {   // holds AT command string and paramter type identifiers
+/**
+   atCommandType struct
+   holds AT command string and paramter type identifiers
+*/
+struct atCommandType {
     char atCmd[3];
     uint8_t  partype;
 };
 
+/**
+   extern declaration of static variables
+   which shall be accessed from other modules
+*/
 extern const struct atCommandType atCommands[];
+
+/**
+   @name performCommand (called from parser.cpp)
+   @brief performs a particular action/AT command
+   @param cmd AT command identifier
+   @param par1 numeric parameter for the command
+   @param keystring string parameter for the command
+   @param periodicMouseMovement if true, mouse will continue moving after action, otherwise only one movement
+   @return none
+*/
 void performCommand (uint8_t cmd, int16_t par1, char * keystring, int8_t periodicMouseMovement);
 
 #endif

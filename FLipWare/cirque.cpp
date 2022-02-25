@@ -19,6 +19,7 @@
 #include "FlipWare.h"
 #include "cirque.h"
 #include "buttons.h"
+#include "modes.h"
 #include "display.h"
 
 // Hardware pin-number labels

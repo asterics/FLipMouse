@@ -26,7 +26,7 @@ SSD1306AsciiWire *oled;    // pointer to the display driver class
 
 
 /**
-   name: displayInit
+   @name displayInit
    @param uint8_t useWire1:  true if Wire1 should be used, else use Wire
    @return uint_t: returns true if display was found, else false
 
@@ -54,7 +54,7 @@ uint8_t displayInit (uint8_t useWire1) {
 
 
 /**
-   name: displayClear
+   @name displayClear
    @param none
    @return none
 
@@ -70,7 +70,7 @@ void displayClear(void) {
 
 
 /**
-   name: displayMessage
+   @name displayMessage
    @param char * msg: string which is printed
    @return none
 
@@ -85,7 +85,7 @@ void displayMessage(char * msg) {
 }
 
 /**
-   name: displayUpdate
+   @name displayUpdate
    @param none
    @return none
 

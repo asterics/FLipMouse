@@ -20,16 +20,23 @@
 #include "tone.h"
 #include "utils.h"
 
+/**
+   static variables for mode handling
+ * */
 uint8_t strongSipPuffState = STRONG_MODE_IDLE;
 uint8_t mouseMoveCount = 0;
 unsigned long currentTime;
 unsigned long previousTime = 0;
-float timeDifference;
-uint32_t timeStamp = 0;
-unsigned long time = 0;
 
+/**
+   extern declaration of static variables
+   which shall be accessed from other modules
+*/
 extern int resetPadDirectionStates;
 
+/**
+   forward declarations of module-internal functions
+*/
 void handleMovement(); 
 
 int useAbsolutePadValues() {
@@ -254,6 +261,12 @@ void handleUserInteraction()
   }
 }
 
+/**
+   @name getAccelFactor
+   @brief calculates acceleration for mouse pointer movements 
+          according to sensordata and acceleration settings 
+   @return float value of current acceleration factor
+*/
 float getAccelFactor() {
   static float accelFactor=0;
   static int xo = 0, yo = 0;
@@ -283,6 +296,12 @@ float getAccelFactor() {
   return(accelFactor);
 }
 
+/**
+   @name acceleratedMouseMove
+   @brief performs accelerated mouse pointer movement
+   @param accelFactor current acceleration factor
+   @return none
+*/
 void acceleratedMouseMove(float accelFactor) {
   static float accumXpos = 0;
   static float accumYpos = 0;
@@ -312,6 +331,12 @@ void acceleratedMouseMove(float accelFactor) {
   accumYpos -= yMove;
 }
 
+/**
+   @name scaleJoystickAxis
+   @brief scales/crops coordinate values to joystick coordinates (0-1023, centered around 512)
+   @param val x/y coordinate value to be scaled
+   @return integer value for joystick coordinate
+*/
 int scaleJoystickAxis (float val) {
   int axis = 512 + (int) (val / 50);
   if (axis < 0) axis = 0; 
@@ -319,6 +344,11 @@ int scaleJoystickAxis (float val) {
   return (axis);
 }
 
+/**
+   @name handleMovement
+   @brief performs an action or movement according to the current sensorData and mode of operation
+   @return none
+*/
 void handleMovement() 
 {
   static int upState=0,downState=0,leftState=0,rightState=0;

@@ -19,6 +19,11 @@ int8_t  led_map[NUMBER_OF_LEDS] = {5, 16, 17};                //  maps leds pins
 uint8_t blinkCount = 0;
 uint8_t blinkTime = 0;
 uint8_t blinkStartTime = 0;
+
+/**
+   extern declaration of static variables
+   which shall be accessed from other modules
+*/
 extern uint8_t actSlot;
 
 void initGPIO() 
@@ -36,7 +41,7 @@ void initBlink(uint8_t  count, uint8_t startTime)
   blinkStartTime = startTime;
 }
 
-void UpdateLeds()
+void updateLeds()
 {
   if (blinkCount == 0) {
     if ((actSlot + 1) & 1) digitalWrite (led_map[0], LOW); else digitalWrite (led_map[0], HIGH);

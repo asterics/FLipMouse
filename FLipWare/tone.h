@@ -14,7 +14,10 @@
 #define _TONE_H_
 
 
-#define TONE_PIN  9   //Piezo Pin (for tone generation)
+/**
+   constant definitions for tone generation 
+*/ 
+#define TONE_PIN  9    // physical pin for piezo tone generation
 
 #define TONE_CALIB            1
 #define TONE_CHANGESLOT       2
@@ -28,7 +31,18 @@
 #define TONE_BT_PAIRING      10
 #define TONE_IR_REC          11
 
+/**
+   @name UpdateTones
+   @brief updates state/timing of running tone signals
+   @return none
+*/
 void UpdateTones();
+
+/**
+   @name makeTone
+   @brief initiates a new tone signal
+   @return none
+*/
 void makeTone(uint8_t kind, uint8_t param);
 
 #endif

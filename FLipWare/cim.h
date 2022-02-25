@@ -34,6 +34,11 @@
 
 #include <inttypes.h>
 
+
+/**
+   CIM protocol constant definitions
+   see also CIM documentation, AsTeRICS framework: https://github.com/asterics/AsTeRICS/tree/master/CIMs
+*/
 #define CIM_HEADER_LEN      11
 #define CIM_FRAME_START     0x5440  // little endian
 #define CIM_ID_LIPMOUSE      0xa401
@@ -71,7 +76,20 @@
 
 #define DATABUF_SIZE 15       // max. 15 bytes needed for data field
 
+/**
+   extern declaration of static variables
+   which shall be accessed from other modules
+*/
+extern void handleCimMode(void);
+extern void init_CIM_frame(void);
+extern volatile uint8_t StandAloneMode;
+extern volatile uint8_t CimMode;
 
+
+/**
+   ARE_frame_t struct
+   contains a packet frame for communication (sent from AsTeRICS ARE)
+*/
 struct ARE_frame_t {
   uint16_t packet_id;
   uint16_t are_id;
@@ -83,6 +101,10 @@ struct ARE_frame_t {
   uint32_t crc;
 };
 
+/**
+   CIM_frame_t struct
+   contains a packet frame for communication (sent to AsTeRICS ARE)
+*/
 struct CIM_frame_t {
   uint16_t packet_id;
   uint16_t cim_id;
@@ -95,25 +117,83 @@ struct CIM_frame_t {
 };
 
 
-
+/**
+   @name init_CIM_frame
+   @brief initialize the CIM frame structure
+   @return none
+*/
 void init_CIM_frame (void);
+
+/**
+   @name parse_CIM_protocol
+   @brief parses incoming serial bytes, detects if ARE or AT command
+          switches back to FlipMouse parser if AT command detected
+   @return incoming serial byte
+*/
 void parse_CIM_protocol(int);
 
-uint16_t adcval;
-uint16_t  ADC_Read(uint16_t);
-uint16_t sendCont;
-
-uint8_t update_Buttonval();
-
+/**
+   @name reply_FeatureList
+   @brief sends the feature list this CIM module type to ARE
+   @return none
+*/
 void reply_FeatureList(void);
+
+/**
+   @name reply_UniqueNumber
+   @brief sends the unique number for this CIM module type to ARE
+   @return none
+*/
 void reply_UniqueNumber(void);
+
+/**
+   @name reply_Acknowledge
+   @brief sends an ackmowledge frame to ARE
+   @return none
+*/
 void reply_Acknowledge(void);
+
+/**
+   @name reply_DataFrame
+   @brief sends a data frame to ARE
+   @return none
+*/
 void reply_DataFrame(void);
 
+/**
+   @name generate_ADCFrame
+   @brief updates CIM data structure with ADV values
+   @return ADC value
+*/
 void generate_ADCFrame(void);
+
+/**
+   @name generate_ButtonFrame
+   @brief updates CIM data structure with button press information
+   @return ADC value
+*/
 void generate_ButtonFrame(void);
 
+/**
+   @name ADC_Init
+   @brief initializes the ADC 
+   @return none
+*/
 void ADC_Init(void);
+
+/**
+   @name ADC_Read
+   @brief reads analog values of given channels
+   @param ADC channel index
+   @return ADC value
+*/
 uint16_t ADC_Read(uint16_t channel );
+
+/**
+   @name update_Buttonval
+   @brief updates state of pressed/released buttons (bit 0,1,2) in integer variable buttonval
+   @return true if button value changed, false otherwise
+*/
+uint8_t update_Buttonval();
 
 #endif

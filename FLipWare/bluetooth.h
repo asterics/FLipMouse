@@ -32,11 +32,10 @@
 #define BTMODULE_UPGRADE_RUNNING 2
 
 /**
-
-   name: mouseBT
-   @þaram x relative movement x axis
-   @þaram y relative movement y axis
-   @þaram scroll relative scroll actions
+   @name mouseBT
+   @param x relative movement x axis
+   @param y relative movement y axis
+   @param scroll relative scroll actions
    @return
 
    this method sends a mouse command via the Bluetooth module.
@@ -69,8 +68,7 @@ void mouseBTRelease(uint8_t mousebutton);
 boolean isMouseBTPressed(uint8_t mousebutton);
 
 /**
-
-   name: initBluetooth
+   @name initBluetooth
    @param none
    @return none
 
@@ -85,8 +83,7 @@ void initBluetooth();
 
 
 /**
-
-   name: setBTName
+   @name setBTName
    @param char * BTName: module name for BT-advertising
    @return none
 
@@ -98,8 +95,7 @@ void setBTName(char * BTName);
 
 
 /**
-
-   name: unpairAllBT
+   @name unpairAllBT
    @return none
 
    forget all paired devices
@@ -109,8 +105,7 @@ void unpairAllBT();
 
 
 /**
-
-   name: keyboardBTPrint
+   @name keyboardBTPrint
    @param char* writeString	string to typed by the Bluetooth HID keyboard
    @return none
 
@@ -122,8 +117,7 @@ void unpairAllBT();
 void keyboardBTPrint(char * writeString);
 
 /**
-
-   name: keyboardBTReleaseAll
+   @name keyboardBTReleaseAll
    @param none
    @return none
 
@@ -132,8 +126,7 @@ void keyboardBTPrint(char * writeString);
 void keyboardBTReleaseAll();
 
 /**
-
-   name: keyboardBTPress
+   @name keyboardBTPress
    @param int key	Keycode which should be pressed. Keycodes are in Teensy format
    @return none
 
@@ -144,8 +137,7 @@ void keyboardBTReleaseAll();
 void keyboardBTPress(int key);
 
 /**
-
-   name: keyboardBTRelease
+   @name keyboardBTRelease
    @param int key	Keycode which should be released. Keycodes are in Teensy format (16bit, divided into consumer keys, systemkeys & keyboard keys)
    @return none
 
@@ -154,8 +146,7 @@ void keyboardBTPress(int key);
 void keyboardBTRelease(int key);
 
 /**
-
-   name: isBluetoothAvailable
+   @name isBluetoothAvailable
    @param none
    @return true, if the BT module is available, false if not
 
@@ -166,8 +157,7 @@ void keyboardBTRelease(int key);
 bool isBluetoothAvailable();
 
 /**
-
-   name: startBTPairing
+   @name startBTPairing
    @param none
    @return none
    @note Not implemented
@@ -176,8 +166,7 @@ bool startBTPairing();
 
 
 /**
-
-   name: performAddonUpgrade
+   @name performAddonUpgrade
    @param none
    @return none
 

@@ -38,7 +38,6 @@
 */
 
 #include "FlipWare.h"
-#include "math.h"
 #include "gpio.h"      
 #include "infrared.h"      
 #include "cirque.h"        // for Cirque Glidepoint trackpad 
@@ -47,26 +46,18 @@
 #include "tone.h"
 #include "parser.h"  
 #include "reporting.h"
+#include "cim.h"
 #include "utils.h"         
 
-// Constants and Macro definitions
+/**
+   device name for ID string & BT-pairing
+   (changed to "Flippad" if Cirque Glidepoint trackpad available)
+*/
+char moduleName[]="Flipmouse";   
 
-#define UPDATE_INTERVAL     5   // update interval for performing HID actions (in milliseconds)
-
-// Analog input pins (4FSRs + 1 pressure sensor, optional 1 hall sensor for FlipPad configuration)
-#define PRESSURE_SENSOR_PIN A0
-#define HALL_SENSOR_PIN     A1
-#define DOWN_SENSOR_PIN     A6
-#define LEFT_SENSOR_PIN     A9
-#define UP_SENSOR_PIN       A7
-#define RIGHT_SENSOR_PIN    A8
-
-// Global variables
-
-char moduleName[]="Flipmouse";   // module name for ID string & BT-name
-                                 // changed to "Flippad" if Cirque Glidepoint trackpad available
-
-
+/**
+   default values for empty configuration slot 
+*/
 const struct SlotSettings defaultSlotSettings = {      // default slotSettings valus, for type definition see fabi.h
   "mouse",                          // initial slot name
   0,                                // initial keystringbuffer length
@@ -80,14 +71,11 @@ const struct SlotSettings defaultSlotSettings = {      // default slotSettings v
   1,                                // bt-mode 1: USB, 2: Bluetooth, 3: both (2 & 3 need daughter board))
 };
 
-struct SlotSettings slotSettings;
-uint8_t workingmem[WORKINGMEM_SIZE];     // working memory (command parser, IR-rec/play)
 
-uint8_t actSlot = 0;
-uint8_t addonUpgrade = BTMODULE_UPGRADE_IDLE; // if not "idle": we are upgrading the addon module
-unsigned long lastInteractionUpdate;
-
-struct SensorData sensorData {
+/**
+   static variables and data structures for settings and sensor data management
+*/
+struct SensorData sensorData {        
   .x=0, .y=0, .xRaw=0, .yRaw=0, .pressure=0, 
   .deadZone=0, .force=0, .forceRaw=0, .angle=0,
   .dir=0,
@@ -100,48 +88,51 @@ struct SensorData sensorData {
 };
 
 
-// function declarations
+struct SlotSettings slotSettings;             // contains all slot settings
+uint8_t workingmem[WORKINGMEM_SIZE];          // working memory (command parser, IR-rec/play)
+uint8_t actSlot = 0;                          // number of current slot
+unsigned long lastInteractionUpdate;          // timestamp for HID interaction updates
+uint8_t addonUpgrade = BTMODULE_UPGRADE_IDLE; // if not "idle": we are upgrading the addon module
+
+int padX=0,padY=0,padState=0;  // trackpad data
+
+// forward declaration of functions for sensor data processing
 void applyCalibration(); 
 void applyDriftCorrection();
 void applyDeadzone();
 
-extern void handleCimMode(void);
-extern void init_CIM_frame(void);
-extern uint8_t StandAloneMode;
-extern uint8_t CimMode;
 
-int padX=0,padY=0,padState=0;
-
-////////////////////////////////////////
-// Setup: program execution starts here
-////////////////////////////////////////
-
+/**
+   @name setup
+   @brief setup function, program execution starts here
+   @return none
+*/
 void setup() {
   //load slotSettings
   memcpy(&slotSettings,&defaultSlotSettings,sizeof(struct SlotSettings));
 
   //initialise BT module, if available (must be done early!)
   initBluetooth();
-  
+
+  // iniitialize other peripherals
   Serial.begin(115200);
-  delay(1000);
-
+  delay(1000);  // allow some time for serial interface to come up
   Wire.begin();
-  Wire.setClock(400000);
-
+  Wire.setClock(400000);  // use 400kHz I2C clock
   initGPIO();
   initIR();
   initButtons();
   initDebouncers();
   init_CIM_frame();  // for AsTeRICS CIM protocol compatibility
 
-  bootstrapSlotAddresses();
+  bootstrapSlotAddresses();   // initialize EEPROM if necessary
   readFromEEPROMSlotNumber(0, true); // read slot from first EEPROM slot if available !
 
-  initBlink(10,25);
+  initBlink(10,25);  // first signs of life!
 
-  cirqueInstalled=initCirque();      // check if i2c-trackpad connected, if possible: init and activate Flippad mode
-  if (cirqueInstalled) strcpy(moduleName,"Flippad");
+  cirqueInstalled=initCirque();      // check if i2c-trackpad connected
+                                     // if possible: init and activate Flippad mode
+  if (cirqueInstalled) strcpy(moduleName,"Flippad");  // update module name
 
   setBTName(moduleName);             // if BT-module installed: set advertising name
   
@@ -153,13 +144,14 @@ void setup() {
   Serial.print(moduleName); Serial.println(" ready !");
 #endif
 
-  lastInteractionUpdate = millis();
+  lastInteractionUpdate = millis();  // get first timestamp
 }
 
-///////////////////////////////
-// Loop: the main program loop
-///////////////////////////////
-
+/**
+   @name loop
+   @brief loop function, periodically called after setup()
+   @return none
+*/
 void loop() {
 	
   //check if we should go into addon upgrade mode
@@ -190,7 +182,8 @@ void loop() {
     sensorData.down =  analogRead(DOWN_SENSOR_PIN);
     sensorData.left =  analogRead(LEFT_SENSOR_PIN);
     sensorData.right = analogRead(RIGHT_SENSOR_PIN);
-  
+
+    // apply rotation if needed
     switch (slotSettings.ro) {
       int tmp;
       case 90: tmp = sensorData.up; sensorData.up = sensorData.left; sensorData.left = sensorData.down; 
@@ -212,7 +205,7 @@ void loop() {
     if (cirqueInstalled) {     //  Trackpad active -> get coordinates and handle tap gestures
       sensorData.xRaw=sensorData.x=padX;
       sensorData.yRaw=sensorData.y=padY;
-      handleTapClicks(padState, slotSettings.gv*10);  // perform clicks and drag actions when in pad mode, note: tap-time for left click in slotSettings.gv, 0-100 10ms 
+      handleTapClicks(padState, slotSettings.gv*10);  // perform clicks and drag actions when in pad mode
     }
     else {                     // FSR/stick active -> apply calibration and drift correction
       if (sensorData.calib_now)
@@ -233,14 +226,15 @@ void loop() {
       sensorData.dir=(180+22+(int)(sensorData.angle*57.29578))/45+1;  // translate rad to deg and make 8 sections
       if (sensorData.dir>8) sensorData.dir=1;  
     }
-       
+
+    // calculate updated x/y/force values according to deadzone
     if (!useAbsolutePadValues())
       applyDeadzone();
 
     handleUserInteraction();  // handle all mouse / joystick / button activities
 
     reportValues();     // send live data to serial
-    UpdateLeds();
+    updateLeds();
     UpdateTones();
   }
 
@@ -249,6 +243,11 @@ void loop() {
   }
 }
 
+/**
+   @name applyCalibration
+   @brief gets calibration coordinates (cx and cy in slotSettings struct) if caribration time reaches 0
+   @return none
+*/
 void applyCalibration() 
 {
   sensorData.xRaw=sensorData.yRaw=0;
@@ -262,6 +261,12 @@ void applyCalibration()
   }
 }
 
+
+/**
+   @name applyDriftCorrection
+   @brief calculates and applies drift correction values for FSR x and y values (in sensorData struct)
+   @return none
+*/
 void applyDriftCorrection()
 {
   // apply drift correction
@@ -291,9 +296,16 @@ void applyDriftCorrection()
   sensorData.yRaw -= sensorData.yDriftComp;
 }
 
+
+/**
+   @name applyDeadzone
+   @brief calculates deadzone and respective x/y/force values (in sensorData struct)
+   @return none
+*/
 void applyDeadzone()
 {
   if ((slotSettings.stickMode == STICKMODE_ALTERNATIVE) || (slotSettings.stickMode == STICKMODE_PAD_ALTERNATIVE)) {
+
     // rectangular deadzone for alternative modes
     if (sensorData.xRaw < -slotSettings.dx) 
       sensorData.x = sensorData.xRaw + slotSettings.dx; // apply deadzone values x direction
@@ -308,6 +320,7 @@ void applyDeadzone()
     else sensorData.y = 0;
 
   } else {
+
     //  circular deadzone for mouse control
     if (sensorData.forceRaw != 0) {     
       float a= slotSettings.dx>0 ? slotSettings.dx : 1 ;
@@ -319,9 +332,7 @@ void applyDeadzone()
     else sensorData.deadZone = slotSettings.dx;
 
     sensorData.force = (sensorData.forceRaw < sensorData.deadZone) ? 0 : sensorData.forceRaw - sensorData.deadZone;
-
     sensorData.x = (int) (sensorData.force * cosf(sensorData.angle));
     sensorData.y = (int) (sensorData.force * sinf(sensorData.angle));
-
   }
 }

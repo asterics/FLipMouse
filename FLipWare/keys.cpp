@@ -14,26 +14,26 @@
 
 */
 
-
-
 #include "FlipWare.h"
+#include "keys.h"
 
-#define KEY_PRESS    0
-#define KEY_HOLD     1
-#define KEY_RELEASE  2
-#define KEY_TOGGLE   3
 
-#define KEYPRESS_BUFFERSIZE 8
-
+/**
+   forward declarations of module-internal functions
+*/
 int pressed_keys[KEYPRESS_BUFFERSIZE];
-
 uint8_t in_keybuffer(int key);
 void remove_from_keybuffer(int key);
 void add_to_keybuffer(int key);
-void setKeyValues(char* text, uint8_t keyAction);
+void performKeyActions(char* text, uint8_t keyAction);
 
-
-
+/**
+   @name updateKey
+   @brief performs a new press/release action for a given keycode
+   @param key the keycode
+   @param keyAction action to be performed
+   @return none
+*/
 void updateKey(int key, uint8_t keyAction)
 {
   switch (keyAction)  {
@@ -62,23 +62,23 @@ void updateKey(int key, uint8_t keyAction)
 
 void pressKeys (char * text)
 {
-  setKeyValues(text, KEY_PRESS);
-  setKeyValues(text, KEY_RELEASE);
+  performKeyActions(text, KEY_PRESS);
+  performKeyActions(text, KEY_RELEASE);
 }
 
 void holdKeys (char * text)
 {
-  setKeyValues(text, KEY_HOLD);
+  performKeyActions(text, KEY_HOLD);
 }
 
 void releaseKeys (char * text)
 {
-  setKeyValues(text, KEY_RELEASE);
+  performKeyActions(text, KEY_RELEASE);
 }
 
 void toggleKeys (char * text)
 {
-  setKeyValues(text, KEY_TOGGLE);
+  performKeyActions(text, KEY_TOGGLE);
 }
 
 void release_all_keys()
@@ -99,7 +99,12 @@ void release_all()  // releases all previously pressed keys and stop mouse actio
   sensorData.autoMoveY = 0;
 }
 
-
+/**
+   @name add_to_keybuffer
+   @brief adds a keycode to buffer of pressed keys
+   @param key the keycode
+   @return none
+*/
 void add_to_keybuffer(int key)
 {
   for (int i = 0; i < KEYPRESS_BUFFERSIZE; i++)
@@ -110,6 +115,12 @@ void add_to_keybuffer(int key)
   }
 }
 
+/**
+   @name remove_from_keybuffer
+   @brief removes a keycode from buffer of pressed keys
+   @param key the keycode
+   @return none
+*/
 void remove_from_keybuffer(int key)
 {
   for (int i = 0; i < KEYPRESS_BUFFERSIZE; i++)
@@ -127,6 +138,12 @@ void remove_from_keybuffer(int key)
   }
 }
 
+/**
+   @name in_keybuffer
+   @brief returns true if a given keycode is in the buffer of pressed keys
+   @param key the keycode
+   @return true if key is actually pressed, otherwise false
+*/
 uint8_t in_keybuffer(int key)
 {
   for (int i = 0; i < KEYPRESS_BUFFERSIZE; i++)
@@ -137,12 +154,20 @@ uint8_t in_keybuffer(int key)
   return (0);
 }
 
+/**
+   keymap_struct 
+   maps a keycode to a key-identifier string
+*/
 struct keymap_struct {
   char *token;
   int key;
 };
 
-const keymap_struct keymap1 [] = {      // keymap for prefix KEY_
+/**
+   keymap1
+   keycode/key-identifier mapping for key-identifiers with prefix "KEY_"
+*/
+const keymap_struct keymap1 [] = {     
 
   {"SHIFT", KEY_LEFT_SHIFT},
   {"CTRL", KEY_LEFT_CTRL},
@@ -244,7 +269,11 @@ const keymap_struct keymap1 [] = {      // keymap for prefix KEY_
   {"MENU", KEY_MENU}
 };
 
-const keymap_struct keymap2 [] = {       // keymap for prefix KEYPAD_
+/**
+   keymap2
+   keycode/key-identifier mapping for key-identifiers with prefix "KEYPAD_"
+*/
+const keymap_struct keymap2 [] = {
   {"SLASH", KEYPAD_SLASH},
   {"ASTERIX", KEYPAD_ASTERIX},
   {"MINUS", KEYPAD_MINUS},
@@ -263,12 +292,17 @@ const keymap_struct keymap2 [] = {       // keymap for prefix KEYPAD_
   {"PERIOD", KEYPAD_PERIOD}
 };
 
-#define KEYMAP1_ELEMENTS (sizeof keymap1 / sizeof keymap1[0])
-#define KEYMAP2_ELEMENTS (sizeof keymap2 / sizeof keymap2[0])
+#define KEYMAP1_ELEMENTS (sizeof keymap1 / sizeof keymap1[0])   // number of key-identifiers with prefix "KEY_"
+#define KEYMAP2_ELEMENTS (sizeof keymap2 / sizeof keymap2[0])   // number of key-identifiers with prefix "KEYPAD_"
 
-// press, release or hold all supported keys
-// text is a string which contains the key identifiers eg. "KEY_CTRL KEY_C" for Ctrl-C
-void setKeyValues(char* text,  uint8_t keyAction)
+/**
+   @name performKeyActions
+   @brief press, release or hold multiple keys
+   @param text is a string which contains the key identifiers eg. "KEY_CTRL KEY_C" for Ctrl-C
+   @param keyAction the action will shall be performed
+   @return none
+*/
+void performKeyActions(char* text,  uint8_t keyAction)
 {
   char * tmptxt = (char *) malloc( sizeof(char) * ( strlen(text) + 2 ) ); // for parsing keystrings
   char * acttoken;

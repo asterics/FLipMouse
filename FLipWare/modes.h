@@ -21,7 +21,9 @@
 #ifndef _MODES_H_
 #define _MODES_H_
 
-
+/**
+   constant definitions of sip/puff and stick modes
+*/
 #define STRONGMODE_MOUSE_JOYSTICK_THRESHOLD  200
 #define STRONGMODE_STABLETIME        20
 #define STRONGMODE_EXIT_TIME        200
@@ -54,7 +56,16 @@
 #define STICKMODE_PAD              5
 #define STICKMODE_PAD_ALTERNATIVE  6     
 
+/**
+   @name handleUserInteraction
+   @brief applies all movement / action handling according to movement data and button modes of current slot
+   @return none
+*/
 void handleUserInteraction();
-int useAbsolutePadValues();
 
+/**
+   @name useAbsolutePadValues
+   @return true if pad is operated in "absolute coordinate" mode, or false otherwise
+*/
+int useAbsolutePadValues();
 #endif

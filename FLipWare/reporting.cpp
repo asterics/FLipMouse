@@ -19,6 +19,9 @@
 #include "parser.h"
 #include "reporting.h"
 
+/**
+  static variables for report management
+*/
 uint8_t reportSlotParameters = REPORT_NONE;
 uint8_t reportRawValues = 0;
 

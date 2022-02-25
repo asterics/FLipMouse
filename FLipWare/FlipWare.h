@@ -77,12 +77,25 @@
 // #define DEBUG_OUTPUT_FULL      // if full debug output is desired
 // #define DEBUG_OUTPUT_BASIC     // if basic debug output is desired (for eeprom)
 
-#define DEFAULT_CLICK_TIME      8    // time for mouse click (loop iterations from press to release)
+/**
+   global constant definitions
+*/
+#define UPDATE_INTERVAL     5    // update interval for performing HID actions (in milliseconds)
+#define DEFAULT_CLICK_TIME  8    // time for mouse click (loop iterations from press to release)
 
-#define WORKINGMEM_SIZE    300        // reserved RAM for working memory (command parser, IR-rec/play)
+// Analog input pins (4FSRs + 1 pressure sensor, optional 1 hall sensor for FlipPad configuration)
+#define PRESSURE_SENSOR_PIN A0
+#define HALL_SENSOR_PIN     A1
+#define DOWN_SENSOR_PIN     A6
+#define LEFT_SENSOR_PIN     A9
+#define UP_SENSOR_PIN       A7
+#define RIGHT_SENSOR_PIN    A8
+
+// RAM buffers and memory constraints
+#define WORKINGMEM_SIZE         300    // reserved RAM for working memory (command parser, IR-rec/play)
 #define MAX_KEYSTRING_LEN (WORKINGMEM_SIZE-3)   // maximum length for AT command parameters
-#define MAX_NAME_LEN  15              // maximum length for a slotname or ir name
-#define MAX_KEYSTRINGBUFFER_LEN 500   // maximum length for all string parameters of one slot
+#define MAX_NAME_LEN  15               // maximum length for a slotname or ir name
+#define MAX_KEYSTRINGBUFFER_LEN 500    // maximum length for all string parameters of one slot
 
 // direction identifiers
 #define DIR_E   1   // east
@@ -94,6 +107,10 @@
 #define DIR_S   7   // south
 #define DIR_SE  8   // south-east
 
+/**
+   SlotSettings struct
+   contains parameters for current slot
+*/
 struct SlotSettings {
 
   char slotName[MAX_NAME_LEN];   // slotname
@@ -121,6 +138,10 @@ struct SlotSettings {
   uint8_t  bt;     // bt-mode (0,1,2)
 };
 
+/**
+   SensorData struct
+   contains working data of sensors (raw and processed values)
+*/
 struct SensorData {
   int x, y, xRaw,yRaw;
   int pressure;
@@ -133,21 +154,25 @@ struct SensorData {
   int xDriftComp, yDriftComp;
   int xLocalMax, yLocalMax;  
 };
-  
+
+/**
+   extern declarations of functions and data structures 
+   which can be accessed from different modules
+*/
 extern char moduleName[];
 extern uint8_t actSlot;
 extern uint8_t addonUpgrade;
-
 extern struct SensorData sensorData;
 extern struct SlotSettings slotSettings; 
 extern const struct SlotSettings defaultSlotSettings;
-
 extern uint8_t workingmem[WORKINGMEM_SIZE];            // working memory  (command parser, IR-rec/play)
 extern char keystringBuffer[MAX_KEYSTRINGBUFFER_LEN];  // storage for all button string parameters of a slot
 
-//set the correct strcpy/strcmp functions for TeensyLC / ARM)
+/**
+   set the correct strcpy/strcmp functions for TeensyLC / ARM)
+*/
 #define strcpy_FM   strcpy
 #define strcmp_FM   strcmp
 typedef char* uint_farptr_t_FM;
 
- #endif
+#endif

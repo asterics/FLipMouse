@@ -13,10 +13,14 @@
 #include <Arduino.h>
 #include "tone.h"
 
+/**
+   static variables for tone singal generation
+*/
 uint16_t toneHeight;
 uint16_t toneOnTime;
 uint16_t toneOffTime;
 uint16_t toneCount = 0;
+
 
 void UpdateTones()
 {

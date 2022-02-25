@@ -17,14 +17,22 @@
 
 #include "FlipWare.h"
 #include "eeprom.h"
+#include "display.h"
+#include "infrared.h"
+#include "gpio.h"
+#include "tone.h"
+#include "modes.h"
+#include "keys.h"
+#include "parser.h"
+#include "reporting.h"
+#include "utils.h"
 
-uint8_t actButton = 0;
 
-extern void parseCommand (char * cmdstr);
-
-const char ERRORMESSAGE_NOT_FOUND[] = "E: not found";
-const char ERRORMESSAGE_EEPROM_FULL[] = "E: eeprom full";
-
+/**
+   atCommands this is the array containing all supported AT commands,
+   it consists of the AT command identifier (e.g. "ID" for command "AT ID")
+   and the identifier for the parameter data type of this command (e.g. PARTYPE_STRING)
+*/
 const struct atCommandType atCommands[] PROGMEM = {
   {"ID"  , PARTYPE_NONE },  {"BM"  , PARTYPE_UINT }, {"CL"  , PARTYPE_NONE }, {"CR"  , PARTYPE_NONE },
   {"CM"  , PARTYPE_NONE },  {"CD"  , PARTYPE_NONE }, {"PL"  , PARTYPE_NONE }, {"PR"  , PARTYPE_NONE },
@@ -49,58 +57,26 @@ const struct atCommandType atCommands[] PROGMEM = {
   {"BC"  , PARTYPE_STRING},
 };
 
-void printCurrentSlot()
-{
-  Serial.print("Slot:");  Serial.println(settings.slotName);
-  Serial.print("AT AX "); Serial.println(settings.ax);
-  Serial.print("AT AY "); Serial.println(settings.ay);
-  Serial.print("AT DX "); Serial.println(settings.dx);
-  Serial.print("AT DY "); Serial.println(settings.dy);
-  Serial.print("AT MS "); Serial.println(settings.ms);
-  Serial.print("AT AC "); Serial.println(settings.ac);
-  Serial.print("AT TS "); Serial.println(settings.ts);
-  Serial.print("AT TP "); Serial.println(settings.tp);
-  Serial.print("AT WS "); Serial.println(settings.ws);
-  Serial.print("AT SP "); Serial.println(settings.sp);
-  Serial.print("AT SS "); Serial.println(settings.ss);
-  Serial.print("AT MM "); Serial.println(settings.stickMode);
-  Serial.print("AT GV "); Serial.println(settings.gv);
-  Serial.print("AT RV "); Serial.println(settings.rv);
-  Serial.print("AT GH "); Serial.println(settings.gh);
-  Serial.print("AT RH "); Serial.println(settings.rh);
-  Serial.print("AT RO "); Serial.println(settings.ro);
-  Serial.print("AT BT "); Serial.println(settings.bt);
-
-  for (int i = 0; i < NUMBER_OF_BUTTONS; i++)
-  {
-    Serial.print("AT BM ");
-    if (i < 9) Serial.print("0"); // leading zero for button numbers !
-    Serial.println(i + 1);
-    Serial.print("AT ");
-    int actCmd = buttons[i].mode;
-    char cmdStr[4];
-        
-    strcpy_FM(cmdStr, (uint_farptr_t_FM)atCommands[actCmd].atCmd);
-    Serial.print(cmdStr);
-    switch (pgm_read_byte_near(&(atCommands[actCmd].partype)))
-    {
-      case PARTYPE_UINT:
-      case PARTYPE_INT:  Serial.print(" "); Serial.print(buttons[i].value); break;
-      case PARTYPE_STRING: Serial.print(" "); Serial.print(buttonKeystrings[i]); break;
-    }
-    Serial.println("");
-  }
-}
+/**
+   error messages for handling EEPROM problems
+*/
+const char ERRORMESSAGE_NOT_FOUND[] = "E: not found";
+const char ERRORMESSAGE_EEPROM_FULL[] = "E: eeprom full";
 
 
-
-
-// perform a command  (called from parser.cpp)
-//   cmd: command identifier
-//   par1: optional numeric parameter
-//   periodicMouseMovement: if true, mouse will continue moving - if false: only one movement
+/**
+   @name performCommand (called from parser.cpp)
+   @brief performs a particular action/AT command
+   @param cmd AT command identifier
+   @param par1 numeric parameter for the command
+   @param keystring string parameter for the command
+   @param periodicMouseMovement if true, mouse will continue moving after action, otherwise only one movement
+   @return none
+*/
 void performCommand (uint8_t cmd, int16_t par1, char * keystring, int8_t periodicMouseMovement)
 {
+  static uint8_t actButton = 0;   // to remember the button number for the button-mode-assignment AT command "AT BM"
+  
   if (actButton != 0)  // if last command was BM (set buttonmode): store current command for this button !!
   {
 #ifdef DEBUG_OUTPUT_FULL
@@ -116,6 +92,7 @@ void performCommand (uint8_t cmd, int16_t par1, char * keystring, int8_t periodi
 
   switch (cmd) {
     case CMD_ID:
+      Serial.print(moduleName); Serial.print(" ");
       Serial.println(VERSION_STRING);
       break;
     case CMD_BM:
@@ -183,20 +160,20 @@ void performCommand (uint8_t cmd, int16_t par1, char * keystring, int8_t periodi
       mouseRelease(MOUSE_MIDDLE);
       break;
     case CMD_WU:
-      mouseScroll(-settings.ws);
+      mouseScroll(-slotSettings.ws);
       break;
     case CMD_WD:
-      mouseScroll(settings.ws);
+      mouseScroll(slotSettings.ws);
       break;
     case CMD_WS:
-      settings.ws = par1;
+      slotSettings.ws = par1;
       break;
     case CMD_MX:
-      if (periodicMouseMovement) moveX = par1;
+      if (periodicMouseMovement) sensorData.autoMoveX = par1;
       else mouseMove(par1, 0);
       break;
     case CMD_MY:
-      if (periodicMouseMovement) moveY = par1;
+      if (periodicMouseMovement) sensorData.autoMoveY = par1;
       else mouseMove(0, par1);
       break;
     case CMD_JX:
@@ -247,7 +224,7 @@ void performCommand (uint8_t cmd, int16_t par1, char * keystring, int8_t periodi
       release_all();
       if (keystring) {
         if ((strlen(keystring) > 0) && (strlen(keystring) < MAX_NAME_LEN-1)) {
-          strcpy (settings.slotName, keystring);  // store current slot name
+          strcpy (slotSettings.slotName, keystring);  // store current slot name
           if (saveToEEPROM(keystring)) Serial.println("OK");
           else Serial.println(ERRORMESSAGE_EEPROM_FULL);
         }
@@ -260,6 +237,7 @@ void performCommand (uint8_t cmd, int16_t par1, char * keystring, int8_t periodi
         release_all();
         if (readFromEEPROM(keystring)) Serial.println("OK");
         else Serial.println(ERRORMESSAGE_NOT_FOUND);
+        displayUpdate();
       }
       break;
     case CMD_LA:
@@ -277,6 +255,7 @@ void performCommand (uint8_t cmd, int16_t par1, char * keystring, int8_t periodi
 #endif
       release_all();
       if (!readFromEEPROM("")) Serial.println(ERRORMESSAGE_NOT_FOUND);
+      displayUpdate();
       break;
     case CMD_DE:
 #ifdef DEBUG_OUTPUT_FULL
@@ -288,9 +267,9 @@ void performCommand (uint8_t cmd, int16_t par1, char * keystring, int8_t periodi
       break;
     case CMD_RS:
       deleteSlot(""); // delete all slots
-      memcpy(&settings,&defaultSettings,sizeof(struct slotGeneralSettings)); //load default values from flash
+      memcpy(&slotSettings,&defaultSlotSettings,sizeof(struct SlotSettings)); //load default values from flash
       initButtons(); //reset buttons
-      saveToEEPROM(settings.slotName); //save default slot to default name
+      saveToEEPROM(slotSettings.slotName); //save default slot to default name
       readFromEEPROM(""); //load this slot
       Serial.println("OK");    // send AT command acknowledge
       break;
@@ -298,11 +277,13 @@ void performCommand (uint8_t cmd, int16_t par1, char * keystring, int8_t periodi
       break;
 
     case CMD_MM:
-      settings.stickMode = par1;
+      slotSettings.stickMode = par1;
+      displayUpdate();
+      
 #ifdef DEBUG_OUTPUT_FULL
-      if (settings.stickMode == STICKMODE_MOUSE)
+      if (slotSettings.stickMode == STICKMODE_MOUSE)
         Serial.println("mouse function activated");
-      else if (settings.stickMode >= STICKMODE_JOYSTICK_XY)
+      else if (slotSettings.stickMode >= STICKMODE_JOYSTICK_XY)
         Serial.println("joystick function activated");
       else Serial.println("alternative functions activated");
 #endif
@@ -312,8 +293,8 @@ void performCommand (uint8_t cmd, int16_t par1, char * keystring, int8_t periodi
       Serial.println("switch mouse / alternative function");
 #endif
       initBlink(6, 15);
-      if (settings.stickMode == STICKMODE_ALTERNATIVE)  settings.stickMode = STICKMODE_MOUSE;
-      else settings.stickMode = STICKMODE_ALTERNATIVE;
+      if (slotSettings.stickMode == STICKMODE_ALTERNATIVE)  slotSettings.stickMode = STICKMODE_MOUSE;
+      else slotSettings.stickMode = STICKMODE_ALTERNATIVE;
       break;
     case CMD_SR:
       reportRawValues = 1;
@@ -326,26 +307,26 @@ void performCommand (uint8_t cmd, int16_t par1, char * keystring, int8_t periodi
       Serial.println("start calibration");
 #endif
       initBlink(10, 20);
-      calib_now = 100;
+      sensorData.calib_now = 100;
       makeTone(TONE_CALIB, 0);
       break;
     case CMD_AX:
-      settings.ax = par1;
+      slotSettings.ax = par1;
       break;
     case CMD_AY:
-      settings.ay = par1;
+      slotSettings.ay = par1;
       break;
     case CMD_DX:
-      settings.dx = par1;
+      slotSettings.dx = par1;
       break;
     case CMD_DY:
-      settings.dy = par1;
+      slotSettings.dy = par1;
       break;
     case CMD_MS:
-      settings.ms = par1;
+      slotSettings.ms = par1;
       break;
     case CMD_AC:
-      settings.ac = par1;
+      slotSettings.ac = par1;
       break;
     case CMD_MA:
       {
@@ -381,34 +362,36 @@ void performCommand (uint8_t cmd, int16_t par1, char * keystring, int8_t periodi
       delay(par1);
       break;
     case CMD_TS:
-      settings.ts = par1;
+      slotSettings.ts = par1;
       break;
     case CMD_TP:
-      settings.tp = par1;
+      slotSettings.tp = par1;
       break;
     case CMD_SP:
-      settings.sp = par1;
+      slotSettings.sp = par1;
       break;
     case CMD_SS:
-      settings.ss = par1;
+      slotSettings.ss = par1;
       break;
     case CMD_GV:
-      settings.gv = par1;
+      slotSettings.gv = par1;
       break;
     case CMD_RV:
-      settings.rv = par1;
+      slotSettings.rv = par1;
       break;
     case CMD_GH:
-      settings.gh = par1;
+      slotSettings.gh = par1;
       break;
     case CMD_RH:
-      settings.rh = par1;
+      slotSettings.rh = par1;
       break;
     case CMD_RO:
-      settings.ro = par1;
+      slotSettings.ro = par1;
+      displayUpdate();
       break;
     case CMD_BT:
-      settings.bt = par1;
+      slotSettings.bt = par1;
+      displayUpdate();
       break;
 
     case CMD_IR:

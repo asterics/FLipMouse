@@ -2,7 +2,7 @@
      FLipWare - AsTeRICS Foundation
      For more info please visit: http://www.asterics-academy.net
 
-     Module: parser.cpp - implementation of the command parser
+     Module: parser.cpp - implementation of the parser for serial commands and parameters
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -12,17 +12,29 @@
    but WITHOUT ANY WARRANTY; See the GNU General Public License:
    http://www.gnu.org/licenses/gpl-3.0.en.html
 
-*/
+*/  
 
 
 #include "FlipWare.h"
+#include "parser.h"
 
 uint8_t readstate = 0;
+
+/**
+   extern declaration of static variables
+   which shall be accessed from other modules
+*/
 extern void init_CIM_frame (void);
 extern void parse_CIM_protocol(int actbyte);
 extern uint8_t CimParserActive;
 
-
+/**
+   @name get_uint
+   @brief converts a string into an unsigned integer (max 16 bit!)
+   @param str pointer to string
+   @param result pointer to 16 bit integer where result shall be stored
+   @return true if conversion valid, false if wrong characters detected
+*/
 uint8_t get_uint(char * str, int16_t * result)
 {
   int num = 0;
@@ -38,6 +50,13 @@ uint8_t get_uint(char * str, int16_t * result)
   return (1);
 }
 
+/**
+   @name get_int
+   @brief converts a string into an signed integer (max 16 bit!)
+   @param str pointer to string
+   @param result pointer to 16 bit integer where result shall be stored
+   @return true if conversion valid, false if wrong characters detected
+*/
 uint8_t get_int(char * str, int16_t * result)
 {
   int16_t num, fact;
@@ -52,6 +71,12 @@ uint8_t get_int(char * str, int16_t * result)
   return (1);
 }
 
+/**
+   @name strup
+   @brief converts a string into upper case characters
+   @param str pointer to string
+   @return none
+*/
 void strup (char * str)   // convert to upper case letters
 {
   if (!str) return;

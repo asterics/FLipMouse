@@ -2,7 +2,7 @@
      FLipWare - AsTeRICS Foundation
      For more info please visit: http://www.asterics-academy.net
 
-     Module: modes.cpp - implementation of stick operation and special modes, header file
+     Module: modes.h - implementation of stick operation and special modes, header file
 
 
    For a list of supported AT commands, see commands.h / commands.cpp
@@ -21,9 +21,31 @@
 #ifndef _MODES_H_
 #define _MODES_H_
 
-#define HOLD_IDLE 0
-#define HOLD_X    1
-#define HOLD_Y    2
+/**
+   constant definitions of sip/puff and stick modes
+*/
+#define STRONGMODE_MOUSE_JOYSTICK_THRESHOLD  200
+#define STRONGMODE_STABLETIME        20
+#define STRONGMODE_EXIT_TIME        200
+#define STRONGMODE_IDLE_TIME         150
+#define SIP_PUFF_SETTLE_TIME         15
+#define MIN_HOLD_TIME                10
+
+#define SIP_PUFF_STATE_IDLE        0
+#define SIP_PUFF_STATE_STARTED     1
+#define SIP_PUFF_STATE_PRESSED     2
+
+#define STRONG_MODE_IDLE                 0
+#define STRONG_MODE_ENTER_STRONGPUFF     1
+#define STRONG_MODE_STRONGPUFF_ACTIVE    2
+#define STRONG_MODE_ENTER_STRONGSIP      3
+#define STRONG_MODE_STRONGSIP_ACTIVE     4
+#define STRONG_MODE_RELEASE              5
+#define STRONG_MODE_RETURN_TO_IDLE       6
+
+#define HOLD_IDLE     0
+#define HOLD_X        1
+#define HOLD_Y        2
 #define HOLD_PRESSURE 3
 
 #define STICKMODE_ALTERNATIVE      0
@@ -32,9 +54,11 @@
 #define STICKMODE_JOYSTICK_ZR      3
 #define STICKMODE_JOYSTICK_SLIDERS 4
 
-void handleModeState(int x, int y, int pressure);
-
-// extern uint8_t holdMode =HOLD_IDLE;
-
+/**
+   @name handleUserInteraction
+   @brief applies all movement / action handling according to movement data and button modes of current slot
+   @return none
+*/
+void handleUserInteraction();
 
 #endif

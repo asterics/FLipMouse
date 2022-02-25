@@ -22,11 +22,13 @@
  * */
 
 #include "eeprom.h"
+#include "reporting.h"
+#include "tone.h"
 
 /** Device address of the EEPROM **/
 #define deviceaddress 0x50
 #define EEPROM_PAGESIZE 64
-#define I2C_WRITE_BUFFER_LEN 64
+#define I2C_WRITE_BUFFER_LEN 16  // 64   Note: smaller i2c buffer size in Wire Library than in i2c_t3! -> adjust?
 #define I2C_READ_BUFFER_LEN  16
 
 /**
@@ -284,12 +286,12 @@ void saveToEEPROMSlotNumber(int8_t nr, char * slotname)
 {
   uint16_t size = 0;
   uint16_t addr = 0; //address pointer
-  uint8_t* p = (uint8_t *)&settings; //pointer to the global settings
+  uint8_t* p = (uint8_t *)&slotSettings; //pointer to the global slotSettings
 
   // determine the size of this slot
-  size += sizeof(slotGeneralSettings);
+  size += sizeof(SlotSettings);
   size += sizeof(slotButtonSettings)*NUMBER_OF_BUTTONS;
-  size += settings.keystringBufferLen;
+  size += slotSettings.keystringBufferLen;
 
   #ifdef DEBUG_OUTPUT_BASIC
     Serial.print("Slotsize:");
@@ -347,17 +349,17 @@ void saveToEEPROMSlotNumber(int8_t nr, char * slotname)
     Serial.println(addr);
   #endif
 
-  // save the general settings to the global settings struct
-  writeEEPROMBin(addr, (uint8_t *)&settings, sizeof(slotGeneralSettings));
-  addr += sizeof(slotGeneralSettings);
+  // save the general slotSettings to the global slotSettings struct
+  writeEEPROMBin(addr, (uint8_t *)&slotSettings, sizeof(SlotSettings));
+  addr += sizeof(SlotSettings);
 
-  // write all button settings
+  // write all button slotSettings
   writeEEPROMBin(addr, (char*)buttons, sizeof(slotButtonSettings)*NUMBER_OF_BUTTONS);
   addr += sizeof(slotButtonSettings)*NUMBER_OF_BUTTONS; 
 
   // write all keystrings
-  writeEEPROMBin(addr, keystringBuffer, settings.keystringBufferLen);
-  addr += settings.keystringBufferLen;
+  writeEEPROMBin(addr, keystringBuffer, slotSettings.keystringBufferLen);
+  addr += slotSettings.keystringBufferLen;
 
   /** update the header table */
   header.endSlotAddress[nr] = addr;
@@ -444,19 +446,19 @@ uint8_t readFromEEPROMSlotNumber(uint8_t nr, bool playTone)
   actSlot=nr;
   address = header.startSlotAddress[nr];
 
-  // load the general settings struct
-  readEEPROMBin((uint8_t *)&settings, address, sizeof(slotGeneralSettings));
-  address+=sizeof(slotGeneralSettings);
+  // load the general slotSettings struct
+  readEEPROMBin((uint8_t *)&slotSettings, address, sizeof(SlotSettings));
+  address+=sizeof(SlotSettings);
   #ifdef DEBUG_OUTPUT_BASIC
-    Serial.print("read slotname "); Serial.println(settings.slotName);
+    Serial.print("read slotname "); Serial.println(slotSettings.slotName);
   #endif
 
-  // load all button settings
+  // load all button slotSettings
   readEEPROMBin((char *)buttons, address, sizeof(slotButtonSettings)*NUMBER_OF_BUTTONS);
   address+=sizeof(slotButtonSettings)*NUMBER_OF_BUTTONS;
 
   // load keystring buffer
-  readEEPROMBin(keystringBuffer, address, settings.keystringBufferLen);
+  readEEPROMBin(keystringBuffer, address, slotSettings.keystringBufferLen);
   initButtonKeystrings();
 
   if (reportSlotParameters != REPORT_NONE)
@@ -696,14 +698,14 @@ void bootstrapSlotAddresses()
     makeTone(TONE_CHANGESLOT, 4);
     Serial.println("Initializing EEPROM!");
     memset(&header, 0, sizeof(header));     // delete all slots, initialize with 0
-    saveToEEPROMSlotNumber(0, "mouse");   // save default settings to first slot
+    saveToEEPROMSlotNumber(0, "mouse");   // save default slotSettings to first slot
     writeEEPROM(EEPROM_MAX_ADDRESS,EEPROM_MAGIC_NUMBER);  // store magic number!
   }
   else {
     // load header from EEPROM storage!
     readEEPROMBin((uint8_t *)&header,0,sizeof(storageHeader));
     if (!header.startSlotAddress[0])  // in case no slot is available 
-      saveToEEPROMSlotNumber(0, "mouse");   // save default settings to first slot
+      saveToEEPROMSlotNumber(0, "mouse");   // save default slotSettings to first slot
   }
 
   #ifdef DEBUG_OUTPUT_BASIC
@@ -799,7 +801,7 @@ void listSlots()
   for (uint8_t i = 0; (i < MAX_SLOTS_IN_EERPOM) && header.startSlotAddress[i]; i++)  {
     // load the base address for the current slot
     address = header.startSlotAddress[i];
-    // print out the slot name (assumed to be located at the beginning of general settings)
+    // print out the slot name (assumed to be located at the beginning of general slotSettings)
     Serial.print("Slot"); Serial.print(i); Serial.print(":");
     readEEPROMBin(tmp, address, MAX_NAME_LEN);
     Serial.println(tmp);    
@@ -849,7 +851,7 @@ uint16_t getFreeSlotAddress(void) {
 
 
 /**
-   print all slot settings and button mode to serial 
+   print all slot slotSettings and button mode to serial 
  * */
 void printAllSlots(void) {
   uint8_t actSlot=0;

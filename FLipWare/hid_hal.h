@@ -19,9 +19,19 @@
 
 #include "FlipWare.h"
 
-/*
+#define DRAG_RECORDING_IDLE 0
+#define DRAG_RECORDING_ACTIVE 1
 
-   name: keyboardPrint
+/**
+   extern declaration of static variables
+   which shall be accessed from other modules
+*/
+extern uint8_t dragRecordingState;
+extern int16_t dragRecordingX;
+extern int16_t dragRecordingY;
+
+/*
+   @name keyboardPrint
    @param char* keyString string to be typed by keyboard
    @return none
 
@@ -30,8 +40,7 @@
 void keyboardPrint(char * keyString);
 
 /*
-
-   name: keyboardPress
+   @name keyboardPress
    @param int key keycode to be typed by keyboard
    @return none
 
@@ -40,8 +49,7 @@ void keyboardPrint(char * keyString);
 void keyboardPress(int key);
 
 /*
-
-   name: keyboardRelease
+   @name keyboardRelease
    @param int key keycode to be released by keyboard
    @return none
 
@@ -50,8 +58,7 @@ void keyboardPress(int key);
 void keyboardRelease(int key);
 
 /*
-
-   name: keyboardReleaseAll
+   @name keyboardReleaseAll
    @param none
    @return none
 
@@ -60,8 +67,7 @@ void keyboardRelease(int key);
 void keyboardReleaseAll();
 
 /*
-
-   name: mousePress
+   @name mousePress
    @param uint8_t button	button code which should be pressed.
    @return none
 
@@ -70,8 +76,7 @@ void keyboardReleaseAll();
 void mousePress(uint8_t button);
 
 /*
-
-   name: mouseToggle
+   @name mouseToggle
    @param uint8_t button  button code which should be toggled.
    @return none
 
@@ -80,8 +85,7 @@ void mousePress(uint8_t button);
 void mouseToggle(uint8_t button);
 
 /*
-
-   name: mouseRelease
+   @name mouseRelease
    @param uint8_t button	button code which should be released.
    @return none
 
@@ -91,8 +95,7 @@ void mouseRelease(uint8_t button);
 
 
 /*
-
-   name: mouseScroll
+   @name mouseScroll
    @param int8_t steps  steps to scroll.
    @return none
 
@@ -102,8 +105,7 @@ void mouseScroll(int8_t steps);
 
 
 /*
-
-   name: mouseMove
+   @name mouseMove
    @param int x	 movement in x direction
    @param int y	 movement in y direction
    @return none

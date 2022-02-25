@@ -31,11 +31,10 @@ long upgradeTimestamp = 0;          // eventually come back to AT mode from an u
 uint8_t readstate_f=0;              // needed to track the return value status during addon upgrade mode
 
 /**
-
-   name: mouseBT
-   @þaram x relative movement x axis
-   @þaram y relative movement y axis
-   @þaram scroll relative scroll actions
+   @name mouseBT
+   @param x relative movement x axis
+   @param y relative movement y axis
+   @param scroll relative scroll actions
    @return
 
    this method sends a mouse command via the Bluetooth module.
@@ -138,8 +137,7 @@ boolean isMouseBTPressed(uint8_t mousebutton)
 
 
 /**
-
-   name: sendBTKeyboardReport
+   @name sendBTKeyboardReport
    @param none
    @return none
 
@@ -175,8 +173,7 @@ void sendBTKeyboardReport()
 }
 
 /**
-
-   name: keyboardBTPress
+   @name keyboardBTPress
    @param int key	Keycode which should be pressed. Keycodes are in Teensy format
    @return none
 
@@ -206,8 +203,7 @@ void keyboardBTPress(int key)
 }
 
 /**
-
-   name: keyboardBTRelease
+   @name keyboardBTRelease
    @param int key	Keycode which should be released. Keycodes are in Teensy format (16bit, divided into consumer keys, systemkeys & keyboard keys)
    @return none
 
@@ -236,8 +232,7 @@ void keyboardBTRelease(int key)
 }
 
 /**
-
-   name: keyboardBTReleaseAll
+   @name keyboardBTReleaseAll
    @param none
    @return none
 
@@ -255,8 +250,7 @@ void keyboardBTReleaseAll()
 
 
 /**
-
-   name: keyboardBTPrint
+   @name keyboardBTPrint
    @param char* writeString	string to typed by the Bluetooth HID keyboard
    @return none
 
@@ -311,8 +305,7 @@ void keyboardBTPrint(char * writeString)
 }
 
 /**
-
-   name: initBluetooth
+   @name initBluetooth
    @param none
    @return none
 
@@ -335,14 +328,37 @@ void initBluetooth()
 
   ///@todo send identifier to BT module & check response. With BT addon this is much faster and reliable
   bt_esp32addon = EZKEY;
-  //Serial_AUX.println("$ID");
-  //set BT name to FLipMouse
-  Serial_AUX.println("$NAME FLipMouse");
+
 }
 
 /**
+   @name setBTName
+   @param char * BTName: module name for BT-advertising
+   @return none
 
-   name: isBluetoothAvailable
+   sets the BT module name for advertising/pairing.
+
+*/
+void setBTName(char * BTName) {
+  //set moduel name for BT advertising
+  Serial_AUX.print("$NAME ");
+  Serial_AUX.println(BTName);  
+}
+
+/**
+   @name unpairAllBT
+   @return none
+
+   forget all paired devices
+
+*/
+void unpairAllBT() {
+  Serial_AUX.println("$DP");
+}
+
+
+/**
+   @name isBluetoothAvailable
    @param none
    @return true, if the BT module is available, false if not
 
@@ -356,8 +372,7 @@ bool isBluetoothAvailable()
 }
 
 /**
-
-   name: startBTPairing
+   @name startBTPairing
    @param none
    @return none
    @note Not implemented
@@ -371,8 +386,7 @@ bool startBTPairing()
 
 
 /**
-
-   name: performAddonUpgrade
+   @name performAddonUpgrade
    @param none
    @return none
 

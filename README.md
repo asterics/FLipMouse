@@ -30,23 +30,34 @@ The sip/puff actions are detected by a pressure sensor. Via two 3.5mm jack plugs
 An IR-receiver module and a IR-LED allow recording and replay of arbitrary infrared remote control commands. Via an add-on module, bluetooth functionalty can be realized (for more information about the bluetooth add-on module please refer to the [FlipMouse Wiki](https://github.com/asterics/FLipMouse/wiki)
 
 
-# Software (firmware and settings manager)
+# Software (firmware and configuration manager)
 
-FLipMouse's firmware is based on the Arduino/Teensyduino framework. The firmware implements a composite USB HID device (mouse, keyboard, joystick and a serial port in one device).
-
+The FLipMouse firmware is based on the Arduino/Teensyduino framework. The firmware implements a composite USB HID device (mouse, keyboard, joystick and a serial port in one device).
 The mouse and keyboard device classes are used to transmit different keys or mouse actions to the host device. The serial port is used configure the FLipMouse (or even use it as a mouse simulator via AT commands).
-
 Multiple configuration settings can be saved (stored in an EEPROM module) and changed via desired user actions.
-
 For more information about (modifying) the FLipMouse firmware see https://github.com/asterics/FLipMouse/wiki/dev-firmware
 
+## Configuration Manager
 
-The configuration settings of the FLipMouse can be changed via the online [Flipmouse Configuration manager](https://flipmouse.asterics.eu/). 
-Using the Configuration Manager, you can assign different actions to all hardware inputs of the FLipMouse (mouthpiece, sip and puff, external buttons,...).
+All settings of the FLipMouse can be changed via the [FlipMouse Configuration manager](https://flipmouse.asterics.eu)  
+Using the configuration manager in the Chrome web browser, you can assign different actions to all hardware inputs of the FLipMouse (mouthpiece, sip and puff, external buttons,...).
+The Configuration mananger can also be used to update the firmware of the FlipMouse and the optional Bluetooth module.
 
 More Information can be found in the user manual: 
 [user manual (english version)](https://github.com/asterics/FLipMouse/blob/master/Documentation/UserManual/Markdown/FLipMouseUserManual.md), 
 [user manual (german version)](https://github.com/asterics/FLipMouse/blob/master/Documentation/UserManual/Markdown/FLipMouseAnwendungsanleitung.md).
+
+
+## Building the firmware
+In order to build the firmware following prerequisites and dependencies must be installed:
+* the [Arduino IDE](https://www.arduino.cc/en/software)
+* the [Teensyduino](https://www.pjrc.com/teensy/td_download.html) add-on (must be compatible with the Arduino IDE version)
+* the [SSD1306Ascii](https://github.com/greiman/SSD1306Ascii) library by Bill Greiman (can be installed using Arduino IDE's library manager)
+* in the header file WireKinetis.h (Teensy Wire-library implemenation), uncomment [this line](https://github.com/PaulStoffregen/Wire/blob/2499ec67c2128629ee33697804f8650180293597/WireKinetis.h#L50), which is needed to implement the Wire1 interface. The file is located in an Arduino IDE installation subfolder, e.g.
+`arduino-1.8.13/hardware/teensy/avr/libraries/Wire/WireKinetis.h` 
+* select the *board* 'Teensy LC' in the Arduino IDE tools menu, and the *USB-type* "Serial+Keyboard+Mouse+Joystick"
+* select the correct *Port* after connecting the TeensyLC to your system
+* compile and upload the firmware 
 
 
 # Cleaning and Safety

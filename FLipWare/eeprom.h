@@ -22,7 +22,7 @@
    0x006E-0xXXXX	setting slots
 
    layout of one slot:
-     struct slotGeneralSettings
+     struct SlotSettings
      struct slotButtonSettings[NUMBER_OF_BUTTONS]
      char buttonParameter[len][NUMBER_OF_BUTTONS] ('\0' terminated strings)
 
@@ -42,8 +42,6 @@
 #define _EEPROM_H_
 
 #include "FlipWare.h"
-#include "i2c_t3.h"
-#include <EEPROM.h>
 
 #define MAX_SLOTS_IN_EERPOM 10
 #define MAX_IRCOMMANDS_IN_EERPOM 20

@@ -31,6 +31,7 @@
 
 
 #include "FlipWare.h"
+#include "gpio.h"
 #include "cim.h"
 #include <avr/io.h>
 #include <stdlib.h>
@@ -38,15 +39,15 @@
 
 #define ARE_MINIMAL_VERSION 1
 
-extern int pressure;
-extern int down;
-extern int left;
-extern int up;
-extern int right;
-extern  int8_t  led_map[];              //  maps leds pins
 
-//const uint32_t LIPMOUSE_CIM_UNIQUE_NUMBER = 0x12345678;
+/**
+   unique number for Lipmouse CIM in ARE
+*/
 const uint32_t LIPMOUSE_CIM_UNIQUE_NUMBER = 7;
+
+/**
+   static variables and structures for this module
+*/
 volatile uint16_t ADC_updatetime = 0;
 unsigned long updateReportsTimestamp;
 
@@ -58,7 +59,10 @@ const char LIPMOUSE_CIM_FEATURELIST[] =
 
 } ;
 
+
+extern  int8_t led_map[];              //  maps leds pins
 extern uint8_t readstate;
+
 volatile uint8_t CimParserActive = 0;
 volatile uint8_t StandAloneMode = 1;
 volatile uint8_t CimMode = 0; // generate CIM pakets from main loop ?
@@ -73,13 +77,6 @@ uint8_t first_packet = 1;
 uint8_t reports_running = 0;
 
 void parseCommand (char * cmdstr);
-
-
-//extern unsigned char old_PIND;
-//extern unsigned char old_PINB;
-
-//unsigned char PIND_Mask =0;
-//unsigned char PINB_Mask =0;
 
 void init_CIM_frame (void)
 {
@@ -245,15 +242,15 @@ void generate_ADCFrame()
 {
   uint16_t adcval;
 
-  adcval = left - right;
+  adcval = sensorData.left - sensorData.right;
   CIM_frame.data[0] = adcval & 0xff;
   CIM_frame.data[1] = adcval >> 8;
 
-  adcval = up - down;
+  adcval = sensorData.up - sensorData.down;
   CIM_frame.data[2] = adcval & 0xff;
   CIM_frame.data[3] = adcval >> 8;
 
-  adcval = pressure;
+  adcval = sensorData.pressure;
   CIM_frame.data[4] = adcval & 0xff;
   CIM_frame.data[5] = adcval >> 8;
 

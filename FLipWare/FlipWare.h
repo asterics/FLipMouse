@@ -8,20 +8,6 @@
         This firmware allows control of HID functions via FLipmouse module and/or AT-commands
         For a description of the supported commands see: commands.h
 
-        HW-requirements:
-                  TeensyLC with external EEPROM (see FlipMouse board schematics)
-                  4 FSR force sensors connected via voltage dividers to ADC pins A6-A9
-                  1 pressure sensor connected to ADC pin A0
-                  3 momentary switches connected to GPIO pins 0,1,2
-                  3 slot indication LEDs connected to GPIO pins 5,16,17
-                  1 TSOP 38kHz IR-receiver connected to GPIO pin 4
-                  1 high current IR-LED connected to GPIO pin 6 via MOSEFT
-                  optional: FlipMouse Bluetooth daughter board
-
-        SW-requirements:
-                  Teensyduino AddOn for Arduino IDE
-                  USB-type set to USB composite device (Serial + Keyboard + Mouse + Joystick)
-
    For a list of supported AT commands, see commands.h / commands.cpp
 
    This program is free software; you can redistribute it and/or modify
@@ -39,17 +25,19 @@
 #define _FLIPWARE_H_
 
 #include <Arduino.h>
+#include <Wire.h>
+#include <EEPROM.h>
 #include <string.h>
 #include <stdint.h>
 #include "commands.h"
 #include "eeprom.h"
 #include "buttons.h"
-#include "modes.h"
 #include "bluetooth.h"
 #include "hid_hal.h"
 
-#define VERSION_STRING "Flipmouse v2.11.1"
+#define VERSION_STRING "v2.12"
 
+//  V2.12: improved modularisation and source code documentation, added LC-display support and elliptical deadzone
 //  V2.11: eeprom access optimization and support for deletion / update of individual slots
 //  V2.10: code size reduction: using floating point math, removed debug level control via AT E0, AT E1 and AT E2
 //          added macro command description to the user manual
@@ -75,46 +63,46 @@
 // #define DEBUG_OUTPUT_FULL      // if full debug output is desired
 // #define DEBUG_OUTPUT_BASIC     // if basic debug output is desired (for eeprom)
 
-#define WORKINGMEM_SIZE    300        // reserved RAM for working memory (command parser, IR-rec/play)
+/**
+   global constant definitions
+*/
+#define UPDATE_INTERVAL     5    // update interval for performing HID actions (in milliseconds)
+#define DEFAULT_CLICK_TIME  8    // time for mouse click (loop iterations from press to release)
+
+// Analog input pins (4FSRs + 1 pressure sensor)
+#define PRESSURE_SENSOR_PIN A0
+#define HALL_SENSOR_PIN     A1
+#define DOWN_SENSOR_PIN     A6
+#define LEFT_SENSOR_PIN     A9
+#define UP_SENSOR_PIN       A7
+#define RIGHT_SENSOR_PIN    A8
+
+// RAM buffers and memory constraints
+#define WORKINGMEM_SIZE         300    // reserved RAM for working memory (command parser, IR-rec/play)
 #define MAX_KEYSTRING_LEN (WORKINGMEM_SIZE-3)   // maximum length for AT command parameters
-#define MAX_NAME_LEN  15              // maximum length for a slotname or ir name
-#define MAX_KEYSTRINGBUFFER_LEN 500   // maximum length for all string parameters of one slot
+#define MAX_NAME_LEN  15               // maximum length for a slotname or ir name
+#define MAX_KEYSTRINGBUFFER_LEN 500    // maximum length for all string parameters of one slot
 
-#define PARTYPE_NONE  0
-#define PARTYPE_UINT  1
-#define PARTYPE_INT   2
-#define PARTYPE_STRING  3
+// direction identifiers
+#define DIR_E   1   // east
+#define DIR_NE  2   // north-east
+#define DIR_N   3   // north
+#define DIR_NW  4   // north-west
+#define DIR_W   5   // west
+#define DIR_SW  6   // sout-west
+#define DIR_S   7   // south
+#define DIR_SE  8   // south-east
 
-#define REPORT_NONE  0
-#define REPORT_ONE_SLOT  1
-#define REPORT_ALL_SLOTS 2
-
-#define TONE_CALIB            1
-#define TONE_CHANGESLOT       2
-#define TONE_ENTER_STRONGSIP  3
-#define TONE_EXIT_STRONGSIP   4
-#define TONE_ENTER_STRONGPUFF 5
-#define TONE_EXIT_STRONGPUFF  6
-#define TONE_INDICATE_SIP     7
-#define TONE_INDICATE_PUFF    8
-#define TONE_IR			          9
-#define TONE_BT_PAIRING      10
-#define TONE_IR_REC          11
-
-#define BUTTON1_PRESS_TIME_FOR_PAIRING 800
-
-#define DEFAULT_CLICK_TIME      8    // time for mouse click (loop iterations from press to release)
-// #define DOUBLECLICK_MULTIPLIER  5    // CLICK_TIME factor for double clicks
-
-extern uint8_t workingmem[WORKINGMEM_SIZE];    // working memory  (command parser, IR-rec/play)
-extern char keystringBuffer[MAX_KEYSTRINGBUFFER_LEN];  // storage for all button string parameters of a slot
-
-struct slotGeneralSettings {
+/**
+   SlotSettings struct
+   contains parameters for current slot
+*/
+struct SlotSettings {
 
   char slotName[MAX_NAME_LEN];   // slotname
   uint16_t keystringBufferLen;   
   
-  uint8_t  stickMode;  // alternative (0) mouse (1) or joystick (2,3,4) mode
+  uint8_t  stickMode;  // alternative(0), mouse(1), joystick (2,3,4)
   uint8_t  ax;     // acceleration x
   uint8_t  ay;     // acceleration y
   int16_t  dx;     // deadzone x
@@ -136,63 +124,39 @@ struct slotGeneralSettings {
   uint8_t  bt;     // bt-mode (0,1,2)
 };
 
-
-
-struct atCommandType {                      // holds settings for a button function
-  char atCmd[3];
-  uint8_t  partype;
+/**
+   SensorData struct
+   contains working data of sensors (raw and processed values)
+*/
+struct SensorData {
+  int x, y, xRaw,yRaw;
+  int pressure;
+  float deadZone, force, forceRaw, angle;
+  uint8_t dir;
+  int8_t autoMoveX,autoMoveY;
+  int up, down, left, right;
+  uint8_t calib_now;
+  int16_t  cx, cy;
+  int xDriftComp, yDriftComp;
+  int xLocalMax, yLocalMax;  
 };
 
+/**
+   extern declarations of functions and data structures 
+   which can be accessed from different modules
+*/
+extern char moduleName[];
 extern uint8_t actSlot;
 extern uint8_t addonUpgrade;
-extern uint8_t reportSlotParameters;
-extern uint8_t reportRawValues;
-extern uint32_t buttonStates;
-extern struct slotGeneralSettings settings;
-extern const struct slotGeneralSettings defaultSettings;
-extern int EmptySlotAddress;
+extern struct SensorData sensorData;
+extern struct SlotSettings slotSettings; 
+extern const struct SlotSettings defaultSlotSettings;
+extern uint8_t workingmem[WORKINGMEM_SIZE];            // working memory  (command parser, IR-rec/play)
+extern char keystringBuffer[MAX_KEYSTRINGBUFFER_LEN];  // storage for all button string parameters of a slot
 
-extern const struct atCommandType atCommands[];
-extern int8_t  input_map[NUMBER_OF_PHYSICAL_BUTTONS];
-
-extern uint16_t calib_now;
-extern int16_t  cx;
-extern int16_t  cy;
-extern int8_t moveX;
-extern int8_t moveY;
-extern float force;
-extern float angle;
-
-void performCommand (uint8_t cmd, int16_t par1, char * keystring, int8_t periodicMouseMovement);
-void initButtons();
-void printCurrentSlot();
-void initBlink(uint8_t count, uint8_t startTime);
-void makeTone(uint8_t kind, uint8_t param);
-
-
-void BlinkLed();
-int  freeRam ();
-void parseByte (int newByte);
-
-void pressKeys(char* text); // presses individual keys
-void holdKeys(char* text);  // holds individual keys
-void toggleKeys(char* text);  // toggles individual keys
-void releaseKeys(char* text);  // releases individual keys
-void release_all_keys();       // releases all previously pressed keys
-void release_all();            // releases all previously pressed keys and buttons
-
-void record_IR_command(char * name);
-void play_IR_command(char * name);
-void hold_IR_command(char * name);
-void stop_IR_command();
-void list_IR_commands();
-uint8_t delete_IR_command(char * name);
-void set_IR_timeout(uint16_t ms);
-void wipe_IR_commands();
-
-float __ieee754_sqrtf(float x);
-
-//set the correct strcpy/strcmp functions for TeensyLC / ARM)
+/**
+   set the correct strcpy/strcmp functions for TeensyLC / ARM)
+*/
 #define strcpy_FM   strcpy
 #define strcmp_FM   strcmp
 typedef char* uint_farptr_t_FM;

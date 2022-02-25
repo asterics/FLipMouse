@@ -86,9 +86,9 @@
 
     Housekeeping commands:
 
-          AT SA <string>  save settings and current button modes to next free eeprom slot under given name (e.g. "AT SA mouse1")
+          AT SA <string>  save slotSettings and current button modes to next free eeprom slot under given name (e.g. "AT SA mouse1")
           AT LO <string>  load button modes from eeprom slot (e.g. AT LOAD mouse1 -> loads profile named "mouse1")
-          AT LA           load all slots (displays names and settings of all stored slots)
+          AT LA           load all slots (displays names and slotSettings of all stored slots)
           AT LI           list all saved mode names
           AT NE           next mode will be loaded (wrap around after last slot)
           AT DE <string>  delete slot of given name (deletes all stored slots if no string parameter is given)
@@ -97,7 +97,7 @@
           AT BT <uint>    set bluetooth mode, 1=USB only, 2=BT only, 3=both(default)
                           (e.g. AT BT 2 -> send HID commands only via BT if BT-daughter board is available)
 
-    FLipMouse-specific settings and commands:
+    FLipMouse-specific slotSettings and commands:
 
           AT MM <uint>    mouse mode: cursor on (uint==1) or alternative functions on (uint==0)
           AT SW           switch between mouse cursor and alternative functions
@@ -120,7 +120,7 @@
           AT SS <uint>    treshold for strong sip (0-512)
           AT GV <uint>    gain vertical drift compensation (0-100)
           AT RV <uint>    range vertical drift compensation (0-100)
-          AT GH <uint>    gain horizontal drift compensation (0-100)
+          AT GH <uint>    gain horizontal drift compensation (0-100)  
           AT RH <uint>    range horizontal drift compensation (0-100)
 
     Infrared-specific commands:
@@ -172,8 +172,10 @@
 #define _COMMANDS_H_
 
 
-// command identifiers
-
+/**
+   atCommands
+   enumeration of AT command identifiers
+*/
 enum atCommands {
   CMD_ID, CMD_BM, CMD_CL, CMD_CR, CMD_CM, CMD_CD, CMD_PL, CMD_PR, CMD_PM, CMD_RL, CMD_RR, CMD_RM,
   CMD_WU, CMD_WD, CMD_WS, CMD_MX, CMD_MY, CMD_KW, CMD_KP, CMD_KR, CMD_RA, CMD_SA, CMD_LO, CMD_LA,
@@ -184,5 +186,31 @@ enum atCommands {
   CMD_TL, CMD_TR, CMD_TM, CMD_KT, CMD_IH, CMD_IS, CMD_UG, CMD_BC,
   NUM_COMMANDS
 };
+
+/**
+   atCommandType struct
+   holds AT command string and paramter type identifiers
+*/
+struct atCommandType {
+    char atCmd[3];
+    uint8_t  partype;
+};
+
+/**
+   extern declaration of static variables
+   which shall be accessed from other modules
+*/
+extern const struct atCommandType atCommands[];
+
+/**
+   @name performCommand (called from parser.cpp)
+   @brief performs a particular action/AT command
+   @param cmd AT command identifier
+   @param par1 numeric parameter for the command
+   @param keystring string parameter for the command
+   @param periodicMouseMovement if true, mouse will continue moving after action, otherwise only one movement
+   @return none
+*/
+void performCommand (uint8_t cmd, int16_t par1, char * keystring, int8_t periodicMouseMovement);
 
 #endif

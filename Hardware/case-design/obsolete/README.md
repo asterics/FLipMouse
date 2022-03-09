@@ -1,4 +1,8 @@
 
+## OBSOLETE
+
+We don't produce nor use acryllic FLipMouse cases anymore, please use the 3D printed versions.
+
 ### FlipMouseAcrylicCase.cdr
 
 Process: Lasercut

@@ -13,6 +13,19 @@
 #ifndef _UTILS_H_
 #define _UTILS_H_
 
+//needed for EEPROM address detection
+#include <Wire.h>
+//needed for the 2 different addresses of the EEPROM
+#include "eeprom.h"
+
+/**
+ * @name getPCBVersion
+ * @brief Used to determine the PCB version.
+ * @return 2 for v2; 3 for v3;
+ * @note Needs intialized Wire library.
+*/
+uint8_t getPCBVersion(void);
+
 /**
    @name __ieee754_sqrtf
    @brief customized version of float square root function (saving flash memory)

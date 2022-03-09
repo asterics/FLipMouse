@@ -37,7 +37,8 @@
 */
 
 #include "FlipWare.h"
-#include "gpio.h"      
+#include "gpio.h"
+#include "sensors.h"
 #include "infrared.h"      
 #include "display.h"       // for SSD1306 I2C-Oled display
 #include "modes.h"
@@ -45,7 +46,7 @@
 #include "parser.h"  
 #include "reporting.h"
 #include "cim.h"
-#include "utils.h"         
+#include "utils.h"
 
 /**
    device name for ID string & BT-pairing
@@ -79,7 +80,7 @@ struct SensorData sensorData {
   .autoMoveX=0, .autoMoveY=0,
   .up=0, .down=0, .left=0, .right=0,
   .calib_now=1,    // calibrate zeropoint right at startup !
-  .cx=0, .cy=0,
+  .cx=0, .cy=0, .cpressure = 0,
   .xDriftComp=0, .yDriftComp=0,
   .xLocalMax=0, .yLocalMax=0
 };
@@ -90,6 +91,7 @@ uint8_t workingmem[WORKINGMEM_SIZE];          // working memory (command parser,
 uint8_t actSlot = 0;                          // number of current slot
 unsigned long lastInteractionUpdate;          // timestamp for HID interaction updates
 uint8_t addonUpgrade = BTMODULE_UPGRADE_IDLE; // if not "idle": we are upgrading the addon module
+uint8_t useMPRLS = 0;						  // if != 0 then we will use the MPRLS sensor via I2C; an analog sensor otherwise.
 
 
 // forward declaration of functions for sensor data processing
@@ -115,7 +117,20 @@ void setup() {
   delay(1000);  // allow some time for serial interface to come up
   Wire.begin();
   Wire.setClock(400000);  // use 400kHz I2C clock
+  
+  //detect PCB version.
+  uint8_t pcbversion = getPCBVersion();
+  switch(pcbversion)
+  {
+	  case 2: deviceaddress = EEPROM_I2C_ADDR_v2; break;
+	  case 3: deviceaddress = EEPROM_I2C_ADDR_v3; break;
+	  default:
+		Serial.println("ERROR, unknown PCB version or missing EEPROM!");
+		break;
+  }
+  
   initGPIO();
+  initSensors();
   initIR();
   initButtons();
   initDebouncers();
@@ -164,12 +179,8 @@ void loop() {
   }
 
   // get current sensor values
-  sensorData.pressure = analogRead(PRESSURE_SENSOR_PIN);
-
-  sensorData.up =    analogRead(UP_SENSOR_PIN);
-  sensorData.down =  analogRead(DOWN_SENSOR_PIN);
-  sensorData.left =  analogRead(LEFT_SENSOR_PIN);
-  sensorData.right = analogRead(RIGHT_SENSOR_PIN);
+  readPressure(&sensorData);
+  readForce(&sensorData);
 
   // apply rotation if needed
   switch (slotSettings.ro) {

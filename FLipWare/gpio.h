@@ -13,11 +13,14 @@
 #ifndef _GPIO_H_
 #define _GPIO_H_
 
+#include <Adafruit_NeoPixel.h>
+#include "utils.h" //we need the getPCBVersion function for Neopixel vs. 3 LEDs
+
 /**
    constant definitions
 */
 #define NUMBER_OF_PHYSICAL_BUTTONS 3  // number of physical switches
-#define NUMBER_OF_LEDS     3          // number of connected leds
+#define NUMBER_OF_LEDS     3          // number of connected leds (only for v2)
 
 /**
    extern declaration of static variables
@@ -47,4 +50,12 @@ void initBlink(uint8_t count, uint8_t startTime);
 */
 void updateLeds();
 
+/**
+   @name setLeds
+   @brief set the LEDs (or the Neopixel directly)
+   @return none
+   @param LEDs (bits 0-3; Neopixel equals bit 0 R; bit 1 G; bit 2 B)
+   @note Only used in CIM mode.
+*/
+void setLeds(uint8_t leds);
 #endif

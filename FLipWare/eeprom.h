@@ -43,6 +43,14 @@
 
 #include "FlipWare.h"
 
+/** @brief Currently used I2C address for the EEPROM
+ * @note On an "old" (v2) PCB it will be 0x50; v3 PCB is 0x51
+ */
+extern uint8_t deviceaddress;
+
+#define EEPROM_I2C_ADDR_v2 0x50
+#define EEPROM_I2C_ADDR_v3 0x51
+
 #define MAX_SLOTS_IN_EERPOM 10
 #define MAX_IRCOMMANDS_IN_EERPOM 20
 

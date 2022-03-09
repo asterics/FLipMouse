@@ -137,6 +137,7 @@ struct SensorData {
   int up, down, left, right;
   uint8_t calib_now;
   int16_t  cx, cy;
+  uint32_t cpressure;
   int xDriftComp, yDriftComp;
   int xLocalMax, yLocalMax;  
 };

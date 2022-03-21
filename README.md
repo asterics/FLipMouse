@@ -54,7 +54,8 @@ In order to build the firmware following prerequisites and dependencies must be 
 * the [Teensyduino](https://www.pjrc.com/teensy/td_download.html) add-on (must be compatible with the Arduino IDE version)
 * the [SSD1306Ascii](https://github.com/greiman/SSD1306Ascii) library by Bill Greiman (can be installed using Arduino IDE's library manager)
 * in the header file WireKinetis.h (Teensy Wire-library implemenation), uncomment [this line](https://github.com/PaulStoffregen/Wire/blob/2499ec67c2128629ee33697804f8650180293597/WireKinetis.h#L50), which is needed to implement the Wire1 interface. The file is located in an Arduino IDE installation subfolder, e.g.
-`arduino-1.8.13/hardware/teensy/avr/libraries/Wire/WireKinetis.h` 
+`arduino-1.8.13/hardware/teensy/avr/libraries/Wire/WireKinetis.h`. On the Mac you might find the file here:
+`/Applications/Teensyduino.app/Contents/Java/hardware/teensy/avr/libraries/Wire/WireKinetis.h`
 * select the *board* 'Teensy LC' in the Arduino IDE tools menu, and the *USB-type* "Serial+Keyboard+Mouse+Joystick"
 * select the correct *Port* after connecting the TeensyLC to your system
 * compile and upload the firmware 

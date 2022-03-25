@@ -30,18 +30,45 @@ pressure_type_t sensor_pressure = MPXV;
  * @brief Used force sensor type. We can use the FSR sensors or possibly
  * in a future version the resistor gauge sensors.
  */
-typedef enum {FSR, RES} force_type_t;
+typedef enum {FSR, RES, RES_I2C} force_type_t;
 force_type_t sensor_force = FSR;
 
 void initSensors()
 {
-	//detect if there is an MPRLS sensor connected to I2C (Wire)
-	Wire.beginTransmission(MPRLS_ADDR);
+  //detect if there is an MPRLS sensor connected to I2C (Wire)
+  Wire.beginTransmission(MPRLS_ADDR);
   uint8_t result = Wire.endTransmission();
   //we found the MPRLS sensor, start the initialization
   if(result == 0) sensor_pressure = MPRLS;
 
-	//Todo for future force sensor versions: detect the used variant here.
+	//detect if there is a resistor gauge sensor with Op-Amps (analog in)
+  //A7/D21 is connected to GND (20mA pin type) (UP)
+  //A9 is horizontal (LEFT)
+  //A8 is vertical (RIGHT)
+  //A6/D20 is connected to GND (DOWN)
+  //detection process: pull D21/A7 to GND. If A6 is read 0, we have the resistor
+  //gauge with op-amps. If A6 is >0, FSRs are installed.
+  //Warning: if the DOWN sensor is broken, this detection fails!
+  pinMode(D21,OUTPUT);
+  digitalWrite(D21,LOW);
+  delay(2);
+  if(analogRead(DOWN_SENSOR_PIN) < 5)
+  {
+    sensor_force = RES;
+    //if we are on RES, set other GND pin to output as well
+    pinMode(D20,OUTPUT);
+    digitalWrite(D20,LOW);
+  } else {
+    //if we have FSRs, reset the pins to analog function again
+    pinMode(D21,INPUT);
+    volatile uint16_t tempread;
+    tempread = analogRead(UP_SENSOR_PIN);
+    tempread = analogRead(DOWN_SENSOR_PIN);
+    tempread = analogRead(LEFT_SENSOR_PIN);
+    tempread = analogRead(RIGHT_SENSOR_PIN);
+  }
+  
+  //TODO: if we use an ADC based resistor gauge, add detection here.
 }
 
 
@@ -100,8 +127,19 @@ void readForce(struct SensorData *data)
 {
   switch(sensor_force)
   {
+    //TODO: add I2C resistor gauge
+    //case RES_I2C:
+    //break;
     case RES:
-    //TODO: if tested to work well, implement the gauge ADC here.
+      //horizontal is LEFT pin
+      //vertical is RIGHT pin
+      
+      //use same analog value for left+right, but invert
+      data->left = analogRead(LEFT_SENSOR_PIN);
+      data->right = 1023 - data->left;
+      data->up = analogRead(RIGHT_SENSOR_PIN);
+      data->down = 1023 - data->up;
+      break;
     case FSR:
     default:
       data->up =    analogRead(UP_SENSOR_PIN);

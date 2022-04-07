@@ -1,5 +1,4 @@
 (sym_lib_table
   (lib (name "Teensy")(type "KiCad")(uri "${KIPRJMOD}/libs/teensy.kicad_sym")(options "")(descr ""))
-  (lib (name "DPS")(type "KiCad")(uri "${KIPRJMOD}/libs/DPS310.kicad_sym")(options "")(descr ""))
   (lib (name "FC68125")(type "KiCad")(uri "${KIPRJMOD}/libs/FC68125.kicad_sym")(options "")(descr ""))
 )

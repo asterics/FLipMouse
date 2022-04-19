@@ -49,6 +49,16 @@ void initSensors()
   //detection process: pull D21/A7 to GND. If A6 is read 0, we have the resistor
   //gauge with op-amps. If A6 is >0, FSRs are installed.
   //Warning: if the DOWN sensor is broken, this detection fails!
+  
+  //TODO: activate check again!
+  pinMode(21,OUTPUT);
+  digitalWrite(21,LOW);
+  pinMode(20,OUTPUT);
+  digitalWrite(20,LOW);
+  sensor_force = RES;
+  analogReadResolution(13);
+  #warning "Activate check for sensor again!"
+  #if 0
   pinMode(D21,OUTPUT);
   digitalWrite(D21,LOW);
   delay(2);
@@ -67,6 +77,7 @@ void initSensors()
     tempread = analogRead(LEFT_SENSOR_PIN);
     tempread = analogRead(RIGHT_SENSOR_PIN);
   }
+  #endif
   
   //TODO: if we use an ADC based resistor gauge, add detection here.
 }
@@ -123,8 +134,27 @@ void readPressure(struct SensorData *data)
   }
 }
 
+uint32_t avg(uint32_t rsample)
+{
+	#define SIZE_BUF 256
+	static uint32_t count = 0;
+	static uint32_t out[SIZE_BUF] = {0};
+	uint32_t sum = 0;
+	
+	out[count] = rsample;
+	count = (count+1) % SIZE_BUF;
+	
+	for(uint16_t i = 0; i<SIZE_BUF; i++)
+	{
+		sum += out[i];
+	}
+	return sum / SIZE_BUF;
+}
+
 void readForce(struct SensorData *data)
 {
+  uint32_t val;
+  static uint32_t countout = 0;
   switch(sensor_force)
   {
     //TODO: add I2C resistor gauge
@@ -136,9 +166,19 @@ void readForce(struct SensorData *data)
       
       //use same analog value for left+right, but invert
       data->left = analogRead(LEFT_SENSOR_PIN);
-      data->right = 1023 - data->left;
+      data->right = (1<<13) - data->left;
       data->up = analogRead(RIGHT_SENSOR_PIN);
-      data->down = 1023 - data->up;
+      data->down = (1<<13) - data->up;
+	  val = avg(data->left);
+	  
+	  countout++;
+		if(countout >= 100)
+		{
+			//Serial.print(data->left);
+			//Serial.print(",");
+			Serial.println(val);
+			countout = 0;
+		}
       break;
     case FSR:
     default:

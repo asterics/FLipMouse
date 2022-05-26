@@ -38,6 +38,7 @@ void initGPIO()
   if(getPCBVersion() == 3)
   {
     pixels.begin();
+    pixels.setBrightness(127);
   }
   
 	for (int i = 0; i < NUMBER_OF_PHYSICAL_BUTTONS; i++) // initialize physical buttons and bouncers
@@ -68,10 +69,14 @@ void updateLeds()
       {
         blinkTime = blinkStartTime;
         blinkCount--;
-        if (blinkCount % 2) {
-          r = g = b = 255;
-        }
       } else blinkTime--;
+      
+      if(blinkCount % 2)
+      {
+        r = g = b = ((blinkStartTime - blinkTime) / blinkStartTime) * 255;
+      } else {
+        r = g = b = 255 - ((blinkStartTime - blinkTime) / blinkStartTime) * 255;
+      }
     }
     pixels.setPixelColor(0,r,g,b);
     pixels.show();

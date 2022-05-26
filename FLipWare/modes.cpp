@@ -270,7 +270,7 @@ float getAccelFactor() {
     if (sensorData.force > accelMaxForce) accelMaxForce = sensorData.force;
     if (sensorData.force > accelMaxForce * 0.8f) {
       if (accelFactor < 1.0f)
-        accelFactor += ((float)slotSettings.ac / 5000.0f);
+        accelFactor += ((float)slotSettings.ac / 500000.0f);
     }
     else if (accelMaxForce > 0) accelMaxForce *= 0.99f;
 

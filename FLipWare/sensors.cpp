@@ -133,7 +133,7 @@ void readPressure(struct SensorData *data)
       break;
   }
 }
-
+/*
 uint32_t avg(uint32_t rsample)
 {
 	#define SIZE_BUF 256
@@ -149,12 +149,13 @@ uint32_t avg(uint32_t rsample)
 		sum += out[i];
 	}
 	return sum / SIZE_BUF;
-}
+}*/
 
 void readForce(struct SensorData *data)
 {
-  uint32_t val;
-  static uint32_t countout = 0;
+  static uint32_t left_right = analogRead(LEFT_SENSOR_PIN);
+  static uint32_t up_down = analogRead(RIGHT_SENSOR_PIN);
+
   switch(sensor_force)
   {
     //TODO: add I2C resistor gauge
@@ -165,20 +166,18 @@ void readForce(struct SensorData *data)
       //vertical is RIGHT pin
       
       //use same analog value for left+right, but invert
-      data->left = analogRead(LEFT_SENSOR_PIN);
-      data->right = (1<<13) - data->left;
-      data->up = analogRead(RIGHT_SENSOR_PIN);
-      data->down = (1<<13) - data->up;
-	  val = avg(data->left);
+      for(uint8_t i = 0; i<10; i++)
+      {
+	    left_right += analogRead(LEFT_SENSOR_PIN);
+	    left_right /= 2;
+	    up_down += analogRead(RIGHT_SENSOR_PIN);
+	    up_down /= 2;
+	  }
 	  
-	  countout++;
-		if(countout >= 100)
-		{
-			//Serial.print(data->left);
-			//Serial.print(",");
-			Serial.println(val);
-			countout = 0;
-		}
+      data->left = left_right >> 3; //convert down to 10bit
+      data->right = (1<<10) - data->left;
+      data->up = up_down >> 3;
+      data->down = (1<<10) - data->up;
       break;
     case FSR:
     default:

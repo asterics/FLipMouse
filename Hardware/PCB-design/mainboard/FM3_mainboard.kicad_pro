@@ -500,7 +500,7 @@
       "idf": "",
       "netlist": "",
       "specctra_dsn": "",
-      "step": "",
+      "step": "FM3_mainboard.step",
       "vrml": ""
     },
     "page_layout_descr_file": ""

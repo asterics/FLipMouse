@@ -2,7 +2,7 @@
      FLipWare - AsTeRICS Foundation
      For more info please visit: http://www.asterics-academy.net
 
-     Module: gpio.h - functions for leds and buttons
+     Module: sensors.cpp - functions to read pressure & force sensors
 
    This program is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; See the GNU General Public License:

@@ -164,12 +164,14 @@ void loop() {
   }
 
   // get current sensor values
-  sensorData.pressure = analogRead(PRESSURE_SENSOR_PIN);
+  /************************************************************************** TODO: replace with PCB_3 branch code  */
+  sensorData.pressure = 512;
 
-  sensorData.up =    analogRead(UP_SENSOR_PIN);
-  sensorData.down =  analogRead(DOWN_SENSOR_PIN);
-  sensorData.left =  analogRead(LEFT_SENSOR_PIN);
-  sensorData.right = analogRead(RIGHT_SENSOR_PIN);
+  sensorData.up =    512;
+  sensorData.down =  512;
+  sensorData.left =  512;
+  sensorData.right = 512;
+  /************************************************************************** TODO: replace with PCB_3 branch code  */
 
   // apply rotation if needed
   switch (slotSettings.ro) {

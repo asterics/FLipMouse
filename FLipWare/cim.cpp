@@ -33,7 +33,7 @@
 #include "FlipWare.h"
 #include "gpio.h"
 #include "cim.h"
-#include <avr/io.h>
+//#include <avr/io.h>
 #include <stdlib.h>
 #include <stdio.h>
 

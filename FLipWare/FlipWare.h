@@ -26,6 +26,9 @@
 
 #include <Arduino.h>
 #include <Wire.h>
+#include <Mouse.h>
+#include <Keyboard.h>
+#include <Joystick.h>
 #include <EEPROM.h>
 #include <string.h>
 #include <stdint.h>

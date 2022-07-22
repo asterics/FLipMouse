@@ -90,7 +90,7 @@ uint8_t deleteIRCommand(char * name);
    is provided by cntEdges.
    The name is also provided as parameter
  * */
-void saveIRToEEPROM(char * name, uint16_t *timings, uint8_t cntEdges);
+void saveIRToEEPROM(char * name, unsigned int *timings, size_t cntEdges);
 
 
 /**
@@ -111,7 +111,7 @@ void listIRCommands();
    Replay one IR command from the EEPROM.
    The slot is identified by the slot name
  * */
-uint16_t readIRFromEEPROM(char * name, uint16_t *timings, uint8_t maxEdges);
+size_t readIRFromEEPROM(char * name, uint16_t *timings, size_t maxEdges);
 
 /**
    This function deletes the slot from EEPROM.

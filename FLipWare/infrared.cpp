@@ -17,7 +17,7 @@
 #include "FlipWare.h"
 #include "infrared.h"
 #include "tone.h"
-
+#include <IRremote.hpp>
 /**
    static variables for infrared code generation and timekeeping
  * */
@@ -26,13 +26,17 @@ int repeatCounter;        // number of desired code repetitions (-1 for endless)
 int idlesequenceCounter;  // bumber of gaps which should be inserted before code repetition
 uint16_t edges;           // number of edges for current code
 uint16_t act_edge;        // current edge
-uint8_t output_state;     // PWM duty cycle
+
+//uint8_t output_state;     // PWM duty cycle
 
 // array for edge times (time difference between the IR code edges)
-uint16_t timings [IR_EDGE_REC_MAX];
+//uint16_t timings [IR_EDGE_REC_MAX];
+
+//IRrecv irrecv(IR_SENSOR_PIN);
 
 // Timer for edge time management
-IntervalTimer playTimer;
+//IntervalTimer playTimer;
+//TODO: some PIO based library?
 
 /**
    forward declarations of module-internal functions
@@ -44,10 +48,13 @@ void start_IR_command_playback(char * name);
    Set Carrier Frequency for PWM
  * */
 void initIR() {
-  pinMode(IR_SENSOR_PIN, INPUT);
+	//init library
+	IrSender.begin(IR_LED_PIN); 
+	IrReceiver.begin(IR_SENSOR_PIN, DISABLE_LED_FEEDBACK);
+  /*pinMode(IR_SENSOR_PIN, INPUT);
   analogWriteFrequency(IR_LED_PIN, 38000);  // TBD: flexible carrier frequency for IR, not only 38kHz !
   pinMode(IR_LED_PIN, OUTPUT);
-  digitalWrite(IR_LED_PIN, LOW);
+  digitalWrite(IR_LED_PIN, LOW);*/
 }
 
 /**
@@ -59,68 +66,37 @@ void initIR() {
  * */
 void record_IR_command(char * name)
 {
-  uint32_t prev;
-  uint32_t duration;
-  uint8_t toggle = 0;
-
-  // fetch current time as previous value the first time
-  prev = millis();
-  while (digitalRead(IR_SENSOR_PIN))	//wait for start bit or user timeout of 10s
-  {
-    duration = millis() - prev; //calculate the difference
-
-    //cancel recording if takes longer than the user timeout
-    if (duration >= IR_USER_TIMEOUT_MS)
-    {
-      Serial.println("IR_TIMEOUT: User timeout");
-      return;
-    }
-  }
-
-  //record for a maximum of IR_EDGE_REC_MAX edges
-  for (edges = 0; edges < IR_EDGE_REC_MAX; edges++)
-  {
-    prev = micros(); // current timestamp in microseconds
-    do
-    {
-      duration = micros() - prev;
-    } while ((duration < edge_timeout) && (digitalRead(IR_SENSOR_PIN) == toggle));
-
-    if (duration >= edge_timeout) break;
-
-    if (duration > MAX_HIGHPRECISION_DURATION) {   // switch to milliseconds
-      duration /= 1000;
-      duration += MAX_HIGHPRECISION_DURATION;
-    }
-    timings[edges] = (uint16_t)duration;
-    toggle = !toggle;  // for next edge detection
-  }
-
-  if (edges == IR_EDGE_REC_MAX)
-    Serial.println("IR-Code sequence full.");
-  else Serial.println("IR-Code timeout reached.");
-
-  //play a feedback tone
-  makeTone(TONE_IR_REC, 0);
-
-  //full edge feedback, if full debug is enabled
-#ifdef DEBUG_OUTPUT_FULL
-  Serial.println("START IR ----------");
-  for (uint8_t i = 0; i < edges; i++)
-    Serial.println(timings[i]);
-  Serial.println("END ----------");
-#endif
-
-  //return the recorded command name and the edge count
-  Serial.print("IR: recorded command ");
-  Serial.print(name);
-  Serial.print(" with ");
-  Serial.print(edges);
-  Serial.println(" edge times.");
-
-  //save the recorded command to the EEPROM storage
-  saveIRToEEPROM(name, timings, edges);
-
+	uint32_t startTime = millis();
+	IrReceiver.start();
+	while(abs((long int)(millis()-startTime)) < (edge_timeout / 1000))
+	{
+		if(IrReceiver.decode())
+		{
+			if(IrReceiver.decodedIRData.flags & IRDATA_FLAGS_WAS_OVERFLOW)
+			{
+				Serial.println("IR-Code sequence full.");
+				IrReceiver.stop();
+				return;
+			}
+			
+			//save the recorded command to the EEPROM storage
+			saveIRToEEPROM(name, IrReceiver.decodedIRData.rawDataPtr->rawbuf, IrReceiver.decodedIRData.rawDataPtr->rawlen);
+			
+			#ifdef DEBUG_OUTPUT_FULL
+			  Serial.println("START IR ----------");
+			  IrReceiver.printIRResultRawFormatted(&Serial, false); 
+			  Serial.println("END ----------");
+			#endif
+			
+			IrReceiver.stop();
+			return;
+		} else {
+			delay(10);
+		}
+	}
+	Serial.println("IR_TIMEOUT: User timeout");
+	IrReceiver.stop();
+	return;
 }
 
 /**
@@ -148,6 +124,7 @@ uint8_t delete_IR_command(char * name)
           repeats a whole code playback (repeatCounter times)
    @return none
 */
+/*
 void generate_next_IR_phase(void)
 {
   if (act_edge > edges) {          // one code repetition finished
@@ -183,6 +160,7 @@ void generate_next_IR_phase(void)
     act_edge++;   // increase edge index for next interrupt
   }
 }
+* */
 
 
 /**
@@ -194,22 +172,21 @@ void generate_next_IR_phase(void)
 */
 void start_IR_command_playback(char * name)
 {
-  uint32_t edge_now = 0;
-  uint32_t edge_prev = 0;
-  uint32_t duration = 0;
-  uint8_t i;
+	Serial.println("### TBD - IR: ### sending, use library :-)");
+	size_t edges;
+	uint16_t timings[IR_EDGE_REC_MAX];
 
-  //fetch the IR command from the eeprom
-  edges = readIRFromEEPROM(name, timings, IR_EDGE_REC_MAX);
+	//fetch the IR command from the eeprom
+	edges = readIRFromEEPROM(name, timings, IR_EDGE_REC_MAX);
 
-  //no edges, no command -> cancel
-  if (edges == 0)
-  {
-#ifdef DEBUG_OUTPUT_FULL
-    Serial.println("No IR command found");
-#endif
-    return;
-  }
+	  //no edges, no command -> cancel
+	  if (edges == 0)
+	  {
+	#ifdef DEBUG_OUTPUT_FULL
+		Serial.println("No IR command found");
+	#endif
+		return;
+	  }
 
   //full edge feedback, if full debug is enabled
 #ifdef DEBUG_OUTPUT_FULL
@@ -222,10 +199,7 @@ void start_IR_command_playback(char * name)
 #endif
 
   makeTone(TONE_IR, 0);
-  act_edge = 0;
-  output_state = 0;
-  playTimer.begin(generate_next_IR_phase, 10); // the first timing is just a dummy value
-  playTimer.priority(20);                      // quite high priority for our timer
+  IrSender.sendRaw(timings,edges,38);
 }
 
 void play_IR_command(char * name)
@@ -252,6 +226,6 @@ void wipe_IR_commands()
 
 void set_IR_timeout(uint16_t tout_ms)
 {
-  if (tout_ms < 1) return;
-  edge_timeout = (uint32_t)tout_ms * 1000;
+  //not available in library
+  return;
 }

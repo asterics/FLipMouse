@@ -15,6 +15,7 @@
 */
 
 #include "bluetooth.h"
+#include <Keyboard.h>
 
 #define BT_MINIMUM_SENDINTERVAL 20     // reduce mouse reports in BT mode (in milliseconds) !
 
@@ -161,15 +162,15 @@ void sendBTKeyboardReport()
   Serial.println(activeKeyCodes[5], HEX);
 #endif
 
-  Serial_AUX.write(0xFD);       			//raw HID
-  Serial_AUX.write(activeModifierKeys);  	//modifier keys
-  Serial_AUX.write(0x00);
-  Serial_AUX.write(activeKeyCodes[0]);	//key 1
-  Serial_AUX.write(activeKeyCodes[1]);   	//key 2
-  Serial_AUX.write(activeKeyCodes[2]);   	//key 3
-  Serial_AUX.write(activeKeyCodes[3]);   	//key 4
-  Serial_AUX.write(activeKeyCodes[4]);   	//key 5
-  Serial_AUX.write(activeKeyCodes[5]);   	//key 6
+  Serial_AUX.write((uint8_t)0xFD);       			//raw HID
+  Serial_AUX.write((uint8_t)activeModifierKeys);  	//modifier keys
+  Serial_AUX.write((uint8_t)0x00);
+  Serial_AUX.write((uint8_t)activeKeyCodes[0]);	//key 1
+  Serial_AUX.write((uint8_t)activeKeyCodes[1]);   	//key 2
+  Serial_AUX.write((uint8_t)activeKeyCodes[2]);   	//key 3
+  Serial_AUX.write((uint8_t)activeKeyCodes[3]);   	//key 4
+  Serial_AUX.write((uint8_t)activeKeyCodes[4]);   	//key 5
+  Serial_AUX.write((uint8_t)activeKeyCodes[5]);   	//key 6
 }
 
 /**
@@ -275,12 +276,14 @@ void keyboardBTPrint(char * writeString)
     // Serial.print("key ="); Serial.print(writeString[i]);
     if (writeString[i] < 128) {     // ASCII
       // Serial.print(" ASCII ="); Serial.println((int)writeString[i]);
-      keycode = pgm_read_byte(keycodes_ascii + (writeString[i] - 0x20));
+      keycode = KeyboardLayout_en_US[writeString[i]];
+      //TODO: use correct layout.
+      //keycode = _asciimap[keycodes_ascii + (writeString[i] - 0x20)[;
     }
     else  {  // ISO_8859
 #ifdef ISO_8859_1_A0
       // Serial.print(" ISO_8859 ="); Serial.println((int)writeString[i]);
-      keycode = pgm_read_byte(keycodes_iso_8859_1 + (writeString[i] - 0xA0));
+      //keycode = _asciimap[(keycodes_iso_8859_1 + (writeString[i] - 0xA0)[;
 #endif
     }
 

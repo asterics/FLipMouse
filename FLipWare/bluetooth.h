@@ -22,7 +22,7 @@
 
 
 //RX/TX3 are used to communicate with an addon board (mounted on AUX header)
-#define Serial_AUX Serial3
+#define Serial_AUX Serial2
 
 /** BT module upgrade: inactive/idle */
 #define BTMODULE_UPGRADE_IDLE 0

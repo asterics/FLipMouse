@@ -54,7 +54,7 @@ void mouseToggle(uint8_t button)
 void mouseScroll(int8_t steps)
 {
   if (slotSettings.bt & 1)
-    Mouse.scroll(steps);
+    Mouse.move(0,0,steps);
 
   if ((slotSettings.bt & 2) && (isBluetoothAvailable()))
     mouseBT(0, 0, steps);
@@ -68,14 +68,14 @@ void mouseMove(int x, int y)
   }
   while (x < -128) {
     if (slotSettings.bt & 1)
-      Mouse.move(-128, 0);
+      Mouse.move(-128, 0, 0);
     if ((slotSettings.bt & 2) && (isBluetoothAvailable()))
       mouseBT(-128, 0, 0);
     x += 128;
   }
   while (x > 127) {
     if (slotSettings.bt & 1)
-      Mouse.move(127, 0);
+      Mouse.move(127, 0, 0);
     if ((slotSettings.bt & 2) && (isBluetoothAvailable()))
       mouseBT(127, 0, 0);
     x -= 127;
@@ -83,21 +83,21 @@ void mouseMove(int x, int y)
 
   while (y < -128) {
     if (slotSettings.bt & 1)
-      Mouse.move(0, -128);
+      Mouse.move(0, -128, 0);
     if ((slotSettings.bt & 2) && (isBluetoothAvailable()))
       mouseBT(0, -128, 0);
     y += 128;
   }
   while (y > 127) {
     if (slotSettings.bt & 1)
-      Mouse.move(0, 127);
+      Mouse.move(0, 127, 0);
     if ((slotSettings.bt & 2) && (isBluetoothAvailable()))
       mouseBT(0, 127, 0);
     y -= 127;
   }
 
   if (slotSettings.bt & 1)
-    Mouse.move(x, y);
+    Mouse.move(x, y, 0);
   if ((slotSettings.bt & 2) && (isBluetoothAvailable()))
     mouseBT(x, y, 0);
 }

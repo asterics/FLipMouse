@@ -1,3 +1,4 @@
 (fp_lib_table
-  (lib (name FLipMouse)(type KiCad)(uri ${KIPRJMOD}/FLipMouse.pretty)(options "")(descr ""))
+  (lib (name "FLipMouse")(type "KiCad")(uri "${KIPRJMOD}/FLipMouse.pretty")(options "")(descr ""))
+  (lib (name "Nano_33")(type "KiCad")(uri "${KIPRJMOD}/libs/Nano/Nano_33.pretty")(options "")(descr ""))
 )

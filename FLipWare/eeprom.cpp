@@ -91,7 +91,7 @@ void saveToEEPROMSlotNumber(int8_t nr, char * slotname)
   char path[32];
   uint8_t revision = 1; //TODO: determine current settings revision number
   sprintf(path,"/%03d/%02d",revision,nr);
-  File f = LittleFS.open(path,"wb");
+  File f = LittleFS.open(path,"w");
 
   #ifdef DEBUG_OUTPUT_BASIC
     Serial.print("Start new slot: ");
@@ -105,6 +105,7 @@ void saveToEEPROMSlotNumber(int8_t nr, char * slotname)
 
   // save the name
   f.print(slotname);
+  f.write('\0');
   // save the general slotSettings to the global slotSettings struct
   f.write((uint8_t *)&slotSettings, sizeof(SlotSettings));
   // write all button slotSettings
@@ -182,12 +183,14 @@ uint8_t readFromEEPROMSlotNumber(uint8_t nr, bool playTone)
   
   if(!LittleFS.exists(path))
   {
-    Serial.print(nr);
-    Serial.println(" Slot not found!");
+    #ifdef DEBUG_OUTPUT_BASIC
+      Serial.print(nr);
+      Serial.println(" Slot not found!");
+    #endif
     return 0;
   }
   
-  File f = LittleFS.open(path,"rb");
+  File f = LittleFS.open(path,"r");
   
   if(!f) return 0;
   
@@ -447,7 +450,6 @@ void bootstrapSlotAddresses()
   uint8_t init_needed = 0;
   uint16_t versionID = 0;
 
-  
   LittleFS.begin();
   
   // check if we need to initialize FS (/rev.bin not found)

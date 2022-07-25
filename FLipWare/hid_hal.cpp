@@ -108,8 +108,7 @@ void keyboardPrint(char * keystring)
     //Keyboard.print(keystring);  // improved for ISO 8859 compatibility (but: slower ..)
     for (int i = 0; i < strlen(keystring); i++)
     {
-      Keyboard.press(keystring[i]);
-      Keyboard.release(keystring[i]);
+      Keyboard.write(keystring[i]);
     }
   }
 

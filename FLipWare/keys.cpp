@@ -38,26 +38,34 @@ void updateKey(int key, uint8_t keyAction)
 {
   switch (keyAction)  {
     case KEY_PRESS:
+	  //Serial.print("P+");
     case KEY_HOLD:
+	  //Serial.println("H");
       add_to_keybuffer(key);
       keyboardPress(key);       // press/hold keys individually
       break;
 
     case KEY_RELEASE:
+      //Serial.println("R");
       remove_from_keybuffer(key);
       keyboardRelease(key);       // release keys individually
       break;
 
     case KEY_TOGGLE:
+	  //Serial.print("T-");
       if (in_keybuffer(key))  {
+		//Serial.println("R");
         remove_from_keybuffer(key);
         keyboardRelease(key);
       } else {
+		//Serial.println("P");
         add_to_keybuffer (key);
         keyboardPress(key);
       }
       break;
   }
+  //need to delay to avoid missing keyboard actions
+  delay(10);
 }
 
 void pressKeys (char * text)
@@ -167,8 +175,7 @@ struct keymap_struct {
    keymap1
    keycode/key-identifier mapping for key-identifiers with prefix "KEY_"
 */
-const keymap_struct keymap1 [] = {     
-
+const keymap_struct keymap1 [] = {
   {"SHIFT", KEY_LEFT_SHIFT},
   {"CTRL", KEY_LEFT_CTRL},
   {"ALT", KEY_LEFT_ALT},
@@ -270,6 +277,7 @@ void performKeyActions(char* text,  uint8_t keyAction)
 {
   char * tmptxt = (char *) malloc( sizeof(char) * ( strlen(text) + 2 ) ); // for parsing keystrings
   char * acttoken;
+  bool found = false;
 
   strcpy(tmptxt, text);
   if (tmptxt[strlen(tmptxt) - 1] != ' ') strcat(tmptxt, " ");
@@ -279,14 +287,32 @@ void performKeyActions(char* text,  uint8_t keyAction)
   {
     if (!strncmp(acttoken, "KEY_", 4)) {
       acttoken += 4;
+      found = false;
+      
       for (int i = 0; i < KEYMAP1_ELEMENTS; i++) {
-        // Serial.print("scanning for ");  Serial.println(keymap1[i].token);
+         //Serial.print("scanning for ");  Serial.println(keymap1[i].token);
         if (!strcmp(acttoken, keymap1[i].token)) {
-          // Serial.println("found!");
+           //Serial.print("found @"); Serial.print(i); Serial.print(", keycode: "); Serial.println(keymap1[i].key);
           updateKey(keymap1[i].key, keyAction);
+          found = true;
           break;
         }
       }
+      //if not found in the array, try if it is 0-9 or A-Z keys
+      //we need to split this test, because we need small letters for Keyboard.print.
+      if(!found && (acttoken[0] >= '0' && acttoken[0] <= '9'))
+      {
+		  //Serial.print("found num key: "); Serial.println(acttoken[0]);
+		  updateKey(acttoken[0], keyAction);
+		  found = true;
+	  }
+	    
+      if(!found && (acttoken[0] >= 'A' && acttoken[0] <= 'Z'))
+      {
+		  //Serial.print("found ascii keys: "); Serial.println(toLowerCase(acttoken[0]));
+		  updateKey(toLowerCase(acttoken[0]), keyAction);
+		  found = true;
+	  }
     }
 
     if (!strncmp(acttoken, "KEYPAD_", 7)) {

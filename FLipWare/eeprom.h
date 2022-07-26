@@ -70,10 +70,9 @@ struct irCommandHeader {
 };
 
 /**
-   Load the EEPROM header, which contains all start addresses of the
-   slots and IR commands
+   Check if storage is valid, initialize if not.
  * */
-void bootstrapSlotAddresses();
+void initStorage();
 
 
 /**
@@ -99,7 +98,7 @@ void saveIRToEEPROM(char * name, unsigned int *timings, size_t cntEdges);
    is provided by cntEdges.
    The name is also provided as parameter
  * */
-void saveIRToEEPROMSlotNumber(uint8_t nr, char * name, uint16_t *timings, uint8_t cntEdges);
+void saveIRToEEPROMSlotNumber(uint8_t nr, char * name, unsigned int *timings, uint8_t cntEdges);
 
 /**
    Print out all slotnames to the serial interface
@@ -111,7 +110,7 @@ void listIRCommands();
    Replay one IR command from the EEPROM.
    The slot is identified by the slot name
  * */
-size_t readIRFromEEPROM(char * name, uint16_t *timings, size_t maxEdges);
+size_t readIRFromEEPROM(char * name, unsigned int *timings, size_t maxEdges);
 
 /**
    This function deletes the slot from EEPROM.
@@ -126,9 +125,14 @@ uint8_t deleteSlot(char * name);
 uint16_t getFreeSlotAddress(void);
 
 /**
-   get the index of the lat slot which holds data  
+   get the index of the last slot which holds data  
  * */
 int8_t getLastSlotIndex(void);
+
+/**
+   get the index of the last available IR command
+ * */
+int8_t getLastIRIndex(void);
 
 /**
    Print out all slot data  to the serial interface
@@ -175,8 +179,6 @@ uint8_t saveToEEPROM(char * slotname);
    Store current slot data to the EEPROM.
    The slot is identified by the slot number. If the nr parameter is -1,
    a new slot will be created (at the first possible position)
-   ATTENTION: if this method is not called from another function (e.g. saveToEEPROM()),
-   it is necessary to preload the start adresses via bootstrapSlotAddresses()!
  * */
 void saveToEEPROMSlotNumber(int8_t nr, char * slotname);
 

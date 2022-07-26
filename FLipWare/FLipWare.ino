@@ -123,7 +123,7 @@ void setup() {
   initDebouncers();
   init_CIM_frame();  // for AsTeRICS CIM protocol compatibility
 
-  bootstrapSlotAddresses();   // initialize EEPROM if necessary
+  initStorage();   // initialize storage if necessary
   readFromEEPROMSlotNumber(0, true); // read slot from first EEPROM slot if available !
 
   initBlink(10,25);  // first signs of life!

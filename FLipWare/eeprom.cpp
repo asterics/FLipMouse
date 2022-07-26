@@ -236,27 +236,29 @@ uint8_t readFromEEPROMSlotNumber(uint8_t nr, bool playTone)
  * */
 int8_t slotnameIRToNumber(char * irName)
 {
-  #if 0
+  /** open current directory */
+  char path[32];
+  sprintf(path,"/ir");
+  Dir dir = LittleFS.openDir(path);
   
-  uint16_t address; //current EEPROM address
-
-  //iterate all possible slots
-  for (uint8_t i = 0; (i < MAX_IRCOMMANDS_IN_EERPOM) && header.startIRAddress[i]; i++)  {
-    //load the base address for the current slot
-    address = header.startIRAddress[i] - sizeof (irCommand);
-    readEEPROMBin((uint8_t *)&irCommand, address, sizeof (irCommand));
-    //compare the slotname
-    if (!strcmp(irCommand.irName, irName))
-      return i;  // IR slotname found!
+  /** find a slot for given name */
+  uint8_t slotnumber = 0;
+  while (dir.next()) {
+    if(dir.fileSize()) {
+      File f = dir.openFile("r");
+      String name = f.readString();
+      f.close();
+      
+      if(name.equals(irName)) return slotnumber; 
+      else slotnumber++;
+    }
   }
+  //not found
   #ifdef DEBUG_OUTPUT_BASIC
     Serial.print("No IR slotName found for ");
     Serial.println(irName);
   #endif
-  #endif
   return -1;
-  
-  
 }
 
 
@@ -269,39 +271,44 @@ int8_t slotnameIRToNumber(char * irName)
  * */
 uint8_t deleteIRCommand(char * name)
 {
-  //TODO!
-  Serial.println("IR deleting not implemented...");
-  return 0;
-  
-  #if 0
-  int8_t nr;
-  if (strlen(name)) {
-    nr = slotnameIRToNumber(name);
+  char path[32];
+    
+  if (!strlen(name)) {
     #ifdef DEBUG_OUTPUT_BASIC
+        Serial.println("Deleting all IR slots");
+    #endif
+    /** remove /ir dir & recreate */
+    sprintf(path,"/ir");
+    LittleFS.remove(path);
+    LittleFS.mkdir(path);
+    return (1);
+  }
+  
+  int8_t nr = slotnameIRToNumber(name);
+  if (nr < 0) return (0);  // slot name does not exist
+  
+  #ifdef DEBUG_OUTPUT_BASIC
       Serial.print("Deleting slot ");
       Serial.print(name);
       Serial.print("@");
-      Serial.println(nr);
-    #endif
-    if (nr >= 0) {
-      // TBD: move data of other ir Slots !
-      for (uint8_t i = nr; i < MAX_IRCOMMANDS_IN_EERPOM-1; i++) {
-        header.startIRAddress[i] = header.startIRAddress[i+1];
-        header.endIRAddress[i] = header.endIRAddress[i+1];
-      }
-    } else return(0);
-  } else {
-    #ifdef DEBUG_OUTPUT_BASIC
-      Serial.println("Deleting all IR slots");
-    #endif
-    for (uint8_t i = 0; i < MAX_IRCOMMANDS_IN_EERPOM; i++) {
-      header.startIRAddress[i] = 0;
-      header.endIRAddress[i] = 0;
+      Serial.println(nr);   
+  #endif
+  
+  //delete file
+  sprintf(path,"/ir/%02d",nr);
+  LittleFS.remove(path);
+
+  int lastSlot= getLastIRIndex();
+  if (nr != lastSlot) {
+    // we must move files
+    char pathTo[32];
+    for (int i=nr; i<lastSlot;i++) {
+      sprintf(path,"/ir/%02d",i+1);
+      sprintf(pathTo,"/ir/%02d",i);
+      LittleFS.rename(path,pathTo);
     }
   }
-  storeHeader();
-    
-  #endif
+  
   return(1);
 }
 
@@ -314,12 +321,11 @@ uint8_t deleteIRCommand(char * name)
  * */
 void saveIRToEEPROM(char * name, unsigned int *timings, size_t cntEdges)
 {
-  /*int8_t nr = slotnameIRToNumber(name);
+  int8_t nr = slotnameIRToNumber(name);
   uint16_t irSlot=0;
   if (nr == -1)  {
-    // a new IR slot, search for the first adress which is "0"
-    while  ((irSlot < MAX_IRCOMMANDS_IN_EERPOM) && header.startIRAddress[irSlot])
-      irSlot++;
+    // a new IR slot, use next free number
+    irSlot = getLastIRIndex() + 1;
 
     if (irSlot < MAX_IRCOMMANDS_IN_EERPOM) {
       #ifdef DEBUG_OUTPUT_BASIC
@@ -337,7 +343,7 @@ void saveIRToEEPROM(char * name, unsigned int *timings, size_t cntEdges)
       Serial.println(nr);
     #endif
     saveIRToEEPROMSlotNumber(nr, name, timings, cntEdges);
-  }*/
+  }
 }
 
 
@@ -347,12 +353,9 @@ void saveIRToEEPROM(char * name, unsigned int *timings, size_t cntEdges)
    is provided by cntEdges.
    The name is also provided as parameter
  * */
-void saveIRToEEPROMSlotNumber(uint8_t nr, char * name, uint16_t *timings, uint8_t cntEdges)
+void saveIRToEEPROMSlotNumber(uint8_t nr, char * name, unsigned int *timings, uint8_t cntEdges)
 {
-	Serial.println("###TBD###: save slot IR nr (load a specific file? Or access somthing in a structured or binary file)");
-	#if 0
   uint16_t size;
-  uint16_t addr = 0; 
 
   //determine the size of this slot
   size = sizeof (irCommand) + cntEdges * 2;
@@ -361,60 +364,45 @@ void saveIRToEEPROMSlotNumber(uint8_t nr, char * name, uint16_t *timings, uint8_
     Serial.print("IR slot size:");
     Serial.println(size);
   #endif
-
-  //if IR slot is not empty: overwrite (eventually move other IR slots)
-  if (header.startIRAddress[nr] != 0)  {
-    int old_size = header.startIRAddress[nr] - header.endIRAddress[nr];
-    #ifdef DEBUG_OUTPUT_BASIC
-      Serial.print("old IR slotsize:");
-      Serial.println(old_size);
-    #endif
-    if (old_size != size) {
-      int bytesToMove = old_size - size;
-      // TBD:  moveIRSlotsInEEPROM(nr, bytesToMove);
-    }
-  }
-
-  /** save this irSlot **/
-  //if  this is the first IR slot, start right at the top address (maximum EEPROM address minus 1)
-  if (nr == 0) addr = EEPROM_MAX_ADDRESS-1;
-  else addr = header.endIRAddress[nr-1];  // else start at end address of last IR slot
-
-  header.startIRAddress[nr]=addr;
   
+  /** save this slot **/
+  char path[32];
+  sprintf(path,"/ir/%02d",nr);
+  File f = LittleFS.open(path,"w");
+
   #ifdef DEBUG_OUTPUT_BASIC
-    Serial.print("Start new irSlot addr@");
-    Serial.println(addr);
+    Serial.print("Start new slot: ");
+    Serial.println(path);
   #endif
-
-  strcpy(irCommand.irName, name);
-  irCommand.edges=cntEdges;
-
-  // write name and edgecount
-  addr-=sizeof(irCommand);
-  writeEEPROMBin(addr, (uint8_t *)&irCommand, sizeof(irCommand));
-
-  // write all edges  
-  addr-=cntEdges*2;
-  writeEEPROMBin(addr, (uint8_t *)timings, cntEdges*2);
-
-  /** update the header table */
-  header.endIRAddress[nr] = addr;
-  storeHeader();
-  #endif
+  
+  if (!f) {
+    Serial.println("file open failed");
+    return;
+  }
+  
+  //prepare header
+  strncpy(irCommand.irName, name, MAX_NAME_LEN);
+  irCommand.edges = cntEdges;
+  
+  // save the command header (name / edgecount
+  f.write((uint8_t *)&irCommand, sizeof(irCommandHeader));
+  
+  // write edges
+  for(size_t i = 0; i<irCommand.edges; i++)
+  {
+    f.write((char *)&timings[i], sizeof(unsigned int));
+  }
+  
+  //finished
+  f.close();
 }
 
 /**
    Load one IR command from the EEPROM.
    identified by the command name
  * */
-size_t readIRFromEEPROM(char * name, uint16_t *timings, size_t maxEdges)
+size_t readIRFromEEPROM(char * name, unsigned int *timings, size_t maxEdges)
 {
-  //TODO!
-  Serial.println("IR saving not implemented...");
-  return 0;
-    
-  #if 0
   int8_t nr = slotnameIRToNumber(name);
 
   if (nr < 0) {
@@ -424,31 +412,53 @@ size_t readIRFromEEPROM(char * name, uint16_t *timings, size_t maxEdges)
     #endif
     return 0;
   }
-
-  uint16_t address = header.startIRAddress[nr];
-
   #ifdef DEBUG_OUTPUT_BASIC
     Serial.print("Load IR command by nr: ");
     Serial.print(nr);
-    Serial.print(" from address: ");
-    Serial.println(address);
   #endif
- 
-  address-=sizeof(irCommand)+irCommand.edges*2 ;   // set address to ir data start!
-  readEEPROMBin((uint8_t *) timings, address, irCommand.edges*2);
+  
+  char path[32];
+  sprintf(path,"/ir/%02d",nr);
+  
+  if(!LittleFS.exists(path))
+  {
+    #ifdef DEBUG_OUTPUT_BASIC
+      Serial.print(nr);
+      Serial.println(" IRcmd not found!");
+    #endif
+    return 0;
+  }
+  
+  File f = LittleFS.open(path,"r");
+  
+  if(!f) return 0;
+
+  // load the general slotSettings struct, containing the name
+  f.readBytes((char *)&irCommand, sizeof(irCommandHeader));
+  #ifdef DEBUG_OUTPUT_BASIC
+    Serial.print("read slotname "); Serial.println(irCommand.irName);
+  #endif
+  
+  if(irCommand.edges >= maxEdges)
+  {
+    Serial.println("E: irCommand.edges > maxEdges, truncating!");
+  }
+  
+  for(size_t i = 0; (i<maxEdges) && (i<irCommand.edges); i++)
+  {
+    f.readBytes((char *)&timings[i], sizeof(unsigned int));
+  }
+  f.close();
 
   //return the count of available edges (used by the IR parser)
   return irCommand.edges;
-    
-  #endif
 }
 
 
 /**
-   Load the EEPROM header, which contains all start addresses of the
-   slots and IR commands
+   Check if storage is valid, initialize if not.
  * */
-void bootstrapSlotAddresses()
+void initStorage()
 {
   uint8_t init_needed = 0;
   uint16_t versionID = 0;
@@ -555,22 +565,20 @@ void listSlots()
  * */
 void listIRCommands()
 {
-	Serial.println("####TBD - EEPROM:### IR cmds from file");
-  /*uint16_t address; //current EEPROM address
-  char tmp[MAX_NAME_LEN];
-
-  //iterate all possible slots
-  for (uint8_t i = 0; i < MAX_IRCOMMANDS_IN_EERPOM; i++) {
-    //load the base address for the current slot
-    address = header.startIRAddress[i];
-    if (address) {
-      //print out the irSlot name
+  char path[32];
+  for(int8_t i = 0; i<MAX_IRCOMMANDS_IN_EERPOM; i++)
+  {
+    sprintf(path,"/ir/%02d",i);
+    File f = LittleFS.open(path,"r");
+    if(f)
+    {
+      //read slotname
+      String slotname = f.readString();
+      f.close();
       Serial.print("IRCommand"); Serial.print(i); Serial.print(":");
-      address-=sizeof(irCommand);
-      readEEPROMBin(tmp, address, MAX_NAME_LEN);
-      Serial.println(tmp);
-    }
-  }*/
+      Serial.println(slotname);
+    } else return;
+  }
 }
 
 /**
@@ -582,6 +590,19 @@ int8_t getLastSlotIndex(void) {
   for(int8_t i = 0; i<MAX_SLOTS_IN_EERPOM; i++)
   {
     sprintf(path,"/%03d/%02d",revision,i);
+    if(!LittleFS.exists(path)) return i-1;
+  }
+  return -1;
+}
+
+/**
+   get the index of the last IR command  
+ * */
+int8_t getLastIRIndex(void) {
+  char path[32];
+  for(int8_t i = 0; i<MAX_IRCOMMANDS_IN_EERPOM; i++)
+  {
+    sprintf(path,"/ir/%02d",i);
     if(!LittleFS.exists(path)) return i-1;
   }
   return -1;

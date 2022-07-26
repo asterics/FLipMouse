@@ -17,6 +17,7 @@
 #include "FlipWare.h"
 #include "infrared.h"
 #include "tone.h"
+#define RAW_BUFFER_LENGTH IR_EDGE_REC_MAX
 #include <IRremote.hpp>
 /**
    static variables for infrared code generation and timekeeping
@@ -172,34 +173,34 @@ void generate_next_IR_phase(void)
 */
 void start_IR_command_playback(char * name)
 {
-	Serial.println("### TBD - IR: ### sending, use library :-)");
 	size_t edges;
-	uint16_t timings[IR_EDGE_REC_MAX];
+	IRData raw;
 
 	//fetch the IR command from the eeprom
-	edges = readIRFromEEPROM(name, timings, IR_EDGE_REC_MAX);
-
-	  //no edges, no command -> cancel
-	  if (edges == 0)
-	  {
-	#ifdef DEBUG_OUTPUT_FULL
-		Serial.println("No IR command found");
-	#endif
-		return;
-	  }
+	edges = readIRFromEEPROM(name, raw.rawDataPtr->rawbuf, IR_EDGE_REC_MAX);
+	raw.rawDataPtr->rawlen = edges;
+	
+  //no edges, no command -> cancel
+  if (edges == 0)
+  {
+    #ifdef DEBUG_OUTPUT_FULL
+      Serial.println("No IR command found");
+    #endif
+    return;
+  }
 
   //full edge feedback, if full debug is enabled
-#ifdef DEBUG_OUTPUT_FULL
-  Serial.println("START IR ----------");
-  for (uint16_t i = 0; i < edges; i++)
-  {
-    Serial.println(timings[i]);
-  }
-  Serial.println("END ----------");
-#endif
+  #ifdef DEBUG_OUTPUT_FULL
+    Serial.println("START IR ----------");
+    for (uint16_t i = 0; i < edges; i++)
+    {
+      Serial.println(timings[i]);
+    }
+    Serial.println("END ----------");
+  #endif
 
   makeTone(TONE_IR, 0);
-  IrSender.sendRaw(timings,edges,38);
+  IrSender.write(&raw);
 }
 
 void play_IR_command(char * name)

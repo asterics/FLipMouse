@@ -37,6 +37,7 @@
 #include "buttons.h"
 #include "bluetooth.h"
 #include "hid_hal.h"
+#include <IRremote.hpp>  
 
 #define VERSION_STRING "v2.12"
 
@@ -63,8 +64,8 @@
 
 // Optional Debug Output Control
 
-// #define DEBUG_OUTPUT_FULL      // if full debug output is desired
-// #define DEBUG_OUTPUT_BASIC     // if basic debug output is desired (for eeprom)
+#define DEBUG_OUTPUT_FULL      // if full debug output is desired
+#define DEBUG_OUTPUT_BASIC     // if basic debug output is desired (for eeprom)
 
 /**
    global constant definitions

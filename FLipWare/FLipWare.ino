@@ -46,7 +46,7 @@
 #include "parser.h"  
 #include "reporting.h"
 #include "cim.h"
-#include "utils.h"         
+#include "utils.h"       
 
 /**
    device name for ID string & BT-pairing

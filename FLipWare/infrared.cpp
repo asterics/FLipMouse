@@ -17,12 +17,10 @@
 #include "FlipWare.h"
 #include "infrared.h"
 #include "tone.h"
-#define RAW_BUFFER_LENGTH IR_EDGE_REC_MAX
-#include <IRremote.hpp>
 /**
    static variables for infrared code generation and timekeeping
  * */
-uint32_t edge_timeout = 10000UL;  // timeout for IR code edge length in microseconds
+uint32_t edge_timeout = 10000UL;  // timeout for IR receiving, [ms]
 int repeatCounter;        // number of desired code repetitions (-1 for endless)
 int idlesequenceCounter;  // bumber of gaps which should be inserted before code repetition
 uint16_t edges;           // number of edges for current code
@@ -50,7 +48,7 @@ void start_IR_command_playback(char * name);
  * */
 void initIR() {
 	//init library
-	IrSender.begin(IR_LED_PIN); 
+	IrSender.begin(IR_LED_PIN,DISABLE_LED_FEEDBACK); 
 	IrReceiver.begin(IR_SENSOR_PIN, DISABLE_LED_FEEDBACK);
   /*pinMode(IR_SENSOR_PIN, INPUT);
   analogWriteFrequency(IR_LED_PIN, 38000);  // TBD: flexible carrier frequency for IR, not only 38kHz !
@@ -69,7 +67,7 @@ void record_IR_command(char * name)
 {
 	uint32_t startTime = millis();
 	IrReceiver.start();
-	while(abs((long int)(millis()-startTime)) < (edge_timeout / 1000))
+	while(abs((long int)(millis()-startTime)) < edge_timeout)
 	{
 		if(IrReceiver.decode())
 		{
@@ -77,11 +75,13 @@ void record_IR_command(char * name)
 			{
 				Serial.println("IR-Code sequence full.");
 				IrReceiver.stop();
-				return;
 			}
+      
+      //play a feedback tone
+      makeTone(TONE_IR_REC, 0);
 			
 			//save the recorded command to the EEPROM storage
-			saveIRToEEPROM(name, IrReceiver.decodedIRData.rawDataPtr->rawbuf, IrReceiver.decodedIRData.rawDataPtr->rawlen);
+			saveIRToEEPROM(name, &IrReceiver.decodedIRData);
 			
 			#ifdef DEBUG_OUTPUT_FULL
 			  Serial.println("START IR ----------");
@@ -177,11 +177,7 @@ void start_IR_command_playback(char * name)
 	IRData raw;
 
 	//fetch the IR command from the eeprom
-	edges = readIRFromEEPROM(name, raw.rawDataPtr->rawbuf, IR_EDGE_REC_MAX);
-	raw.rawDataPtr->rawlen = edges;
-	
-  //no edges, no command -> cancel
-  if (edges == 0)
+  if (!readIRFromEEPROM(name, &raw))
   {
     #ifdef DEBUG_OUTPUT_FULL
       Serial.println("No IR command found");
@@ -192,10 +188,7 @@ void start_IR_command_playback(char * name)
   //full edge feedback, if full debug is enabled
   #ifdef DEBUG_OUTPUT_FULL
     Serial.println("START IR ----------");
-    for (uint16_t i = 0; i < edges; i++)
-    {
-      Serial.println(timings[i]);
-    }
+    Serial.println("not available in IRRemote");
     Serial.println("END ----------");
   #endif
 

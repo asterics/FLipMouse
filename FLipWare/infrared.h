@@ -13,20 +13,19 @@
 #ifndef _INFRARED_H_
 #define _INFRARED_H_
 
-
+#define USE_IRREMOTE_HPP_AS_PLAIN_INCLUDE
+#include <IRremote.hpp>
 
 /**
    physical pin definitions
 */
-#define IR_LED_PIN     D16    //  IR-Led output pin
-#define IR_SENSOR_PIN  D14    //  input pin of the TSOP IR receiver
+#define IR_LED_PIN     28    //  IR-Led output pin
+#define IR_SENSOR_PIN  26    //  input pin of the TSOP IR receiver
 
 
 // name of the idle code command (played after other ir commands if it exists)
 #define IDLESEQUENCE_NAME "idle"
 #define IDLESEQUENCE_REPEAT 1
-
-#define IR_EDGE_REC_MAX 512
 
 
 /**

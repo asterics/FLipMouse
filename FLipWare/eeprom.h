@@ -43,6 +43,9 @@
 
 #include "FlipWare.h"
 
+#define USE_IRREMOTE_HPP_AS_PLAIN_INCLUDE
+#include <IRremote.hpp>
+
 #define MAX_SLOTS_IN_EERPOM 10
 #define MAX_IRCOMMANDS_IN_EERPOM 20
 
@@ -85,20 +88,16 @@ uint8_t deleteIRCommand(char * name);
 /**
    Save one IR command to the EEPROM. If the name is already assigned,
    it will be overwritten, otherwise a new slot will be used.
-   There is an array of timings between the edges, the length
-   is provided by cntEdges.
    The name is also provided as parameter
  * */
-void saveIRToEEPROM(char * name, unsigned int *timings, size_t cntEdges);
+void saveIRToEEPROM(char * name, IRData *timings);
 
 
 /**
    Save one IR command to the EEPROM. The slot is determined by the slot number.
-   There is an array of timings between the edges, the length
-   is provided by cntEdges.
    The name is also provided as parameter
  * */
-void saveIRToEEPROMSlotNumber(uint8_t nr, char * name, unsigned int *timings, uint8_t cntEdges);
+void saveIRToEEPROMSlotNumber(uint8_t nr, char * name, IRData *timings);
 
 /**
    Print out all slotnames to the serial interface
@@ -110,7 +109,7 @@ void listIRCommands();
    Replay one IR command from the EEPROM.
    The slot is identified by the slot name
  * */
-size_t readIRFromEEPROM(char * name, unsigned int *timings, size_t maxEdges);
+size_t readIRFromEEPROM(char * name, IRData *timings);
 
 /**
    This function deletes the slot from EEPROM.

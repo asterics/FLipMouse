@@ -19,7 +19,7 @@ uint8_t blinkCount = 0;
 uint8_t blinkTime = 0;
 uint8_t blinkStartTime = 0;
 
-Adafruit_NeoPixel pixels(2, NEOPIXEL_PIN, NEO_GRB + NEO_KHZ800);
+Adafruit_NeoPixel pixels(1, NEOPIXEL_PIN, NEO_GRB + NEO_KHZ800);
 
 /**
    extern declaration of static variables
@@ -66,7 +66,7 @@ void updateLeds()
       r = g = b = 255 - ((blinkStartTime - blinkTime) / blinkStartTime) * 255;
     }
   }
-  pixels.fill(r,g,b);
+  pixels.setPixelColor(0,r,g,b);
   pixels.show();
 }
 
@@ -76,6 +76,6 @@ void setLeds(uint8_t leds)
   if(leds & (1<<0)) r = 255;
   if(leds & (1<<1)) g = 255;
   if(leds & (1<<2)) b = 255;
-  pixels.fill(r,g,b);
+  pixels.setPixelColor(0,r,g,b);
   pixels.show();
 }

@@ -17,7 +17,7 @@
 /**
    constant definitions for tone generation 
 */ 
-#define TONE_PIN  D15    // physical pin for piezo tone generation
+#define TONE_PIN  27    // physical pin for piezo tone generation
 
 #define TONE_CALIB            1
 #define TONE_CHANGESLOT       2

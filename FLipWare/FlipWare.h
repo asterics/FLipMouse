@@ -72,14 +72,6 @@
 #define UPDATE_INTERVAL     5    // update interval for performing HID actions (in milliseconds)
 #define DEFAULT_CLICK_TIME  8    // time for mouse click (loop iterations from press to release)
 
-// Analog input pins (4FSRs + 1 pressure sensor)
-#define PRESSURE_SENSOR_PIN A0
-#define HALL_SENSOR_PIN     A1
-#define DOWN_SENSOR_PIN     A6
-#define LEFT_SENSOR_PIN     A9
-#define UP_SENSOR_PIN       A7
-#define RIGHT_SENSOR_PIN    A8
-
 // RAM buffers and memory constraints
 #define WORKINGMEM_SIZE         300    // reserved RAM for working memory (command parser, IR-rec/play)
 #define MAX_KEYSTRING_LEN (WORKINGMEM_SIZE-3)   // maximum length for AT command parameters
@@ -140,6 +132,7 @@ struct SensorData {
   int up, down, left, right;
   uint8_t calib_now;
   int16_t  cx, cy;
+  uint32_t cpressure;
   int xDriftComp, yDriftComp;
   int xLocalMax, yLocalMax;  
 };

@@ -20,6 +20,8 @@ uint8_t blinkCount = 0;
 uint8_t blinkTime = 0;
 uint8_t blinkStartTime = 0;
 
+Adafruit_NeoPixel pixels(1, 5, NEO_GRB + NEO_KHZ800);
+
 /**
    extern declaration of static variables
    which shall be accessed from other modules
@@ -31,8 +33,8 @@ void initGPIO()
   for (int i = 0; i < NUMBER_OF_PHYSICAL_BUTTONS; i++) // initialize physical buttons and bouncers
   pinMode (input_map[i], INPUT_PULLUP);   // configure the pins for input mode with pullup resistors
 
-  for (int i = 0; i < NUMBER_OF_LEDS; i++) // initialize physical buttons and bouncers
-  pinMode (led_map[i], OUTPUT);   // configure the pins for input mode with pullup resistors
+  pixels.begin();
+  pixels.setBrightness(127);
 }
 
 void initBlink(uint8_t  count, uint8_t startTime)
@@ -43,22 +45,38 @@ void initBlink(uint8_t  count, uint8_t startTime)
 
 void updateLeds()
 {
-  if (blinkCount == 0) {
-    if ((actSlot + 1) & 1) digitalWrite (led_map[0], LOW); else digitalWrite (led_map[0], HIGH);
-    if ((actSlot + 1) & 2) digitalWrite (led_map[1], LOW); else digitalWrite (led_map[1], HIGH);
-    if ((actSlot + 1) & 4) digitalWrite (led_map[2], LOW); else digitalWrite (led_map[2], HIGH);
-  }
-  else {
+  uint8_t r = 0;
+  uint8_t g = 0;
+  uint8_t b = 0;
+
+	if (blinkCount == 0) {
+	  if ((actSlot + 1) & 1) r = 255;
+	  if ((actSlot + 1) & 2) g = 255;
+	  if ((actSlot + 1) & 4) b = 255;
+	} else {
     if (blinkTime == 0)
     {
       blinkTime = blinkStartTime;
       blinkCount--;
-      if (blinkCount % 2) {
-        digitalWrite (led_map[0], LOW); digitalWrite (led_map[1], LOW); digitalWrite (led_map[2], LOW);
-      }
-      else {
-        digitalWrite (led_map[0], HIGH); digitalWrite (led_map[1], HIGH); digitalWrite (led_map[2], HIGH);
-      }
     } else blinkTime--;
+
+    if(blinkCount % 2)
+    {
+      r = g = b = ((blinkStartTime - blinkTime) / blinkStartTime) * 255;
+    } else {
+      r = g = b = 255 - ((blinkStartTime - blinkTime) / blinkStartTime) * 255;
+    }
   }
+  pixels.setPixelColor(0,r,g,b);
+  pixels.show();
+}
+
+void setLeds(uint8_t leds)
+{
+  uint8_t r,g,b = 0;
+  if(leds & (1<<0)) r = 255;
+  if(leds & (1<<1)) g = 255;
+  if(leds & (1<<2)) b = 255;
+  pixels.setPixelColor(0,r,g,b);
+  pixels.show();
 }

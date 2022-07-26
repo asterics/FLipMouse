@@ -38,6 +38,7 @@
 
 #include "FlipWare.h"
 #include "gpio.h"      
+#include "sensors.h"      
 #include "infrared.h"      
 #include "display.h"       // for SSD1306 I2C-Oled display
 #include "modes.h"
@@ -116,6 +117,7 @@ void setup() {
   Wire.begin();
   Wire.setClock(400000);  // use 400kHz I2C clock
   initGPIO();
+  initSensors();
   initIR();
   initButtons();
   initDebouncers();
@@ -164,14 +166,8 @@ void loop() {
   }
 
   // get current sensor values
-  /************************************************************************** TODO: replace with PCB_3 branch code  */
-  sensorData.pressure = 512;
-
-  sensorData.up =    512;
-  sensorData.down =  512;
-  sensorData.left =  512;
-  sensorData.right = 512;
-  /************************************************************************** TODO: replace with PCB_3 branch code  */
+  readPressure(&sensorData);
+  readForce(&sensorData);
 
   // apply rotation if needed
   switch (slotSettings.ro) {

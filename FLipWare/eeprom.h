@@ -180,4 +180,10 @@ uint8_t saveToEEPROM(char * slotname);
  * */
 void saveToEEPROMSlotNumber(int8_t nr, char * slotname);
 
+/**
+ * If settings are under version control (TBD!), this function returns the current
+ * revision (-> foldername in FS) to read from / write to.
+ */
+uint8_t getSettingsRevision(void);
+
 #endif

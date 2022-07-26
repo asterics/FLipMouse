@@ -94,7 +94,7 @@
 */
 struct SlotSettings {
 
-  char slotName[MAX_NAME_LEN];   // slotname
+  char slotName[MAX_NAME_LEN];   // slotname (@warning: must be always the first element, storing relies on that!)
   uint16_t keystringBufferLen;   
   
   uint8_t  stickMode;  // alternative(0), mouse(1), joystick (2,3,4)
@@ -156,5 +156,15 @@ extern char keystringBuffer[MAX_KEYSTRINGBUFFER_LEN];  // storage for all button
 #define strcpy_FM   strcpy
 #define strcmp_FM   strcmp
 typedef char* uint_farptr_t_FM;
+
+/**
+ * Some define checks to warn from building in debug settings
+ */
+#ifdef DEBUG_OUTPUT_BASIC
+  #warning "DEBUG_OUTPUT_BASIC active! (GUI might not work)"
+#endif
+#ifdef DEBUG_OUTPUT_FULL
+  #warning "DEBUG_OUTPUT_FULL active! (GUI might not work)"
+#endif
 
 #endif

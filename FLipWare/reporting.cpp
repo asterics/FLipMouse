@@ -25,7 +25,6 @@
 uint8_t reportSlotParameters = REPORT_NONE;
 uint8_t reportRawValues = 0;
 
-
 void printCurrentSlot()
 {
   Serial.print("Slot:");  Serial.println(slotSettings.slotName);
@@ -74,7 +73,6 @@ void printCurrentSlot()
     Serial.println("");
   }
 }
-
 
 void reportValues()
 {

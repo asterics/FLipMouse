@@ -89,7 +89,7 @@ void saveToEEPROMSlotNumber(int8_t nr, char * slotname)
 
   /** save this slot **/
   char path[32];
-  uint8_t revision = 1; //TODO: determine current settings revision number
+  uint8_t revision = getSettingsRevision(); //determine current settings revision number
   sprintf(path,"/%03d/%02d",revision,nr);
   File f = LittleFS.open(path,"w");
 
@@ -103,10 +103,7 @@ void saveToEEPROMSlotNumber(int8_t nr, char * slotname)
     return;
   }
 
-  // save the name
-  f.print(slotname);
-  f.write('\0');
-  // save the general slotSettings to the global slotSettings struct
+  // save the general slotSettings to the global slotSettings struct (slot name is first element)
   f.write((uint8_t *)&slotSettings, sizeof(SlotSettings));
   // write all button slotSettings
   f.write((char*)buttons, sizeof(slotButtonSettings) * NUMBER_OF_BUTTONS);
@@ -125,7 +122,7 @@ int8_t slotnameToNumber(char * slotname)
 {
   /** open current directory */
   char path[32];
-  uint8_t revision = 1; //TODO: determine current settings revision number
+  uint8_t revision = getSettingsRevision(); //determine current settings revision number
   sprintf(path,"/%03d",revision);
   Dir dir = LittleFS.openDir(path);
   
@@ -153,7 +150,12 @@ int8_t slotnameToNumber(char * slotname)
  * */
 uint8_t readFromEEPROM(char * slotname)
 {
-  if (*slotname == 0) return readFromEEPROMSlotNumber(actSlot + 1, true);
+  if (*slotname == 0)
+  {
+    //either load next slot or first slot.
+    if(actSlot == getLastSlotIndex())return readFromEEPROMSlotNumber(0, true);
+    else return readFromEEPROMSlotNumber(actSlot + 1, true);
+  }
 
   int8_t nr = slotnameToNumber(slotname);
   #ifdef DEBUG_OUTPUT_BASIC
@@ -178,7 +180,7 @@ uint8_t readFromEEPROMSlotNumber(uint8_t nr, bool playTone)
 {
   /** open & read this slot **/
   char path[32];
-  uint8_t revision = 1; //TODO: determine current settings revision number
+  uint8_t revision = getSettingsRevision(); //determine current settings revision number
   sprintf(path,"/%03d/%02d",revision,nr);
   
   if(!LittleFS.exists(path))
@@ -193,10 +195,8 @@ uint8_t readFromEEPROMSlotNumber(uint8_t nr, bool playTone)
   File f = LittleFS.open(path,"r");
   
   if(!f) return 0;
-  
-  //read slotname
-  String slotname = f.readString();
-  // load the general slotSettings struct
+
+  // load the general slotSettings struct, containing the name
   f.readBytes((char *)&slotSettings, sizeof(SlotSettings));
   #ifdef DEBUG_OUTPUT_BASIC
     Serial.print("read slotname "); Serial.println(slotSettings.slotName);
@@ -208,6 +208,9 @@ uint8_t readFromEEPROMSlotNumber(uint8_t nr, bool playTone)
   // load keystring buffer
   f.readBytes(keystringBuffer, slotSettings.keystringBufferLen);
   initButtonKeystrings();
+  
+  //now next slot is active
+  actSlot = nr;
 
   if (reportSlotParameters != REPORT_NONE)
     printCurrentSlot();
@@ -481,7 +484,7 @@ void bootstrapSlotAddresses()
 uint8_t deleteSlot(char * name)
 {
   char path[32];
-  uint8_t revision = 1; //TODO: determine current settings revision number
+  uint8_t revision = getSettingsRevision(); //determine current settings revision number
   
   if (!strlen(name)) {
     #ifdef DEBUG_OUTPUT_BASIC
@@ -529,7 +532,7 @@ uint8_t deleteSlot(char * name)
 void listSlots()
 {
   char path[32];
-  uint8_t revision = 1; //TODO: determine current settings revision number
+  uint8_t revision = getSettingsRevision(); //determine current settings revision number
   for(int8_t i = 0; i<MAX_SLOTS_IN_EERPOM; i++)
   {
     sprintf(path,"/%03d/%02d",revision,i);
@@ -575,7 +578,7 @@ void listIRCommands()
  * */
 int8_t getLastSlotIndex(void) {
   char path[32];
-  uint8_t revision = 1; //TODO: determine current settings revision number
+  uint8_t revision = getSettingsRevision(); //determine current settings revision number
   for(int8_t i = 0; i<MAX_SLOTS_IN_EERPOM; i++)
   {
     sprintf(path,"/%03d/%02d",revision,i);
@@ -599,4 +602,14 @@ void printAllSlots(void) {
   if(getLastSlotIndex() >= 0)
     readFromEEPROMSlotNumber(0, true);
   else Serial.println("END");
+}
+
+/**
+ * If settings are under version control (TBD!), this function returns the current
+ * revision (-> foldername in FS) to read from / write to.
+ */
+uint8_t getSettingsRevision(void)
+{
+	//TODO: implement revisions (or use the first folder name for something different)
+	return 1;
 }

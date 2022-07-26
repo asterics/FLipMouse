@@ -31,7 +31,7 @@ extern uint8_t reportRawValues;
    @brief prints the AT command strings of the current slot settings to the serial interface
    @return none
 */
-void printCurrentSlot();
+void printCurrentSlot(void);
 
 /**
    @name reportValues

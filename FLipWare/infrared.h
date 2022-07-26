@@ -18,8 +18,8 @@
 /**
    physical pin definitions
 */
-#define IR_LED_PIN     6    //  IR-Led output pin
-#define IR_SENSOR_PIN  4    //  input pin of the TSOP IR receiver
+#define IR_LED_PIN     D16    //  IR-Led output pin
+#define IR_SENSOR_PIN  D14    //  input pin of the TSOP IR receiver
 
 
 // name of the idle code command (played after other ir commands if it exists)

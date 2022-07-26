@@ -19,7 +19,7 @@
    constant definitions
 */
 #define NUMBER_OF_PHYSICAL_BUTTONS 3  // number of physical switches
-#define NUMBER_OF_LEDS     3          // number of connected leds
+#define NEOPIXEL_PIN D10
 
 /**
    extern declaration of static variables

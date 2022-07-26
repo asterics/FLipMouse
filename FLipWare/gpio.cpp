@@ -13,14 +13,13 @@
 #include <Arduino.h>
 #include "gpio.h"
 
-int8_t  input_map[NUMBER_OF_PHYSICAL_BUTTONS] = {0, 2, 1};    //  maps physical button pins to button index 0,1,2
-int8_t  led_map[NUMBER_OF_LEDS] = {5, 16, 17};                //  maps leds pins
+int8_t  input_map[NUMBER_OF_PHYSICAL_BUTTONS] = {D2, D8, D9};    //  maps physical button pins to button index 0,1,2
 
 uint8_t blinkCount = 0;
 uint8_t blinkTime = 0;
 uint8_t blinkStartTime = 0;
 
-Adafruit_NeoPixel pixels(1, 5, NEO_GRB + NEO_KHZ800);
+Adafruit_NeoPixel pixels(2, NEOPIXEL_PIN, NEO_GRB + NEO_KHZ800);
 
 /**
    extern declaration of static variables
@@ -67,7 +66,7 @@ void updateLeds()
       r = g = b = 255 - ((blinkStartTime - blinkTime) / blinkStartTime) * 255;
     }
   }
-  pixels.setPixelColor(0,r,g,b);
+  pixels.fill(r,g,b);
   pixels.show();
 }
 
@@ -77,6 +76,6 @@ void setLeds(uint8_t leds)
   if(leds & (1<<0)) r = 255;
   if(leds & (1<<1)) g = 255;
   if(leds & (1<<2)) b = 255;
-  pixels.setPixelColor(0,r,g,b);
+  pixels.fill(r,g,b);
   pixels.show();
 }

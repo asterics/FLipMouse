@@ -19,7 +19,7 @@
 #include "Wire.h"
 
 /** Analog sensor input if a analog pressure sensor is used */
-#define PRESSURE_SENSOR_PIN A1
+#define PRESSURE_SENSOR_PIN A3
 
 /**
  * @brief I2C address of the MPRLS pressure sensor 

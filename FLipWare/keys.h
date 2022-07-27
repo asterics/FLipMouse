@@ -24,6 +24,21 @@
 // size of the buffer for currently pressed keys
 #define KEYPRESS_BUFFERSIZE 8
 
+/**
+   @name printKeyboardLayout
+   @brief Prints out the currently used keyboard layout (e.g. "en_US\n")
+   @return none
+*/
+void printKeyboardLayout();
+
+/**
+   @name setKeyboardLayout
+   @brief Updates the currently used keyboard layout.
+   @param name Name of the new keyboard layout (e.g. "en_US" or "de_DE")
+   @return 0 on success, 1 if layout is not found.
+   @note Currently supported: de_DE, en_US, es_ES, fr_FR, it_IT, sv_SE, da_DK
+*/
+int8_t setKeyboardLayout(char *name);
 
 /**
    @name pressKeys

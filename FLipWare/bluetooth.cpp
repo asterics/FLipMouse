@@ -45,7 +45,6 @@ uint8_t readstate_f=0;              // needed to track the return value status d
 void mouseBT(int x, int y, uint8_t scroll)
 {
   static int oldMouseButtons = 0;
-  static int sendCnt = 0;
   static int accuX = 0, accuY = 0;
 
 #ifdef DEBUG_OUTPUT_FULL
@@ -64,7 +63,7 @@ void mouseBT(int x, int y, uint8_t scroll)
   accuY += y;
 
   if ((activeMouseButtons != oldMouseButtons) ||
-      (btsendTimestamp + BT_MINIMUM_SENDINTERVAL <= millis()))
+      ((uint32_t)abs((long int)(millis()-btsendTimestamp)) > BT_MINIMUM_SENDINTERVAL ))
   {
     btsendTimestamp = millis();
 
@@ -89,13 +88,12 @@ void mouseBT(int x, int y, uint8_t scroll)
     Serial_AUX.write((uint8_t)accuX);
     Serial_AUX.write((uint8_t)accuY);
 
-    //maybe the wheel? Not official by Adafruit... -> not working
-    Serial_AUX.write((uint8_t)0x00);
+    //wheel. Unsupported by EZKey, but implement in our ESP32 module
+    Serial_AUX.write((uint8_t)scroll);
     //some additional bytes...
     Serial_AUX.write((uint8_t)0x00);
     Serial_AUX.write((uint8_t)0x00);
 
-    sendCnt = 0;
     accuX = 0; accuY = 0;
     oldMouseButtons = activeMouseButtons;
   }
@@ -276,7 +274,8 @@ void keyboardBTPrint(char * writeString)
     // Serial.print("key ="); Serial.print(writeString[i]);
     if (writeString[i] < 128) {     // ASCII
       // Serial.print(" ASCII ="); Serial.println((int)writeString[i]);
-      keycode = KeyboardLayout_en_US[writeString[i]];
+      //TODO: adapt to kbd layout currently set. Implement a layout pointer getter in keys.cpp
+      keycode = KeyboardLayout_en_US[(uint8_t)writeString[i]];
       //TODO: use correct layout.
       //keycode = _asciimap[keycodes_ascii + (writeString[i] - 0x20)[;
     }

@@ -26,6 +26,49 @@ uint8_t in_keybuffer(int key);
 void remove_from_keybuffer(int key);
 void add_to_keybuffer(int key);
 void performKeyActions(char* text, uint8_t keyAction);
+char kbdLayout[6] = "en_US";
+
+/**
+   @name printKeyboardLayout
+   @brief Prints out the currently used keyboard layout (e.g. "en_US\n")
+   @return none
+*/
+void printKeyboardLayout()
+{
+	Serial.println(kbdLayout);
+}
+
+/**
+   @name setKeyboardLayout
+   @brief Updates the currently used keyboard layout.
+   @param name Name of the new keyboard layout (e.g. "en_US" or "de_DE")
+   @return 1 on success, 0 if layout is not found.
+   @note Currently supported: de_DE, en_US, es_ES, fr_FR, it_IT, sv_SE, da_DK
+*/
+int8_t setKeyboardLayout(char *name)
+{
+	const uint8_t *newLayout = 0;
+	
+	if(strncmp(name, "de_DE",5) == 0) newLayout = KeyboardLayout_de_DE;
+	if(strncmp(name, "en_US",5) == 0) newLayout = KeyboardLayout_en_US;
+	if(strncmp(name, "es_ES",5) == 0) newLayout = KeyboardLayout_es_ES;
+	if(strncmp(name, "fr_FR",5) == 0) newLayout = KeyboardLayout_fr_FR;
+	if(strncmp(name, "it_IT",5) == 0) newLayout = KeyboardLayout_it_IT;
+	if(strncmp(name, "sv_SE",5) == 0) newLayout = KeyboardLayout_sv_SE;
+	if(strncmp(name, "da_DK",5) == 0) newLayout = KeyboardLayout_da_DK;
+	
+	if(newLayout)
+	{
+		Keyboard.begin(newLayout);
+		#ifdef DEBUG_OUTPUT_FULL
+			Serial.print("Found new layout pointer for ");
+			Serial.print(name);
+			Serial.println(", setting in Keyboard.begin");
+		#endif
+    strncpy(kbdLayout,name,5); //save locally
+		return 1;
+	} else return 0;
+}
 
 /**
    @name updateKey
@@ -167,7 +210,7 @@ uint8_t in_keybuffer(int key)
    maps a keycode to a key-identifier string
 */
 struct keymap_struct {
-  char *token;
+  char const *token;
   int key;
 };
 
@@ -289,7 +332,7 @@ void performKeyActions(char* text,  uint8_t keyAction)
       acttoken += 4;
       found = false;
       
-      for (int i = 0; i < KEYMAP1_ELEMENTS; i++) {
+      for (unsigned int i = 0; i < KEYMAP1_ELEMENTS; i++) {
          //Serial.print("scanning for ");  Serial.println(keymap1[i].token);
         if (!strcmp(acttoken, keymap1[i].token)) {
            //Serial.print("found @"); Serial.print(i); Serial.print(", keycode: "); Serial.println(keymap1[i].key);
@@ -317,7 +360,7 @@ void performKeyActions(char* text,  uint8_t keyAction)
 
     if (!strncmp(acttoken, "KEYPAD_", 7)) {
       acttoken += 7;
-      for (int i = 0; i < KEYMAP2_ELEMENTS; i++) {
+      for (unsigned int i = 0; i < KEYMAP2_ELEMENTS; i++) {
         if (!strcmp(acttoken, keymap2[i].token))
           updateKey(keymap2[i].key, keyAction);
       }

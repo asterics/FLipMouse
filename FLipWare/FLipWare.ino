@@ -47,6 +47,7 @@
 #include "reporting.h"
 #include "cim.h"
 #include "utils.h"       
+#include "keys.h"       
 
 /**
    device name for ID string & BT-pairing
@@ -56,7 +57,7 @@ char moduleName[]="Flipmouse";
 /**
    default values for empty configuration slot 
 */
-const struct SlotSettings defaultSlotSettings = {      // default slotSettings valus, for type definition see fabi.h
+const struct SlotSettings defaultSlotSettings = {      // default slotSettings valus, for type definition see Flipware.h
   "mouse",                          // initial slot name
   0,                                // initial keystringbuffer length
   1,                                // stickMode: Mouse cursor movement active
@@ -67,6 +68,7 @@ const struct SlotSettings defaultSlotSettings = {      // default slotSettings v
   0, 0,                             // offset x / y
   0,                                // orientation
   1,                                // bt-mode 1: USB, 2: Bluetooth, 3: both (2 & 3 need daughter board))
+  "en_US",                          // en_US as default keyboard layout.
 };
 
 
@@ -80,7 +82,7 @@ struct SensorData sensorData {
   .autoMoveX=0, .autoMoveY=0,
   .up=0, .down=0, .left=0, .right=0,
   .calib_now=1,    // calibrate zeropoint right at startup !
-  .cx=0, .cy=0,
+  .cx=0, .cy=0, .cpressure=0,
   .xDriftComp=0, .yDriftComp=0,
   .xLocalMax=0, .yLocalMax=0
 };
@@ -129,6 +131,7 @@ void setup() {
   initBlink(10,25);  // first signs of life!
 
   setBTName(moduleName);             // if BT-module installed: set advertising name
+  setKeyboardLayout(slotSettings.kbdLayout); //load keyboard layout from slot
   
   displayInstalled=displayInit(0);   // check if i2c-display connected, if possible: init
   displayUpdate();

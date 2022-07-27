@@ -67,7 +67,7 @@ void record_IR_command(char * name)
 {
 	uint32_t startTime = millis();
 	IrReceiver.start();
-	while(abs((long int)(millis()-startTime)) < edge_timeout)
+	while((uint32_t)abs((long int)(millis()-startTime)) < edge_timeout)
 	{
 		if(IrReceiver.decode())
 		{
@@ -119,52 +119,6 @@ uint8_t delete_IR_command(char * name)
 }
 
 /**
-   @name generate_next_IR_phase
-   @brief generates the current timings for PWM or NON-PWM phases, using a timer 
-          updates the stored edge time for the next edge timing
-          repeats a whole code playback (repeatCounter times)
-   @return none
-*/
-/*
-void generate_next_IR_phase(void)
-{
-  if (act_edge > edges) {          // one code repetition finished
-    analogWrite(IR_LED_PIN, 0);
-    digitalWrite(IR_LED_PIN, LOW);
-    output_state = 0;
-    act_edge = 0;
-    if (repeatCounter > 0) repeatCounter--;
-    if (repeatCounter == 0) {
-      playTimer.end();  // stop time if last repetition done
-      // note: repeatCounter is -1 for hold mode
-      if (idlesequenceCounter > 0) {
-        idlesequenceCounter--;
-        delayMicroseconds(IR_REPEAT_GAP);  // pause before next idlesequence (TBD: make that non-blocking)
-        start_IR_command_playback(IDLESEQUENCE_NAME);  // in case the idlesequence command exists: play it!
-      }
-    }
-  }
-  else {
-    if (act_edge == edges)
-      playTimer.update(IR_REPEAT_GAP);  // gap between code repetitions
-    else {
-      uint32_t duration = timings[act_edge];
-      if (duration > MAX_HIGHPRECISION_DURATION)  // timing in milliseconds
-        duration = (duration - MAX_HIGHPRECISION_DURATION) * 1000; // switch to microseconds
-      playTimer.update(duration);  // set interval for current on/off phase
-    }
-
-    analogWrite(IR_LED_PIN, output_state);
-    if (output_state == 0) output_state = 128;
-    else output_state = 0;
-
-    act_edge++;   // increase edge index for next interrupt
-  }
-}
-* */
-
-
-/**
    @name start_IR_command_playback
    @brief copies the edge timing information of a stored IR command of given name
           from EEPROM to timings array in RAM and starts playback
@@ -173,7 +127,6 @@ void generate_next_IR_phase(void)
 */
 void start_IR_command_playback(char * name)
 {
-	size_t edges;
 	IRData raw;
 
 	//fetch the IR command from the eeprom
@@ -220,6 +173,6 @@ void wipe_IR_commands()
 
 void set_IR_timeout(uint16_t tout_ms)
 {
-  //not available in library
+  edge_timeout = tout_ms;
   return;
 }

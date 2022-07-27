@@ -64,8 +64,8 @@
 
 // Optional Debug Output Control
 
-#define DEBUG_OUTPUT_FULL      // if full debug output is desired
-#define DEBUG_OUTPUT_BASIC     // if basic debug output is desired (for eeprom)
+//#define DEBUG_OUTPUT_FULL      // if full debug output is desired
+//#define DEBUG_OUTPUT_BASIC     // if basic debug output is desired (for eeprom)
 
 /**
    global constant definitions
@@ -118,6 +118,7 @@ struct SlotSettings {
   int16_t  cy;     // calib y
   uint16_t ro;     // orientation (0,90,180,270)
   uint8_t  bt;     // bt-mode (0,1,2)
+  char kbdLayout[6];
 };
 
 /**

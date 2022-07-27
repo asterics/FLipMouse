@@ -40,9 +40,8 @@ struct irCommandHeader irCommand;
    it will be saved to a new slot.
    returns 1 if successful, 0 if maximum slot count is reached
  * */
-uint8_t saveToEEPROM(char * slotname)
+uint8_t saveToEEPROM(char const * slotname)
 {
-  uint32_t timestamp = millis();
   
   //check if a slot with this name is available
   int8_t nr = slotnameToNumber(slotname);
@@ -73,9 +72,10 @@ uint8_t saveToEEPROM(char * slotname)
    a new slot will be created, starting at the end address of 
    the previous slot. 
  * */
-void saveToEEPROMSlotNumber(int8_t nr, char * slotname)
+void saveToEEPROMSlotNumber(int8_t nr, char const * slotname)
 {
   size_t size = 0;
+  (void)slotname; //TODO: this implementation currently uses the slotname from slotSettings.
   
   // determine the size of this slot
   size += sizeof(SlotSettings);
@@ -118,7 +118,7 @@ void saveToEEPROMSlotNumber(int8_t nr, char * slotname)
    slotnameToNumber(char * slotname)
    Determines the slot number for a given slot name
  * */
-int8_t slotnameToNumber(char * slotname)
+int8_t slotnameToNumber(char const * slotname)
 {
   /** open current directory */
   char path[32];
@@ -148,7 +148,7 @@ int8_t slotnameToNumber(char * slotname)
    If there is no slotname given: load next slot...
    returns 1 if successful, 0 otherwise
  * */
-uint8_t readFromEEPROM(char * slotname)
+uint8_t readFromEEPROM(char const * slotname)
 {
   if (*slotname == 0)
   {
@@ -234,7 +234,7 @@ uint8_t readFromEEPROMSlotNumber(uint8_t nr, bool playTone)
 /**
    Determines the irSlot number for a given ir Name
  * */
-int8_t slotnameIRToNumber(char * irName)
+int8_t slotnameIRToNumber(char const * irName)
 {
   /** open current directory */
   char path[32];
@@ -269,7 +269,7 @@ int8_t slotnameIRToNumber(char * irName)
    returns 1 if successful, 0 otherwise
 
  * */
-uint8_t deleteIRCommand(char * name)
+uint8_t deleteIRCommand(char const * name)
 {
   char path[32];
     
@@ -320,7 +320,7 @@ uint8_t deleteIRCommand(char * name)
    it will be overwritten, otherwise a new slot will be used.
    The name is also provided as parameter
  * */
-void saveIRToEEPROM(char * name, IRData *timings)
+void saveIRToEEPROM(char const * name, IRData *timings)
 {
   int8_t nr = slotnameIRToNumber(name);
   uint16_t irSlot=0;
@@ -354,14 +354,12 @@ void saveIRToEEPROM(char * name, IRData *timings)
    is provided by cntEdges.
    The name is also provided as parameter
  * */
-void saveIRToEEPROMSlotNumber(uint8_t nr, char *name, IRData *timings)
+void saveIRToEEPROMSlotNumber(uint8_t nr, char const *name, IRData *timings)
 {
-  uint16_t size;
-
-  //determine the size of this slot
-  size = sizeof(IRData);
-
   #ifdef DEBUG_OUTPUT_BASIC
+    uint16_t size;
+    //determine the size of this slot
+    size = sizeof(IRData);
     Serial.print("IR slot size:");
     Serial.println(size);
   #endif
@@ -400,7 +398,7 @@ void saveIRToEEPROMSlotNumber(uint8_t nr, char *name, IRData *timings)
    identified by the command name
    returns 1 if successful, 0 if not found.
  * */
-size_t readIRFromEEPROM(char * name, IRData *timings)
+size_t readIRFromEEPROM(char const * name, IRData *timings)
 {
   int8_t nr = slotnameIRToNumber(name);
 
@@ -451,8 +449,7 @@ size_t readIRFromEEPROM(char * name, IRData *timings)
  * */
 void initStorage()
 {
-  uint8_t init_needed = 0;
-  uint16_t versionID = 0;
+  //uint16_t versionID = 0; //TODO: maybe implement the version ID to initialize/overwrite slots?
 
   LittleFS.begin();
   
@@ -485,7 +482,7 @@ void initStorage()
    if an empty string is given as parameter, all slots are deleted!
    returns 1 if successful, 0 otherwise
  * */
-uint8_t deleteSlot(char * name)
+uint8_t deleteSlot(char const * name)
 {
   char path[32];
   uint8_t revision = getSettingsRevision(); //determine current settings revision number
@@ -610,7 +607,6 @@ int8_t getLastIRIndex(void) {
    print all slot slotSettings and button mode to serial 
  * */
 void printAllSlots(void) {
-  uint8_t actSlot=0;
   reportSlotParameters = REPORT_ALL_SLOTS;
   for(int8_t i = 0; i<=getLastSlotIndex(); i++) {
     readFromEEPROMSlotNumber(i, false);

@@ -46,6 +46,7 @@ void printCurrentSlot()
   Serial.print("AT RH "); Serial.println(slotSettings.rh);
   Serial.print("AT RO "); Serial.println(slotSettings.ro);
   Serial.print("AT BT "); Serial.println(slotSettings.bt);
+  Serial.print("AT KL "); Serial.println(slotSettings.kbdLayout);
 
   for (int i = 0; i < NUMBER_OF_BUTTONS; i++)
   {

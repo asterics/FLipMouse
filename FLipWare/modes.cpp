@@ -282,6 +282,7 @@ float getAccelFactor() {
     lastAngle = sensorData.angle;
     xo = sensorData.x; yo = sensorData.y;
   }
+  (void)lastAngle; //avoid compiler warnings on unused variable. TODO: necessary value?
   return(accelFactor);
 }
 
@@ -340,7 +341,7 @@ int scaleJoystickAxis (float val) {
 */
 void handleMovement() 
 {
-  static int upState=0,downState=0,leftState=0,rightState=0;
+  //static int upState=0,downState=0,leftState=0,rightState=0;
   
   if ((sensorData.autoMoveX != 0) || (sensorData.autoMoveY != 0)) // handle movement induced by button actions
   {

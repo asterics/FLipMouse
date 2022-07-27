@@ -106,7 +106,7 @@ void keyboardPrint(char * keystring)
 {
   if (slotSettings.bt & 1) {
     //Keyboard.print(keystring);  // improved for ISO 8859 compatibility (but: slower ..)
-    for (int i = 0; i < strlen(keystring); i++)
+    for (unsigned int i = 0; i < strlen(keystring); i++)
     {
       Keyboard.write(keystring[i]);
     }

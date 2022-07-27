@@ -83,21 +83,21 @@ void initStorage();
    If the "name" parameter is set to \0, all IR commands will be deleted
    returns 1 if successful, 0 otherwise
  * */
-uint8_t deleteIRCommand(char * name);
+uint8_t deleteIRCommand(char const * name);
 
 /**
    Save one IR command to the EEPROM. If the name is already assigned,
    it will be overwritten, otherwise a new slot will be used.
    The name is also provided as parameter
  * */
-void saveIRToEEPROM(char * name, IRData *timings);
+void saveIRToEEPROM(char const * name, IRData *timings);
 
 
 /**
    Save one IR command to the EEPROM. The slot is determined by the slot number.
    The name is also provided as parameter
  * */
-void saveIRToEEPROMSlotNumber(uint8_t nr, char * name, IRData *timings);
+void saveIRToEEPROMSlotNumber(uint8_t nr, char const * name, IRData *timings);
 
 /**
    Print out all slotnames to the serial interface
@@ -109,14 +109,14 @@ void listIRCommands();
    Replay one IR command from the EEPROM.
    The slot is identified by the slot name
  * */
-size_t readIRFromEEPROM(char * name, IRData *timings);
+size_t readIRFromEEPROM(char const * name, IRData *timings);
 
 /**
    This function deletes the slot from EEPROM.
    if an empty string is given as parameter, all slots are deleted!
    returns 1 if successful, 0 otherwise
  * */
-uint8_t deleteSlot(char * name);
+uint8_t deleteSlot(char const * name);
 
 /**
    get the first free address for slot data  
@@ -157,13 +157,13 @@ uint8_t readFromEEPROMSlotNumber(uint8_t nr,  bool playTone);
    The slot is identified by the slot name
    returns 1 if successful, 0 otherwise
  * */
-uint8_t readFromEEPROM(char * slotname);
+uint8_t readFromEEPROM(char const * slotname);
 
 
 /**
    Determines the slot number for a given slot name.
  * */
-int8_t slotnameToNumber(char * slotname);
+int8_t slotnameToNumber(char const * slotname);
 
 /**
    Save the current slot by the given slotname.
@@ -172,14 +172,14 @@ int8_t slotnameToNumber(char * slotname);
    returns 1 if successful, 0 if max slot count is reached
 
  * */
-uint8_t saveToEEPROM(char * slotname);
+uint8_t saveToEEPROM(char const * slotname);
 
 /**
    Store current slot data to the EEPROM.
    The slot is identified by the slot number. If the nr parameter is -1,
    a new slot will be created (at the first possible position)
  * */
-void saveToEEPROMSlotNumber(int8_t nr, char * slotname);
+void saveToEEPROMSlotNumber(int8_t nr, char const * slotname);
 
 /**
  * If settings are under version control (TBD!), this function returns the current

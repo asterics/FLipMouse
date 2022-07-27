@@ -113,7 +113,7 @@ char * getButtonKeystring(int num);
    @param text: pointer to string which shall be copied to keystring buffer
    @return number of free bytes remaining in keystring buffer
 */
-uint16_t setButtonKeystring(uint8_t buttonIndex, char * text);
+uint16_t setButtonKeystring(uint8_t buttonIndex, char const * text);
 
 /**
    @name handlePress

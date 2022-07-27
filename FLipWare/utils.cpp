@@ -39,6 +39,10 @@ float __ieee754_sqrtf(float x)
   float z;
   __uint32_t r, hx;
   __int32_t ix, s, q, m, t, i;
+  
+  //avoid compiler warnings
+  (void)hx;
+  (void)i;
 
   GET_FLOAT_WORD(ix, x);
 

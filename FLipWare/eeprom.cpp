@@ -468,6 +468,9 @@ void initStorage()
       f.close();
     }
     saveToEEPROMSlotNumber(0, "mouse");   // save default slotSettings to first slot
+    
+    //create IR folder
+    LittleFS.mkdir("/ir");
   }
   
   //if no slot is found, save current startup settings to "mouse"

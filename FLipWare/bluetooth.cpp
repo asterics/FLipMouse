@@ -323,9 +323,12 @@ void initBluetooth()
 #ifdef DEBUG_OUTPUT_FULL
   Serial.println("init Bluetooth");
 #endif
+  //start the AUX serial port 9600 8N1  
+  Serial_AUX.begin(115200);  // NOTE: changed for RP2040!
 
-  //start the AUX serial port 9600 8N1
-  Serial_AUX.begin(9600);
+  resetBTModule(0);  // start ESP32 module!
+  delay (2000);
+  
   bt_available = 1;
 
   ///@todo send identifier to BT module & check response. With BT addon this is much faster and reliable
@@ -342,7 +345,7 @@ void initBluetooth()
 
 */
 void setBTName(char * BTName) {
-  //set moduel name for BT advertising
+  //set module name for BT advertising
   Serial_AUX.print("$NAME ");
   Serial_AUX.println(BTName);  
 }
@@ -418,7 +421,7 @@ void performAddonUpgrade()
       // 20 seconds no data -> return to AT mode !
       if (millis()-upgradeTimestamp > 20000) {
         addonUpgrade = BTMODULE_UPGRADE_IDLE;
-        Serial_AUX.begin(9600); //switch to lower speed...
+        Serial_AUX.begin(115200); //switch to lower speed...   // NOTE: changed for RP2040! 
         Serial.flush();
         Serial_AUX.flush();
         return;
@@ -445,7 +448,7 @@ void performAddonUpgrade()
             bt_available = 1;
             readstate_f=0;
             delay(50);
-            Serial_AUX.begin(9600); //switch to lower speed...
+            Serial_AUX.begin(115200); //switch to lower speed...  // NOTE: changed for RP2040! 
             Serial.flush();
             Serial_AUX.flush();
             } else readstate_f=0;
@@ -456,4 +459,37 @@ void performAddonUpgrade()
     }
     return;
   }
+}
+
+
+// NOTE: changed for RP2040! 
+/**
+   @name resetBTModule
+   @param downloadMode if true, ESP32 is put in FW download mode
+   @return none
+
+   resets the ESP32 connected to the RP2020 on the ArduinoNanoConnect board
+*/
+void resetBTModule (int downloadMode)
+{
+  pinMode (6,OUTPUT); digitalWrite (6, HIGH);  // orange led  on ArduinoNano2040Connect
+
+  if (downloadMode) {
+     Serial.println ("ESP32 put into download mode!");    
+     pinMode (2,OUTPUT); digitalWrite (2, LOW);   // ESP32 GPIO0 pin on ArduinoNano2040Connect
+     delay(100);
+     pinMode (3,OUTPUT); digitalWrite (3, LOW);   // ESP32 reset pin on ArduinoNano2040Connect
+     delay(100);
+     digitalWrite (3, HIGH);  // release reset
+     delay(1000);
+     digitalWrite (2, HIGH);  // release GPIO0
+  } else {
+    Serial.println ("ESP32 reset!"); 
+    pinMode (3,OUTPUT);
+    digitalWrite (3, LOW);   // ESP32 reset pin on ArduinoNano2040Connect
+    delay(100);
+    digitalWrite (3, HIGH);  // release reset
+  }
+ 
+  digitalWrite (6, LOW);
 }

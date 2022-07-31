@@ -113,14 +113,17 @@ void setup() {
   //initialise BT module, if available (must be done early!)
   initBluetooth();
 
-  // iniitialize other peripherals
+  // initialize peripherals
   Serial.begin(115200);
   delay(1000);  // allow some time for serial interface to come up
+
   Wire.begin();
   Wire.setClock(400000);  // use 400kHz I2C clock
+
   initGPIO();
   initSensors();
   initIR();
+
   initButtons();
   initDebouncers();
   init_CIM_frame();  // for AsTeRICS CIM protocol compatibility
@@ -130,17 +133,17 @@ void setup() {
 
   initBlink(10,25);  // first signs of life!
 
-  setBTName(moduleName);             // if BT-module installed: set advertising name
+  // NOTE: changed for RP2040!  TBD: why does setBTName damage the console UART TX ??
+  // setBTName(moduleName);             // if BT-module installed: set advertising name 
+
   setKeyboardLayout(slotSettings.kbdLayout); //load keyboard layout from slot
   
   displayInstalled=displayInit(0);   // check if i2c-display connected, if possible: init
   displayUpdate();
- 
 #ifdef DEBUG_OUTPUT_FULL
   Serial.print("Free RAM:");  Serial.println(freeRam());
   Serial.print(moduleName); Serial.println(" ready !");
 #endif
-
   lastInteractionUpdate = millis();  // get first timestamp
 }
 

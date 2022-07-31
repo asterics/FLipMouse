@@ -54,7 +54,7 @@ const struct atCommandType atCommands[] PROGMEM = {
   {"IW"  , PARTYPE_NONE },  {"BT"  , PARTYPE_UINT }, {"HL"  , PARTYPE_NONE }, {"HR"  , PARTYPE_NONE },
   {"HM"  , PARTYPE_NONE },  {"TL"  , PARTYPE_NONE }, {"TR"  , PARTYPE_NONE }, {"TM"  , PARTYPE_NONE },
   {"KT"  , PARTYPE_STRING }, {"IH"  , PARTYPE_STRING }, {"IS"  , PARTYPE_NONE }, {"UG", PARTYPE_NONE },
-  {"BC"  , PARTYPE_STRING}, {"KL"  , PARTYPE_STRING },
+  {"BC"  , PARTYPE_STRING}, {"KL"  , PARTYPE_STRING }, {"BR"  , PARTYPE_UINT },
 };
 
 /**
@@ -458,8 +458,14 @@ void performCommand (uint8_t cmd, int16_t par1, char * keystring, int8_t periodi
       break;
     case CMD_BC:
       if (isBluetoothAvailable()) {
+        
         Serial_AUX.write(keystring);
         Serial_AUX.write('\n'); //terminate command
+        
+        //byte bf[]= {0xfd,0,3,0,5,0,0,0,0};
+        //Serial_AUX.write(bf, 9); //terminate command
+
+        digitalWrite (6,!digitalRead (6));
       }
       break;
     case CMD_UG:
@@ -471,5 +477,8 @@ void performCommand (uint8_t cmd, int16_t par1, char * keystring, int8_t periodi
       // delaying to ensure that UART command is sent and received
       delay(500);
       break;  
+    case CMD_BR:
+      resetBTModule (par1);
+      break;
   }
 }

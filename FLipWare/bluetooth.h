@@ -175,4 +175,13 @@ bool startBTPairing();
 void performAddonUpgrade();
 
 
+
+/**
+   @name resetBTModule
+   @param downloadMode if true, ESP32 is put in FW download mode
+   @return none
+
+   resets the ESP32 connected to the RP2020 on the ArduinoNanoConnect board
+*/
+void resetBTModule (int downloadMode);
 #endif

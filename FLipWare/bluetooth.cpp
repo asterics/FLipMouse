@@ -28,7 +28,7 @@ uint8_t activeModifierKeys = 0;
 uint8_t activeMouseButtons = 0;
 
 long btsendTimestamp = millis();
-long upgradeTimestamp = 0;          // eventually come back to AT mode from an unsuccessful BT module upgrade !
+unsigned long upgradeTimestamp = 0;          // eventually come back to AT mode from an unsuccessful BT module upgrade !
 uint8_t readstate_f=0;              // needed to track the return value status during addon upgrade mode
 
 /**
@@ -324,10 +324,11 @@ void initBluetooth()
   Serial.println("init Bluetooth");
 #endif
   //start the AUX serial port 9600 8N1  
-  Serial_AUX.begin(115200);  // NOTE: changed for RP2040!
-
+  Serial_AUX.begin(115200);  // NOTE: changed for RP2040! TODO: maybe get from revision number (>=3)?
+  
   resetBTModule(0);  // start ESP32 module!
-  delay (2000);
+  delay (500);
+  Serial_AUX.flush();
   
   bt_available = 1;
 
@@ -419,7 +420,7 @@ void performAddonUpgrade()
     if(Serial.available()) upgradeTimestamp=millis();   // incoming data: assume working upgrade!
     else {
       // 20 seconds no data -> return to AT mode !
-      if (millis()-upgradeTimestamp > 20000) {
+      if((uint32_t)abs((long int)(millis()-upgradeTimestamp)) > 20000) {
         addonUpgrade = BTMODULE_UPGRADE_IDLE;
         Serial_AUX.begin(115200); //switch to lower speed...   // NOTE: changed for RP2040! 
         Serial.flush();

@@ -491,7 +491,7 @@
       "netlist": "",
       "specctra_dsn": "",
       "step": "FM3_mainboard.step",
-      "vrml": ""
+      "vrml": "FM3_mainboard.wrl"
     },
     "page_layout_descr_file": ""
   },

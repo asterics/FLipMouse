@@ -3513,7 +3513,7 @@
       (net 4 "GND") (pinfunction "GND") (pintype "power_in") (tstamp b01e4ac9-c229-44bc-8d8e-d05c4e4a692b))
     (pad "30" smd oval (at -17.78 8.255 180) (size 3 1.7) (layers "B.Cu" "B.Mask")
       (net 14 "/VIN") (pinfunction "VIN") (pintype "power_in") (tstamp d63d2283-62c9-4c0c-890d-d62c700562b5))
-    (model "${KIPRJMOD}/libs/Nano/3dModel/Arduino Nano 33 IoT.stp"
+    (model "${KIPRJMOD}/step/ArduinoNanoRP2040.stp"
       (offset (xyz 0.5 0 0))
       (scale (xyz 1 1 1))
       (rotate (xyz -90 0 90))

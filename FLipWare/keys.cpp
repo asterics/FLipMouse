@@ -27,6 +27,7 @@ void remove_from_keybuffer(int key);
 void add_to_keybuffer(int key);
 void performKeyActions(char* text, uint8_t keyAction);
 char kbdLayout[6] = "en_US";
+const uint8_t *kbdLayoutArray = KeyboardLayout_en_US;
 
 /**
    @name printKeyboardLayout
@@ -60,6 +61,7 @@ int8_t setKeyboardLayout(char *name)
 	if(newLayout)
 	{
 		Keyboard.begin(newLayout);
+    kbdLayoutArray = newLayout;
 		#ifdef DEBUG_OUTPUT_FULL
 			Serial.print("Found new layout pointer for ");
 			Serial.print(name);
@@ -68,6 +70,16 @@ int8_t setKeyboardLayout(char *name)
     strncpy(kbdLayout,name,5); //save locally
 		return 1;
 	} else return 0;
+}
+
+/**
+   @name getKeyboardLayout
+   @brief Used to get the pointer to the current keyboard layout
+   @return Pointer to keyboard layout array
+*/
+const uint8_t *getKeyboardLayout()
+{
+  return kbdLayoutArray;
 }
 
 /**

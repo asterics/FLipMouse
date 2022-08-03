@@ -32,6 +32,13 @@
 void printKeyboardLayout();
 
 /**
+   @name getKeyboardLayout
+   @brief Used to get the pointer to the current keyboard layout
+   @return Pointer to keyboard layout array
+*/
+const uint8_t *getKeyboardLayout();
+
+/**
    @name setKeyboardLayout
    @brief Updates the currently used keyboard layout.
    @param name Name of the new keyboard layout (e.g. "en_US" or "de_DE")

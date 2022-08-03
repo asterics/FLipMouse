@@ -127,23 +127,25 @@ void keyboardBTReleaseAll();
 
 /**
    @name keyboardBTPress
-   @param int key	Keycode which should be pressed. Keycodes are in Teensy format
+   @param int k	Key to be pressed
    @return none
 
-    Press a defined key code.
-    keycodes and modifier codes are extracted and sent to EZ-Key module via UART
-    for keylayouts see: https://github.com/PaulStoffregen/cores/blob/master/teensy/keylayouts.h
+   Press a key, value is the same as in Keyboard.press().
+   Because the Keyboard library does not export the raw keycodes or
+   the full report, we copy the code of the Keyboard library to here.
 */
-void keyboardBTPress(int key);
+void keyboardBTPress(int k);
 
 /**
    @name keyboardBTRelease
-   @param int key	Keycode which should be released. Keycodes are in Teensy format (16bit, divided into consumer keys, systemkeys & keyboard keys)
+   @param int k	Key to be released
    @return none
 
-   Release a defined key code.
+   Release a key, value is the same as in Keyboard.release().
+   Because the Keyboard library does not export the raw keycodes or
+   the full report, we copy the code of the Keyboard library to here.
 */
-void keyboardBTRelease(int key);
+void keyboardBTRelease(int k);
 
 /**
    @name isBluetoothAvailable

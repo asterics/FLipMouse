@@ -15,7 +15,11 @@
 */
 
 #include "bluetooth.h"
+//necessary to include keyboard / keyboardlayout.h to have access to the key definitions
 #include <Keyboard.h>
+#include <KeyboardLayout.h>
+//we fetch the keyboard layout map via keys.h
+#include "keys.h"
 
 #define BT_MINIMUM_SENDINTERVAL 20     // reduce mouse reports in BT mode (in milliseconds) !
 
@@ -173,58 +177,92 @@ void sendBTKeyboardReport()
 
 /**
    @name keyboardBTPress
-   @param int key	Keycode which should be pressed. Keycodes are in Teensy format
+   @param int k	Key to be pressed
    @return none
 
-    Press a defined key code.
-    keycodes and modifier codes are extracted and sent to EZ-Key module via UART
-    for keylayouts see: https://github.com/PaulStoffregen/cores/blob/master/teensy/keylayouts.h
+   Press a key, value is the same as in Keyboard.press().
+   Because the Keyboard library does not export the raw keycodes or
+   the full report, we copy the code of the Keyboard library to here.
 */
-void keyboardBTPress(int key)
+void keyboardBTPress(int k)
 {
   uint8_t currentIndex = 0;
-  uint8_t keyCode = (uint8_t)(key & 0xff);
-
-  if ((key >> 8) ==  0xE0)  // supported modifier key ?
-  {
-    // set bit in modifier key mask
-    activeModifierKeys |= keyCode;
-  } else if ((key >> 8) ==  0xF0) { // supported key ?
-    // check the active key codes for a free slot or overwrite the last one
-    while ((activeKeyCodes[currentIndex] != 0) && (activeKeyCodes[currentIndex] != keyCode) && (currentIndex < 6))
-      currentIndex++;
-    //set the key code to the array
-    activeKeyCodes[currentIndex] = keyCode;
+  const uint8_t *_asciimap = getKeyboardLayout();
+  if(_asciimap == 0) return; //invalid layout pointer.
+  
+  if (k >= 136) {			// it's a non-printing key (not a modifier)
+    k = k - 136;
+  } else if (k >= 128) {	// it's a modifier key
+    activeModifierKeys |= (1<<(k-128));
+    k = 0;
+  } else {				// it's a printing key
+    k = pgm_read_byte(_asciimap + k);
+    if (!k) {
+      return;
+    }
+    if ((k & ALT_GR) == ALT_GR) {
+      activeModifierKeys |= 0x40;   // AltGr = right Alt
+      k &= 0x3F;
+    } else if ((k & SHIFT) == SHIFT) {
+      activeModifierKeys |= 0x02;	// the left shift modifier
+      k &= 0x7F;
+    }
+    if (k == ISO_REPLACEMENT) {
+      k = ISO_KEY;
+    }
   }
 
+  // check the active key codes for a free slot or overwrite the last one
+  while ((activeKeyCodes[currentIndex] != 0) && (activeKeyCodes[currentIndex] != k) && (currentIndex < 6))
+    currentIndex++;
+  //set the key code to the array
+  activeKeyCodes[currentIndex] = k;
   //send the new keyboard report
   sendBTKeyboardReport();
 }
 
 /**
    @name keyboardBTRelease
-   @param int key	Keycode which should be released. Keycodes are in Teensy format (16bit, divided into consumer keys, systemkeys & keyboard keys)
+   @param int k	Key to be released
    @return none
 
-   Release a defined key code.
+   Release a key, value is the same as in Keyboard.release().
+   Because the Keyboard library does not export the raw keycodes or
+   the full report, we copy the code of the Keyboard library to here.
 */
-void keyboardBTRelease(int key)
+void keyboardBTRelease(int k)
 {
-  uint8_t currentIndex = 0;
-  uint8_t keyCode = (uint8_t)(key & 0xff);
-
-  if ((key >> 8) ==  0xE0)  // supported modifier key (see Teensy keylayouts.h)
-  {
-    // clear bit in modifier key mask
-    activeModifierKeys &= ~keyCode;
-  } else {
-    //if not, check the active key codes for the pressed key
-    while ((activeKeyCodes[currentIndex] != keyCode) && (currentIndex < 6)) currentIndex++;
-    //delete the key code from the array
-    for (int i = currentIndex; i < 5; i++)
-      activeKeyCodes[i] = activeKeyCodes[i + 1];
-    activeKeyCodes[5] = 0;
-  }
+	uint8_t currentIndex = 0;
+  const uint8_t *_asciimap = getKeyboardLayout();
+  if(_asciimap == 0) return; //invalid layout pointer.
+  
+	if (k >= 136) {			// it's a non-printing key (not a modifier)
+		k = k - 136;
+	} else if (k >= 128) {	// it's a modifier key
+		activeModifierKeys &= ~(1<<(k-128));
+		k = 0;
+	} else {				// it's a printing key
+		k = pgm_read_byte(_asciimap + k);
+		if (!k) {
+			return;
+		}
+		if ((k & ALT_GR) == ALT_GR) {
+			activeModifierKeys &= ~(0x40);   // AltGr = right Alt
+			k &= 0x3F;
+		} else if ((k & SHIFT) == SHIFT) {
+			activeModifierKeys &= ~(0x02);	// the left shift modifier
+			k &= 0x7F;
+		}
+		if (k == ISO_REPLACEMENT) {
+			k = ISO_KEY;
+		}
+	}
+  //check the active key codes for the pressed key
+  while ((activeKeyCodes[currentIndex] != k) && (currentIndex < 6)) currentIndex++;
+  //delete the key code from the array
+  for (int i = currentIndex; i < 5; i++)
+    activeKeyCodes[i] = activeKeyCodes[i + 1];
+  activeKeyCodes[5] = 0;
 
   //send the new keyboard report
   sendBTKeyboardReport();
@@ -253,10 +291,8 @@ void keyboardBTReleaseAll()
    @param char* writeString	string to typed by the Bluetooth HID keyboard
    @return none
 
-   This method prints out an ASCII string (no modifiers available!!!) via the
+   This method prints out an ASCII string via the
    Bluetooth module
-
-   @todo We should use the keyboard maps from ESP32, can store all of them. But how to handle any multibyte strings?
 */
 void keyboardBTPrint(char * writeString)
 {
@@ -265,43 +301,10 @@ void keyboardBTPrint(char * writeString)
   // print each char of the string
   while (writeString[i])
   {
-    // Serial_AUX.write(writeString[i++]);
-
-    // improved for localization / keycodes (but: slower ...)
-
-    int keycode = 0, modifier = 0;
-
-    // Serial.print("key ="); Serial.print(writeString[i]);
-    if (writeString[i] < 128) {     // ASCII
-      // Serial.print(" ASCII ="); Serial.println((int)writeString[i]);
-      //TODO: adapt to kbd layout currently set. Implement a layout pointer getter in keys.cpp
-      keycode = KeyboardLayout_en_US[(uint8_t)writeString[i]];
-      //TODO: use correct layout.
-      //keycode = _asciimap[keycodes_ascii + (writeString[i] - 0x20)[;
-    }
-    else  {  // ISO_8859
-#ifdef ISO_8859_1_A0
-      // Serial.print(" ISO_8859 ="); Serial.println((int)writeString[i]);
-      //keycode = _asciimap[(keycodes_iso_8859_1 + (writeString[i] - 0xA0)[;
-#endif
-    }
-
-    if (keycode & 0x40) {  // SHIFT
-      // Serial.print("SHIFT+");
-      keycode &= ~0x40;
-      modifier = 0xe002;
-    } else if (keycode & 0x80) {  // ALTGR
-      // Serial.print("ALTGR+");
-      keycode &= ~0x80;
-      modifier = 0xe040;
-    }
-    // Serial.print("HID =");
-    // Serial.println(keycode);
-
-    if (modifier) keyboardBTPress(modifier);
-    keyboardBTPress(keycode | 0xf000);
-    keyboardBTRelease(keycode | 0xf000);
-    if (modifier) keyboardBTRelease(modifier);
+    keyboardBTPress(writeString[i]);
+    delay(10);
+    keyboardBTRelease(writeString[i]);
+    delay(10);
     i++;
   }
 }

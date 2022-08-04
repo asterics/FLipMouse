@@ -11,20 +11,20 @@
         For a description of the supported commands see: commands.h
 
         HW-requirements:
-                  TeensyLC with external EEPROM (see board schematics)
-                  4 FSR force sensors connected via voltage dividers to ADC pins A6-A9
-                  1 pressure sensor connected to ADC pin A0
-                  3 momentary switches connected to GPIO pins 0,1,2
-                  3 slot indication LEDs connected to GPIO pins 5,16,17
-                  1 TSOP 38kHz IR-receiver connected to GPIO pin 4
-                  1 high current IR-LED connected to GPIO pin 6 via MOSEFT
-                  optional: Bluetooth daughter board connected to 10-pin expansion port
-                  optional: SSD1306 display (connected via I2C-1)
+                  Arduino Nano RP2040 Connect
+                  Sensor board with NAU7802 strain gauge ADC
+                  1 pressure sensor connected to ADC pin A0 OR an MPRLS I2C pressure sensor
+                  3 momentary switches connected to GPIO pins (
+                  Neopixel LED
+                  1 TSOP 38kHz IR-receiver
+                  1 high current IR-LED, driven with a MOSFET
+                  optional: SSD1306 display
 
         SW-requirements:
-                  Teensyduino AddOn for Arduino IDE, see https://www.pjrc.com/teensy/td_download.html
-                  USB-type set to USB composite device (Serial + Keyboard + Mouse + Joystick)
+                  arduino-pico core (https://github.com/earlephilhower/arduino-pico), installable via board manager
+                  Adafruit Neopixel library, installable via library manager
                   SSD1306Ascii-library by Bill Greiman, see https://github.com/greiman/SSD1306Ascii
+                  Arduino settings: "Flash Size: 15MB Sketch, 1MB FS"
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by

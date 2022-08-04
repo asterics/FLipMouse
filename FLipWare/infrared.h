@@ -13,19 +13,32 @@
 #ifndef _INFRARED_H_
 #define _INFRARED_H_
 
-#define USE_IRREMOTE_HPP_AS_PLAIN_INCLUDE
-#include <IRremote.hpp>
 
 /**
    physical pin definitions
 */
+//RP2040:
 #define IR_LED_PIN     28    //  IR-Led output pin      // NOTE: changed for RP2040 ? 28 and 26 are ADC pins ...
 #define IR_SENSOR_PIN  26    //  input pin of the TSOP IR receiver
 
+//Time until the record command will be canceled (in milliseconds)
+#define IR_USER_TIMEOUT_MS 10000
+
+// ir code repeat gap (in microseconds)
+#define IR_REPEAT_GAP 10000
+
+// Maximum count of uint16_t edges for one IR-command
+#define IR_EDGE_REC_MAX 250
+
+// minimum count of signal edges which are necessary to accept a command
+#define IR_EDGE_REC_MIN 5
 
 // name of the idle code command (played after other ir commands if it exists)
 #define IDLESEQUENCE_NAME "idle"
-#define IDLESEQUENCE_REPEAT 1
+#define IDLESEQUENCE_REPEAT 0
+
+// maximum time interval which can be stored in high precision (microseconds) format
+#define MAX_HIGHPRECISION_DURATION 64000
 
 
 /**

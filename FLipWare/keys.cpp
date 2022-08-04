@@ -93,27 +93,39 @@ void updateKey(int key, uint8_t keyAction)
 {
   switch (keyAction)  {
     case KEY_PRESS:
-	  //Serial.print("P+");
+    #ifdef DEBUG_OUTPUT_KEYS
+      Serial.print("P+");
+    #endif
     case KEY_HOLD:
-	  //Serial.println("H");
+      #ifdef DEBUG_OUTPUT_KEYS
+        Serial.println("H");
+      #endif
       add_to_keybuffer(key);
       keyboardPress(key);       // press/hold keys individually
       break;
 
     case KEY_RELEASE:
-      //Serial.println("R");
+      #ifdef DEBUG_OUTPUT_KEYS
+        Serial.println("R");
+      #endif
       remove_from_keybuffer(key);
       keyboardRelease(key);       // release keys individually
       break;
 
     case KEY_TOGGLE:
-	  //Serial.print("T-");
+      #ifdef DEBUG_OUTPUT_KEYS
+        Serial.print("T-");
+      #endif
       if (in_keybuffer(key))  {
-		//Serial.println("R");
+        #ifdef DEBUG_OUTPUT_KEYS
+          Serial.println("R");
+        #endif
         remove_from_keybuffer(key);
         keyboardRelease(key);
       } else {
-		//Serial.println("P");
+        #ifdef DEBUG_OUTPUT_KEYS
+          Serial.println("P");
+        #endif
         add_to_keybuffer (key);
         keyboardPress(key);
       }
@@ -345,9 +357,15 @@ void performKeyActions(char* text,  uint8_t keyAction)
       found = false;
       
       for (unsigned int i = 0; i < KEYMAP1_ELEMENTS; i++) {
-         //Serial.print("scanning for ");  Serial.println(keymap1[i].token);
+        #ifdef DEBUG_OUTPUT_KEYS
+          Serial.print("scanning for ");  Serial.println(keymap1[i].token);
+        #endif
+        
         if (!strcmp(acttoken, keymap1[i].token)) {
-           //Serial.print("found @"); Serial.print(i); Serial.print(", keycode: "); Serial.println(keymap1[i].key);
+          #ifdef DEBUG_OUTPUT_KEYS
+            Serial.print("found @"); Serial.print(i); Serial.print(", keycode: "); Serial.println(keymap1[i].key);
+          #endif
+          
           updateKey(keymap1[i].key, keyAction);
           found = true;
           break;
@@ -357,17 +375,23 @@ void performKeyActions(char* text,  uint8_t keyAction)
       //we need to split this test, because we need small letters for Keyboard.print.
       if(!found && (acttoken[0] >= '0' && acttoken[0] <= '9'))
       {
-		  //Serial.print("found num key: "); Serial.println(acttoken[0]);
-		  updateKey(acttoken[0], keyAction);
-		  found = true;
-	  }
+        #ifdef DEBUG_OUTPUT_KEYS
+          Serial.print("found num key: "); Serial.println(acttoken[0]);
+        #endif
+        
+        updateKey(acttoken[0], keyAction);
+        found = true;
+      }
 	    
       if(!found && (acttoken[0] >= 'A' && acttoken[0] <= 'Z'))
       {
-		  //Serial.print("found ascii keys: "); Serial.println(toLowerCase(acttoken[0]));
-		  updateKey(toLowerCase(acttoken[0]), keyAction);
-		  found = true;
-	  }
+        #ifdef DEBUG_OUTPUT_KEYS
+          Serial.print("found ascii keys: "); Serial.println(toLowerCase(acttoken[0]));
+        #endif
+        
+        updateKey(toLowerCase(acttoken[0]), keyAction);
+        found = true;
+      }
     }
 
     if (!strncmp(acttoken, "KEYPAD_", 7)) {

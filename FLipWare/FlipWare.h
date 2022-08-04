@@ -37,10 +37,10 @@
 #include "buttons.h"
 #include "bluetooth.h"
 #include "hid_hal.h"
-#include <IRremote.hpp>  
 
-#define VERSION_STRING "v2.12"
+#define VERSION_STRING "v3.00"
 
+//  V3.00: changed platform to Arduino Nano RP2040 Connect
 //  V2.12: improved modularisation and source code documentation, added LC-display support and elliptical deadzone
 //  V2.11: eeprom access optimization and support for deletion / update of individual slots
 //  V2.10: code size reduction: using floating point math, removed debug level control via AT E0, AT E1 and AT E2
@@ -66,6 +66,8 @@
 
 //#define DEBUG_OUTPUT_FULL      // if full debug output is desired
 //#define DEBUG_OUTPUT_BASIC     // if basic debug output is desired (for eeprom)
+//#define DEBUG_OUTPUT_KEYS      // enable keys.cpp debugging, showing key press/release events and keycode lookup
+//#define DEBUG_OUTPUT_IR      	 // enable infrared.cpp debugging, showing whats happening on IR recv/send
 
 /**
    global constant definitions
@@ -167,6 +169,12 @@ typedef char* uint_farptr_t_FM;
 #endif
 #ifdef DEBUG_OUTPUT_FULL
   #warning "DEBUG_OUTPUT_FULL active! (GUI might not work)"
+#endif
+#ifdef DEBUG_OUTPUT_KEYS
+  #warning "DEBUG_OUTPUT_KEYS active! (GUI might not work)"
+#endif
+#ifdef DEBUG_OUTPUT_IR
+  #warning "DEBUG_OUTPUT_KEYS active! (GUI might not work)"
 #endif
 
 #endif

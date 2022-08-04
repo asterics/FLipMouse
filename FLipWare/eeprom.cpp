@@ -318,9 +318,11 @@ uint8_t deleteIRCommand(char const * name)
 /**
    Save one IR command to the EEPROM. If the name is already assigned,
    it will be overwritten, otherwise a new slot will be used.
+   There is an array of timings between the edges, the length
+   is provided by cntEdges.
    The name is also provided as parameter
  * */
-void saveIRToEEPROM(char const * name, IRData *timings)
+void saveIRToEEPROM(char * name, uint16_t *timings, uint16_t cntEdges)
 {
   int8_t nr = slotnameIRToNumber(name);
   uint16_t irSlot=0;
@@ -333,7 +335,7 @@ void saveIRToEEPROM(char const * name, IRData *timings)
         Serial.print("New IR command @");
         Serial.println(irSlot);
       #endif
-      saveIRToEEPROMSlotNumber(irSlot, name, timings);
+      saveIRToEEPROMSlotNumber(irSlot, name, timings, cntEdges);
     } else Serial.println ("IR memory full, code not saved.");
   }
   else {
@@ -343,7 +345,7 @@ void saveIRToEEPROM(char const * name, IRData *timings)
       Serial.print(" at position ");
       Serial.println(nr);
     #endif
-    saveIRToEEPROMSlotNumber(nr, name, timings);
+    saveIRToEEPROMSlotNumber(nr, name, timings, cntEdges);
   }
 }
 
@@ -354,12 +356,11 @@ void saveIRToEEPROM(char const * name, IRData *timings)
    is provided by cntEdges.
    The name is also provided as parameter
  * */
-void saveIRToEEPROMSlotNumber(uint8_t nr, char const *name, IRData *timings)
+void saveIRToEEPROMSlotNumber(uint8_t nr, char * name, uint16_t *timings, uint16_t cntEdges)
 {
   #ifdef DEBUG_OUTPUT_BASIC
-    uint16_t size;
     //determine the size of this slot
-    size = sizeof(IRData);
+    size_t size = sizeof (irCommand) + cntEdges * 2;
     Serial.print("IR slot size:");
     Serial.println(size);
   #endif
@@ -381,24 +382,23 @@ void saveIRToEEPROMSlotNumber(uint8_t nr, char const *name, IRData *timings)
   
   //prepare header
   strncpy(irCommand.irName, name, MAX_NAME_LEN);
-  irCommand.edges = 0; //unused
+  irCommand.edges = cntEdges;
   
   // save the command header (name / edgecount
   f.write((uint8_t *)&irCommand, sizeof(irCommandHeader));
   
   // write IR data
-  f.write((uint8_t *)timings, sizeof(IRData));
+  f.write((uint8_t *)timings, cntEdges * 2);
   
   //finished
   f.close();
 }
 
 /**
-   Load one IR command from the EEPROM.
-   identified by the command name
-   returns 1 if successful, 0 if not found.
+   Replay one IR command from the EEPROM.
+   The slot is identified by the slot name
  * */
-size_t readIRFromEEPROM(char const * name, IRData *timings)
+uint16_t readIRFromEEPROM(char * name, uint16_t *timings, uint16_t maxEdges)
 {
   int8_t nr = slotnameIRToNumber(name);
 
@@ -434,13 +434,19 @@ size_t readIRFromEEPROM(char const * name, IRData *timings)
   f.readBytes((char *)&irCommand, sizeof(irCommandHeader));
   #ifdef DEBUG_OUTPUT_BASIC
     Serial.print("read slotname "); Serial.println(irCommand.irName);
+    Serial.print("edge count "); Serial.println(irCommand.edges);
   #endif
   
-  f.readBytes((char *)timings, sizeof(IRData));
+  if(irCommand.edges > maxEdges) {
+    f.close();
+    return 0;
+  }
+  
+  f.readBytes((char *)timings, irCommand.edges * 2);
   f.close();
 
   //return the count of available edges (used by the IR parser)
-  return 1;
+  return irCommand.edges;
 }
 
 

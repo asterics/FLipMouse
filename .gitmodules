@@ -1,3 +1,0 @@
-[submodule "Hardware/PCB-design/mainboard/libs/Nano"]
-	path = Hardware/PCB-design/mainboard/libs/Nano
-	url = https://github.com/hulkco/Nano_33

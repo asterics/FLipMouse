@@ -69,6 +69,8 @@
 //#define DEBUG_OUTPUT_KEYS      // enable keys.cpp debugging, showing key press/release events and keycode lookup
 //#define DEBUG_OUTPUT_IR      	 // enable infrared.cpp debugging, showing whats happening on IR recv/send
 
+#define BUILD_FOR_RP2040        // enable a build for RP2040. There are differences in eeprom & infrared handling.
+
 /**
    global constant definitions
 */

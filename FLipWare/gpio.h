@@ -20,8 +20,6 @@
 */
 #define NUMBER_OF_PHYSICAL_BUTTONS 3  // number of physical switches
 #define NEOPIXEL_PIN 15
-//#warning "Neopixel is set to SparkFunProMicro!"
-//#define NEOPIXEL_PIN 25
 
 /**
    extern declaration of static variables

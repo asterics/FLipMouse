@@ -18,8 +18,8 @@
    physical pin definitions
 */
 //RP2040:
-#define IR_LED_PIN     28    //  IR-Led output pin      // NOTE: changed for RP2040 ? 28 and 26 are ADC pins ...
-#define IR_SENSOR_PIN  26    //  input pin of the TSOP IR receiver
+#define IR_LED_PIN     19    //  IR-Led output pin      // NOTE: changed for RP2040 ? 28 and 26 are ADC pins ...
+#define IR_SENSOR_PIN  16    //  input pin of the TSOP IR receiver
 
 //Time until the record command will be canceled (in milliseconds)
 #define IR_USER_TIMEOUT_MS 10000

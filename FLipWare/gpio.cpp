@@ -13,8 +13,7 @@
 #include <Arduino.h>
 #include "gpio.h"
 
-//int8_t  input_map[NUMBER_OF_PHYSICAL_BUTTONS] = {D2, D8, D9};    //  maps physical button pins to button index 0,1,2  // TBD: changed for RP2040!
-int8_t  input_map[NUMBER_OF_PHYSICAL_BUTTONS] = {25, 20, 21};      //  NOTE: changed for RP2040!
+int8_t  input_map[NUMBER_OF_PHYSICAL_BUTTONS] = {17, 20, 21};      //  NOTE: changed for RP2040!
 
 uint8_t blinkCount = 0;
 uint8_t blinkTime = 0;

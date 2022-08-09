@@ -195,6 +195,9 @@ uint8_t delete_IR_command(char * name)
 {
   //RP2040: return value determines alarm behaviour
   #ifdef BUILD_FOR_RP2040
+	//avoid unused parameter warning
+	(void)id;
+	(void)user_data;
     int64_t ret = 0; //return 0 -> no reschedule; <0 [us] from last timestamp; >0 [us] from this return.
   #endif
   /* Disabled, IRQ context here!
@@ -219,7 +222,7 @@ uint8_t delete_IR_command(char * name)
       if (idlesequenceCounter > 0) {
         idlesequenceCounter--;
         delayMicroseconds(IR_REPEAT_GAP);  // pause before next idlesequence (TBD: make that non-blocking)
-        start_IR_command_playback(IDLESEQUENCE_NAME);  // in case the idlesequence command exists: play it!
+        start_IR_command_playback((char*)IDLESEQUENCE_NAME);  // in case the idlesequence command exists: play it!
       }
     } 
     #ifdef BUILD_FOR_RP2040

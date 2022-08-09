@@ -23,7 +23,6 @@
    extern declaration of static variables
    which shall be accessed from other modules
 */
-extern uint8_t reportSlotParameters;
 extern uint8_t reportRawValues;
 
 /** 

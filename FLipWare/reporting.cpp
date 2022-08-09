@@ -22,7 +22,6 @@
 /**
   static variables for report management
 */
-uint8_t reportSlotParameters = REPORT_NONE;
 uint8_t reportRawValues = 0;
 
 /** 
@@ -31,7 +30,7 @@ uint8_t reportRawValues = 0;
  */
 void printCurrentSlot(Stream *S)
 {
-  S->print("Slot:");  S->println(slotSettings.slotName);
+  S->println(slotSettings.slotName);
   S->print("AT AX "); S->println(slotSettings.ax);
   S->print("AT AY "); S->println(slotSettings.ay);
   S->print("AT DX "); S->println(slotSettings.dx);

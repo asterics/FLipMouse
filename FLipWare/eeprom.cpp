@@ -103,12 +103,8 @@ void saveToEEPROMSlotNumber(int8_t nr, char const * slotname)
     return;
   }
 
-  // save the general slotSettings to the global slotSettings struct (slot name is first element)
-  f.write((uint8_t *)&slotSettings, sizeof(SlotSettings));
-  // write all button slotSettings
-  f.write((char*)buttons, sizeof(slotButtonSettings) * NUMBER_OF_BUTTONS);
-  // write all keystrings
-  f.write(keystringBuffer, slotSettings.keystringBufferLen);
+  //just use the reporting function to put all our settings into the file
+  printCurrentSlot(&f);
   
   //finished
   f.close();
@@ -153,8 +149,8 @@ uint8_t readFromEEPROM(char const * slotname)
   if (*slotname == 0)
   {
     //either load next slot or first slot.
-    if(actSlot == getLastSlotIndex())return readFromEEPROMSlotNumber(0, true);
-    else return readFromEEPROMSlotNumber(actSlot + 1, true);
+    if(actSlot == getLastSlotIndex()) return readFromEEPROMSlotNumber(0, true, false);
+    else return readFromEEPROMSlotNumber(actSlot + 1, true, false);
   }
 
   int8_t nr = slotnameToNumber(slotname);
@@ -165,8 +161,8 @@ uint8_t readFromEEPROM(char const * slotname)
     Serial.println(nr);
   #endif
   //call the method which loads the data
-  if (nr >= 0) return readFromEEPROMSlotNumber(nr, true);
-  else return readFromEEPROMSlotNumber(0, true);
+  if (nr >= 0) return readFromEEPROMSlotNumber(nr, true, false);
+  else return readFromEEPROMSlotNumber(0, true, false);
   
 }
 
@@ -176,7 +172,7 @@ uint8_t readFromEEPROM(char const * slotname)
    if the playTone flag is set, a tone according to the current slot number will be played
    returns 1 if successful, 0 otherwise   
  * */
-uint8_t readFromEEPROMSlotNumber(uint8_t nr, bool playTone)
+uint8_t readFromEEPROMSlotNumber(uint8_t nr, bool playTone, bool print)
 {
   /** open & read this slot **/
   char path[32];
@@ -197,31 +193,42 @@ uint8_t readFromEEPROMSlotNumber(uint8_t nr, bool playTone)
   if(!f) return 0;
 
   // load the general slotSettings struct, containing the name
-  f.readBytes((char *)&slotSettings, sizeof(SlotSettings));
+  String name = f.readStringUntil('\n');
+  name.trim();
+  
+  // read line by line & feed into parser
+  String line = "";
+  do{
+    line = f.readStringUntil('\n');
+    line.trim();
+    #ifdef DEBUG_OUTPUT_BASIC
+      Serial.print("Sending to parser: ");
+      Serial.println(line);
+    #endif
+    parseCommand((char*)line.c_str());
+  } while(line.length()>0);
+  
+  //finished
+  f.close();
+
   #ifdef DEBUG_OUTPUT_BASIC
     Serial.print("read slotname "); Serial.println(slotSettings.slotName);
   #endif
-
-  // load all button slotSettings
-  f.readBytes((char *)buttons, sizeof(slotButtonSettings)*NUMBER_OF_BUTTONS);
-
-  // load keystring buffer
-  f.readBytes(keystringBuffer, slotSettings.keystringBufferLen);
-  initButtonKeystrings();
   
   //now next slot is active
   actSlot = nr;
 
-  if (reportSlotParameters != REPORT_NONE)
+  if (print) {
+    Serial.print("Slot:");  
     printCurrentSlot(&Serial); //send slot to serial
+  }
 
   if (playTone) makeTone(TONE_CHANGESLOT, actSlot);
   #ifdef DEBUG_OUTPUT_BASIC
     Serial.print("actSlot: "); Serial.println(actSlot);
   #endif
 
-  if (reportSlotParameters)
-    Serial.println("END");   // important: end marker for slot parameter list (command "load all" - AT LA)
+  if (print) Serial.println("END");   // important: end marker for slot parameter list (command "load all" - AT LA)
 
   return(1);
 }
@@ -618,14 +625,15 @@ int8_t getLastIRIndex(void) {
    print all slot slotSettings and button mode to serial 
  * */
 void printAllSlots(void) {
-  reportSlotParameters = REPORT_ALL_SLOTS;
-  for(int8_t i = 0; i<=getLastSlotIndex(); i++) {
-    readFromEEPROMSlotNumber(i, false);
+  uint8_t lastLoadedSlot = actSlot;
+  int8_t lastSlot = getLastSlotIndex();
+  for(int8_t i = 0; i<=lastSlot; i++) {
+    readFromEEPROMSlotNumber(i, false, true);
   }
-  reportSlotParameters = REPORT_NONE;
-  if(getLastSlotIndex() >= 0)
-    readFromEEPROMSlotNumber(0, true);
-  else Serial.println("END");
+  if(lastSlot <= 0) Serial.println("END");
+  
+  //load previously active slot
+  readFromEEPROMSlotNumber(lastLoadedSlot, false, false);
 }
 
 /**

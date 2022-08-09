@@ -42,7 +42,7 @@
 #define _EEPROM_H_
 
 #include "FlipWare.h"
-
+#include "parser.h"
 
 #define MAX_SLOTS_IN_EERPOM 10
 #define MAX_IRCOMMANDS_IN_EERPOM 20
@@ -152,7 +152,7 @@ void listSlots();
    if the playTone flag is set, a tone according to the current slot number will be played
    returns 1 if successful, 0 otherwise
  * */
-uint8_t readFromEEPROMSlotNumber(uint8_t nr,  bool playTone);
+uint8_t readFromEEPROMSlotNumber(uint8_t nr,  bool playTone, bool print);
 
 /**
    Read one slot data from the EEPROM to the global variables

@@ -26,12 +26,13 @@
 extern uint8_t reportSlotParameters;
 extern uint8_t reportRawValues;
 
-/**
-   @name printCurrentSlot
-   @brief prints the AT command strings of the current slot settings to the serial interface
-   @return none
-*/
-void printCurrentSlot(void);
+/** 
+  @name printCurrentSlot
+  @brief Print current to given stream
+  @param S Stream to send the AT commands to; in our case Serial or a File
+  @return none
+ */
+void printCurrentSlot(Stream *S);
 
 /**
    @name reportValues

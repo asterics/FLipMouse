@@ -25,53 +25,57 @@
 uint8_t reportSlotParameters = REPORT_NONE;
 uint8_t reportRawValues = 0;
 
-void printCurrentSlot()
+/** 
+ * @brief Print current to given stream
+ * @param S Stream to send the AT commands to; in our case Serial or a File
+ */
+void printCurrentSlot(Stream *S)
 {
-  Serial.print("Slot:");  Serial.println(slotSettings.slotName);
-  Serial.print("AT AX "); Serial.println(slotSettings.ax);
-  Serial.print("AT AY "); Serial.println(slotSettings.ay);
-  Serial.print("AT DX "); Serial.println(slotSettings.dx);
-  Serial.print("AT DY "); Serial.println(slotSettings.dy);
-  Serial.print("AT MS "); Serial.println(slotSettings.ms);
-  Serial.print("AT AC "); Serial.println(slotSettings.ac);
-  Serial.print("AT TS "); Serial.println(slotSettings.ts);
-  Serial.print("AT TP "); Serial.println(slotSettings.tp);
-  Serial.print("AT WS "); Serial.println(slotSettings.ws);
-  Serial.print("AT SP "); Serial.println(slotSettings.sp);
-  Serial.print("AT SS "); Serial.println(slotSettings.ss);
-  Serial.print("AT MM "); Serial.println(slotSettings.stickMode);
-  Serial.print("AT GV "); Serial.println(slotSettings.gv);
-  Serial.print("AT RV "); Serial.println(slotSettings.rv);
-  Serial.print("AT GH "); Serial.println(slotSettings.gh);
-  Serial.print("AT RH "); Serial.println(slotSettings.rh);
-  Serial.print("AT RO "); Serial.println(slotSettings.ro);
-  Serial.print("AT BT "); Serial.println(slotSettings.bt);
-  Serial.print("AT KL "); Serial.println(slotSettings.kbdLayout);
+  S->print("Slot:");  S->println(slotSettings.slotName);
+  S->print("AT AX "); S->println(slotSettings.ax);
+  S->print("AT AY "); S->println(slotSettings.ay);
+  S->print("AT DX "); S->println(slotSettings.dx);
+  S->print("AT DY "); S->println(slotSettings.dy);
+  S->print("AT MS "); S->println(slotSettings.ms);
+  S->print("AT AC "); S->println(slotSettings.ac);
+  S->print("AT TS "); S->println(slotSettings.ts);
+  S->print("AT TP "); S->println(slotSettings.tp);
+  S->print("AT WS "); S->println(slotSettings.ws);
+  S->print("AT SP "); S->println(slotSettings.sp);
+  S->print("AT SS "); S->println(slotSettings.ss);
+  S->print("AT MM "); S->println(slotSettings.stickMode);
+  S->print("AT GV "); S->println(slotSettings.gv);
+  S->print("AT RV "); S->println(slotSettings.rv);
+  S->print("AT GH "); S->println(slotSettings.gh);
+  S->print("AT RH "); S->println(slotSettings.rh);
+  S->print("AT RO "); S->println(slotSettings.ro);
+  S->print("AT BT "); S->println(slotSettings.bt);
+  S->print("AT KL "); S->println(slotSettings.kbdLayout);
 
   for (int i = 0; i < NUMBER_OF_BUTTONS; i++)
   {
-    Serial.print("AT BM ");
-    if (i < 9) Serial.print("0"); // leading zero for button numbers !
-    Serial.println(i + 1);
+    S->print("AT BM ");
+    if (i < 9) S->print("0"); // leading zero for button numbers !
+    S->println(i + 1);
     int actCmd = buttons[i].mode;
     char cmdStr[4];
 
     if ((actCmd <0 ) || (actCmd>=NUM_COMMANDS)) {
-      Serial.print("E: buttonmode =");
-      Serial.println(actCmd);
+      S->print("E: buttonmode =");
+      S->println(actCmd);
       actCmd=CMD_NC;
     }
     
-    Serial.print("AT ");
+    S->print("AT ");
     strcpy_FM(cmdStr, (uint_farptr_t_FM)atCommands[actCmd].atCmd);
-    Serial.print(cmdStr);
+    S->print(cmdStr);
     switch (pgm_read_byte_near(&(atCommands[actCmd].partype)))
     {
       case PARTYPE_UINT:
-      case PARTYPE_INT:  Serial.print(" "); Serial.print(buttons[i].value); break;
-      case PARTYPE_STRING: Serial.print(" "); Serial.print(buttonKeystrings[i]); break;
+      case PARTYPE_INT:  S->print(" "); S->print(buttons[i].value); break;
+      case PARTYPE_STRING: S->print(" "); S->print(buttonKeystrings[i]); break;
     }
-    Serial.println("");
+    S->println("");
   }
 }
 

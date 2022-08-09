@@ -213,7 +213,7 @@ uint8_t readFromEEPROMSlotNumber(uint8_t nr, bool playTone)
   actSlot = nr;
 
   if (reportSlotParameters != REPORT_NONE)
-    printCurrentSlot();
+    printCurrentSlot(&Serial); //send slot to serial
 
   if (playTone) makeTone(TONE_CHANGESLOT, actSlot);
   #ifdef DEBUG_OUTPUT_BASIC
@@ -277,10 +277,13 @@ uint8_t deleteIRCommand(char const * name)
     #ifdef DEBUG_OUTPUT_BASIC
         Serial.println("Deleting all IR slots");
     #endif
-    /** remove /ir dir & recreate */
-    sprintf(path,"/ir");
-    LittleFS.remove(path);
-    LittleFS.mkdir(path);
+    
+    //open ir dir
+    Dir dir = LittleFS.openDir("/ir");
+    //and iterate over files to remove them.
+    while(dir.next()) {
+      LittleFS.remove(String("/ir/") + String(dir.fileName()));
+    }
     return (1);
   }
   
@@ -497,12 +500,14 @@ uint8_t deleteSlot(char const * name)
     #ifdef DEBUG_OUTPUT_BASIC
         Serial.println("Deleting all slots");
     #endif
-    /** open current directory */
-    
-    
-    sprintf(path,"/%03d",revision);
-    LittleFS.remove(path);
-    LittleFS.mkdir(path);
+  
+    //open current dir
+    sprintf(path,"/%03d/",revision);
+    Dir dir = LittleFS.openDir(path);
+    //and iterate over files to remove them.
+    while(dir.next()) {
+      LittleFS.remove(String(path) + String(dir.fileName()));
+    }
     return (1);
   }
 

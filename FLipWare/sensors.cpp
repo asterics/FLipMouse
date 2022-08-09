@@ -48,6 +48,7 @@ void initSensors()
   if (!nau.begin()) {
     Serial.println("SEN: no force sensor found");
     sensor_force = NO_FORCE;
+    return;
   } else {
     sensor_force = NAU7802;
     #ifdef DEBUG_OUTPUT_SENSORS

@@ -68,6 +68,7 @@
 //#define DEBUG_OUTPUT_BASIC     // if basic debug output is desired (for eeprom)
 //#define DEBUG_OUTPUT_KEYS      // enable keys.cpp debugging, showing key press/release events and keycode lookup
 //#define DEBUG_OUTPUT_IR      	 // enable infrared.cpp debugging, showing whats happening on IR recv/send
+//#define DEBUG_OUTPUT_SENSORS 	 // enable sensors.cpp debugging, showing whats happening on sensor reading & init
 
 #define BUILD_FOR_RP2040        // enable a build for RP2040. There are differences in eeprom & infrared handling.
 
@@ -135,7 +136,7 @@ struct SensorData {
   float deadZone, force, forceRaw, angle;
   uint8_t dir;
   int8_t autoMoveX,autoMoveY;
-  int up, down, left, right;
+  int32_t up, down, left, right;
   uint8_t calib_now;
   int16_t  cx, cy;
   uint32_t cpressure;

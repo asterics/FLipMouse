@@ -18,6 +18,9 @@
 //MPRLS pressure sensor is I2C
 #include "Wire.h"
 
+//NAU7802 library
+#include <Adafruit_NAU7802.h>
+
 /** Analog sensor input if a analog pressure sensor is used */
 #define PRESSURE_SENSOR_PIN A3
 

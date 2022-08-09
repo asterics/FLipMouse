@@ -12,12 +12,15 @@
 
 #include "sensors.h"
 
+Adafruit_NAU7802 nau;
+
 #define MPRLS_READ_TIMEOUT (20)     ///< millis
 #define MPRLS_STATUS_POWERED (0x40) ///< Status SPI powered bit
 #define MPRLS_STATUS_BUSY (0x20)    ///< Status busy bit
 #define MPRLS_STATUS_FAILED (0x04)  ///< Status bit for integrity fail
 #define MPRLS_STATUS_MATHSAT (0x01) ///< Status bit for math saturation
 #define MPRLS_STATUS_MASK (0b01100101) ///< Sensor status mask: only these bits are set
+
 
 /**
  * @brief Used pressure sensor type. We can use either the MPXV7007GP
@@ -30,7 +33,7 @@ pressure_type_t sensor_pressure = MPXV;
  * @brief Used force sensor type. We can use the FSR sensors or possibly
  * in a future version the resistor gauge sensors.
  */
-typedef enum {RES_I2C, NO_FORCE} force_type_t;
+typedef enum {NAU7802, NO_FORCE} force_type_t;
 force_type_t sensor_force = NO_FORCE;
 
 void initSensors()
@@ -41,9 +44,52 @@ void initSensors()
   //we found the MPRLS sensor, start the initialization
   if(result == 0) sensor_pressure = MPRLS;
 
-  //TODO: initialize NAU7802 I2C gauge ADC.
-  #warning "No sensor active!"
-  sensor_force = NO_FORCE;
+  //NAU7802 init
+  if (!nau.begin()) {
+    Serial.println("SEN: no force sensor found");
+    sensor_force = NO_FORCE;
+  } else {
+    sensor_force = NAU7802;
+    #ifdef DEBUG_OUTPUT_SENSORS
+      Serial.println("SEN: Found NAU7802");
+    #endif
+  }
+  //set LDO: TBA: what value is the best?
+  nau.setLDO(NAU7802_2V7);
+  //nau.setLDO(NAU7802_2V4);
+  //nau.setLDO(NAU7802_3V0);
+  
+  //set gain: TBA: select good value
+  nau.setGain(NAU7802_GAIN_128);
+  //nau.setGain(NAU7802_GAIN_64);
+  //nau.setGain(NAU7802_GAIN_32);
+  
+  //set sampling rate
+  nau.setRate(NAU7802_RATE_320SPS);
+  //nau.setRate(NAU7802_RATE_80SPS);
+  //nau.setRate(NAU7802_RATE_40SPS);
+  
+  //flush NAU7802
+  for (uint8_t i=0; i<10; i++) {
+    while (!nau.available()) delay(1);
+    nau.read();
+  }
+
+  while (!nau.calibrate(NAU7802_CALMOD_INTERNAL)) {
+    Serial.println("SEN: error calibrating int offset");
+    delay(1000);
+  }
+  #ifdef DEBUG_OUTPUT_SENSORS
+    Serial.println("SEN: Calibrated internal offset");
+  #endif
+
+  while (!nau.calibrate(NAU7802_CALMOD_OFFSET)) {
+    Serial.println("SEN: Failed to calibrate system offset, retrying!");
+    delay(1000);
+  }
+  #ifdef DEBUG_OUTPUT_SENSORS
+    Serial.println("Calibrated system offset");
+  #endif
 }
 
 
@@ -102,8 +148,22 @@ void readForce(struct SensorData *data)
 {
   switch(sensor_force)
   {
-    case RES_I2C:
-      //TODO: add NAU7802 reading here.
+    case NAU7802:
+      //TODO: should we interleave the reading or wait here for both?
+      
+      //wait for available data on channel 1 & read to "up"
+      while (!nau.available()) delayMicroseconds(500);
+      data->up = nau.read();
+      
+      //switch to channel 2
+      nau.setChannel(NAU7802_CHANNEL2);
+      
+      //wait for available data on channel 2 & read to "left"
+      while (!nau.available()) delayMicroseconds(500);
+      data->left = nau.read();
+      
+      //switch back to channel 1
+      nau.setChannel(NAU7802_CHANNEL1);
       break;
     case NO_FORCE:
     default:

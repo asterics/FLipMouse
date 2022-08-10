@@ -65,10 +65,11 @@
 // Optional Debug Output Control
 
 //#define DEBUG_OUTPUT_FULL      // if full debug output is desired
-//#define DEBUG_OUTPUT_BASIC     // if basic debug output is desired (for eeprom)
+//#define DEBUG_OUTPUT_MEMORY    // enables eeprom.cpp debugging, showing memory access
 //#define DEBUG_OUTPUT_KEYS      // enable keys.cpp debugging, showing key press/release events and keycode lookup
 //#define DEBUG_OUTPUT_IR      	 // enable infrared.cpp debugging, showing whats happening on IR recv/send
 //#define DEBUG_OUTPUT_SENSORS 	 // enable sensors.cpp debugging, showing whats happening on sensor reading & init
+//#define DEBUG_DELAY_STARTUP 	 // enable a 3s delay after Serial.begin and before all the other stuff.
 
 #define BUILD_FOR_RP2040        // enable a build for RP2040. There are differences in eeprom & infrared handling.
 
@@ -167,8 +168,8 @@ typedef char* uint_farptr_t_FM;
 /**
  * Some define checks to warn from building in debug settings
  */
-#ifdef DEBUG_OUTPUT_BASIC
-  #warning "DEBUG_OUTPUT_BASIC active! (GUI might not work)"
+#ifdef DEBUG_OUTPUT_MEMORY
+  #warning "DEBUG_OUTPUT_MEMORY active! (GUI might not work)"
 #endif
 #ifdef DEBUG_OUTPUT_FULL
   #warning "DEBUG_OUTPUT_FULL active! (GUI might not work)"
@@ -178,6 +179,12 @@ typedef char* uint_farptr_t_FM;
 #endif
 #ifdef DEBUG_OUTPUT_IR
   #warning "DEBUG_OUTPUT_KEYS active! (GUI might not work)"
+#endif
+#ifdef DEBUG_OUTPUT_SENSORS
+  #warning "DEBUG_OUTPUT_SENSORS active! (GUI might not work)"
+#endif
+#ifdef DEBUG_DELAY_STARTUP
+  #warning "DELAY_STARTUP is active, do not release this way!"
 #endif
 
 #endif

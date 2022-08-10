@@ -220,7 +220,6 @@ void performCommand (uint8_t cmd, int16_t par1, char * keystring, int8_t periodi
       //change keyboard layout.
       if(strnlen(keystring,5) == 5) {
         if(setKeyboardLayout(keystring)) {
-          Serial.println("OK");
           strncpy(slotSettings.kbdLayout, keystring, 5);
         } else Serial.println("NOK: supported layouts: de_DE, en_US, es_ES, fr_FR, it_IT, sv_SE, da_DK");
       } else { 

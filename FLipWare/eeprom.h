@@ -152,7 +152,7 @@ void listSlots();
    if the playTone flag is set, a tone according to the current slot number will be played
    returns 1 if successful, 0 otherwise
  * */
-uint8_t readFromEEPROMSlotNumber(uint8_t nr,  bool playTone, bool print);
+uint8_t readFromEEPROMSlotNumber(uint8_t nr,  bool playTone);
 
 /**
    Read one slot data from the EEPROM to the global variables

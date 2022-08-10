@@ -53,7 +53,7 @@
 /**
    device name for ID string & BT-pairing
 */
-char moduleName[]="Flipmouse";   
+char moduleName[]="FLipmouse";   
 
 /**
    default values for empty configuration slot 
@@ -116,7 +116,11 @@ void setup() {
 
   // initialize peripherals
   Serial.begin(115200);
-  delay(1000);  // allow some time for serial interface to come up
+  
+  #ifdef DEBUG_DELAY_STARTUP
+    delay(3000);  // allow some time for serial interface to come up
+  #endif
+
 
   Wire.begin();
   Wire.setClock(400000);  // use 400kHz I2C clock
@@ -130,7 +134,7 @@ void setup() {
   init_CIM_frame();  // for AsTeRICS CIM protocol compatibility
 
   initStorage();   // initialize storage if necessary
-  readFromEEPROMSlotNumber(0, true, false); // read slot from first EEPROM slot if available !
+  readFromEEPROMSlotNumber(0, true); // read slot from first EEPROM slot if available !
 
   initBlink(10,25);  // first signs of life!
 

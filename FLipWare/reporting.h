@@ -26,10 +26,8 @@
 extern uint8_t reportRawValues;
 
 /** 
-  @name printCurrentSlot
-  @brief Print current to given stream
-  @param S Stream to send the AT commands to; in our case Serial or a File
-  @return none
+ * @brief Print current to given stream
+ * @param S Stream to send the AT commands to; in our case Serial or a File
  */
 void printCurrentSlot(Stream *S);
 

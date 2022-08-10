@@ -52,7 +52,7 @@ uint8_t saveToEEPROM(char const * slotname)
       saveToEEPROMSlotNumber(getLastSlotIndex()+1, slotname);
   } else {
     //overwrite existing one
-    #ifdef DEBUG_OUTPUT_BASIC
+    #ifdef DEBUG_OUTPUT_MEMORY
       Serial.print("Overwrite Slot ");
       Serial.print(slotname);
       Serial.print(", slot index= ");
@@ -74,26 +74,15 @@ uint8_t saveToEEPROM(char const * slotname)
  * */
 void saveToEEPROMSlotNumber(int8_t nr, char const * slotname)
 {
-  size_t size = 0;
   (void)slotname; //TODO: this implementation currently uses the slotname from slotSettings.
   
-  // determine the size of this slot
-  size += sizeof(SlotSettings);
-  size += sizeof(slotButtonSettings)*NUMBER_OF_BUTTONS;
-  size += slotSettings.keystringBufferLen;
-
-  #ifdef DEBUG_OUTPUT_BASIC
-    Serial.print("Slotsize:");
-    Serial.println(size);
-  #endif
-
   /** save this slot **/
   char path[32];
   uint8_t revision = getSettingsRevision(); //determine current settings revision number
   sprintf(path,"/%03d/%02d",revision,nr);
   File f = LittleFS.open(path,"w");
 
-  #ifdef DEBUG_OUTPUT_BASIC
+  #ifdef DEBUG_OUTPUT_MEMORY
     Serial.print("Start new slot: ");
     Serial.println(path);
   #endif
@@ -105,6 +94,11 @@ void saveToEEPROMSlotNumber(int8_t nr, char const * slotname)
 
   //just use the reporting function to put all our settings into the file
   printCurrentSlot(&f);
+  
+  #ifdef DEBUG_OUTPUT_MEMORY
+    Serial.print("Slotsize:");
+    Serial.println(f.size());
+  #endif
   
   //finished
   f.close();
@@ -127,7 +121,8 @@ int8_t slotnameToNumber(char const * slotname)
   while (dir.next()) {
     if(dir.fileSize()) {
       File f = dir.openFile("r");
-      String name = f.readString();
+      String name = f.readStringUntil('\n');
+      name.trim();
       f.close();
       
       if(name.equals(slotname)) return slotnumber; 
@@ -149,20 +144,25 @@ uint8_t readFromEEPROM(char const * slotname)
   if (*slotname == 0)
   {
     //either load next slot or first slot.
-    if(actSlot == getLastSlotIndex()) return readFromEEPROMSlotNumber(0, true, false);
-    else return readFromEEPROMSlotNumber(actSlot + 1, true, false);
+    #ifdef DEBUG_OUTPUT_MEMORY
+			Serial.print("Load next:");
+			if(actSlot == getLastSlotIndex()) Serial.println("0");
+			else Serial.println(actSlot + 1);
+		#endif
+    if(actSlot == getLastSlotIndex()) return readFromEEPROMSlotNumber(0, true);
+    else return readFromEEPROMSlotNumber(actSlot + 1, true);
   }
 
   int8_t nr = slotnameToNumber(slotname);
-  #ifdef DEBUG_OUTPUT_BASIC
+  #ifdef DEBUG_OUTPUT_MEMORY
     Serial.print("Load slot ");
     Serial.print(slotname);
     Serial.print("@");
     Serial.println(nr);
   #endif
   //call the method which loads the data
-  if (nr >= 0) return readFromEEPROMSlotNumber(nr, true, false);
-  else return readFromEEPROMSlotNumber(0, true, false);
+  if (nr >= 0) return readFromEEPROMSlotNumber(nr, true);
+  else return readFromEEPROMSlotNumber(0, true);
   
 }
 
@@ -172,7 +172,7 @@ uint8_t readFromEEPROM(char const * slotname)
    if the playTone flag is set, a tone according to the current slot number will be played
    returns 1 if successful, 0 otherwise   
  * */
-uint8_t readFromEEPROMSlotNumber(uint8_t nr, bool playTone, bool print)
+uint8_t readFromEEPROMSlotNumber(uint8_t nr, bool playTone)
 {
   /** open & read this slot **/
   char path[32];
@@ -181,7 +181,7 @@ uint8_t readFromEEPROMSlotNumber(uint8_t nr, bool playTone, bool print)
   
   if(!LittleFS.exists(path))
   {
-    #ifdef DEBUG_OUTPUT_BASIC
+    #ifdef DEBUG_OUTPUT_MEMORY
       Serial.print(nr);
       Serial.println(" Slot not found!");
     #endif
@@ -192,16 +192,25 @@ uint8_t readFromEEPROMSlotNumber(uint8_t nr, bool playTone, bool print)
   
   if(!f) return 0;
 
-  // load the general slotSettings struct, containing the name
+  // load name & store to slotSettings
   String name = f.readStringUntil('\n');
   name.trim();
+  strncpy(slotSettings.slotName,name.c_str(),MAX_NAME_LEN);
+  
   
   // read line by line & feed into parser
   String line = "";
   do{
+		//check for remaining byte size, otherwise readStringUntil hangs until timeout
+		if((f.position()+5) > f.size()) break;
     line = f.readStringUntil('\n');
     line.trim();
-    #ifdef DEBUG_OUTPUT_BASIC
+    //check again length, we need at least 5 bytes: "AT ..", e.g. "AT NC"
+    if(line.length() < 5) break;
+    line = line.substring(3);
+    //after substringing, we need at least 2 bytes: "..", e.g. "NC"
+    if(line.length() < 2) break;
+    #ifdef DEBUG_OUTPUT_MEMORY
       Serial.print("Sending to parser: ");
       Serial.println(line);
     #endif
@@ -211,24 +220,17 @@ uint8_t readFromEEPROMSlotNumber(uint8_t nr, bool playTone, bool print)
   //finished
   f.close();
 
-  #ifdef DEBUG_OUTPUT_BASIC
+  #ifdef DEBUG_OUTPUT_MEMORY
     Serial.print("read slotname "); Serial.println(slotSettings.slotName);
   #endif
-  
+
   //now next slot is active
   actSlot = nr;
 
-  if (print) {
-    Serial.print("Slot:");  
-    printCurrentSlot(&Serial); //send slot to serial
-  }
-
   if (playTone) makeTone(TONE_CHANGESLOT, actSlot);
-  #ifdef DEBUG_OUTPUT_BASIC
+  #ifdef DEBUG_OUTPUT_MEMORY
     Serial.print("actSlot: "); Serial.println(actSlot);
   #endif
-
-  if (print) Serial.println("END");   // important: end marker for slot parameter list (command "load all" - AT LA)
 
   return(1);
 }
@@ -261,7 +263,7 @@ int8_t slotnameIRToNumber(char const * irName)
     }
   }
   //not found
-  #ifdef DEBUG_OUTPUT_BASIC
+  #ifdef DEBUG_OUTPUT_MEMORY
     Serial.print("No IR slotName found for ");
     Serial.println(irName);
   #endif
@@ -281,7 +283,7 @@ uint8_t deleteIRCommand(char const * name)
   char path[32];
     
   if (!strlen(name)) {
-    #ifdef DEBUG_OUTPUT_BASIC
+    #ifdef DEBUG_OUTPUT_MEMORY
         Serial.println("Deleting all IR slots");
     #endif
     
@@ -300,7 +302,7 @@ uint8_t deleteIRCommand(char const * name)
   //get current number of IR cmds
   int lastSlot= getLastIRIndex();
   
-  #ifdef DEBUG_OUTPUT_BASIC
+  #ifdef DEBUG_OUTPUT_MEMORY
       Serial.print("Deleting slot ");
       Serial.print(name);
       Serial.print("@");
@@ -341,7 +343,7 @@ void saveIRToEEPROM(char * name, uint16_t *timings, uint16_t cntEdges)
     irSlot = getLastIRIndex() + 1;
 
     if (irSlot < MAX_IRCOMMANDS_IN_EERPOM) {
-      #ifdef DEBUG_OUTPUT_BASIC
+      #ifdef DEBUG_OUTPUT_MEMORY
         Serial.print("New IR command @");
         Serial.println(irSlot);
       #endif
@@ -349,7 +351,7 @@ void saveIRToEEPROM(char * name, uint16_t *timings, uint16_t cntEdges)
     } else Serial.println ("IR memory full, code not saved.");
   }
   else {
-    #ifdef DEBUG_OUTPUT_BASIC
+    #ifdef DEBUG_OUTPUT_MEMORY
       Serial.print("Overwrite IR Slot ");
       Serial.print(name);
       Serial.print(" at position ");
@@ -368,7 +370,7 @@ void saveIRToEEPROM(char * name, uint16_t *timings, uint16_t cntEdges)
  * */
 void saveIRToEEPROMSlotNumber(uint8_t nr, char * name, uint16_t *timings, uint16_t cntEdges)
 {
-  #ifdef DEBUG_OUTPUT_BASIC
+  #ifdef DEBUG_OUTPUT_MEMORY
     //determine the size of this slot
     size_t size = sizeof (irCommand) + cntEdges * 2;
     Serial.print("IR slot size:");
@@ -380,7 +382,7 @@ void saveIRToEEPROMSlotNumber(uint8_t nr, char * name, uint16_t *timings, uint16
   sprintf(path,"/ir/%02d",nr);
   File f = LittleFS.open(path,"w");
 
-  #ifdef DEBUG_OUTPUT_BASIC
+  #ifdef DEBUG_OUTPUT_MEMORY
     Serial.print("Start new slot: ");
     Serial.println(path);
   #endif
@@ -419,7 +421,7 @@ uint16_t readIRFromEEPROM(char * name, uint16_t *timings, uint16_t maxEdges)
     #endif
     return 0;
   }
-  #ifdef DEBUG_OUTPUT_BASIC
+  #ifdef DEBUG_OUTPUT_MEMORY
     Serial.print("Load IR command by nr: ");
     Serial.print(nr);
   #endif
@@ -429,7 +431,7 @@ uint16_t readIRFromEEPROM(char * name, uint16_t *timings, uint16_t maxEdges)
   
   if(!LittleFS.exists(path))
   {
-    #ifdef DEBUG_OUTPUT_BASIC
+    #ifdef DEBUG_OUTPUT_MEMORY
       Serial.print(nr);
       Serial.println(" IRcmd not found!");
     #endif
@@ -442,7 +444,7 @@ uint16_t readIRFromEEPROM(char * name, uint16_t *timings, uint16_t maxEdges)
 
   // load the general ircmd struct, containing the name
   f.readBytes((char *)&irCommand, sizeof(irCommandHeader));
-  #ifdef DEBUG_OUTPUT_BASIC
+  #ifdef DEBUG_OUTPUT_MEMORY
     Serial.print("read slotname "); Serial.println(irCommand.irName);
     Serial.print("edge count "); Serial.println(irCommand.edges);
   #endif
@@ -504,7 +506,7 @@ uint8_t deleteSlot(char const * name)
   uint8_t revision = getSettingsRevision(); //determine current settings revision number
   
   if (!strlen(name)) {
-    #ifdef DEBUG_OUTPUT_BASIC
+    #ifdef DEBUG_OUTPUT_MEMORY
         Serial.println("Deleting all slots");
     #endif
   
@@ -518,7 +520,7 @@ uint8_t deleteSlot(char const * name)
     return (1);
   }
 
-  #ifdef DEBUG_OUTPUT_BASIC
+  #ifdef DEBUG_OUTPUT_MEMORY
     Serial.print("Deleting slot ");
     Serial.println(name);      
   #endif
@@ -560,8 +562,9 @@ void listSlots()
     File f = LittleFS.open(path,"r");
     if(f)
     {
-      //read slotname
-      String slotname = f.readString();
+      //read slotname (until new line, trim away CR)
+      String slotname = f.readStringUntil('\n');
+      slotname.trim();
       f.close();
       Serial.print("Slot"); Serial.print(i); Serial.print(":");
       Serial.println(slotname);
@@ -625,15 +628,21 @@ int8_t getLastIRIndex(void) {
    print all slot slotSettings and button mode to serial 
  * */
 void printAllSlots(void) {
-  uint8_t lastLoadedSlot = actSlot;
-  int8_t lastSlot = getLastSlotIndex();
-  for(int8_t i = 0; i<=lastSlot; i++) {
-    readFromEEPROMSlotNumber(i, false, true);
-  }
-  if(lastSlot <= 0) Serial.println("END");
+  char path[32];
+  uint8_t revision = getSettingsRevision(); //determine current settings revision number
   
-  //load previously active slot
-  readFromEEPROMSlotNumber(lastLoadedSlot, false, false);
+  for(uint8_t i = 0; i<MAX_SLOTS_IN_EERPOM; i++)
+  {
+	  sprintf(path,"/%03d/%02d",revision,i);
+	  File f = LittleFS.open(path,"r");
+	  if(f)
+	  {
+		  String slot = f.readString();
+		  Serial.print("Slot"); Serial.print(":");
+		  Serial.print(slot);
+	  } else break;
+	}
+	Serial.println("END");
 }
 
 /**

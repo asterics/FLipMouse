@@ -2241,6 +2241,10 @@
     (effects (font (size 2.54 2.54) (thickness 0.508) bold) (justify left bottom))
     (uuid 01bf5123-6f66-4028-9269-ef1ff54c55d7)
   )
+  (text "Alternative to RS-Pro 457011:\nPKM17EPP-2002-B0" (at 252.73 122.555 0)
+    (effects (font (size 1.27 1.27)) (justify left bottom))
+    (uuid 032c27f5-b90c-456b-b71b-fed06fe7a6c5)
+  )
   (text "EITHER" (at 256.54 106.045 0)
     (effects (font (size 2.54 2.54)) (justify left bottom))
     (uuid 1fdd1586-3e39-49f3-b565-53a8febbdc03)
@@ -2597,7 +2601,7 @@
     (property "Reference" "BZ1" (id 0) (at 245.0592 119.9134 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
-    (property "Value" "KCG0603" (id 1) (at 245.0592 122.2248 0)
+    (property "Value" "457011" (id 1) (at 244.475 123.19 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
     (property "Footprint" "Buzzer_Beeper:Buzzer_D14mm_H7mm_P10mm" (id 2) (at 249.555 118.11 90)
@@ -4157,7 +4161,7 @@
       (reference "A1") (unit 1) (value "Arduino_Nano_v2.x") (footprint "FLipMouse:NANO_33_Footprint_SMD_Castell_AlignmentHoles")
     )
     (path "/00000000-0000-0000-0000-00005d346f07"
-      (reference "BZ1") (unit 1) (value "KCG0603") (footprint "Buzzer_Beeper:Buzzer_D14mm_H7mm_P10mm")
+      (reference "BZ1") (unit 1) (value "457011") (footprint "Buzzer_Beeper:Buzzer_D14mm_H7mm_P10mm")
     )
     (path "/00000000-0000-0000-0000-00005fc55e90"
       (reference "C5") (unit 1) (value "100n") (footprint "Capacitor_SMD:C_0603_1608Metric")

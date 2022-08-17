@@ -86,33 +86,16 @@ __Finalize:__
 
 
 
-# Fabrication Records
+# Testing
 
-| Manufacturer | Date       | Quantity | Length | Manufacturing ID | Notes                                                        |
-| ------------ | ---------- | -------- | ------ | ---------------- | ------------------------------------------------------------ |
-| <example> BA | 12.08.2022 | 5        | 150mm  | 202201           | Example record here, measurement for correct timings of hot air and glue amount determined. |
-|              |            |          |        |                  |                                                              |
-|              |            |          |        |                  |                                                              |
-|              |            |          |        |                  |                                                              |
-|              |            |          |        |                  |                                                              |
-|              |            |          |        |                  |                                                              |
-|              |            |          |        |                  |                                                              |
-|              |            |          |        |                  |                                                              |
-|              |            |          |        |                  |                                                              |
-|              |            |          |        |                  |                                                              |
-|              |            |          |        |                  |                                                              |
-|              |            |          |        |                  |                                                              |
-|              |            |          |        |                  |                                                              |
-|              |            |          |        |                  |                                                              |
-|              |            |          |        |                  |                                                              |
-|              |            |          |        |                  |                                                              |
-|              |            |          |        |                  |                                                              |
-|              |            |          |        |                  |                                                              |
-|              |            |          |        |                  |                                                              |
-|              |            |          |        |                  |                                                              |
-|              |            |          |        |                  |                                                              |
-|              |            |          |        |                  |                                                              |
-|              |            |          |        |                  |                                                              |
-|              |            |          |        |                  |                                                              |
-|              |            |          |        |                  |                                                              |
+## Tools
 
+<TBA, use a strain gauge setup>
+
+## Procedure
+
+<TBA, use a strain gauge setup>
+
+## Documentation
+
+For each produced batch, fill out one document __template_mouthpiece_production.ots__ and save it as: `mouthpiece_production_<date>.ods`(e.g.: mouthpiece_production_20221118.ods)

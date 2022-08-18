@@ -82,7 +82,7 @@ struct SensorData sensorData {
   .dir=0,
   .autoMoveX=0, .autoMoveY=0,
   .up=0, .down=0, .left=0, .right=0,
-  .calib_now=1,    // calibrate zeropoint right at startup !
+  .calib_now=50,    // calibrate zeropoint right at startup !
   .cx=0, .cy=0, .cpressure=0,
   .xDriftComp=0, .yDriftComp=0,
   .xLocalMax=0, .yLocalMax=0

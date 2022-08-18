@@ -96,47 +96,66 @@ void initSensors()
 
 void readPressure(struct SensorData *data)
 {
+  static uint64_t lastRead = micros();
   uint8_t buffer[4]  = {0};
   switch(sensor_pressure)
   {
     case MPRLS:
-      //request status byte
-      Wire.requestFrom(MPRLS_ADDR,4);
-      for(uint8_t i = 0; i<4; i++) buffer[i] = Wire.read();
-      //any errors? set pressure value to 512, convert otherwise...
-      if(buffer[0] & MPRLS_STATUS_BUSY)
+      //according to datasheet, minimum sample rate is 161Sps -> ~6250us
+      if(abs((long int)(micros() - lastRead)) > 6250)
       {
-        //sensor is busy, cannot read data
-        return;
-      }
-      if((buffer[0] & MPRLS_STATUS_MATHSAT) || (buffer[0] & MPRLS_STATUS_FAILED))
-      {
-        data->pressure = 512;
-        //Serial.println("MPRLS:error");
-      } else {
-        uint32_t rawval = (uint32_t(buffer[1]) << 16) | (uint32_t(buffer[2]) << 8) | (uint32_t(buffer[3]));
-        rawval = rawval / MPRLS_DIVIDER;
-        //only procede if value != 0
-        if(rawval)
+        lastRead = micros();
+        //request status byte
+        Wire.requestFrom(MPRLS_ADDR,4);
+        for(uint8_t i = 0; i<4; i++) buffer[i] = Wire.read();
+        //any errors? set pressure value to 512, convert otherwise...
+        if(buffer[0] & MPRLS_STATUS_BUSY)
         {
-          //calibrate if requested
-          if(data->calib_now)
+          //sensor is busy, cannot read data
+          #ifdef DEBUG_OUTPUT_SENSORS
+            Serial.println("MPRLS: busy");
+          #endif
+          return;
+        }
+        if((buffer[0] & MPRLS_STATUS_MATHSAT) || (buffer[0] & MPRLS_STATUS_FAILED))
+        {
+          //sensor failed or saturated
+          #ifdef DEBUG_OUTPUT_SENSORS
+            Serial.println("MPRLS:failed or saturated");
+          #endif
+          return;
+        } else {
+          uint32_t rawval = (uint32_t(buffer[1]) << 16) | (uint32_t(buffer[2]) << 8) | (uint32_t(buffer[3]));
+          //only procede if value != 0
+          if(rawval)
           {
-            data->cpressure = rawval;
-          } else {
-            //base value is 512; calculate difference between current & calibrated raw value
-            data->pressure = 512 + (rawval - data->cpressure);
+            //calibrate if requested
+            if(data->calib_now)
+            {
+              #ifdef DEBUG_OUTPUT_SENSORS
+                Serial.print("MPRLS: calib: ");
+                Serial.println(rawval);
+              #endif
+              data->cpressure = rawval;
+            } else {
+              //base value is 512; calculate difference between current & calibrated raw value.
+              int32_t diff = ((int32_t)rawval - (int32_t)data->cpressure) / MPRLS_DIVIDER;
+              //clamp to 0
+              if(diff < -512) data->pressure = 0;
+              else data->pressure = 512 + diff;
+              //clamp value
+              if(data->pressure > 1023) data->pressure = 1023;
+            }
           }
         }
+        
+        //trigger new conversion
+        Wire.beginTransmission(MPRLS_ADDR);
+        Wire.write(0xAA);
+        Wire.write(0);
+        Wire.write(0);
+        Wire.endTransmission();
       }
-      
-      //trigger new conversion
-      Wire.beginTransmission(MPRLS_ADDR);
-      Wire.write(0xAA);
-      Wire.write(0);
-      Wire.write(0);
-      Wire.endTransmission();
-      
       break;
     case MPXV:
     default:

@@ -3192,7 +3192,7 @@
     (property "Reference" "R7" (id 0) (at 248.92 101.6 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
-    (property "Value" "220R" (id 1) (at 249.555 103.505 0)
+    (property "Value" "4k7" (id 1) (at 249.555 103.505 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
     (property "Footprint" "Resistor_THT:R_Axial_DIN0204_L3.6mm_D1.6mm_P1.90mm_Vertical" (id 2) (at 253.238 104.14 90)
@@ -3471,7 +3471,7 @@
     (property "Reference" "R8" (id 0) (at 278.765 101.6 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
-    (property "Value" "220R" (id 1) (at 281.305 103.505 0)
+    (property "Value" "4k7" (id 1) (at 281.305 103.505 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
     (property "Footprint" "Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder" (id 2) (at 276.733 104.14 90)
@@ -4269,10 +4269,10 @@
       (reference "R2") (unit 1) (value "24R") (footprint "Resistor_THT:R_Axial_DIN0204_L3.6mm_D1.6mm_P1.90mm_Vertical")
     )
     (path "/2ae21f0b-9554-4164-8d49-a2a787e722ed"
-      (reference "R7") (unit 1) (value "220R") (footprint "Resistor_THT:R_Axial_DIN0204_L3.6mm_D1.6mm_P1.90mm_Vertical")
+      (reference "R7") (unit 1) (value "4k7") (footprint "Resistor_THT:R_Axial_DIN0204_L3.6mm_D1.6mm_P1.90mm_Vertical")
     )
     (path "/7279863c-ff9f-41e2-868a-ae542af3f597"
-      (reference "R8") (unit 1) (value "220R") (footprint "Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder")
+      (reference "R8") (unit 1) (value "4k7") (footprint "Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder")
     )
     (path "/8e758580-4e94-406e-8429-b56bfa78eb75"
       (reference "R9") (unit 1) (value "24R") (footprint "Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder")

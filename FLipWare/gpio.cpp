@@ -49,9 +49,9 @@ void updateLeds()
   uint8_t b = 0;
 
 	if (blinkCount == 0) {
-	  if ((actSlot + 1) & 1) r = 255;
-	  if ((actSlot + 1) & 2) g = 255;
-	  if ((actSlot + 1) & 4) b = 255;
+	  if ((actSlot + 1) & 1) g = 255;
+	  if ((actSlot + 1) & 2) b = 255;
+	  if ((actSlot + 1) & 4) r = 255;
 	} else {
     if (blinkTime == 0)
     {

@@ -1727,7 +1727,7 @@
       (net 27 "unconnected-(U1-Pad7)") (pinfunction "NC") (pintype "no_connect") (tstamp b4a5d36a-0377-4ca2-b4ac-736308b88a8f))
     (pad "8" smd rect locked (at -8.382 3.81 180) (size 2.54 1.524) (layers "F.Cu" "F.Paste" "F.Mask")
       (net 28 "unconnected-(U1-Pad8)") (pinfunction "NC") (pintype "no_connect") (tstamp ac9bcce0-0d04-4f54-93ee-b29a82da0bdd))
-    (model "${KIPRJMOD}/step/MPXV7007GP.wrl"
+    (model "${KIPRJMOD}/step/MPXV7007GP.wrl" hide
       (offset (xyz 5.75 -6.25 0))
       (scale (xyz 0.38 0.38 0.35))
       (rotate (xyz 0 0 -90))
@@ -5037,10 +5037,15 @@
       (net 4 "GND") (pinfunction "Pin_4") (pintype "passive") (tstamp 87d7ea06-9235-4ae4-97d9-1bb0badd21d6))
     (pad "5" thru_hole oval (at 0 0 90) (size 1.7 1.7) (drill 1) (layers *.Cu *.Mask)
       (net 23 "/SDA") (pinfunction "Pin_5") (pintype "passive") (tstamp 34474462-06d4-461d-a326-b9475b033985))
-    (model "${KICAD6_3DMODEL_DIR}/Connector_PinHeader_2.54mm.3dshapes/PinHeader_1x05_P2.54mm_Horizontal.wrl"
+    (model "${KICAD6_3DMODEL_DIR}/Connector_PinHeader_2.54mm.3dshapes/PinHeader_1x05_P2.54mm_Horizontal.wrl" hide
       (offset (xyz 0 0 0))
       (scale (xyz 1 1 1))
       (rotate (xyz 0 0 0))
+    )
+    (model "${KIPRJMOD}/step/22-05-2051.wrl"
+      (offset (xyz 0 -5 1))
+      (scale (xyz 0.39 0.39 0.39))
+      (rotate (xyz -90 0 -90))
     )
   )
 

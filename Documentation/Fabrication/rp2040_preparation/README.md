@@ -96,4 +96,4 @@ Not available, if procedure is followed, the software is flashed correctly:
 
 ## Documentation
 
-For each produced batch, fill out one document __template_arduino_init_production.ots__ and save it as: `mouthpiece_arduino_init_<date>.ods`(e.g.: mouthpiece_arduino_init_20221118.ods)
+For each produced batch, fill out one document __template_arduino_init_production.ots__ and save it as: `arduino_init_<date>.ods`(e.g.: arduino_init_20221118.ods)

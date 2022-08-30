@@ -38,6 +38,9 @@ force_type_t sensor_force = NO_FORCE;
 
 void initSensors()
 {
+  #ifdef DEBUG_OUTPUT_SENSORS
+    delay(2000);
+  #endif
   //detect if there is an MPRLS sensor connected to I2C (Wire)
   Wire.beginTransmission(MPRLS_ADDR);
   uint8_t result = Wire.endTransmission();
@@ -166,24 +169,29 @@ void readPressure(struct SensorData *data)
 
 void readForce(struct SensorData *data)
 {
+  static bool channel1 = true;
+  
   switch(sensor_force)
   {
     case NAU7802:
-      //TODO: should we interleave the reading or wait here for both?
+      //interleave between channel 1 & 2
+      if(channel1) {
+        //wait for available data on channel 1 & read to "up"
+        while (!nau.available()) delayMicroseconds(500);
+        data->up = nau.read();
+        //switch to channel 2
+        nau.setChannel(NAU7802_CHANNEL2);
+        channel1 = false;
+      } else {
       
-      //wait for available data on channel 1 & read to "up"
-      while (!nau.available()) delayMicroseconds(500);
-      data->up = nau.read();
+        //wait for available data on channel 2 & read to "left"
+        while (!nau.available()) delayMicroseconds(500);
+        data->left = nau.read();
       
-      //switch to channel 2
-      nau.setChannel(NAU7802_CHANNEL2);
-      
-      //wait for available data on channel 2 & read to "left"
-      while (!nau.available()) delayMicroseconds(500);
-      data->left = nau.read();
-      
-      //switch back to channel 1
-      nau.setChannel(NAU7802_CHANNEL1);
+        //switch back to channel 1
+        nau.setChannel(NAU7802_CHANNEL1);
+        channel1 = true;
+      }
       break;
     case NO_FORCE:
     default:

@@ -70,6 +70,7 @@
 //#define DEBUG_OUTPUT_IR      	 // enable infrared.cpp debugging, showing whats happening on IR recv/send
 //#define DEBUG_OUTPUT_SENSORS 	 // enable sensors.cpp debugging, showing whats happening on sensor reading & init
 //#define DEBUG_DELAY_STARTUP 	 // enable a 3s delay after Serial.begin and before all the other stuff.
+#define DEBUG_NO_TONE           // disable tones, to avoid annoying other passengers when programming on the train :-)
 
 #define BUILD_FOR_RP2040        // enable a build for RP2040. There are differences in eeprom & infrared handling.
 
@@ -185,6 +186,9 @@ typedef char* uint_farptr_t_FM;
 #endif
 #ifdef DEBUG_DELAY_STARTUP
   #warning "DELAY_STARTUP is active, do not release this way!"
+#endif
+#ifdef DEBUG_NO_TONE
+  #warning "DEBUG_NO_TONE is defined, do not release this way!"
 #endif
 
 #endif

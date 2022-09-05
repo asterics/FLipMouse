@@ -62,7 +62,7 @@ const struct SlotSettings defaultSlotSettings = {      // default slotSettings v
   "mouse",                          // initial slot name
   0,                                // initial keystringbuffer length
   1,                                // stickMode: Mouse cursor movement active
-  40, 40, 20, 20, 50, 20,           // accx, accy, deadzone x, deadzone y, maxspeed, acceleration time
+  40, 40, 20, 20, 100, 100, 50, 20, // accx, accy, deadzone x, deadzone y, divider x, divider y, maxspeed, acceleration time
   400, 600, 3,                      // threshold sip, threshold puff, wheel step,
   800, 10,                          // threshold strong puff, threshold strong sip
   40, 20, 40, 20 ,                  // gain and range drift compenstation( vertical, horizontal)

@@ -70,7 +70,7 @@
 //#define DEBUG_OUTPUT_IR      	 // enable infrared.cpp debugging, showing whats happening on IR recv/send
 //#define DEBUG_OUTPUT_SENSORS 	 // enable sensors.cpp debugging, showing whats happening on sensor reading & init
 //#define DEBUG_DELAY_STARTUP 	 // enable a 3s delay after Serial.begin and before all the other stuff.
-#define DEBUG_NO_TONE           // disable tones, to avoid annoying other passengers when programming on the train :-)
+//#define DEBUG_NO_TONE          // disable tones, to avoid annoying other passengers when programming on the train :-)
 
 #define BUILD_FOR_RP2040        // enable a build for RP2040. There are differences in eeprom & infrared handling.
 
@@ -110,6 +110,8 @@ struct SlotSettings {
   uint8_t  ay;     // acceleration y
   int16_t  dx;     // deadzone x
   int16_t  dy;     // deadzone y
+  int16_t  dividerLeft; // divider for X axis
+  int16_t  dividerUp;   // divider for Y axis
   uint16_t ms;     // maximum speed
   uint16_t ac;     // acceleration time
   uint16_t ts;     // threshold sip

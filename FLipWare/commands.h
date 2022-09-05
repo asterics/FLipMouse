@@ -110,6 +110,8 @@
           AT AY <uint>    acceleration y-axis  (0-100)
           AT DX <uint>    deadzone x-axis  (0-1000)
           AT DY <uint>    deadzone y-axis  (0-1000)
+          AT CX <uint>    divider for x-axis raw values (0-5000)
+          AT CY <uint>    divider for y-axis raw values (0-5000)
           AT MS <uint>    maximum speed  (0-100)
           AT AC <uint>    acceleration time (0-100)
           AT MA <string>  execute a command macro containing multiple commands (separated by semicolon)
@@ -186,7 +188,7 @@ enum atCommands {
   CMD_AY, CMD_DX, CMD_DY, CMD_TS, CMD_TP, CMD_SP, CMD_SS, CMD_GV, CMD_RV, CMD_GH, CMD_RH, CMD_IR,
   CMD_IP, CMD_IC, CMD_IL, CMD_JX, CMD_JY, CMD_JZ, CMD_JT, CMD_JS, CMD_JP, CMD_JR, CMD_JH,
   CMD_IT, CMD_KH, CMD_MS, CMD_AC, CMD_MA, CMD_WA, CMD_RO, CMD_IW, CMD_BT, CMD_HL, CMD_HR, CMD_HM,
-  CMD_TL, CMD_TR, CMD_TM, CMD_KT, CMD_IH, CMD_IS, CMD_UG, CMD_BC, CMD_KL, CMD_BR,
+  CMD_TL, CMD_TR, CMD_TM, CMD_KT, CMD_IH, CMD_IS, CMD_UG, CMD_BC, CMD_KL, CMD_BR, CMD_CX, CMD_CY,
   NUM_COMMANDS
 };
 

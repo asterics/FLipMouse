@@ -54,7 +54,8 @@ const struct atCommandType atCommands[] PROGMEM = {
   {"IW"  , PARTYPE_NONE },  {"BT"  , PARTYPE_UINT }, {"HL"  , PARTYPE_NONE }, {"HR"  , PARTYPE_NONE },
   {"HM"  , PARTYPE_NONE },  {"TL"  , PARTYPE_NONE }, {"TR"  , PARTYPE_NONE }, {"TM"  , PARTYPE_NONE },
   {"KT"  , PARTYPE_STRING }, {"IH"  , PARTYPE_STRING }, {"IS"  , PARTYPE_NONE }, {"UG", PARTYPE_NONE },
-  {"BC"  , PARTYPE_STRING}, {"KL"  , PARTYPE_STRING }, {"BR"  , PARTYPE_UINT },
+  {"BC"  , PARTYPE_STRING}, {"KL"  , PARTYPE_STRING }, {"BR"  , PARTYPE_UINT },{"CX"  , PARTYPE_UINT },
+  {"CY"  , PARTYPE_UINT },
 };
 
 /**
@@ -334,6 +335,12 @@ void performCommand (uint8_t cmd, int16_t par1, char * keystring, int8_t periodi
       break;
     case CMD_DY:
       slotSettings.dy = par1;
+      break;
+    case CMD_CX:
+      slotSettings.dividerLeft = par1;
+      break;
+    case CMD_CY:
+      slotSettings.dividerUp = par1;
       break;
     case CMD_MS:
       slotSettings.ms = par1;

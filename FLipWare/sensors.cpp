@@ -180,7 +180,8 @@ void readForce(struct SensorData *data)
   switch(sensor_force)
   {
     case NAU7802:
-      if(abs((long int)(millis() - lastRead)) > 5)
+      //every 10ms one channel reading -> 20ms for both channels -> 50Hz update rate
+      if(abs((long int)(millis() - lastRead)) > 10)
       {
         lastRead = millis();
         //interleave between channel 1 & 2
@@ -188,30 +189,25 @@ void readForce(struct SensorData *data)
           //wait for available data on channel 1 & read to "up"
           if(!nau.available()) return;
           data->left = nau.read() / slotSettings.dividerLeft;
+          if(data->left > 1023) data->left = 1023;
+          if(data->left < -1023) data->left = -1023;
+          data->right = 1024-data->left;
           //switch to channel 2
           nau.setChannel(NAU7802_CHANNEL2);
           nau.calibrate(NAU7802_CALMOD_OFFSET);
           nau.calibrate(NAU7802_CALMOD_GAIN);
-          //flush 5 readings
-          /*for (uint8_t i=0; i<5; i++) {
-            while (! nau.available()) delay(1);
-            nau.read();
-          }*/
           channel1 = false;
         } else {
           //wait for available data on channel 2 & read to "left"
           if(!nau.available()) return;
           data->up = nau.read() / slotSettings.dividerUp;
-        
+          if(data->up > 1023) data->up = 1023;
+          if(data->up < -1023) data->up = -1023;
+          data->down = 1024-data->up;
           //switch back to channel 1
           nau.setChannel(NAU7802_CHANNEL1);
           nau.calibrate(NAU7802_CALMOD_OFFSET);
           nau.calibrate(NAU7802_CALMOD_GAIN);
-          //flush 5 readings
-          /*for (uint8_t i=0; i<5; i++) {
-            while (! nau.available()) delay(1);
-            nau.read();
-          }*/
           channel1 = true;
         }
       }

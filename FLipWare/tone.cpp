@@ -14,7 +14,7 @@
 #include "tone.h"
 
 /**
-   static variables for tone singal generation
+   static variables for tone signal generation
 */
 uint16_t toneHeight;
 uint16_t toneOnTime;
@@ -26,10 +26,6 @@ void UpdateTones()
 {
   static uint16_t toneState = 0;
   static uint16_t cnt = 0;
-  
-  #ifdef DEBUG_NO_TONE
-  return;
-  #else
 
   if (!toneCount) return;
 
@@ -55,9 +51,6 @@ void makeTone(uint8_t kind, uint8_t param)
 {
   uint8_t tonePin = TONE_PIN;
 
-  #ifdef DEBUG_NO_TONE
-  return;
-  #else
   switch (kind) {
     case TONE_ENTER_STRONGPUFF:
       tone(tonePin, 400, 200);

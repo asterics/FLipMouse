@@ -23,7 +23,7 @@
         SW-requirements:
                   arduino-pico core (https://github.com/earlephilhower/arduino-pico), installable via board manager
                   Adafruit Neopixel library, installable via library manager
-                  https://github.com/benjaminaigner/Adafruit_NAU7802 - TODO: create a PR to have channel changes upstream
+                  https://github.com/benjaminaigner/Adafruit_NAU7802
                   SSD1306Ascii-library by Bill Greiman, see https://github.com/greiman/SSD1306Ascii
                   Arduino settings: "Flash Size: 15MB Sketch, 1MB FS"
 

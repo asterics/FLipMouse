@@ -150,6 +150,7 @@ void setup() {
   Serial.print(moduleName); Serial.println(" ready !");
 #endif
   lastInteractionUpdate = millis();  // get first timestamp
+  sensorData.calib_now=500;
 }
 
 /**
@@ -183,14 +184,11 @@ void loop() {
   // apply rotation if needed
   switch (slotSettings.ro) {
     int tmp;
-    case 90: tmp = sensorData.up; sensorData.up = sensorData.left; sensorData.left = sensorData.down; 
-             sensorData.down = sensorData.right; sensorData.right = tmp; 
+    case 90:  //TBD
              break;
-    case 180: tmp = sensorData.up; sensorData.up = sensorData.down; sensorData.down = tmp; tmp = sensorData.right; 
-              sensorData.right = sensorData.left; sensorData.left = tmp; 
+    case 180: //TBD
               break;
-    case 270: tmp = sensorData.up; sensorData.up = sensorData.right; sensorData.right = sensorData.down; 
-              sensorData.down = sensorData.left; sensorData.left = tmp; 
+    case 270: //TBD
               break;
   }
 
@@ -198,14 +196,9 @@ void loop() {
   if (StandAloneMode && (millis() >= lastInteractionUpdate + UPDATE_INTERVAL))  {
     lastInteractionUpdate = millis();
     
-    // apply calibration and drift correction
+    // apply calibration
     if (sensorData.calib_now)
-      applyCalibration();              
-    else  {   // no new calibration, use current values for x and y offset !
-      sensorData.xRaw = (sensorData.left - sensorData.right) - sensorData.cx;
-      sensorData.yRaw = (sensorData.up - sensorData.down) - sensorData.cy;
-      applyDriftCorrection();
-    } 
+      applyCalibration();
 
     // calculate angular direction and force
     sensorData.forceRaw = __ieee754_sqrtf(sensorData.xRaw * sensorData.xRaw + sensorData.yRaw * sensorData.yRaw);
@@ -239,52 +232,17 @@ void loop() {
 */
 void applyCalibration() 
 {
-  sensorData.xRaw=sensorData.yRaw=0;
   sensorData.calib_now--;           // wait for calibration moment
   if (sensorData.calib_now == 0) {  // calibrate now !! get new offset values
-    slotSettings.cx = (sensorData.left - sensorData.right);
-    slotSettings.cy = (sensorData.up - sensorData.down);
+    slotSettings.cx += sensorData.xRaw;
+    slotSettings.cy += sensorData.yRaw;
     sensorData.cx = slotSettings.cx;
     sensorData.cy = slotSettings.cy;
-    sensorData.xLocalMax = 0; sensorData.yLocalMax = 0;
+  } else {
+    sensorData.xRaw=0;
+    sensorData.yRaw=0;
   }
 }
-
-
-/**
-   @name applyDriftCorrection
-   @brief calculates and applies drift correction values for FSR x and y values (in sensorData struct)
-   @return none
-*/
-void applyDriftCorrection()
-{
-  // apply drift correction
-  if (((sensorData.xRaw < 0) && (sensorData.xLocalMax > 0)) || ((sensorData.xRaw > 0) && (sensorData.xLocalMax < 0)))  
-     sensorData.xLocalMax = 0;
-  if (abs(sensorData.xRaw) > abs(sensorData.xLocalMax)) {
-    sensorData.xLocalMax = sensorData.xRaw;
-    //Serial.print("xLocalMax=");
-    //Serial.println(xLocalMax);
-  }
-  if (sensorData.xLocalMax > slotSettings.rh) sensorData.xLocalMax = slotSettings.rh;
-  if (sensorData.xLocalMax < -slotSettings.rh) sensorData.xLocalMax = -slotSettings.rh;
-
-  if (((sensorData.yRaw < 0) && (sensorData.yLocalMax > 0)) || ((sensorData.yRaw > 0) && (sensorData.yLocalMax < 0)))
-    sensorData.yLocalMax = 0;
-  if (abs(sensorData.yRaw) > abs(sensorData.yLocalMax)) {
-    sensorData.yLocalMax = sensorData.yRaw;
-    //Serial.print("yLocalMax=");
-    //Serial.println(yLocalMax);
-  }
-  if (sensorData.yLocalMax > slotSettings.rv) sensorData.yLocalMax = slotSettings.rv;
-  if (sensorData.yLocalMax < -slotSettings.rv) sensorData.yLocalMax = -slotSettings.rv;
-
-  sensorData.xDriftComp = sensorData.xLocalMax * ((float)slotSettings.gh / 250);
-  sensorData.yDriftComp = sensorData.yLocalMax * ((float)slotSettings.gv / 250);
-  sensorData.xRaw -= sensorData.xDriftComp;
-  sensorData.yRaw -= sensorData.yDriftComp;
-}
-
 
 /**
    @name applyDeadzone

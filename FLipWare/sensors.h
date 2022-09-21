@@ -18,8 +18,14 @@
 //MPRLS pressure sensor is I2C
 #include "Wire.h"
 
-//NAU7802 library
+#include <LoadcellSensor.h>
+
+//NAU7802 library (Benjamin Aigner's fork with channel change feature)
 #include <Adafruit_NAU7802.h>
+
+
+/** Data ready pin of NAU chip */
+#define DRDY_PIN        28
 
 /** Analog sensor input if a analog pressure sensor is used */
 #define PRESSURE_SENSOR_PIN A3

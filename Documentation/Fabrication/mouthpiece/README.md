@@ -42,6 +42,7 @@ __Note: Material will be referenced in square brackets: []__
 | 2    | Miter saw              | DIY-store                              | ![Mitre saw](./img/mitresaw.jpg)                             |
 | 3    | Heat gun               | DIY-store                              | ![A heat gun in an original case with different accessories](./img/heatgun.jpg) |
 | 4    | Mouthpiece holder      | 3D printed, .stl file in this folder.  | ![Holding tool with 15 places for Luer Lock adapters and 2 holes to screw the holder to a surface](./img/holder.png) |
+| 5    | Sand paper, 240grit    | DIY-store                              |                                                              |
 
 __Note: Tools will be referenced in curly brackets: {}__
 
@@ -52,7 +53,7 @@ __Cut the acryllic pipe:__
 
 1. Adjust the mitre saw _{2}_ to the necessary length: 50, 100, 120 or 150mm
 2. Cut as many pipes _[3]_ as you want to produce
-3. Use the heat gun _{3}_ at ~120°C and heat up both ends for ~10s (removing the burr) (TBA: give exact values here)
+3. Use the heat gun _{3}_ at **500°C** and heat up both ends for ~**5s** (removing the burr)
 
 
 
@@ -79,7 +80,8 @@ __Glueing:__
 
 __Finalize:__
 
-1. Use the heat gun _{3}_ at ~120°C and heat up the top for ~30s (TBA: exact value) to have rounded edges
+1. Us the sand paper _{5}_ to make a 45° / 1mm chamfer on the outside of the mouthpiece; remove any burr inside the acryllic pipe (either with sand paper, a big drill with ~10mm or a countersunk head)
+1. Use the heat gun _{3}_ at ~500°C and heat up the top for ~5 to have rounded edges
 2. Put a filter _[4]_ into the acryllic pipe
 3. TBA: how to mark the mouthpieces with a chargenumber?
 4. Unscrew the luer locks, the female luer lock can be put into the construction kit.

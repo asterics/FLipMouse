@@ -82,7 +82,7 @@ struct SensorData sensorData {
   .dir=0,
   .autoMoveX=0, .autoMoveY=0,
   .up=0, .down=0, .left=0, .right=0,
-  .calib_now=50,    // calibrate zeropoint right at startup !
+  .calib_now=100,    // calibrate zeropoint right at startup !
   .cx=0, .cy=0, .cpressure=0,
   .xDriftComp=0, .yDriftComp=0,
   .xLocalMax=0, .yLocalMax=0
@@ -97,14 +97,12 @@ uint8_t addonUpgrade = BTMODULE_UPGRADE_IDLE; // if not "idle": we are upgrading
 
 
 // forward declaration of functions for sensor data processing
-void applyCalibration(); 
-void applyDriftCorrection();
 void applyDeadzone();
 
 
 /**
    @name setup
-   @brief setup function, program execution starts here
+   @brief setup function, program execution of core1 starts here
    @return none
 */
 void setup() {
@@ -120,13 +118,8 @@ void setup() {
   #ifdef DEBUG_DELAY_STARTUP
     delay(3000);  // allow some time for serial interface to come up
   #endif
-
-
-  Wire.begin();
-  Wire.setClock(400000);  // use 400kHz I2C clock
-
+  
   initGPIO();
-  initSensors();
   initIR();
 
   initButtons();
@@ -150,16 +143,57 @@ void setup() {
   Serial.print(moduleName); Serial.println(" ready !");
 #endif
   lastInteractionUpdate = millis();  // get first timestamp
-  sensorData.calib_now=500;
+
 }
 
 /**
+   @name setup1
+   @brief setup1 function, program execution of core2 starts here
+   @return none
+*/
+void setup1() {
+
+  Wire.begin();
+  Wire.setClock(400000);  // use 400kHz I2C clock
+  initSensors();
+}
+
+/**
+   @name loop1
+   @brief loop1 function, periodically called from core2 after setup1()
+   @return none
+*/
+void loop1() {
+  static unsigned long lastInteractionUpdate1=0;     
+  static int first_calib=1;
+	
+  if (millis() >= lastInteractionUpdate1 + UPDATE_INTERVAL)  {
+    lastInteractionUpdate1 = millis();
+
+    if (StandAloneMode) {
+
+      // update calibration counter
+      if (sensorData.calib_now>0) sensorData.calib_now--;
+      else if (first_calib) {sensorData.calib_now=200;first_calib=0;}  // TBD
+
+      // get current sensor values
+      readPressure(&sensorData);
+      readForce(&sensorData);
+      if (sensorData.calib_now) {sensorData.xRaw=sensorData.yRaw=0;}
+      
+    }
+  }
+}
+
+
+
+/**
    @name loop
-   @brief loop function, periodically called after setup()
+   @brief loop function, periodically called from core1 after setup()
    @return none
 */
 void loop() {
-	
+
   //check if we should go into addon upgrade mode
 	if(addonUpgrade != BTMODULE_UPGRADE_IDLE) {
     performAddonUpgrade();
@@ -177,72 +211,50 @@ void loop() {
     Serial.write(Serial_AUX.read());
   }
 
-  // get current sensor values
-  readPressure(&sensorData);
-  readForce(&sensorData);
-
-  // apply rotation if needed
-  switch (slotSettings.ro) {
-    int tmp;
-    case 90:  //TBD
-             break;
-    case 180: //TBD
-              break;
-    case 270: //TBD
-              break;
-  }
-
   // perform periodic updates  
-  if (StandAloneMode && (millis() >= lastInteractionUpdate + UPDATE_INTERVAL))  {
+  if (millis() >= lastInteractionUpdate + UPDATE_INTERVAL)  {
     lastInteractionUpdate = millis();
-    
-    // apply calibration
-    if (sensorData.calib_now)
-      applyCalibration();
 
-    // calculate angular direction and force
-    sensorData.forceRaw = __ieee754_sqrtf(sensorData.xRaw * sensorData.xRaw + sensorData.yRaw * sensorData.yRaw);
-    if (sensorData.forceRaw !=0) {
-      sensorData.angle = atan2f ((float)sensorData.yRaw / sensorData.forceRaw, (float)sensorData.xRaw / sensorData.forceRaw );
-      
-      // get 8 directions
-      sensorData.dir=(180+22+(int)(sensorData.angle*57.29578))/45+1;  // translate rad to deg and make 8 sections
-      if (sensorData.dir>8) sensorData.dir=1;  
-    }
+    if (StandAloneMode) {
 
-    // calculate updated x/y/force values according to deadzone
-    applyDeadzone();
 
-    handleUserInteraction();  // handle all mouse / joystick / button activities
-
-    reportValues();     // send live data to serial
-    updateLeds();
-    UpdateTones();
-  }
-
-  if (CimMode) {
-    handleCimMode();   // create periodic reports if running in AsTeRICS CIM compatibility mode
-  }
-}
-
-/**
-   @name applyCalibration
-   @brief gets calibration coordinates (cx and cy in slotSettings struct) if caribration time reaches 0
-   @return none
+/*
+      // apply rotation if needed
+      switch (slotSettings.ro) {
+        int32_t tmp;
+        case 90: tmp=sensorData.xRaw;sensorData.xRaw=sensorData.yRaw;sensorData.yRaw=tmp;
+                break;
+        case 180: sensorData.xRaw=-sensorData.xRaw;sensorData.yRaw=-sensorData.yRaw;
+                  break;
+        case 270: tmp=sensorData.xRaw;sensorData.xRaw=-sensorData.yRaw;sensorData.yRaw=tmp;
+                  break;
+      }
 */
-void applyCalibration() 
-{
-  sensorData.calib_now--;           // wait for calibration moment
-  if (sensorData.calib_now == 0) {  // calibrate now !! get new offset values
-    slotSettings.cx += sensorData.xRaw;
-    slotSettings.cy += sensorData.yRaw;
-    sensorData.cx = slotSettings.cx;
-    sensorData.cy = slotSettings.cy;
-  } else {
-    sensorData.xRaw=0;
-    sensorData.yRaw=0;
+      // calculate angular direction and force
+      sensorData.forceRaw = __ieee754_sqrtf(sensorData.xRaw * sensorData.xRaw + sensorData.yRaw * sensorData.yRaw);
+      if (sensorData.forceRaw !=0) {
+        sensorData.angle = atan2f ((float)sensorData.yRaw / sensorData.forceRaw, (float)sensorData.xRaw / sensorData.forceRaw );
+        
+        // get 8 directions
+        sensorData.dir=(180+22+(int)(sensorData.angle*57.29578))/45+1;  // translate rad to deg and make 8 sections
+        if (sensorData.dir>8) sensorData.dir=1;  
+      }
+
+      // calculate updated x/y/force values according to deadzone
+      applyDeadzone();
+
+      handleUserInteraction();  // handle all mouse / joystick / button activities
+
+      reportValues();     // send live data to serial
+      updateLeds();
+      UpdateTones();
+    }
+    if (CimMode) {
+      handleCimMode();   // create periodic reports if running in AsTeRICS CIM compatibility mode
+    }
   }
 }
+
 
 /**
    @name applyDeadzone

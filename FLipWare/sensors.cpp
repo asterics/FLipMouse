@@ -99,16 +99,16 @@ void getValuesISR() {
   static int32_t xChange=0,yChange=0;
   
   if (channel==1) {
-      xChange=(nau.read()-nau_x)/2;
+      xChange=((nau.read()-nau_x))/2;
       nau_x+=xChange; nau_y+=yChange;
       nau.setChannel(NAU7802_CHANNEL2);
-      // getValueMPRLS();
+      getValueMPRLS();
 
       channel=2;
       newData=1;
   }
   else {
-      yChange=(nau.read()-nau_y)/2;
+      yChange=((nau.read()-nau_y))/2;
       nau_x+=xChange; nau_y+=yChange;
       nau.setChannel(NAU7802_CHANNEL1);
       channel=1;
@@ -120,14 +120,11 @@ void getValuesISR() {
 void initSensors()
 {
 
-  /*
   //detect if there is an MPRLS sensor connected to I2C (Wire)
   Wire.beginTransmission(MPRLS_ADDR);
   uint8_t result = Wire.endTransmission();
   //we found the MPRLS sensor, start the initialization
   if(result == 0) sensor_pressure = MPRLS;
-  */
-
 
   //NAU7802 init
   if (!nau.begin()) {
@@ -162,16 +159,12 @@ void readPressure(struct SensorData *data)
 {
   switch(sensor_pressure)
   {
-    case MPRLS:    
-
-      data->pressure=512;   // TBD...
-      break;
-      
+    case MPRLS:          
       //only procede if value != 0
       if(mprls_rawval)
       {
         //calibrate if requested
-        if(data->calib_now)
+        if(data->calib_now==1)
         {
           #ifdef DEBUG_OUTPUT_SENSORS
             Serial.print("MPRLS: calib: ");
@@ -182,7 +175,7 @@ void readPressure(struct SensorData *data)
           //base value is 512; calculate difference between current & calibrated raw value.
           int32_t diff = ((int32_t)mprls_rawval - (int32_t)data->cpressure) / MPRLS_DIVIDER;
           //clamp to 0
-          if(diff < -512) data->pressure = 0;
+          if(diff < -512) data->pressure = -512;
           else data->pressure = 512 + diff;
           //clamp value
           if(data->pressure > 1023) data->pressure = 1023;
@@ -201,15 +194,25 @@ void readPressure(struct SensorData *data)
 
 void readForce(struct SensorData *data)
 {
-  static uint64_t lastRead = millis();
+  static int32_t currentX=0,currentY=0;
   
   switch(sensor_force)
   {
     case NAU7802:
-          if (newData) {
+        if (newData) {
             newData=0;
-            data->xRaw = (XS.process(nau_x) / 200 ) - data->cx; 
-            data->yRaw = (YS.process(nau_y) / 200) - data->cy;
+            currentX=XS.process(nau_x) / 200;
+            currentY=YS.process(nau_y) / 200;
+        }
+        data->xRaw =  currentX - data->cx;
+        data->yRaw =  currentY - data->cy;
+
+        if(data->calib_now==1) {
+          XS.calib();YS.calib();
+          data->cx += data->xRaw;
+          data->cy += data->yRaw;
+          slotSettings.cx = data->cx;
+          slotSettings.cy = data->cy;
         }
         break;
     case NO_FORCE:

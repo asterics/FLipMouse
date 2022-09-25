@@ -62,7 +62,7 @@ const struct SlotSettings defaultSlotSettings = {      // default slotSettings v
   "mouse",                          // initial slot name
   0,                                // initial keystringbuffer length
   1,                                // stickMode: Mouse cursor movement active
-  40, 40, 20, 20, 100, 100, 50, 20, // accx, accy, deadzone x, deadzone y, divider x, divider y, maxspeed, acceleration time
+  40, 40, 20, 20, 50, 20,           // accx, accy, deadzone x, deadzone y, maxspeed, acceleration time
   400, 600, 3,                      // threshold sip, threshold puff, wheel step,
   800, 10,                          // threshold strong puff, threshold strong sip
   40, 20, 40, 20 ,                  // gain and range drift compenstation( vertical, horizontal)
@@ -82,7 +82,7 @@ struct SensorData sensorData {
   .dir=0,
   .autoMoveX=0, .autoMoveY=0,
   .up=0, .down=0, .left=0, .right=0,
-  .calib_now=100,    // calibrate zeropoint right at startup !
+  .calib_now=200,    // calibrate sensors ~1000 ms after startup !
   .cx=0, .cy=0, .cpressure=0,
   .xDriftComp=0, .yDriftComp=0,
   .xLocalMax=0, .yLocalMax=0
@@ -110,7 +110,7 @@ void setup() {
   memcpy(&slotSettings,&defaultSlotSettings,sizeof(struct SlotSettings));
 
   //initialise BT module, if available (must be done early!)
-  initBluetooth();
+  // initBluetooth();   //   TBD: find out why this interferes with I2C !?!
 
   // initialize peripherals
   Serial.begin(115200);
@@ -121,14 +121,11 @@ void setup() {
   
   initGPIO();
   initIR();
-
   initButtons();
   initDebouncers();
   init_CIM_frame();  // for AsTeRICS CIM protocol compatibility
-
   initStorage();   // initialize storage if necessary
   readFromEEPROMSlotNumber(0, true); // read slot from first EEPROM slot if available !
-
   initBlink(10,25);  // first signs of life!
 
   // NOTE: changed for RP2040!  TBD: why does setBTName damage the console UART TX ??
@@ -136,8 +133,8 @@ void setup() {
 
   setKeyboardLayout(slotSettings.kbdLayout); //load keyboard layout from slot
   
-  displayInstalled=displayInit(0);   // check if i2c-display connected, if possible: init
-  displayUpdate();
+  // displayInstalled=displayInit(0);   // check if i2c-display connected   TBD: missing i2c core2 synchronisation!
+  // displayUpdate();
 #ifdef DEBUG_OUTPUT_FULL
   Serial.print("Free RAM:");  Serial.println(freeRam());
   Serial.print(moduleName); Serial.println(" ready !");
@@ -148,7 +145,7 @@ void setup() {
 
 /**
    @name setup1
-   @brief setup1 function, program execution of core2 starts here
+   @brief setup1 function, program execution of core2 starts here (for I2C sensor updates)
    @return none
 */
 void setup1() {
@@ -160,29 +157,26 @@ void setup1() {
 
 /**
    @name loop1
-   @brief loop1 function, periodically called from core2 after setup1()
+   @brief loop1 function, periodically called from core2 after setup1(), performs I2C sensor updates
    @return none
 */
 void loop1() {
-  static unsigned long lastInteractionUpdate1=0;     
-  static int first_calib=1;
+  static unsigned long lastUpdate=0;     
 	
-  if (millis() >= lastInteractionUpdate1 + UPDATE_INTERVAL)  {
-    lastInteractionUpdate1 = millis();
+  if (millis() >= lastUpdate + UPDATE_INTERVAL)  {
+    lastUpdate = millis();
 
-    if (StandAloneMode) {
+    // get current sensor values;   TBD: use message queue for sychronized communication with core1!
+    readPressure(&sensorData);
+    readForce(&sensorData);
 
-      // update calibration counter
-      if (sensorData.calib_now>0) sensorData.calib_now--;
-      else if (first_calib) {sensorData.calib_now=200;first_calib=0;}  // TBD
-
-      // get current sensor values
-      readPressure(&sensorData);
-      readForce(&sensorData);
-      if (sensorData.calib_now) {sensorData.xRaw=sensorData.yRaw=0;}
-      
-    }
+    // update calibration counter, bypass sensor values during calibration
+    if (sensorData.calib_now) {
+      sensorData.calib_now--;
+      sensorData.xRaw=sensorData.yRaw=sensorData.pressure=0;
+    }      
   }
+  delay(1);  // core2: sleep a bit ...  
 }
 
 
@@ -217,8 +211,6 @@ void loop() {
 
     if (StandAloneMode) {
 
-
-/*
       // apply rotation if needed
       switch (slotSettings.ro) {
         int32_t tmp;
@@ -226,10 +218,10 @@ void loop() {
                 break;
         case 180: sensorData.xRaw=-sensorData.xRaw;sensorData.yRaw=-sensorData.yRaw;
                   break;
-        case 270: tmp=sensorData.xRaw;sensorData.xRaw=-sensorData.yRaw;sensorData.yRaw=tmp;
+        case 270: tmp=sensorData.xRaw;sensorData.xRaw=sensorData.yRaw;sensorData.yRaw=-tmp;
                   break;
       }
-*/
+
       // calculate angular direction and force
       sensorData.forceRaw = __ieee754_sqrtf(sensorData.xRaw * sensorData.xRaw + sensorData.yRaw * sensorData.yRaw);
       if (sensorData.forceRaw !=0) {
@@ -240,12 +232,9 @@ void loop() {
         if (sensorData.dir>8) sensorData.dir=1;  
       }
 
-      // calculate updated x/y/force values according to deadzone
-      applyDeadzone();
-
+      applyDeadzone();          // calculate updated x/y/force values according to deadzone
       handleUserInteraction();  // handle all mouse / joystick / button activities
-
-      reportValues();     // send live data to serial
+      reportValues();           // send live data to serial
       updateLeds();
       UpdateTones();
     }
@@ -253,6 +242,7 @@ void loop() {
       handleCimMode();   // create periodic reports if running in AsTeRICS CIM compatibility mode
     }
   }
+  delay(1);  // core1: sleep a bit ...  
 }
 
 

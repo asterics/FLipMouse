@@ -99,27 +99,45 @@ void getValuesISR() {
   static int32_t xChange=0,yChange=0;
   
   if (channel==1) {
-      xChange=((nau.read()-nau_x))/2;
-      nau_x+=xChange; nau_y+=yChange;
+      xChange=(XS.process(nau.read())-nau_x)/2;
       nau.setChannel(NAU7802_CHANNEL2);
-      getValueMPRLS();
-
+      nau_x+=xChange; nau_y+=yChange;
       channel=2;
+      getValueMPRLS();
       newData=1;
   }
   else {
-      yChange=((nau.read()-nau_y))/2;
-      nau_x+=xChange; nau_y+=yChange;
+      yChange=(YS.process(nau.read())-nau_y)/2;
       nau.setChannel(NAU7802_CHANNEL1);
+      nau_x+=xChange; nau_y+=yChange;
       channel=1;
+      getValueMPRLS();
       newData=1;
   }
+}
+
+/**************************************************************************/
+/*!
+    @brief  5Hz Lowpass Bessel, 2nd Order (./fiview 25 -i LpBe2/5)
+    @param  val the next incoming signal value
+    @param  buf a pointer to a buffer for working data (2 double values needed)
+    @return  the filtered signal
+*/
+/**************************************************************************/
+double mprlsFilter(double val) {
+   double tmp, fir, iir;
+   double buf[2]={0};
+   tmp= buf[0]; memmove(buf, buf+1, 1*sizeof(double));
+   val *= 0.06378257264840968;
+   iir= val+1.068354407019735*buf[0]-0.3234846976133736*tmp;
+   fir= iir+buf[0]+buf[0]+tmp;
+   buf[1]= iir; val= fir;
+   return val;
 }
 
 
 void initSensors()
 {
-
   //detect if there is an MPRLS sensor connected to I2C (Wire)
   Wire.beginTransmission(MPRLS_ADDR);
   uint8_t result = Wire.endTransmission();
@@ -157,10 +175,12 @@ void initSensors()
 
 void readPressure(struct SensorData *data)
 {
+  static int32_t mprls_filtered=512;
+  
   switch(sensor_pressure)
   {
     case MPRLS:          
-      //only procede if value != 0
+      //only proceed if value != 0
       if(mprls_rawval)
       {
         //calibrate if requested
@@ -170,14 +190,15 @@ void readPressure(struct SensorData *data)
             Serial.print("MPRLS: calib: ");
             Serial.println(mprls_rawval);
           #endif
-          data->cpressure = mprls_rawval;
+          data->cpressure = mprls_filtered;
         } else {
-          //base value is 512; calculate difference between current & calibrated raw value.
-          int32_t diff = ((int32_t)mprls_rawval - (int32_t)data->cpressure) / MPRLS_DIVIDER;
-          //clamp to 0
+          // calculate filtered pressure value, apply offset
+          mprls_filtered=mprlsFilter(mprls_rawval);
+          int32_t diff = ((int32_t)mprls_filtered - (int32_t)data->cpressure) / MPRLS_DIVIDER;
+
+          // center around 512, clamp to 0/1023 (GUI compatibility)
           if(diff < -512) data->pressure = -512;
           else data->pressure = 512 + diff;
-          //clamp value
           if(data->pressure > 1023) data->pressure = 1023;
         }
       }
@@ -199,21 +220,20 @@ void readForce(struct SensorData *data)
   switch(sensor_force)
   {
     case NAU7802:
-        if (newData) {
-            newData=0;
-            currentX=XS.process(nau_x) / 200;
-            currentY=YS.process(nau_y) / 200;
-        }
-        data->xRaw =  currentX - data->cx;
-        data->yRaw =  currentY - data->cy;
 
         if(data->calib_now==1) {
-          XS.calib();YS.calib();
-          data->cx += data->xRaw;
-          data->cy += data->yRaw;
-          slotSettings.cx = data->cx;
-          slotSettings.cy = data->cy;
+          XS.calib();
+          YS.calib();
+          nau_x=nau_y=0;
         }
+
+        if (newData) {
+            newData=0;
+            currentX=nau_x/200;
+            currentY=nau_y/200;
+        }
+        data->xRaw =  currentX;
+        data->yRaw =  currentY;
         break;
     case NO_FORCE:
     default:

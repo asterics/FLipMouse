@@ -110,7 +110,7 @@ void setup() {
   memcpy(&slotSettings,&defaultSlotSettings,sizeof(struct SlotSettings));
 
   //initialise BT module, if available (must be done early!)
-  // initBluetooth();   //   TBD: find out why this interferes with I2C !?!
+  initBluetooth();   //   TBD: find out why this interferes with I2C !?!
 
   // initialize peripherals
   Serial.begin(115200);

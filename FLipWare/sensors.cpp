@@ -62,8 +62,8 @@ void configureNAU() {
 
 void getValueMPRLS() {
   uint8_t buffer[4]  = {0};
-  Wire.requestFrom(MPRLS_ADDR,1);
-  buffer[0] = Wire.read();
+  Wire1.requestFrom(MPRLS_ADDR,1);
+  buffer[0] = Wire1.read();
   //any errors? set pressure value to 512, convert otherwise...
   if(buffer[0] & MPRLS_STATUS_BUSY)
   {
@@ -82,16 +82,16 @@ void getValueMPRLS() {
     return;
   } else {
     //request all 4 bytes
-    Wire.requestFrom(MPRLS_ADDR,4);
-    for(uint8_t i = 0; i<4; i++) buffer[i] = Wire.read();
+    Wire1.requestFrom(MPRLS_ADDR,4);
+    for(uint8_t i = 0; i<4; i++) buffer[i] = Wire1.read();
     mprls_rawval = (uint32_t(buffer[1]) << 16) | (uint32_t(buffer[2]) << 8) | (uint32_t(buffer[3]));
   }
   //trigger new conversion
-  Wire.beginTransmission(MPRLS_ADDR);
-  Wire.write(0xAA);
-  Wire.write(0);
-  Wire.write(0);
-  Wire.endTransmission();
+  Wire1.beginTransmission(MPRLS_ADDR);
+  Wire1.write(0xAA);
+  Wire1.write(0);
+  Wire1.write(0);
+  Wire1.endTransmission();
 }  
 
 
@@ -139,13 +139,13 @@ double mprlsFilter(double val) {
 void initSensors()
 {
   //detect if there is an MPRLS sensor connected to I2C (Wire)
-  Wire.beginTransmission(MPRLS_ADDR);
-  uint8_t result = Wire.endTransmission();
+  Wire1.beginTransmission(MPRLS_ADDR);
+  uint8_t result = Wire1.endTransmission();
   //we found the MPRLS sensor, start the initialization
   if(result == 0) sensor_pressure = MPRLS;
 
   //NAU7802 init
-  if (!nau.begin()) {
+  if (!nau.begin(&Wire1)) {
     Serial.println("SEN: no force sensor found");
     sensor_force = NO_FORCE;
     return;

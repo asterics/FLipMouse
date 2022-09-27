@@ -150,8 +150,8 @@ void setup() {
 */
 void setup1() {
 
-  Wire.begin();
-  Wire.setClock(400000);  // use 400kHz I2C clock
+  Wire1.begin();
+  Wire1.setClock(400000);  // use 400kHz I2C clock
   initSensors();
 }
 

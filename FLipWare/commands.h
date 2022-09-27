@@ -94,7 +94,8 @@
           AT LI           list all saved mode names
           AT NE           next mode will be loaded (wrap around after last slot)
           AT DE <string>  delete slot of given name (deletes all stored slots if no string parameter is given)
-          AT RS           resets FLipMouse and restores default configuration (deletes EEPROM and restores default Slot "mouse")
+          AT RS           resets FLipMouse settings and restores default configuration (deletes EEPROM and restores default Slot "mouse")
+          AT RE           perform a reboot (SW-reset)
           AT NC           no command (idle operation)
           AT BT <uint>    set bluetooth mode, 1=USB only, 2=BT only, 3=both(default)
                           (e.g. AT BT 2 -> send HID commands only via BT if BT-daughter board is available)
@@ -110,8 +111,6 @@
           AT AY <uint>    acceleration y-axis  (0-100)
           AT DX <uint>    deadzone x-axis  (0-1000)
           AT DY <uint>    deadzone y-axis  (0-1000)
-          AT CX <uint>    divider for x-axis raw values (0-5000)
-          AT CY <uint>    divider for y-axis raw values (0-5000)
           AT MS <uint>    maximum speed  (0-100)
           AT AC <uint>    acceleration time (0-100)
           AT MA <string>  execute a command macro containing multiple commands (separated by semicolon)
@@ -138,7 +137,7 @@
           AT IL           lists all stored infrared command names
           AT IT <uint>    set code timeout value for IR Recording (e.g. "AT IT 10" sets 10 milliseconds timeout)
           
-    Addon commands:
+    Bluetooth commands:
      
           AT BC <string>  sends parameter to external UART (mostly ESP32 Bluetooth Addon)
           AT BR <uint>    resets the ESP32 bluetooth module (connected to RP 2040 on ArduinoNanoConnect board)  // NOTE: changed for RP2040! 
@@ -188,7 +187,7 @@ enum atCommands {
   CMD_AY, CMD_DX, CMD_DY, CMD_TS, CMD_TP, CMD_SP, CMD_SS, CMD_GV, CMD_RV, CMD_GH, CMD_RH, CMD_IR,
   CMD_IP, CMD_IC, CMD_IL, CMD_JX, CMD_JY, CMD_JZ, CMD_JT, CMD_JS, CMD_JP, CMD_JR, CMD_JH,
   CMD_IT, CMD_KH, CMD_MS, CMD_AC, CMD_MA, CMD_WA, CMD_RO, CMD_IW, CMD_BT, CMD_HL, CMD_HR, CMD_HM,
-  CMD_TL, CMD_TR, CMD_TM, CMD_KT, CMD_IH, CMD_IS, CMD_UG, CMD_BC, CMD_KL, CMD_BR, CMD_CX, CMD_CY,
+  CMD_TL, CMD_TR, CMD_TM, CMD_KT, CMD_IH, CMD_IS, CMD_UG, CMD_BC, CMD_KL, CMD_BR, CMD_RE, 
   NUM_COMMANDS
 };
 

@@ -44,7 +44,6 @@ void handleUserInteraction()
   static uint8_t puffCount = 0, sipCount = 0;
   int strongDirThreshold;
 
-
   // check physical buttons 1,2 and 3
   for (int i = 0; i < NUMBER_OF_PHYSICAL_BUTTONS; i++) // update button press / release events
   handleButton(i, digitalRead(input_map[i]) == LOW ? 1 : 0);
@@ -59,7 +58,7 @@ void handleUserInteraction()
     }
   } else checkPairing = 0;
   
-  
+
   // check sip/puff activities
   if (sensorData.pressure > previousPressure) pressureRising = 1; else pressureRising = 0;
   if (sensorData.pressure < previousPressure) pressureFalling = 1; else pressureFalling = 0;
@@ -184,8 +183,10 @@ void handleUserInteraction()
     default: break;
   }
 
+
   if (strongSipPuffState == STRONG_MODE_IDLE)
   {
+
     //handle normal sip and puff actions
     switch (puffState)  {
       case SIP_PUFF_STATE_IDLE:
@@ -299,7 +300,7 @@ void acceleratedMouseMove(float accelFactor) {
   float moveValX = sensorData.x * (float)slotSettings.ax * accelFactor;
   float moveValY = sensorData.y * (float)slotSettings.ay * accelFactor;
   float actSpeed =  __ieee754_sqrtf (moveValX * moveValX + moveValY * moveValY);
-  float max_speed = (float)slotSettings.ms / 10.0f;
+  float max_speed = (float)slotSettings.ms / 3.0f;
 
   if (actSpeed > max_speed) {
     moveValX *= (max_speed / actSpeed);
@@ -312,7 +313,7 @@ void acceleratedMouseMove(float accelFactor) {
 
   int xMove = (int)accumXpos;
   int yMove = (int)accumYpos;
-
+  
   if ((xMove != 0) || (yMove != 0)) {
     mouseMove(xMove, yMove);
   }

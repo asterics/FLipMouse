@@ -42,16 +42,18 @@ void initBlink(uint8_t  count, uint8_t startTime)
   blinkStartTime = startTime;
 }
 
-void updateLeds()
+void updateLeds()  // TBD: allow user-defined slot colors
 {
   uint8_t r = 0;
   uint8_t g = 0;
   uint8_t b = 0;
+  static uint32_t oldValue=0;
+  uint8_t colCode=actSlot+1;
 
 	if (blinkCount == 0) {
-	  if ((actSlot + 1) & 1) g = 255;
-	  if ((actSlot + 1) & 2) b = 255;
-	  if ((actSlot + 1) & 4) r = 255;
+	  if (colCode & 1) g = 255;
+	  if (colCode & 2) b = 255;
+	  if (colCode & 4) r = 255;
 	} else {
     if (blinkTime == 0)
     {
@@ -66,8 +68,13 @@ void updateLeds()
       r = g = b = 255 - ((blinkStartTime - blinkTime) / blinkStartTime) * 255;
     }
   }
-  pixels.setPixelColor(0,r,g,b);
-  pixels.show();
+  
+  uint32_t ledValue=(uint32_t)r + ((uint32_t)g<<8) + ((uint32_t)b<<16);
+  if (ledValue!=oldValue) {
+    oldValue=ledValue;
+    pixels.setPixelColor(0,r,g,b);
+    pixels.show();
+  }  
 }
 
 void setLeds(uint8_t leds)

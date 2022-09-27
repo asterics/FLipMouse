@@ -35,8 +35,6 @@ void printCurrentSlot(Stream *S)
   S->print("AT AY "); S->println(slotSettings.ay);
   S->print("AT DX "); S->println(slotSettings.dx);
   S->print("AT DY "); S->println(slotSettings.dy);
-  S->print("AT CX "); S->println(slotSettings.dividerLeft);
-  S->print("AT CY "); S->println(slotSettings.dividerUp);
   S->print("AT MS "); S->println(slotSettings.ms);
   S->print("AT AC "); S->println(slotSettings.ac);
   S->print("AT TS "); S->println(slotSettings.ts);

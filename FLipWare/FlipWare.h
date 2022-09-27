@@ -110,8 +110,6 @@ struct SlotSettings {
   uint8_t  ay;     // acceleration y
   int16_t  dx;     // deadzone x
   int16_t  dy;     // deadzone y
-  int16_t  dividerLeft; // divider for X axis
-  int16_t  dividerUp;   // divider for Y axis
   uint16_t ms;     // maximum speed
   uint16_t ac;     // acceleration time
   uint16_t ts;     // threshold sip
@@ -140,8 +138,8 @@ struct SensorData {
   float deadZone, force, forceRaw, angle;
   uint8_t dir;
   int8_t autoMoveX,autoMoveY;
-  int32_t up, down, left, right;
-  uint8_t calib_now;
+  int32_t up, down, left, right;  // TBD: obsolete, remove (GUI must be updated for report compatibility)
+  uint16_t calib_now;
   int16_t  cx, cy;
   uint32_t cpressure;
   int xDriftComp, yDriftComp;

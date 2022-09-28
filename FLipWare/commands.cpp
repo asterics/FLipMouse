@@ -26,7 +26,7 @@
 #include "parser.h"
 #include "reporting.h"
 #include "utils.h"
-
+#include <hardware/watchdog.h>
 
 /**
    atCommands this is the array containing all supported AT commands,
@@ -54,7 +54,7 @@ const struct atCommandType atCommands[] PROGMEM = {
   {"IW"  , PARTYPE_NONE },  {"BT"  , PARTYPE_UINT }, {"HL"  , PARTYPE_NONE }, {"HR"  , PARTYPE_NONE },
   {"HM"  , PARTYPE_NONE },  {"TL"  , PARTYPE_NONE }, {"TR"  , PARTYPE_NONE }, {"TM"  , PARTYPE_NONE },
   {"KT"  , PARTYPE_STRING }, {"IH"  , PARTYPE_STRING }, {"IS"  , PARTYPE_NONE }, {"UG", PARTYPE_NONE },
-  {"BC"  , PARTYPE_STRING},
+  {"BC"  , PARTYPE_STRING}, {"KL"  , PARTYPE_STRING }, {"BR"  , PARTYPE_UINT }, {"RE"  , PARTYPE_NONE },
 };
 
 /**
@@ -216,6 +216,16 @@ void performCommand (uint8_t cmd, int16_t par1, char * keystring, int8_t periodi
     case CMD_KR:
       if (keystring) releaseKeys(keystring);
       break;
+    case CMD_KL:
+      //change keyboard layout.
+      if(strnlen(keystring,5) == 5) {
+        if(setKeyboardLayout(keystring)) {
+          strncpy(slotSettings.kbdLayout, keystring, 5);
+        } else Serial.println("NOK: supported layouts: de_DE, en_US, es_ES, fr_FR, it_IT, sv_SE, da_DK");
+      } else { 
+        printKeyboardLayout(); 
+      }
+      break;
     case CMD_RA:
       release_all();
       break;
@@ -238,6 +248,7 @@ void performCommand (uint8_t cmd, int16_t par1, char * keystring, int8_t periodi
         if (readFromEEPROM(keystring)) Serial.println("OK");
         else Serial.println(ERRORMESSAGE_NOT_FOUND);
         displayUpdate();
+        setKeyboardLayout(slotSettings.kbdLayout);
       }
       break;
     case CMD_LA:
@@ -256,6 +267,7 @@ void performCommand (uint8_t cmd, int16_t par1, char * keystring, int8_t periodi
       release_all();
       if (!readFromEEPROM("")) Serial.println(ERRORMESSAGE_NOT_FOUND);
       displayUpdate();
+      setKeyboardLayout(slotSettings.kbdLayout);
       break;
     case CMD_DE:
 #ifdef DEBUG_OUTPUT_FULL
@@ -271,7 +283,12 @@ void performCommand (uint8_t cmd, int16_t par1, char * keystring, int8_t periodi
       initButtons(); //reset buttons
       saveToEEPROM(slotSettings.slotName); //save default slot to default name
       readFromEEPROM(""); //load this slot
+      setKeyboardLayout(slotSettings.kbdLayout);
       Serial.println("OK");    // send AT command acknowledge
+      break;
+    case CMD_RE:
+      watchdog_reboot(0, 0, 10);
+      while (1) { continue; }     
       break;
     case CMD_NC:
       break;
@@ -444,8 +461,14 @@ void performCommand (uint8_t cmd, int16_t par1, char * keystring, int8_t periodi
       break;
     case CMD_BC:
       if (isBluetoothAvailable()) {
+        
         Serial_AUX.write(keystring);
         Serial_AUX.write('\n'); //terminate command
+        
+        //byte bf[]= {0xfd,0,3,0,5,0,0,0,0};
+        //Serial_AUX.write(bf, 9); //terminate command
+
+        digitalWrite (6,!digitalRead (6));
       }
       break;
     case CMD_UG:
@@ -457,5 +480,8 @@ void performCommand (uint8_t cmd, int16_t par1, char * keystring, int8_t periodi
       // delaying to ensure that UART command is sent and received
       delay(500);
       break;  
+    case CMD_BR:
+      resetBTModule (par1);
+      break;
   }
 }

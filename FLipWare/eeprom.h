@@ -42,21 +42,14 @@
 #define _EEPROM_H_
 
 #include "FlipWare.h"
-
-/** @brief Currently used I2C address for the EEPROM
- * @note On an "old" (v2) PCB it will be 0x50; v3 PCB is 0x51
- */
-extern uint8_t deviceaddress;
-
-#define EEPROM_I2C_ADDR_v2 0x50
-#define EEPROM_I2C_ADDR_v3 0x51
+#include "parser.h"
 
 #define MAX_SLOTS_IN_EERPOM 10
 #define MAX_IRCOMMANDS_IN_EERPOM 20
 
 #define EEPROM_MAX_ADDRESS 0x7FFF
 #define EEPROM_MAGIC_NUMBER 	0x3b
-#define MAX_NAME_LEN  15 
+#define MAX_NAME_LEN  15
 
 /**
    header structure, starts at adress 0x00 in EEPROM,
@@ -74,14 +67,13 @@ struct storageHeader {
 
 struct irCommandHeader {
   char irName[MAX_NAME_LEN];
-  uint8_t edges;
+  uint16_t edges;
 };
 
 /**
-   Load the EEPROM header, which contains all start addresses of the
-   slots and IR commands
+   Check if storage is valid, initialize if not.
  * */
-void bootstrapSlotAddresses();
+void initStorage();
 
 
 /**
@@ -89,7 +81,7 @@ void bootstrapSlotAddresses();
    If the "name" parameter is set to \0, all IR commands will be deleted
    returns 1 if successful, 0 otherwise
  * */
-uint8_t deleteIRCommand(char * name);
+uint8_t deleteIRCommand(char const * name);
 
 /**
    Save one IR command to the EEPROM. If the name is already assigned,
@@ -98,7 +90,7 @@ uint8_t deleteIRCommand(char * name);
    is provided by cntEdges.
    The name is also provided as parameter
  * */
-void saveIRToEEPROM(char * name, uint16_t *timings, uint8_t cntEdges);
+void saveIRToEEPROM(char * name, uint16_t *timings, uint16_t cntEdges);
 
 
 /**
@@ -107,7 +99,7 @@ void saveIRToEEPROM(char * name, uint16_t *timings, uint8_t cntEdges);
    is provided by cntEdges.
    The name is also provided as parameter
  * */
-void saveIRToEEPROMSlotNumber(uint8_t nr, char * name, uint16_t *timings, uint8_t cntEdges);
+void saveIRToEEPROMSlotNumber(uint8_t nr, char * name, uint16_t *timings, uint16_t cntEdges);
 
 /**
    Print out all slotnames to the serial interface
@@ -119,14 +111,14 @@ void listIRCommands();
    Replay one IR command from the EEPROM.
    The slot is identified by the slot name
  * */
-uint16_t readIRFromEEPROM(char * name, uint16_t *timings, uint8_t maxEdges);
+uint16_t readIRFromEEPROM(char * name, uint16_t *timings, uint16_t maxEdges);
 
 /**
    This function deletes the slot from EEPROM.
    if an empty string is given as parameter, all slots are deleted!
    returns 1 if successful, 0 otherwise
  * */
-uint8_t deleteSlot(char * name);
+uint8_t deleteSlot(char const * name);
 
 /**
    get the first free address for slot data  
@@ -134,9 +126,14 @@ uint8_t deleteSlot(char * name);
 uint16_t getFreeSlotAddress(void);
 
 /**
-   get the index of the lat slot which holds data  
+   get the index of the last slot which holds data  
  * */
 int8_t getLastSlotIndex(void);
+
+/**
+   get the index of the last available IR command
+ * */
+int8_t getLastIRIndex(void);
 
 /**
    Print out all slot data  to the serial interface
@@ -162,13 +159,13 @@ uint8_t readFromEEPROMSlotNumber(uint8_t nr,  bool playTone);
    The slot is identified by the slot name
    returns 1 if successful, 0 otherwise
  * */
-uint8_t readFromEEPROM(char * slotname);
+uint8_t readFromEEPROM(char const * slotname);
 
 
 /**
    Determines the slot number for a given slot name.
  * */
-int8_t slotnameToNumber(char * slotname);
+int8_t slotnameToNumber(char const * slotname);
 
 /**
    Save the current slot by the given slotname.
@@ -177,15 +174,19 @@ int8_t slotnameToNumber(char * slotname);
    returns 1 if successful, 0 if max slot count is reached
 
  * */
-uint8_t saveToEEPROM(char * slotname);
+uint8_t saveToEEPROM(char const * slotname);
 
 /**
    Store current slot data to the EEPROM.
    The slot is identified by the slot number. If the nr parameter is -1,
    a new slot will be created (at the first possible position)
-   ATTENTION: if this method is not called from another function (e.g. saveToEEPROM()),
-   it is necessary to preload the start adresses via bootstrapSlotAddresses()!
  * */
-void saveToEEPROMSlotNumber(int8_t nr, char * slotname);
+void saveToEEPROMSlotNumber(int8_t nr, char const * slotname);
+
+/**
+ * If settings are under version control (TBD!), this function returns the current
+ * revision (-> foldername in FS) to read from / write to.
+ */
+uint8_t getSettingsRevision(void);
 
 #endif

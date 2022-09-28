@@ -17,22 +17,34 @@
 #include "FlipWare.h"
 #include "infrared.h"
 #include "tone.h"
-
 /**
    static variables for infrared code generation and timekeeping
  * */
-uint32_t edge_timeout = 10000UL;  // timeout for IR code edge length in microseconds
-int repeatCounter;        // number of desired code repetitions (-1 for endless)
-int idlesequenceCounter;  // bumber of gaps which should be inserted before code repetition
-uint16_t edges;           // number of edges for current code
-uint16_t act_edge;        // current edge
-uint8_t output_state;     // PWM duty cycle
+uint32_t edge_timeout = 10000UL;  // timeout for IR receiving, [ms]
+volatile int repeatCounter;        // number of desired code repetitions (-1 for endless)
+volatile int idlesequenceCounter;  // bumber of gaps which should be inserted before code repetition
+volatile uint16_t edges;           // number of edges for current code
+volatile uint16_t act_edge;        // current edge
+
+
+#ifdef BUILD_FOR_RP2040
+  //RP2040:
+  alarm_id_t ir_alarm_id = -1; //alarm id for replaying
+  alarm_pool_t *ir_alarm_pool = nullptr; //alarm pool for replaying
+  // Keep std::map safe for multicore use
+  auto_init_mutex(_irMutex);
+  //initialize with 128, DC is 0.5 on first timer call
+  volatile uint8_t output_state = 128;     // PWM duty cycle
+#else
+  //Teensy:
+  volatile uint8_t output_state;     // PWM duty cycle
+  // Timer for edge time management
+  IntervalTimer playTimer;
+#endif
 
 // array for edge times (time difference between the IR code edges)
-uint16_t timings [IR_EDGE_REC_MAX];
+volatile uint16_t timings [IR_EDGE_REC_MAX];
 
-// Timer for edge time management
-IntervalTimer playTimer;
 
 /**
    forward declarations of module-internal functions
@@ -44,8 +56,25 @@ void start_IR_command_playback(char * name);
    Set Carrier Frequency for PWM
  * */
 void initIR() {
+  
+  #ifdef BUILD_FOR_RP2040
+    //RP2040: enable default alarm pool, used for IR edge playback.
+    //alarm_pool_init_default();
+    //RP2040: create a new alarm pool, the default one is already crowded (tone & analogWrite?)
+    //Note/Todo: figure out why the alarm pool fills up and needs to be this big,
+    //even if we just use one alarm.
+    ir_alarm_pool = alarm_pool_create(2, 64);
+    
+    //RP2040:
+    analogWriteFreq(38000);
+    analogWriteRange(255); //set to 8 bit
+  #else
+    //Teensy:
+    analogWriteFrequency(IR_LED_PIN, 38000);  // TBD: flexible carrier frequency for IR, not only 38kHz !
+  #endif
+
+  //GPIO & PWM setup
   pinMode(IR_SENSOR_PIN, INPUT);
-  analogWriteFrequency(IR_LED_PIN, 38000);  // TBD: flexible carrier frequency for IR, not only 38kHz !
   pinMode(IR_LED_PIN, OUTPUT);
   digitalWrite(IR_LED_PIN, LOW);
 }
@@ -59,6 +88,15 @@ void initIR() {
  * */
 void record_IR_command(char * name)
 {
+  #ifdef BUILD_FOR_RP2040
+    //RP2040:
+    // Ensure only 1 core can start or stop at a time
+    //source: Tone.cpp
+    CoreMutex m(&_irMutex);
+    if (!m) {
+      return;    // Weird deadlock case
+    }
+  #endif
   uint32_t prev;
   uint32_t duration;
   uint8_t toggle = 0;
@@ -104,7 +142,7 @@ void record_IR_command(char * name)
   makeTone(TONE_IR_REC, 0);
 
   //full edge feedback, if full debug is enabled
-#ifdef DEBUG_OUTPUT_FULL
+#ifdef DEBUG_OUTPUT_IR
   Serial.println("START IR ----------");
   for (uint8_t i = 0; i < edges; i++)
     Serial.println(timings[i]);
@@ -119,8 +157,7 @@ void record_IR_command(char * name)
   Serial.println(" edge times.");
 
   //save the recorded command to the EEPROM storage
-  saveIRToEEPROM(name, timings, edges);
-
+  saveIRToEEPROM(name, (uint16_t *)timings, (uint16_t)edges);
 }
 
 /**
@@ -148,32 +185,74 @@ uint8_t delete_IR_command(char * name)
           repeats a whole code playback (repeatCounter times)
    @return none
 */
-void generate_next_IR_phase(void)
+#ifdef BUILD_FOR_RP2040
+  //RP2040:
+  int64_t generate_next_IR_phase(alarm_id_t id, void *user_data)
+#else
+  //Teensy:
+  void generate_next_IR_phase(void)
+#endif
 {
+  //RP2040: return value determines alarm behaviour
+  #ifdef BUILD_FOR_RP2040
+	//avoid unused parameter warning
+	(void)id;
+	(void)user_data;
+    int64_t ret = 0; //return 0 -> no reschedule; <0 [us] from last timestamp; >0 [us] from this return.
+  #endif
+  /* Disabled, IRQ context here!
+   * #ifdef DEBUG_OUTPUT_IR
+    Serial.print("id:");
+    Serial.println(id);
+  #endif*/
   if (act_edge > edges) {          // one code repetition finished
     analogWrite(IR_LED_PIN, 0);
     digitalWrite(IR_LED_PIN, LOW);
-    output_state = 0;
+    //RP2040: start with pulses.
+    #ifdef BUILD_FOR_RP2040
+      output_state = 128;
+    #else
+      output_state = 0;
+    #endif
     act_edge = 0;
     if (repeatCounter > 0) repeatCounter--;
     if (repeatCounter == 0) {
-      playTimer.end();  // stop time if last repetition done
+      ret = 0;  // stop time if last repetition done
       // note: repeatCounter is -1 for hold mode
       if (idlesequenceCounter > 0) {
         idlesequenceCounter--;
         delayMicroseconds(IR_REPEAT_GAP);  // pause before next idlesequence (TBD: make that non-blocking)
-        start_IR_command_playback(IDLESEQUENCE_NAME);  // in case the idlesequence command exists: play it!
+        start_IR_command_playback((char*)IDLESEQUENCE_NAME);  // in case the idlesequence command exists: play it!
       }
-    }
+    } 
+    #ifdef BUILD_FOR_RP2040
+      else {
+        //RP2040:
+        //we need this alarm again
+        ret = IR_REPEAT_GAP;
+      }
+    #endif
   }
   else {
     if (act_edge == edges)
-      playTimer.update(IR_REPEAT_GAP);  // gap between code repetitions
+      #ifdef BUILD_FOR_RP2040
+        //RP2040:
+        ret = IR_REPEAT_GAP; // gap between code repetitions
+      #else
+        //teensy:
+        playTimer.update(IR_REPEAT_GAP);  // gap between code repetitions
+      #endif
     else {
       uint32_t duration = timings[act_edge];
       if (duration > MAX_HIGHPRECISION_DURATION)  // timing in milliseconds
         duration = (duration - MAX_HIGHPRECISION_DURATION) * 1000; // switch to microseconds
-      playTimer.update(duration);  // set interval for current on/off phase
+      #ifdef BUILD_FOR_RP2040
+        //RP2040:
+        ret = duration;
+      #else
+        //Teensy:
+        playTimer.update(duration);  // set interval for current on/off phase
+      #endif
     }
 
     analogWrite(IR_LED_PIN, output_state);
@@ -182,8 +261,12 @@ void generate_next_IR_phase(void)
 
     act_edge++;   // increase edge index for next interrupt
   }
+  
+  #ifdef BUILD_FOR_RP2040
+    //RP2040:
+    return ret;
+  #endif
 }
-
 
 /**
    @name start_IR_command_playback
@@ -194,25 +277,31 @@ void generate_next_IR_phase(void)
 */
 void start_IR_command_playback(char * name)
 {
-  uint32_t edge_now = 0;
-  uint32_t edge_prev = 0;
-  uint32_t duration = 0;
-  uint8_t i;
-
+  #ifdef BUILD_FOR_RP2040
+    //RP2040:
+    // Ensure only 1 core can start or stop at a time
+    //source: Tone.cpp
+    CoreMutex m(&_irMutex);
+    if (!m) {
+      return;    // Weird deadlock case
+    }
+  #endif
+    
   //fetch the IR command from the eeprom
-  edges = readIRFromEEPROM(name, timings, IR_EDGE_REC_MAX);
+  edges = readIRFromEEPROM(name, (uint16_t*)timings, IR_EDGE_REC_MAX);
 
   //no edges, no command -> cancel
   if (edges == 0)
   {
-#ifdef DEBUG_OUTPUT_FULL
-    Serial.println("No IR command found");
+#ifdef DEBUG_OUTPUT_IR
+    Serial.print("No IR command found: ");
+    Serial.println(name);
 #endif
     return;
   }
 
   //full edge feedback, if full debug is enabled
-#ifdef DEBUG_OUTPUT_FULL
+#ifdef DEBUG_OUTPUT_IR
   Serial.println("START IR ----------");
   for (uint16_t i = 0; i < edges; i++)
   {
@@ -223,9 +312,20 @@ void start_IR_command_playback(char * name)
 
   makeTone(TONE_IR, 0);
   act_edge = 0;
-  output_state = 0;
-  playTimer.begin(generate_next_IR_phase, 10); // the first timing is just a dummy value
-  playTimer.priority(20);                      // quite high priority for our timer
+  #ifdef BUILD_FOR_RP2040
+    //RP2040: start with pulses
+    output_state = 128;
+    //add CB function as alarm
+    ir_alarm_id = alarm_pool_add_alarm_in_us(ir_alarm_pool, 25, generate_next_IR_phase, nullptr, true);
+    if(ir_alarm_id == -1) Serial.println("IR: no alarm available!");
+    //busy wait for finished IR
+    while(act_edge < edges);
+  #else
+    //Teensy:
+    output_state = 0;
+    playTimer.begin(generate_next_IR_phase, 10); // the first timing is just a dummy value
+    playTimer.priority(20);                      // quite high priority for our timer
+  #endif
 }
 
 void play_IR_command(char * name)
@@ -252,6 +352,6 @@ void wipe_IR_commands()
 
 void set_IR_timeout(uint16_t tout_ms)
 {
-  if (tout_ms < 1) return;
-  edge_timeout = (uint32_t)tout_ms * 1000;
+  edge_timeout = tout_ms;
+  return;
 }

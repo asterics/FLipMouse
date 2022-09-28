@@ -14,7 +14,7 @@
 #include "tone.h"
 
 /**
-   static variables for tone singal generation
+   static variables for tone signal generation
 */
 uint16_t toneHeight;
 uint16_t toneOnTime;

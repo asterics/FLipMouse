@@ -11,20 +11,21 @@
         For a description of the supported commands see: commands.h
 
         HW-requirements:
-                  TeensyLC with external EEPROM (see board schematics)
-                  4 FSR force sensors connected via voltage dividers to ADC pins A6-A9
-                  1 pressure sensor connected to ADC pin A0
-                  3 momentary switches connected to GPIO pins 0,1,2
-                  3 slot indication LEDs connected to GPIO pins 5,16,17
-                  1 TSOP 38kHz IR-receiver connected to GPIO pin 4
-                  1 high current IR-LED connected to GPIO pin 6 via MOSEFT
-                  optional: Bluetooth daughter board connected to 10-pin expansion port
-                  optional: SSD1306 display (connected via I2C-1)
+                  Arduino Nano RP2040 Connect
+                  Sensor board with NAU7802 strain gauge ADC
+                  1 pressure sensor connected to ADC pin A0 OR an MPRLS I2C pressure sensor
+                  3 momentary switches connected to GPIO pins (
+                  Neopixel LED
+                  1 TSOP 38kHz IR-receiver
+                  1 high current IR-LED, driven with a MOSFET
+                  optional: SSD1306 display
 
         SW-requirements:
-                  Teensyduino AddOn for Arduino IDE, see https://www.pjrc.com/teensy/td_download.html
-                  USB-type set to USB composite device (Serial + Keyboard + Mouse + Joystick)
+                  arduino-pico core (https://github.com/earlephilhower/arduino-pico), installable via board manager
+                  Adafruit Neopixel library, installable via library manager
+                  https://github.com/benjaminaigner/Adafruit_NAU7802
                   SSD1306Ascii-library by Bill Greiman, see https://github.com/greiman/SSD1306Ascii
+                  Arduino settings: "Flash Size: 15MB Sketch, 1MB FS"
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -37,8 +38,8 @@
 */
 
 #include "FlipWare.h"
-#include "gpio.h"
-#include "sensors.h"
+#include "gpio.h"      
+#include "sensors.h"      
 #include "infrared.h"      
 #include "display.h"       // for SSD1306 I2C-Oled display
 #include "modes.h"
@@ -46,17 +47,18 @@
 #include "parser.h"  
 #include "reporting.h"
 #include "cim.h"
-#include "utils.h"
+#include "utils.h"       
+#include "keys.h"       
 
 /**
    device name for ID string & BT-pairing
 */
-char moduleName[]="Flipmouse";   
+char moduleName[]="FLipmouse";   
 
 /**
    default values for empty configuration slot 
 */
-const struct SlotSettings defaultSlotSettings = {      // default slotSettings valus, for type definition see fabi.h
+const struct SlotSettings defaultSlotSettings = {      // default slotSettings valus, for type definition see Flipware.h
   "mouse",                          // initial slot name
   0,                                // initial keystringbuffer length
   1,                                // stickMode: Mouse cursor movement active
@@ -67,6 +69,7 @@ const struct SlotSettings defaultSlotSettings = {      // default slotSettings v
   0, 0,                             // offset x / y
   0,                                // orientation
   1,                                // bt-mode 1: USB, 2: Bluetooth, 3: both (2 & 3 need daughter board))
+  "en_US",                          // en_US as default keyboard layout.
 };
 
 
@@ -79,8 +82,8 @@ struct SensorData sensorData {
   .dir=0,
   .autoMoveX=0, .autoMoveY=0,
   .up=0, .down=0, .left=0, .right=0,
-  .calib_now=2,    // calibrate zeropoint right at startup !
-  .cx=0, .cy=0, .cpressure = 0,
+  .calib_now=200,    // calibrate sensors ~1000 ms after startup !
+  .cx=0, .cy=0, .cpressure=0,
   .xDriftComp=0, .yDriftComp=0,
   .xLocalMax=0, .yLocalMax=0
 };
@@ -91,18 +94,15 @@ uint8_t workingmem[WORKINGMEM_SIZE];          // working memory (command parser,
 uint8_t actSlot = 0;                          // number of current slot
 unsigned long lastInteractionUpdate;          // timestamp for HID interaction updates
 uint8_t addonUpgrade = BTMODULE_UPGRADE_IDLE; // if not "idle": we are upgrading the addon module
-uint8_t useMPRLS = 0;						  // if != 0 then we will use the MPRLS sensor via I2C; an analog sensor otherwise.
 
 
 // forward declaration of functions for sensor data processing
-void applyCalibration(); 
-void applyDriftCorrection();
 void applyDeadzone();
 
 
 /**
    @name setup
-   @brief setup function, program execution starts here
+   @brief setup function, program execution of core1 starts here
    @return none
 */
 void setup() {
@@ -110,57 +110,84 @@ void setup() {
   memcpy(&slotSettings,&defaultSlotSettings,sizeof(struct SlotSettings));
 
   //initialise BT module, if available (must be done early!)
-  initBluetooth();
+  initBluetooth();   //   TBD: find out why this interferes with I2C !?!
 
-  // iniitialize other peripherals
+  // initialize peripherals
   Serial.begin(115200);
-  delay(1000);  // allow some time for serial interface to come up
-  Wire.begin();
-  Wire.setClock(400000);  // use 400kHz I2C clock
   
-  //detect PCB version.
-  uint8_t pcbversion = getPCBVersion();
-  switch(pcbversion)
-  {
-	  case 2: deviceaddress = EEPROM_I2C_ADDR_v2; break;
-	  case 3: deviceaddress = EEPROM_I2C_ADDR_v3; break;
-	  default:
-		Serial.println("ERROR, unknown PCB version or missing EEPROM!");
-		break;
-  }
+  #ifdef DEBUG_DELAY_STARTUP
+    delay(3000);  // allow some time for serial interface to come up
+  #endif
   
   initGPIO();
-  initSensors();
   initIR();
   initButtons();
   initDebouncers();
   init_CIM_frame();  // for AsTeRICS CIM protocol compatibility
-
-  bootstrapSlotAddresses();   // initialize EEPROM if necessary
+  initStorage();   // initialize storage if necessary
   readFromEEPROMSlotNumber(0, true); // read slot from first EEPROM slot if available !
-
   initBlink(10,25);  // first signs of life!
 
-  setBTName(moduleName);             // if BT-module installed: set advertising name
+  // NOTE: changed for RP2040!  TBD: why does setBTName damage the console UART TX ??
+  // setBTName(moduleName);             // if BT-module installed: set advertising name 
+
+  setKeyboardLayout(slotSettings.kbdLayout); //load keyboard layout from slot
   
-  displayInstalled=displayInit(0);   // check if i2c-display connected, if possible: init
-  displayUpdate();
- 
+  // displayInstalled=displayInit(0);   // check if i2c-display connected   TBD: missing i2c core2 synchronisation!
+  // displayUpdate();
 #ifdef DEBUG_OUTPUT_FULL
   Serial.print("Free RAM:");  Serial.println(freeRam());
   Serial.print(moduleName); Serial.println(" ready !");
 #endif
-
   lastInteractionUpdate = millis();  // get first timestamp
+
 }
 
 /**
+   @name setup1
+   @brief setup1 function, program execution of core2 starts here (for I2C sensor updates)
+   @return none
+*/
+void setup1() {
+
+  Wire1.begin();
+  Wire1.setClock(400000);  // use 400kHz I2C clock
+  initSensors();
+}
+
+/**
+   @name loop1
+   @brief loop1 function, periodically called from core2 after setup1(), performs I2C sensor updates
+   @return none
+*/
+void loop1() {
+  static unsigned long lastUpdate=0;     
+	
+  if (millis() >= lastUpdate + UPDATE_INTERVAL)  {
+    lastUpdate = millis();
+
+    // get current sensor values;   TBD: use message queue for sychronized communication with core1!
+    readPressure(&sensorData);
+    readForce(&sensorData);
+
+    // update calibration counter, bypass sensor values during calibration
+    if (sensorData.calib_now) {
+      sensorData.calib_now--;
+      sensorData.xRaw=sensorData.yRaw=sensorData.pressure=0;
+    }      
+  }
+  delay(1);  // core2: sleep a bit ...  
+}
+
+
+
+/**
    @name loop
-   @brief loop function, periodically called after setup()
+   @brief loop function, periodically called from core1 after setup()
    @return none
 */
 void loop() {
-	
+
   //check if we should go into addon upgrade mode
 	if(addonUpgrade != BTMODULE_UPGRADE_IDLE) {
     performAddonUpgrade();
@@ -178,113 +205,44 @@ void loop() {
     Serial.write(Serial_AUX.read());
   }
 
-  // get current sensor values
-  readPressure(&sensorData);
-  readForce(&sensorData);
-
-  // apply rotation if needed
-  switch (slotSettings.ro) {
-    int tmp;
-    case 90: tmp = sensorData.up; sensorData.up = sensorData.left; sensorData.left = sensorData.down; 
-             sensorData.down = sensorData.right; sensorData.right = tmp; 
-             break;
-    case 180: tmp = sensorData.up; sensorData.up = sensorData.down; sensorData.down = tmp; tmp = sensorData.right; 
-              sensorData.right = sensorData.left; sensorData.left = tmp; 
-              break;
-    case 270: tmp = sensorData.up; sensorData.up = sensorData.right; sensorData.right = sensorData.down; 
-              sensorData.down = sensorData.left; sensorData.left = tmp; 
-              break;
-  }
-
   // perform periodic updates  
-  if (StandAloneMode && (millis() >= lastInteractionUpdate + UPDATE_INTERVAL))  {
+  if (millis() >= lastInteractionUpdate + UPDATE_INTERVAL)  {
     lastInteractionUpdate = millis();
-    
-    // apply calibration and drift correction
-    if (sensorData.calib_now)
-      applyCalibration();              
-    else  {   // no new calibration, use current values for x and y offset !
-      sensorData.xRaw = (sensorData.left - sensorData.right) - sensorData.cx;
-      sensorData.yRaw = (sensorData.up - sensorData.down) - sensorData.cy;
-      applyDriftCorrection();
-    } 
 
-    // calculate angular direction and force
-    sensorData.forceRaw = __ieee754_sqrtf(sensorData.xRaw * sensorData.xRaw + sensorData.yRaw * sensorData.yRaw);
-    if (sensorData.forceRaw !=0) {
-      sensorData.angle = atan2f ((float)sensorData.yRaw / sensorData.forceRaw, (float)sensorData.xRaw / sensorData.forceRaw );
-      
-      // get 8 directions
-      sensorData.dir=(180+22+(int)(sensorData.angle*57.29578))/45+1;  // translate rad to deg and make 8 sections
-      if (sensorData.dir>8) sensorData.dir=1;  
+    if (StandAloneMode) {
+
+      // apply rotation if needed
+      switch (slotSettings.ro) {
+        int32_t tmp;
+        case 90: tmp=sensorData.xRaw;sensorData.xRaw=sensorData.yRaw;sensorData.yRaw=tmp;
+                break;
+        case 180: sensorData.xRaw=-sensorData.xRaw;sensorData.yRaw=-sensorData.yRaw;
+                  break;
+        case 270: tmp=sensorData.xRaw;sensorData.xRaw=sensorData.yRaw;sensorData.yRaw=-tmp;
+                  break;
+      }
+
+      // calculate angular direction and force
+      sensorData.forceRaw = __ieee754_sqrtf(sensorData.xRaw * sensorData.xRaw + sensorData.yRaw * sensorData.yRaw);
+      if (sensorData.forceRaw !=0) {
+        sensorData.angle = atan2f ((float)sensorData.yRaw / sensorData.forceRaw, (float)sensorData.xRaw / sensorData.forceRaw );
+        
+        // get 8 directions
+        sensorData.dir=(180+22+(int)(sensorData.angle*57.29578))/45+1;  // translate rad to deg and make 8 sections
+        if (sensorData.dir>8) sensorData.dir=1;  
+      }
+
+      applyDeadzone();          // calculate updated x/y/force values according to deadzone
+      handleUserInteraction();  // handle all mouse / joystick / button activities
+      reportValues();           // send live data to serial
+      updateLeds();
+      UpdateTones();
     }
-
-    // calculate updated x/y/force values according to deadzone
-    applyDeadzone();
-
-    handleUserInteraction();  // handle all mouse / joystick / button activities
-
-    reportValues();     // send live data to serial
-    updateLeds();
-    UpdateTones();
+    if (CimMode) {
+      handleCimMode();   // create periodic reports if running in AsTeRICS CIM compatibility mode
+    }
   }
-
-  if (CimMode) {
-    handleCimMode();   // create periodic reports if running in AsTeRICS CIM compatibility mode
-  }
-}
-
-/**
-   @name applyCalibration
-   @brief gets calibration coordinates (cx and cy in slotSettings struct) if caribration time reaches 0
-   @return none
-*/
-void applyCalibration() 
-{
-  sensorData.xRaw=sensorData.yRaw=0;
-  sensorData.calib_now--;           // wait for calibration moment
-  if (sensorData.calib_now == 0) {  // calibrate now !! get new offset values
-    slotSettings.cx = (sensorData.left - sensorData.right);
-    slotSettings.cy = (sensorData.up - sensorData.down);
-    sensorData.cx = slotSettings.cx;
-    sensorData.cy = slotSettings.cy;
-    sensorData.xLocalMax = 0; sensorData.yLocalMax = 0;
-  }
-}
-
-
-/**
-   @name applyDriftCorrection
-   @brief calculates and applies drift correction values for FSR x and y values (in sensorData struct)
-   @return none
-*/
-void applyDriftCorrection()
-{
-  // apply drift correction
-  if (((sensorData.xRaw < 0) && (sensorData.xLocalMax > 0)) || ((sensorData.xRaw > 0) && (sensorData.xLocalMax < 0)))  
-     sensorData.xLocalMax = 0;
-  if (abs(sensorData.xRaw) > abs(sensorData.xLocalMax)) {
-    sensorData.xLocalMax = sensorData.xRaw;
-    //Serial.print("xLocalMax=");
-    //Serial.println(xLocalMax);
-  }
-  if (sensorData.xLocalMax > slotSettings.rh) sensorData.xLocalMax = slotSettings.rh;
-  if (sensorData.xLocalMax < -slotSettings.rh) sensorData.xLocalMax = -slotSettings.rh;
-
-  if (((sensorData.yRaw < 0) && (sensorData.yLocalMax > 0)) || ((sensorData.yRaw > 0) && (sensorData.yLocalMax < 0)))
-    sensorData.yLocalMax = 0;
-  if (abs(sensorData.yRaw) > abs(sensorData.yLocalMax)) {
-    sensorData.yLocalMax = sensorData.yRaw;
-    //Serial.print("yLocalMax=");
-    //Serial.println(yLocalMax);
-  }
-  if (sensorData.yLocalMax > slotSettings.rv) sensorData.yLocalMax = slotSettings.rv;
-  if (sensorData.yLocalMax < -slotSettings.rv) sensorData.yLocalMax = -slotSettings.rv;
-
-  sensorData.xDriftComp = sensorData.xLocalMax * ((float)slotSettings.gh / 250);
-  sensorData.yDriftComp = sensorData.yLocalMax * ((float)slotSettings.gv / 250);
-  sensorData.xRaw -= sensorData.xDriftComp;
-  sensorData.yRaw -= sensorData.yDriftComp;
+  delay(1);  // core1: sleep a bit ...  
 }
 
 

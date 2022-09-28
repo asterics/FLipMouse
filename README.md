@@ -22,6 +22,10 @@ We provide a [Construction Manual](https://github.com/asterics/FLipMouse/blob/ma
 There are different options for the enclosure: a laser-cut acrylic case (which is delivered in the DIY kit) and various 3d-printed variants. The desing files for enclosures can be found in folder [Hardware/case-design](https://github.com/asterics/FLipMouse/tree/master/Hardware/case-design).
 The PCB designs (schematic and layout) have been made with EagleCAD/KiCad and are available in folder [Hardware/PCB-design](https://github.com/asterics/FLipMouse/tree/master/Hardware/PCB-design)
 
+# Support us
+If you want to support the development of FLipMouse you're very welcome to donate to the AsTeRICS Foundation:
+<div><a title="Support AsTeRICS Foundation on betterplace.org!" target="_blank" href="https://www.betterplace.at/development-of-open-source-assistive-technologies/donate"><img style="border:0px" alt="" src="https://betterplace-assets.betterplace.org/static-images/projects/donation-button-en.png" width="160" height="100"></a>
+</div>
 
 # Hardware and Features
 
@@ -40,8 +44,8 @@ For more information about (modifying) the FLipMouse firmware see https://github
 ## Configuration Manager
 
 All settings of the FLipMouse can be changed via the [FlipMouse Configuration manager](https://flipmouse.asterics.eu)  
-Using the configuration manager in the Chrome web browser, you can assign different actions to all hardware inputs of the FLipMouse (mouthpiece, sip and puff, external buttons,...).
-The Configuration mananger can also be used to update the firmware of the FlipMouse and the optional Bluetooth module.
+Using the configuration manager in the __Chrome/Edge__ web browser, you can assign different actions to all hardware inputs of the FLipMouse (mouthpiece, sip and puff, external buttons,...).
+The Configuration manager can also be used to update the firmware of the FlipMouse and the optional Bluetooth module.
 
 More Information can be found in the user manual: 
 [user manual (english version)](https://github.com/asterics/FLipMouse/blob/master/Documentation/UserManual/Markdown/FLipMouseUserManual.md), 
@@ -51,12 +55,11 @@ More Information can be found in the user manual:
 ## Building the firmware
 In order to build the firmware following prerequisites and dependencies must be installed:
 * the [Arduino IDE](https://www.arduino.cc/en/software)
-* the [Teensyduino](https://www.pjrc.com/teensy/td_download.html) add-on (must be compatible with the Arduino IDE version)
+* the [arduino-pico](https://github.com/earlephilhower/arduino-pico) Core (can be installed from Arduino board-manager)
 * the [SSD1306Ascii](https://github.com/greiman/SSD1306Ascii) library by Bill Greiman (can be installed using Arduino IDE's library manager)
-* in the header file WireKinetis.h (Teensy Wire-library implemenation), uncomment [this line](https://github.com/PaulStoffregen/Wire/blob/2499ec67c2128629ee33697804f8650180293597/WireKinetis.h#L50), which is needed to implement the Wire1 interface. The file is located in an Arduino IDE installation subfolder, e.g.
-`arduino-1.8.13/hardware/teensy/avr/libraries/Wire/WireKinetis.h` 
-* select the *board* 'Teensy LC' in the Arduino IDE tools menu, and the *USB-type* "Serial+Keyboard+Mouse+Joystick"
-* select the correct *Port* after connecting the TeensyLC to your system
+* the [Adafruit Neopixel](https://github.com/adafruit/Adafruit_NeoPixel) library (installable via library manager)
+* select the *board* 'Arduino Nano RP2040 Connect' in the Arduino IDE tools menu, and the *Flash Size* "16MB (Sketch: 15MB, FS: 1MB)"
+* select the correct *Port* after connecting the Arduino to your system
 * compile and upload the firmware 
 
 
@@ -79,31 +82,11 @@ is limited to simple buttons. Therefore, this interface is at a very low price (
 
 # Troubleshooting / FAQ
 
-### I cannot calibrate the FLipmouse, so that all 4 sensor values are in the same range
-
-Usually this is caused by unequal forces on one (or more) of the 4 sensors. The reason is either:
-* Displaced FSR sensor: please reposition the FSR to the center of the engraved circle
-* Displaced rubber pad: please reposition the rubber pad to the center of the engraved circle
-* Broken sensor: If it is possible, take a multimeter to measure the FSR value (should be down to 1-2kOhm with applied force)
-
-### A thread of the enclosure screws (M3) is broken
-
-There is no functional problem if one of the 4 screws are missing. If it is necessary to use this screw, the best solution is an extra attached screw nut.
-Use a M3 screw nut (either plastic or metal) and glue it to the case. You need an extra screw, because the standard screws are to short for extra screw nuts.
-
-### A thread of the sensor carrier (M4) is broken
-
-The solution for this problem is the same as for the M3 screws. 
-If you don't have longer M4 plastic screws, it is possible to remove a short piece of the spring. With a shorter spring, it is possible to drive the screw for a few extra mm.
-
-### I dropped the FLipmouse and the case is broken
-
-No problem, the acrylic glass can be glued again. Usually it is not as beautiful as before, but it works.
-If you don't have the acrylic glass glue, you can use all types of glue which are able to glue acrylic glass.
-
 ### The mouse cursor moves without any force on the mouthpiece
 
-This problem may have different causes. Please visit the wiki for further information: [Calibration](https://github.com/asterics/FLipMouse/wiki/calibration)
+This problem may have different causes. Please visit the user manual how to setup a correct mouth piece configuration: [Manual EN](https://github.com/asterics/FLipMouse/blob/master/Documentation/UserManual/Markdown/FLipMouseUserManual.md#stick-configuration-tab-stick-config) / [Anleitung DE](https://github.com/asterics/FLipMouse/blob/master/Documentation/UserManual/Markdown/FLipMouseAnwendungsanleitung.md#stick-konfiguration-tab-stick-config).
+
+
 
 
 

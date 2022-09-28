@@ -33,7 +33,7 @@
 #include "FlipWare.h"
 #include "gpio.h"
 #include "cim.h"
-#include <avr/io.h>
+//#include <avr/io.h>
 #include <stdlib.h>
 #include <stdio.h>
 
@@ -238,11 +238,11 @@ void generate_ADCFrame()
 {
   uint16_t adcval;
 
-  adcval = sensorData.left - sensorData.right;
+  adcval = sensorData.xRaw;
   CIM_frame.data[0] = adcval & 0xff;
   CIM_frame.data[1] = adcval >> 8;
 
-  adcval = sensorData.up - sensorData.down;
+  adcval = sensorData.yRaw;
   CIM_frame.data[2] = adcval & 0xff;
   CIM_frame.data[3] = adcval >> 8;
 

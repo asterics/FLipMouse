@@ -39,6 +39,10 @@ float __ieee754_sqrtf(float x)
   float z;
   __uint32_t r, hx;
   __int32_t ix, s, q, m, t, i;
+  
+  //avoid compiler warnings
+  (void)hx;
+  (void)i;
 
   GET_FLOAT_WORD(ix, x);
 
@@ -109,42 +113,4 @@ int freeRam()
 #else  // __arm__
   return __brkval ? &top - __brkval : &top - __malloc_heap_start;
 #endif  // __arm__
-}
-
-uint8_t getPCBVersion(void)
-{
-	static uint8_t version = 0;
-  uint8_t result;
-	switch(version)
-	{
-		case 0: //not tested
-      Wire.beginTransmission(EEPROM_I2C_ADDR_v2);
-      result = Wire.endTransmission();
-      if(result == 0) //found v2
-      {
-          version = 2;
-          return version;
-      }
-      
-      Wire.beginTransmission(EEPROM_I2C_ADDR_v3);
-      result = Wire.endTransmission();
-      if(result == 0) //found v3
-      {
-          version = 3;
-          return version;
-      }
-      
-      //oh no, no EEPROM?!?
-      version = -1;
-      return 0;
-      
-			break;
-    case 2: //PCB v2
-    case 3: //PCB v3
-      return version;
-      break;
-    default:
-      return 0;
-      break;
-  }
 }

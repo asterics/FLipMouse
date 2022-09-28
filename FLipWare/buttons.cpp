@@ -61,7 +61,7 @@ void printKeystrings()
     } else x++;
   }
 }
-uint16_t setButtonKeystring(uint8_t buttonIndex, char * newKeystring)
+uint16_t setButtonKeystring(uint8_t buttonIndex, char const * newKeystring)
 {
   char * keystringAddress = getButtonKeystring(buttonIndex);
   

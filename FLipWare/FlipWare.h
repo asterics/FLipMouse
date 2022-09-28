@@ -26,6 +26,9 @@
 
 #include <Arduino.h>
 #include <Wire.h>
+#include <Mouse.h>
+#include <Keyboard.h>
+#include <Joystick.h>
 #include <EEPROM.h>
 #include <string.h>
 #include <stdint.h>
@@ -35,8 +38,9 @@
 #include "bluetooth.h"
 #include "hid_hal.h"
 
-#define VERSION_STRING "v2.12"
+#define VERSION_STRING "v3.00"
 
+//  V3.00: changed platform to Arduino Nano RP2040 Connect
 //  V2.12: improved modularisation and source code documentation, added LC-display support and elliptical deadzone
 //  V2.11: eeprom access optimization and support for deletion / update of individual slots
 //  V2.10: code size reduction: using floating point math, removed debug level control via AT E0, AT E1 and AT E2
@@ -60,22 +64,21 @@
 
 // Optional Debug Output Control
 
-// #define DEBUG_OUTPUT_FULL      // if full debug output is desired
-// #define DEBUG_OUTPUT_BASIC     // if basic debug output is desired (for eeprom)
+//#define DEBUG_OUTPUT_FULL      // if full debug output is desired
+//#define DEBUG_OUTPUT_MEMORY    // enables eeprom.cpp debugging, showing memory access
+//#define DEBUG_OUTPUT_KEYS      // enable keys.cpp debugging, showing key press/release events and keycode lookup
+//#define DEBUG_OUTPUT_IR      	 // enable infrared.cpp debugging, showing whats happening on IR recv/send
+//#define DEBUG_OUTPUT_SENSORS 	 // enable sensors.cpp debugging, showing whats happening on sensor reading & init
+//#define DEBUG_DELAY_STARTUP 	 // enable a 3s delay after Serial.begin and before all the other stuff.
+//#define DEBUG_NO_TONE          // disable tones, to avoid annoying other passengers when programming on the train :-)
+
+#define BUILD_FOR_RP2040        // enable a build for RP2040. There are differences in eeprom & infrared handling.
 
 /**
    global constant definitions
 */
 #define UPDATE_INTERVAL     5    // update interval for performing HID actions (in milliseconds)
 #define DEFAULT_CLICK_TIME  8    // time for mouse click (loop iterations from press to release)
-
-// Analog input pins (4FSRs + 1 pressure sensor)
-#define PRESSURE_SENSOR_PIN A0
-#define HALL_SENSOR_PIN     A1
-#define DOWN_SENSOR_PIN     A6
-#define LEFT_SENSOR_PIN     A9
-#define UP_SENSOR_PIN       A7
-#define RIGHT_SENSOR_PIN    A8
 
 // RAM buffers and memory constraints
 #define WORKINGMEM_SIZE         300    // reserved RAM for working memory (command parser, IR-rec/play)
@@ -99,7 +102,7 @@
 */
 struct SlotSettings {
 
-  char slotName[MAX_NAME_LEN];   // slotname
+  char slotName[MAX_NAME_LEN];   // slotname (@warning: must be always the first element, storing relies on that!)
   uint16_t keystringBufferLen;   
   
   uint8_t  stickMode;  // alternative(0), mouse(1), joystick (2,3,4)
@@ -122,6 +125,7 @@ struct SlotSettings {
   int16_t  cy;     // calib y
   uint16_t ro;     // orientation (0,90,180,270)
   uint8_t  bt;     // bt-mode (0,1,2)
+  char kbdLayout[6];
 };
 
 /**
@@ -134,8 +138,8 @@ struct SensorData {
   float deadZone, force, forceRaw, angle;
   uint8_t dir;
   int8_t autoMoveX,autoMoveY;
-  int up, down, left, right;
-  uint8_t calib_now;
+  int32_t up, down, left, right;  // TBD: obsolete, remove (GUI must be updated for report compatibility)
+  uint16_t calib_now;
   int16_t  cx, cy;
   uint32_t cpressure;
   int xDriftComp, yDriftComp;
@@ -161,5 +165,30 @@ extern char keystringBuffer[MAX_KEYSTRINGBUFFER_LEN];  // storage for all button
 #define strcpy_FM   strcpy
 #define strcmp_FM   strcmp
 typedef char* uint_farptr_t_FM;
+
+/**
+ * Some define checks to warn from building in debug settings
+ */
+#ifdef DEBUG_OUTPUT_MEMORY
+  #warning "DEBUG_OUTPUT_MEMORY active! (GUI might not work)"
+#endif
+#ifdef DEBUG_OUTPUT_FULL
+  #warning "DEBUG_OUTPUT_FULL active! (GUI might not work)"
+#endif
+#ifdef DEBUG_OUTPUT_KEYS
+  #warning "DEBUG_OUTPUT_KEYS active! (GUI might not work)"
+#endif
+#ifdef DEBUG_OUTPUT_IR
+  #warning "DEBUG_OUTPUT_KEYS active! (GUI might not work)"
+#endif
+#ifdef DEBUG_OUTPUT_SENSORS
+  #warning "DEBUG_OUTPUT_SENSORS active! (GUI might not work)"
+#endif
+#ifdef DEBUG_DELAY_STARTUP
+  #warning "DELAY_STARTUP is active, do not release this way!"
+#endif
+#ifdef DEBUG_NO_TONE
+  #warning "DEBUG_NO_TONE is defined, do not release this way!"
+#endif
 
 #endif

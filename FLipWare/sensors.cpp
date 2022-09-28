@@ -12,6 +12,9 @@
 
 #include "sensors.h"
 
+Adafruit_NAU7802 nau;
+LoadcellSensor XS,YS;
+
 #define MPRLS_READ_TIMEOUT (20)     ///< millis
 #define MPRLS_STATUS_POWERED (0x40) ///< Status SPI powered bit
 #define MPRLS_STATUS_BUSY (0x20)    ///< Status busy bit
@@ -19,113 +22,189 @@
 #define MPRLS_STATUS_MATHSAT (0x01) ///< Status bit for math saturation
 #define MPRLS_STATUS_MASK (0b01100101) ///< Sensor status mask: only these bits are set
 
+
+uint8_t channel, newData=0;
+int32_t nau_x=0, nau_y=0;
+uint32_t mprls_rawval=512;
+
 /**
  * @brief Used pressure sensor type. We can use either the MPXV7007GP
  * sensor connected to an analog pin or the MPRLS sensor board with I2C
  */
-typedef enum {MPXV, MPRLS} pressure_type_t;
-pressure_type_t sensor_pressure = MPXV;
+typedef enum {MPXV, MPRLS, NO_PRESSURE} pressure_type_t;
+pressure_type_t sensor_pressure = NO_PRESSURE;
 
 /**
  * @brief Used force sensor type. We can use the FSR sensors or possibly
  * in a future version the resistor gauge sensors.
  */
-typedef enum {FSR, RES, RES_I2C} force_type_t;
-force_type_t sensor_force = FSR;
+typedef enum {NAU7802, NO_FORCE} force_type_t;
+force_type_t sensor_force = NO_FORCE;
+
+
+void configureNAU() {
+  nau.setLDO(NAU7802_3V0);   // NAU7802_2V7, NAU7802_2V4 
+  nau.setGain(NAU7802_GAIN_128);  // NAU7802_GAIN_64, NAU7802_GAIN_32
+  nau.setRate(NAU7802_RATE_320SPS);  // NAU7802_RATE_80SPS
+
+  // trigger internal calibration 
+  while (! nau.calibrate(NAU7802_CALMOD_INTERNAL)) {
+    Serial.println("Failed to set internal calibration, retrying!");
+    delay(1000);
+  }
+  
+  // flush ADC
+  for (uint8_t i=0; i<10; i++) {
+    while (! nau.available()) delay(1);
+    nau.read();
+  }  
+}
+
+void getValueMPRLS() {
+  uint8_t buffer[4]  = {0};
+  Wire1.requestFrom(MPRLS_ADDR,1);
+  buffer[0] = Wire1.read();
+  //any errors? set pressure value to 512, convert otherwise...
+  if(buffer[0] & MPRLS_STATUS_BUSY)
+  {
+    //sensor is busy, cannot read data
+    #ifdef DEBUG_OUTPUT_SENSORS
+      Serial.println("MPRLS: busy");
+    #endif
+    return;
+  }
+  if((buffer[0] & MPRLS_STATUS_MATHSAT) || (buffer[0] & MPRLS_STATUS_FAILED))
+  {
+    //sensor failed or saturated
+    #ifdef DEBUG_OUTPUT_SENSORS
+      Serial.println("MPRLS:failed or saturated");
+    #endif
+    return;
+  } else {
+    //request all 4 bytes
+    Wire1.requestFrom(MPRLS_ADDR,4);
+    for(uint8_t i = 0; i<4; i++) buffer[i] = Wire1.read();
+    mprls_rawval = (uint32_t(buffer[1]) << 16) | (uint32_t(buffer[2]) << 8) | (uint32_t(buffer[3]));
+  }
+  //trigger new conversion
+  Wire1.beginTransmission(MPRLS_ADDR);
+  Wire1.write(0xAA);
+  Wire1.write(0);
+  Wire1.write(0);
+  Wire1.endTransmission();
+}  
+
+
+void getValuesISR() {
+  static int32_t xChange=0,yChange=0;
+  
+  if (channel==1) {
+      xChange=(XS.process(nau.read())-nau_x)/2;
+      nau.setChannel(NAU7802_CHANNEL2);
+      nau_x+=xChange; nau_y+=yChange;
+      channel=2;
+      getValueMPRLS();
+      newData=1;
+  }
+  else {
+      yChange=(YS.process(nau.read())-nau_y)/2;
+      nau.setChannel(NAU7802_CHANNEL1);
+      nau_x+=xChange; nau_y+=yChange;
+      channel=1;
+      getValueMPRLS();
+      newData=1;
+  }
+}
+
+/**************************************************************************/
+/*!
+    @brief  5Hz Lowpass Bessel, 2nd Order (./fiview 25 -i LpBe2/5)
+    @param  val the next incoming signal value
+    @param  buf a pointer to a buffer for working data (2 double values needed)
+    @return  the filtered signal
+*/
+/**************************************************************************/
+double mprlsFilter(double val) {
+   double tmp, fir, iir;
+   double buf[2]={0};
+   tmp= buf[0]; memmove(buf, buf+1, 1*sizeof(double));
+   val *= 0.06378257264840968;
+   iir= val+1.068354407019735*buf[0]-0.3234846976133736*tmp;
+   fir= iir+buf[0]+buf[0]+tmp;
+   buf[1]= iir; val= fir;
+   return val;
+}
+
 
 void initSensors()
 {
   //detect if there is an MPRLS sensor connected to I2C (Wire)
-  Wire.beginTransmission(MPRLS_ADDR);
-  uint8_t result = Wire.endTransmission();
+  Wire1.beginTransmission(MPRLS_ADDR);
+  uint8_t result = Wire1.endTransmission();
   //we found the MPRLS sensor, start the initialization
   if(result == 0) sensor_pressure = MPRLS;
 
-	//detect if there is a resistor gauge sensor with Op-Amps (analog in)
-  //A7/D21 is connected to GND (20mA pin type) (UP)
-  //A9 is horizontal (LEFT)
-  //A8 is vertical (RIGHT)
-  //A6/D20 is connected to GND (DOWN)
-  //detection process: pull D21/A7 to GND. If A6 is read 0, we have the resistor
-  //gauge with op-amps. If A6 is >0, FSRs are installed.
-  //Warning: if the DOWN sensor is broken, this detection fails!
-  
-  //TODO: activate check again!
-  pinMode(21,OUTPUT);
-  digitalWrite(21,LOW);
-  pinMode(20,OUTPUT);
-  digitalWrite(20,LOW);
-  sensor_force = RES;
-  analogReadResolution(13);
-  #warning "Activate check for sensor again!"
-  #if 0
-  pinMode(D21,OUTPUT);
-  digitalWrite(D21,LOW);
-  delay(2);
-  if(analogRead(DOWN_SENSOR_PIN) < 5)
-  {
-    sensor_force = RES;
-    //if we are on RES, set other GND pin to output as well
-    pinMode(D20,OUTPUT);
-    digitalWrite(D20,LOW);
+  //NAU7802 init
+  if (!nau.begin(&Wire1)) {
+    Serial.println("SEN: no force sensor found");
+    sensor_force = NO_FORCE;
+    return;
   } else {
-    //if we have FSRs, reset the pins to analog function again
-    pinMode(D21,INPUT);
-    volatile uint16_t tempread;
-    tempread = analogRead(UP_SENSOR_PIN);
-    tempread = analogRead(DOWN_SENSOR_PIN);
-    tempread = analogRead(LEFT_SENSOR_PIN);
-    tempread = analogRead(RIGHT_SENSOR_PIN);
+    sensor_force = NAU7802;
+    #ifdef DEBUG_OUTPUT_SENSORS
+      Serial.println("SEN: Found NAU7802");
+    #endif
   }
+
+  pinMode (DRDY_PIN, INPUT);
+  nau.setChannel(NAU7802_CHANNEL1);
+  configureNAU();
+  nau.setChannel(NAU7802_CHANNEL2);
+  configureNAU();
+  nau.setChannel(NAU7802_CHANNEL1);
+  channel=1;
+
+  attachInterrupt(digitalPinToInterrupt(DRDY_PIN), getValuesISR, RISING);
+
+  #ifdef DEBUG_OUTPUT_SENSORS
+    Serial.println("SEN: Calibrated internal offset");
   #endif
-  
-  //TODO: if we use an ADC based resistor gauge, add detection here.
+
 }
 
 
 void readPressure(struct SensorData *data)
 {
-  uint8_t buffer[4]  = {0};
+  static int32_t mprls_filtered=512;
+  
   switch(sensor_pressure)
   {
-    case MPRLS:
-      //request status byte
-      Wire.requestFrom(MPRLS_ADDR,4);
-      for(uint8_t i = 0; i<4; i++) buffer[i] = Wire.read();
-      //any errors? set pressure value to 512, convert otherwise...
-      if(buffer[0] & MPRLS_STATUS_BUSY)
+    case MPRLS:          
+      //only proceed if value != 0
+      if(mprls_rawval)
       {
-        //sensor is busy, cannot read data
-        return;
-      }
-      if((buffer[0] & MPRLS_STATUS_MATHSAT) || (buffer[0] & MPRLS_STATUS_FAILED))
-      {
-        data->pressure = 512;
-        //Serial.println("MPRLS:error");
-      } else {
-        uint32_t rawval = (uint32_t(buffer[1]) << 16) | (uint32_t(buffer[2]) << 8) | (uint32_t(buffer[3]));
-        rawval = rawval / MPRLS_DIVIDER;
-        //only procede if value != 0
-        if(rawval)
+        //calibrate if requested
+        if(data->calib_now==1)
         {
-          //calibrate if requested
-          if(data->calib_now)
-          {
-            data->cpressure = rawval;
-          } else {
-            //base value is 512; calculate difference between current & calibrated raw value
-            data->pressure = 512 + (rawval - data->cpressure);
-          }
+          #ifdef DEBUG_OUTPUT_SENSORS
+            Serial.print("MPRLS: calib: ");
+            Serial.println(mprls_rawval);
+          #endif
+          data->cpressure = mprls_filtered;
+        } else {
+          // calculate filtered pressure value, apply offset
+          mprls_filtered=mprlsFilter(mprls_rawval);
+          int32_t diff = ((int32_t)mprls_filtered - (int32_t)data->cpressure) / MPRLS_DIVIDER;
+
+          // center around 512, clamp to 0/1023 (GUI compatibility)
+          if(diff < -512) data->pressure = -512;
+          else data->pressure = 512 + diff;
+          if(data->pressure > 1023) data->pressure = 1023;
         }
       }
-      
-      //trigger new conversion
-      Wire.beginTransmission(MPRLS_ADDR);
-      Wire.write(0xAA);
-      Wire.write(0);
-      Wire.write(0);
-      Wire.endTransmission();
-      
+      break;
+    case NO_PRESSURE:
+      data->pressure = 512;
       break;
     case MPXV:
     default:
@@ -133,58 +212,33 @@ void readPressure(struct SensorData *data)
       break;
   }
 }
-/*
-uint32_t avg(uint32_t rsample)
-{
-	#define SIZE_BUF 256
-	static uint32_t count = 0;
-	static uint32_t out[SIZE_BUF] = {0};
-	uint32_t sum = 0;
-	
-	out[count] = rsample;
-	count = (count+1) % SIZE_BUF;
-	
-	for(uint16_t i = 0; i<SIZE_BUF; i++)
-	{
-		sum += out[i];
-	}
-	return sum / SIZE_BUF;
-}*/
 
 void readForce(struct SensorData *data)
 {
-  static uint32_t left_right = analogRead(LEFT_SENSOR_PIN);
-  static uint32_t up_down = analogRead(RIGHT_SENSOR_PIN);
-
+  static int32_t currentX=0,currentY=0;
+  
   switch(sensor_force)
   {
-    //TODO: add I2C resistor gauge
-    //case RES_I2C:
-    //break;
-    case RES:
-      //horizontal is LEFT pin
-      //vertical is RIGHT pin
-      
-      //use same analog value for left+right, but invert
-      for(uint8_t i = 0; i<10; i++)
-      {
-	    left_right += analogRead(LEFT_SENSOR_PIN);
-	    left_right /= 2;
-	    up_down += analogRead(RIGHT_SENSOR_PIN);
-	    up_down /= 2;
-	  }
-	  
-      data->left = left_right >> 3; //convert down to 10bit
-      data->right = (1<<10) - data->left;
-      data->up = up_down >> 3;
-      data->down = (1<<10) - data->up;
-      break;
-    case FSR:
+    case NAU7802:
+
+        if(data->calib_now==1) {
+          XS.calib();
+          YS.calib();
+          nau_x=nau_y=0;
+        }
+
+        if (newData) {
+            newData=0;
+            currentX=nau_x/200;
+            currentY=nau_y/200;
+        }
+        data->xRaw =  currentX;
+        data->yRaw =  currentY;
+        break;
+    case NO_FORCE:
     default:
-      data->up =    analogRead(UP_SENSOR_PIN);
-      data->down =  analogRead(DOWN_SENSOR_PIN);
-      data->left =  analogRead(LEFT_SENSOR_PIN);
-      data->right = analogRead(RIGHT_SENSOR_PIN);
+      data->xRaw=0;
+      data->yRaw=0;
       break;
   }
 }

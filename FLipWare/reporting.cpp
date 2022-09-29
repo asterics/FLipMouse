@@ -81,12 +81,15 @@ void printCurrentSlot(Stream *S)
 void reportValues()
 {
   static uint8_t valueReportCount = 0;
+  
   if (!reportRawValues)   return;
 
-  if (valueReportCount++ > 10) {      // report raw values approx. every 50ms !
+  if (valueReportCount++ > 50/UPDATE_INTERVAL) {      // report raw values approx. every 50ms !
+    int32_t u=sensorData.yRaw+512; int32_t d=512-sensorData.yRaw;   // just for GUI compatibility with V2 (bar displays up/down)
+    int32_t l=sensorData.xRaw+512; int32_t r=512-sensorData.xRaw;   // just for GUI compatibility with V2 (bar displays left/right)
     Serial.print("VALUES:"); Serial.print(sensorData.pressure); Serial.print(",");
-    Serial.print(sensorData.up); Serial.print(","); Serial.print(sensorData.down); Serial.print(",");
-    Serial.print(sensorData.left); Serial.print(","); Serial.print(sensorData.right); Serial.print(",");
+    Serial.print(u); Serial.print(","); Serial.print(d); Serial.print(",");
+    Serial.print(l); Serial.print(","); Serial.print(r); Serial.print(",");
     Serial.print(sensorData.xRaw); Serial.print(","); Serial.print(sensorData.yRaw); Serial.print(",");
     for (uint8_t i = 0; i < NUMBER_OF_BUTTONS; i++)
     {

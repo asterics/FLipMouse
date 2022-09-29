@@ -139,7 +139,6 @@ struct SensorData {
   float deadZone, force, forceRaw, angle;
   uint8_t dir;
   int8_t autoMoveX,autoMoveY;
-  int32_t up, down, left, right;  // TBD: obsolete, remove (GUI must be updated for report compatibility)
   uint16_t calib_now;
   int16_t  cx, cy;
   uint32_t cpressure;

@@ -55,7 +55,6 @@
       (xy -3.175 -3.175)
     ) (layer "F.Fab") (width 0.1) (fill solid) (tstamp dda838b1-7776-4cba-996f-221e88bfb997))
   (pad "1" smd oval (at 17.78 -8.89 270) (size 3 1.7) (layers "F.Cu" "F.Paste" "F.Mask") (tstamp b3d157f3-007e-426f-ae22-a823566ba505))
-  (pad "1" thru_hole circle (at 17.78 -7.605) (size 1.524 1.524) (drill 0.85) (layers *.Cu *.Mask) (tstamp fe6d9dd5-ea76-463e-aee1-dee116b70c83))
   (pad "2" smd oval (at 15.24 -8.89 270) (size 3 1.7) (layers "F.Cu" "F.Paste" "F.Mask") (tstamp c3af8d5d-c54d-4c92-8db5-1448d7796f0b))
   (pad "3" smd oval (at 12.7 -8.89 270) (size 3 1.7) (layers "F.Cu" "F.Paste" "F.Mask") (tstamp 6ee4b261-1765-4a7d-bd3b-9ec877dbf7d1))
   (pad "4" smd oval (at 10.16 -8.89 270) (size 3 1.7) (layers "F.Cu" "F.Paste" "F.Mask") (tstamp 89bd2446-9609-42ac-80ef-563fe40a192f))
@@ -84,7 +83,6 @@
   (pad "27" smd oval (at 10.16 8.89 270) (size 3 1.7) (layers "F.Cu" "F.Paste" "F.Mask") (tstamp 7581ea12-0a04-47a7-9ff3-77088f9782ba))
   (pad "28" smd oval (at 12.7 8.89 270) (size 3 1.7) (layers "F.Cu" "F.Paste" "F.Mask") (tstamp a9d799ce-70b9-4100-ae71-f1762440a5bf))
   (pad "29" smd oval (at 15.24 8.89 270) (size 3 1.7) (layers "F.Cu" "F.Paste" "F.Mask") (tstamp 41e4f8b1-a5dc-4809-b9a9-84258faa4a5d))
-  (pad "30" thru_hole circle (at 17.78 7.62) (size 1.524 1.524) (drill 0.85) (layers *.Cu *.Mask) (tstamp 6f558443-2444-4d61-9cee-ca0a814891fd))
   (pad "30" smd oval (at 17.78 8.89 270) (size 3 1.7) (layers "F.Cu" "F.Paste" "F.Mask") (tstamp 9dccc471-b116-43f1-bdaf-ccb90158dd7f))
   (model "${KIPRJMOD}/step/ArduinoNanoRP2040.stp"
     (offset (xyz 0.5 0 0))

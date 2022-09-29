@@ -82,7 +82,7 @@ struct SensorData sensorData {
   .dir=0,
   .autoMoveX=0, .autoMoveY=0,
   .up=0, .down=0, .left=0, .right=0,
-  .calib_now=200,    // calibrate sensors ~1000 ms after startup !
+  .calib_now=CALIBRATION_PERIOD,   // calibrate sensors after startup !
   .cx=0, .cy=0, .cpressure=0,
   .xDriftComp=0, .yDriftComp=0,
   .xLocalMax=0, .yLocalMax=0
@@ -126,7 +126,6 @@ void setup() {
   init_CIM_frame();  // for AsTeRICS CIM protocol compatibility
   initStorage();   // initialize storage if necessary
   readFromEEPROMSlotNumber(0, true); // read slot from first EEPROM slot if available !
-  initBlink(10,25);  // first signs of life!
 
   // NOTE: changed for RP2040!  TBD: why does setBTName damage the console UART TX ??
   // setBTName(moduleName);             // if BT-module installed: set advertising name 
@@ -141,6 +140,9 @@ void setup() {
 #endif
   lastInteractionUpdate = millis();  // get first timestamp
 
+  initBlink(10,20);  // first signs of life!
+  sensorData.calib_now = CALIBRATION_PERIOD;
+  makeTone(TONE_CALIB, 0);
 }
 
 /**
@@ -170,11 +172,9 @@ void loop1() {
     readPressure(&sensorData);
     readForce(&sensorData);
 
-    // update calibration counter, bypass sensor values during calibration
-    if (sensorData.calib_now) {
-      sensorData.calib_now--;
-      sensorData.xRaw=sensorData.yRaw=sensorData.pressure=0;
-    }      
+    // update calibration counter (if calibration running)
+    if (sensorData.calib_now) sensorData.calib_now--;
+    
   }
   delay(1);  // core2: sleep a bit ...  
 }

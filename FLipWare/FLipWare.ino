@@ -24,8 +24,9 @@
                   arduino-pico core (https://github.com/earlephilhower/arduino-pico), installable via board manager
                   Adafruit Neopixel library, installable via library manager
                   https://github.com/benjaminaigner/Adafruit_NAU7802
+                  https://github.com/ChrisVeigl/LoadcellSensor
                   SSD1306Ascii-library by Bill Greiman, see https://github.com/greiman/SSD1306Ascii
-                  Arduino settings: "Flash Size: 15MB Sketch, 1MB FS"
+                  Arduino settings: Tools->Board:"Arduino Nano RP2040 Connect",  "Tools->Flash Size: "15MB Sketch, 1MB FS" 
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -47,7 +48,6 @@
 #include "parser.h"  
 #include "reporting.h"
 #include "cim.h"
-#include "utils.h"       
 #include "keys.h"       
 
 /**
@@ -90,8 +90,7 @@ struct I2CSensorValues sensorValues {
 };
 
 
-mutex_t sensorDataMutex;
-
+mutex_t sensorDataMutex;                      // for synchronizsation of data access between cores
 struct SlotSettings slotSettings;             // contains all slot settings
 uint8_t workingmem[WORKINGMEM_SIZE];          // working memory (command parser, IR-rec/play)
 uint8_t actSlot = 0;                          // number of current slot
@@ -99,13 +98,9 @@ unsigned long lastInteractionUpdate;          // timestamp for HID interaction u
 uint8_t addonUpgrade = BTMODULE_UPGRADE_IDLE; // if not "idle": we are upgrading the addon module
 
 
-// forward declaration of functions for sensor data processing
-void applyDeadzone();
-
-
 /**
    @name setup
-   @brief setup function, program execution of core1 starts here
+   @brief setup function, program execution of core0 starts here
    @return none
 */
 void setup() {
@@ -141,6 +136,7 @@ void setup() {
   
   // displayInstalled=displayInit(0);   // check if i2c-display connected   TBD: missing i2c core2 synchronisation!
   // displayUpdate();
+  
 #ifdef DEBUG_OUTPUT_FULL
   Serial.print("Free RAM:");  Serial.println(freeRam());
   Serial.print(moduleName); Serial.println(" ready !");
@@ -149,51 +145,10 @@ void setup() {
 
 }
 
-/**
-   @name setup1
-   @brief setup1 function, program execution of core2 starts here (for I2C sensor updates)
-   @return none
-*/
-void setup1() {
-
-  Wire1.begin();
-  Wire1.setClock(400000);  // use 400kHz I2C clock
-  initSensors();
-  initBlink(10,20);  // first signs of life!
-
-  makeTone(TONE_CALIB, 0);
-
-}
-
-/**
-   @name loop1
-   @brief loop1 function, periodically called from core2 after setup1(), performs I2C sensor updates
-   @return none
-*/
-void loop1() {
-  static unsigned long lastUpdate=0;     
-	
-  if (millis() >= lastUpdate + UPDATE_INTERVAL)  {
-    lastUpdate = millis();
-
-    // get current sensor values
-    mutex_enter_blocking(&sensorDataMutex);
-    readPressure(&sensorValues);
-    readForce(&sensorValues);
-    mutex_exit(&sensorDataMutex);
-
-    // update calibration counter (if calibration running)
-    if (sensorValues.calib_now) sensorValues.calib_now--;
-    
-  }
-  delay(1);  // core2: sleep a bit ...  
-}
-
-
 
 /**
    @name loop
-   @brief loop function, periodically called from core1 after setup()
+   @brief loop function, periodically called from core0 after setup()
    @return none
 */
 void loop() {
@@ -239,66 +194,61 @@ void loop() {
                   break;
       }
 
-      // calculate angular direction and force
-      sensorData.forceRaw = __ieee754_sqrtf(sensorData.xRaw * sensorData.xRaw + sensorData.yRaw * sensorData.yRaw);
-      if (sensorData.forceRaw !=0) {
-        sensorData.angle = atan2f ((float)sensorData.yRaw / sensorData.forceRaw, (float)sensorData.xRaw / sensorData.forceRaw );
-        
-        // get 8 directions
-        sensorData.dir=(180+22+(int)(sensorData.angle*57.29578))/45+1;  // translate rad to deg and make 8 sections
-        if (sensorData.dir>8) sensorData.dir=1;  
-      }
+      calculateDirection(&sensorData);            // calculate angular direction / force form x/y sensor data
+      applyDeadzone(&sensorData, &slotSettings);  // calculate updated x/y/force values according to deadzone
+      handleUserInteraction();                    // handle all mouse / joystick / button activities
 
-      applyDeadzone();          // calculate updated x/y/force values according to deadzone
-      handleUserInteraction();  // handle all mouse / joystick / button activities
-      reportValues();           // send live data to serial
-      updateLeds();
-      UpdateTones();
+      reportValues();   // send live data to serial
+      updateLeds();     // mode indication via front facing neopixel LEDs
+      UpdateTones();    // mode indication via audio signals (buzzer)
     }
     if (CimMode) {
       handleCimMode();   // create periodic reports if running in AsTeRICS CIM compatibility mode
     }
   }
+  delay(1);  // core0: sleep a bit ...  
+}
+
+
+//
+//   Following code is running on second core (core1)
+//
+
+/**
+   @name setup1
+   @brief setup1 function, program execution of core1 starts here (for I2C sensor updates)
+   @return none
+*/
+void setup1() {
+
+  Wire1.begin();
+  Wire1.setClock(400000);  // use 400kHz I2C clock
+  initSensors();
+  initBlink(10,20);  // first signs of life!
+  makeTone(TONE_CALIB, 0);
+}
+
+/**
+   @name loop1
+   @brief loop1 function, periodically called from core1 after setup1(), performs I2C sensor updates
+   @return none
+*/
+void loop1() {
+  static unsigned long lastUpdate=0;     
+	
+  if (millis() >= lastUpdate + UPDATE_INTERVAL)  {
+    lastUpdate = millis();
+
+    // get current sensor values
+    mutex_enter_blocking(&sensorDataMutex);
+    readPressure(&sensorValues);
+    readForce(&sensorValues);
+    mutex_exit(&sensorDataMutex);
+
+    // update calibration counter (if calibration running)
+    if (sensorValues.calib_now) sensorValues.calib_now--;
+    
+  }
   delay(1);  // core1: sleep a bit ...  
 }
 
-
-/**
-   @name applyDeadzone
-   @brief calculates deadzone and respective x/y/force values (in sensorData struct)
-   @return none
-*/
-void applyDeadzone()
-{
-  if (slotSettings.stickMode == STICKMODE_ALTERNATIVE) {
-
-    // rectangular deadzone for alternative modes
-    if (sensorData.xRaw < -slotSettings.dx) 
-      sensorData.x = sensorData.xRaw + slotSettings.dx; // apply deadzone values x direction
-    else if (sensorData.xRaw > slotSettings.dx) 
-      sensorData.x = sensorData.xRaw - slotSettings.dx;
-    else sensorData.x = 0;
-
-    if (sensorData.yRaw < -slotSettings.dy)
-      sensorData.y = sensorData.yRaw + slotSettings.dy; // apply deadzone values y direction
-    else if (sensorData.yRaw > slotSettings.dy)
-      sensorData.y = sensorData.yRaw - slotSettings.dy;
-    else sensorData.y = 0;
-
-  } else {
-
-    //  circular deadzone for mouse control
-    if (sensorData.forceRaw != 0) {     
-      float a= slotSettings.dx>0 ? slotSettings.dx : 1 ;
-      float b= slotSettings.dy>0 ? slotSettings.dy : 1 ;      
-      float s=sinf(sensorData.angle);
-      float c=cosf(sensorData.angle);
-      sensorData.deadZone =  a*b / __ieee754_sqrtf(a*a*s*s + b*b*c*c);  // ellipse equation, polar form
-    }
-    else sensorData.deadZone = slotSettings.dx;
-
-    sensorData.force = (sensorData.forceRaw < sensorData.deadZone) ? 0 : sensorData.forceRaw - sensorData.deadZone;
-    sensorData.x = (int) (sensorData.force * cosf(sensorData.angle));
-    sensorData.y = (int) (sensorData.force * sinf(sensorData.angle));
-  }
-}

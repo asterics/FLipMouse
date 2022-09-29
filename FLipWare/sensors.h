@@ -13,16 +13,10 @@
 #ifndef _SENSORS_H_
 #define _SENSORS_H_
 
-//we need the SensorData structure definition
-#include "FlipWare.h"
-//MPRLS pressure sensor is I2C
-#include "Wire.h"
-
-#include <LoadcellSensor.h>
-
-//NAU7802 library (Benjamin Aigner's fork with channel change feature)
-#include <Adafruit_NAU7802.h>
-
+#include "FlipWare.h"        // we need the SensorData and SlotSettings structure definitions
+#include "Wire.h"            // MPRLS pressure sensor and NAU7802 sensor use I2C
+#include <LoadcellSensor.h>  // for signal conditioning
+#include <Adafruit_NAU7802.h>  //NAU7802 library (Benjamin Aigner's fork with channel change feature)
 
 /** Data ready pin of NAU chip */
 #define DRDY_PIN        28
@@ -61,5 +55,20 @@ void readPressure(struct I2CSensorValues *data);
    @return none
 */
 void readForce(struct I2CSensorValues *data);
+
+
+/**
+   @name calculateDirection
+   @brief calculates angular direction and force for current x/y sensor values
+   @return none
+*/
+void calculateDirection(struct SensorData * sensorData);
+
+/**
+   @name applyDeadzone
+   @brief applies deadzone algorithm (elliptical or rectangular) to raw x/y sensor data
+   @return none
+*/
+void applyDeadzone(struct SensorData * sensorData, struct SlotSettings * slotSettings);
 
 #endif /* _SENSORS_H_ */

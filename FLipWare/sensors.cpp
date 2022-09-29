@@ -11,6 +11,8 @@
 */
 
 #include "sensors.h"
+#include "modes.h"
+#include "utils.h"
 
 Adafruit_NAU7802 nau;
 LoadcellSensor XS,YS,PS;
@@ -22,17 +24,21 @@ LoadcellSensor XS,YS,PS;
 #define MPRLS_STATUS_MATHSAT (0x01) ///< Status bit for math saturation
 #define MPRLS_STATUS_MASK (0b01100101) ///< Sensor status mask: only these bits are set
 
-
-uint8_t channel, newData=0;
-int32_t nau_x=0, nau_y=0;
-uint32_t mprls_rawval=512;
-
 /**
  * @brief Used pressure sensor type. We can use either the MPXV7007GP
  * sensor connected to an analog pin or the MPRLS sensor board with I2C
  */
 typedef enum {MPXV, MPRLS, NO_PRESSURE} pressure_type_t;
 pressure_type_t sensor_pressure = NO_PRESSURE;
+
+
+/**
+ * @brief Global variables for passing sensor data from the ISR
+ */
+uint8_t channel, newData=0;
+int32_t nau_x=0, nau_y=0;
+uint32_t mprls_rawval=512;
+
 
 /**
  * @brief Used force sensor type. We can use the FSR sensors or possibly
@@ -42,6 +48,11 @@ typedef enum {NAU7802, NO_FORCE} force_type_t;
 force_type_t sensor_force = NO_FORCE;
 
 
+/**
+   @name configureNAU
+   @brief initialises the NAU7802 chip for desired sampling rate and gain
+   @return none
+*/
 void configureNAU() {
   nau.setLDO(NAU7802_3V0);   // NAU7802_2V7, NAU7802_2V4 
   nau.setGain(NAU7802_GAIN_128);  // NAU7802_GAIN_64, NAU7802_GAIN_32
@@ -60,6 +71,11 @@ void configureNAU() {
   }  
 }
 
+/**
+   @name getValueMPRLS
+   @brief reads a current value from the MPRLS pressure sensor (polling)
+   @return nonw
+*/
 void getValueMPRLS() {
   uint8_t buffer[4]  = {0};
   Wire1.requestFrom(MPRLS_ADDR,1);
@@ -95,6 +111,13 @@ void getValueMPRLS() {
 }  
 
 
+/**
+   @name getValuesISR
+   @brief called via pin-change interrupt if new data from NAU7802 is available. 
+          Reads NAU data, changes NAU channel and reads MPRLS data, updates global variables.
+          Expected sampling rate ca. 64 Hz
+   @return none
+*/
 void getValuesISR() {
   static int32_t xChange=0,yChange=0;
   
@@ -116,6 +139,11 @@ void getValuesISR() {
   }
 }
 
+/**
+   @name initSensors
+   @brief initialises I2C interface, prepares NAU and MPRLS readouts. [called from core 1]
+   @return none
+*/
 void initSensors()
 {
   //detect if there is an MPRLS sensor connected to I2C (Wire)
@@ -152,7 +180,12 @@ void initSensors()
 
 }
 
-
+/**
+   @name readPressure
+   @brief updates and processes new pressure sensor values form MPRLS. [called from core 1]
+   @param data: pointer to I2CSensorValues struct, used by core1
+   @return none
+*/
 void readPressure(struct I2CSensorValues *data)
 {
   static int32_t mprls_filtered=512;
@@ -196,6 +229,12 @@ void readPressure(struct I2CSensorValues *data)
   }
 }
 
+/**
+   @name readForce
+   @brief updates and processes new  x/y sensor values from NAU7802. [called from core 1]
+   @param data: pointer to I2CSensorValues struct, used by core1
+   @return none
+*/
 void readForce(struct I2CSensorValues *data)
 {
   static int32_t currentX=0,currentY=0;
@@ -231,3 +270,65 @@ void readForce(struct I2CSensorValues *data)
       break;
   }
 }
+
+
+/**
+   @name calculateDirection
+   @brief calculates angular direction and force for current x/y sensor values. [called from core 0]
+   @param sensorData: pointer to SensorData struct, used by core0
+   @return none
+*/
+void calculateDirection(struct SensorData * sensorData)
+{
+  sensorData->forceRaw = __ieee754_sqrtf(sensorData->xRaw * sensorData->xRaw + sensorData->yRaw * sensorData->yRaw);
+  if (sensorData->forceRaw !=0) {
+    sensorData->angle = atan2f ((float)sensorData->yRaw / sensorData->forceRaw, (float)sensorData->xRaw / sensorData->forceRaw );
+    
+    // get 8 directions
+    sensorData->dir=(180+22+(int)(sensorData->angle*57.29578))/45+1;  // translate rad to deg and make 8 sections
+    if (sensorData->dir>8) sensorData->dir=1;  
+  }
+}
+
+/**
+   @name applyDeadzone
+   @brief calculates deadzone and respective x/y/force values (in sensorData struct). [called from core 0]
+   @param sensorData: pointer to SensorData struct, used by core0
+   @param slotSettings: pointer to SlotSettings struct, used by core0
+   @return none
+*/
+void applyDeadzone(struct SensorData * sensorData, struct SlotSettings * slotSettings)
+{
+  if (slotSettings->stickMode == STICKMODE_ALTERNATIVE) {
+
+    // rectangular deadzone for alternative modes
+    if (sensorData->xRaw < -slotSettings->dx) 
+      sensorData->x = sensorData->xRaw + slotSettings->dx; // apply deadzone values x direction
+    else if (sensorData->xRaw > slotSettings->dx) 
+      sensorData->x = sensorData->xRaw - slotSettings->dx;
+    else sensorData->x = 0;
+
+    if (sensorData->yRaw < -slotSettings->dy)
+      sensorData->y = sensorData->yRaw + slotSettings->dy; // apply deadzone values y direction
+    else if (sensorData->yRaw > slotSettings->dy)
+      sensorData->y = sensorData->yRaw - slotSettings->dy;
+    else sensorData->y = 0;
+
+  } else {
+
+    //  circular deadzone for mouse control
+    if (sensorData->forceRaw != 0) {     
+      float a= slotSettings->dx>0 ? slotSettings->dx : 1 ;
+      float b= slotSettings->dy>0 ? slotSettings->dy : 1 ;      
+      float s=sinf(sensorData->angle);
+      float c=cosf(sensorData->angle);
+      sensorData->deadZone =  a*b / __ieee754_sqrtf(a*a*s*s + b*b*c*c);  // ellipse equation, polar form
+    }
+    else sensorData->deadZone = slotSettings->dx;
+
+    sensorData->force = (sensorData->forceRaw < sensorData->deadZone) ? 0 : sensorData->forceRaw - sensorData->deadZone;
+    sensorData->x = (int) (sensorData->force * cosf(sensorData->angle));
+    sensorData->y = (int) (sensorData->force * sinf(sensorData->angle));
+  }
+}
+

@@ -464,9 +464,6 @@
         "nets": [
           "/VIN",
           "GND",
-          "Net-(D1-Pad1)",
-          "Net-(D1-Pad2)",
-          "Net-(D2-Pad1)",
           "Net-(D3-Pad1)",
           "Net-(D3-Pad2)",
           "VCC"

@@ -1,6 +1,6 @@
 /*
      FLipWare - AsTeRICS Foundation
-     For more info please visit: http://www.asterics-academy.net
+     For more info please visit: https://www.asterics-foundation.org
 
      Module: commands.cpp - implementation of the AT-commands
      For a description of the supported commands see: commands.h

@@ -1,7 +1,7 @@
 /*
 	FLipWare - AsTeRICS Foundation
 	Copyright (c) Benjamin Aigner
-	For more info please visit: http://www.asterics-academy.net
+	For more info please visit: https://www.asterics-foundation.org
 
 	Module: bluetooth.cpp - using external Bluetooth addon for mouse/keyboard control
 

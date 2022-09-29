@@ -1,7 +1,7 @@
 
 /*
       FLipWare - AsTeRICS Foundation
-     For more info please visit: http://www.asterics-academy.net
+     For more info please visit: https://www.asterics-foundation.org
 
      Module: buttons.cpp - implementation of the button handling
 

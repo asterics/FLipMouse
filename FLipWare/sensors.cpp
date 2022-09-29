@@ -13,7 +13,7 @@
 #include "sensors.h"
 
 Adafruit_NAU7802 nau;
-LoadcellSensor XS,YS;
+LoadcellSensor XS,YS,PS;
 
 #define MPRLS_READ_TIMEOUT (20)     ///< millis
 #define MPRLS_STATUS_POWERED (0x40) ///< Status SPI powered bit
@@ -116,26 +116,6 @@ void getValuesISR() {
   }
 }
 
-/**************************************************************************/
-/*!
-    @brief  5Hz Lowpass Bessel, 2nd Order (./fiview 25 -i LpBe2/5)
-    @param  val the next incoming signal value
-    @param  buf a pointer to a buffer for working data (2 double values needed)
-    @return  the filtered signal
-*/
-/**************************************************************************/
-double mprlsFilter(double val) {
-   double tmp, fir, iir;
-   double buf[2]={0};
-   tmp= buf[0]; memmove(buf, buf+1, 1*sizeof(double));
-   val *= 0.06378257264840968;
-   iir= val+1.068354407019735*buf[0]-0.3234846976133736*tmp;
-   fir= iir+buf[0]+buf[0]+tmp;
-   buf[1]= iir; val= fir;
-   return val;
-}
-
-
 void initSensors()
 {
   //detect if there is an MPRLS sensor connected to I2C (Wire)
@@ -183,24 +163,27 @@ void readPressure(struct SensorData *data)
       //only proceed if value != 0
       if(mprls_rawval)
       {
-        //calibrate if requested
-        if(data->calib_now==1)
+        //calibrate offset in the middle of the calibration period
+        if(data->calib_now==CALIBRATION_PERIOD/2)
         {
           #ifdef DEBUG_OUTPUT_SENSORS
             Serial.print("MPRLS: calib: ");
             Serial.println(mprls_rawval);
           #endif
-          data->cpressure = mprls_filtered;
-        } else {
-          // calculate filtered pressure value, apply offset
-          mprls_filtered=mprlsFilter(mprls_rawval);
-          int32_t diff = ((int32_t)mprls_filtered - (int32_t)data->cpressure) / MPRLS_DIVIDER;
-
-          // center around 512, clamp to 0/1023 (GUI compatibility)
-          if(diff < -512) data->pressure = -512;
-          else data->pressure = 512 + diff;
-          if(data->pressure > 1023) data->pressure = 1023;
+          PS.calib();
         }
+        
+        // calculate filtered pressure value, apply signal conditioning
+        mprls_filtered=PS.process(mprls_rawval / 10);
+        data->pressure = 512 + mprls_filtered / MPRLS_DIVIDER;
+
+        // clamp to 1/1022 (allows disabling strong sip/puff)
+        if(data->pressure < 1) data->pressure = 1;
+        if(data->pressure > 1022) data->pressure = 1022;
+
+        // during calibration period: bypass activities
+        if(data->calib_now) data->pressure=512;
+
       }
       break;
     case NO_PRESSURE:
@@ -221,19 +204,25 @@ void readForce(struct SensorData *data)
   {
     case NAU7802:
 
-        if(data->calib_now==1) {
+        //calibrate offset in the middle of the calibration period
+        if(data->calib_now==CALIBRATION_PERIOD/2) {
           XS.calib();
           YS.calib();
-          nau_x=nau_y=0;
         }
 
+        // update x/y-values 
         if (newData) {
             newData=0;
             currentX=nau_x/200;
             currentY=nau_y/200;
         }
-        data->xRaw =  currentX;
-        data->yRaw =  currentY;
+
+        // during calibration period: bypass activities
+        if(data->calib_now) data->xRaw=data->yRaw=0;
+        else {
+          data->xRaw =  currentX;
+          data->yRaw =  currentY;
+        }
         break;
     case NO_FORCE:
     default:

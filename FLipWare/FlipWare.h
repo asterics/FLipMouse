@@ -79,6 +79,7 @@
 */
 #define UPDATE_INTERVAL     5    // update interval for performing HID actions (in milliseconds)
 #define DEFAULT_CLICK_TIME  8    // time for mouse click (loop iterations from press to release)
+#define CALIBRATION_PERIOD  200  // approx. 200*UPDATE_INTERVAL = 1sec calibration time
 
 // RAM buffers and memory constraints
 #define WORKINGMEM_SIZE         300    // reserved RAM for working memory (command parser, IR-rec/play)
@@ -121,8 +122,8 @@ struct SlotSettings {
   uint8_t  rv;     // range vertical drift compensation
   uint8_t  gh;     // gain horizontal drift compensation
   uint8_t  rh;     // range horizontal drift compensation
-  int16_t  cx;     // calib x
-  int16_t  cy;     // calib y
+  int16_t  cx;     // calib x  (TBD: now obsolete, can be removed)
+  int16_t  cy;     // calib y  (TBD: now obsolete, can be removed)
   uint16_t ro;     // orientation (0,90,180,270)
   uint8_t  bt;     // bt-mode (0,1,2)
   char kbdLayout[6];

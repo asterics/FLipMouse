@@ -7,7 +7,7 @@ All settings and functions of the FlipMouse can be tailored to specific user cap
 Additional features like built-in environmental control via infrared, optional bluetooth-add-on module for controlling smartphones/tablets or complete software-based control of all functions via serial command interface make the FlipMouse one of the most flexible alternative input devices available today.
 
 
-![Fully euqipped FLipmouse with 2 external buttons attached. Mounted on Manfrotto mount](/img/FLipmouse2.jpg)
+![Fully euqipped FLipmouse v2 with 2 external buttons attached. Mounted on Manfrotto mount](/img/FLipmouse2.jpg)
 
 The FlipMouse might be used as a full replacement of standard computer input devices and can also be used for accessing smartphones or tablets (via the standard HID support or accessibility features).
 It can be useful for people with motor disablities, computer gamers, musicians or people who want a hands-free computer access for other purposes.
@@ -55,9 +55,11 @@ More Information can be found in the user manual:
 ## Building the firmware
 In order to build the firmware following prerequisites and dependencies must be installed:
 * the [Arduino IDE](https://www.arduino.cc/en/software)
-* the [arduino-pico](https://github.com/earlephilhower/arduino-pico) Core (can be installed from Arduino board-manager)
+* the [arduino-pico](https://github.com/earlephilhower/arduino-pico) Core (can be installed using Arduino IDE's Arduino board-manager)
+* the [Adafruit Neopixel](https://github.com/adafruit/Adafruit_NeoPixel) library (can be installed using Arduino IDE's library manager)
+* the modified [Adafruit NAU_7802] https://github.com/benjaminaigner/Adafruit_NAU7802 library (with channel-change feature added by Benjamin Aigner)
+* the [LoadcellSensor] (https://github.com/ChrisVeigl/LoadcellSensor) library for sensor signal processing (by Chris Veigl)
 * the [SSD1306Ascii](https://github.com/greiman/SSD1306Ascii) library by Bill Greiman (can be installed using Arduino IDE's library manager)
-* the [Adafruit Neopixel](https://github.com/adafruit/Adafruit_NeoPixel) library (installable via library manager)
 * select the *board* 'Arduino Nano RP2040 Connect' in the Arduino IDE tools menu, and the *Flash Size* "16MB (Sketch: 15MB, FS: 1MB)"
 * select the correct *Port* after connecting the Arduino to your system
 * compile and upload the firmware 

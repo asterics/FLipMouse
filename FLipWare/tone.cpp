@@ -37,7 +37,7 @@ void UpdateTones()
       toneState++;
       break;
     case 1:
-      if (++cnt > (toneOnTime + toneOffTime) / 5 )  {
+      if (++cnt > (toneOnTime + toneOffTime) / UPDATE_INTERVAL )  {
         toneCount--;
         toneState = 0;
         cnt = 0;

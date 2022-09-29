@@ -122,8 +122,6 @@ struct SlotSettings {
   uint8_t  rv;     // range vertical drift compensation
   uint8_t  gh;     // gain horizontal drift compensation
   uint8_t  rh;     // range horizontal drift compensation
-  int16_t  cx;     // calib x  (TBD: now obsolete, can be removed)
-  int16_t  cy;     // calib y  (TBD: now obsolete, can be removed)
   uint16_t ro;     // orientation (0,90,180,270)
   uint8_t  bt;     // bt-mode (0,1,2)
   char kbdLayout[6];
@@ -140,8 +138,6 @@ struct SensorData {
   uint8_t dir;
   int8_t autoMoveX,autoMoveY;
   uint16_t calib_now;
-  int16_t  cx, cy;
-  uint32_t cpressure;
   int xDriftComp, yDriftComp;
   int xLocalMax, yLocalMax;  
 };

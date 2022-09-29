@@ -66,7 +66,6 @@ const struct SlotSettings defaultSlotSettings = {      // default slotSettings v
   400, 600, 3,                      // threshold sip, threshold puff, wheel step,
   800, 10,                          // threshold strong puff, threshold strong sip
   40, 20, 40, 20 ,                  // gain and range drift compenstation( vertical, horizontal)
-  0, 0,                             // offset x / y
   0,                                // orientation
   1,                                // bt-mode 1: USB, 2: Bluetooth, 3: both (2 & 3 need daughter board))
   "en_US",                          // en_US as default keyboard layout.
@@ -82,7 +81,6 @@ struct SensorData sensorData {
   .dir=0,
   .autoMoveX=0, .autoMoveY=0,
   .calib_now=CALIBRATION_PERIOD,   // calibrate sensors after startup !
-  .cx=0, .cy=0, .cpressure=0,
   .xDriftComp=0, .yDriftComp=0,
   .xLocalMax=0, .yLocalMax=0
 };

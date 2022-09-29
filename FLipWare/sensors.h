@@ -38,7 +38,7 @@
 /**
  * @brief Fixed divider for the MPRLS raw value.
  */
-#define MPRLS_DIVIDER 100
+#define MPRLS_DIVIDER 50
 
 /**
    @name initSensors

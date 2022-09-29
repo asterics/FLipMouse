@@ -324,7 +324,7 @@ void performCommand (uint8_t cmd, int16_t par1, char * keystring, int8_t periodi
       Serial.println("start calibration");
 #endif
       initBlink(10, 20);
-      sensorData.calib_now = CALIBRATION_PERIOD;
+      sensorValues.calib_now = CALIBRATION_PERIOD;
       makeTone(TONE_CALIB, 0);
       break;
     case CMD_AX:

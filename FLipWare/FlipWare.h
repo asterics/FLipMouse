@@ -128,8 +128,8 @@ struct SlotSettings {
 };
 
 /**
-   SensorData struct
-   contains working data of sensors (raw and processed values)
+   SensorData structs
+   contain working data of sensors (raw and processed values)
 */
 struct SensorData {
   int x, y, xRaw,yRaw;
@@ -137,9 +137,14 @@ struct SensorData {
   float deadZone, force, forceRaw, angle;
   uint8_t dir;
   int8_t autoMoveX,autoMoveY;
-  uint16_t calib_now;
   int xDriftComp, yDriftComp;
   int xLocalMax, yLocalMax;  
+};
+
+struct I2CSensorValues {
+  int xRaw,yRaw;
+  int pressure;
+  uint16_t calib_now;
 };
 
 /**
@@ -150,6 +155,7 @@ extern char moduleName[];
 extern uint8_t actSlot;
 extern uint8_t addonUpgrade;
 extern struct SensorData sensorData;
+extern struct I2CSensorValues sensorValues;
 extern struct SlotSettings slotSettings; 
 extern const struct SlotSettings defaultSlotSettings;
 extern uint8_t workingmem[WORKINGMEM_SIZE];            // working memory  (command parser, IR-rec/play)

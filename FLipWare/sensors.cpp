@@ -153,7 +153,7 @@ void initSensors()
 }
 
 
-void readPressure(struct SensorData *data)
+void readPressure(struct I2CSensorValues *data)
 {
   static int32_t mprls_filtered=512;
   
@@ -196,7 +196,7 @@ void readPressure(struct SensorData *data)
   }
 }
 
-void readForce(struct SensorData *data)
+void readForce(struct I2CSensorValues *data)
 {
   static int32_t currentX=0,currentY=0;
   

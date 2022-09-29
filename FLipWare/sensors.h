@@ -53,13 +53,13 @@ void initSensors();
    @note For the MPRLS sensor, it returns the previous measurement & triggers a new one!
    @return none
 */
-void readPressure(struct SensorData *data);
+void readPressure(struct I2CSensorValues *data);
 
 /**
    @name readForce
    @brief read current force sensors (might be FSR or RES-DMS)
    @return none
 */
-void readForce(struct SensorData *data);
+void readForce(struct I2CSensorValues *data);
 
 #endif /* _SENSORS_H_ */

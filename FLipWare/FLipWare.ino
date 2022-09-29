@@ -80,11 +80,17 @@ struct SensorData sensorData {
   .deadZone=0, .force=0, .forceRaw=0, .angle=0,
   .dir=0,
   .autoMoveX=0, .autoMoveY=0,
-  .calib_now=CALIBRATION_PERIOD,   // calibrate sensors after startup !
   .xDriftComp=0, .yDriftComp=0,
   .xLocalMax=0, .yLocalMax=0
 };
 
+struct I2CSensorValues sensorValues {        
+  .xRaw=0, .yRaw=0, .pressure=0, 
+  .calib_now=CALIBRATION_PERIOD     // calibrate sensors after startup !
+};
+
+
+mutex_t sensorDataMutex;
 
 struct SlotSettings slotSettings;             // contains all slot settings
 uint8_t workingmem[WORKINGMEM_SIZE];          // working memory (command parser, IR-rec/play)
@@ -103,7 +109,11 @@ void applyDeadzone();
    @return none
 */
 void setup() {
-  //load slotSettings
+
+  // prepare synchronizsation of sensor data exchange between cores
+  mutex_init(&sensorDataMutex);
+
+ //load slotSettings
   memcpy(&slotSettings,&defaultSlotSettings,sizeof(struct SlotSettings));
 
   //initialise BT module, if available (must be done early!)
@@ -137,9 +147,6 @@ void setup() {
 #endif
   lastInteractionUpdate = millis();  // get first timestamp
 
-  initBlink(10,20);  // first signs of life!
-  sensorData.calib_now = CALIBRATION_PERIOD;
-  makeTone(TONE_CALIB, 0);
 }
 
 /**
@@ -152,6 +159,10 @@ void setup1() {
   Wire1.begin();
   Wire1.setClock(400000);  // use 400kHz I2C clock
   initSensors();
+  initBlink(10,20);  // first signs of life!
+
+  makeTone(TONE_CALIB, 0);
+
 }
 
 /**
@@ -165,12 +176,14 @@ void loop1() {
   if (millis() >= lastUpdate + UPDATE_INTERVAL)  {
     lastUpdate = millis();
 
-    // get current sensor values;   TBD: use message queue for sychronized communication with core1!
-    readPressure(&sensorData);
-    readForce(&sensorData);
+    // get current sensor values
+    mutex_enter_blocking(&sensorDataMutex);
+    readPressure(&sensorValues);
+    readForce(&sensorValues);
+    mutex_exit(&sensorDataMutex);
 
     // update calibration counter (if calibration running)
-    if (sensorData.calib_now) sensorData.calib_now--;
+    if (sensorValues.calib_now) sensorValues.calib_now--;
     
   }
   delay(1);  // core2: sleep a bit ...  
@@ -205,6 +218,13 @@ void loop() {
   // perform periodic updates  
   if (millis() >= lastInteractionUpdate + UPDATE_INTERVAL)  {
     lastInteractionUpdate = millis();
+
+    // get current sensor data from core1
+    mutex_enter_blocking(&sensorDataMutex);
+    sensorData.xRaw=sensorValues.xRaw;
+    sensorData.yRaw=sensorValues.yRaw;
+    sensorData.pressure=sensorValues.pressure;
+    mutex_exit(&sensorDataMutex);
 
     if (StandAloneMode) {
 

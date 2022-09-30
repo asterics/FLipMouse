@@ -57,6 +57,7 @@ void configureNAU() {
   nau.setLDO(NAU7802_3V0);   // NAU7802_2V7, NAU7802_2V4 
   nau.setGain(NAU7802_GAIN_128);  // NAU7802_GAIN_64, NAU7802_GAIN_32
   nau.setRate(NAU7802_RATE_320SPS);  // NAU7802_RATE_80SPS
+  nau.setPGACap(NAU7802_CAP_OFF); //disable PGA capacitor on channel 2
 
   // trigger internal calibration 
   while (! nau.calibrate(NAU7802_CALMOD_INTERNAL)) {
@@ -162,17 +163,18 @@ void initSensors()
     #ifdef DEBUG_OUTPUT_SENSORS
       Serial.println("SEN: Found NAU7802");
     #endif
+
+    pinMode (DRDY_PIN, INPUT);
+    nau.setChannel(NAU7802_CHANNEL1);
+    configureNAU();
+    nau.setChannel(NAU7802_CHANNEL2);
+    configureNAU();
+    nau.setChannel(NAU7802_CHANNEL1);
+    channel=1;
+
+    attachInterrupt(digitalPinToInterrupt(DRDY_PIN), getValuesISR, RISING);
+    
   }
-
-  pinMode (DRDY_PIN, INPUT);
-  nau.setChannel(NAU7802_CHANNEL1);
-  configureNAU();
-  nau.setChannel(NAU7802_CHANNEL2);
-  configureNAU();
-  nau.setChannel(NAU7802_CHANNEL1);
-  channel=1;
-
-  attachInterrupt(digitalPinToInterrupt(DRDY_PIN), getValuesISR, RISING);
 
   #ifdef DEBUG_OUTPUT_SENSORS
     Serial.println("SEN: Calibrated internal offset");

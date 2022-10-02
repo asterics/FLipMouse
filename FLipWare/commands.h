@@ -125,6 +125,7 @@
           AT RV <uint>    range vertical drift compensation (0-100)
           AT GH <uint>    gain horizontal drift compensation (0-100)  
           AT RH <uint>    range horizontal drift compensation (0-100)
+          AT SB <uint>    select a sensorboard (profile-ID), adjusts signal processing parameters (0-3)
 
     Infrared-specific commands:
 
@@ -187,7 +188,7 @@ enum atCommands {
   CMD_AY, CMD_DX, CMD_DY, CMD_TS, CMD_TP, CMD_SP, CMD_SS, CMD_GV, CMD_RV, CMD_GH, CMD_RH, CMD_IR,
   CMD_IP, CMD_IC, CMD_IL, CMD_JX, CMD_JY, CMD_JZ, CMD_JT, CMD_JS, CMD_JP, CMD_JR, CMD_JH,
   CMD_IT, CMD_KH, CMD_MS, CMD_AC, CMD_MA, CMD_WA, CMD_RO, CMD_IW, CMD_BT, CMD_HL, CMD_HR, CMD_HM,
-  CMD_TL, CMD_TR, CMD_TM, CMD_KT, CMD_IH, CMD_IS, CMD_UG, CMD_BC, CMD_KL, CMD_BR, CMD_RE, 
+  CMD_TL, CMD_TR, CMD_TM, CMD_KT, CMD_IH, CMD_IS, CMD_UG, CMD_BC, CMD_KL, CMD_BR, CMD_RE, CMD_SB,
   NUM_COMMANDS
 };
 

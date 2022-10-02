@@ -68,6 +68,7 @@ const struct SlotSettings defaultSlotSettings = {      // default slotSettings v
   40, 20, 40, 20 ,                  // gain and range drift compenstation( vertical, horizontal)
   0,                                // orientation
   1,                                // bt-mode 1: USB, 2: Bluetooth, 3: both (2 & 3 need daughter board))
+  0,                                // sensorboard profile ID 0 
   "en_US",                          // en_US as default keyboard layout.
 };
 
@@ -235,7 +236,13 @@ void setup1() {
 */
 void loop1() {
   static unsigned long lastUpdate=0;     
-	
+
+  // check if there is a message from the other core (sensorboard change, profile ID)
+  if (rp2040.fifo.available()) {
+      makeTone(TONE_CALIB, 0);
+      setSensorBoard(rp2040.fifo.pop());  
+  }
+
   if (millis() >= lastUpdate + UPDATE_INTERVAL)  {
     lastUpdate = millis();
 

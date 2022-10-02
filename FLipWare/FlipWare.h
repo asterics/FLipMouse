@@ -124,6 +124,7 @@ struct SlotSettings {
   uint8_t  rh;     // range horizontal drift compensation
   uint16_t ro;     // orientation (0,90,180,270)
   uint8_t  bt;     // bt-mode (0,1,2)
+  uint8_t  sb;     // sensorboard-profileID (0,1,2,3)
   char kbdLayout[6];
 };
 

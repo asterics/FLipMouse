@@ -25,6 +25,7 @@
 #include "keys.h"
 #include "parser.h"
 #include "reporting.h"
+#include "sensors.h"
 #include "utils.h"
 #include <hardware/watchdog.h>
 
@@ -55,6 +56,7 @@ const struct atCommandType atCommands[] PROGMEM = {
   {"HM"  , PARTYPE_NONE },  {"TL"  , PARTYPE_NONE }, {"TR"  , PARTYPE_NONE }, {"TM"  , PARTYPE_NONE },
   {"KT"  , PARTYPE_STRING }, {"IH"  , PARTYPE_STRING }, {"IS"  , PARTYPE_NONE }, {"UG", PARTYPE_NONE },
   {"BC"  , PARTYPE_STRING}, {"KL"  , PARTYPE_STRING }, {"BR"  , PARTYPE_UINT }, {"RE"  , PARTYPE_NONE },
+  {"SB"  , PARTYPE_UINT },
 };
 
 /**
@@ -401,6 +403,10 @@ void performCommand (uint8_t cmd, int16_t par1, char * keystring, int8_t periodi
       break;
     case CMD_RH:
       slotSettings.rh = par1;
+      break;
+    case CMD_SB:
+      slotSettings.sb = par1;
+      rp2040.fifo.push_nb(par1);  // tell the other core to switch sensorboard profile!
       break;
     case CMD_RO:
       slotSettings.ro = par1;

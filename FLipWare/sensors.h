@@ -35,6 +35,14 @@
 #define MPRLS_DIVIDER 50
 
 /**
+ * @brief Sensorboard IDs for different signal processing parameters
+ */
+#define SENSOR_BOARD_DEFAULT     0
+#define SENSOR_BOARD_10K         1
+#define SENSOR_BOARD_100K        2
+#define SENSOR_BOARD_STRAINGAUGE 3
+
+/**
    @name initSensors
    @brief initializes the sensors (pressure & force)
    @return none
@@ -70,5 +78,14 @@ void calculateDirection(struct SensorData * sensorData);
    @return none
 */
 void applyDeadzone(struct SensorData * sensorData, struct SlotSettings * slotSettings);
+
+/**
+   @name setSensorBoard
+   @brief activates a certain parameters profile for signal processing, depending on the selected senosorboard ID
+   @param sensorBoardID: the ID of the sensorboard signal processing profile  (e.g. SENSOR_BOARD_STRAINGAUGE) 
+   @return none
+*/
+void setSensorBoard(int sensorBoardID);
+
 
 #endif /* _SENSORS_H_ */

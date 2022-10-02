@@ -171,9 +171,11 @@ void initSensors()
     configureNAU();
     nau.setChannel(NAU7802_CHANNEL1);
     channel=1;
+  
+    setSensorBoard(SENSOR_BOARD_DEFAULT);  // default settings for x/y sensor signal processing
+    PS.setGain(0.1);                           // but: adjust gain for MPRLS pressure sensor        
 
-    attachInterrupt(digitalPinToInterrupt(DRDY_PIN), getValuesISR, RISING);
-    
+    attachInterrupt(digitalPinToInterrupt(DRDY_PIN), getValuesISR, RISING);  // start processing data ready signals!
   }
 
   #ifdef DEBUG_OUTPUT_SENSORS
@@ -209,7 +211,7 @@ void readPressure(struct I2CSensorValues *data)
         }
         
         // calculate filtered pressure value, apply signal conditioning
-        mprls_filtered=PS.process(mprls_rawval / 10);
+        mprls_filtered=PS.process(mprls_rawval);
         data->pressure = 512 + mprls_filtered / MPRLS_DIVIDER;
 
         // clamp to 1/1022 (allows disabling strong sip/puff)
@@ -334,3 +336,55 @@ void applyDeadzone(struct SensorData * sensorData, struct SlotSettings * slotSet
   }
 }
 
+
+/**
+   @name setSensorBoard
+   @brief activates a certain parameters profile for signal processing, depending on the selected senosorboard ID
+   @param sensorBoardID: the ID of the sensorboard signal processing profile (e.g. SENSOR_BOARD_STRAINGAUGE) 
+   @return none
+*/
+void setSensorBoard(int sensorBoardID) 
+{
+
+  detachInterrupt(digitalPinToInterrupt(DRDY_PIN));
+  switch (sensorBoardID) {
+    case SENSOR_BOARD_DEFAULT:        /* sensorboard default settings */
+      XS.setGain(1);                      YS.setGain(1);
+      XS.setCompensationFactor(0.05);     YS.setCompensationFactor(0.05);
+      XS.setCompensationDecay (0.95);     YS.setCompensationDecay(0.95);
+      XS.setMovementThreshold(1000);      YS.setMovementThreshold(1000);
+      XS.setIdleDetectionPeriod(1000);    YS.setIdleDetectionPeriod(1000);
+      XS.setIdleDetectionThreshold(3000); YS.setIdleDetectionThreshold(3000);
+    break;    
+    case SENSOR_BOARD_10K:            /* 10K sensorboard settings */
+      XS.setGain(1);                      YS.setGain(1);
+      XS.setCompensationFactor(0.05);     YS.setCompensationFactor(0.05);
+      XS.setCompensationDecay (0.95);     YS.setCompensationDecay(0.95);
+      XS.setMovementThreshold(2000);      YS.setMovementThreshold(2000);
+      XS.setIdleDetectionPeriod(1000);    YS.setIdleDetectionPeriod(1000);
+      XS.setIdleDetectionThreshold(3500); YS.setIdleDetectionThreshold(3500);
+    break;
+    case SENSOR_BOARD_100K:           /* 100K sensorboard settings */
+      XS.setGain(1);                      YS.setGain(1);
+      XS.setCompensationFactor(0.05);     YS.setCompensationFactor(0.05);
+      XS.setCompensationDecay (0.95);     YS.setCompensationDecay(0.95);
+      XS.setMovementThreshold(2500);      YS.setMovementThreshold(2500); 
+      XS.setIdleDetectionPeriod(1000);    YS.setIdleDetectionPeriod(1000);
+      XS.setIdleDetectionThreshold(4500); YS.setIdleDetectionThreshold(4500);
+    break;
+    case SENSOR_BOARD_STRAINGAUGE:    /* strain gauge sensorboard settings */
+      XS.setGain(0.08);                   YS.setGain(0.08);
+      XS.setCompensationFactor(0);        YS.setCompensationFactor(0);
+      XS.setMovementThreshold(1500);      YS.setMovementThreshold(1500);
+      XS.setIdleDetectionPeriod(100);     YS.setIdleDetectionPeriod(100);
+      XS.setIdleDetectionThreshold(50);   YS.setIdleDetectionThreshold(50);
+      XS.setBaselineLowpass(0.1);         YS.setBaselineLowpass(0.1);
+      XS.setNoiseLowpass(3);              YS.setNoiseLowpass(3);
+      XS.setActivityLowpass(2);           YS.setActivityLowpass(2);
+    break;   
+  }
+
+  XS.calib(); YS.calib();
+  attachInterrupt(digitalPinToInterrupt(DRDY_PIN), getValuesISR, RISING);
+
+}

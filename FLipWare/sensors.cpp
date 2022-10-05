@@ -38,6 +38,7 @@ pressure_type_t sensor_pressure = NO_PRESSURE;
 uint8_t channel, newData=0;
 int32_t nau_x=0, nau_y=0;
 uint32_t mprls_rawval=512;
+uint8_t reportValues=0;
 
 
 /**
@@ -258,6 +259,11 @@ void readForce(struct I2CSensorValues *data)
             newData=0;
             currentX=nau_x/200;
             currentY=nau_y/200;
+            if (reportValues)  {
+              XS.printValues(0x07, 15000);    
+              YS.printValues(0x07, 15000);    
+              Serial.println("");
+            }
         }
 
         // during calibration period: bypass activities
@@ -381,7 +387,10 @@ void setSensorBoard(int sensorBoardID)
       XS.setBaselineLowpass(0.1);         YS.setBaselineLowpass(0.1);
       XS.setNoiseLowpass(3);              YS.setNoiseLowpass(3);
       XS.setActivityLowpass(2);           YS.setActivityLowpass(2);
-    break;   
+    break;
+    case SENSOR_BOARD_REPORTVALUES:
+      reportValues=!reportValues;
+    break;
   }
 
   XS.calib(); YS.calib();

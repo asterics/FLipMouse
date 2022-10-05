@@ -41,6 +41,7 @@
 #define SENSOR_BOARD_10K         1
 #define SENSOR_BOARD_100K        2
 #define SENSOR_BOARD_STRAINGAUGE 3
+#define SENSOR_BOARD_REPORTVALUES 16   // to enable or disable signal traces for serial plotter
 
 /**
    @name initSensors

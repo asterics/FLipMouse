@@ -234,6 +234,9 @@ def main():
               exit
             else:
               time.sleep(0.5)
+        #set device name depending on selected module
+        ser.write(str("AT BC $NAME "+devices[current_device] + "\r\n").encode())
+        print(ser.readline().decode())
         retry = 0
         while 1:
           ser.write(str("AT BC $ID\r\n").encode())

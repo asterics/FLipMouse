@@ -242,7 +242,7 @@ def main():
             break
           else: 
             retry = retry + 1
-            if retry > 10:
+            if retry > 15:
               print("Error getting ESP32 revision number")
               break
           time.sleep(1)

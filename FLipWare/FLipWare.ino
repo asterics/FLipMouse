@@ -169,6 +169,10 @@ void loop() {
   // if incoming data from BT-addOn: forward it to host serial interface
   while (Serial_AUX.available() > 0) {
     Serial.write(Serial_AUX.read());
+    //TBD: filter out data, which should be processed here:
+    // * We want to send "$GC" to the ESP32 to get currently connected device(s)
+    // * Eventually assign a BLE device to one slot, MAC addresses are accessible via "$GP" (read) / "$SW" (select device)
+    // currently active connection should be stored globally, to be usable in updateLeds(), which should display on a slot change BLE connectivity
   }
 
   // perform periodic updates  

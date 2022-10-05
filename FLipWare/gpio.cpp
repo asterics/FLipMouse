@@ -42,6 +42,7 @@ void initBlink(uint8_t  count, uint8_t startTime)
   blinkStartTime = startTime;
 }
 
+// TBD: add graphical output of currently connected BLE device on slot change
 void updateLeds()  // TBD: allow user-defined slot colors
 {
   uint8_t r = 0;

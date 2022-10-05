@@ -465,7 +465,6 @@
           "/VIN",
           "GND",
           "Net-(D3-Pad1)",
-          "Net-(D3-Pad2)",
           "VCC"
         ],
         "pcb_color": "rgba(0, 0, 0, 0.000)",

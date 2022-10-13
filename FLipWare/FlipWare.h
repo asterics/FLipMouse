@@ -35,6 +35,7 @@
 #include "commands.h"
 #include "eeprom.h"
 #include "buttons.h"
+#include "infrared.h"
 #include "bluetooth.h"
 #include "hid_hal.h"
 
@@ -182,7 +183,7 @@ typedef char* uint_farptr_t_FM;
   #warning "DEBUG_OUTPUT_KEYS active! (GUI might not work)"
 #endif
 #ifdef DEBUG_OUTPUT_IR
-  #warning "DEBUG_OUTPUT_KEYS active! (GUI might not work)"
+  #warning "DEBUG_OUTPUT_IR active! (GUI might not work)"
 #endif
 #ifdef DEBUG_OUTPUT_SENSORS
   #warning "DEBUG_OUTPUT_SENSORS active! (GUI might not work)"

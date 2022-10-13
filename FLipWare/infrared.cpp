@@ -20,7 +20,7 @@
 /**
    static variables for infrared code generation and timekeeping
  * */
-uint32_t edge_timeout = 10000UL;  // timeout for IR receiving, [ms]
+uint32_t edge_timeout = IR_EDGE_TIMEOUT_US;  // timeout for IR receiving, [us]
 volatile int repeatCounter;        // number of desired code repetitions (-1 for endless)
 volatile int idlesequenceCounter;  // bumber of gaps which should be inserted before code repetition
 volatile uint16_t edges;           // number of edges for current code
@@ -350,8 +350,12 @@ void wipe_IR_commands()
   deleteIRCommand(0);
 }
 
-void set_IR_timeout(uint16_t tout_ms)
+void set_IR_timeout(uint32_t tout_ms)
 {
   edge_timeout = tout_ms;
-  return;
+}
+
+uint32_t get_IR_timeout()
+{
+  return edge_timeout;
 }

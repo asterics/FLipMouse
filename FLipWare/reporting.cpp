@@ -37,6 +37,10 @@ void printCurrentSlot(Stream *S)
   S->print("AT DY "); S->println(slotSettings.dy);
   S->print("AT MS "); S->println(slotSettings.ms);
   S->print("AT AC "); S->println(slotSettings.ac);
+  //IR timeout only if not default value
+  if(get_IR_timeout() != IR_EDGE_TIMEOUT_US) {
+    S->print("AT IT "); S->println(get_IR_timeout());
+  }
   S->print("AT TS "); S->println(slotSettings.ts);
   S->print("AT TP "); S->println(slotSettings.tp);
   S->print("AT WS "); S->println(slotSettings.ws);

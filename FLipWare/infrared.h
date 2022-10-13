@@ -24,6 +24,8 @@
 //Time until the record command will be canceled (in milliseconds)
 #define IR_USER_TIMEOUT_MS 10000
 
+#define IR_EDGE_TIMEOUT_US  15000UL
+
 // ir code repeat gap (in microseconds)
 #define IR_REPEAT_GAP 10000
 
@@ -100,11 +102,18 @@ uint8_t delete_IR_command(char * name);
 
 /**
    @name set_IR_timeout
-   @brief sets the timeout for IR recording 
-   @param ms timeout value in milliseconds
+   @brief sets the inter-edge timeout for IR recording 
+   @param us timeout value in microseconds
    @return none
 */
-void set_IR_timeout(uint16_t ms);
+void set_IR_timeout(uint32_t us);
+
+/**
+   @name get_IR_timeout
+   @brief gets the inter-edge timeout for IR recording 
+   @return timeout value in microseconds
+*/
+uint32_t get_IR_timeout();
 
 /**
    @name wipe_IR_commands

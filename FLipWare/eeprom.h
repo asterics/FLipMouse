@@ -2,7 +2,7 @@
      FLipWare - AsTeRICS Foundation
      For more info please visit: https://www.asterics-foundation.org
 
-     Module: eeprom.h - implementation of the EEPROM storage management, header file
+     Module: eeprom.h - implementation of the storage management (now in flash filesystem), header
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -15,29 +15,30 @@
 */
 
 /**
-   General EEPROM memory layout:
-   (0x7FFF is the max address in case of a 256kbit EEPROM)
-
-   0x0000-0x006D	struct storageHeader
-   0x006E-0xXXXX	setting slots
-
-   layout of one slot:
-     struct SlotSettings
-     struct slotButtonSettings[NUMBER_OF_BUTTONS]
-     char buttonParameter[len][NUMBER_OF_BUTTONS] ('\0' terminated strings)
-
-   0x7FFE-0xXXXX	IR code storage 
-   Note that the IR slots start at the top address (0x7FFE, top->down)
-
-   layout of one IR command slot:
-     char irSlotName[MAX_NAME_LEN]  ('\0' terminated string)
-     uint8_t countEdges     
-     uint16_t timings[countEdges]
-
-   0x7FFF  Magic Byte to indicate valid EEPROM content   
-
- * */
-
+ * In v3, all config is stored in individual files.
+ * 
+ * Filename structure:
+ * /xxx/yy
+ * Where:
+ * xxx is a 3 digit number, reserved for example for config revisions
+ * (useful for rollback); currently unused and fixed to "001"
+ * yy slot number, starting with slot 0.
+ * 
+ * Example: /001/00 for the first created slot
+ * 
+ * Each slot file is an ASCII text file, which contains
+ * all "AT" commands for this slot.
+ * The first line is always the slot name
+ * 
+ * IR command filenames:
+ * /ir/xx
+ * xx is a 2 digit IR command number, starting with 0
+ * 
+ * Each IR command file contains is a binary file, which
+ * consists of:
+ * 1.) the irCommandHeader (containing name and count of edges)
+ * 2.) the edge values (16bit values -> 2xedgecount bytes)
+ */
 #ifndef _EEPROM_H_
 #define _EEPROM_H_
 
@@ -47,24 +48,9 @@
 #define MAX_SLOTS_IN_EERPOM 10
 #define MAX_IRCOMMANDS_IN_EERPOM 20
 
-#define EEPROM_MAX_ADDRESS 0x7FFF
-#define EEPROM_MAGIC_NUMBER 	0x3b
 #define MAX_NAME_LEN  15
 
-/**
-   header structure, starts at adress 0x00 in EEPROM,
-   contains start and end adresses of configuration slots
-   and IR commands (the IR commands are stored top-down)
-
- * */
-struct storageHeader {
-  uint16_t	startSlotAddress[MAX_SLOTS_IN_EERPOM];
-  uint16_t  endSlotAddress[MAX_SLOTS_IN_EERPOM];
-  uint16_t	startIRAddress[MAX_IRCOMMANDS_IN_EERPOM];
-  uint16_t  endIRAddress[MAX_IRCOMMANDS_IN_EERPOM];
-  uint16_t  versionID;
-};
-
+/** data for one IR command */
 struct irCommandHeader {
   char irName[MAX_NAME_LEN];
   uint16_t edges;

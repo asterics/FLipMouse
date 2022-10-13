@@ -2,7 +2,7 @@
      FLipWare - AsTeRICS Foundation
      For more info please visit: https://www.asterics-foundation.org
 
-     Module: eeprom.cpp - implementation of the EEPROM storage management
+     Module: eeprom.cpp - implementation of the storage management (now in flash filesystem)
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -13,14 +13,6 @@
    http://www.gnu.org/licenses/gpl-3.0.en.html
 
 */
-
-
-/**
-   TODO:
-   -) implement overwrite/move for IR commands
-   -) implement a "memory full" command
- * */
-
 #include "eeprom.h"
 #include "reporting.h"
 #include "tone.h"
@@ -29,9 +21,8 @@
 #include <LittleFS.h>
 
 /**
-   Local copy of all slot and ir command start adresses
+   Local copy of IR command header (name and edge count)
  * */
-struct storageHeader header;
 struct irCommandHeader irCommand;
 
 /**

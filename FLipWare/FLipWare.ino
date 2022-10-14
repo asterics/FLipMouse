@@ -139,7 +139,9 @@ void setup() {
   // displayUpdate();
   
 #ifdef DEBUG_OUTPUT_FULL
-  Serial.print("Free RAM:");  Serial.println(freeRam());
+  #ifndef BUILD_FOR_RP2040
+    Serial.print("Free RAM:");  Serial.println(freeRam());
+  #endif
   Serial.print(moduleName); Serial.println(" ready !");
 #endif
   lastInteractionUpdate = millis();  // get first timestamp

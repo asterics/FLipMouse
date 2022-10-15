@@ -350,9 +350,9 @@ void wipe_IR_commands()
   deleteIRCommand(0);
 }
 
-void set_IR_timeout(uint32_t tout_ms)
+void set_IR_timeout(uint32_t tout_us)
 {
-  edge_timeout = tout_ms;
+  edge_timeout = tout_us;
 }
 
 uint32_t get_IR_timeout()

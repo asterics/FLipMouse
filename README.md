@@ -29,7 +29,7 @@ If you want to support the development of FLipMouse you're very welcome to donat
 
 # Hardware and Features
 
-The FLipMouse uses a [TeensyLC](https://www.pjrc.com/teensy/teensyLC.html) microcontroller (ARM CortexM0+ architecture) as main module. Movements of the mouthpiece are measured via FSRs (Force Sensing Resistors), which detect small forces applied to the mouthpiece / joystick.
+The FLipMouse uses aa [Arduino Nano RP2040 Connect](https://docs.arduino.cc/hardware/nano-rp2040-connect) microcontroller (ARM CortexM0+ architecture) as main module. Movements of the mouthpiece are measured via FSRs (Force Sensing Resistors), which detect small forces applied to the mouthpiece / joystick.
 The sip/puff actions are detected by a pressure sensor. Via two 3.5mm jack plugs, external momentary switches can be connected and desired actions can be assigned.
 An IR-receiver module and a IR-LED allow recording and replay of arbitrary infrared remote control commands. Via an add-on module, bluetooth functionalty can be realized (for more information about the bluetooth add-on module please refer to the [FlipMouse Wiki](https://github.com/asterics/FLipMouse/wiki)
 
@@ -40,6 +40,7 @@ The FLipMouse firmware is based on the Arduino/Teensyduino framework. The firmwa
 The mouse and keyboard device classes are used to transmit different keys or mouse actions to the host device. The serial port is used configure the FLipMouse (or even use it as a mouse simulator via AT commands).
 Multiple configuration settings can be saved (stored in an EEPROM module) and changed via desired user actions.
 For more information about (modifying) the FLipMouse firmware see https://github.com/asterics/FLipMouse/wiki/dev-firmware
+Please __note__ the COM-Port installation instructions for older Windows systems (Win7/8) [here](https://github.com/raspberrypi/pico-feedback/issues/118).
 
 ## Configuration Manager
 

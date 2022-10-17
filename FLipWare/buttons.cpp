@@ -42,7 +42,8 @@ char * getButtonKeystring(int num)
 {
   char * str = keystringBuffer;
   for (int i=0;i<num;i++) {
-    while (*str++);    
+    if(*str) while(*str++);    
+    else str++;  
   }
   return(str);
 }
@@ -79,7 +80,16 @@ uint16_t setButtonKeystring(uint8_t buttonIndex, char * newKeystring)
   }
     
   strcpy (keystringAddress, newKeystring);  // store the new keystring!
-  buttonKeystrings[buttonIndex] = keystringAddress;  // remember it's address
+  
+  //update ALL keystring pointers, because we might have moved some of them
+  char * x = keystringBuffer;
+  for (int i=0;i<NUMBER_OF_BUTTONS;i++) {
+    if (*x) {
+      buttonKeystrings[i] = x;
+      while (*x++);
+    } else x++;
+  }
+  
   slotSettings.keystringBufferLen += delta;  // update buffer length
   
 #ifdef DEBUG_OUTPUT_FULL

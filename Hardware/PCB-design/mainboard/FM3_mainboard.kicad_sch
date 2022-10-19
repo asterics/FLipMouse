@@ -2379,7 +2379,7 @@
     (effects (font (size 2.54 2.54)) (justify left bottom))
     (uuid 1b150049-58d5-40ba-9294-8e1618cf38c5)
   )
-  (text "Changes for v3.2:\n-) adapt to SFH4244 LED (or any other if better):\n	2 LEDs or again 4 LEDs + 2 Resistors?\nIN-S126ESGHIR (or SFH4045)\nor 3 LEDs without R?\n-) move MPRLS DRDY to a RP2040 pin\n-) pulldown on FET gate\n-) remove all THT stuff\n-) remove MPXV in general\n-) change footprint of OLED\n-) resistor buzzer -> removed\n-) connector sensorboard (Würth WM-MM)\n-) capacitor for IR LEDs"
+  (text "Changes for v3.2:\n-) adapt to SFH4244 LED (or any other if better):\n	2 LEDs or again 4 LEDs + 2 Resistors?\nIN-S126ESGHIR (or SFH4045)\nor 3 LEDs without R?\n-) move MPRLS DRDY to a RP2040 pin\n-) pulldown on FET gate\n-) remove all THT stuff\n-) remove MPXV in general\n-) change footprint of OLED\n-) resistor buzzer -> removed\n-) connector sensorboard (Würth WM-MM)\n-) capacitor for IR LEDs\n-) moved all SMD parts to top (except Arduino)"
     (at 227.33 251.46 0)
     (effects (font (size 1.27 1.27)) (justify left bottom))
     (uuid 1ce8c446-954b-4e4f-921a-cb783d3a062b)

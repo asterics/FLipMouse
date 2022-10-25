@@ -11,6 +11,7 @@
 */
 
 #include <Arduino.h>
+#include "FlipWare.h"
 #include "gpio.h"
 
 int8_t  input_map[NUMBER_OF_PHYSICAL_BUTTONS] = {17, 20, 21};      //  NOTE: changed for RP2040!
@@ -52,9 +53,16 @@ void updateLeds()  // TBD: allow user-defined slot colors
   uint8_t colCode=actSlot+1;
 
 	if (blinkCount == 0) {
-	  if (colCode & 1) g = 255;
-	  if (colCode & 2) b = 255;
-	  if (colCode & 4) r = 255;
+    if (slotSettings.sc==0) {
+      if (colCode & 1) g = 255;
+      if (colCode & 2) b = 255;
+      if (colCode & 4) r = 255;
+    } else {
+      r=(slotSettings.sc>>16) & 0xff;
+      g=(slotSettings.sc>>8) & 0xff;
+      b= slotSettings.sc & 0xff;
+    }
+
 	} else {
     if (blinkTime == 0)
     {

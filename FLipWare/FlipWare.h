@@ -126,6 +126,7 @@ struct SlotSettings {
   uint16_t ro;     // orientation (0,90,180,270)
   uint8_t  bt;     // bt-mode (0,1,2)
   uint8_t  sb;     // sensorboard-profileID (0,1,2,3)
+  uint32_t sc;     // slotcolor (0x: rrggbb)
   char kbdLayout[6];
 };
 

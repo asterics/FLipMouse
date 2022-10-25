@@ -99,6 +99,7 @@
           AT NC           no command (idle operation)
           AT BT <uint>    set bluetooth mode, 1=USB only, 2=BT only, 3=both(default)
                           (e.g. AT BT 2 -> send HID commands only via BT if BT-daughter board is available)
+          AT SC <string>  change slot color: given string 0xRRGGBB                           
 
     FLipMouse-specific slotSettings and commands:
 
@@ -189,6 +190,7 @@ enum atCommands {
   CMD_IP, CMD_IC, CMD_IL, CMD_JX, CMD_JY, CMD_JZ, CMD_JT, CMD_JS, CMD_JP, CMD_JR, CMD_JH,
   CMD_IT, CMD_KH, CMD_MS, CMD_AC, CMD_MA, CMD_WA, CMD_RO, CMD_IW, CMD_BT, CMD_HL, CMD_HR, CMD_HM,
   CMD_TL, CMD_TR, CMD_TM, CMD_KT, CMD_IH, CMD_IS, CMD_UG, CMD_BC, CMD_KL, CMD_BR, CMD_RE, CMD_SB,
+  CMD_SC,
   NUM_COMMANDS
 };
 

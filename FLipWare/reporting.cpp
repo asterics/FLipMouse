@@ -24,12 +24,35 @@
 */
 uint8_t reportRawValues = 0;
 
+/**
+   @name makehex
+   @param uint32_t val
+   @param char* str - the target string
+   @return none
+   translates an uint32 integer value into a hex value
+   the hex value is stored into a zero-terminated string (str)
+   (with leading zeros, starting with "0x", eg. "0x00ACAB")
+*/
+void makehex(uint32_t val, char* str) {
+  str[0] = '0';
+  str[1] = 'x';
+  for (int i = 7; i >= 2; i--) {
+    int digit = val % 16;
+    if (digit > 9) str[i] = 'a' + digit - 10;
+    else str[i] = '0' + digit;
+    val >>= 4;
+  }
+  str[8] = 0;
+}
+
+
 /** 
  * @brief Print current to given stream
  * @param S Stream to send the AT commands to; in our case Serial or a File
  */
 void printCurrentSlot(Stream *S)
 {
+  char tmp[10];
   S->println(slotSettings.slotName);
   S->print("AT AX "); S->println(slotSettings.ax);
   S->print("AT AY "); S->println(slotSettings.ay);
@@ -54,6 +77,7 @@ void printCurrentSlot(Stream *S)
   S->print("AT RO "); S->println(slotSettings.ro);
   S->print("AT BT "); S->println(slotSettings.bt);
   S->print("AT KL "); S->println(slotSettings.kbdLayout);
+  S->print("AT SC "); makehex(slotSettings.sc, tmp); S->println(tmp);
 
   for (int i = 0; i < NUMBER_OF_BUTTONS; i++)
   {

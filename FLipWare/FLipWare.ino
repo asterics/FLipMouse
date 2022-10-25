@@ -68,7 +68,8 @@ const struct SlotSettings defaultSlotSettings = {      // default slotSettings v
   40, 20, 40, 20 ,                  // gain and range drift compenstation( vertical, horizontal)
   0,                                // orientation
   1,                                // bt-mode 1: USB, 2: Bluetooth, 3: both (2 & 3 need daughter board))
-  0,                                // sensorboard profile ID 0 
+  0,                                // sensorboard profile ID 0
+  0x0,                              // default slot color: black
   "en_US",                          // en_US as default keyboard layout.
 };
 

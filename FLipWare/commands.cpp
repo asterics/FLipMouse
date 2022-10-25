@@ -56,7 +56,7 @@ const struct atCommandType atCommands[] PROGMEM = {
   {"HM"  , PARTYPE_NONE },  {"TL"  , PARTYPE_NONE }, {"TR"  , PARTYPE_NONE }, {"TM"  , PARTYPE_NONE },
   {"KT"  , PARTYPE_STRING }, {"IH"  , PARTYPE_STRING }, {"IS"  , PARTYPE_NONE }, {"UG", PARTYPE_NONE },
   {"BC"  , PARTYPE_STRING}, {"KL"  , PARTYPE_STRING }, {"BR"  , PARTYPE_UINT }, {"RE"  , PARTYPE_NONE },
-  {"SB"  , PARTYPE_UINT },
+  {"SB"  , PARTYPE_UINT },  {"SC"  , PARTYPE_STRING },
 };
 
 /**
@@ -408,6 +408,12 @@ void performCommand (uint8_t cmd, int16_t par1, char * keystring, int8_t periodi
       slotSettings.sb = par1;
       rp2040.fifo.push_nb(par1);  // tell the other core to switch sensorboard profile!
       break;
+    case CMD_SC:
+       Serial.print ("slot color: ");Serial.println (keystring);
+       Serial.println((uint32_t)strtol(keystring, NULL, 0));
+      slotSettings.sc = (uint32_t)strtol(keystring, NULL, 0);
+      break;
+
     case CMD_RO:
       slotSettings.ro = par1;
       displayUpdate();

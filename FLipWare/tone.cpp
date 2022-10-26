@@ -22,7 +22,7 @@ uint16_t toneOffTime;
 uint16_t toneCount = 0;
 
 
-void UpdateTones()
+void updateTones()
 {
   static uint16_t toneState = 0;
   static uint16_t cnt = 0;

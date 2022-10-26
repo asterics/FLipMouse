@@ -38,11 +38,11 @@
 #define TONE_IR_REC          11
 
 /**
-   @name UpdateTones
+   @name updateTones
    @brief updates state/timing of running tone signals
    @return none
 */
-void UpdateTones();
+void updateTones();
 
 /**
    @name makeTone

@@ -405,12 +405,16 @@ void performCommand (uint8_t cmd, int16_t par1, char * keystring, int8_t periodi
       slotSettings.rh = par1;
       break;
     case CMD_SB:
-      slotSettings.sb = par1;
-      rp2040.fifo.push_nb(par1);  // tell the other core to switch sensorboard profile!
+      if (slotSettings.sb != par1) {
+        slotSettings.sb = par1;
+        rp2040.fifo.push_nb(par1);  // tell the other core to switch sensorboard profile!
+      }
       break;
     case CMD_SC:
+#ifdef DEBUG_OUTPUT_FULL
        Serial.print ("slot color: ");Serial.println (keystring);
        Serial.println((uint32_t)strtol(keystring, NULL, 0));
+#endif
       slotSettings.sc = (uint32_t)strtol(keystring, NULL, 0);
       break;
 

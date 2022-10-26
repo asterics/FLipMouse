@@ -77,6 +77,7 @@ void printCurrentSlot(Stream *S)
   S->print("AT RO "); S->println(slotSettings.ro);
   S->print("AT BT "); S->println(slotSettings.bt);
   S->print("AT KL "); S->println(slotSettings.kbdLayout);
+  S->print("AT SB "); S->println(slotSettings.sb);
   S->print("AT SC "); makehex(slotSettings.sc, tmp); S->println(tmp);
 
   for (int i = 0; i < NUMBER_OF_BUTTONS; i++)

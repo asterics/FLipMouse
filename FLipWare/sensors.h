@@ -35,6 +35,18 @@
 #define MPRLS_DIVIDER 50
 
 /**
+ * @brief Fixed divider for the NAU raw values
+ */
+#define NAU_DIVIDER 200
+
+/**
+ * @brief Sensor Watchdog value (approx. milliseconds until device resets)
+ */
+#define SENSOR_WATCHDOG_TIMEOUT 1000
+
+
+
+/**
  * @brief Sensorboard IDs for different signal processing parameters
  */
 #define SENSOR_BOARD_DEFAULT     0
@@ -87,6 +99,13 @@ void applyDeadzone(struct SensorData * sensorData, struct SlotSettings * slotSet
    @return none
 */
 void setSensorBoard(int sensorBoardID);
+
+/**
+   @name checkSensorWatchdog
+   @brief checks if an integer value which should be periodically reset when I2C-sensordata is ready exceeds a certain value
+   @return true: value within normal range  false: value exceeded -> action must be taken
+*/
+uint8_t checkSensorWatchdog();
 
 
 #endif /* _SENSORS_H_ */

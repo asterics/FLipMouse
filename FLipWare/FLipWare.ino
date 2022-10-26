@@ -48,7 +48,9 @@
 #include "parser.h"  
 #include "reporting.h"
 #include "cim.h"
-#include "keys.h"       
+#include "keys.h"
+#include <hardware/watchdog.h>
+
 
 /**
    device name for ID string & BT-pairing
@@ -240,11 +242,17 @@ void setup1() {
 */
 void loop1() {
   static unsigned long lastUpdate=0;     
-
+  
   // check if there is a message from the other core (sensorboard change, profile ID)
   if (rp2040.fifo.available()) {
       makeTone(TONE_CALIB, 0);
       setSensorBoard(rp2040.fifo.pop());  
+  }
+
+  // reset device if I2C interface hangs and sensors don't deliver data
+  if (!checkSensorWatchdog()) {
+    watchdog_reboot(0, 0, 10);
+    while(1);
   }
 
   if (millis() >= lastUpdate + UPDATE_INTERVAL)  {

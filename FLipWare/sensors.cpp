@@ -16,6 +16,8 @@
 
 Adafruit_NAU7802 nau;
 LoadcellSensor XS,YS,PS;
+int sensorWatchdog=0;
+
 
 #define MPRLS_READ_TIMEOUT (20)     ///< millis
 #define MPRLS_STATUS_POWERED (0x40) ///< Status SPI powered bit
@@ -139,6 +141,7 @@ void getValuesISR() {
       getValueMPRLS();
       newData=1;
   }
+  sensorWatchdog=0;   // we got data, reset watchdog counter!
 }
 
 /**
@@ -243,7 +246,7 @@ void readPressure(struct I2CSensorValues *data)
 void readForce(struct I2CSensorValues *data)
 {
   static int32_t currentX=0,currentY=0;
-  
+
   switch(sensor_force)
   {
     case NAU7802:
@@ -257,8 +260,8 @@ void readForce(struct I2CSensorValues *data)
         // update x/y-values 
         if (newData) {
             newData=0;
-            currentX=nau_x/200;
-            currentY=nau_y/200;
+            currentX=nau_x / NAU_DIVIDER;
+            currentY=nau_y / NAU_DIVIDER;
             if (reportValues)  {
               XS.printValues(0x07, 15000);    
               YS.printValues(0x07, 15000);    
@@ -395,4 +398,15 @@ void setSensorBoard(int sensorBoardID)
   attachInterrupt(digitalPinToInterrupt(DRDY_PIN), getValuesISR, RISING);
   
   sensorValues.calib_now = CALIBRATION_PERIOD;  // initiate calibration fro new sensorboard profile!
+}
+
+/**
+   @name checkSensorWatchdog
+   @brief checks if an integer value which should be periodically reset when I2C-sensordata is ready exceeds a certain value
+   @return true: value within normal range  false: value exceeded -> action must be taken
+*/
+uint8_t checkSensorWatchdog() {
+  if (sensorWatchdog++ > SENSOR_WATCHDOG_TIMEOUT)   // timeout after approx. 1 second
+    return(false);
+  return(true); 
 }

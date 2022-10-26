@@ -371,7 +371,7 @@ void setSensorBoard(int sensorBoardID)
       XS.setIdleDetectionThreshold(3500); YS.setIdleDetectionThreshold(3500);
     break;
     case SENSOR_BOARD_100K:           /* 100K sensorboard settings */
-      XS.setGain(0.7);                      YS.setGain(0.7);
+      XS.setGain(0.7);                    YS.setGain(0.7);
       XS.setCompensationFactor(0.02);     YS.setCompensationFactor(0.02);
       XS.setCompensationDecay (0.98);     YS.setCompensationDecay(0.98);
       XS.setMovementThreshold(2000);      YS.setMovementThreshold(2000); 
@@ -384,16 +384,15 @@ void setSensorBoard(int sensorBoardID)
       XS.setMovementThreshold(1500);      YS.setMovementThreshold(1500);
       XS.setIdleDetectionPeriod(100);     YS.setIdleDetectionPeriod(100);
       XS.setIdleDetectionThreshold(50);   YS.setIdleDetectionThreshold(50);
-      XS.setBaselineLowpass(0.1);         YS.setBaselineLowpass(0.1);
-      XS.setNoiseLowpass(3);              YS.setNoiseLowpass(3);
-      XS.setActivityLowpass(2);           YS.setActivityLowpass(2);
+      // XS.setBaselineLowpass(0.1);         YS.setBaselineLowpass(0.1);
+      // XS.setNoiseLowpass(3);              YS.setNoiseLowpass(3);
+      // XS.setActivityLowpass(2);           YS.setActivityLowpass(2);
     break;
     case SENSOR_BOARD_REPORTVALUES:
       reportValues=!reportValues;
     break;
   }
-
-  XS.calib(); YS.calib();
   attachInterrupt(digitalPinToInterrupt(DRDY_PIN), getValuesISR, RISING);
-
+  
+  sensorValues.calib_now = CALIBRATION_PERIOD;  // initiate calibration fro new sensorboard profile!
 }

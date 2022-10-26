@@ -68,7 +68,7 @@ const struct SlotSettings defaultSlotSettings = {      // default slotSettings v
   40, 20, 40, 20 ,                  // gain and range drift compenstation( vertical, horizontal)
   0,                                // orientation
   1,                                // bt-mode 1: USB, 2: Bluetooth, 3: both (2 & 3 need daughter board))
-  0,                                // sensorboard profile ID 0
+  2,                                // default sensorboard profile ID 2
   0x0,                              // default slot color: black
   "en_US",                          // en_US as default keyboard layout.
 };
@@ -114,7 +114,7 @@ void setup() {
   memcpy(&slotSettings,&defaultSlotSettings,sizeof(struct SlotSettings));
 
   //initialise BT module, if available (must be done early!)
-  initBluetooth();   //   TBD: find out why this interferes with I2C !?!
+  initBluetooth();
 
   // initialize peripherals
   Serial.begin(115200);
@@ -171,11 +171,7 @@ void loop() {
   
   // if incoming data from BT-addOn: forward it to host serial interface
   while (Serial_AUX.available() > 0) {
-    Serial.write(Serial_AUX.read());
-    //TBD: filter out data, which should be processed here:
-    // * We want to send "$GC" to the ESP32 to get currently connected device(s)
-    // * Eventually assign a BLE device to one slot, MAC addresses are accessible via "$GP" (read) / "$SW" (select device)
-    // currently active connection should be stored globally, to be usable in updateLeds(), which should display on a slot change BLE connectivity
+    Serial.write(detectBTResponse(Serial_AUX.read()));
   }
 
   // perform periodic updates  
@@ -208,7 +204,8 @@ void loop() {
 
       reportValues();   // send live data to serial
       updateLeds();     // mode indication via front facing neopixel LEDs
-      UpdateTones();    // mode indication via audio signals (buzzer)
+      updateBTConnectionState(); // check if BT is connected (for pairing indication LED animation)
+      updateTones();    // mode indication via audio signals (buzzer)
     }
     if (CimMode) {
       handleCimMode();   // create periodic reports if running in AsTeRICS CIM compatibility mode

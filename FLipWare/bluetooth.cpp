@@ -25,6 +25,9 @@
 
 typedef enum {NONE, EZKEY, MINIBT01, MINIBT02} addontype_t;
 
+static char macaddress[] = "00 00 00 00 00 00";  // len: 18
+uint8_t bt_connected = 0;
+
 uint8_t bt_available = 0;
 addontype_t bt_esp32addon = NONE;
 uint8_t activeKeyCodes[6];
@@ -339,6 +342,79 @@ void initBluetooth()
   bt_esp32addon = EZKEY;
 
 }
+
+/**
+   @name detectBTResponse
+   @param int c: incoming character from BT module
+   @return outgoming character (value for c is propagated)
+
+   detects certain replies from the BT module (eg. if a paired connection was returned after sendind $GC)
+*/
+int detectBTResponse (int c)
+{
+  #define STATE_FIND_MESSAGE 0
+  #define STATE_GET_ARGUMENT 1
+  
+  static char messageConnected[] = "CONNECTED:";
+  static int checkpos=0;
+  static int state=STATE_FIND_MESSAGE;
+
+  switch (state) {
+    case  STATE_FIND_MESSAGE:    
+          if (c==messageConnected[checkpos++]) {
+            if (checkpos == strlen(messageConnected)) {
+              state=STATE_GET_ARGUMENT;
+              checkpos=0;
+            }
+          }
+          else checkpos=0;
+          break;
+    case  STATE_GET_ARGUMENT:
+          macaddress[checkpos++]=(char)c;
+          if (checkpos>=sizeof(macaddress)-1) {
+            // Serial.println("pairing found:"); Serial.println(macaddress);
+            checkpos=0;
+            bt_connected=1;
+            state=STATE_FIND_MESSAGE;
+          }
+          break;
+   //TBD: Eventually assign a BLE device to one slot, MAC addresses are accessible via "$GP" (read) / "$SW" (select device)
+
+  }
+  return(c);  
+}
+
+/**
+   @name updateBTConnectionState
+   @return none
+
+   periodically polls the BT modue for connections
+*/
+void updateBTConnectionState () {
+  static uint32_t timestamp=0;
+  if (millis()-timestamp >= 2000)  {  // every 2 seconds
+      timestamp=millis();      
+      if (isBluetoothAvailable()) {
+        Serial_AUX.write("$GC\n");
+        // digitalWrite (6,!digitalRead (6));
+        bt_connected=0;  // will be updated in case the BT-module sends back connection/mac address
+      }
+  }
+}
+
+
+/**
+   @name isBluetoothConnected
+   @param none
+   @return true, if the BT module is connected (paired) false if not
+
+   This method returns true, if the BT module is currently paired to a host device
+   False will be returned otherwise
+*/
+bool isBluetoothConnected() {
+  return(bt_connected);
+}
+
 
 /**
    @name setBTName

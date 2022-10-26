@@ -83,6 +83,24 @@ void initBluetooth();
 
 
 /**
+   @name detectBTResponse
+   @param int c: incoming character from BT module
+   @return outgoming character (value for c is propagated)
+
+   detects certain replies from the BT module (eg. if a paired connection was returned after sendind $GC)
+*/
+int detectBTResponse (int c);
+
+/**
+   @name updateBTConnectionState
+   @return none
+
+   periodically polls the BT modue for connections
+*/
+void updateBTConnectionState ();
+
+
+/**
    @name setBTName
    @param char * BTName: module name for BT-advertising
    @return none
@@ -157,6 +175,17 @@ void keyboardBTRelease(int k);
    False will be returned otherwise
 */
 bool isBluetoothAvailable();
+
+
+/**
+   @name isBluetoothConnected
+   @param none
+   @return true, if the BT module is connected (paired) false if not
+
+   This method returns true, if the BT module is currently paired to a host device
+   False will be returned otherwise
+*/
+bool isBluetoothConnected();
 
 /**
    @name startBTPairing

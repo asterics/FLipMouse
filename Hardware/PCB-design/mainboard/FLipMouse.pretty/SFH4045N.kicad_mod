@@ -27,4 +27,9 @@
   (fp_line (start -1.5 1.325) (end -1.5 -1.325) (layer "F.Fab") (width 0.15) (tstamp 80d2169e-5e7f-4b78-8042-16ffeab28015))
   (pad "1" smd rect (at -1.35 -0.775) (size 0.9 1.4) (layers "F.Cu" "F.Paste" "F.Mask") (tstamp d00cad8d-ca7f-4315-bc67-be755242a0fa))
   (pad "2" smd rect (at 1.35 -0.775) (size 0.9 1.4) (layers "F.Cu" "F.Paste" "F.Mask") (tstamp ed318b69-b1f0-454c-9438-a75801fa1526))
+  (model "${KIPRJMOD}/step/SFH4045N.step"
+    (offset (xyz 0 0.2 0.59))
+    (scale (xyz 1 1 1))
+    (rotate (xyz 180 90 90))
+  )
 )

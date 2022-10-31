@@ -16,7 +16,7 @@
 
 Adafruit_NAU7802 nau;
 LoadcellSensor XS,YS,PS;
-int sensorWatchdog=0;
+int sensorWatchdog=-1;
 
 
 #define MPRLS_READ_TIMEOUT (20)     ///< millis
@@ -406,7 +406,11 @@ void setSensorBoard(int sensorBoardID)
    @return true: value within normal range  false: value exceeded -> action must be taken
 */
 uint8_t checkSensorWatchdog() {
-  if (sensorWatchdog++ > SENSOR_WATCHDOG_TIMEOUT)   // timeout after approx. 1 second
+  //if we never received any valid values, proceed
+  if(sensorWatchdog == -1) return(true);
+  //if we received at least one time values, but then it stops,
+  //check the value and reset after ~1s (SENSOR_WATCHDOG_TIMEOUT)
+  if (sensorWatchdog++ > SENSOR_WATCHDOG_TIMEOUT)
     return(false);
   return(true); 
 }

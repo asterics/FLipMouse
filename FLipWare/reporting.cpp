@@ -105,6 +105,7 @@ void printCurrentSlot(Stream *S)
     }
     S->println("");
   }
+  S->flush();
 }
 
 void reportValues()

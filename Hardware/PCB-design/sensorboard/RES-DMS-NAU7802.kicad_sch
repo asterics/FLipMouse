@@ -6,8 +6,8 @@
 
   (title_block
     (title "RES-DMS for FLipMouse")
-    (date "2021-12-07")
-    (rev "v0.1")
+    (date "2022-11-16")
+    (rev "v3.2")
     (comment 1 "Eduard Sustr & Benjamin Aigner")
   )
 
@@ -631,7 +631,6 @@
       )
     )
   )
-
 
   (junction (at 72.39 180.34) (diameter 0) (color 0 0 0 0)
     (uuid 0590e40a-7afd-4253-a98e-a603add46952)

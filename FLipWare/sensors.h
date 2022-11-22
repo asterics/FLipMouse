@@ -37,7 +37,7 @@
 /**
  * @brief Fixed divider for the NAU raw values
  */
-#define NAU_DIVIDER 200
+#define NAU_DIVIDER 120
 
 /**
  * @brief Sensor Watchdog value (approx. milliseconds until device resets)

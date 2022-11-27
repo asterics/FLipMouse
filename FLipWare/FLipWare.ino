@@ -132,6 +132,7 @@ void setup() {
   init_CIM_frame();  // for AsTeRICS CIM protocol compatibility
   initStorage();   // initialize storage if necessary
   readFromEEPROMSlotNumber(0, true); // read slot from first EEPROM slot if available !
+  rp2040.fifo.push_nb(slotSettings.sb); // apply sensorboard settings
 
   // NOTE: changed for RP2040!  TBD: why does setBTName damage the console UART TX ??
   // setBTName(moduleName);             // if BT-module installed: set advertising name 

@@ -14,7 +14,7 @@
 #include "FlipWare.h"
 #include "gpio.h"
 
-int8_t  input_map[NUMBER_OF_PHYSICAL_BUTTONS] = {17, 20, 21};      //  NOTE: changed for RP2040!
+int8_t  input_map[NUMBER_OF_PHYSICAL_BUTTONS] = {17, 28, 20};      //  NOTE: changed for RP2040!
 
 uint8_t blinkCount = 0;
 uint8_t blinkTime = 0;

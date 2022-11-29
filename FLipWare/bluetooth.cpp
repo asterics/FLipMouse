@@ -356,7 +356,7 @@ int detectBTResponse (int c)
   #define STATE_GET_ARGUMENT 1
   
   static char messageConnected[] = "CONNECTED:";
-  static int checkpos=0;
+  static unsigned int checkpos=0;
   static int state=STATE_FIND_MESSAGE;
 
   switch (state) {

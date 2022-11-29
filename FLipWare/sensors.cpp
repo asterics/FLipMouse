@@ -358,7 +358,7 @@ void setSensorBoard(int sensorBoardID)
   detachInterrupt(digitalPinToInterrupt(DRDY_PIN));
   switch (sensorBoardID) {
     case SENSOR_BOARD_DEFAULT:        /* sensorboard default settings */
-      XS.setGain(1);                      YS.setGain(1);
+      XS.setGain(1);                      YS.setGain(1.6);
       XS.setCompensationFactor(0.05);     YS.setCompensationFactor(0.05);
       XS.setCompensationDecay (0.95);     YS.setCompensationDecay(0.95);
       XS.setMovementThreshold(1000);      YS.setMovementThreshold(1000);
@@ -366,7 +366,7 @@ void setSensorBoard(int sensorBoardID)
       XS.setIdleDetectionThreshold(3000); YS.setIdleDetectionThreshold(3000);
     break;    
     case SENSOR_BOARD_10K:            /* 10K sensorboard settings */
-      XS.setGain(0.8);                    YS.setGain(0.8);
+      XS.setGain(0.8);                    YS.setGain(1.2);
       XS.setCompensationFactor(0.06);     YS.setCompensationFactor(0.06);
       XS.setCompensationDecay (0.96);     YS.setCompensationDecay(0.96);
       XS.setMovementThreshold(1500);      YS.setMovementThreshold(1500);
@@ -374,7 +374,7 @@ void setSensorBoard(int sensorBoardID)
       XS.setIdleDetectionThreshold(3500); YS.setIdleDetectionThreshold(3500);
     break;
     case SENSOR_BOARD_100K:           /* 100K sensorboard settings */
-      XS.setGain(0.7);                    YS.setGain(0.7);
+      XS.setGain(0.7);                    YS.setGain(1.1);
       XS.setCompensationFactor(0.02);     YS.setCompensationFactor(0.02);
       XS.setCompensationDecay (0.98);     YS.setCompensationDecay(0.98);
       XS.setMovementThreshold(2000);      YS.setMovementThreshold(2000); 
@@ -382,7 +382,7 @@ void setSensorBoard(int sensorBoardID)
       XS.setIdleDetectionThreshold(4000); YS.setIdleDetectionThreshold(4000);
     break;
     case SENSOR_BOARD_STRAINGAUGE:    /* strain gauge sensorboard settings */
-      XS.setGain(0.08);                   YS.setGain(0.08);
+      XS.setGain(0.08);                   YS.setGain(0.1);
       XS.setCompensationFactor(0);        YS.setCompensationFactor(0);
       XS.setMovementThreshold(1500);      YS.setMovementThreshold(1500);
       XS.setIdleDetectionPeriod(100);     YS.setIdleDetectionPeriod(100);

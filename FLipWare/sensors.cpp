@@ -178,6 +178,13 @@ void initSensors()
   
     setSensorBoard(SENSOR_BOARD_DEFAULT);  // default settings for x/y sensor signal processing
     PS.setGain(0.1);                           // but: adjust gain for MPRLS pressure sensor        
+    PS.setCompensationFactor(0);
+    PS.setMovementThreshold(1000);
+    PS.setIdleDetectionPeriod(1000);
+    PS.setIdleDetectionThreshold(10);
+    PS.setBaselineLowpass(0.05);
+    PS.setNoiseLowpass(1.2);
+    PS.setActivityLowpass(0.2);
 
     attachInterrupt(digitalPinToInterrupt(DRDY_PIN), getValuesISR, RISING);  // start processing data ready signals!
   }

@@ -152,7 +152,6 @@ void setup() {
 
 }
 
-
 /**
    @name loop
    @brief loop function, periodically called from core0 after setup()
@@ -252,9 +251,16 @@ void loop1() {
 
   // reset device if I2C interface hangs and sensors don't deliver data
   if (!checkSensorWatchdog()) {
+    //Serial.println("WATCHDOG !!");
     watchdog_reboot(0, 0, 10);
     while(1);
   }
+
+  if (digitalRead(DRDY_PIN) == HIGH)
+  { 
+    getValuesISR();
+  }
+
 
   if (millis() >= lastUpdate + UPDATE_INTERVAL)  {
     lastUpdate = millis();
@@ -271,4 +277,3 @@ void loop1() {
   }
   delay(1);  // core1: sleep a bit ...  
 }
-

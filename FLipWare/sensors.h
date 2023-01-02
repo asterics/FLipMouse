@@ -42,7 +42,7 @@
 /**
  * @brief Sensor Watchdog value (approx. milliseconds until device resets)
  */
-#define SENSOR_WATCHDOG_TIMEOUT 1000
+#define SENSOR_WATCHDOG_TIMEOUT 3000
 
 
 
@@ -107,5 +107,14 @@ void setSensorBoard(int sensorBoardID);
 */
 uint8_t checkSensorWatchdog();
 
+
+/**
+   @name getValuesISR
+   @brief called via pin-change interrupt if new data from NAU7802 is available. 
+          Reads NAU data, changes NAU channel and reads MPRLS data, updates global variables.
+          Expected sampling rate ca. 64 Hz
+   @return none
+*/
+void getValuesISR();
 
 #endif /* _SENSORS_H_ */

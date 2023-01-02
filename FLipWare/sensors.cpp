@@ -18,7 +18,6 @@ Adafruit_NAU7802 nau;
 LoadcellSensor XS,YS,PS;
 int sensorWatchdog=-1;
 
-
 #define MPRLS_READ_TIMEOUT (20)     ///< millis
 #define MPRLS_STATUS_POWERED (0x40) ///< Status SPI powered bit
 #define MPRLS_STATUS_BUSY (0x20)    ///< Status busy bit
@@ -186,7 +185,7 @@ void initSensors()
     PS.setNoiseLowpass(1.2);
     PS.setActivityLowpass(0.2);
 
-    attachInterrupt(digitalPinToInterrupt(DRDY_PIN), getValuesISR, RISING);  // start processing data ready signals!
+    // attachInterrupt(digitalPinToInterrupt(DRDY_PIN), getValuesISR, RISING);  // start processing data ready signals!
   }
 
   #ifdef DEBUG_OUTPUT_SENSORS
@@ -362,7 +361,7 @@ void applyDeadzone(struct SensorData * sensorData, struct SlotSettings * slotSet
 void setSensorBoard(int sensorBoardID) 
 {
 
-  detachInterrupt(digitalPinToInterrupt(DRDY_PIN));
+  // detachInterrupt(digitalPinToInterrupt(DRDY_PIN));
   switch (sensorBoardID) {
     case SENSOR_BOARD_DEFAULT:        /* sensorboard default settings */
       XS.setGain(1);                      YS.setGain(1.6);
@@ -402,7 +401,7 @@ void setSensorBoard(int sensorBoardID)
       reportValues=!reportValues;
     break;
   }
-  attachInterrupt(digitalPinToInterrupt(DRDY_PIN), getValuesISR, RISING);
+  // attachInterrupt(digitalPinToInterrupt(DRDY_PIN), getValuesISR, RISING);
   
   sensorValues.calib_now = CALIBRATION_PERIOD;  // initiate calibration fro new sensorboard profile!
 }

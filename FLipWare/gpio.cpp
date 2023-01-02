@@ -59,8 +59,8 @@ void updateLeds()
       if (colCode & 2) b = 255;
       if (colCode & 4) r = 255;
     } else {   // user defined slotcolor available
-      r=(slotSettings.sc>>16) & 0xff;
-      g=(slotSettings.sc>>8) & 0xff;
+      g=(slotSettings.sc>>16) & 0xff;
+      r=(slotSettings.sc>>8) & 0xff;
       b= slotSettings.sc & 0xff;
     }
 

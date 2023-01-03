@@ -49,11 +49,11 @@
 /**
  * @brief Sensorboard IDs for different signal processing parameters
  */
-#define SENSOR_BOARD_DEFAULT     0
-#define SENSOR_BOARD_10K         1
-#define SENSOR_BOARD_100K        2
-#define SENSOR_BOARD_STRAINGAUGE 3
-#define SENSOR_BOARD_REPORTVALUES 16   // to enable or disable signal traces for serial plotter
+#define SENSORBOARD_SENSITIVITY_HIGH     0
+#define SENSORBOARD_SENSITIVITY_MEDIUM   1
+#define SENSORBOARD_SENSITIVITY_LOW      2
+#define SENSORBOARD_SENSITIVITY_VERY_LOW 3
+#define SENSORBOARD_REPORTVALUES        16   // to enable or disable signal traces for serial plotter
 
 /**
    @name initSensors
@@ -109,12 +109,12 @@ uint8_t checkSensorWatchdog();
 
 
 /**
-   @name getValuesISR
-   @brief called via pin-change interrupt if new data from NAU7802 is available. 
+   @name getSensorValues
+   @brief called if new data from NAU7802 is available. 
           Reads NAU data, changes NAU channel and reads MPRLS data, updates global variables.
           Expected sampling rate ca. 64 Hz
    @return none
 */
-void getValuesISR();
+void getSensorValues();
 
 #endif /* _SENSORS_H_ */

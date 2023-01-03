@@ -115,13 +115,13 @@ void getValueMPRLS() {
 
 
 /**
-   @name getValuesISR
-   @brief called via pin-change interrupt if new data from NAU7802 is available. 
+   @name getSensorValues
+   @brief called if new data from NAU7802 is available. 
           Reads NAU data, changes NAU channel and reads MPRLS data, updates global variables.
           Expected sampling rate ca. 64 Hz
    @return none
 */
-void getValuesISR() {
+void getSensorValues() {
   static int32_t xChange=0,yChange=0;
   
   if (channel==1) {
@@ -175,7 +175,7 @@ void initSensors()
     nau.setChannel(NAU7802_CHANNEL1);
     channel=1;
   
-    setSensorBoard(SENSOR_BOARD_DEFAULT);  // default settings for x/y sensor signal processing
+    setSensorBoard(SENSORBOARD_SENSITIVITY_HIGH);  // default settings for x/y sensor signal processing
     PS.setGain(0.1);                           // but: adjust gain for MPRLS pressure sensor        
     PS.setCompensationFactor(0);
     PS.setMovementThreshold(1000);
@@ -185,7 +185,7 @@ void initSensors()
     PS.setNoiseLowpass(1.2);
     PS.setActivityLowpass(0.2);
 
-    // attachInterrupt(digitalPinToInterrupt(DRDY_PIN), getValuesISR, RISING);  // start processing data ready signals!
+    // attachInterrupt(digitalPinToInterrupt(DRDY_PIN), getSensorValues, RISING);  // start processing data ready signals!
   }
 
   #ifdef DEBUG_OUTPUT_SENSORS
@@ -363,7 +363,7 @@ void setSensorBoard(int sensorBoardID)
 
   // detachInterrupt(digitalPinToInterrupt(DRDY_PIN));
   switch (sensorBoardID) {
-    case SENSOR_BOARD_DEFAULT:        /* sensorboard default settings */
+    case SENSORBOARD_SENSITIVITY_HIGH:        /* sensorboard default settings */
       XS.setGain(1);                      YS.setGain(1.6);
       XS.setCompensationFactor(0.05);     YS.setCompensationFactor(0.05);
       XS.setCompensationDecay (0.95);     YS.setCompensationDecay(0.95);
@@ -371,7 +371,7 @@ void setSensorBoard(int sensorBoardID)
       XS.setIdleDetectionPeriod(1000);    YS.setIdleDetectionPeriod(1000);
       XS.setIdleDetectionThreshold(3000); YS.setIdleDetectionThreshold(3000);
     break;    
-    case SENSOR_BOARD_10K:            /* 10K sensorboard settings */
+    case SENSORBOARD_SENSITIVITY_MEDIUM:       /* 10K sensorboard settings */
       XS.setGain(0.8);                    YS.setGain(1.2);
       XS.setCompensationFactor(0.06);     YS.setCompensationFactor(0.06);
       XS.setCompensationDecay (0.96);     YS.setCompensationDecay(0.96);
@@ -379,7 +379,7 @@ void setSensorBoard(int sensorBoardID)
       XS.setIdleDetectionPeriod(1000);    YS.setIdleDetectionPeriod(1000);
       XS.setIdleDetectionThreshold(3500); YS.setIdleDetectionThreshold(3500);
     break;
-    case SENSOR_BOARD_100K:           /* 100K sensorboard settings */
+    case SENSORBOARD_SENSITIVITY_LOW:           /* 100K sensorboard settings */
       XS.setGain(0.7);                    YS.setGain(1.1);
       XS.setCompensationFactor(0.02);     YS.setCompensationFactor(0.02);
       XS.setCompensationDecay (0.98);     YS.setCompensationDecay(0.98);
@@ -387,7 +387,7 @@ void setSensorBoard(int sensorBoardID)
       XS.setIdleDetectionPeriod(1000);    YS.setIdleDetectionPeriod(1000);
       XS.setIdleDetectionThreshold(4000); YS.setIdleDetectionThreshold(4000);
     break;
-    case SENSOR_BOARD_STRAINGAUGE:    /* strain gauge sensorboard settings */
+    case SENSORBOARD_SENSITIVITY_VERY_LOW:     /* strain gauge sensorboard settings */
       XS.setGain(0.08);                   YS.setGain(0.1);
       XS.setCompensationFactor(0);        YS.setCompensationFactor(0);
       XS.setMovementThreshold(1500);      YS.setMovementThreshold(1500);
@@ -397,11 +397,11 @@ void setSensorBoard(int sensorBoardID)
       // XS.setNoiseLowpass(3);              YS.setNoiseLowpass(3);
       // XS.setActivityLowpass(2);           YS.setActivityLowpass(2);
     break;
-    case SENSOR_BOARD_REPORTVALUES:
+    case SENSORBOARD_REPORTVALUES:
       reportValues=!reportValues;
     break;
   }
-  // attachInterrupt(digitalPinToInterrupt(DRDY_PIN), getValuesISR, RISING);
+  // attachInterrupt(digitalPinToInterrupt(DRDY_PIN), getSensorValues, RISING);
   
   sensorValues.calib_now = CALIBRATION_PERIOD;  // initiate calibration fro new sensorboard profile!
 }

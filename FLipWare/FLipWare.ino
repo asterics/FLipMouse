@@ -249,18 +249,19 @@ void loop1() {
       setSensorBoard(rp2040.fifo.pop());  
   }
 
-  // reset device if I2C interface hangs and sensors don't deliver data
+
+  // check if the Data Ready Pin of the NAU chip signals new data, if yes: get sensor values!
+  if (digitalRead(DRDY_PIN) == HIGH)
+  { 
+    getSensorValues();
+  }
+
+  // reset FlipMouse if sensors don't deliver data for several seconds (interface hangs?)
   if (!checkSensorWatchdog()) {
     //Serial.println("WATCHDOG !!");
     watchdog_reboot(0, 0, 10);
     while(1);
   }
-
-  if (digitalRead(DRDY_PIN) == HIGH)
-  { 
-    getValuesISR();
-  }
-
 
   if (millis() >= lastUpdate + UPDATE_INTERVAL)  {
     lastUpdate = millis();

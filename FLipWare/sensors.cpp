@@ -39,7 +39,7 @@ pressure_type_t sensor_pressure = NO_PRESSURE;
 uint8_t channel, newData=0;
 int32_t nau_x=0, nau_y=0;
 uint32_t mprls_rawval=512;
-uint8_t reportValues=0;
+uint8_t reportXValues=0,reportYValues=0;
 
 
 /**
@@ -118,14 +118,15 @@ void getValueMPRLS() {
    @name getSensorValues
    @brief called if new data from NAU7802 is available. 
           Reads NAU data, changes NAU channel and reads MPRLS data, updates global variables.
-          Expected sampling rate ca. 64 Hz
+          Expected call frequency is about 64 Hz (-> 32 Hz sampling rate for a new X/Y pair).
+          We increase the update rate to 64 Hz by interpolating 2 values, see below.
    @return none
 */
 void getSensorValues() {
   static int32_t xChange=0,yChange=0;
   
   if (channel==1) {
-      xChange=(XS.process(nau.read())-nau_x)/2;
+      xChange=(XS.process(nau.read())-nau_x)/2;  // interpolate X and Y axis for every new X value 
       nau.setChannel(NAU7802_CHANNEL2);
       nau_x+=xChange; nau_y+=yChange;
       channel=2;
@@ -133,7 +134,7 @@ void getSensorValues() {
       newData=1;
   }
   else {
-      yChange=(YS.process(nau.read())-nau_y)/2;
+      yChange=(YS.process(nau.read())-nau_y)/2;  // interpolate X and Y axis for every new Y value
       nau.setChannel(NAU7802_CHANNEL1);
       nau_x+=xChange; nau_y+=yChange;
       channel=1;
@@ -174,9 +175,9 @@ void initSensors()
     configureNAU();
     nau.setChannel(NAU7802_CHANNEL1);
     channel=1;
-  
-    setSensorBoard(SENSORBOARD_SENSITIVITY_HIGH);  // default settings for x/y sensor signal processing
-    PS.setGain(0.1);                           // but: adjust gain for MPRLS pressure sensor        
+
+    // set signal processing parameters for sip/puff (MPRLS pressure sensor)
+    PS.setGain(0.1);                   // low gain necessary
     PS.setCompensationFactor(0);
     PS.setMovementThreshold(1000);
     PS.setIdleDetectionPeriod(1000);
@@ -185,6 +186,15 @@ void initSensors()
     PS.setNoiseLowpass(1.2);
     PS.setActivityLowpass(0.2);
 
+    // set default signal processing parameters for X and Y axis (NAU loadcell amplifier)
+    XS.setCompensationFactor(0.25);   YS.setCompensationFactor(0.25);  // overshoot compensation range (fraction of maximum force)
+    XS.setCompensationDecay(0.98);    YS.setCompensationDecay(0.98);   // overshoot compensation decrease over time
+    XS.setBaselineLowpass(0.15);      YS.setBaselineLowpass(0.15);     // low-pass cutoff frequency for the baseline adjustment
+    XS.setNoiseLowpass(3);            YS.setNoiseLowpass(3);           // low-pass cutoff frequency for valid signal
+    XS.setActivityLowpass(2);         YS.setActivityLowpass(2);        // low-pass cutoff frequency for idle detection / autocalibration 
+    XS.enableAutoCalibration(1);      YS.enableAutoCalibration(1);     // enable autocalibration
+
+    // uncomment for ISR-driven data readout (this caused problems maybe due to race conditions, now using polling from loop1!)
     // attachInterrupt(digitalPinToInterrupt(DRDY_PIN), getSensorValues, RISING);  // start processing data ready signals!
   }
 
@@ -265,19 +275,24 @@ void readForce(struct I2CSensorValues *data)
 
         // update x/y-values 
         if (newData) {
-            newData=0;
-            currentX=nau_x / NAU_DIVIDER;
-            currentY=nau_y / NAU_DIVIDER;
-            if (reportValues)  {
-              XS.printValues(0x07, 15000);    
-              YS.printValues(0x07, 15000);    
-              Serial.println("");
-            }
+          static uint8_t printCount=0;
+          newData=0;
+          currentX=nau_x / NAU_DIVIDER;
+          currentY=nau_y / NAU_DIVIDER;
+          if (printCount++ > 1) {   // report only every second iteration (we interpolate 2 values)
+            printCount=0;
+            if (reportXValues) XS.printValues(0x07, 40000);
+            if (reportYValues) YS.printValues(0x07, 40000);
+            if (reportXValues || reportYValues) Serial.println("");
+          }
         }
 
-        // during calibration period: bypass activities
-        if(data->calib_now) data->xRaw=data->yRaw=0;
+        if(data->calib_now) {
+          // during calibration period: set X/Y value to zero
+          data->xRaw=data->yRaw=0;
+        }
         else {
+          // here we provide new X/Y values for further processing by core 0 !
           data->xRaw =  currentX;
           data->yRaw =  currentY;
         }
@@ -361,49 +376,40 @@ void applyDeadzone(struct SensorData * sensorData, struct SlotSettings * slotSet
 void setSensorBoard(int sensorBoardID) 
 {
 
-  // detachInterrupt(digitalPinToInterrupt(DRDY_PIN));
   switch (sensorBoardID) {
-    case SENSORBOARD_SENSITIVITY_HIGH:        /* sensorboard default settings */
+   case SENSORBOARD_SENSITIVITY_HIGH:        // sensorboard default settings
       XS.setGain(1);                      YS.setGain(1.6);
-      XS.setCompensationFactor(0.05);     YS.setCompensationFactor(0.05);
-      XS.setCompensationDecay (0.95);     YS.setCompensationDecay(0.95);
       XS.setMovementThreshold(1000);      YS.setMovementThreshold(1000);
       XS.setIdleDetectionPeriod(1000);    YS.setIdleDetectionPeriod(1000);
       XS.setIdleDetectionThreshold(3000); YS.setIdleDetectionThreshold(3000);
     break;    
-    case SENSORBOARD_SENSITIVITY_MEDIUM:       /* 10K sensorboard settings */
+    case SENSORBOARD_SENSITIVITY_MEDIUM:       // 10K sensorboard settings
       XS.setGain(0.8);                    YS.setGain(1.2);
-      XS.setCompensationFactor(0.06);     YS.setCompensationFactor(0.06);
-      XS.setCompensationDecay (0.96);     YS.setCompensationDecay(0.96);
       XS.setMovementThreshold(1500);      YS.setMovementThreshold(1500);
       XS.setIdleDetectionPeriod(1000);    YS.setIdleDetectionPeriod(1000);
       XS.setIdleDetectionThreshold(3500); YS.setIdleDetectionThreshold(3500);
     break;
-    case SENSORBOARD_SENSITIVITY_LOW:           /* 100K sensorboard settings */
+    case SENSORBOARD_SENSITIVITY_LOW:           // 100K sensorboard settings
       XS.setGain(0.7);                    YS.setGain(1.1);
-      XS.setCompensationFactor(0.02);     YS.setCompensationFactor(0.02);
-      XS.setCompensationDecay (0.98);     YS.setCompensationDecay(0.98);
       XS.setMovementThreshold(2000);      YS.setMovementThreshold(2000); 
       XS.setIdleDetectionPeriod(1000);    YS.setIdleDetectionPeriod(1000);
       XS.setIdleDetectionThreshold(4000); YS.setIdleDetectionThreshold(4000);
     break;
-    case SENSORBOARD_SENSITIVITY_VERY_LOW:     /* strain gauge sensorboard settings */
+    case SENSORBOARD_SENSITIVITY_VERY_LOW:     // strain gauge sensorboard settings 
       XS.setGain(0.08);                   YS.setGain(0.1);
-      XS.setCompensationFactor(0);        YS.setCompensationFactor(0);
       XS.setMovementThreshold(1500);      YS.setMovementThreshold(1500);
       XS.setIdleDetectionPeriod(100);     YS.setIdleDetectionPeriod(100);
       XS.setIdleDetectionThreshold(50);   YS.setIdleDetectionThreshold(50);
-      // XS.setBaselineLowpass(0.1);         YS.setBaselineLowpass(0.1);
-      // XS.setNoiseLowpass(3);              YS.setNoiseLowpass(3);
-      // XS.setActivityLowpass(2);           YS.setActivityLowpass(2);
+    break; 
+
+    //  signal reporting settings
+    case SENSORBOARD_REPORT_X:
+      reportXValues=!reportXValues;
     break;
-    case SENSORBOARD_REPORTVALUES:
-      reportValues=!reportValues;
+    case SENSORBOARD_REPORT_Y:
+      reportYValues=!reportYValues;
     break;
-  }
-  // attachInterrupt(digitalPinToInterrupt(DRDY_PIN), getSensorValues, RISING);
-  
-  sensorValues.calib_now = CALIBRATION_PERIOD;  // initiate calibration fro new sensorboard profile!
+  }  
 }
 
 /**

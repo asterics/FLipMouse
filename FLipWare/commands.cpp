@@ -405,10 +405,14 @@ void performCommand (uint8_t cmd, int16_t par1, char * keystring, int8_t periodi
       slotSettings.rh = par1;
       break;
     case CMD_SB:
-      if (slotSettings.sb != par1) {
+      if ((par1 < SENSORBOARD_REPORT_X) && (slotSettings.sb != par1)) {
         slotSettings.sb = par1;
-        rp2040.fifo.push_nb(par1);  // tell the other core to switch sensorboard profile!
+        sensorValues.calib_now = CALIBRATION_PERIOD;  // initiate calibration for new sensorboard profile!
+        initBlink(10, 20);
+        makeTone(TONE_CALIB, 0);
+        rp2040.fifo.push_nb(par1); // tell the other core to switch sensorboard profile
       }
+      else  rp2040.fifo.push_nb(par1);  // tell the other core to apply sensorboard reporting settings
       break;
     case CMD_SC:
 #ifdef DEBUG_OUTPUT_FULL

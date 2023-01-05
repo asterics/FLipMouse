@@ -232,7 +232,6 @@ void setup1() {
   Wire1.setClock(400000);  // use 400kHz I2C clock
   initSensors();
   initBlink(10,20);  // first signs of life!
-  makeTone(TONE_CALIB, 0);
 }
 
 /**
@@ -245,7 +244,6 @@ void loop1() {
   
   // check if there is a message from the other core (sensorboard change, profile ID)
   if (rp2040.fifo.available()) {
-      makeTone(TONE_CALIB, 0);
       setSensorBoard(rp2040.fifo.pop());  
   }
 

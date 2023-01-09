@@ -181,18 +181,20 @@ void initSensors()
     PS.setCompensationFactor(0);
     PS.setMovementThreshold(1000);
     PS.setIdleDetectionPeriod(1000);
-    PS.setIdleDetectionThreshold(10);
+    PS.setIdleDetectionThreshold(100);
     PS.setBaselineLowpass(0.05);
     PS.setNoiseLowpass(1.2);
     PS.setActivityLowpass(0.2);
 
     // set default signal processing parameters for X and Y axis (NAU loadcell amplifier)
-    XS.setCompensationFactor(0.25);   YS.setCompensationFactor(0.25);  // overshoot compensation range (fraction of maximum force)
-    XS.setCompensationDecay(0.98);    YS.setCompensationDecay(0.98);   // overshoot compensation decrease over time
-    XS.setBaselineLowpass(0.15);      YS.setBaselineLowpass(0.15);     // low-pass cutoff frequency for the baseline adjustment
-    XS.setNoiseLowpass(3);            YS.setNoiseLowpass(3);           // low-pass cutoff frequency for valid signal
-    XS.setActivityLowpass(2);         YS.setActivityLowpass(2);        // low-pass cutoff frequency for idle detection / autocalibration 
-    XS.enableAutoCalibration(1);      YS.enableAutoCalibration(1);     // enable autocalibration
+    XS.setCompensationFactor(0.20);     YS.setCompensationFactor(0.20);    // overshoot compensation range (fraction of maximum force)
+    XS.setCompensationDecay(0.95);      YS.setCompensationDecay(0.95);     // overshoot compensation decrease over time
+    XS.setBaselineLowpass(0.25);        YS.setBaselineLowpass(0.25);       // low-pass cutoff frequency for the baseline adjustment
+    XS.setNoiseLowpass(3);              YS.setNoiseLowpass(3);             // low-pass cutoff frequency for valid signal
+    XS.setActivityLowpass(2);           YS.setActivityLowpass(2);          // low-pass cutoff frequency for idle detection / autocalibration 
+    XS.setIdleDetectionPeriod(1000);    YS.setIdleDetectionPeriod(1000);   // 1 second idle detection period (autocalibration)
+    XS.setIdleDetectionThreshold(3000); YS.setIdleDetectionThreshold(3000);// gain-compensated threshold value for idle detection (autocalibration)
+    XS.enableAutoCalibration(1);        YS.enableAutoCalibration(1);       // enable autocalibration
 
     // uncomment for ISR-driven data readout (this caused problems maybe due to race conditions, now using polling from loop1!)
     // attachInterrupt(digitalPinToInterrupt(DRDY_PIN), getSensorValues, RISING);  // start processing data ready signals!
@@ -377,29 +379,25 @@ void setSensorBoard(int sensorBoardID)
 {
 
   switch (sensorBoardID) {
-   case SENSORBOARD_SENSITIVITY_HIGH:        // sensorboard default settings
-      XS.setGain(1);                      YS.setGain(1.6);
-      XS.setMovementThreshold(1000);      YS.setMovementThreshold(1000);
-      XS.setIdleDetectionPeriod(1000);    YS.setIdleDetectionPeriod(1000);
-      XS.setIdleDetectionThreshold(3000); YS.setIdleDetectionThreshold(3000);
+   case SENSORBOARD_SENSITIVITY_HIGH:
+      XS.setGain(2.5);                   YS.setGain(3.0);
+      XS.setMovementThreshold(1500);     YS.setMovementThreshold(1500);
+      XS.setCompensationFactor(0.10);    YS.setCompensationFactor(0.10);
     break;    
-    case SENSORBOARD_SENSITIVITY_MEDIUM:       // 10K sensorboard settings
-      XS.setGain(0.8);                    YS.setGain(1.2);
-      XS.setMovementThreshold(1500);      YS.setMovementThreshold(1500);
-      XS.setIdleDetectionPeriod(1000);    YS.setIdleDetectionPeriod(1000);
-      XS.setIdleDetectionThreshold(3500); YS.setIdleDetectionThreshold(3500);
+    case SENSORBOARD_SENSITIVITY_MEDIUM:
+      XS.setGain(1.8);                   YS.setGain(2.0);
+      XS.setMovementThreshold(1800);      YS.setMovementThreshold(1800);
+      XS.setCompensationFactor(0.15);    YS.setCompensationFactor(0.15);
     break;
-    case SENSORBOARD_SENSITIVITY_LOW:           // 100K sensorboard settings
-      XS.setGain(0.7);                    YS.setGain(1.1);
-      XS.setMovementThreshold(2000);      YS.setMovementThreshold(2000); 
-      XS.setIdleDetectionPeriod(1000);    YS.setIdleDetectionPeriod(1000);
-      XS.setIdleDetectionThreshold(4000); YS.setIdleDetectionThreshold(4000);
+    case SENSORBOARD_SENSITIVITY_LOW:
+      XS.setGain(1.3);                   YS.setGain(1.6);
+      XS.setMovementThreshold(2000);     YS.setMovementThreshold(2000); 
+      XS.setCompensationFactor(0.20);    YS.setCompensationFactor(0.20);
     break;
-    case SENSORBOARD_SENSITIVITY_VERY_LOW:     // strain gauge sensorboard settings 
-      XS.setGain(0.08);                   YS.setGain(0.1);
-      XS.setMovementThreshold(1500);      YS.setMovementThreshold(1500);
-      XS.setIdleDetectionPeriod(100);     YS.setIdleDetectionPeriod(100);
-      XS.setIdleDetectionThreshold(50);   YS.setIdleDetectionThreshold(50);
+    case SENSORBOARD_SENSITIVITY_VERY_LOW:
+      XS.setGain(1.0);                   YS.setGain(1.2);
+      XS.setCompensationFactor(0.30);    YS.setCompensationFactor(0.30);
+      XS.setMovementThreshold(3000);     YS.setMovementThreshold(3000);
     break; 
 
     //  signal reporting settings

@@ -281,7 +281,13 @@ void readForce(struct I2CSensorValues *data)
           newData=0;
           currentX=nau_x / NAU_DIVIDER;
           currentY=nau_y / NAU_DIVIDER;
-          if (printCount++ > 1) {   // report only every second iteration (we interpolate 2 values)
+
+          // prevent unintended baseline correction if other axis is moving
+          YS.lockBaseline(XS.isMoving());
+          XS.lockBaseline(YS.isMoving());
+
+          // report values if enabled (only every second iteration as we interpolate 2 values)
+          if (printCount++ > 1) {
             printCount=0;
             if (reportXValues) XS.printValues(0x07, 40000);
             if (reportYValues) YS.printValues(0x07, 40000);

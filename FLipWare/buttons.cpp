@@ -42,8 +42,8 @@ char * getButtonKeystring(int num)
 {
   char * str = keystringBuffer;
   for (int i=0;i<num;i++) {
-    if(*str) while(*str++);    
-    else str++;
+    if(*str) while(*str++);
+    else str++;  
   }
   return(str);
 }

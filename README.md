@@ -24,7 +24,7 @@ The PCB designs (schematic and layout) have been made with EagleCAD/KiCad and ar
 
 # Support us
 If you want to support the development of FLipMouse you're very welcome to donate to the AsTeRICS Foundation:
-<div><a title="Support AsTeRICS Foundation on betterplace.org!" target="_blank" href="https://www.betterplace.at/development-of-open-source-assistive-technologies/donate"><img style="border:0px" alt="" src="https://betterplace-assets.betterplace.org/static-images/projects/donation-button-en.png" width="160" height="100"></a>
+<div><a title="Support AsTeRICS Foundation on betterplace.org!" target="_blank" href="https://www.betterplace.at/development-of-open-source-assistive-technologies"><img style="border:0px" alt="" src="https://betterplace-assets.betterplace.org/static-images/projects/donation-button-en.png" width="160" height="100"></a>
 </div>
 
 # Hardware and Features

@@ -1,6 +1,6 @@
 /*
      FLipWare - AsTeRICS Foundation
-     For more info please visit: http://www.asterics-academy.net
+     For more info please visit: https://www.asterics-foundation.org
 
      Module: tone.cpp - functions for tone/audio feedback
 
@@ -14,7 +14,7 @@
 #include "tone.h"
 
 /**
-   static variables for tone singal generation
+   static variables for tone signal generation
 */
 uint16_t toneHeight;
 uint16_t toneOnTime;
@@ -22,7 +22,7 @@ uint16_t toneOffTime;
 uint16_t toneCount = 0;
 
 
-void UpdateTones()
+void updateTones()
 {
   static uint16_t toneState = 0;
   static uint16_t cnt = 0;
@@ -37,7 +37,7 @@ void UpdateTones()
       toneState++;
       break;
     case 1:
-      if (++cnt > (toneOnTime + toneOffTime) / 5 )  {
+      if (++cnt > (toneOnTime + toneOffTime) / UPDATE_INTERVAL )  {
         toneCount--;
         toneState = 0;
         cnt = 0;

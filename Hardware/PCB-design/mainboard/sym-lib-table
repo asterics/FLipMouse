@@ -1,0 +1,5 @@
+(sym_lib_table
+  (lib (name "FC68125")(type "KiCad")(uri "${KIPRJMOD}/libs/FC68125.kicad_sym")(options "")(descr ""))
+  (lib (name "MPRLS")(type "Legacy")(uri "${KIPRJMOD}/libs/mprl.lib")(options "")(descr ""))
+  (lib (name "5mm_ws2812")(type "KiCad")(uri "${KIPRJMOD}/libs/5mm_ws2812.kicad_sym")(options "")(descr ""))
+)

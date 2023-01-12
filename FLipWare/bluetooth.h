@@ -1,7 +1,7 @@
 /*
 	FLipWare - AsTeRICS Foundation
 	Copyright (c) Benjamin Aigner
-	For more info please visit: http://www.asterics-academy.net
+	For more info please visit: https://www.asterics-foundation.org
 
 	Module: bluetooth.h - using external Bluetooth addon for mouse/keyboard control
 
@@ -22,7 +22,7 @@
 
 
 //RX/TX3 are used to communicate with an addon board (mounted on AUX header)
-#define Serial_AUX Serial3
+#define Serial_AUX Serial2
 
 /** BT module upgrade: inactive/idle */
 #define BTMODULE_UPGRADE_IDLE 0
@@ -83,6 +83,24 @@ void initBluetooth();
 
 
 /**
+   @name detectBTResponse
+   @param int c: incoming character from BT module
+   @return outgoming character (value for c is propagated)
+
+   detects certain replies from the BT module (eg. if a paired connection was returned after sendind $GC)
+*/
+int detectBTResponse (int c);
+
+/**
+   @name updateBTConnectionState
+   @return none
+
+   periodically polls the BT modue for connections
+*/
+void updateBTConnectionState ();
+
+
+/**
    @name setBTName
    @param char * BTName: module name for BT-advertising
    @return none
@@ -127,23 +145,25 @@ void keyboardBTReleaseAll();
 
 /**
    @name keyboardBTPress
-   @param int key	Keycode which should be pressed. Keycodes are in Teensy format
+   @param int k	Key to be pressed
    @return none
 
-    Press a defined key code.
-    keycodes and modifier codes are extracted and sent to EZ-Key module via UART
-    for keylayouts see: https://github.com/PaulStoffregen/cores/blob/master/teensy/keylayouts.h
+   Press a key, value is the same as in Keyboard.press().
+   Because the Keyboard library does not export the raw keycodes or
+   the full report, we copy the code of the Keyboard library to here.
 */
-void keyboardBTPress(int key);
+void keyboardBTPress(int k);
 
 /**
    @name keyboardBTRelease
-   @param int key	Keycode which should be released. Keycodes are in Teensy format (16bit, divided into consumer keys, systemkeys & keyboard keys)
+   @param int k	Key to be released
    @return none
 
-   Release a defined key code.
+   Release a key, value is the same as in Keyboard.release().
+   Because the Keyboard library does not export the raw keycodes or
+   the full report, we copy the code of the Keyboard library to here.
 */
-void keyboardBTRelease(int key);
+void keyboardBTRelease(int k);
 
 /**
    @name isBluetoothAvailable
@@ -155,6 +175,17 @@ void keyboardBTRelease(int key);
    False will be returned otherwise
 */
 bool isBluetoothAvailable();
+
+
+/**
+   @name isBluetoothConnected
+   @param none
+   @return true, if the BT module is connected (paired) false if not
+
+   This method returns true, if the BT module is currently paired to a host device
+   False will be returned otherwise
+*/
+bool isBluetoothConnected();
 
 /**
    @name startBTPairing
@@ -175,4 +206,13 @@ bool startBTPairing();
 void performAddonUpgrade();
 
 
+
+/**
+   @name resetBTModule
+   @param downloadMode if true, ESP32 is put in FW download mode
+   @return none
+
+   resets the ESP32 connected to the RP2020 on the ArduinoNanoConnect board
+*/
+void resetBTModule (int downloadMode);
 #endif

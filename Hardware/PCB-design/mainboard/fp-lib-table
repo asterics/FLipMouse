@@ -1,0 +1,3 @@
+(fp_lib_table
+  (lib (name "FLipMouse")(type "KiCad")(uri "${KIPRJMOD}/FLipMouse.pretty")(options "")(descr ""))
+)

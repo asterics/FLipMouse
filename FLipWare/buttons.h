@@ -1,7 +1,7 @@
 
 /*
       FLipWare - AsTeRICS Foundation
-     For more info please visit: http://www.asterics-academy.net
+     For more info please visit: https://www.asterics-foundation.org
 
      Module: buttons.h - header file for the button handling
 
@@ -113,7 +113,7 @@ char * getButtonKeystring(int num);
    @param text: pointer to string which shall be copied to keystring buffer
    @return number of free bytes remaining in keystring buffer
 */
-uint16_t setButtonKeystring(uint8_t buttonIndex, char * text);
+uint16_t setButtonKeystring(uint8_t buttonIndex, char const * text);
 
 /**
    @name handlePress

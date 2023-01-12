@@ -1,7 +1,7 @@
 /*
 	FLipWare - AsTeRICS Foundation
 	Copyright (c) Benjamin Aigner
-	For more info please visit: http://www.asterics-academy.net
+	For more info please visit: https://www.asterics-foundation.org
 
 	Module: bluetooth.cpp - using external Bluetooth addon for mouse/keyboard control
 
@@ -15,10 +15,18 @@
 */
 
 #include "bluetooth.h"
+//necessary to include keyboard / keyboardlayout.h to have access to the key definitions
+#include <Keyboard.h>
+#include <KeyboardLayout.h>
+//we fetch the keyboard layout map via keys.h
+#include "keys.h"
 
 #define BT_MINIMUM_SENDINTERVAL 20     // reduce mouse reports in BT mode (in milliseconds) !
 
 typedef enum {NONE, EZKEY, MINIBT01, MINIBT02} addontype_t;
+
+static char macaddress[] = "00 00 00 00 00 00";  // len: 18
+uint8_t bt_connected = 0;
 
 uint8_t bt_available = 0;
 addontype_t bt_esp32addon = NONE;
@@ -27,7 +35,7 @@ uint8_t activeModifierKeys = 0;
 uint8_t activeMouseButtons = 0;
 
 long btsendTimestamp = millis();
-long upgradeTimestamp = 0;          // eventually come back to AT mode from an unsuccessful BT module upgrade !
+unsigned long upgradeTimestamp = 0;          // eventually come back to AT mode from an unsuccessful BT module upgrade !
 uint8_t readstate_f=0;              // needed to track the return value status during addon upgrade mode
 
 /**
@@ -44,7 +52,6 @@ uint8_t readstate_f=0;              // needed to track the return value status d
 void mouseBT(int x, int y, uint8_t scroll)
 {
   static int oldMouseButtons = 0;
-  static int sendCnt = 0;
   static int accuX = 0, accuY = 0;
 
 #ifdef DEBUG_OUTPUT_FULL
@@ -63,7 +70,7 @@ void mouseBT(int x, int y, uint8_t scroll)
   accuY += y;
 
   if ((activeMouseButtons != oldMouseButtons) ||
-      (btsendTimestamp + BT_MINIMUM_SENDINTERVAL <= millis()))
+      ((uint32_t)abs((long int)(millis()-btsendTimestamp)) > BT_MINIMUM_SENDINTERVAL ))
   {
     btsendTimestamp = millis();
 
@@ -88,13 +95,12 @@ void mouseBT(int x, int y, uint8_t scroll)
     Serial_AUX.write((uint8_t)accuX);
     Serial_AUX.write((uint8_t)accuY);
 
-    //maybe the wheel? Not official by Adafruit... -> not working
-    Serial_AUX.write((uint8_t)0x00);
+    //wheel. Unsupported by EZKey, but implement in our ESP32 module
+    Serial_AUX.write((uint8_t)scroll);
     //some additional bytes...
     Serial_AUX.write((uint8_t)0x00);
     Serial_AUX.write((uint8_t)0x00);
 
-    sendCnt = 0;
     accuX = 0; accuY = 0;
     oldMouseButtons = activeMouseButtons;
   }
@@ -161,71 +167,105 @@ void sendBTKeyboardReport()
   Serial.println(activeKeyCodes[5], HEX);
 #endif
 
-  Serial_AUX.write(0xFD);       			//raw HID
-  Serial_AUX.write(activeModifierKeys);  	//modifier keys
-  Serial_AUX.write(0x00);
-  Serial_AUX.write(activeKeyCodes[0]);	//key 1
-  Serial_AUX.write(activeKeyCodes[1]);   	//key 2
-  Serial_AUX.write(activeKeyCodes[2]);   	//key 3
-  Serial_AUX.write(activeKeyCodes[3]);   	//key 4
-  Serial_AUX.write(activeKeyCodes[4]);   	//key 5
-  Serial_AUX.write(activeKeyCodes[5]);   	//key 6
+  Serial_AUX.write((uint8_t)0xFD);       			//raw HID
+  Serial_AUX.write((uint8_t)activeModifierKeys);  	//modifier keys
+  Serial_AUX.write((uint8_t)0x00);
+  Serial_AUX.write((uint8_t)activeKeyCodes[0]);	//key 1
+  Serial_AUX.write((uint8_t)activeKeyCodes[1]);   	//key 2
+  Serial_AUX.write((uint8_t)activeKeyCodes[2]);   	//key 3
+  Serial_AUX.write((uint8_t)activeKeyCodes[3]);   	//key 4
+  Serial_AUX.write((uint8_t)activeKeyCodes[4]);   	//key 5
+  Serial_AUX.write((uint8_t)activeKeyCodes[5]);   	//key 6
 }
 
 /**
    @name keyboardBTPress
-   @param int key	Keycode which should be pressed. Keycodes are in Teensy format
+   @param int k	Key to be pressed
    @return none
 
-    Press a defined key code.
-    keycodes and modifier codes are extracted and sent to EZ-Key module via UART
-    for keylayouts see: https://github.com/PaulStoffregen/cores/blob/master/teensy/keylayouts.h
+   Press a key, value is the same as in Keyboard.press().
+   Because the Keyboard library does not export the raw keycodes or
+   the full report, we copy the code of the Keyboard library to here.
 */
-void keyboardBTPress(int key)
+void keyboardBTPress(int k)
 {
   uint8_t currentIndex = 0;
-  uint8_t keyCode = (uint8_t)(key & 0xff);
-
-  if ((key >> 8) ==  0xE0)  // supported modifier key ?
-  {
-    // set bit in modifier key mask
-    activeModifierKeys |= keyCode;
-  } else if ((key >> 8) ==  0xF0) { // supported key ?
-    // check the active key codes for a free slot or overwrite the last one
-    while ((activeKeyCodes[currentIndex] != 0) && (activeKeyCodes[currentIndex] != keyCode) && (currentIndex < 6))
-      currentIndex++;
-    //set the key code to the array
-    activeKeyCodes[currentIndex] = keyCode;
+  const uint8_t *_asciimap = getKeyboardLayout();
+  if(_asciimap == 0) return; //invalid layout pointer.
+  
+  if (k >= 136) {			// it's a non-printing key (not a modifier)
+    k = k - 136;
+  } else if (k >= 128) {	// it's a modifier key
+    activeModifierKeys |= (1<<(k-128));
+    k = 0;
+  } else {				// it's a printing key
+    k = pgm_read_byte(_asciimap + k);
+    if (!k) {
+      return;
+    }
+    if ((k & ALT_GR) == ALT_GR) {
+      activeModifierKeys |= 0x40;   // AltGr = right Alt
+      k &= 0x3F;
+    } else if ((k & SHIFT) == SHIFT) {
+      activeModifierKeys |= 0x02;	// the left shift modifier
+      k &= 0x7F;
+    }
+    if (k == ISO_REPLACEMENT) {
+      k = ISO_KEY;
+    }
   }
 
+  // check the active key codes for a free slot or overwrite the last one
+  while ((activeKeyCodes[currentIndex] != 0) && (activeKeyCodes[currentIndex] != k) && (currentIndex < 6))
+    currentIndex++;
+  //set the key code to the array
+  activeKeyCodes[currentIndex] = k;
   //send the new keyboard report
   sendBTKeyboardReport();
 }
 
 /**
    @name keyboardBTRelease
-   @param int key	Keycode which should be released. Keycodes are in Teensy format (16bit, divided into consumer keys, systemkeys & keyboard keys)
+   @param int k	Key to be released
    @return none
 
-   Release a defined key code.
+   Release a key, value is the same as in Keyboard.release().
+   Because the Keyboard library does not export the raw keycodes or
+   the full report, we copy the code of the Keyboard library to here.
 */
-void keyboardBTRelease(int key)
+void keyboardBTRelease(int k)
 {
-  uint8_t currentIndex = 0;
-  uint8_t keyCode = (uint8_t)(key & 0xff);
-
-  if ((key >> 8) ==  0xE0)  // supported modifier key (see Teensy keylayouts.h)
-  {
-    // clear bit in modifier key mask
-    activeModifierKeys &= ~keyCode;
-  } else {
-    //if not, check the active key codes for the pressed key
-    while ((activeKeyCodes[currentIndex] != keyCode) && (currentIndex < 6)) currentIndex++;
-    //delete the key code from the array
-    for (int i = currentIndex; i < 5; i++)
-      activeKeyCodes[i] = activeKeyCodes[i + 1];
-    activeKeyCodes[5] = 0;
-  }
+	uint8_t currentIndex = 0;
+  const uint8_t *_asciimap = getKeyboardLayout();
+  if(_asciimap == 0) return; //invalid layout pointer.
+  
+	if (k >= 136) {			// it's a non-printing key (not a modifier)
+		k = k - 136;
+	} else if (k >= 128) {	// it's a modifier key
+		activeModifierKeys &= ~(1<<(k-128));
+		k = 0;
+	} else {				// it's a printing key
+		k = pgm_read_byte(_asciimap + k);
+		if (!k) {
+			return;
+		}
+		if ((k & ALT_GR) == ALT_GR) {
+			activeModifierKeys &= ~(0x40);   // AltGr = right Alt
+			k &= 0x3F;
+		} else if ((k & SHIFT) == SHIFT) {
+			activeModifierKeys &= ~(0x02);	// the left shift modifier
+			k &= 0x7F;
+		}
+		if (k == ISO_REPLACEMENT) {
+			k = ISO_KEY;
+		}
+	}
+  //check the active key codes for the pressed key
+  while ((activeKeyCodes[currentIndex] != k) && (currentIndex < 6)) currentIndex++;
+  //delete the key code from the array
+  for (int i = currentIndex; i < 5; i++)
+    activeKeyCodes[i] = activeKeyCodes[i + 1];
+  activeKeyCodes[5] = 0;
 
   //send the new keyboard report
   sendBTKeyboardReport();
@@ -254,10 +294,8 @@ void keyboardBTReleaseAll()
    @param char* writeString	string to typed by the Bluetooth HID keyboard
    @return none
 
-   This method prints out an ASCII string (no modifiers available!!!) via the
+   This method prints out an ASCII string via the
    Bluetooth module
-
-   @todo We should use the keyboard maps from ESP32, can store all of them. But how to handle any multibyte strings?
 */
 void keyboardBTPrint(char * writeString)
 {
@@ -266,40 +304,10 @@ void keyboardBTPrint(char * writeString)
   // print each char of the string
   while (writeString[i])
   {
-    // Serial_AUX.write(writeString[i++]);
-
-    // improved for localization / keycodes (but: slower ...)
-
-    int keycode = 0, modifier = 0;
-
-    // Serial.print("key ="); Serial.print(writeString[i]);
-    if (writeString[i] < 128) {     // ASCII
-      // Serial.print(" ASCII ="); Serial.println((int)writeString[i]);
-      keycode = pgm_read_byte(keycodes_ascii + (writeString[i] - 0x20));
-    }
-    else  {  // ISO_8859
-#ifdef ISO_8859_1_A0
-      // Serial.print(" ISO_8859 ="); Serial.println((int)writeString[i]);
-      keycode = pgm_read_byte(keycodes_iso_8859_1 + (writeString[i] - 0xA0));
-#endif
-    }
-
-    if (keycode & 0x40) {  // SHIFT
-      // Serial.print("SHIFT+");
-      keycode &= ~0x40;
-      modifier = 0xe002;
-    } else if (keycode & 0x80) {  // ALTGR
-      // Serial.print("ALTGR+");
-      keycode &= ~0x80;
-      modifier = 0xe040;
-    }
-    // Serial.print("HID =");
-    // Serial.println(keycode);
-
-    if (modifier) keyboardBTPress(modifier);
-    keyboardBTPress(keycode | 0xf000);
-    keyboardBTRelease(keycode | 0xf000);
-    if (modifier) keyboardBTRelease(modifier);
+    keyboardBTPress(writeString[i]);
+    delay(10);
+    keyboardBTRelease(writeString[i]);
+    delay(10);
     i++;
   }
 }
@@ -321,15 +329,92 @@ void initBluetooth()
 #ifdef DEBUG_OUTPUT_FULL
   Serial.println("init Bluetooth");
 #endif
-
-  //start the AUX serial port 9600 8N1
-  Serial_AUX.begin(9600);
+  //start the AUX serial port 9600 8N1  
+  Serial_AUX.begin(115200);  // NOTE: changed for RP2040! TODO: maybe get from revision number (>=3)?
+  
+  resetBTModule(0);  // start ESP32 module!
+  delay (500);
+  Serial_AUX.flush();
+  
   bt_available = 1;
 
   ///@todo send identifier to BT module & check response. With BT addon this is much faster and reliable
   bt_esp32addon = EZKEY;
 
 }
+
+/**
+   @name detectBTResponse
+   @param int c: incoming character from BT module
+   @return outgoming character (value for c is propagated)
+
+   detects certain replies from the BT module (eg. if a paired connection was returned after sendind $GC)
+*/
+int detectBTResponse (int c)
+{
+  #define STATE_FIND_MESSAGE 0
+  #define STATE_GET_ARGUMENT 1
+  
+  static char messageConnected[] = "CONNECTED:";
+  static unsigned int checkpos=0;
+  static int state=STATE_FIND_MESSAGE;
+
+  switch (state) {
+    case  STATE_FIND_MESSAGE:    
+          if (c==messageConnected[checkpos++]) {
+            if (checkpos == strlen(messageConnected)) {
+              state=STATE_GET_ARGUMENT;
+              checkpos=0;
+            }
+          }
+          else checkpos=0;
+          break;
+    case  STATE_GET_ARGUMENT:
+          macaddress[checkpos++]=(char)c;
+          if (checkpos>=sizeof(macaddress)-1) {
+            // Serial.println("pairing found:"); Serial.println(macaddress);
+            checkpos=0;
+            bt_connected=1;
+            state=STATE_FIND_MESSAGE;
+          }
+          break;
+   //TBD: Eventually assign a BLE device to one slot, MAC addresses are accessible via "$GP" (read) / "$SW" (select device)
+
+  }
+  return(c);  
+}
+
+/**
+   @name updateBTConnectionState
+   @return none
+
+   periodically polls the BT modue for connections
+*/
+void updateBTConnectionState () {
+  static uint32_t timestamp=0;
+  if (millis()-timestamp >= 2000)  {  // every 2 seconds
+      timestamp=millis();      
+      if (isBluetoothAvailable()) {
+        Serial_AUX.write("$GC\n");
+        // digitalWrite (6,!digitalRead (6));
+        bt_connected=0;  // will be updated in case the BT-module sends back connection/mac address
+      }
+  }
+}
+
+
+/**
+   @name isBluetoothConnected
+   @param none
+   @return true, if the BT module is connected (paired) false if not
+
+   This method returns true, if the BT module is currently paired to a host device
+   False will be returned otherwise
+*/
+bool isBluetoothConnected() {
+  return(bt_connected);
+}
+
 
 /**
    @name setBTName
@@ -340,7 +425,7 @@ void initBluetooth()
 
 */
 void setBTName(char * BTName) {
-  //set moduel name for BT advertising
+  //set module name for BT advertising
   Serial_AUX.print("$NAME ");
   Serial_AUX.println(BTName);  
 }
@@ -414,9 +499,9 @@ void performAddonUpgrade()
     if(Serial.available()) upgradeTimestamp=millis();   // incoming data: assume working upgrade!
     else {
       // 20 seconds no data -> return to AT mode !
-      if (millis()-upgradeTimestamp > 20000) {
+      if((uint32_t)abs((long int)(millis()-upgradeTimestamp)) > 20000) {
         addonUpgrade = BTMODULE_UPGRADE_IDLE;
-        Serial_AUX.begin(9600); //switch to lower speed...
+        Serial_AUX.begin(115200); //switch to lower speed...   // NOTE: changed for RP2040! 
         Serial.flush();
         Serial_AUX.flush();
         return;
@@ -443,7 +528,7 @@ void performAddonUpgrade()
             bt_available = 1;
             readstate_f=0;
             delay(50);
-            Serial_AUX.begin(9600); //switch to lower speed...
+            Serial_AUX.begin(115200); //switch to lower speed...  // NOTE: changed for RP2040! 
             Serial.flush();
             Serial_AUX.flush();
             } else readstate_f=0;
@@ -454,4 +539,37 @@ void performAddonUpgrade()
     }
     return;
   }
+}
+
+
+// NOTE: changed for RP2040! 
+/**
+   @name resetBTModule
+   @param downloadMode if true, ESP32 is put in FW download mode
+   @return none
+
+   resets the ESP32 connected to the RP2020 on the ArduinoNanoConnect board
+*/
+void resetBTModule (int downloadMode)
+{
+  pinMode (6,OUTPUT); digitalWrite (6, HIGH);  // orange led  on ArduinoNano2040Connect
+
+  if (downloadMode) {
+     Serial.println ("ESP32 put into download mode!");    
+     pinMode (2,OUTPUT); digitalWrite (2, LOW);   // ESP32 GPIO0 pin on ArduinoNano2040Connect
+     delay(100);
+     pinMode (3,OUTPUT); digitalWrite (3, LOW);   // ESP32 reset pin on ArduinoNano2040Connect
+     delay(100);
+     digitalWrite (3, HIGH);  // release reset
+     delay(1000);
+     digitalWrite (2, HIGH);  // release GPIO0
+  } else {
+    Serial.println ("ESP32 reset!"); 
+    pinMode (3,OUTPUT);
+    digitalWrite (3, LOW);   // ESP32 reset pin on ArduinoNano2040Connect
+    delay(100);
+    digitalWrite (3, HIGH);  // release reset
+  }
+ 
+  digitalWrite (6, LOW);
 }

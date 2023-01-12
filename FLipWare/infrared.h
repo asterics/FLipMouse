@@ -1,6 +1,6 @@
 /*
      FLipWare - AsTeRICS Foundation
-     For more info please visit: http://www.asterics-academy.net
+     For more info please visit: https://www.asterics-foundation.org
 
      Module: infrared.h - implementation of the infrared record/replay functions 
 
@@ -17,11 +17,15 @@
 /**
    physical pin definitions
 */
-#define IR_LED_PIN     6    //  IR-Led output pin
-#define IR_SENSOR_PIN  4    //  input pin of the TSOP IR receiver
+//RP2040:
+#define IR_LED_PIN     19    //  IR-Led output pin      // NOTE: changed for RP2040 ? 28 and 26 are ADC pins ...
+#define IR_SENSOR_PIN  16    //  input pin of the TSOP IR receiver
 
-//Time until the record command will be canceled (in milliseconds)
+// Time until the record command will be canceled (in milliseconds)
 #define IR_USER_TIMEOUT_MS 10000
+
+// Longest valid IR edge-to-edgetime (in microseconds)
+#define IR_EDGE_TIMEOUT_US  15000UL
 
 // ir code repeat gap (in microseconds)
 #define IR_REPEAT_GAP 10000
@@ -34,10 +38,11 @@
 
 // name of the idle code command (played after other ir commands if it exists)
 #define IDLESEQUENCE_NAME "idle"
-#define IDLESEQUENCE_REPEAT 1
+#define IDLESEQUENCE_REPEAT 0
 
 // maximum time interval which can be stored in high precision (microseconds) format
 #define MAX_HIGHPRECISION_DURATION 64000
+
 
 /**
    @name initIR
@@ -98,11 +103,18 @@ uint8_t delete_IR_command(char * name);
 
 /**
    @name set_IR_timeout
-   @brief sets the timeout for IR recording 
-   @param ms timeout value in milliseconds
+   @brief sets the inter-edge timeout for IR recording 
+   @param us timeout value in microseconds
    @return none
 */
-void set_IR_timeout(uint16_t ms);
+void set_IR_timeout(uint32_t us);
+
+/**
+   @name get_IR_timeout
+   @brief gets the inter-edge timeout for IR recording 
+   @return timeout value in microseconds
+*/
+uint32_t get_IR_timeout();
 
 /**
    @name wipe_IR_commands

@@ -1,6 +1,6 @@
 /*
      FLipWare - AsTeRICS Foundation
-     For more info please visit: http://www.asterics-academy.net
+     For more info please visit: https://www.asterics-foundation.org
 
      Module: reporting.h - implementation of serial reports
 
@@ -23,15 +23,13 @@
    extern declaration of static variables
    which shall be accessed from other modules
 */
-extern uint8_t reportSlotParameters;
 extern uint8_t reportRawValues;
 
-/**
-   @name printCurrentSlot
-   @brief prints the AT command strings of the current slot settings to the serial interface
-   @return none
-*/
-void printCurrentSlot();
+/** 
+ * @brief Print current to given stream
+ * @param S Stream to send the AT commands to; in our case Serial or a File
+ */
+void printCurrentSlot(Stream *S);
 
 /**
    @name reportValues

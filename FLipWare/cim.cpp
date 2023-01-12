@@ -1,6 +1,6 @@
 /*
      FLipWare - AsTeRICS Foundation
-     For more info please visit: http://www.asterics-academy.net
+     For more info please visit: https://www.asterics-foundation.org
 
      Module: cim.cpp - AsTeRICS LipMouse CIM Firmware using Teensy controller
 
@@ -33,7 +33,7 @@
 #include "FlipWare.h"
 #include "gpio.h"
 #include "cim.h"
-#include <avr/io.h>
+//#include <avr/io.h>
 #include <stdlib.h>
 #include <stdio.h>
 
@@ -60,7 +60,6 @@ const char LIPMOUSE_CIM_FEATURELIST[] =
 } ;
 
 
-extern  int8_t led_map[];              //  maps leds pins
 extern uint8_t readstate;
 
 volatile uint8_t CimParserActive = 0;
@@ -173,10 +172,7 @@ uint8_t process_ARE_frame(uint8_t status_code)
             break;
           case LIPMOUSE_CIM_FEATURE_SET_LEDS:
             if (data_size == 1) {
-              uint8_t actLeds = ARE_frame.data[0];
-              if (actLeds & 1) digitalWrite (led_map[0], LOW); else digitalWrite (led_map[0], HIGH);
-              if (actLeds & 2) digitalWrite (led_map[1], LOW); else digitalWrite (led_map[1], HIGH);
-              if (actLeds & 4) digitalWrite (led_map[2], LOW); else digitalWrite (led_map[2], HIGH);
+              setLeds(ARE_frame.data[0]);
             }
             break;
           case LIPMOUSE_CIM_FEATURE_ATCMD:
@@ -242,11 +238,11 @@ void generate_ADCFrame()
 {
   uint16_t adcval;
 
-  adcval = sensorData.left - sensorData.right;
+  adcval = sensorData.xRaw;
   CIM_frame.data[0] = adcval & 0xff;
   CIM_frame.data[1] = adcval >> 8;
 
-  adcval = sensorData.up - sensorData.down;
+  adcval = sensorData.yRaw;
   CIM_frame.data[2] = adcval & 0xff;
   CIM_frame.data[3] = adcval >> 8;
 

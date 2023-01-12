@@ -1,6 +1,6 @@
 /*
      FLipWare - AsTeRICS Foundation
-     For more info please visit: http://www.asterics-academy.net
+     For more info please visit: https://www.asterics-foundation.org
 
      Module: commands.h - implementation of the AT-commands, header file
 
@@ -83,6 +83,8 @@
 
           AT KR <string>    key release: releases all keys identified in the string
           AT RA             release all: releases all currently pressed keys and buttons
+          AT KL <string>    change keyboard layout. No parameter prints the currently used layout. 
+                            Currently supported: de_DE, en_US, es_ES, fr_FR, it_IT, sv_SE, da_DK.
 
     Housekeeping commands:
 
@@ -92,10 +94,12 @@
           AT LI           list all saved mode names
           AT NE           next mode will be loaded (wrap around after last slot)
           AT DE <string>  delete slot of given name (deletes all stored slots if no string parameter is given)
-          AT RS           resets FLipMouse and restores default configuration (deletes EEPROM and restores default Slot "mouse")
+          AT RS           resets FLipMouse settings and restores default configuration (deletes EEPROM and restores default Slot "mouse")
+          AT RE           perform a reboot (SW-reset)
           AT NC           no command (idle operation)
           AT BT <uint>    set bluetooth mode, 1=USB only, 2=BT only, 3=both(default)
                           (e.g. AT BT 2 -> send HID commands only via BT if BT-daughter board is available)
+          AT SC <string>  change slot color: given string 0xRRGGBB                           
 
     FLipMouse-specific slotSettings and commands:
 
@@ -122,6 +126,7 @@
           AT RV <uint>    range vertical drift compensation (0-100)
           AT GH <uint>    gain horizontal drift compensation (0-100)  
           AT RH <uint>    range horizontal drift compensation (0-100)
+          AT SB <uint>    select a sensorboard (profile-ID), adjusts signal processing parameters (0-3)
 
     Infrared-specific commands:
 
@@ -134,9 +139,10 @@
           AT IL           lists all stored infrared command names
           AT IT <uint>    set code timeout value for IR Recording (e.g. "AT IT 10" sets 10 milliseconds timeout)
           
-    Addon commands:
+    Bluetooth commands:
      
           AT BC <string>  sends parameter to external UART (mostly ESP32 Bluetooth Addon)
+          AT BR <uint>    resets the ESP32 bluetooth module (connected to RP 2040 on ArduinoNanoConnect board)  // NOTE: changed for RP2040! 
           AT UG           start addon upgrade, Serial ports are transparent until ("$FIN") is received.
 
    supported key identifiers for key commands (AT KP/KH/KR/KT):
@@ -183,7 +189,8 @@ enum atCommands {
   CMD_AY, CMD_DX, CMD_DY, CMD_TS, CMD_TP, CMD_SP, CMD_SS, CMD_GV, CMD_RV, CMD_GH, CMD_RH, CMD_IR,
   CMD_IP, CMD_IC, CMD_IL, CMD_JX, CMD_JY, CMD_JZ, CMD_JT, CMD_JS, CMD_JP, CMD_JR, CMD_JH,
   CMD_IT, CMD_KH, CMD_MS, CMD_AC, CMD_MA, CMD_WA, CMD_RO, CMD_IW, CMD_BT, CMD_HL, CMD_HR, CMD_HM,
-  CMD_TL, CMD_TR, CMD_TM, CMD_KT, CMD_IH, CMD_IS, CMD_UG, CMD_BC,
+  CMD_TL, CMD_TR, CMD_TM, CMD_KT, CMD_IH, CMD_IS, CMD_UG, CMD_BC, CMD_KL, CMD_BR, CMD_RE, CMD_SB,
+  CMD_SC,
   NUM_COMMANDS
 };
 

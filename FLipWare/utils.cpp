@@ -1,6 +1,6 @@
 /*
      FLipWare - AsTeRICS Foundation
-     For more info please visit: http://www.asterics-academy.net
+     For more info please visit: https://www.asterics-foundation.org
 
      Module: utils.cpp - utility functions 
 
@@ -39,6 +39,10 @@ float __ieee754_sqrtf(float x)
   float z;
   __uint32_t r, hx;
   __int32_t ix, s, q, m, t, i;
+  
+  //avoid compiler warnings
+  (void)hx;
+  (void)i;
 
   GET_FLOAT_WORD(ix, x);
 

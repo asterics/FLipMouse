@@ -1,0 +1,51 @@
+EESchema-LIBRARY Version 2.4
+#encoding utf-8
+#
+# Honeywell MPRLS0025PA00001AB
+#
+DEF MPRLS0025PA00001AB U 0 40 Y Y 1 L N
+F0 "U" 0 200 50 H V L CNN 
+F1 "MPRLS0025PA00001AB" 0 300 50 H V L CNN 
+F2 "Honeywell-MPRLS0025PA00001AB-*" 0 400 50 H I L CNN 
+F3 "https://sensing.honeywell.com/honeywell-sensing-micropressure-board-mount-pressure-mpr-series-datasheet-32332628-en.pdf" 0 500 50 H I L CNN 
+F4 "No" 0 600 50 H I L CNN "automotive"
+F5 "IC" 0 700 50 H I L CNN "category"
+F6 "Sensors" 0 800 50 H I L CNN "device class L1"
+F7 "Pressure Sensors" 0 900 50 H I L CNN "device class L2"
+F8 "unset" 0 1000 50 H I L CNN "device class L3"
+F9 "MICROPRESSURE EVAL BOARD 25 PSI" 0 1100 50 H I L CNN "digikey description"
+F10 "480-7127-ND" 0 1200 50 H I L CNN "digikey part number"
+F11 "5.86mm" 0 1300 50 H I L CNN "height"
+F12 "Yes" 0 1400 50 H I L CNN "lead free"
+F13 "c5a2135f599f8721" 0 1500 50 H I L CNN "library id"
+F14 "Honeywell" 0 1600 50 H I L CNN "manufacturer"
+F15 "25PSI" 0 1700 50 H I L CNN "max pressure"
+F16 "3.6V" 0 1800 50 H I L CNN "max supply voltage"
+F17 "1.8V" 0 1900 50 H I L CNN "min supply voltage"
+F18 "785-MPRLS25PA00001AB" 0 2000 50 H I L CNN "mouser part number"
+F19 "0.0338uA" 0 2100 50 H I L CNN "operating supply current"
+F20 "SMD_5MM0_5MM0" 0 2200 50 H I L CNN "package"
+F21 "Barbless" 0 2300 50 H I L CNN "port style"
+F22 "0-25PSI" 0 2400 50 H I L CNN "pressure"
+F23 "Yes" 0 2500 50 H I L CNN "rohs"
+F24 "I2C" 0 2600 50 H I L CNN "sensor output"
+F25 "+85°C" 0 2700 50 H I L CNN "temperature range high"
+F26 "-40°C" 0 2800 50 H I L CNN "temperature range low"
+DRAW
+X NC 11 100 -1000 100 R 40 40 1 1 P 
+X NC 5 100 -1100 100 R 40 40 1 1 P 
+X VDD 12 100 0 100 R 40 40 1 1 W 
+X EOC 8 1300 0 100 L 40 40 1 1 P 
+X MISO 7 1300 -100 100 L 40 40 1 1 B 
+X MOSI/SDA 2 1300 -200 100 L 40 40 1 1 B 
+X ~RES~ 9 1300 -300 100 L 40 40 1 1 P 
+X SCLK/SCL 3 1300 -400 100 L 40 40 1 1 I 
+X SS 1 1300 -500 100 L 40 40 1 1 P 
+X VO+ 4 1300 -700 100 L 40 40 1 1 P 
+X VO- 6 1300 -800 100 L 40 40 1 1 P 
+X VSS 10 1300 -1100 100 L 40 40 1 1 W 
+S 200 100 1200 -1200 1 1 0 f
+ENDDRAW
+ENDDEF
+#
+# End Library

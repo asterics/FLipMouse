@@ -1,6 +1,6 @@
 /*
      FLipWare - AsTeRICS Foundation
-     For more info please visit: http://www.asterics-academy.net
+     For more info please visit: https://www.asterics-foundation.org
 
      Module: tone.h - functions for tone/audio feedback 
 
@@ -13,11 +13,17 @@
 #ifndef _TONE_H_
 #define _TONE_H_
 
+#include "FlipWare.h"
 
 /**
    constant definitions for tone generation 
 */ 
-#define TONE_PIN  9    // physical pin for piezo tone generation
+#ifdef DEBUG_NO_TONE
+  //unconnected pin...
+  #define TONE_PIN 6
+#else
+  #define TONE_PIN  25    // physical pin for piezo tone generation
+#endif
 
 #define TONE_CALIB            1
 #define TONE_CHANGESLOT       2
@@ -32,11 +38,11 @@
 #define TONE_IR_REC          11
 
 /**
-   @name UpdateTones
+   @name updateTones
    @brief updates state/timing of running tone signals
    @return none
 */
-void UpdateTones();
+void updateTones();
 
 /**
    @name makeTone

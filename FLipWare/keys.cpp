@@ -1,6 +1,6 @@
 /*
      FLipWare - AsTeRICS Foundation
-     For more info please visit: http://www.asterics-academy.net
+     For more info please visit: https://www.asterics-foundation.org
 
      Module: keys.cpp - implementation of the keyboard handling
 
@@ -26,6 +26,61 @@ uint8_t in_keybuffer(int key);
 void remove_from_keybuffer(int key);
 void add_to_keybuffer(int key);
 void performKeyActions(char* text, uint8_t keyAction);
+char kbdLayout[6] = "en_US";
+const uint8_t *kbdLayoutArray = KeyboardLayout_en_US;
+
+/**
+   @name printKeyboardLayout
+   @brief Prints out the currently used keyboard layout (e.g. "en_US\n")
+   @return none
+*/
+void printKeyboardLayout()
+{
+	Serial.println(kbdLayout);
+}
+
+/**
+   @name setKeyboardLayout
+   @brief Updates the currently used keyboard layout.
+   @param name Name of the new keyboard layout (e.g. "en_US" or "de_DE")
+   @return 1 on success, 0 if layout is not found.
+   @note Currently supported: de_DE, en_US, es_ES, fr_FR, it_IT, sv_SE, da_DK
+*/
+int8_t setKeyboardLayout(char *name)
+{
+	const uint8_t *newLayout = 0;
+	
+	if(strncmp(name, "de_DE",5) == 0) newLayout = KeyboardLayout_de_DE;
+	if(strncmp(name, "en_US",5) == 0) newLayout = KeyboardLayout_en_US;
+	if(strncmp(name, "es_ES",5) == 0) newLayout = KeyboardLayout_es_ES;
+	if(strncmp(name, "fr_FR",5) == 0) newLayout = KeyboardLayout_fr_FR;
+	if(strncmp(name, "it_IT",5) == 0) newLayout = KeyboardLayout_it_IT;
+	if(strncmp(name, "sv_SE",5) == 0) newLayout = KeyboardLayout_sv_SE;
+	if(strncmp(name, "da_DK",5) == 0) newLayout = KeyboardLayout_da_DK;
+	
+	if(newLayout)
+	{
+		Keyboard.begin(newLayout);
+    kbdLayoutArray = newLayout;
+		#ifdef DEBUG_OUTPUT_FULL
+			Serial.print("Found new layout pointer for ");
+			Serial.print(name);
+			Serial.println(", setting in Keyboard.begin");
+		#endif
+    strncpy(kbdLayout,name,5); //save locally
+		return 1;
+	} else return 0;
+}
+
+/**
+   @name getKeyboardLayout
+   @brief Used to get the pointer to the current keyboard layout
+   @return Pointer to keyboard layout array
+*/
+const uint8_t *getKeyboardLayout()
+{
+  return kbdLayoutArray;
+}
 
 /**
    @name updateKey
@@ -38,26 +93,46 @@ void updateKey(int key, uint8_t keyAction)
 {
   switch (keyAction)  {
     case KEY_PRESS:
+    #ifdef DEBUG_OUTPUT_KEYS
+      Serial.print("P+");
+    #endif
     case KEY_HOLD:
+      #ifdef DEBUG_OUTPUT_KEYS
+        Serial.println("H");
+      #endif
       add_to_keybuffer(key);
       keyboardPress(key);       // press/hold keys individually
       break;
 
     case KEY_RELEASE:
+      #ifdef DEBUG_OUTPUT_KEYS
+        Serial.println("R");
+      #endif
       remove_from_keybuffer(key);
       keyboardRelease(key);       // release keys individually
       break;
 
     case KEY_TOGGLE:
+      #ifdef DEBUG_OUTPUT_KEYS
+        Serial.print("T-");
+      #endif
       if (in_keybuffer(key))  {
+        #ifdef DEBUG_OUTPUT_KEYS
+          Serial.println("R");
+        #endif
         remove_from_keybuffer(key);
         keyboardRelease(key);
       } else {
+        #ifdef DEBUG_OUTPUT_KEYS
+          Serial.println("P");
+        #endif
         add_to_keybuffer (key);
         keyboardPress(key);
       }
       break;
   }
+  //need to delay to avoid missing keyboard actions
+  delay(10);
 }
 
 void pressKeys (char * text)
@@ -159,7 +234,7 @@ uint8_t in_keybuffer(int key)
    maps a keycode to a key-identifier string
 */
 struct keymap_struct {
-  char *token;
+  char const *token;
   int key;
 };
 
@@ -167,20 +242,19 @@ struct keymap_struct {
    keymap1
    keycode/key-identifier mapping for key-identifiers with prefix "KEY_"
 */
-const keymap_struct keymap1 [] = {     
-
+const keymap_struct keymap1 [] = {
   {"SHIFT", KEY_LEFT_SHIFT},
   {"CTRL", KEY_LEFT_CTRL},
   {"ALT", KEY_LEFT_ALT},
   {"RIGHT_ALT", KEY_RIGHT_ALT},
   {"GUI", KEY_LEFT_GUI},
   {"RIGHT_GUI", KEY_RIGHT_GUI},
-  {"UP", KEY_UP},
-  {"DOWN", KEY_DOWN},
-  {"LEFT", KEY_LEFT},
-  {"RIGHT", KEY_RIGHT},
-  {"ENTER", KEY_ENTER},
-  {"SPACE", KEY_SPACE},
+  {"UP", KEY_UP_ARROW},
+  {"DOWN", KEY_DOWN_ARROW},
+  {"LEFT", KEY_LEFT_ARROW},
+  {"RIGHT", KEY_RIGHT_ARROW},
+  {"ENTER", KEY_RETURN},
+  {"SPACE", ' '},
   {"ESC", KEY_ESC},
   {"BACKSPACE", KEY_BACKSPACE},
   {"TAB", KEY_TAB},
@@ -215,57 +289,21 @@ const keymap_struct keymap1 [] = {
   {"DELETE", KEY_DELETE},
   {"END", KEY_END},
   {"PAGE_DOWN", KEY_PAGE_DOWN},
-  {"A", KEY_A},
-  {"B", KEY_B},
-  {"C", KEY_C},
-  {"D", KEY_D},
-  {"E", KEY_E},
-  {"F", KEY_F},
-  {"G", KEY_G},
-  {"H", KEY_H},
-  {"I", KEY_I},
-  {"J", KEY_J},
-  {"K", KEY_K},
-  {"L", KEY_L},
-  {"M", KEY_M},
-  {"N", KEY_N},
-  {"O", KEY_O},
-  {"P", KEY_P},
-  {"Q", KEY_Q},
-  {"R", KEY_R},
-  {"S", KEY_S},
-  {"T", KEY_T},
-  {"U", KEY_U},
-  {"V", KEY_V},
-  {"W", KEY_W},
-  {"X", KEY_X},
-  {"Y", KEY_Y},
-  {"Z", KEY_Z},
-  {"1", KEY_1},
-  {"2", KEY_2},
-  {"3", KEY_3},
-  {"4", KEY_4},
-  {"5", KEY_5},
-  {"6", KEY_6},
-  {"7", KEY_7},
-  {"8", KEY_8},
-  {"9", KEY_9},
-  {"0", KEY_0},
   {"PAUSE", KEY_PAUSE},
   {"SCROLL_LOCK", KEY_SCROLL_LOCK},
   {"NUM_LOCK", KEY_NUM_LOCK},
-  {"PRINTSCREEN", KEY_PRINTSCREEN},
-  {"SEMICOLON", KEY_SEMICOLON},
-  {"COMMA", KEY_COMMA},
-  {"PERIOD", KEY_PERIOD},
-  {"MINUS", KEY_MINUS},
-  {"EQUAL", KEY_EQUAL},
-  {"SLASH", KEY_SLASH},
-  {"BACKSLASH", KEY_BACKSLASH},
-  {"LEFT_BRACE", KEY_LEFT_BRACE},
-  {"RIGHT_BRACE", KEY_RIGHT_BRACE},
-  {"QUOTE", KEY_QUOTE},
-  {"TILDE", KEY_TILDE},
+  {"PRINTSCREEN", KEY_PRINT_SCREEN},
+  {"SEMICOLON", ';'},
+  {"COMMA", ','},
+  {"PERIOD", ','},
+  {"MINUS", '-'},
+  {"EQUAL", '='},
+  {"SLASH", '/'},
+  {"BACKSLASH", '\\'},
+  {"LEFT_BRACE", '('},
+  {"RIGHT_BRACE", ')'},
+  {"QUOTE", '"'},
+  {"TILDE", '~'},
   {"MENU", KEY_MENU}
 };
 
@@ -274,22 +312,22 @@ const keymap_struct keymap1 [] = {
    keycode/key-identifier mapping for key-identifiers with prefix "KEYPAD_"
 */
 const keymap_struct keymap2 [] = {
-  {"SLASH", KEYPAD_SLASH},
-  {"ASTERIX", KEYPAD_ASTERIX},
-  {"MINUS", KEYPAD_MINUS},
-  {"PLUS", KEYPAD_PLUS},
-  {"ENTER", KEYPAD_ENTER},
-  {"1", KEYPAD_1},
-  {"2", KEYPAD_2},
-  {"3", KEYPAD_3},
-  {"4", KEYPAD_4},
-  {"5", KEYPAD_5},
-  {"6", KEYPAD_6},
-  {"7", KEYPAD_7},
-  {"8", KEYPAD_8},
-  {"9", KEYPAD_9},
-  {"0", KEYPAD_0},
-  {"PERIOD", KEYPAD_PERIOD}
+  {"SLASH", KEY_KP_SLASH},
+  {"ASTERIX", KEY_KP_ASTERISK},
+  {"MINUS", KEY_KP_MINUS},
+  {"PLUS", KEY_KP_PLUS},
+  {"ENTER", KEY_KP_ENTER},
+  {"1", KEY_KP_1},
+  {"2", KEY_KP_2},
+  {"3", KEY_KP_3},
+  {"4", KEY_KP_4},
+  {"5", KEY_KP_5},
+  {"6", KEY_KP_6},
+  {"7", KEY_KP_7},
+  {"8", KEY_KP_8},
+  {"9", KEY_KP_9},
+  {"0", KEY_KP_0},
+  {"PERIOD", KEY_KP_DOT}
 };
 
 #define KEYMAP1_ELEMENTS (sizeof keymap1 / sizeof keymap1[0])   // number of key-identifiers with prefix "KEY_"
@@ -306,6 +344,7 @@ void performKeyActions(char* text,  uint8_t keyAction)
 {
   char * tmptxt = (char *) malloc( sizeof(char) * ( strlen(text) + 2 ) ); // for parsing keystrings
   char * acttoken;
+  bool found = false;
 
   strcpy(tmptxt, text);
   if (tmptxt[strlen(tmptxt) - 1] != ' ') strcat(tmptxt, " ");
@@ -315,19 +354,49 @@ void performKeyActions(char* text,  uint8_t keyAction)
   {
     if (!strncmp(acttoken, "KEY_", 4)) {
       acttoken += 4;
-      for (int i = 0; i < KEYMAP1_ELEMENTS; i++) {
-        // Serial.print("scanning for ");  Serial.println(keymap1[i].token);
+      found = false;
+      
+      for (unsigned int i = 0; i < KEYMAP1_ELEMENTS; i++) {
+        #ifdef DEBUG_OUTPUT_KEYS
+          Serial.print("scanning for ");  Serial.println(keymap1[i].token);
+        #endif
+        
         if (!strcmp(acttoken, keymap1[i].token)) {
-          // Serial.println("found!");
+          #ifdef DEBUG_OUTPUT_KEYS
+            Serial.print("found @"); Serial.print(i); Serial.print(", keycode: "); Serial.println(keymap1[i].key);
+          #endif
+          
           updateKey(keymap1[i].key, keyAction);
+          found = true;
           break;
         }
+      }
+      //if not found in the array, try if it is 0-9 or A-Z keys
+      //we need to split this test, because we need small letters for Keyboard.print.
+      if(!found && (acttoken[0] >= '0' && acttoken[0] <= '9'))
+      {
+        #ifdef DEBUG_OUTPUT_KEYS
+          Serial.print("found num key: "); Serial.println(acttoken[0]);
+        #endif
+        
+        updateKey(acttoken[0], keyAction);
+        found = true;
+      }
+	    
+      if(!found && (acttoken[0] >= 'A' && acttoken[0] <= 'Z'))
+      {
+        #ifdef DEBUG_OUTPUT_KEYS
+          Serial.print("found ascii keys: "); Serial.println(toLowerCase(acttoken[0]));
+        #endif
+        
+        updateKey(toLowerCase(acttoken[0]), keyAction);
+        found = true;
       }
     }
 
     if (!strncmp(acttoken, "KEYPAD_", 7)) {
       acttoken += 7;
-      for (int i = 0; i < KEYMAP2_ELEMENTS; i++) {
+      for (unsigned int i = 0; i < KEYMAP2_ELEMENTS; i++) {
         if (!strcmp(acttoken, keymap2[i].token))
           updateKey(keymap2[i].key, keyAction);
       }

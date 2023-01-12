@@ -1,6 +1,6 @@
 /*
      FLipWare - AsTeRICS Foundation
-     For more info please visit: http://www.asterics-academy.net
+     For more info please visit: https://www.asterics-foundation.org
 
      Module: gpio.h - functions for leds and buttons
 
@@ -13,11 +13,13 @@
 #ifndef _GPIO_H_
 #define _GPIO_H_
 
+#include <Adafruit_NeoPixel.h>
+
 /**
    constant definitions
 */
 #define NUMBER_OF_PHYSICAL_BUTTONS 3  // number of physical switches
-#define NUMBER_OF_LEDS     3          // number of connected leds
+#define NEOPIXEL_PIN 15
 
 /**
    extern declaration of static variables
@@ -46,5 +48,14 @@ void initBlink(uint8_t count, uint8_t startTime);
    @return none
 */
 void updateLeds();
+
+/**
+   @name setLeds
+   @brief set the LEDs (or the Neopixel directly)
+   @return none
+   @param LEDs (bits 0-3; Neopixel equals bit 0 R; bit 1 G; bit 2 B)
+   @note Only used in CIM mode.
+*/
+void setLeds(uint8_t leds);
 
 #endif

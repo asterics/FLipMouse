@@ -1,7 +1,7 @@
 
 /*
       FLipWare - AsTeRICS Foundation
-     For more info please visit: http://www.asterics-academy.net
+     For more info please visit: https://www.asterics-foundation.org
 
      Module: buttons.cpp - implementation of the button handling
 
@@ -42,7 +42,7 @@ char * getButtonKeystring(int num)
 {
   char * str = keystringBuffer;
   for (int i=0;i<num;i++) {
-    if(*str) while(*str++);    
+    if(*str) while(*str++);
     else str++;  
   }
   return(str);
@@ -62,7 +62,7 @@ void printKeystrings()
     } else x++;
   }
 }
-uint16_t setButtonKeystring(uint8_t buttonIndex, char * newKeystring)
+uint16_t setButtonKeystring(uint8_t buttonIndex, char const * newKeystring)
 {
   char * keystringAddress = getButtonKeystring(buttonIndex);
   
@@ -89,7 +89,7 @@ uint16_t setButtonKeystring(uint8_t buttonIndex, char * newKeystring)
       while (*x++);
     } else x++;
   }
-  
+
   slotSettings.keystringBufferLen += delta;  // update buffer length
   
 #ifdef DEBUG_OUTPUT_FULL

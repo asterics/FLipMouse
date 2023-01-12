@@ -41,7 +41,7 @@ __Note: Material will be referenced in square brackets: []__
 | 1    | Mixing pan & toothpick | Included in the epoxy kit or DIY-store | ![A analog film case with a toothpick](./img/mixingpan.png)  |
 | 2    | Miter saw              | DIY-store                              | ![Mitre saw](./img/mitresaw.jpg)                             |
 | 3    | Heat gun               | DIY-store                              | ![A heat gun in an original case with different accessories](./img/heatgun.jpg) |
-| 4    | Mouthpiece holder      | 3D printed, .stl file in this folder.  | ![Holding tool with 15 places for Luer Lock adapters and 2 holes to screw the holder to a surface](./img/holder.png) |
+| 4    | Mouthpiece holder      | 3D printed, "tools" subfolder.         | ![Holding tool with 15 places for Luer Lock adapters and 2 holes to screw the holder to a surface](./img/holder.png) |
 | 5    | Sand paper, 240grit    | DIY-store                              |                                                              |
 
 __Note: Tools will be referenced in curly brackets: {}__

@@ -1240,7 +1240,7 @@
     (effects (font (size 1.27 1.27)) (justify left bottom))
     (uuid ac4f4606-4747-4300-bc59-32bfd3a5994d)
   )
-  (text "R3-R6 + C4/5 LowPass:\n470n + 33k = 10Hz Cutoff\n100n + 47R = 33.8kHz Cutoff"
+  (text "R3-R6 + C4/5 LowPass:\n470n + 33k = 10Hz Cutoff (didn't work well with current boards -> investigate)\n100n + 47R = 33.8kHz Cutoff\n470n + 4k7 = 72Hz Cutoff\n470n + 47R = 7.2kHz Cutoff"
     (at 63.5 111.76 0)
     (effects (font (size 1.27 1.27)) (justify left bottom))
     (uuid c21019df-608d-48bc-bf4e-2e04b96e4c9d)

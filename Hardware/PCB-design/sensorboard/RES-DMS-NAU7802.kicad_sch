@@ -775,7 +775,6 @@
     )
   )
 
-
   (junction (at 90.17 165.1) (diameter 0) (color 0 0 0 0)
     (uuid 0bdd3129-05fa-40b9-a117-7738a90b58d0)
   )
@@ -2615,7 +2614,7 @@
     (property "Value" "R_Pack04" (id 1) (at 205.232 109.6522 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
-    (property "Footprint" "Resistor_SMD:R_Array_Convex_4x1206" (id 2) (at 207.645 107.95 90)
+    (property "Footprint" "Resistor_SMD:R_Array_Convex_4x0603" (id 2) (at 207.645 107.95 90)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Datasheet" "~" (id 3) (at 200.66 107.95 0)
@@ -2919,7 +2918,7 @@
       (reference "R14") (unit 1) (value "1k") (footprint "Resistor_SMD:R_1206_3216Metric")
     )
     (path "/e585351b-5699-4104-99ac-e99731ac32b5"
-      (reference "RN1") (unit 1) (value "R_Pack04") (footprint "Resistor_SMD:R_Array_Convex_4x1206")
+      (reference "RN1") (unit 1) (value "R_Pack04") (footprint "Resistor_SMD:R_Array_Convex_4x0603")
     )
     (path "/479d2297-e59e-40ec-8a75-d08e515c11dd"
       (reference "TP1") (unit 1) (value "TestPoint") (footprint "TestPoint:TestPoint_Pad_D1.0mm")

@@ -389,21 +389,26 @@ void setSensorBoard(int sensorBoardID)
       XS.setGain(2.5);                   YS.setGain(3.0);
       XS.setMovementThreshold(1500);     YS.setMovementThreshold(1500);
       XS.setCompensationFactor(0.10);    YS.setCompensationFactor(0.10);
+      XS.enableOvershootCompensation(true); YS.enableOvershootCompensation(true);
     break;    
     case SENSORBOARD_SENSITIVITY_MEDIUM:
       XS.setGain(1.8);                   YS.setGain(2.0);
       XS.setMovementThreshold(1800);      YS.setMovementThreshold(1800);
       XS.setCompensationFactor(0.15);    YS.setCompensationFactor(0.15);
+      XS.enableOvershootCompensation(true); YS.enableOvershootCompensation(true);
     break;
     case SENSORBOARD_SENSITIVITY_LOW:
       XS.setGain(1.3);                   YS.setGain(1.6);
       XS.setMovementThreshold(2000);     YS.setMovementThreshold(2000); 
       XS.setCompensationFactor(0.20);    YS.setCompensationFactor(0.20);
+      XS.enableOvershootCompensation(true); YS.enableOvershootCompensation(true);
     break;
     case SENSORBOARD_SENSITIVITY_VERY_LOW:
-      XS.setGain(1.0);                   YS.setGain(1.2);
-      XS.setCompensationFactor(0.30);    YS.setCompensationFactor(0.30);
-      XS.setMovementThreshold(3000);     YS.setMovementThreshold(3000);
+      XS.setGain(0.1);                    YS.setGain(0.1);
+      XS.setMovementThreshold(500);       YS.setMovementThreshold(500);
+      XS.setIdleDetectionPeriod(200);     YS.setIdleDetectionPeriod(200);
+      XS.setIdleDetectionThreshold(120);  YS.setIdleDetectionThreshold(120);
+      XS.enableOvershootCompensation(false); YS.enableOvershootCompensation(false);
     break; 
 
     //  signal reporting settings

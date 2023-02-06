@@ -1014,6 +1014,11 @@
       (net 16 "GND") (pinfunction "Pin_5") (pintype "passive") (tstamp 47e17112-ae60-4ace-8f77-1284ca5e7173))
     (pad "6" smd rect (at 3.175 2.25 225) (size 1.5 3) (layers "F.Cu" "F.Paste" "F.Mask")
       (net 15 "/SDA") (pinfunction "Pin_6") (pintype "passive") (tstamp 5ff8fd20-d467-4311-9704-0e7822a420c2))
+    (model "${KIPRJMOD}/../mainboard/step/690367280676.step"
+      (offset (xyz 0 0 2.5))
+      (scale (xyz 1 1 1))
+      (rotate (xyz 0 0 0))
+    )
   )
 
   (footprint "Resistor_SMD:R_0603_1608Metric" (layer "F.Cu")

@@ -14,8 +14,8 @@ partition-table.bin		5bd3413 (RP2040 branch)
 
 # Versions for the esp32_mouse_keyboard binary file
 
-esp32_mouse_keyboard.bin	fa59627 (RP2040 branch)
+esp32_mouse_keyboard.bin	c4d9c87 (master branch, v0.3.4)
 
 # Versions for FLipWare
 
-FM.uf						712338a (RP2040 branch)
+FM.uf						64c2003 (master branch, v3.2)

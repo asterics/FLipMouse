@@ -143,7 +143,7 @@ void handleRelease (int buttonIndex)    // a button was released: deal with "sti
     case CMD_HM:
       mouseRelease(MOUSE_MIDDLE);
       break;
-    case CMD_JP: Joystick.button(buttons[buttonIndex].value, 0); break;
+    case CMD_JP: joystickButton(buttons[buttonIndex].value, 0); break;
     case CMD_MX: sensorData.autoMoveX = 0; break;
     case CMD_MY: sensorData.autoMoveY = 0; break;
     case CMD_KH: releaseKeys(buttonKeystrings[buttonIndex]); break;

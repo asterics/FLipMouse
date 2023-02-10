@@ -139,3 +139,46 @@ void keyboardReleaseAll()
   if ((slotSettings.bt & 2) && (isBluetoothAvailable()))
     keyboardBTReleaseAll();
 }
+
+void joystickAxis(int axis1, int axis2, uint8_t select)
+{
+  if (slotSettings.bt & 1)
+  {
+    switch(select)
+    {
+      case 0:
+        Joystick.X(axis1);
+        Joystick.Y(axis2);
+      break;
+      case 1:
+        Joystick.Z(axis1);
+        Joystick.Zrotate(axis2);
+      break;
+      case 2:
+        Joystick.sliderLeft(axis1);
+        Joystick.sliderRight(axis2);
+      break;
+      default: break;
+    }
+  }
+  if ((slotSettings.bt & 2) && (isBluetoothAvailable()))
+  {
+    joystickBTAxis(axis1, axis2, select);
+  }
+}
+
+void joystickButton(uint8_t nr, int val)
+{
+  if (slotSettings.bt & 1) 
+    Joystick.button(nr,val);
+  if ((slotSettings.bt & 2) && (isBluetoothAvailable()))
+    joystickBTButton(nr,val);
+}
+
+void joystickHat(int val)
+{
+  if (slotSettings.bt & 1) 
+    Joystick.hat(val);
+  if ((slotSettings.bt & 2) && (isBluetoothAvailable()))
+    joystickBTHat(val);
+}

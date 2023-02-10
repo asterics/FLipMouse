@@ -206,7 +206,6 @@ bool startBTPairing();
 void performAddonUpgrade();
 
 
-
 /**
    @name resetBTModule
    @param downloadMode if true, ESP32 is put in FW download mode
@@ -215,4 +214,40 @@ void performAddonUpgrade();
    resets the ESP32 connected to the RP2020 on the ArduinoNanoConnect board
 */
 void resetBTModule (int downloadMode);
+
+
+/**
+   @name joystickBTAxis
+   @param int axis1       new value for axis 1 (either X,Z or sliderLeft; set by param select)
+   @param int axis2       new value for axis 2 (either Y,Zrotate or sliderRight; set by param select)
+   @param uint8_t select  define axis for values (0: X/Y; 1: Z/Zrotate; 2: sliderLeft/sliderRight)
+   @return none
+
+   Updates axis on the Joystick report for the BT firmware. Updated report is sent.
+
+   @note Parameter range for axis is 0-1023, but we only have int8_t ranges, so it is mapped.
+   @note Axis set to -1 avoids an update of this axis
+*/
+void joystickBTAxis(int axis1, int axis2, uint8_t select);
+
+
+/**
+   @name joystickBTButton
+   @param uint8_t nr    button number (1-32)
+   @param int     val   state for button, 0 released; != 0 pressed
+
+   Update button field of the BT joystick report & sends it.
+*/
+void joystickBTButton(uint8_t nr, int val);
+
+
+/**
+   @name joystickBtHat
+   @param int     val   Hat position, 0-360 or -1
+
+   Update BT joystick hat: 0-360 for position (mapped to 8 positions); -1 is rest position
+   The updated report is sent.
+*/
+void joystickBTHat(int val);
+
 #endif

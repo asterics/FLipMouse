@@ -23,16 +23,16 @@
 
 #define BT_MINIMUM_SENDINTERVAL 20     // reduce mouse reports in BT mode (in milliseconds) !
 
-typedef enum {NONE, EZKEY, MINIBT01, MINIBT02} addontype_t;
-
 static char macaddress[] = "00 00 00 00 00 00";  // len: 18
 uint8_t bt_connected = 0;
 
 uint8_t bt_available = 0;
-addontype_t bt_esp32addon = NONE;
 uint8_t activeKeyCodes[6];
 uint8_t activeModifierKeys = 0;
 uint8_t activeMouseButtons = 0;
+
+//directly work in this report as it is easy & better to handle
+int8_t joystickReport[11] = {0};
 
 long btsendTimestamp = millis();
 unsigned long upgradeTimestamp = 0;          // eventually come back to AT mode from an unsuccessful BT module upgrade !
@@ -329,18 +329,15 @@ void initBluetooth()
 #ifdef DEBUG_OUTPUT_FULL
   Serial.println("init Bluetooth");
 #endif
-  //start the AUX serial port 9600 8N1  
-  Serial_AUX.begin(115200);  // NOTE: changed for RP2040! TODO: maybe get from revision number (>=3)?
+  //start the AUX serial port 115200 8N1
+  ///@note FM2 uses 9k6, ESP32 firmware must detect board and baud rate setting
+  Serial_AUX.begin(115200);
   
   resetBTModule(0);  // start ESP32 module!
   delay (500);
   Serial_AUX.flush();
   
   bt_available = 1;
-
-  ///@todo send identifier to BT module & check response. With BT addon this is much faster and reliable
-  bt_esp32addon = EZKEY;
-
 }
 
 /**
@@ -572,4 +569,102 @@ void resetBTModule (int downloadMode)
   }
  
   digitalWrite (6, LOW);
+}
+
+
+/**
+   @name sendBTJoystickReport
+   @param none
+   @return none
+
+   Sends the joystick report
+*/
+void sendBTJoystickReport()
+{
+  Serial_AUX.write((uint8_t)0xFD); //raw HID report
+  Serial_AUX.write((uint8_t)0x00); //stuffing
+  Serial_AUX.write((uint8_t)0x01); //joystick interface
+  for(uint8_t i = 0; i<11; i++) Serial_AUX.write(joystickReport[i]);
+}
+
+
+/**
+   @name joystickBTAxis
+   @param int axis1       new value for axis 1 (either X,Z or sliderLeft; set by param select)
+   @param int axis2       new value for axis 2 (either Y,Zrotate or sliderRight; set by param select)
+   @param uint8_t select  define axis for values (0: X/Y; 1: Z/Zrotate; 2: sliderLeft/sliderRight)
+   @return none
+
+   Updates axis on the Joystick report for the BT firmware. Updated report is sent.
+
+   @note Parameter range for axis is 0-1023, but we only have int8_t ranges, so it is mapped.
+   @note Axis set to -1 avoids an update of this axis
+*/
+void joystickBTAxis(int axis1, int axis2, uint8_t select)
+{
+  //map the axis to int8
+  ///@todo how does map handle -1 as parameter here? will check later anyway.
+  int8_t a1 = map(axis1, 0, 1023, -127, 127);
+  int8_t a2 = map(axis2, 0, 1023, -127, 127);
+  
+  //determine correct axis & update report bytes
+  switch(select)
+  {
+    case 0:
+      if(axis1 != -1) joystickReport[0] = a1;
+      if(axis2 != -1) joystickReport[1] = a2;
+    break;
+    case 1:
+      if(axis1 != -1) joystickReport[2] = a1;
+      if(axis2 != -1) joystickReport[3] = a2;
+    break;
+    case 2:
+      if(axis1 != -1) joystickReport[4] = a1;
+      if(axis2 != -1) joystickReport[5] = a2;
+    break;
+    default: break;
+  }
+  sendBTJoystickReport();
+}
+
+
+/**
+   @name joystickBTButton
+   @param uint8_t nr    button number (1-32)
+   @param int     val   state for button, 0 released; != 0 pressed
+
+   Update button field of the BT joystick report & sends it.
+*/
+void joystickBTButton(uint8_t nr, int val)
+{
+  int8_t *out = 0; //get a pointer to the right byte for the button
+  uint8_t shift; //determine the individual bit in this byte
+  if(nr >= 1 && nr <=8) { out = &joystickReport[7]; shift = nr - 1 ; }
+  if(nr >= 9 && nr <=16) { out = &joystickReport[8]; shift = nr - 9; }
+  if(nr >= 17 && nr <=24) { out = &joystickReport[9]; shift = nr - 17; }
+  if(nr >= 25 && nr <=32) { out = &joystickReport[10]; shift = nr - 25; }
+  
+  if(out)
+  {
+    if(val) *out |= (1<<shift);
+    else *out &= ~(1<<shift);
+  }
+  
+  sendBTJoystickReport();
+}
+
+
+/**
+   @name joystickBtHat
+   @param int     val   Hat position, 0-360 or -1
+
+   Update BT joystick hat: 0-360 for position (mapped to 8 positions); -1 is rest position
+   The updated report is sent.
+*/
+void joystickBTHat(int val)
+{
+	if(val < 0) joystickReport[6] = 0;
+	if(val >= 0 && val <= 360) joystickReport[6] = map(val,0,360,1,8);
+  
+  sendBTJoystickReport();
 }

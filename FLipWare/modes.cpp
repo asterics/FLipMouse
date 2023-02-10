@@ -364,18 +364,18 @@ void handleMovement()
       break;
       
     case STICKMODE_JOYSTICK_XY:
-      Joystick.X (scaleJoystickAxis((float)sensorData.x * slotSettings.ax));
-      Joystick.Y (scaleJoystickAxis((float)sensorData.y * slotSettings.ay));
+      joystickAxis(scaleJoystickAxis((float)sensorData.x * slotSettings.ax), \
+        scaleJoystickAxis((float)sensorData.y * slotSettings.ay),0);
       break;
 
     case STICKMODE_JOYSTICK_ZR:
-      Joystick.Z (scaleJoystickAxis((float)sensorData.x * slotSettings.ax));
-      Joystick.Zrotate (scaleJoystickAxis((float)sensorData.y * slotSettings.ay));
+      joystickAxis(scaleJoystickAxis((float)sensorData.x * slotSettings.ax), \
+        scaleJoystickAxis((float)sensorData.y * slotSettings.ay),1);
       break;
 
     case STICKMODE_JOYSTICK_SLIDERS:
-      Joystick.sliderLeft (scaleJoystickAxis((float)sensorData.x * slotSettings.ax));
-      Joystick.sliderRight (scaleJoystickAxis((float)sensorData.y * slotSettings.ay));
+      joystickAxis(scaleJoystickAxis((float)sensorData.x * slotSettings.ax), \
+        scaleJoystickAxis((float)sensorData.y * slotSettings.ay),2);
       break;
   }
 }

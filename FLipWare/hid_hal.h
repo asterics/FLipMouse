@@ -115,5 +115,36 @@ void mouseScroll(int8_t steps);
 void mouseMove(int x, int y);
 
 
+/*
+   @name joystickAxis
+   @param int axis1       new value for axis 1 (either X,Z or sliderLeft; set by param select)
+   @param int axis2       new value for axis 2 (either Y,Zrotate or sliderRight; set by param select)
+   @param uint8_t select  define axis for values (0: X/Y; 1: Z/Zrotate; 2: sliderLeft/sliderRight)
 
+   Updates 2 joystick axis with new values.
+   Which axis are sent depends on the select parameter.
+   
+   @note The range for axis1 & axis2 is 0-1023.
+   @note If an axis is set to -1, it will not be updated.
+*/
+void joystickAxis(int axis1, int axis2, uint8_t select);
+
+
+/*
+   @name joystickButton
+   @param uint8_t nr    button number (1-32)
+   @param int     val   state for button, 0 released; != 0 pressed
+
+   Update joystick buttons.
+*/
+void joystickButton(uint8_t nr, int val);
+
+
+/*
+   @name joystickHat
+   @param int     val   Hat position, 0-360 or -1
+
+   Update joystick hat: 0-360 for position (mapped to 8 positions); -1 is rest position
+*/
+void joystickHat(int val);
 #endif

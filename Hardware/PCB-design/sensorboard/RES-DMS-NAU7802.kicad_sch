@@ -1317,8 +1317,8 @@
     (effects (font (size 1.27 1.27)) (justify left bottom))
     (uuid 91e75bee-e6f2-4e3b-bc45-485bfbc862ef)
   )
-  (text "Must be the same type as the force sensing\nresistors!\nNote: DNP if on DMS.\nNote: just to be safe, might work with RN1."
-    (at 146.05 101.6 0)
+  (text "Must be the same type as the force sensing\nresistors!\nNote: DNP if on DMS.\nNote: just to be safe, might work with RN1.\nNote: set to 555R, to distinguish between sensor resistors and other part of bridge."
+    (at 141.605 96.52 0)
     (effects (font (size 1.27 1.27)) (justify left bottom))
     (uuid a1a8c47b-cc6c-4ce5-94ca-c62f8da828a0)
   )
@@ -1757,7 +1757,7 @@
     (in_bom yes) (on_board yes)
     (uuid 106b48ce-c343-4bc1-a966-95d5a5c1ee63)
     (property "Reference" "R14" (id 0) (at 176.53 107.95 90))
-    (property "Value" "1k" (id 1) (at 179.07 107.95 90))
+    (property "Value" "555R" (id 1) (at 179.07 107.95 90))
     (property "Footprint" "Resistor_SMD:R_1206_3216Metric" (id 2) (at 178.308 107.95 90)
       (effects (font (size 1.27 1.27)) hide)
     )
@@ -1789,7 +1789,7 @@
     (in_bom yes) (on_board yes)
     (uuid 1c410388-6dbc-4d7f-92bb-c866584eba47)
     (property "Reference" "R13" (id 0) (at 171.45 107.95 90))
-    (property "Value" "1k" (id 1) (at 173.99 107.95 90))
+    (property "Value" "555R" (id 1) (at 173.99 107.95 90))
     (property "Footprint" "Resistor_SMD:R_1206_3216Metric" (id 2) (at 173.228 107.95 90)
       (effects (font (size 1.27 1.27)) hide)
     )
@@ -2190,7 +2190,7 @@
     (in_bom yes) (on_board yes)
     (uuid 75bc358e-cfd4-4683-9983-e89c2e96b124)
     (property "Reference" "R11" (id 0) (at 161.29 107.95 90))
-    (property "Value" "1k" (id 1) (at 163.83 107.95 90))
+    (property "Value" "555R" (id 1) (at 163.83 107.95 90))
     (property "Footprint" "Resistor_SMD:R_1206_3216Metric" (id 2) (at 163.068 107.95 90)
       (effects (font (size 1.27 1.27)) hide)
     )
@@ -2358,7 +2358,7 @@
     (in_bom yes) (on_board yes)
     (uuid b50bcc1f-0c0c-4c40-9ffe-e9cc6a509b9e)
     (property "Reference" "R12" (id 0) (at 166.37 107.95 90))
-    (property "Value" "1k" (id 1) (at 168.91 107.95 90))
+    (property "Value" "555R" (id 1) (at 168.91 107.95 90))
     (property "Footprint" "Resistor_SMD:R_1206_3216Metric" (id 2) (at 168.148 107.95 90)
       (effects (font (size 1.27 1.27)) hide)
     )
@@ -2906,16 +2906,16 @@
       (reference "R10") (unit 1) (value "1k") (footprint "Resistor_SMD:R_1206_3216Metric")
     )
     (path "/75bc358e-cfd4-4683-9983-e89c2e96b124"
-      (reference "R11") (unit 1) (value "1k") (footprint "Resistor_SMD:R_1206_3216Metric")
+      (reference "R11") (unit 1) (value "555R") (footprint "Resistor_SMD:R_1206_3216Metric")
     )
     (path "/b50bcc1f-0c0c-4c40-9ffe-e9cc6a509b9e"
-      (reference "R12") (unit 1) (value "1k") (footprint "Resistor_SMD:R_1206_3216Metric")
+      (reference "R12") (unit 1) (value "555R") (footprint "Resistor_SMD:R_1206_3216Metric")
     )
     (path "/1c410388-6dbc-4d7f-92bb-c866584eba47"
-      (reference "R13") (unit 1) (value "1k") (footprint "Resistor_SMD:R_1206_3216Metric")
+      (reference "R13") (unit 1) (value "555R") (footprint "Resistor_SMD:R_1206_3216Metric")
     )
     (path "/106b48ce-c343-4bc1-a966-95d5a5c1ee63"
-      (reference "R14") (unit 1) (value "1k") (footprint "Resistor_SMD:R_1206_3216Metric")
+      (reference "R14") (unit 1) (value "555R") (footprint "Resistor_SMD:R_1206_3216Metric")
     )
     (path "/e585351b-5699-4104-99ac-e99731ac32b5"
       (reference "RN1") (unit 1) (value "R_Pack04") (footprint "Resistor_SMD:R_Array_Convex_4x0603")

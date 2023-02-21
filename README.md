@@ -60,7 +60,7 @@ In order to build the firmware following prerequisites and dependencies must be 
 * the [Arduino IDE](https://www.arduino.cc/en/software)
 * the [arduino-pico](https://github.com/earlephilhower/arduino-pico) Core (can be installed using Arduino IDE's Arduino board-manager)
 * the [Adafruit Neopixel](https://github.com/adafruit/Adafruit_NeoPixel) library (can be installed using Arduino IDE's library manager)
-* the modified [Adafruit NAU_7802](https://github.com/benjaminaigner/Adafruit_NAU7802) library (with channel-change feature added by Benjamin Aigner)
+* the [NAU7802-DualChannel](https://github.com/benjaminaigner/NAU7802-DualChannel) library
 * the [LoadcellSensor](https://github.com/ChrisVeigl/LoadcellSensor) library for sensor signal processing (by Chris Veigl)
 * the [SSD1306Ascii](https://github.com/greiman/SSD1306Ascii) library by Bill Greiman (can be installed using Arduino IDE's library manager)
 * select the *board* 'Arduino Nano RP2040 Connect' in the Arduino IDE tools menu, and the *Flash Size* "16MB (Sketch: 15MB, FS: 1MB)"

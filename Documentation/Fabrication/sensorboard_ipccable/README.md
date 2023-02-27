@@ -16,8 +16,8 @@ The insulation of the ribbon cable is also removed and the cable is tinned.
 
 | Nr.  | Description                                     | Source                 | Image |
 | ---- | ----------------------------------------------- | ---------------------- | ----- |
-| 1    | __80mm__ 6pin flat ribbon cable, 1.27mm spacing | Electronic distributor | TBD.  |
-| 2    | 6pin WR-MM Connector (690157000672)             | Electronic distributor | TBD.  |
+| 1    | __65mm__ 6pin flat ribbon cable, 1.27mm spacing | Electronic distributor | TBD.  |
+| 2    | 2x 6pin WR-MM Connector (690157000672)          | Electronic distributor | TBD.  |
 
 
 __Note: Material will be referenced in square brackets: []__
@@ -26,9 +26,7 @@ __Note: Material will be referenced in square brackets: []__
 
 | Nr.  | Description           | Source                                                       | Image |
 | ---- | --------------------- | ------------------------------------------------------------ | ----- |
-| 1    | Wirestripper          | 3D printed, in folder "tools"                                | TBD.  |
-| 2    | Solderpot             | Electronic tool distributor                                  | TBD.  |
-| 3    | Crimping tool or vise | DIY store. A 3D printed insert for tools is available in the folder "tools" | TBD.  |
+| 1    | Crimping tool or vise | DIY store. A 3D printed insert for tools is available in the folder "tools" | TBD.  |
 
 
 __Note: Tools will be referenced in curly brackets: {}__
@@ -37,9 +35,8 @@ __Note: Tools will be referenced in curly brackets: {}__
 
 # Procedure
 
-1. Remove the insulation of one side of the IDC cable _[1]_ by inserting it into the wirestripper _{1}_, pressing and pulling.
-2. Apply solder on the wires with the solderpot or a solder iron _{2}_
-3. Crimp the Würth connector _[2]_ with either a vise or a crimping tool _{3}_. __Note:__ take care of the orientation, like shown in this picture! (red wire is marked pin one of the connector)
+1. Crimp the Würth connector _[2]_ with either a vise or a crimping tool _{3}_. __Note:__ take care of the orientation, like shown in this picture! (red wire is marked pin one of the connector)
+2. Repeat for the second connector
 
 ![Orientation example](./img/orientation.jpg)
 
@@ -54,8 +51,7 @@ None
 
 ## Procedure
 
-1. Visually check the connector if the clips are in locked position
-2. Visually check if all 6 cable ends are tinned and there is no short-circuit.
+1. Visually check both connectors if the clips are in locked position
 
 ## Documentation
 

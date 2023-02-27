@@ -2510,8 +2510,8 @@
     (effects (font (size 1.27 1.27)) (justify left bottom))
     (uuid 1ce8c446-954b-4e4f-921a-cb783d3a062b)
   )
-  (text "FLipMouse\n* Silicon tube, 2x4mm, 45mm length\n* PVC/PE tube 4x6mm, 5mm length\n* LuerLock with M5 screw\n* Sensor board PCB (see second KiCAD project & BOM)\n* screws according to case (3x M2x10+nuts; 2x M2x16)\n* Mouthpiece\n* Sensorboard cable (6pin IDC cable 65mm + WR-MM 690157000672)\n\nFLipPad\n* Glide adapter PCB (see addons folder for KiCAD project & BOM)\n\nBoth:\n* 3D printed case (depending on type)\n* HotShoe Adapter\n* USB cable with magnetic plug\n* Packaging\n\nThese parts should be placed in the .xls BOM file.\n"
-    (at 297.18 244.475 0)
+  (text "FLipMouse\n* Silicon tube, 2x4mm, 45mm length\n* PVC/PE tube 4x6mm, 5mm length\n* LuerLock with M5 screw\n* Sensor board PCB (see second KiCAD project & BOM)\n* screws according to case (4x M2x10+nuts; 2x M2x16)\n* Mouthpiece\n* Sensorboard cable (6pin IDC cable 65mm + 2x WR-MM 690157000672)\n\nFLipPad\n* Glide adapter PCB (see addons folder for KiCAD project & BOM)\n\nBoth:\n* 3D printed case (depending on type)\n* HotShoe Adapter\n* USB cable with magnetic plug\n* Packaging\n\nThese parts should be placed in the .xls BOM file.\n"
+    (at 291.465 244.475 0)
     (effects (font (size 2 2) bold) (justify left bottom))
     (uuid 3c388481-36a9-4fde-bf17-5a65446362d3)
   )

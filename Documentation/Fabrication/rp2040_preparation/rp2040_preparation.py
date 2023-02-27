@@ -62,7 +62,7 @@ def main():
       current_device = args.device.upper()
       
     if not args.serial:
-      error("Error: Need a serial port (e.g. COM2 or /dev/ttyACM0)")
+      error("Error: Need a serial port (e.g. -s COM2 or -s /dev/ttyACM0)")
     else:
       global current_serial
       current_serial = args.serial

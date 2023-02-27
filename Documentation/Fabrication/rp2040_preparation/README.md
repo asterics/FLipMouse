@@ -31,7 +31,7 @@ __Note: Material will be referenced in square brackets: []__
 | Nr.  | Description                       | Source                                                       |
 | ---- | --------------------------------- | ------------------------------------------------------------ |
 | 1    | Terminal + Python3                | Install python according to your OS                          |
-| 2    | esptool                           | Install via pip: `pip install esptool` (if it cannot be executed from a terminal, run this command as root) |
+| 2    | esptool                           | Install via pip: `pip3 install esptool --break-system-packages` (if it cannot be executed from a terminal, run this command as root) |
 | 2    | Permanent marker (red/blue/green) | DYI store, paper store (possibly any store)                  |
 
 __Note: Tools will be referenced in curly brackets: {}__

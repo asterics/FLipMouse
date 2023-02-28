@@ -18,4 +18,4 @@ esp32_mouse_keyboard.bin	ac4492c (gamepad2022 branch, v0.3.5)
 
 # Versions for FLipWare
 
-FM.uf						6bd3f46 (btjoystick branch, v3.3)
+FM.uf						6bd3f46 (master branch 7e4e1b3 , v3.3)

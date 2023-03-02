@@ -14,10 +14,10 @@ The insulation of the ribbon cable is also removed and the cable is tinned.
 
 ## Material
 
-| Nr.  | Description                                     | Source                 | Image |
-| ---- | ----------------------------------------------- | ---------------------- | ----- |
-| 1    | __65mm__ 6pin flat ribbon cable, 1.27mm spacing | Electronic distributor | TBD.  |
-| 2    | 2x 6pin WR-MM Connector (690157000672)          | Electronic distributor | TBD.  |
+| Nr.  | Description                                            | Source                 | Image |
+| ---- | ------------------------------------------------------ | ---------------------- | ----- |
+| 1    | __70mm__ 6pin flat ribbon cable, 1.27mm spacing, 28AWG | Electronic distributor | TBD.  |
+| 2    | 2x 6pin WR-MM Connector (690157000672)                 | Electronic distributor | TBD.  |
 
 
 __Note: Material will be referenced in square brackets: []__

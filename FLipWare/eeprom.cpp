@@ -246,7 +246,7 @@ int8_t slotnameIRToNumber(char const * irName)
   while (dir.next()) {
     if(dir.fileSize()) {
       File f = dir.openFile("r");
-      String name = f.readString();
+      String name = f.readStringUntil(0);
       f.close();
       
       if(name.equals(irName)) return slotnumber; 
@@ -578,7 +578,7 @@ void listIRCommands()
     if(f)
     {
       //read slotname
-      String slotname = f.readString();
+      String slotname = f.readStringUntil(0);
       f.close();
       Serial.print("IRCommand"); Serial.print(i); Serial.print(":");
       Serial.println(slotname);

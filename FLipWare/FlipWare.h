@@ -39,8 +39,9 @@
 #include "bluetooth.h"
 #include "hid_hal.h"
 
-#define VERSION_STRING "v3.3"
+#define VERSION_STRING "v3.3.1"
 
+//  V3.3.1:  fixed IR-command name bug
 //  V3.3:  added Bluetooth Joystick
 //  V3.2:  changed pinning to PCB v3.2
 //  V3.00: changed platform to Arduino Nano RP2040 Connect

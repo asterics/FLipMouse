@@ -53,6 +53,9 @@
 #define SENSORBOARD_SENSITIVITY_MEDIUM   1
 #define SENSORBOARD_SENSITIVITY_LOW      2
 #define SENSORBOARD_SENSITIVITY_VERY_LOW 3
+#define SENSORBOARD_NODMS_HIGH           4
+#define SENSORBOARD_NODMS_MEDIUM         5
+#define SENSORBOARD_NODMS_LOW            6
 #define SENSORBOARD_REPORT_X             10   // enable / disable signal processing values reporting for X axis
 #define SENSORBOARD_REPORT_Y             11   // enable / disable signal processing values reporting for Y axis
 

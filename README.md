@@ -17,10 +17,10 @@ Our goal is to provide an affordable DIY-solution for everybody who wants to use
 
 # The DIY construction kit
 
-The official FlipMouse DIY kit is available for purchase via https://hackerspaceshop.com/products/flipmouse-diy-kit. 
+The official FlipMouse DIY kit is available for purchase via https://asterics-foundation.org. 
 We provide a [Construction Manual](https://github.com/asterics/FLipMouse/blob/master/ConstructionKit/ConstructionManual.pdf) which shows how to assemble the kit. In case you want to buy the components from other sources, a full part list is available in folder [Hardware](https://github.com/asterics/FLipMouse/tree/master/Hardware).
 There are different options for the enclosure: a laser-cut acrylic case (which is delivered in the DIY kit) and various 3d-printed variants. The desing files for enclosures can be found in folder [Hardware/case-design](https://github.com/asterics/FLipMouse/tree/master/Hardware/case-design).
-The PCB designs (schematic and layout) have been made with EagleCAD/KiCad and are available in folder [Hardware/PCB-design](https://github.com/asterics/FLipMouse/tree/master/Hardware/PCB-design)
+The PCB designs (schematic and layout) have been made with KiCad and are available in folder [Hardware/PCB-design](https://github.com/asterics/FLipMouse/tree/master/Hardware/PCB-design)
 
 # Support us
 If you want to support the development of FLipMouse you're very welcome to donate to the AsTeRICS Foundation:
@@ -31,14 +31,15 @@ If you want to support the development of FLipMouse you're very welcome to donat
 
 # Hardware and Features
 
-The FLipMouse uses aa [Arduino Nano RP2040 Connect](https://docs.arduino.cc/hardware/nano-rp2040-connect) microcontroller (ARM CortexM0+ architecture) as main module. Movements of the mouthpiece are measured via FSRs (Force Sensing Resistors), which detect small forces applied to the mouthpiece / joystick.
-The sip/puff actions are detected by a pressure sensor. Via two 3.5mm jack plugs, external momentary switches can be connected and desired actions can be assigned.
-An IR-receiver module and a IR-LED allow recording and replay of arbitrary infrared remote control commands. Via an add-on module, bluetooth functionalty can be realized (for more information about the bluetooth add-on module please refer to the [FlipMouse Wiki](https://github.com/asterics/FLipMouse/wiki)
+The new FLipMouse v3 uses an [Arduino Nano RP2040 Connect](https://docs.arduino.cc/hardware/nano-rp2040-connect) microcontroller (ARM CortexM0+ architecture) as main module. Movements of the mouthpiece are measured via Strain Gauges (DMS), which detect small forces applied to the mouthpiece / joystick.
+The sip/puff actions are detected by a pressure sensor. Via two 3.5mm jack plugs, external momentary switches can be connected. From all these user inputs, desired actions can be assigned via the [FlipMouse WebGUI](https://flipmouse.asterics.eu), for example mouse/keyboard or joystick actions via USB HID.
+Via bluetooth, BT-enabled devices can be paired and mouse/keyboard functions can be used wirelessly.
+Furthermore, an IR-receiver module and a IR-LED allow recording and replay of arbitrary infrared remote control commands. 
 
 
 # Software (firmware and configuration manager)
 
-The FLipMouse firmware is based on the Arduino/Teensyduino framework. The firmware implements a composite USB HID device (mouse, keyboard, joystick and a serial port in one device).
+The FLipMouse firmware is based on the Arduino framework. The firmware implements a composite USB HID device (mouse, keyboard, joystick and a serial port in one device).
 The mouse and keyboard device classes are used to transmit different keys or mouse actions to the host device. The serial port is used configure the FLipMouse (or even use it as a mouse simulator via AT commands).
 Multiple configuration settings can be saved (stored in an EEPROM module) and changed via desired user actions.
 For more information about (modifying) the FLipMouse firmware see https://github.com/asterics/FLipMouse/wiki/dev-firmware
@@ -57,12 +58,12 @@ More Information can be found in the user manual:
 
 ## Building the firmware
 In order to build the firmware following prerequisites and dependencies must be installed:
-* the [Arduino IDE](https://www.arduino.cc/en/software)
-* the [arduino-pico](https://github.com/earlephilhower/arduino-pico) Core (can be installed using Arduino IDE's Arduino board-manager)
-* the [Adafruit Neopixel](https://github.com/adafruit/Adafruit_NeoPixel) library (can be installed using Arduino IDE's library manager)
-* the [NAU7802-DualChannel](https://github.com/benjaminaigner/NAU7802-DualChannel) library
+* the [Arduino IDE](https://www.arduino.cc/en/software) (v1.8.16 or above)
+* the [arduino-pico](https://github.com/earlephilhower/arduino-pico) Core (v3.0.0, can be installed using Arduino IDE's Arduino board-manager)
+* the [Adafruit Neopixel](https://github.com/adafruit/Adafruit_NeoPixel) library (v1.11.0, can be installed using Arduino IDE's library manager)
+* the [NAU7802-DualChannel](https://github.com/benjaminaigner/NAU7802-DualChannel) library (dual channel patch by Beni Aigner)
 * the [LoadcellSensor](https://github.com/ChrisVeigl/LoadcellSensor) library for sensor signal processing (by Chris Veigl)
-* the [SSD1306Ascii](https://github.com/greiman/SSD1306Ascii) library by Bill Greiman (can be installed using Arduino IDE's library manager)
+* the [SSD1306Ascii](https://github.com/greiman/SSD1306Ascii) library by Bill Greiman (v1.3.5, can be installed using Arduino IDE's library manager)
 * select the *board* 'Arduino Nano RP2040 Connect' in the Arduino IDE tools menu, and the *Flash Size* "16MB (Sketch: 15MB, FS: 1MB)"
 * select the correct *Port* after connecting the Arduino to your system
 * compile and upload the firmware 
@@ -83,6 +84,8 @@ The FLipMouse is also AsTeRICS compatible, so it is possible to use the raw inpu
 
 * FABI: [FABI: Flexible Assistive Button Interface GitHub](https://github.com/asterics/FABI): The Flexible Assistive Button Interface (FABI) provides basically the same control methods (mouse, clicking, keyboard,...), but the input
 is limited to simple buttons. Therefore, this interface is at a very low price (if you buy the Arduino Pro Micro from China, it can be under 5$).
+
+* AsTeRICS Grid: [Asterics Grid AAC Web-App](https://grid.asterics.eu): an open source, cross plattform communicator / talker for Augmented and Alternative Communication (AAC).
 
 
 # Troubleshooting / FAQ

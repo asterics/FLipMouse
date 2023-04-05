@@ -20,13 +20,13 @@ ____
 
 # Einleitung
 
-Die FLipMouse ist ein alternatives Eingabesystem, das an der [Fachhochschule Technikum Wien](https://www.technikum-wien.at) entwickelt und von der [AsTeRICS Foundation](https://asterics-foundation.org) als Open Source Baukasten angeboten wird. Die FLipMouse ermöglicht es Menschen, die keine Standard-Computer-Eingabegeräte verwenden können, eine Computermaus oder einen Joystick zu steuern, sowie die gewünschten Tasten auf der Tastatur zu drücken oder Infrarot-Fernbedienungen zu verwenden. Die FLipMouse kann mit minimalen Finger- oder Lippenbewegungen und/oder durch Schluckbewegungen über ein spezielles Mundstück betätigt werden.
+Die FLipMouse ist ein alternatives Eingabesystem, das an der [Fachhochschule Technikum Wien](https://www.technikum-wien.at) entwickelt und von der [AsTeRICS Foundation](https://asterics-foundation.org) als Open Source Baukasten angeboten wird. Die FLipMouse ermöglicht es,  die Computermaus, einen Joystick oder Tasten der Tastatur mit minimalen Finger- oder Lippenbewegungen zu verwenden. Weiters können Geräte via Bluetooth oder Infrarot gesteuert werden.
 
-Die FLipMouse kann über eine webbasierte Konfigurationsanwendung konfiguriert werden, die von nun an *Konfigurationsmanager* genannt wird. Sie ist auf der Website [flipmouse.asterics.eu](https://flipmouse.asterics.eu/index_fm.htm) zu finden. Dieses Benutzerhandbuch enthält eine Beschreibung des Konfigurationsmanagers und erklärt, wie die verschiedenen Funktionen und Merkmale der FLipMouse verwendet werden. Die FLipMouse kann auf jedem Windows-, Mac- oder Linux-Computer ohne Installation von spezieller Software verwendet werden, da sie sich wie ein Standard-Maus/Joystick/Tastatur-Gerät verhält. Mit dem optionalen Bluetooth-Zusatzmodul können auch Smartphones oder Tablet-Computer angesteuert werden - was ebenfalls in diesem Handbuch erklärt wird.
+Die FLipMouse kann über eine webbasierte Konfigurationsanwendung konfiguriert werden, die von nun an *Konfigurationsmanager* genannt wird. Sie ist auf der Website [flipmouse.asterics.eu](https://flipmouse.asterics.eu/index_fm.htm) zu finden. Dieses Benutzerhandbuch enthält eine Beschreibung des Konfigurationsmanagers und erklärt, wie die verschiedenen Funktionen und Merkmale der FLipMouse verwendet werden. Die FLipMouse kann auf jedem Windows-, Mac- oder Linux-Computer ohne Installation von spezieller Software verwendet werden, da sie sich wie ein Standard-Maus/Joystick/Tastatur-Gerät verhält. Mit der Bluetooth-Funktion können auch Smartphones oder Tablet-Computer angesteuert werden - was ebenfalls in diesem Handbuch erklärt wird.
 
 Darüber hinaus enthält dieses Handbuch wichtige Richtlinien für die Verwendung der FLipMouse, insbesondere Reinigungsverfahren und hygienische Vorsichtsmaßnahmen.
 
-Alle Designdateien für die Elektronik und das 3d-gedruckte Gehäuse - sowie der Software-Quellcode - sind Open Source verfügbar und werden über die Website der AsTeRICS Foundation und über GitHub verbreitet. Der Bausatz für die FLipMouse kann bei [Hackerspaceshop.com](https://hackerspaceshop.com/collections/flipmouse) erworben werden. Detaillierte Anleitungen sind in der [FlipMouse-Bauanleitung](https://github.com/asterics/FLipMouse/blob/master/ConstructionKit/ConstructionManual.pdf) enthalten. Viel Spaß beim Bauen und Benutzen deiner FLipMouse!
+Alle Designdateien für die Elektronik und das 3d-gedruckte Gehäuse - sowie der Software-Quellcode - sind Open Source verfügbar und werden über die Website der AsTeRICS Foundation und über GitHub verbreitet. Detaillierte Anleitungen sind in der [FlipMouse-Bauanleitung](https://github.com/asterics/FLipMouse/blob/master/ConstructionKit/ConstructionManual.pdf) enthalten. Viel Spaß beim Bauen und Benutzen deiner FLipMouse!
 
 Die AsTeRICS Foundation
 
@@ -38,146 +38,107 @@ Die AsTeRICS Foundation
 
 # Hardware Übersicht
 
-Die FLipMouse ist mit einem 3d-gedruckten Gehäuse erhältlich. Designdateien für das 3d-gedruckte Gehäuse werden im [Github-Repository](https://github.com/asterics/FLipMouse/tree/master/Hardware/case-design/3D_printer) bereitgestellt. Die primäre Methode zur Interaktion mit der FLipMouse ist der transparente Stick ("Hygienic Stick" oder "Mundstück"), der an der Vorderseite der FLipMouse angebracht ist. Der *Hygienic Stick* wird von der Firma *QuadJoy* hergestellt. Ersatzstäbchen können über die Homepage bestellt werden: [quad.life](https://quad.life/). Wir bedanken uns bei Bill und Debra Street von *QuadJoy*, dass wir ihr Mundstück für unseren FLipMouse-Baukasten verwenden durften! (Bitte beachten Sie die Reinigungshinweise im entsprechenden Abschnitt dieser Anleitung).
+Die FLipMouse ist mit einem 3d-gedruckten Gehäuse erhältlich. Designdateien für das 3d-gedruckte Gehäuse werden im [Github-Repository](https://github.com/asterics/FLipMouse/tree/master/Hardware/case-design/3D_printer) bereitgestellt. Die primäre Methode zur Interaktion mit der FLipMouse ist ein transparenter Stab ("Mundstück" bzw. "Finger-Joystick"), der an der Vorderseite der FLipMouse angebracht ist. Ersatzstäbe können über den [Webshop](https://www.asterics-foundation.org/webshop) der AsTeRICS Foundation bestellt werden. (Bitte beachten Sie die Reinigungshinweise im entsprechenden Abschnitt dieser Anleitung).
 
 <p align="left" width="100%">
     <img width="60%" src="./Bilder/f2.svg">
 </p>
 
-*Abbildung 1*: Verwendung der FLipMouse für die Computersteuerung durch Lippeninteraktion
+*Abbildung 1*: Verwendung der FLipMouse als Mundsteuerung für Computer
 
-Zusätzlich können zwei externe Taster an die Klinkenbuchsen auf der linken Seite des FlipMouse-Gehäuses angeschlossen werden, und eine Taste ist bereits auf dem Gerät integriert ("B1", siehe Abbildung 3).
+Zusätzlich können zwei externe Taster an die Klinkenbuchsen auf den beiden Seite des FlipMouse-Gehäuses angeschlossen werden, und eine Taste ist bereits auf dem Gerät integriert.
 
 **Benutzer können auf verschiedene Weise mit der FLipMouse interagieren:**
 
 1. durch Berühren des Mundstücks mit den Lippen oder Fingern und Aufbringen kleiner Kräfte in vertikaler oder horizontaler Richtung
-2. durch Erhöhen oder Verringern des Drucks im Mundstück (puffen oder schlürfen)
+2. durch Erhöhen oder Verringern des Drucks im Mundstück (pusten oder ansaugen)
 3. durch Betätigung von (bis zu) 3 Schaltern / Drucktastern
-4. falls gewünscht, kann ein Kunststoffschlauch an den Drucksensor angeschlossen werden, so dass der Joystick mit einem Finger bedient werden kann und ein separates Mundstück die Steuerung von Schlucken/Pusten ermöglicht. Alternativ kann der Druck auch durch das Anbringen eines Gummiballs am Kunststoffschlauch beeinflusst werden (Kissenschalter / Softschalter).
+4. falls gewünscht, kann ein Kunststoffschlauch an den Drucksensor angeschlossen werden, so dass der Joystick mit einem Finger bedient werden kann und ein separates Mundstück für pusten/saugen verwendet werden kann. Alternativ kann der Druck auch durch das Anbringen eines Gummiballs am Kunststoffschlauch beeinflusst werden (Kissenschalter / Softschalter).
 
-**Die Hardware-Eigenschaften der FLipMouse:** (siehe Bilder am Ende dieser Liste)
 
-(a)    "Zero-way"-Joystick/Mundstück: sehr geringe Kräfte reichen aus, um eine Auf-/Ab-/Links-/Rechts-Bewegung zu erzeugen
 
-        o  Der Zero-Way-Joystick kann mit Fingern oder Zehen etc. bedient werden
+**Die Hardware-Eigenschaften der FLipMouse:** 
+
+(a)    "Zero-way" Finger-Joystick/Mundstück: sehr geringe Kräfte reichen aus, um eine Auf-/Ab-/Links-/Rechts-Bewegung zu erzeugen
+
+        o  Der Zero-Way Joystick kann mit Fingern oder Zehen bedient werden
 
         o  Er kann auch als Mundstück verwendet werden (Betätigung durch Lippen/Mundbewegungen)
 
-        o  Falls gewünscht, können Schluck-/Puste-Aktivitäten in das Mundstück zusätzliche Funktionen auslösen
+        o  Falls gewünscht,  können durch pusten/saugen am Mundstück zusätzliche Funktionen ausgelöst werden. Hier stehen jeweils 2 unterschiedliche Stärke-Einstellungen zur Verfügung.
 
 (b)    Ein eingebauter Schalter ("Taste 1 / B1") am Gerät, z.B. zum Ändern der aktiven Konfiguration (Funktionen)
 
 (c)    Zwei 3,5-mm-Klinkenbuchsen zum Anschluss von externen Schaltern / Tastern zur Auslösung von Zusatzfunktionen ("Taster 2 / B2" und "Taster 3 / B3")
 
-(d)    3 Leuchtdioden (LED) zur Anzeige der aktiven Konfiguration, des Kalibrierungsvorgangs usw.
+(d)    Anzeige der aktiven Konfiguration, des Kalibrierungsvorgangs usw. durch Farbe an der Frontseite
 
 (e)    Universal-Infrarot-Fernbedienungsempfänger und -sender
 
-(f)    "Hot Shoe"-Adapter zur Montage an einem Manfrotto Magic Arm oder einem ähnlichen Montagesystem
+(f)    Bluetooth-Unterstützung z. B. zur Steuerung von Smartphones oder iOS-Geräten
 
-(g)    Firmware-Aktualisierung über die FLipMouse-Webanwendung auf [flipmouse.asterics.eu](https://flipmouse.asterics.eu/index_fm.htm)
+(g)    "Hot Shoe"-Adapter zur Montage an einem Manfrotto Magic Arm oder einem ähnlichen Montagesystem
 
-(h)    Optionale Zusatzplatine für Bluetooth (z. B. zur Steuerung von Smartphones oder iOS-Geräten)
+(h)    Firmware-Aktualisierung über die FLipMouse-Webanwendung auf [flipmouse.asterics.eu](https://flipmouse.asterics.eu/index_fm.htm)
 
-(i)     Reset-Taste
-
-<p align="left" width="100%">
-    <img width="55%" src="./Bilder/f3DE.svg">
-</p>
-
-*Abbildung 2*: FLipMouse rechte Seite
-
-<p align="left" width="100%">
-    <img width="55%" src="./Bilder/f4DE.svg">
-</p>
-
-*Abbildung 3*: FLipMouse linke Seite
-
-Auf der rechten Seite des FLipMouse-Gehäuses zeigen 3 LEDs den aktuellen Betriebsmodus an (der geändert werden kann, um verschiedene Geschwindigkeitseinstellungen oder Funktionsoptionen zu aktivieren). Außerdem ist hier das Infrarot (IR) Empfängermodul zugänglich. Mit diesem Modul können beliebige Infrarot-Fernbedienungsbefehle aufgezeichnet werden (z.B. zum Ändern der Lautstärke oder der Kanaleinstellungen eines TV-Gerätes). Die IR-Signale können dann über die IR-Sendediode auf der Rückseite der FLipMouse wiedergegeben werden.
-
-Auf der linken Seite der FLipMouse befindet sich eine Taste (B1), die eine konfigurierbare Funktion bietet (z. B. Ändern des Betriebsmodus). Neben dieser Taste befindet sich ein Loch, das den Zugang zur Reset-Taste der FlipMouse ermöglicht (wird normalerweise nicht benötigt). 
-Zwei 3,5-mm-Klinkenbuchsen mit den Bildbezeichnungen (B2) und (B3) ermöglichen den Anschluss von externen Tastern. Es können Standardschalter mit 3,5-mm-Klinkenstecker verwendet werden.
-
-## 3D-gedrucktes Gehäuse
+   
 
 <p align="left" width="100%">
     <img width="60%" src="./Bilder/f5.JPG">
 </p>
 
-*Abbildung 4*: FLipMouse 3D-gedrucktes Gehäuse
 
-Es sind verschiedene Alternativen für das FLipMouse-Gehäuse verfügbar, z.B. eine Acrylversion. Die empfohlene Version ist das 3D-gedruckte Gehäuse, das auch in der Bauanleitung dokumentiert ist. Die 3D-Designdateien können vom [Github Repository](https://github.com/asterics/FLipMouse/tree/master/Hardware/case-design/3D_printer) heruntergeladen werden. Die elektronischen Komponenten und PCB sind gleich wie bei der früheren Acrylgehäuse-Variante - die Geräte bieten daher genau die gleiche Funktionalität.
+Auf der linken Seite der FLipMouse befindet sich eine Taste (B1), die eine konfigurierbare Funktion bietet (z. B. Ändern des Betriebsmodus). Eine 3,5-mm-Klinkenbuchse ermöglicht den Anschluss eines externen Tasters.
 
-## Bluetooth – Zusatzmodul
+Auf der rechten Seite des FLipMouse-Gehäuses ist das Infrarot (IR) Empfängermodul zugänglich. Mit diesem Modul können beliebige Infrarot-Fernbedienungsbefehle aufgezeichnet werden (z.B. zum Ändern der Lautstärke oder der Kanaleinstellungen eines TV-Gerätes). Die IR-Signale können dann über die IR-Sendediode auf der Rückseite der FLipMouse wiedergegeben werden. Weiters kann zweiter externer Taster (B3) angeschlossen werden.
 
-Das optionale Bluetooth-Zusatzmodul ermöglicht den Anschluss der FLipMouse als Bluetoothmaus/ -tastatur an verschiedene mobile Geräte (Smartphones, Tablets, IOs-Geräte). Wenn dieses Modul nicht im DIY-Kit enthalten ist, kann es einzeln bei der AsTeRICS Foundation bestellt oder mit Hilfe der auf Github verfügbaren Hardware-Design-Dateien gebaut werden (Teile müssen einzeln bestellt werden). Wenn Sie sich für diese Funktion interessieren, werfen Sie einen Blick auf das [FLipMouse Wiki](https://github.com/asterics/FLipMouse/wiki), wo der Bau des Zusatzmoduls erklärt wird.
+Die Frontseite des Gehäuses bietet eine Anschlussmöglichkeit für das Mundstück / den Finger-Joystick. Hier wird auch der aktuelle Betriebsmodus durch eine einstellbare Lichtfarbe angezeigt.
 
-<p align="left" width="100%">
-    <img width="40%" src="./Bilder/f6.JPG">
-</p>
 
-*Abbildung 5*: Bluetooth Zusatzmodul
 
-# Anweisungen für die ordnungsgemäße Montage und Verwendung
+# Richtige Montage und Verwendung
 
 **1. Befestigen Sie den "Hygienic Stick**
 
-![hygienic stick](./Bilder/f7.PNG)
+Verwenden Sie ein sauberes Mundstück, stecken Sie dieses auf den vorderen Anschluss (Luer Lock Adapter) und drehen Sie das Mundstück im Uhrzeigersinn bis es gut sitzt (nicht zu fest).
 
-*Abbildung 6*: Befestigen des Hygienic Stick
-
-Verwenden Sie einen sauberen "Hygienic Stick", stecken Sie ihn auf den vorderen Anschluss und drehen Sie ihn im Uhrzeigersinn (nicht zu fest).
-
-**2. Montieren des FLipMouse-Geräts in einer für den Benutzer / die Benutzerin geeigneten Weise**
-![hygienic stick](./Bilder/f8.PNG)
-
-*Abbildung 7*: Montieren der FlipMouse
+**2. Montieren der FLipMouse in einer geeigneten Weise**
 
 Das Bild zeigt eine Kombination aus "[Manfrotto Gelenkarm](https://www.manfrotto.com/global/single-arm-2-section-196ab-2/)" + "[SuperClamp](https://www.manfrotto.com/global/super-photo-clamp-without-stud-aluminium-035/)" Halterung. Sie können auch den [Manfrotto Magic Arm](https://www.manfrotto.com/global/magic-photo-arm-smart-centre-lever-and-flexible-extension-143n/) oder eine andere Befestigungslösung verwenden, die auf den HotShoe-Adapter der FLipMouse passt. Seien Sie vorsichtig, wenn Sie die Halterung an der 3/8"-Schraube des HotShoe-Adapters befestigen: Bei starker Krafteinwirkung kann das Gehäuse des Geräts brechen.
 
-![Lips](./Bilder/f9.PNG)
-
-*Abbildung 8*: Verwendung der FLipMouse mit Mund/Lippen
+*Verwendung als Mundsteuerung*
+![Verwendung als Mundsteuerung](./Bilder/f2.png)
+*Abbildung 3*: Verwendung der FLipMouse mit Mund/Lippen
 
 Achten Sie darauf, dass der Kopf des Benutzers bequem aufliegt. Das Mundstück sollte die Lippen leicht berühren. Es ist nicht sinnvoll, das Mundstück in den Mund zu stecken! Dies könnte zu einem unangenehmen Gefühl führen und die Kontrolle der seitlichen Bewegung erschweren.
 
-![Fingers](./Bilder/f10.PNG)
-
-*Abbildung 9*: Verwendung der FLipMouse mit den Fingern
+*Verwendung als Finger-Joystick*
+![Verwendung als Fingerjoystick](./Bilder/f10.PNG)
+*Abbildung 4*: Verwendung der FLipMouse mit den Fingern
 
 Wenn der Benutzer / die Benutzerin die FLipMouse mit einem Finger oder dem Daumen betätigen möchte, montieren Sie das System so, dass sich die Hand in einer Ruheposition befindet und der Finger den Joystick ohne Belastung berühren kann. Bringen Sie einen oder zwei zusätzliche externe Schalter an, falls gewünscht, und montieren Sie die Schalter an geeigneten Stellen (z. B. an den Beinen/Zehen/Schultern usw.).
 
-![ball-switch](./Bilder/f11.PNG)
-
-*Abbildung 10*: Verwendung der FLipMouse als Ball-Switch-Schnittstelle
-
-Wenn eine Interaktionsmethode mit einem weichen Ball gewünscht wird, kann ein Kunststoffrohr mit einem *Luer-Lock*-Adapter am vorderen Anschluss der FLipMouse befestigt werden. Dieser Kunststoffschlauch kann mit einem weichen Ball verbunden werden (das Bild oben zeigt ein billiges "Hundespielzeug" aus einer Tierhandlung). Diese Lösung kann als weicher Kopfschalter / Kissenschalter oder Schulterschalter verwendet werden und kann mit anderen externen Schaltern kombiniert werden.
-
-
-
+*Soft-Taster mittels Gummiball*
+Ein Kunststoffschlauch kann mittels eines *Luer-Lock*-Adapter am vorderen Anschluss der FLipMouse befestigt werden. Dieser Kunststoffschlauch kann mit einem weichen Ball verbunden werden (das Bild oben zeigt ein billiges "Hundespielzeug" aus einer Tierhandlung)., sodass ein Drücken das Balles ein verwertbare saug/puste-Signal erzeugt. Diese Lösung kann als weicher Kopfschalter / Kissenschalter oder Schulterschalter ausgeführt und mit anderen externen Schaltern kombiniert werden.
 
 
 **3. Anschließen der FLipMouse an einen Computer, ein Tablet oder ein Smart Phone**
 
-Wenn Sie die FLipMouse über das mitgelieferte USB-Mikrokabel anschließen, berühren Sie das Mundstück nicht, solange die LEDs blinken (das anfängliche Blinken zeigt die Phase der Nullpunktkalibrierung an). Warten Sie, bis das Gerät vom Computer erkannt wird, und bewegen Sie dann den Joystick/das Mundstück, um den korrekten Betrieb zu überprüfen.
-
-![ball-switch](./Bilder/f12DE.svg)
-
-*Abbildung 11*: Verbinden der FLipMouse mit dem Computer
+Die FLipMouse wird über das mitgelieferte USB-Micro - Kabel an einen Computer (bzw. eine 5V-Stromquelle) angeschlossen.
 
 **Bitte beachten Sie**, dass jedes Mal, wenn Sie das FLipMouse-Gerät mit Strom versorgen (bzw. wenn Sie es einstecken), eine **Nullkalibrierung** durchgeführt wird, was durch Blinken aller 3 LEDs angezeigt wird. **Es ist wichtig, dass Sie den Joystick / das Mundstück nicht berühren, bis die LEDs nicht mehr blinken.**
 
-#### Verwendung der FLipMouse mit Smart Phones oder Tablets
+![USB Micro Kabelverbindung](./Bilder/f12DE.svg)
+*Abbildung 5*: Verbinden der FLipMouse mit dem Computer
 
+*Verwendung der FLipMouse mit Smart Phones oder Tablets*
 Die FLipMouse sollte mit allen Betriebssystemen funktionieren, die USB-HID-Geräte (Maus/Tastatur/Joystick) unterstützen, wie Windows, Linux oder MacOS. Einige Android-Geräte bieten einen USB-Anschluss mit USB-OTG-Funktionalität ("on-the-go"). Wenn Ihr Gerät "OTG" unterstützt, können Sie die FLipMouse mit einem USB-OTG-Adapter (siehe Bild unten) anschließen und sie sollte wie eine normale Maus (Sie erhalten einen Mauszeiger) oder Tastatur funktionieren. Sie können mit der App "OTG Checker" testen, ob Ihr Android-Telefon oder Android-Tablet die USB-OTG-Funktion unterstützt.
 
 ![smartphone](./Bilder/f13.PNG)
+*Abbildung 6*: Verwendung der FLipMouse mit dem Smart Phone
 
-*Abbildung 12*: Verwendung der FLipMouse mit dem Smart Phone
-
-#### Verwendung der FLipMouse über Bluetooth
-
-Das Bluetooth - Zusatzmodul für die FLipMouse ermöglicht die kabellose Maus-/Tastatursteuerung von Computern, Tablets und Smartphones. Darüber hinaus können iPhones oder iPads über VoiceOver & Assistive-Switch-Unterstützung genutzt werden. Weitere Informationen finden Sie im Kapitel [*Verwendung des Bluetooth-Moduls*](https://github.com/asterics/FLipMouse/blob/master/Documentation/UserManual/Markdown/FLipMouseAnwendungsanleitung.md#verwendung-des-bluetooth-moduls).
+*Verwendung der FLipMouse über Bluetooth*
+Die Bluetooth-Funktion der FLipMouse ermöglicht die kabellose Maus-/Tastatursteuerung von Computern, Tablets und Smartphones. Darüber hinaus können iPhones oder iPads über VoiceOver & Assistive-Switch-Unterstützung genutzt werden. Weitere Informationen finden Sie im Kapitel [*Verwendung des Bluetooth-Moduls*](https://github.com/asterics/FLipMouse/blob/master/Documentation/UserManual/Markdown/FLipMouseAnwendungsanleitung.md#verwendung-des-bluetooth-moduls).
 
 
 
@@ -185,31 +146,25 @@ Das Bluetooth - Zusatzmodul für die FLipMouse ermöglicht die kabellose Maus-/T
 
 # FLipMouse-Konfigurationsmanager
 
-Der [FLipMouse Konfigurationsmanager](https://flipmouse.asterics.eu/index_fm.htm) bietet eine grafische Benutzeroberfläche (GUI) zum Ändern und Speichern von Einstellungen des FLipMouse-Geräts, sodass alle Merkmale und Funktionen an persönliche Vorlieben und Bedürfnisse angepasst werden können. **Derzeit muss der Google Chrome-Browser (oder ein Chromium-basierter Browser) verwendet werden.** Der Konfigurationsmanager ist über die folgende Website zugänglich: **flipmouse.asterics.eu**. Der FLipMouse-Konfigurationsmanager sendet und empfängt Informationen von/zu der FLipMouse. Diese Informationsübertragung erfolgt über einen Kommunikationsanschluss (COM-Anschluss).  Die folgende Abbildung zeigt die Einstiegsseite des FLipmouse-Konfigurationsmanagers:
+Der *FLipMouse Konfigurationsmanager* ist eine grafische Benutzeroberfläche (GUI) zum Ändern und Speichern von Einstellungen der FLipMouse, sodass alle Merkmale und Funktionen an persönliche Vorlieben und Bedürfnisse angepasst werden können. **Derzeit werden folgende WebBrowser unterstützt: Chrome, Chromium, Edge, Safari**. Der Konfigurationsmanager ist über die folgende Website zugänglich: [https://flipmouse.asterics.eu](https://flipmouse.asterics.eu). Der FLipMouse-Konfigurationsmanager sendet und empfängt Informationen von der FLipMouse. Diese Informationsübertragung erfolgt über einen Kommunikationsanschluss (COM-Anschluss).  Die folgende Abbildung zeigt die Einstiegsseite des FLipmouse-Konfigurationsmanagers:
 
 <p align="left" width="100%">
     <img width="70%" src="./Bilder/fig1DE.PNG">
 </p>
+*Abbildung 7: Willkommensseite des FLipMouse-Konfigurationsmanagers*.
 
-*Abbildung 13: Willkommensseite des FLipMouse-Konfigurationsmanagers*
+### Verbindungsaufbau mit der FLipMouse
 
-### Anschließen des FLipMouse-Geräts
+1. Vergewissern Sie sich, dass die FLipMouse über einen USB-Anschluss mit Ihrem Computer verbunden ist und dass ein unterstützter Browser verwendet wird.
 
-Gehen Sie folgendermaßen vor, um das Gerät anzuschließen:
-
-1. Vergewissern Sie sich, dass Ihr Gerät über einen USB-Anschluss mit Ihrem Computer verbunden ist (siehe "Hinweise zur ordnungsgemäßen Montage und Verwendung").
-
-2. Klicken Sie auf VERBINDEN ZU FLIPMOUSE (ÜBER USB ANGESCHLOSSEN) und wählen Sie im Auswahlfeld den entsprechenden COM-Port (Kommunikationsanschluss) aus. Wenn das Auswahlfeld leer erscheint, bedeutet dies, dass kein Kommunikationsanschluss erkannt wurde. Schließen Sie in diesem Fall das FLipMouse-Gerät erneut an und warten Sie, bis der COM-Port aktualisiert wird.
+2. Klicken Sie auf *VERBINDEN ZU FLIPMOUSE (ÜBER USB ANGESCHLOSSEN)* und wählen Sie im Auswahlfeld den entsprechenden COM-Port (Kommunikationsanschluss) aus. Wenn das Auswahlfeld leer erscheint, bedeutet dies, dass kein Kommunikationsanschluss erkannt wurde. Schließen Sie in diesem Fall das FLipMouse-Gerät erneut an und warten Sie, bis der COM-Port aktualisiert wird. Falls auch nach wiederholten Versuchen kein COM-Port wählbar ist, liegt vermutlich ein Problem mit dem Treiber vor. Legen Sie in diesem Fall bitte ein [Issue im Github Repository](https://github.com/asterics/FLipMouse/issues) an bzw. suchen Sie dort nach Lösungsmöglichkeiten.
 
 3. Sobald der COM-Port ausgewählt ist, klicken Sie auf die Schaltfläche "Verbinden" am unteren Rand des Auswahlfeldes.
 
-4. Nach erfolgreicher Verbindung des COM-Ports wird das Hauptfenster (siehe Abbildung 14) angezeigt und Sie sollten ein Live-Feedback der Stick-Bewegung sehen. Der Port-Status in der oberen rechten Ecke des Fensters zeigt "verbunden" an:
+4. Nach erfolgreicher Verbindung des COM-Ports wird das Hauptfenster angezeigt und Sie sollten ein Live-Feedback der Stick-Bewegung sehen. Der COM-Port Status in der oberen rechten Ecke des Fensters zeigt "verbunden" an:
 
-   
-
-   ![ConfigManager](./Bilder/fig2DE.PNG)
-
-*Abbildung 14*: FLipMouse Konfigurationsmanager
+![ConfigManager](./Bilder/fig2DE.PNG)
+*Abbildung 8: FLipMouse-Konfigurationsmanager*
 
 ## Ändern von Einstellungen und Funktionen
 
@@ -237,8 +192,7 @@ Die FLipMouse wird mit einer HotShoe 3/8"-Montageschraube befestigt, die sich an
 <p align="left" width="100%">
     <img width="100%" src="./Bilder/fig3DE.svg">
 </p>
-
-*Abbildung 15: FLipMouse Konfigurationsmanager: Tab STICK-CONFIG, Bildlaufleisten*
+*Abbildung 9: FLipMouse Konfigurationsmanager: Tab STICK-CONFIG*
 
 Die Bildlaufleisten ermöglichen es, die Parameter des Sticks und das Verhalten des Mauszeigers nach den Wünschen des Benutzers / der Benutzerin zu ändern. Das Verhalten der folgenden Merkmale kann geändert werden:
 
@@ -257,39 +211,24 @@ Falls gewünscht, können die Sensitivitäts- und Deadzonewerte für horizontale
 <p align="left" width="100%">
     <img width="100%" src="./Bilder/fig3.1DE.svg">
 </p>
-*Abbildung 16: FLipMouse Konfigurationsmanager: Tab STICK-CONFIG, zeige x/y getrennt*
-
-
+*Abbildung 10: FLipMouse Konfigurationsmanager: Tab STICK-CONFIG, Aufteilung x/y*
 
 #### Maximale Geschwindigkeit
 
 Die Einstellung der maximalen Geschwindigkeit auf ein niedriges Niveau ist nützlich, wenn der Benutzer die Cursorgeschwindigkeit begrenzen und gleichzeitig eine hohe Empfindlichkeit/Beschleunigung beibehalten möchte.
 
-**“Zeige erweiterte Einstellungen”**:
-
 #### Beschleunigung
 
-Diese Einstellung wird durch Klicken auf *"Zeige erweiterte Einstellungen"* aktiviert. Die Beschleunigungseinstellung erlaubt es, das Beschleunigungsverhalten des Mauszeigers zu beeinflussen: Wenn die Beschleunigung auf einen niedrigen Wert eingestellt ist, wird selbst eine starke Auslenkung des Sticks eine langsame (aber fortschreitende) Bewegung des Mauszeigers auslösen, was es einfacher macht, kleine Ziele präzise zu erreichen.
+Die Beschleunigungseinstellung erlaubt es, das Beschleunigungsverhalten des Mauszeigers zu beeinflussen: Wenn die Beschleunigung auf einen niedrigen Wert eingestellt ist, wird selbst eine starke Auslenkung des Sticks eine langsame (aber fortschreitende) Bewegung des Mauszeigers auslösen, was es einfacher macht, kleine Ziele präzise zu erreichen.
 
-#### Drift compensation range + Drift compensation gain
 
-Diese Einstellungen werden durch Klicken auf *"Zeige erweiterte Einstellungen"* aktiviert.
-Aus mechanischen Gründen weisen die Kraftsensoren der FLipMouse kleine Ungenauigkeiten auf, die zu einem Abdriften des Mauszeigers führen können. Kritisch ist dieser Effekt bei sehr kleinen Deadzone-Einstellungen (sehr feinfühlige Maussteuerung): Wenn Sie das Mundstück/den Joystick in eine Richtung bewegen und dann loslassen, "driftet" der Mauszeiger weiterhin leicht in diese Richtung, da sich die Sensorwerte nicht an der kalibrierten Mittelposition einpendeln. Seit Version 2.9 bietet die FLipMouse eine "Driftkompensation", bei der die Software versucht, die zu erwartende Drift, die durch die letzte Interaktion verursacht wurde, zu berechnen und den Bias zu korrigieren, so dass die Leistung insbesondere bei kleinen Deadzoneeinstellungen verbessert wird.
+**“Zeige erweiterte Einstellungen”**:
 
-Der Wert "Drift compensation gain" steht für den Grad der Korrektur, während der Wert "Drift compensation range" für den Betrag der Kraft steht, die bei der Berechnung berücksichtigt wird. 
-Jeder dieser Werte hat einen entsprechenden Schieberegler. Es ist auch möglich, unterschiedliche Werte für die x-Achse und die y-Achse einzustellen, wenn Sie auf "*zeige x/y getrennt*" klicken (siehe folgende Abbildung).
+#### Sensitivitäts-Profil
 
-<p align="left" width="100%">
-    <img width="100%" src="./Bilder/fig4.1DE.svg">
-</p>
+Diese Einstellung wird durch Klicken auf *"Erweiterte Optionen anzeigen "* aktiviert.
+Die Kraftsensoren der FLipMouse weisen mechanisch bedingt kleine Ungenauigkeiten auf, die zu einem Abdriften des Mauszeigers führen können. Die Auswahlbox für verschiedene Empfindlichkeitsprofile erlaubt es, die Gesamtverstärkung und die Driftkorrektur einzustellen. In der Regel (und sofern keine anderen Sensorvarianten im Einsatz sind) sollte die Einstellung "Medium" verwendet werden.
 
-*Abbildung 17: FLipMouse Konfigurationsmanager: Tab STICK-CONFIG, zeige x/y getrennt*
-
-Die besten Werte für eine bestimmte FLipMouse können durch Experimentieren ermittelt werden.
-Zum Beispiel:
-
-1. Drücken Sie das Mundstück nach oben und lassen Sie es los. Wenn der Mauszeiger weiterhin nach oben driftet, versuchen Sie, den Wert für den vertikalen Ausgleich zu erhöhen
-2. Drücken Sie das Mundstück nach links und lassen Sie es los. Wenn der Mauszeiger nach rechts driftet, versuchen Sie, den horizontalen Ausgleichswert zu verringern.
 
 ### Verwenden des Sticks für Joystick-Bewegungen
 
@@ -298,8 +237,7 @@ Wenn Sie im Tab STICK-CONFIG einen der Joystick-Modi auswählen, führt das Bewe
 <p align="left" width="100%">
     <img width="80%" src="./Bilder/fig20.1DE.svg">
 </p>
-
-*Abbildung 18: Stickkonfiguration für die Joystick-Bewegung einstellen*
+*Abbildung 11: Konfiguration für Joystick-Bewegung einstellen*
 
 Bitte beachten Sie, dass die Joystick-Funktion von den auf dem Computer laufenden Software-Anwendungen (z.B. Computerspiele) unterstützt werden muss. Microsoft Windows bietet eine Test-Software namens "*joy.cpl*" an - Sie können dieses Programm starten, indem Sie "*joy.cpl*" in den Suchdialog eingeben.
 
@@ -308,8 +246,7 @@ Der von der FLipMouse bereitgestellte Joystick-Controller heißt *"Serial+Keyboa
 <p align="left" width="100%">
     <img width="30%" src="./Bilder/fig21.PNG">
 </p>
-
-*Abbildung 19: Joy.cpl Eigenschaften*
+*Abbildung 12: Joy.cpl Tool Ansicht*
 
 Gewünschte Joystick-Tasten-Aktivitäten können mit Saug/Puste- oder anderen Interaktionsereignissen erstellt werden, indem Sie "*Joystick ... setzen"* aus dem Aktionsmenü wählen, wie im Abschnitt [*Zuweisung von verschiedenen Aktionen*](https://github.com/asterics/FLipMouse/blob/master/Documentation/UserManual/Markdown/FLipMouseAnwendungsanleitung.md#zuweisung-von-verschiedenen-aktionen-tab-aktionen)) beschrieben.
 
@@ -321,8 +258,7 @@ Wenn der FLipMouse-Stick mit dem Mund verwendet wird, kann der Benutzer Aktionen
 <p align="left" width="100%">
     <img width="100%" src="./Bilder/fig5.1DE.svg">
 </p>
-
-*Figure 20:* Tab SAUG-PUSTE-STEUERUNG
+*Abbildung 13: einstellugnen für  Saugen und Pusten*
 
 Beachten Sie, dass der Leerlaufdruck (ohne Saugen und ohne Pusten) bei 
 bei etwa 512 liegt, und der Druck steigt, wenn Sie 
@@ -346,14 +282,12 @@ Die Aktionen können durch Anklicken des Eintrags in der Aktionskonfigurationsta
 <p align="left" width="100%">
     <img width="100%" src="./Bilder/fig6.1DE.svg">
 </p>
-
-*Abbildung 21: Benutzeraktivitäten verschiedene Aktionen zuordnen*
+*Abbildung 14: Benutzeraktivitäten verschiedene Aktionen zuweisen*
 
 <p align="left" width="100%">
     <img width="80%" src="./Bilder/fig7DE.PNG">
 </p>
-
-*Abbildung 22: Pop-up-Fenster zur Auswahl der gewünschten Aktion*
+*Abbildung 15: Pop-up-Fenster zur Auswahl der gewünschten Aktion*
 
 Im Folgenden werden die einzelnen Aktionskategorien und die verschiedenen Aktionen kurz beschrieben.
 
@@ -417,7 +351,7 @@ oder werfen Sie einen Blick auf die [FLipMouse Wiki / Github Seiten](https://git
     <img width="80%" src="./Bilder/fig8.1DE.svg">
 </p>
 
-*Abbildung 23: Hinzufügen von Tasten für die Aktionen Tasten Drücken / Halten / Umschalten*
+*Abbildung 16: Hinzufügen von Tasten für die Aktionen Tasten Drücken / Halten / Umschalten*
 
 **Schreibe Wort**
 Die Aktion *Schreibe Wort* ermöglicht die Eingabe eines bestimmten Textes/Satzes bei zugewiesener Benutzeraktivität (z. B.: Schreiben Sie "Hallo", wenn Sie den FLipMouse-Stick nach oben bewegen). Wenn Sie diese Aktion auswählen, wird unter dem Dropdown-Menü ein leeres Textfeld angezeigt, in das der Text eingegeben werden kann (siehe unten):
@@ -425,8 +359,7 @@ Die Aktion *Schreibe Wort* ermöglicht die Eingabe eines bestimmten Textes/Satze
 <p align="left" width="100%">
     <img width="80%" src="./Bilder/fig9DE.PNG">
 </p>
-
-*Abbildung 24: Funktion Schreibe Wort*
+*Abbildung 17: Funktion "Schreibe Wort"*
 
 In diesem Beispiel wird jedes Mal, wenn die Taste 1 der FLipMouse gedrückt wird, "Hallo" geschrieben.
 
@@ -436,29 +369,7 @@ In diesem Beispiel wird jedes Mal, wenn die Taste 1 der FLipMouse gedrückt wird
 Wenn die Aktion *Keine Funktion (leer)* ausgewählt ist, wird der entsprechenden Benutzeraktivität keine Aktion zugewiesen.
 
 **Nächsten Slot laden**
-Diese Aktion ist nur relevant, wenn Sie mehrere FLipMouse-Konfigurations-Slots gespeichert haben. Diese Aktion schaltet auf den nächsten Slot um. Wenn der letzte Slot bereits erreicht ist, wird durch Auslösen dieser Aktion zum ersten Slot gewechselt. Wenn Sie den Steckplatz wechseln, ändern sich die eingebauten LED-Lampen entsprechend und zeigen den aktiven Steckplatz an.
-
-Es gibt drei eingebaute LEDs (rot, gelb-orange, grün), die die Binärzahl für die Steckplatzposition der von Ihnen gewählten Konfiguration anzeigen. Wenn Sie also zwei Konfigurationen gespeichert haben, z.B. "Spieleinstellungen" und "Maus", dann ist "Spieleinstellungen" der Slot 1 und "Maus" der Slot 2.
-
-Zusätzlich zu den LEDs wird der Wechsel des Steckplatzes durch ein akustisches Signal angezeigt.
-
-Die folgende Liste zeigt die Farbcodes und die akustischen Signale der LEDs für jede Steckplatzposition:
-
-| **Aktiver Slot** | **Akkustisches Signal** | **Aufleuchtende LEDs** |
-| ---------------- | ----------------------- | ---------------------- |
-| Slot 1           | ein Biepton             | rot                    |
-| Slot 2           | zwei Bieptöne           | gelb                   |
-| Slot 3           | drei Bieptöne           | rot, gelb              |
-| Slot 4           | vier Bieptöne           | grün                   |
-| Slot 5           | fünf Bieptöne           | rot, grün              |
-| Slot 6           | sechs Bieptöne          | gelb, grün             |
-| Slot 7           | sieben Bieptöne         | rot, gelb, grün        |
-
-Die nächste Abbildung (Abbildung 25) zeigt eine ähnliche Liste, aber die leuchtenden LEDs in den entsprechenden Farben für die visuellen Menschen. Die verschiedenen Slots werden in dieser Abbildung als "Position" bezeichnet.
-
-![buttons](./Bilder/22.PNG)
-
-*Abbildung 25: Farbcodes der LEDs*
+Diese Aktion ist nur relevant, wenn Sie mehrere FLipMouse-Konfigurations-Slots gespeichert haben. Diese Aktion schaltet auf den nächsten Slot um. Wenn der letzte Slot bereits erreicht ist, wird durch Auslösen dieser Aktion zum ersten Slot gewechselt. Wenn Sie den Steckplatz wechseln, ändern die eingebauten LED-Lampen entsprechend die Farbe an der Gehäusefront und zeigen so den aktiven Slot an. Zusätzlich zur Farbe LEDs wird der Wechsel des Steckplatzes durch ein akustisches Signal angezeigt (die Anzahl der Töne entspricht der Nummer des Slots).
 
 **Slot per Name laden**
 Mit dieser Aktion wird der Konfigurations-Slot mit dem angegebenen Namen aktiviert. Der Name kann im Drop-Down Menü ausgewählt werden. Diese Aktion ist nur relevant, wenn Sie mehrere FLipMouse-Konfigurations-Slots gespeichert haben. Die LEDs zeigen die Slotnummer wie oben beschrieben an.
@@ -483,8 +394,7 @@ Im Tab SLOTS können Sie neue Konfigurations-Speicherplätze  (Slots) erstellen,
 <p align="left" width="100%">
     <img width="100%" src="./Bilder/fig10.1DE.svg">
 </p>
-
-*Abbildung 26: FLipMouse Konfigurationsmanager: Tab SLOTS*
+*Abbildung 18: SLOTS Einstellungen*
 
 Oben in der Mitte des Fensters des Konfigurationsmanagers (blaues Kästchen in Abbildung 26) wird der aktuelle Slot angezeigt und kann geändert werden.
 Die Einstellungen des aktuellen Slot werden gespeichert und beim Wechsel zu einem anderen Slot beibehalten. Die maximale Anzahl von Slots beträgt 10.
@@ -500,8 +410,8 @@ Die Schaltfläche *Alle Slots herunterladen* ermöglicht das Übertragen aller a
 Im Tab ALLGEMEIN können Sie den USB/Bluetooth-Modus ändern und Firmware-Updates für das FLipMouse-Gerät und das Bluetooth-Zusatzmodul (falls installiert) durchführen:
 
 ![general](./Bilder/fig11DE.PNG)
+*Abbildung 19: Allgemeine Einstellungen*
 
-*Abbildung 27: Allgemeine Einstellungen*
 
 #### USB/Bluetooth-Modus
 
@@ -521,7 +431,7 @@ Der FLipMouse-Stick ist mit vier Kraftsensoren verbunden - einer für jede Beweg
 
 ![visualisation](./Bilder/fig12.PNG)
 
-*Abbildung 28: Links: Live-Anzeige der Kraftsensorwerte; Mitte: aktueller Slot mit den 3 Tasten (wenn eine Taste gedrückt wird, wird der entsprechende Kreis gelb); Rechts: Sip und Puff Live-Wert und aktuelle Schwellenwerte*
+*Abbildung 20: Links: Live-Anzeige der Kraftsensorwerte; Mitte: aktueller Slot mit den 3 Tasten (wenn eine Taste gedrückt wird, wird der entsprechende Kreis gelb); Rechts: Sip und Puff Live-Wert und aktuelle Schwellenwerte*
 
 ### Infrarot-Code-Aufzeichnung und -Wiedergabe
 
@@ -529,7 +439,7 @@ Die FLipMouse verfügt über ein Infrarot-Fernbedienungs-Empfängermodul und ein
 
 ![infrared](./Bilder/fig30.PNG)
 
-*Abbildung 29: Infrarot-Code-Aufzeichnung*
+*Abbildung 21: Infrarot-Code-Aufzeichnung*
 
 Um einen neuen IR-Code aufzuzeichnen, gehen Sie auf die Registerkarte AKTIONEN. Klicken Sie auf die gewünschte Aktion und wählen Sie im Popup-Fenster die Aktionskategorie "**Infrarot**". Dort können zwei verschiedene Arten von IR-Aktionen aus dem Kombinationsfeld ausgewählt werden:
 
@@ -544,7 +454,7 @@ In diesem Fenster können Sie auch IR-Kommandos verwalten. Neben *Neues IR-Komma
     <img width="70%" src="./Bilder/fig13DE.PNG">
 </p>
 
-*Abbildung 30: Konfigurationsmanager für Infrarot-Aufnahme und -Wiedergabe*
+*Abbildung 22: Konfigurationsmanager für Infrarot-Aufnahme und -Wiedergabe*
 
 
 
@@ -560,7 +470,7 @@ Das Bluetooth-Modul wird auf den internen 10-poligen Anschluss der FLipMouse ges
     <img width="40%" src="./Bilder/fig31.JPG">
 </p>
 
-*Abbildung 31: Bluetooth-Modul*
+*Abbildung 23: Bluetooth-Modul*
 
 #### Verbinden mit einem Bluetooth-Host-Gerät (Pairing)
 
@@ -576,7 +486,7 @@ Mehrere Benutzer und Benutzerinnen berichteten, dass sie eine andere Form des Mu
 ![mouthpiece](./Bilder/fig33.PNG)
 ![mouthpiece1](./Bilder/fig33.1.PNG)
 
-*Abbildung 32: Modifizierte Form des Mundstücks*
+*Abbildung 24: Modifizierte Form des Mundstücks*
 
 Unabhängig von den von Ihnen gewünschten Mundstückmodifikationen: Achten Sie stets auf einen hygienischen Betrieb und wenden Sie die im folgenden Kapitel beschriebenen Reinigungsverfahren an!
 
@@ -591,19 +501,19 @@ Der Speichelfilter befindet sich im Inneren des *Hygienic Stick*. Normalerweise 
     <img width="50%" src="./Bilder/fig34.1.jpg">
 </p>
 
-*Abbildung 33.1: Entfernen des Speichelfilters mit Hilfe einer normalen Schraube zum Ergreifen des Filters*
+*Abbildung 25.1: Entfernen des Speichelfilters mit Hilfe einer normalen Schraube zum Ergreifen des Filters*
 
 <p align="left" width="100%">
     <img width="50%" src="./Bilder/fig34.2.jpg">
 </p>
 
-*Abbildung 33.2: Der entfernte Filter*
+*Abbildung 25.2: Der entfernte Filter*
 
 <p align="left" width="100%">
     <img width="50%" src="./Bilder/fig34.3.jpg">
 </p>
 
-*Abbildung 33.3: Einsetzen eines neuen Filters (Einschieben in den Hygienestick)* 
+*Abbildung 25.3: Einsetzen eines neuen Filters (Einschieben in den Hygienestick)* 
 
 **Desinfektion des Mundstücks/Hygienesticks:**
 Verwenden Sie zum Desinfizieren eines Mundstücks kochendes Wasser. Legen Sie den *Hygienic Stick* (ohne Speichelfilter) für mindestens fünf Minuten in kochendes Wasser. Dann lassen Sie den *Hygienic Stick* vor der nächsten Anwendung trocknen.
@@ -628,68 +538,6 @@ Bei mangelnder Hygiene des Mundstücks, insbesondere wenn das Mundstück von meh
 
 Bei falscher Positionierung der FLipMouse besteht die Gefahr, dass man sich nach längerem Gebrauch unwohl fühlt, und es kann zu Muskelkrämpfen oder Muskelschmerzen durch ungewohnte Kopfhaltung kommen - achten Sie auf eine bequeme Position und planen Sie Pausen ein, wenn Sie längere Zeiträume arbeiten!
 
-
-
-
-
-# Aktualisieren der Firmware über die Arduino IDE
-
-Neben der Möglichkeit, die FLipMouse-Firmware über den Konfigurationsmanager zu aktualisieren, kann die Firmware auch über die Arduino-IDE und die Teensyduino-Add-on/Loader-Anwendung aktualisiert werden. Die neuesten Versionen finden Sie im aktuellen Release-Paket auf [Github](https://github.com/asterics/FLipMouse/releases). Entpacken Sie das Paket FLipMouse.zip und starten Sie das Programm teensy.exe (den Teensy Loader).
-
-<p align="left" width="100%">
-    <img width="15%" src="./Bilder/fig35.PNG">
-</p>
-
-*Abbildung 34: Teensy Loader Schritt 1*
-
-Die Benutzeroberfläche des Teensy Loader sollte wie in Abbildung 34 dargestellt aussehen. Falls eine Sicherheitswarnung (im Zusammenhang mit der Windows-Benutzerzugriffskontrolle) erscheint, stellen Sie bitte sicher, dass der Herausgeber "PJRC.COM, LLC" ist und klicken Sie auf "Ausführen".
-Aktivieren Sie im nächsten Schritt den "Download-Modus" der FLipMouse, indem Sie mit einem spitzen Gegenstand (Nadel, kleiner Schraubenzieher, ...) auf die Reset-Taste drücken, die über das kleine Loch an der Unterseite der FLipMouse zugänglich ist. Nach ein paar Sekunden (Treiberinstallation) sollte die Teensy Loader GUI die Verbindung zur FLipMouse anzeigen, wie in der folgenden Abbildung dargestellt:
-
-<p align="left" width="100%">
-    <img width="15%" src="./Bilder/fig36.PNG">
-</p>
-
-*Abbildung 35: Teensy Loader Schritt 2*
-
-Wählen Sie "File → Open HEX file" (Datei → HEX-Datei öffnen) und wählen Sie die Datei "FLipWare.hex" aus dem FLipMouse-Ordner (oder dem Ort, an dem Sie die .zip-Datei heruntergeladen haben).
-
-Wählen Sie "Betrieb → Programm". Nach ein paar Sekunden sollten Sie die Meldung "Download abgeschlossen" sehen, so wie in der nächsten Abbildung (Abbildung 36). (Wenn dieser Schritt nicht funktioniert, versuchen Sie, die FLipMouse aus- und wieder einzustecken und die Teensy Loader-Software neu zu starten).
-
-<p align="left" width="100%">
-    <img width="15%" src="./Bilder/fig37.PNG">
-</p>
-
-*Abbildung 36: Teensy Loader Schritt 3*
-
-Um die Installation der Firmware abzuschließen, wählen Sie “Operation → Reboot”.
-Sie sollten "Reboot" lesen und die FLipMouse sollte kurz piepen.
-
-<p align="left" width="100%">
-    <img width="15%" src="./Bilder/fig38.PNG">
-</p>
-
-*Abbildung 37: Teensy Loader Schritt 4*
-
-Um die GUI-Software zu aktualisieren, kopieren Sie die Datei "FLipMouseGUI.exe" aus dem Zip-Paket an den gewünschten Ort (und ersetzen damit die alte FLipMouseGUI.exe-Datei).
-
-# Erstellen der Firmware
-
-Wenn Sie die Software (Firmware) der FLipMouse anpassen möchten, gehen Sie folgendermaßen vor:
-
-1. Kopieren Sie das FLipMouse-Repository, https://github.com/asterics/FLipMouse
-
-2. Laden Sie die Arduino IDE herunter und installieren Sie sie: https://www.arduino.cc/en/main/software
-
-3. Laden Sie Teensyduino herunter und installieren Sie es: https://www.pjrc.com/teensy/td_download.html
-
-4. Öffnen Sie FLipWare/FLipware.ino mit der Arduino IDE, siehe: https://github.com/asterics/FLipMouse/blob/master/FLipWare/FLipWare.ino
-
-5. Verwenden Sie die folgenden Einstellungen in Arduino IDE:
-   o    Tools -> Board -> Teensy LC
-   o    Tools -> USB Type -> "Serial + Mouse + Keyboard + Joystick"
-   ![adaptFirmware](./Bilder/fig39.PNG)
-
-*Abbildung 38: Firmware adaptieren*
 
 
 
@@ -766,23 +614,20 @@ Bitte beachten Sie, dass bestimmte Befehle zur Anpassung der FLipMouse-Einstellu
 | **Tasten für alternative Funktionen**                                                                                                                                                                                                                                                              |
 | KEY_SHIFT  KEY_CTRL  KEY_ALT  KEY_RIGHT_ALT  KEY_GUI  KEY_RIGHT_GUI                                                                                                                                                                                                                                |
 
+
+
 # Kontakt
 
-Fachhochschule Technikum Wien
-
-Fakultät für Elektrotechnik
-
+**Fachhochschule Technikum Wien**
+Department Electronic Engineering
 Höchstädtplatz 6
-
 A-1200 Wien
-
 ÖSTERREICH
 
-AsTeRICS Foundation
-
+**AsTeRICS Foundation**
 Webpage: [www.asterics-foundation.org](http://www.asterics-foundation.org)
-
 Email: <office@asterics-foundation.org>
+
 
 # Haftungsausschluss
 

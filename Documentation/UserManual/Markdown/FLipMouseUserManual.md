@@ -155,20 +155,20 @@ The following figure shows the welcome page of the FLipmouse Configuration Manag
 
 ## Establishing connection with the FLipMouse
 
-1. Make sure your device is connected to your computer via an USB port and that a supported webbrowser is used. 
+1. Make sure the FLipMouse is connected to your computer via an USB port and that a supported webbrowser - Chrome, Chromium, Edge or Safari - is used. (The Test Mode allows using the Configuration Manager without a real FlipMouse, which can be useful e.g. to view or change settings from a backup-file.)
 2. Click *CONNECT TO FLIPMOUSE CONNECTED VIA USB* and select the appropriate COM port (communication port) in the selection box. If the selection box appears empty, this means that no communication port has been detected. In this case, please reconnect the FLipMouse device and wait for the COM port to be updated. If no COM port can be selected even after repeated attempts, there is probably a problem with the driver. In this case, please create an [Issue in the Github Repository](https://github.com/asterics/FLipMouse/issues) or look for possible solutions there.
 3. Once the COM port is selected, click the “Connect” button at the bottom of the selection box. 
-4. After successful connection of the COM port, the main window will be displayed and you should see live feedback of the stick movement. The port status at the top right corner of the window will show “connected”:
+4. After successful connection of the COM port, the main window is opened. The title bar shows the COM port status "connected" in the upper right corner of the window. The selection box *Select slot* shows the active configuration settings (slot). Below this, the tabs with the main functions can be selected:
    
 
-![ConfigManager](./Bilder/fig2.PNG)
-*Figure 8: FLipMouse Configuration Manager*
+![ConfigManager Title bar](./Bilder/header_en.jpg)
+*Figure 8: Title bar of the FLipMouse Configuration Manager*
 
 
 
 ## Changing Settings and Features
 
-### Operational modes – “memory slots”
+### Memory Slots
 
 The Configuration Manager allows adjustment of all settings an operational modes of the FLipMouse. The settings are stored in individual **slots** - for example one slot for fast mouse operation, one slot for slow mouse operation, one slot for keyboard-keys ASDW etc. All settings are stored in the FLipMouse. The settings can also be saved to (or loaded from) a file on your computer. 
 Settings which were stored in the FLipMouse stay valid also after the power supply has been removed. When the FLipMouse is plugged in the next time, the settings will be available – also if you use another computer or operating system!
@@ -177,7 +177,11 @@ Settings which were stored in the FLipMouse stay valid also after the power supp
 
 ## Tab STICK-CONFIG
 
-In the STICK-CONFIG tab, the **operational mode function of the mouthpiece/joystick for the active slot is set**. Furthermore, the *sensitivity*, the *deadzone* and other parameters can be changed. The ability to configure multiple slots with different stick settings allows flexible application scenarios for the FLipMouse. The individual slots can be switched by any action of the user (e.g. pressing an external button or puffing strongly into the mouthpiece, see section [*Assigning different actions*](https://github.com/asterics/FLipMouse/blob/master/Documentation/UserManual/Markdown/FLipMouseUserManual.md#tab-actions)).
+In the STICK-CONFIG tab, the **operational mode of the mouthpiece/joystick for the active slot is set**. Furthermore, the *sensitivity*, the *deadzone* and other parameters can be changed. The ability to configure multiple slots with different stick settings allows flexible application scenarios for the FLipMouse. The individual slots can be switched by any action of the user (e.g. pressing an external button or puffing strongly into the mouthpiece, see section [*Assigning different actions*](https://github.com/asterics/FLipMouse/blob/master/Documentation/UserManual/Markdown/FLipMouseUserManual.md#tab-actions)).
+
+
+
+![ConfigManager](./Bilder/tab_stick_en.jpg)
 
 ### Operational Mode ("Use stick for ...")
 
@@ -199,7 +203,7 @@ If one of the joystick modes is selected, the FLipMouse behaves like a gamepad w
 
 *Figure 9: Set stick configuration for joystick movement*
 
-Please note that the joystick function must be supported by corresponding software applications - e.g. computer games. (Microsoft Windows offers a test software called "*joy.cpl*" for live display of axis and button activities - this tool can be started by entering "*joy.cpl*" in the search dialog).
+Please note that the joystick function must be supported by corresponding software applications - e.g. computer games. (Microsoft Windows offers a test software for live display of joystick axis and button activities - this tool can be started by entering "*joy.cpl*" in the search dialog).
 
 
 
@@ -222,7 +226,7 @@ The scroll bars make it possible to change the motion parameters of the stick an
 <p align="left" width="100%">
     <img width="100%" src="./Bilder/fig3.svg">
 </p>
-*Figure 10: FLipMouse Configuration Manager: Tab STICK-CONFIG*
+*Figure 10: Tab STICK-CONFIG, Setting the motion parameters*
 
  
 
@@ -241,7 +245,7 @@ If desired, the sensitivity- and deadzone-values for horizontal or vertical move
 <p align="left" width="100%">
     <img width="100%" src="./Bilder/fig3.1.svg">
 </p>
-*Figure 11: FLipMouse Configuration Manager: Tab STICK-CONFIG, splitting x/y*
+*Figure 11: Tab STICK-CONFIG, splitting x/y-axis *
 
 #### Maximum Speed
 
@@ -257,6 +261,14 @@ The acceleration setting allows influencing the acceleration behavior of the mou
 (This setting is enabled by clicking *“Show advanced options”*.)
 Due to mechanical reasons, the force sensors of the FLipMouse show small inaccuracies which can result in mouse cursor drifting. The selection box for different Sensitivity Profiles allows to change overall gain/amplification and drift correction settings. Usually (and unless no other sensor variants are in use) the setting "Medium" should be used.
 
+### Applying the settings to all slots
+
+The current controller values for the motion parameters as well as the stick setting can be applied to all existing slots using the two buttons at the end of the tab. (This possibility exists also in other tabs, like the settings of the suction-puff control).
+
+![ConfigManager](./Bilder/footer_en.jpg)
+
+*Figure 11: Apply settings to all slots*
+
 
 
 ## Tab SIP AND PUFF
@@ -270,14 +282,12 @@ In the tab "SIP-PUFF-CONTROL", the threshold values for sipping and puffing into
 </p>
 *Figure 12: Tab SIP AND PUFF*
 
-Note that the idle pressure level (without sip or puff) is 
-around 512, and the level increases when you puff 
-into the mouthpiece, indicating increased pressure.
-With the sliders, the threshold pressure for sip and puff can be regulated. The grey dotted line represents the actual pressure. The blue and red dotted lines represent the limits reached in this session.
+Note that the idle pressure level (without sip or puff) is around 512, and the level increases when you puff 
+into the mouthpiece, indicating increased pressure. With the sliders, the threshold pressure for sip and puff can be regulated. The grey dotted line represents the actual pressure. The blue and red dotted lines represent the limits reached in this session.
 
-#### StrongSip and StrongPuff
+#### Extended gestures for strong sip and strong puff
 
-The SIP AND PUFF tab allows to define additional threshold values for StrongSip or StrongPuff activities, which can then trigger distinct actions. For example, the next configuration slot could be activated by a strong puff. To enrich the functionality of the FLipMouse especially for persons who cannot access external switches, additional StrongSip and StrongPuff gestures are available. These gestures allow to trigger actions via a strong sip or a strong puff followed by a stick movement (up / down / left / right).  A  strong sip or puff  is indicated via an acoustic signal (high tone). If the stick is moved within one second, the corresponding action (for example “StrongSip+Up” is triggered). If the stick is not moved within one second, the single StrongSip or StrongPuff action will be triggered. Thus, a total of 10 additional actions can be performed.
+By combining a strong sip or strong puff with a short stick movement, up to 8 additional actions can be triggered (e.g. "strong sip + up" or "strong puff + left"). The stick must be deflected in the corresponding direction shortly *after* the strong sip or puff activity. (If the stick is not moved within one second, the action for strong sip or puff is triggered).
 
 
 
@@ -287,14 +297,18 @@ The ACTIONS tab allows the mapping of user activities to desired FlipMouse funct
 
 * pressing or releasing the 3 buttons (built-in button 1 or external button 2 or 3)
 * stick movements (up/down/left/right) which exceed the deadzone threshold value
-* sip and puff activities (see section StrongSip and StrongPuff).
+* sip and puff activities (or extended sip/puff gestures).
 
-The actions can be changed via clicking the entry in the action configuration table (see the blue box in figure 21). The table shows the actions for all user activities, either only for the currently active slot, or for all slots (which gives an overview of all actions). When clicking one particular action,  a window pops up where you can change the action category (here for Button 1: Device) and the action itself (here: Load next slot), see Figure 22.
+The assignment of user activities to actions is displayed in a table. By using the display options *Current slot*, *Table* or *List* it is possible to get an overview of all existing slots or a detailed display of the current slot: 
 
 <p align="left" width="100%">
     <img width="100%" src="./Bilder/fig6.1.svg">
 </p>
 *Figure 13: Assign different actions to user activities*
+
+
+
+The assignment of actions can be changed by clicking on the entry in the table - this opens a window with further options:
 
 <p align="left" width="100%">
     <img width="80%" src="./Bilder/fig7.PNG">
@@ -442,8 +456,9 @@ This action allows running a so-called command macro which consists of several i
 In the SLOTS tab you can create new slots, delete existing slots, download a single or all slots (backup settings) and upload a file containing a complete configuration with multiple slots (restore backup). Furthermore, several demo settings (presets) can be applied. 
 
 <p align="left" width="100%">
-    <img width="100%" src="./Bilder/fig10.1.svg">
+    <img width="100%" src="./Bilder/tab_slots1_en.jpg">
 </p>
+
 *Figure 17: SLOTS Settings Tab*
 
 
@@ -482,6 +497,10 @@ A new slot can be created by copying the settings of the currently active slot. 
 
 ### Upload Slots to device
 
+<p align="left" width="100%">
+    <img width="100%" src="./Bilder/tab_slots2_en.jpg">
+</p>
+
 #### Upload Slots from file
 
 This function lets you select a Slots-file (.set) from your computer and upload it to the FLipMouse (restore a backup). Be careful - this deletes all existing Slot-settings of your device!
@@ -502,14 +521,16 @@ Clicking the button *Download all slots* transfers all current slots to a settin
 
 The  GENERAL tab allows changing the USB/Bluetooth mode and apply firmware updates of the FLipmouse device and the Bluetooth Add-On module (if installed):
 
-![general](./Bilder/fig11.PNG)
+![general](./Bilder/tab_general_en.jpg)
 *Figure 18: General Settings*
 
 
 
 ### Slot Test Mode
 
-TBD
+![general](./Bilder/slot_testmode_en.jpg)
+
+The Slot test mode allows a temporary application of settings in order to perform a slot test and then return to a working FLipmouse configuration. When the Slot test mode is enabled, modifications in the settings are not applied to the FlipMouse as usual. This feature allows FLipMouse users to experiment with slot settings without the risk of "locking themselfes out". For example: for creating and testing a slot with keyboard key actions for a gaming application, a user can click *Test current slot*, then switch to the gaming application during the countdown time of 10 seconds, then test the current slot settings with the FLipMouse for 90 seconds, and then automatically return to the previous mouse cursor control settings. If the settings work as desired, the current slot can be saved, else the slot settings may be reverted.  
 
 
 

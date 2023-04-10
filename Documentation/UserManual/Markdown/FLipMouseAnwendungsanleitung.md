@@ -160,22 +160,20 @@ Die folgende Abbildung zeigt die Einstiegsseite des FLipmouse-Konfigurationsmana
 
 ## Verbindungsaufbau mit der FLipMouse
 
-1. Vergewissern Sie sich, dass die FLipMouse über USB mit Ihrem Computer verbunden ist und dass ein unterstützter Browser verwendet wird.
+1. Stellen Sie sicher, dass die FLipMouse über einen USB-Anschluss mit Ihrem Computer verbunden ist und dass ein unterstützter Webbrowser - Chrome, Chromium, Edge oder Safari - verwendet wird. (Der Testmodus erlaubt die Verwendung des Konfigurationsmanagers ohne eine echte FlipMouse, was z. B. zum Anzeigen oder Ändern von Einstellungen aus einer Backup-Datei nützlich sein kann).
 2. Klicken Sie auf *VERBINDEN ZU FLIPMOUSE (ÜBER USB ANGESCHLOSSEN)* und wählen Sie im Auswahlfeld den entsprechenden COM-Port (Kommunikationsanschluss) aus. Wenn das Auswahlfeld leer erscheint, bedeutet dies, dass kein Kommunikationsanschluss erkannt wurde. Schließen Sie in diesem Fall das FLipMouse-Gerät erneut an und warten Sie, bis der COM-Port aktualisiert wird. Falls auch nach wiederholten Versuchen kein COM-Port wählbar ist, liegt vermutlich ein Problem mit dem Treiber vor. Legen Sie in diesem Fall bitte ein [Issue im Github Repository](https://github.com/asterics/FLipMouse/issues) an bzw. suchen Sie dort nach Lösungsmöglichkeiten.
 3. Sobald der COM-Port ausgewählt ist, klicken Sie auf die Schaltfläche "Verbinden" am unteren Rand des Auswahlfeldes.
-4. Nach erfolgreicher Verbindung des COM-Ports wird das Hauptfenster angezeigt und Sie sollten ein Live-Feedback der Stick-Bewegung sehen. Der COM-Port Status in der oberen rechten Ecke des Fensters zeigt "verbunden" an:
-   
+4. Nach erfolgreicher Verbindung des COM-Ports wird das Hauptfenster geöffnet. Die Titelleiste zeigt in der oberen rechten Ecke des Fensters den COM-Port Status als "verbunden" an, und die Auswahlbox *Slot auswählen* zeigt den aktiven Konfigurations-Speicherplatz (Slot). Darunter könnten die Tabs (Reiter) mit den Hauptfunktionen gewählt werden:
 
-![ConfigManager](./Bilder/fig2DE.PNG)
-*Abbildung 8: FLipMouse-Konfigurationsmanager*
+![ConfigManager-Header](./Bilder/header_de.jpg)*Abbildung 8: Titelleiste des FLipMouse-Konfigurationsmanagers*
 
 
 
 ## Ändern von Einstellungen und Funktionen
 
-### Betriebsarten: Speicherplätze ("Slots")
+### Speicherplätze ("Slots")
 
-Der Konfigurationsmanager ermöglicht die Anpassung aller Einstellungen und Betriebsarten der FLipmouse. Die Einstellungen werden in einzelnen **Speicherplätzen (Slots)** abgelegt - z.B. ein Slot für schnellen Mausbetrieb, ein Slot für langsamen Mausbetrieb, ein Slot für Tastatur-ASDW usw. Alle Einstellungen werden auf der FLipMouse gespeichert. Die Einstellungen können auch in einer Datei auf Ihrem Computer abgelegt (oder von dort geladen) werden. 
+Der Konfigurationsmanager ermöglicht die Anpassung aller Einstellungen und Betriebsarten der FLipmouse. Die Einstellungen werden in einzelnen **Speicherplätzen (Slots)** abgelegt - z.B. ein Slot für schnellen Mausbetrieb, ein Slot für langsamen Mausbetrieb, ein Slot für Tastatur-ASDW usw. Alle Einstellungen werden in der FLipMouse gespeichert. Die Einstellungen können auch in einer Datei auf Ihrem Computer abgelegt (oder von dort geladen) werden. 
 Die in der FLipMouse gespeicherten Einstellungen bleiben auch dann erhalten, wenn die Stromversorgung unterbrochen wird. Wenn die FLipMouse das nächste Mal angeschlossen wird, sind die Einstellungen wieder verfügbar - auch wenn Sie einen anderen Computer oder ein anderes Betriebssystem verwenden!
 
 
@@ -183,6 +181,9 @@ Die in der FLipMouse gespeicherten Einstellungen bleiben auch dann erhalten, wen
 ## Tab STICK-CONFIG
 
 Im Tab STICK-CONFIG wird die **Betriebsart des Mundstücks/Joysticks für den aktiven Slot eingestellt**. Weiters können etwa die *Sensitivität*, die *Deadzone* und weitere Parameter für geändert werden. Durch die Möglichkeit, mehrere Slots mit unterschiedlichen Stick-Einstellungen bzw. Betriebsarten zu konfigurieren, können flexible Anwendungsszenarien für die FLipMouse realisiert werden. Die Slots können durch eine beliebige Aktion des Benutzers / der Benutzerin gewechselt werden (z.B. das Drücken eines externen Tasters oder starkes Pusten in das Mundstück, siehe Abschnitt [*Zuweisung von verschiedenen Aktionen*](https://github.com/asterics/FLipMouse/blob/master/Documentation/UserManual/Markdown/FLipMouseAnwendungsanleitung.md#tab-aktionen)).
+
+
+![ConfigManager](./Bilder/tab_stick_de.jpg)
 
 ### Betriebsart (“Verwende Stick für”)
 
@@ -202,7 +203,7 @@ Falls eine der Joystick-Betriebsarten gewählt wird, verhält sich die FLipMouse
 
 *Abbildung 9: Konfiguration für Joystick-Bewegung einstellen*
 
-Bitte beachten Sie, dass die Joystick-Funktion von entsprechenden Software-Anwendungen - z.B. Computerspielen - unterstützt werden muss. (Microsoft Windows bietet eine Test-Software namens "*joy.cpl*" für die Live-Anzeige der Achsen- und Button-Aktivitäten an - dieses Tool kann durch Eingabe von "*joy.cpl*" in den Suchdialog gestartet werden.)
+Bitte beachten Sie, dass die Joystick-Funktion von entsprechenden Software-Anwendungen - z.B. Computerspielen - unterstützt werden muss. (Microsoft Windows bietet eine Test-Software für die Live-Anzeige der Joystick-Achsen- und Button-Aktivitäten an - dieses Tool kann durch Eingabe von "*joy.cpl*" in den Suchdialog gestartet werden.)
 
 
 
@@ -223,7 +224,7 @@ Die Bildlaufleisten ermöglichen es, die Bewegungsparameter des Sticks und das V
 <p align="left" width="100%">
     <img width="100%" src="./Bilder/fig3DE.svg">
 </p>
-*Abbildung 10: FLipMouse Konfigurationsmanager: Tab STICK-CONFIG*
+*Abbildung 10: Tab STICK-CONFIG, Einstellung der Bewegungsparameter*
 
 
 
@@ -242,7 +243,7 @@ Falls gewünscht, können die Sensitivitäts- und Deadzonewerte für horizontale
 <p align="left" width="100%">
     <img width="100%" src="./Bilder/fig3.1DE.svg">
 </p>
-*Abbildung 11: FLipMouse Konfigurationsmanager: Tab STICK-CONFIG, Aufteilung x/y*
+*Abbildung 11: Tab STICK-CONFIG, Aufteilung der x/y-Achsen*
 
 #### Maximale Geschwindigkeit
 
@@ -257,12 +258,19 @@ Die Beschleunigungseinstellung erlaubt es, das Beschleunigungsverhalten des Maus
 (Diese Einstellung wird erst durch Klicken auf *"Zeige erweiterte Einstellungen "* sichtbar.)
 Die Kraftsensoren der FLipMouse weisen mechanisch bedingt kleine Ungenauigkeiten auf, die zu einem Abdriften des Mauszeigers führen können. Die Auswahlbox für verschiedene Empfindlichkeitsprofile erlaubt es, die Gesamtverstärkung und die Driftkorrektur einzustellen. In der Regel (und sofern keine anderen Sensorvarianten zum Einsatz kommen) sollte die Einstellung "Medium" verwendet werden.
 
+### Anwenden der Einstellungen auf alle Slots
 
-### Verwenden des Sticks für Joystick-Bewegungen
+Die aktuellen Regler-Werte für die Bewegungsparameter sowie die Stick-Einstellung kann durch die beiden Schaltflächen am Ende des Tabs auf alle existierenden Slots übertragen werden. (Diese Möglichkeit besteht auch in anderen Tabs, wie z.B. bei den Einstellungen der Saug-Puste-Steuerung).
+
+![ConfigManager](./Bilder/footer_de.jpg)
+
+*Abbildung 11: Einstellungen auf alle Slots anwenden*
+
+
 
 ## Tab SAUG-PUSTE-STEUERUNG
 
-Im Tab "SAUG-PUSTE-STEUERUNG" können die Schwellenwerte für Pusten und Ansaugen  nach Belieben eingestellt werden. Falls die FLipMouse angeschlossen ist, können die aktuellen Druckwerte anhand der horizontalen blauen Säule überwacht werden. Die aktuellen Minimal- und Maximalwerte sind anhand der vertiaklen blauen und roten Linien erkennbar). Für das Ansaugen und das Pusten können jeweils zwei Schwellwerte eingestellt werden (Stark und Leicht), denen im Tab "AKTIONEN" unterschiedliche Aktionen zugeordent werden können. **Tipp**: die Schwellwerte für leichte Betätigung sollten so sensibel wie möglich eingestellt werden, und der Unterschied zur starken Betätigung sollte groß genug sein, um ein versehentliches Auslösen der zugeordneten Aktionen zu verhindern. Eventuell ist es nützlich, in der ersten Lernphase die starken Schwellwerte nicht zu verwenden (also so einzustellen, dass sie gar nicht erreichbar sind).
+Im Tab "SAUG-PUSTE-STEUERUNG" können die Schwellenwerte für Pusten und Ansaugen  nach Belieben eingestellt werden. Falls die FLipMouse angeschlossen ist, können die aktuellen Druckwerte anhand der horizontalen blauen Säule überwacht werden. Die aktuellen Minimal- und Maximalwerte sind anhand der vertikalen blauen und roten Linien erkennbar). Für das Ansaugen und das Pusten können jeweils zwei Schwellwerte eingestellt werden (normal und stark), denen im Tab "AKTIONEN" unterschiedliche Aktionen zugeordnet werden können. **Tipp**: die Schwellwerte für leichte Betätigung sollten so sensibel wie möglich eingestellt werden, und der Unterschied zur starken Betätigung sollte groß genug sein, um ein versehentliches Auslösen der zugeordneten Aktionen zu verhindern. Eventuell ist es nützlich, in der ersten Lernphase die starken Schwellwerte nicht zu verwenden (also so einzustellen, dass sie gar nicht erreichbar sind).
 
 <p align="left" width="100%">
     <img width="100%" src="./Bilder/fig5.1DE.svg">
@@ -270,13 +278,11 @@ Im Tab "SAUG-PUSTE-STEUERUNG" können die Schwellenwerte für Pusten und Ansauge
 *Abbildung 12: Einstellungen für Pusten und Ansaugen*
 
 Beachten Sie, dass der Leerlaufdruck (ohne Saugen und ohne Pusten) bei 
-bei etwa 512 liegt, und der Druck steigt, wenn Sie 
-in das Mundstück pusten, das dadurch auch einen erhöhten Druck anzeigt.
-Mit den Schiebereglern kann der Schwellendruck für Saugen und Pusten eingestellt werden. Die graue gepunktete Linie stellt den aktuellen Druck dar. Die blaue und die rote gepunktete Linie stellen die in dieser Sitzung erreichten Grenzwerte dar.
+bei etwa 512 liegt, und der Druck steigt, wenn Sie in das Mundstück pusten, das dadurch auch einen erhöhten Druck anzeigt. Mit den Schiebereglern kann der Schwellendruck für Saugen und Pusten eingestellt werden. Die graue gepunktete Linie stellt den aktuellen Druck dar. Die blaue und die rote gepunktete Linie stellen die in dieser Sitzung erreichten Grenzwerte dar.
 
-#### Stark (An)saugen and Stark Pusten
+#### Erweiterte Gesten für Stark Ansaugen und Stark Pusten
 
-Im Tab SAUG-PUSTE-STEUERUNG können zusätzliche Schwellenwerte für starkes Saugen und starkes Pusten definiert werden, die dann unterschiedliche Aktionen auslösen können. Zum Beispiel könnte der nächste Slot durch starkes Pusten aktiviert werden. Um die Funktionalität der FLipMouse insbesondere für Personen zu erweitern, die nicht auf externe Schalter zugreifen können, sind noch zusätzliche Aktionen verfügbar, die mit starkem Saugen oder starkem Pusten ausgelöst werden. Diese Gesten ermöglichen das Auslösen von Aktionen durch starken Saugen oder starkes Pusten, gefolgt von einer Stick-Bewegung (rauf / runter / links / rechts). Starkes Saugen oder starkes Pusten wird durch ein akustisches Signal (hoher Ton) angezeigt. Wird der Stick innerhalb einer Sekunde bewegt, wird die entsprechende Aktion (z.B. "Stark ansaugen + nach oben") ausgelöst. Wird der Stick nicht innerhalb einer Sekunde bewegt, wird die einzelne Stark pusten- oder Stark ansaugen-Aktion ausgelöst. Insgesamt können also 10 zusätzliche Aktionen ausgeführt werden.
+Durch die Kombination eines starken Ansaugens oder Pustens mit einer kurzen Stick-Bewegung können bis zu 8 weitere Aktionen ausgelöst werden (z.B. "stark ansaugen + nach oben" oder "stark pusten + nach links"). Dabei muss der Stick kurz *nach* der Saug- oder Puste-Aktivität in die entsprechende Richtung ausgelenkt werden. (Wird der Stick nicht innerhalb einer Sekunde bewegt, so wird die eingestellte Aktion für stark pusten oder stark ansaugen ausgelöst.)
 
 
 
@@ -286,14 +292,16 @@ Im Tab AKTIONEN können unterschiedliche Benutzeraktivitäten zu gewünschten Fl
 
 - das Drücken oder Loslassen der 3 Tasten (eingebaute Taste *Button1* oder externe Tasten *Button2* oder *Button3*)
 - Stickbewegungen (auf/ab/links/rechts), die den Schwellenwert der Deadzone überschreiten
-- Saug- und Puste-Aktivitäten (siehe Abschnitt *Stark (An)saugen und Stark Pusten*).
+- Saug- und Puste-Aktivitäten (oder erweiterte Saug-Puste-Gesten).
 
-Die Aktionen können durch Anklicken des Eintrags in der Aktionskonfigurationstabelle geändert werden (siehe das blaue Feld in Abbildung 21). Die Tabelle zeigt die Aktionen für alle Benutzeraktivitäten an, entweder nur für den gerade aktiven Slot oder für alle Slots (was einen Überblick über alle Aktionen gibt). Wenn Sie auf eine bestimmte Aktion klicken, öffnet sich ein Fenster, in dem Sie die Aktionskategorie (in Abbildung 22 für Button 1: Gerät) und die Aktion selbst (hier: Nächsten Slot laden) ändern können, siehe Abbildung 22.
+Die Zuweisung von Benutzeraktivitäten zu Aktionen wird in einer Tabelle dargestellt. Durch die Darstelloptionen *Aktueller Slot*, *Tabelle* oder *Liste* ist es möglich, einen Überblick auf alle existierenden Slots oder eine detaillierte Darstellung des aktuellen Slots zu erhalten.
 
 <p align="left" width="100%">
     <img width="100%" src="./Bilder/fig6.1DE.svg">
 </p>
 *Abbildung 13: Verschiedene Aktionen für Benutzeraktivitäten zuweisen*
+
+ Die Zuweisung von Aktionen kann durch Anklicken des Eintrags in der Tabelle geändert werden - dadurch öffnet sich ein Fenster mit weiteren Optionen:
 
 <p align="left" width="100%">
     <img width="80%" src="./Bilder/fig7DE.PNG">
@@ -418,9 +426,10 @@ Diese Aktion ermöglicht das Ausführen eines sogenannten benutzerdefiniertem Ma
 Im SLOTS-Tab können Sie neue Slots erstellen, bestehende Slots löschen, einen einzelnen oder alle Slots herunterladen (Backup erstellen) und eine Datei hochladen, die eine vollständige Konfiguration mit mehreren Slots enthält (Backup wiederherstellen). Außerdem können verschiedene Demo-Einstellungen (Presets) angewendet werden.
 
 <p align="left" width="100%">
-    <img width="100%" src="./Bilder/fig10.1DE.svg">
+    <img width="100%" src="./Bilder/tab_slots1_de.jpg">
 </p>
-*Abbildung 17: SLOTS Einstellungen*
+
+*Abbildung 17: SLOT Einstellungen*
 
 
 
@@ -432,8 +441,6 @@ Die Slotliste zeigt alle vorhandenen Slots in der richtigen Reihenfolge an. Der 
 
 Jedem Slot kann eine Farbe zugewiesen werden, die auf der Vorderseite der FLipMouse angezeigt wird. Die Farbe kann durch Anklicken der farbigen Schaltfläche über einen Auswahldialog  geändert werden. 
 
-
-
 #### Verbindung (USB- oder Bluetooth Modus)
 
 Durch Anklicken der Schaltfläche *Verbindung* in der Slot-Liste wird zwischen USB- und Bluetooth-Modus für diesen Slot umgeschaltet. Der Bluetooth-Modus ermöglicht die Steuerung von Handys, Tablets und Computern, die Bluetooth-fähig sind. Auf diese Weise können benutzerdefinierte Slots für USB oder Bluetooth erstellt werden, so dass es möglich ist, z. B. von einem Laptop (USB) zu einer drahtlosen Verbindung (Telefon/Tablet) und zurück zu wechseln (mit den Aktionen *Nächster Slot* oder *Slot per Name laden*.
@@ -441,19 +448,15 @@ Durch Anklicken der Schaltfläche *Verbindung* in der Slot-Liste wird zwischen U
 **Bluetooth-Kopplung**
 Die Bluetooth-Funktion kann nur funktionieren, wenn ein Host-Gerät mit der FLipMouse verbunden (gekoppelt/gepairt) ist. Ein Host-Gerät kann z. B. ein Mobiltelefon mit Android- oder iOS-Betriebssystem sein. Die FLipMouse kann nur dann mit einem Host-Gerät gekoppelt werden, wenn derzeit kein anderes Gerät verbunden ist und somit der Kopplungsmodus aktiv ist.  Ein aktiver Kopplungsmodus der FlipMouse wird durch langsames Dimmen der Lichtfarbe auf der Vorderseite des FLipMouse-Moduls angezeigt. Sobald eine Bluetooth-Verbindung hergestellt ist, leuchtet die Lichtfarbe dauerhaft. Um die Kopplung herzustellen, öffnen Sie die Bluetooth-Einstellungen Ihres Hostgeräts, aktivieren die Bluetooth-Funktion, wählen *Neues BT-Gerät hinzufügen*, und wählen dann die FLipMouse aus der Liste der verfügbaren Geräte aus. 
 
-
-
-#### Slot löschen
+#### Aktion Slot löschen
 
 Ein Slot kann durch Klicken auf die Schaltfläche *Löschen* in der Slotliste entfernt werden.
 
-#### Slot herunterladen
+#### Aktion Slot herunterladen
 
 Ein Slot kann auf dem Computer gespeichert werden, indem Sie auf die Schaltfläche *Slot herunterladen* in der Slotliste klicken (eine Datei wird von Ihrem Browser heruntergeladen - Sie können sie an einem beliebigen Ort speichern).
 
-
-
-**Neuen Slot erstellen / Vorhandenen Slot kopieren**
+### Neuen Slot erstellen / vorhandenen Slot kopieren
 
 Ein neuer Slot kann erstellt werden, indem die Einstellungen des derzeit aktiven Slots kopiert werden. Geben Sie dazu den gewünschten Namen für den neuen Slot in das entsprechende Textfeld ein (*Name für neuen Slot einfügen*). Klicken Sie dann auf die Schaltfläche "SLOT ERSTELLEN". Dadurch wird **eine Kopie des derzeit aktiven Slots** an das Ende der Slotliste angehängt und ein neuer Name dafür vergeben.
 
@@ -461,11 +464,17 @@ Ein neuer Slot kann erstellt werden, indem die Einstellungen des derzeit aktiven
 
 ### Slots auf das Gerät hochladen
 
+<p align="left" width="100%">
+    <img width="100%" src="./Bilder/tab_slots2_de.jpg">
+</p>
+
+
+
 #### Slots aus Datei hochladen
 
 Mit dieser Funktion können Sie eine Slots-Datei (.set) von Ihrem Computer auswählen und auf die FLipMouse hochladen (Wiederherstellung eines Backups). Seien Sie vorsichtig - dies löscht alle bestehenden Slot-Einstellungen Ihres Geräts!
 
-#### Demo-Einstellungen anwenden
+#### Demo-Voreinstellungen anwenden
 
 Mit dieser Funktion können Sie bestehende Demo-Einstellungen anwenden, die von uns erstellt wurden, um verschiedene Funktionen und Anwendungsszenarien der FLipMouse zu zeigen. Die vorhandenen Voreinstellungen können über die Auswahlbox gewählt werden. Falls eine Kurzbeschreibung vorhanden ist, kann diese in einem Pop-up-Fenster geöffnet werden. Das ausgewählte Demo-Preset wird durch Anklicken der entsprechenden Schaltfläche übernommen.
 
@@ -481,14 +490,18 @@ Ein Klick auf die Scahltfläche *Alle Slots herunterladen* überträgt alle aktu
 
 Im Tab ALLGEMEIN können Sie den USB/Bluetooth-Modus ändern und Firmware-Updates für das FLipMouse-Gerät und das Bluetooth-Zusatzmodul (falls installiert) durchführen:
 
-![general](./Bilder/fig11DE.PNG)
+![general](./Bilder/tab_general_de.jpg)
 *Abbildung 18: Allgemeine Einstellungen*
 
 
 
 ### Slot Test Modus
 
-TBD
+![general](./Bilder/slot_testmode_de.jpg)
+
+Der Slot-Testmodus ermöglicht eine vorübergehende Anwendung von Einstellungen, um einen Slot-Test durchzuführen und dann zu einer funktionierenden FlipMouse-Konfiguration zurückzukehren. Wenn der Slot-Testmodus aktiviert ist, werden Änderungen an den Einstellungen nicht wie üblich sofort auf die FlipMouse angewendet. Diese Funktion ermöglicht es FLipMouse-Benutzern, mit den Slot-Einstellungen zu experimentieren, ohne Gefahr zu laufen, sich zu "auszusperren". Ein Beispiel: Um einen Slot mit Tastenaktionen für eine Spieleanwendung zu erstellen und zu testen, kann ein Benutzer auf *Aktuellen Slot testen* klicken, dann während der Countdown-Zeit von 10 Sekunden zur Spieleanwendung wechseln, dann die aktuellen Slot-Einstellungen mit der FLipMouse 90 Sekunden lang testen und dann automatisch zu den vorherigen Mauszeiger-Steuerungseinstellungen zurückkehren. Wenn die Einstellungen wie gewünscht funktionieren, kann der aktuelle Slot gespeichert werden, andernfalls können die Slot-Einstellungen rückgängig gemacht werden.
+
+
 
 ### Firmware Version
 

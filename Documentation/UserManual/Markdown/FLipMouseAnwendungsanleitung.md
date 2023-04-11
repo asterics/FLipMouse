@@ -6,7 +6,11 @@
 
 
 
+
+
 ![FLipMouseLogo](./Bilder/flipmouseLogo.svg)
+
+
 
 
 
@@ -37,7 +41,7 @@ Die AsTeRICS Foundation
 </p>
 
 
-## Hardware Übersicht
+# Hardware Übersicht
 
 Die FLipMouse ist mit einem 3d-gedruckten Gehäuse erhältlich. Designdateien für das 3d-gedruckte Gehäuse werden im [Github-Repository](https://github.com/asterics/FLipMouse/tree/master/Hardware/case-design/3D_printer) bereitgestellt. Die primäre Methode zur Interaktion mit der FLipMouse ist ein transparenter Stab ("Mundstück" bzw. "Finger-Joystick"), der an der Vorderseite der FLipMouse angebracht ist. Ersatzstäbe können über den [Webshop](https://www.asterics-foundation.org/webshop) der AsTeRICS Foundation bestellt werden. (Bitte beachten Sie die Reinigungshinweise im entsprechenden Abschnitt dieser Anleitung).
 
@@ -96,7 +100,7 @@ Die Frontseite des Gehäuses bietet eine Anschlussmöglichkeit für das Mundstü
 
 
 
-## Montage und Verwendung
+# Montage und Verwendung
 
 **1. Befestigung des Mundstücks / des Joysticks**
 
@@ -264,7 +268,7 @@ Die aktuellen Regler-Werte für die Bewegungsparameter sowie die Stick-Einstellu
 
 ![ConfigManager](./Bilder/footer_de.jpg)
 
-*Abbildung 11: Einstellungen auf alle Slots anwenden*
+*Abbildung 12: Einstellungen auf alle Slots anwenden*
 
 
 
@@ -275,7 +279,7 @@ Im Tab "SAUG-PUSTE-STEUERUNG" können die Schwellenwerte für Pusten und Ansauge
 <p align="left" width="100%">
     <img width="100%" src="./Bilder/fig5.1DE.svg">
 </p>
-*Abbildung 12: Einstellungen für Pusten und Ansaugen*
+*Abbildung 13: Einstellungen für Pusten und Ansaugen*
 
 Beachten Sie, dass der Leerlaufdruck (ohne Saugen und ohne Pusten) bei 
 bei etwa 512 liegt, und der Druck steigt, wenn Sie in das Mundstück pusten, das dadurch auch einen erhöhten Druck anzeigt. Mit den Schiebereglern kann der Schwellendruck für Saugen und Pusten eingestellt werden. Die graue gepunktete Linie stellt den aktuellen Druck dar. Die blaue und die rote gepunktete Linie stellen die in dieser Sitzung erreichten Grenzwerte dar.
@@ -299,14 +303,14 @@ Die Zuweisung von Benutzeraktivitäten zu Aktionen wird in einer Tabelle dargest
 <p align="left" width="100%">
     <img width="100%" src="./Bilder/fig6.1DE.svg">
 </p>
-*Abbildung 13: Verschiedene Aktionen für Benutzeraktivitäten zuweisen*
+*Abbildung 14: Verschiedene Aktionen für Benutzeraktivitäten zuweisen*
 
  Die Zuweisung von Aktionen kann durch Anklicken des Eintrags in der Tabelle geändert werden - dadurch öffnet sich ein Fenster mit weiteren Optionen:
 
 <p align="left" width="100%">
     <img width="80%" src="./Bilder/fig7DE.PNG">
 </p>
-*Abbildung 14: Pop-up-Fenster zur Auswahl der gewünschten Aktion*
+*Abbildung 15: Pop-up-Fenster zur Auswahl der gewünschten Aktion*
 
 Im Folgenden werden die einzelnen Aktionskategorien und die verschiedenen Aktionen kurz beschrieben.
 
@@ -375,7 +379,7 @@ oder werfen Sie einen Blick auf die [FLipMouse Wiki / Github Seiten](https://git
 <p align="left" width="100%">
     <img width="80%" src="./Bilder/fig8.1DE.svg">
 </p>
-*Abbildung 15: Hinzufügen von Tasten für die Aktionen Tasten Drücken / Halten / Umschalten*
+*Abbildung 16: Hinzufügen von Tasten für die Aktionen Tasten Drücken / Halten / Umschalten*
 
 
 
@@ -385,7 +389,7 @@ Die Aktion *Schreibe Wort* ermöglicht die Eingabe eines bestimmten Textes/Satze
 <p align="left" width="100%">
     <img width="80%" src="./Bilder/fig9DE.PNG">
 </p>
-*Abbildung 16: Funktion "Schreibe Wort"*
+*Abbildung 17: Funktion "Schreibe Wort"*
 
 In diesem Beispiel wird jedes Mal, wenn die Taste *Button1* der FLipMouse gedrückt wird, "Hallo" geschrieben.
 
@@ -410,7 +414,28 @@ Diese Aktion startet die Kalibrierungssequenz für die mittlere Position des Sti
 ### Aktionskategorie: "Infrarot"
 
 **Infrarot-Kommando abspielen / halten**
-Diese Aktion gibt den Infrarot (IR-)Code mit dem angegebenen Befehlsnamen wieder. Die vorhandenen (aufgezeichneten) IR-Befehle können aus dem Dropdown-Menü ausgewählt werden. Die Aktion *Infrarot-Kommando abspielen* sendet den aufgezeichneten Code einmal, während die Aktion *Infrarot-Kommando halten* den Code wiederholt, bis die Benutzeraktivität beendet ist. Weitere Informationen zu Infrarot-Codes finden Sie im Abschnitt ["*Infrarot-Code-Aufzeichnung und -Wiedergabe*"](https://github.com/asterics/FLipMouse/blob/master/Documentation/UserManual/Markdown/FLipMouseAnwendungsanleitung.md#infrarot-code-aufzeichnung-und--wiedergabe).
+Diese Aktion gibt den Infrarot (IR-)Code mit dem angegebenen Befehlsnamen wieder. Die vorhandenen (aufgezeichneten) IR-Befehle können aus dem Dropdown-Menü ausgewählt werden. Die Aktion *Infrarot-Kommando abspielen* sendet den aufgezeichneten Code einmal, während die Aktion *Infrarot-Kommando halten* den Code wiederholt, bis die Benutzeraktivität beendet ist. 
+
+<p align="left" width="100%">
+    <img width="70%" src="./Bilder/fig13DE.PNG">
+</p>
+
+*Abbildung 18: Konfigurationsmanager für Infrarot-Aufnahme und -Wiedergabe*
+
+Die FLipMouse verfügt über ein Infrarot-Fernbedienungs-Empfängermodul und eine Hochstrom-IR-LED, sodass sie Fernbedienungscodes vieler in der Unterhaltungselektronik verwendeter Fernbedienungsgeräte aufzeichnen und wiedergeben kann. Wenn Sie diese Funktion der FLipMouse nutzen möchten, achten Sie darauf, dass die IR-Sende-LED auf das zu steuernde Gerät gerichtet ist. Eine Anleitung zum Anschluss einer externen IR-LED zur Erhöhung der Sendeleistung finden Sie auf den [FLipMouse Wiki-Seiten](https://github.com/asterics/FLipMouse/wiki).
+
+![infrared](./Bilder/fig30.PNG)
+
+*Abbildung 19: Infrarot-Code-Aufzeichnung (hier mit FLipMouse V1 Hardware)*
+
+Um einen neuen IR-Code aufzuzeichnen, gehen Sie auf die Registerkarte AKTIONEN. Klicken Sie auf die gewünschte Aktion und wählen Sie im Popup-Fenster die Aktionskategorie "**Infrarot**". Dort können zwei verschiedene Arten von IR-Aktionen aus dem Kombinationsfeld ausgewählt werden:
+
+- *Infrarot-Kommando abspielen*: sendet den aufgezeichneten Code einmal
+- *Infrarot-Kommando halten (für Dauer der Eingabe-Aktion)*: wiederholt den Code, bis die Benutzeraktivität beendet ist
+
+Die vorhandenen Befehle können aus dem Dropdown-Menü ausgewählt werden.
+
+In diesem Fenster können Sie auch IR-Kommandos verwalten. Neben *Neues IR-Kommando* können Sie einen Namen eingeben und dann auf AUFNAHME klicken - richten Sie Ihre IR-Fernbedienung auf die Seite der FLipMouse, an der die LEDs herausragen, und senden Sie den IR-Befehl (für die Aufzeichnungsphase gibt es ein Zeitlimit von 10 Sekunden). Der neue Befehl wird nun in der FLipMouse gespeichert und kann durch Auswahl des Namens im Dropdown-Menü ausgewählt und wiedergegeben werden. Wenn der Befehl nicht korrekt wiedergegeben wird, versuchen Sie, den IR-Code-Timeout zu erhöhen - zum Beispiel auf 250 Millisekunden ("Zeige erweiterte Optionen"). Mit *IR Kommando Löschen* können Befehle gelöscht werden.
 
 
 
@@ -428,8 +453,7 @@ Im SLOTS-Tab können Sie neue Slots erstellen, bestehende Slots löschen, einen 
 <p align="left" width="100%">
     <img width="100%" src="./Bilder/tab_slots1_de.jpg">
 </p>
-
-*Abbildung 17: SLOT Einstellungen*
+*Abbildung 20: SLOT Einstellungen*
 
 
 
@@ -448,31 +472,32 @@ Durch Anklicken der Schaltfläche *Verbindung* in der Slot-Liste wird zwischen U
 **Bluetooth-Kopplung**
 Die Bluetooth-Funktion kann nur funktionieren, wenn ein Host-Gerät mit der FLipMouse verbunden (gekoppelt/gepairt) ist. Ein Host-Gerät kann z. B. ein Mobiltelefon mit Android- oder iOS-Betriebssystem sein. Die FLipMouse kann nur dann mit einem Host-Gerät gekoppelt werden, wenn derzeit kein anderes Gerät verbunden ist und somit der Kopplungsmodus aktiv ist.  Ein aktiver Kopplungsmodus der FlipMouse wird durch langsames Dimmen der Lichtfarbe auf der Vorderseite des FLipMouse-Moduls angezeigt. Sobald eine Bluetooth-Verbindung hergestellt ist, leuchtet die Lichtfarbe dauerhaft. Um die Kopplung herzustellen, öffnen Sie die Bluetooth-Einstellungen Ihres Hostgeräts, aktivieren die Bluetooth-Funktion, wählen *Neues BT-Gerät hinzufügen*, und wählen dann die FLipMouse aus der Liste der verfügbaren Geräte aus. 
 
-#### Aktion Slot löschen
+#### Slot löschen
 
 Ein Slot kann durch Klicken auf die Schaltfläche *Löschen* in der Slotliste entfernt werden.
 
-#### Aktion Slot herunterladen
+#### Slot herunterladen
 
 Ein Slot kann auf dem Computer gespeichert werden, indem Sie auf die Schaltfläche *Slot herunterladen* in der Slotliste klicken (eine Datei wird von Ihrem Browser heruntergeladen - Sie können sie an einem beliebigen Ort speichern).
+
 
 ### Neuen Slot erstellen / vorhandenen Slot kopieren
 
 Ein neuer Slot kann erstellt werden, indem die Einstellungen des derzeit aktiven Slots kopiert werden. Geben Sie dazu den gewünschten Namen für den neuen Slot in das entsprechende Textfeld ein (*Name für neuen Slot einfügen*). Klicken Sie dann auf die Schaltfläche "SLOT ERSTELLEN". Dadurch wird **eine Kopie des derzeit aktiven Slots** an das Ende der Slotliste angehängt und ein neuer Name dafür vergeben.
 
 
-
 ### Slots auf das Gerät hochladen
-
-<p align="left" width="100%">
-    <img width="100%" src="./Bilder/tab_slots2_de.jpg">
-</p>
-
 
 
 #### Slots aus Datei hochladen
 
 Mit dieser Funktion können Sie eine Slots-Datei (.set) von Ihrem Computer auswählen und auf die FLipMouse hochladen (Wiederherstellung eines Backups). Seien Sie vorsichtig - dies löscht alle bestehenden Slot-Einstellungen Ihres Geräts!
+
+<p align="left" width="90%">
+    <img width="100%" src="./Bilder/tab_slots2_de.jpg">
+</p>
+
+*Abbildung 21: Slots hochladen (Backup wiederherstellen)*
 
 #### Demo-Voreinstellungen anwenden
 
@@ -491,15 +516,18 @@ Ein Klick auf die Scahltfläche *Alle Slots herunterladen* überträgt alle aktu
 Im Tab ALLGEMEIN können Sie den USB/Bluetooth-Modus ändern und Firmware-Updates für das FLipMouse-Gerät und das Bluetooth-Zusatzmodul (falls installiert) durchführen:
 
 ![general](./Bilder/tab_general_de.jpg)
-*Abbildung 18: Allgemeine Einstellungen*
+*Abbildung 22: Allgemeine Einstellungen*
 
 
 
 ### Slot Test Modus
 
+Der Slot-Testmodus ermöglicht eine vorübergehende Anwendung von Einstellungen, um einen Slot-Test durchzuführen und dann zu einer funktionierenden FlipMouse-Konfiguration zurückzukehren. Wenn der Slot-Testmodus aktiviert ist, werden Änderungen an den Einstellungen nicht wie üblich sofort auf die FlipMouse angewendet. Diese Funktion ermöglicht es FLipMouse-Benutzern, mit den Slot-Einstellungen zu experimentieren, ohne Gefahr zu laufen, sich zu "auszusperren". Ein Beispiel: Um einen Slot mit Tastenaktionen für eine Spieleanwendung zu erstellen und zu testen, kann ein Benutzer auf *Aktuellen Slot testen* klicken, dann während der Countdown-Zeit von 10 Sekunden zur Spieleanwendung wechseln, dann die aktuellen Slot-Einstellungen mit der FLipMouse 90 Sekunden lang testen und dann automatisch zu den vorherigen Mauszeiger-Steuerungseinstellungen zurückkehren. Wenn die Einstellungen wie gewünscht funktionieren, kann der aktuelle Slot gespeichert werden, andernfalls können die Slot-Einstellungen rückgängig gemacht werden:
+
+
 ![general](./Bilder/slot_testmode_de.jpg)
 
-Der Slot-Testmodus ermöglicht eine vorübergehende Anwendung von Einstellungen, um einen Slot-Test durchzuführen und dann zu einer funktionierenden FlipMouse-Konfiguration zurückzukehren. Wenn der Slot-Testmodus aktiviert ist, werden Änderungen an den Einstellungen nicht wie üblich sofort auf die FlipMouse angewendet. Diese Funktion ermöglicht es FLipMouse-Benutzern, mit den Slot-Einstellungen zu experimentieren, ohne Gefahr zu laufen, sich zu "auszusperren". Ein Beispiel: Um einen Slot mit Tastenaktionen für eine Spieleanwendung zu erstellen und zu testen, kann ein Benutzer auf *Aktuellen Slot testen* klicken, dann während der Countdown-Zeit von 10 Sekunden zur Spieleanwendung wechseln, dann die aktuellen Slot-Einstellungen mit der FLipMouse 90 Sekunden lang testen und dann automatisch zu den vorherigen Mauszeiger-Steuerungseinstellungen zurückkehren. Wenn die Einstellungen wie gewünscht funktionieren, kann der aktuelle Slot gespeichert werden, andernfalls können die Slot-Einstellungen rückgängig gemacht werden.
+*Abbildung 23: SLOT Test Modus*
 
 
 
@@ -515,44 +543,9 @@ Der FLipMouse-Stick ist mit vier Kraftsensoren verbunden - einer für jede Beweg
 
 ![visualisation](./Bilder/fig12.PNG)
 
-*Abbildung 10: Links: Live-Anzeige der Kraftsensorwerte; Mitte: aktueller Slot mit den 3 Tasten (wenn eine Taste gedrückt wird, wird der entsprechende Kreis gelb); Rechts: Sip und Puff Live-Wert und aktuelle Schwellenwerte*
+*Abbildung 24: Links: Live-Anzeige der Kraftsensorwerte; Mitte: aktueller Slot mit den 3 Tasten (wenn eine Taste gedrückt wird, wird der entsprechende Kreis gelb); Rechts: Sip und Puff Live-Wert und aktuelle Schwellenwerte*
 
 
-
-## Infrarot-Code-Aufzeichnung und -Wiedergabe
-
-Die FLipMouse verfügt über ein Infrarot-Fernbedienungs-Empfängermodul und eine Hochstrom-IR-LED, sodass sie Fernbedienungscodes vieler in der Unterhaltungselektronik verwendeter Fernbedienungsgeräte aufzeichnen und wiedergeben kann. Wenn Sie diese Funktion der FLipMouse nutzen möchten, achten Sie darauf, dass die IR-Sende-LED auf das zu steuernde Gerät gerichtet ist. Eine Anleitung zum Anschluss einer externen IR-LED zur Erhöhung der Sendeleistung finden Sie auf den [FLipMouse Wiki-Seiten](https://github.com/asterics/FLipMouse/wiki).
-
-![infrared](./Bilder/fig30.PNG)
-
-*Abbildung 20: Infrarot-Code-Aufzeichnung*
-
-Um einen neuen IR-Code aufzuzeichnen, gehen Sie auf die Registerkarte AKTIONEN. Klicken Sie auf die gewünschte Aktion und wählen Sie im Popup-Fenster die Aktionskategorie "**Infrarot**". Dort können zwei verschiedene Arten von IR-Aktionen aus dem Kombinationsfeld ausgewählt werden:
-
-- *Infrarot-Kommando abspielen*: sendet den aufgezeichneten Code einmal
-- *Infrarot-Kommando halten (für Dauer der Eingabe-Aktion)*: wiederholt den Code, bis die Benutzeraktivität beendet ist
-
-Die vorhandenen Befehle können aus dem Dropdown-Menü ausgewählt werden.
-
-In diesem Fenster können Sie auch IR-Kommandos verwalten. Neben *Neues IR-Kommando* können Sie einen Namen eingeben und dann auf AUFNAHME klicken - richten Sie Ihre IR-Fernbedienung auf die Seite der FLipMouse, an der die LEDs herausragen, und senden Sie den IR-Befehl (für die Aufzeichnungsphase gibt es ein Zeitlimit von 10 Sekunden). Der neue Befehl wird nun in der FLipMouse gespeichert und kann durch Auswahl des Namens im Dropdown-Menü ausgewählt und wiedergegeben werden. Wenn der Befehl nicht korrekt wiedergegeben wird, versuchen Sie, den IR-Code-Timeout zu erhöhen - zum Beispiel auf 250 Millisekunden ("Zeige erweiterte Optionen"). Mit *IR Kommando Löschen* können Befehle gelöscht werden.
-
-<p align="left" width="100%">
-    <img width="70%" src="./Bilder/fig13DE.PNG">
-</p>
-*Abbildung 21: Konfigurationsmanager für Infrarot-Aufnahme und -Wiedergabe*
-
-
-
-## Verwendung der Bluetooth-Funktion
-
-Die Bluetooth-Funktion ermöglicht die Steuerung von Handys, Tablets und Computern mit Bluetooth-Fähigkeit. Wenn die FLipMouse über USB an einen PC oder Laptop angeschlossen ist, kann der Benutzer auf Bluetooth-Betrieb umschalten und bei Bedarf wieder auf USB wechseln.
-
-#### Verbinden mit einem Bluetooth-Host-Gerät (Pairing)
-
-Das Host-Gerät kann z. B. ein Mobiltelefon mit Android- oder iOS-Betriebssystem sein. 
-Die FLipMouse kann nur dann mit einem Host-Gerät verbunden werden, wenn derzeit kein Gerät verbunden ist und somit der Pairing-Modus aktiv ist. Um ein Gerät zu verbinden, öffnen Sie die Bluetooth-Einstellungen Ihres Android- oder iOS-Geräts, aktivieren die Bluetooth Funktion, wählen *neues BT-Gerät hinzufügen* und selektiern dann die FLipMouse aus der Liste der verfügbaren Geräte. Öffnen Sie dann die Registerkarte ALLGEMEIN und aktivieren Sie den Bluetooth-Betrieb für die gewünschten Slots (siehe Abschnitt [*Allgemeine Einstellungen*](https://github.com/asterics/FLipMouse/blob/master/Documentation/UserManual/Markdown/FLipMouseAnwendungsanleitung.md#allgemeine-einstellungen-tab-allgemein).
-
-Hinweis: Wenn sich das Bluetooth-Modul im Paring-Modus befindet (also aktuell kein Host-Gerät über Bluetooth verbdunen ist) und der Bluetooth-Betrieb im aktuellen Slot aktiv ist, so "dimmt" die Lichtfarbe an der Vorderseite der FLipMouse  Moduls langsam auf und ab. Sobald die Bluetooth Verbindung hergestellt ist, leuchtet die Lichtfarbe kontinuierlich.
 
 
 
@@ -590,17 +583,17 @@ Der Stadard-Speichelfilter kann wie unten gezeigt ausgetauscht werden:
 <p align="left" width="100%">
     <img width="50%" src="./Bilder/fig34.1.jpg">
 </p>
-*Abbildung 22.1: Entfernen des Speichelfilters mit Hilfe einer normalen Schraube zum Ergreifen des Filters*
+*Abbildung 25.1: Entfernen des Speichelfilters mit Hilfe einer normalen Schraube zum Ergreifen des Filters*
 
 <p align="left" width="100%">
     <img width="50%" src="./Bilder/fig34.2.jpg">
 </p>
-*Abbildung 22.2: Der entfernte Filter*
+*Abbildung 25.2: Der entfernte Filter*
 
 <p align="left" width="100%">
     <img width="50%" src="./Bilder/fig34.3.jpg">
 </p>
-*Abbildung 22.3: Einsetzen eines neuen Filters (Einschieben in den Hygienestick)* 
+*Abbildung 25.3: Einsetzen eines neuen Filters (Einschieben in das Acrlygals-Rohr)* 
 
 
 
@@ -621,7 +614,7 @@ Mehrere Benutzer und Benutzerinnen berichteten, dass sie eine andere Form des Mu
 ![mouthpiece](./Bilder/fig33.PNG)
 ![mouthpiece1](./Bilder/fig33.1.PNG)
 
-*Abbildung 23: Modifizierte Form des Mundstücks*
+*Abbildung 26: Modifizierte Form des Mundstücks*
 
 Unabhängig von den von Ihnen gewünschten Mundstückmodifikationen: Achten Sie stets auf einen hygienischen Betrieb und wenden Sie die im diesem Kapitel beschriebenen Reinigungsverfahren an!
 
@@ -675,6 +668,8 @@ Unabhängig von den von Ihnen gewünschten Mundstückmodifikationen: Achten Sie 
 
 Bitte beachten Sie, dass bestimmte Befehle zur Anpassung der FLipMouse-Einstellungen nicht in dieser Tabelle aufgeführt sind (z. B. Einstellung von Schwellenwerten oder Beschleunigungen, Aufzeichnung von IR-Befehlen usw.). Eine vollständige Liste der Befehle finden Sie in der [FLipMouse wiki](https://github.com/asterics/FLipMouse/wiki/at-api).
 
+
+
 ## Liste der Kürzel für Keybord-Tasten
 
 | **Unterstützte Kürzel für Tastaturtasten**                                                                                                                                                                                                                                                         |
@@ -710,7 +705,7 @@ Email: <office@asterics-foundation.org>
 
 
 
-# Haftungsausschluss
+## Haftungsausschluss
 
 Die Fachhochschule Technikum Wien und die AsTeRICS Foundation übernehmen keine Gewährleistung und Haftung für die Funktionsfähigkeit der beschriebenen Geräte, Software und die Richtigkeit der übergebenen Unterlagen.
 
@@ -718,7 +713,7 @@ Weiters haftet die FH TW nicht für gesundheitliche Schäden, die durch die Verw
 
 
 
-# Danksagung
+## Danksagung
 
 Dieses Projekt wurde teilweise von der Stadt Wien finanziert, 
 Magistratsabteilung für Wirtschaft, Arbeit und Statistik (MA 23), 

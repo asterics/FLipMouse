@@ -6,6 +6,8 @@
 
 ![FLipMouseLogo](./Bilder/flipmouseLogo.svg)
 
+
+
 **Table of Contents**
 
 [TOC]
@@ -31,7 +33,7 @@ The AsTeRICS Foundation
 </p>
 
 
-## Hardware overview
+# Hardware overview
 
 The FLipMouse is available with a 3d-printed enclosure. Design files for the 3d-printed case are provided in the [Github repository](https://github.com/asterics/FLipMouse/tree/master/Hardware/case-design/3D_printer). The primary method for interacting with the FLipMouse is the transparent stick ("mouthpiece" or "finger-joystick") which is attached to the front of the FLipMouse. Replacement sticks can be ordered via the  [Webshop](https://www.asterics-foundation.org/webshop). (Please note the cleaning instructions in the dedicated section of this manual.)
 
@@ -91,7 +93,7 @@ The front of the housing offers a connection possibility for the mouthpiece / fi
 
 
 
-## Mounting and usage
+# Mounting and usage
 
 **1. Attach the mouthpiece / joystick**
 
@@ -183,6 +185,8 @@ In the STICK-CONFIG tab, the **operational mode of the mouthpiece/joystick for t
 
 ![ConfigManager](./Bilder/tab_stick_en.jpg)
 
+
+
 ### Operational Mode ("Use stick for ...")
 
 This setting determines the effect of touching the stick: 
@@ -245,7 +249,7 @@ If desired, the sensitivity- and deadzone-values for horizontal or vertical move
 <p align="left" width="100%">
     <img width="100%" src="./Bilder/fig3.1.svg">
 </p>
-*Figure 11: Tab STICK-CONFIG, splitting x/y-axis *
+*Figure 11: Tab STICK-CONFIG, splitting x/y-axis*
 
 #### Maximum Speed
 
@@ -267,7 +271,7 @@ The current controller values for the motion parameters as well as the stick set
 
 ![ConfigManager](./Bilder/footer_en.jpg)
 
-*Figure 11: Apply settings to all slots*
+*Figure 12: Apply settings to all slots*
 
 
 
@@ -280,7 +284,7 @@ In the tab "SIP-PUFF-CONTROL", the threshold values for sipping and puffing into
 <p align="left" width="100%">
     <img width="100%" src="./Bilder/fig5.1.svg">
 </p>
-*Figure 12: Tab SIP AND PUFF*
+*Figure 13: Tab SIP AND PUFF*
 
 Note that the idle pressure level (without sip or puff) is around 512, and the level increases when you puff 
 into the mouthpiece, indicating increased pressure. With the sliders, the threshold pressure for sip and puff can be regulated. The grey dotted line represents the actual pressure. The blue and red dotted lines represent the limits reached in this session.
@@ -304,7 +308,7 @@ The assignment of user activities to actions is displayed in a table. By using t
 <p align="left" width="100%">
     <img width="100%" src="./Bilder/fig6.1.svg">
 </p>
-*Figure 13: Assign different actions to user activities*
+*Figure 14: Assign different actions to user activities*
 
 
 
@@ -313,7 +317,7 @@ The assignment of actions can be changed by clicking on the entry in the table -
 <p align="left" width="100%">
     <img width="80%" src="./Bilder/fig7.PNG">
 </p>
-*Figure 14: Pop-up window for choice of desired action*
+*Figure 15: Pop-up window for choice of desired action*
 
 In the following, the individual action categories and different actions will be briefly described.
 
@@ -381,7 +385,7 @@ or have a look at the [FLipMouse Wiki / Github pages](https://github.com/asteric
 <p align="left" width="100%">
     <img width="80%" src="./Bilder/fig8.1.svg">
 </p>
-*Figure 15: Add keys for the action press / hold / toggle keys*
+*Figure 16: Add keys for the action press / hold / toggle keys*
 
 **Write Word**
 The *Write word* action allows typing a particular text/phrase whenever a user activity occurs (for example: write “Hello” whenever you move the FLipMouse stick up). Selecting this action displays a blank text box under the drop-down menu where the text can be entered, as shown below:
@@ -389,7 +393,7 @@ The *Write word* action allows typing a particular text/phrase whenever a user a
 <p align="left" width="100%">
     <img width="80%" src="./Bilder/fig9.PNG">
 </p>
-*Figure 16: Write word function*
+*Figure 17: Write word function*
 
 In this example, "Hello" will be written each time button 2 of the FLipMouse is pressed.
 
@@ -421,14 +425,13 @@ This action replays the infrared (IR-)code with the given command name. The exis
 <p align="left" width="100%">
     <img width="70%" src="./Bilder/fig13.PNG">
 </p>
-
-*Figure 21: Infrared Recording and Replay Configuration Manager*
+*Figure 18: Infrared Recording and Replay Configuration Manager*
 
 The FLipMouse device includes an infrared remote control receiver module and a high current IR LED so that it can record and replay remote control codes of many remote control devices used in consumer electronics. If you want to use this feature of the FLipMouse, make sure that the IR sending LED is points towards the device you want to control. For instructions how to connect an external IR LED to increase the transmit power, please visit the [FLipMouse Wiki pages](https://github.com/asterics/FLipMouse/wiki).
 
 ![infrared](./Bilder/fig30.PNG)
 
-*Figure 20: Infrared Code Recording*
+*Figure 19: Infrared Code Recording (here: FLipMouse V1 hardware)*
 
 To record a new IR code, go to the tab ACTIONS. Click the desired action and select the action category “**Infrared**” in the popup-window. There, three different types of IR-actions can be selected from the combo box:
 
@@ -458,8 +461,7 @@ In the SLOTS tab you can create new slots, delete existing slots, download a sin
 <p align="left" width="100%">
     <img width="100%" src="./Bilder/tab_slots1_en.jpg">
 </p>
-
-*Figure 17: SLOTS Settings Tab*
+*Figure 20: SLOTS Settings Tab*
 
 
 
@@ -497,13 +499,15 @@ A new slot can be created by copying the settings of the currently active slot. 
 
 ### Upload Slots to device
 
+#### Upload Slots from file
+
+This function lets you select a Slots-file (.set) from your computer and upload it to the FLipMouse (restore a backup). Be careful - this deletes all existing Slot-settings of your device!
+
 <p align="left" width="100%">
     <img width="100%" src="./Bilder/tab_slots2_en.jpg">
 </p>
 
-#### Upload Slots from file
-
-This function lets you select a Slots-file (.set) from your computer and upload it to the FLipMouse (restore a backup). Be careful - this deletes all existing Slot-settings of your device!
+*Figure 21: Upload slots (resore Backup)*
 
 #### Appy Demo Settings
 
@@ -522,19 +526,20 @@ Clicking the button *Download all slots* transfers all current slots to a settin
 The  GENERAL tab allows changing the USB/Bluetooth mode and apply firmware updates of the FLipmouse device and the Bluetooth Add-On module (if installed):
 
 ![general](./Bilder/tab_general_en.jpg)
-*Figure 18: General Settings*
+*Figure 22: General Settings*
 
 
 
 ### Slot Test Mode
 
-![general](./Bilder/slot_testmode_en.jpg)
-
 The Slot test mode allows a temporary application of settings in order to perform a slot test and then return to a working FLipmouse configuration. When the Slot test mode is enabled, modifications in the settings are not applied to the FlipMouse as usual. This feature allows FLipMouse users to experiment with slot settings without the risk of "locking themselfes out". For example: for creating and testing a slot with keyboard key actions for a gaming application, a user can click *Test current slot*, then switch to the gaming application during the countdown time of 10 seconds, then test the current slot settings with the FLipMouse for 90 seconds, and then automatically return to the previous mouse cursor control settings. If the settings work as desired, the current slot can be saved, else the slot settings may be reverted.  
 
 
+![general](./Bilder/slot_testmode_en.jpg)
 
-### Firmware Versions
+*Figure 23: SLOT Test Mode*
+
+### Firmware Version
 
 Here you can see the installed version of the FLipMouse software (firmware). If the installed version is older than the version available online in the FLipMouse github repository, the option "UPDATE FIRMWARE" is displayed (otherwise "OVERWRITE FIRMWARE" is displayed). Clicking this button will attempt to download and install the firmware version which is available in the repository. This process should only be done on a laptop or desktop computer. The FLipMouse will temporarily appear as a USB drive, and the downloaded file must be copied to that drive. After that, the FLipMouse restarts with the updated software. (This process is also explained in the configuration manager, please follow the instructions step by step).
 
@@ -545,7 +550,7 @@ Here you can see the installed version of the FLipMouse software (firmware). If 
 The FLipMouse stick is attached to four force sensors – one for each movement direction (up, down, left, right). The numeric value of each of those sensors is displayed in the “VISUALIZATION” tab. The live values can be monitored when the FLipMouse device is connected. Whenever the stick is moved, the sensor values change. Specifically, a movement in each direction increases the respective sensor value. Significant deviation in one direction indicates a sensor problem - in this case, the sensors should be checked and might need to be replaced.
 
 ![visualisation](./Bilder/fig12.PNG)
-*Figure 19: Left: Live display of force sensor values; Middle: current slot with the 3 buttons (if one button is pressed, the corresponding circle will get yellow; Right: Sip and Puff live value and current thresholds*
+*Figure 24: Left: Live display of force sensor values; Middle: current slot with the 3 buttons (if one button is pressed, the corresponding circle will get yellow; Right: Sip and Puff live value and current thresholds*
 
 
 
@@ -585,17 +590,17 @@ The standard filter can be replaced as shown below:
 <p align="left" width="100%">
     <img width="50%" src="./Bilder/fig34.1.jpg">
 </p>
-*Figure 22.1: Removal of the saliva filter, using a normal screw to grab the filter*
+*Figure 25.1: Removal of the saliva filter, using a normal screw to grab the filter*
 
 <p align="left" width="100%">
     <img width="50%" src="./Bilder/fig34.2.jpg">
 </p>
-*Figure 22.2: The removed filter*
+*Figure 25.2: The removed filter*
 
 <p align="left" width="100%">
     <img width="50%" src="./Bilder/fig34.3.jpg">
 </p>
-*Figure 22.3: Inserting a new filter (pushing it back into the hygienic stick)*
+*Figure 25.3: Inserting a new filter (pushing it back into the hygienic stick)*
 
 
 
@@ -620,7 +625,7 @@ Several users reported that they would prefer a different shape of the mouthpiec
 ![mouthpiece](./Bilder/fig33.PNG)
 ![mouthpiece1](./Bilder/fig33.1.PNG)
 
-*Figure 23: Modified shape of the mouthpiece*
+*Figure 26: Modified shape of the mouthpiece*
 
 Regardless of your desired mouthpiece modifications: Always take care for a hygienic operation and apply the cleaning procedures as described in this chapter!
 
@@ -674,6 +679,8 @@ Regardless of your desired mouthpiece modifications: Always take care for a hygi
 
 Please note that certain commands for adjusting FLipMouse settings are not shown in this table (for example setting thresholds or accelerations, recording IR-commands etc.). For a full list of commands please refer to the [FLipMouse wiki](https://github.com/asterics/FLipMouse/wiki/at-api). 
 
+
+
 ## Supported Key Identifiers:
 
 | **Supported KEY Identifiers:**                                                                                                                                                                                                                                                                     |
@@ -710,7 +717,7 @@ Email: <office@asterics-foundation.org>
 
 
 
-# Disclaimer
+## Disclaimer
 
 The University of Applied Sciences Technikum Wien and the AsTeRICS Foundation do not assume any warranty and liability for the functionality of the described devices, software and the correctness of the documents handed over.
 
@@ -718,7 +725,7 @@ Additionally, the UAS TW is not liable for any damages to health due to the use 
 
 
 
-# Acknowledgement
+## Acknowledgement
 
 This project was partly funded by the City of Vienna, 
 Municipal department of Economic Affairs, Labor and Statistics (MA 23), 

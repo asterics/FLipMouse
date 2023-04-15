@@ -37,6 +37,7 @@ To fully use the update procedures from the WebGUI, the Arduino Nano RP2040 Conn
 
 
 <div style="page-break-after: always; break-after: page;"></div>
+
 # Running the script (if working under Linux)
 
 1. Attach the Arduino Nano RP2040 Connect to the computer

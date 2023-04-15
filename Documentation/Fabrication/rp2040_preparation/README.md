@@ -63,12 +63,12 @@ To fully use the update procedures from the WebGUI, the Arduino Nano RP2040 Conn
 3. Attach the Arduino Nano RP2040 Connect to the computer. The process should start and finish automatically after 7 steps. If the scrpit fails or hangs, Press Ctrl+C, unplug the Arduino and restart the script.
   
 
-# Testing
+# Did it work?
 
 If everything worked, the __Blue LED should blink__ indicating a running Bluetooth firmware
 
 
-## Updating the firmware files
+# Updating the firmware files
 
 If new firmware (.bin, .uf2) files exist in the repositories of FlipMouse3 and/or ESP32_mouse_keyboard:
 
@@ -81,7 +81,7 @@ If new firmware (.bin, .uf2) files exist in the repositories of FlipMouse3 and/o
 
 
 
-## Background and operation of this tool
+# Background and operation of this tool
 
 This tool performs following steps:
 

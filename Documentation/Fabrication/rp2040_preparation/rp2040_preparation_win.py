@@ -90,18 +90,15 @@ def main():
     else:
       global current_device
       current_device = args.device.upper()
-      
-    if not args.serial:
-      current_serial = portName
-    else:
-      current_serial = args.serial
-      
+     
     global startwith
     if args.startwith:
       startwith = int(args.startwith)
       print("Starting with step " + args.startwith)
     else:
       startwith = 0
+
+    current_serial = portName
     
     while 1:
       print("Flashing " + devices[args.device] + " firmware to " + current_serial)

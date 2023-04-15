@@ -73,11 +73,11 @@ If everything worked, the __Blue LED should blink__ indicating a running Bluetoo
 
 If new firmware (.bin, .uf2) files exist in the repositories of FlipMouse3 and/or ESP32_mouse_keyboard:
 
-1. Replace `bootloader.bin`,`esp32_addon_bootloader.bin`, `ota_initial_data.bin` and `partition-table.bin`with a current build from: _esp32_addon_bootloader/build/esp32_addon_bootloader.bin_
-2. Replace `mousekeyboard.bin` with a current build from: _esp32_mouse_keyboard/build/esp32_mouse_keyboard.bin_
-3. Replace `FM.uf2`, `FP.uf2`, `FB.uf2` with current builds from the FLipWare/FabiWare repositories (build with Arduino and select _Sketch->Export compiled binary_)
-4. Replace `serialflasher1.uf2` with a new build from the serialflasher1.ino sketch from this directory (build with Arduino and select _Sketch->Export compiled binary_)
-5. Replace `serialflasher2.uf2` with a new build from the serialflasher2.ino sketch from this directory (build with Arduino and select _Sketch->Export compiled binary_)
+1. Replace `bootloader.bin`,`esp32_addon_bootloader.bin`, `ota_data_initial.bin` and `partition-table.bin`with a current build from: _esp32_addon_bootloader/build/esp32_addon_bootloader.bin_
+2. Replace `esp32_mouse_keyboard.bin` with a current build from: _esp32_mouse_keyboard/build/esp32_mouse_keyboard.bin_
+3. Replace `FM.uf2` with current builds from the FLipWare repository (build with Arduino and select _Sketch->Export compiled binary_). Respectively, the `FP.uf2`or `FB.uf2` files could be obtained from the FlipPad/FABI repos.
+4. Replace `serialflasher1.uf2` with a new build from the serialflasher1.ino sketch its subdirectory (build with Arduino and select _Sketch->Export compiled binary_)
+5. Replace `serialflasher2.uf2` with a new build from the serialflasher2.ino sketch its subdirectory (build with Arduino and select _Sketch->Export compiled binary_)
 7. __Write down the current GIT tags (releases) or commit numbers for the builds to _VERSIONS.md_ __
 
 

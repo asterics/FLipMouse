@@ -44,20 +44,23 @@ To fully use the update procedures from the WebGUI, the Arduino Nano RP2040 Conn
 2. Open a shell window 
 3. Call the script: `python3 rp2040_preparation.py -d <FM/FP/FB> -s <serial port> [-o<step number>]`
 
-_-d <FM/FP/FB>_ Select the device firmware to be flashed. Use FM for FLipMouse. (FP for FlipPad and FB for FABI are not finished yet)
+  _-d <FM/FP/FB>_ Select the device firmware to be flashed. Use FM for FLipMouse. (FP for FlipPad and FB for FABI are not finished yet)
 
-_-s <serial port>_ Select a serial port where the Arduino Nano 2040 microcontroller is connected (/dev/ttyACM0 or /dev/ttyUSB0)
+  _-s <serial port>_ Select a serial port where the Arduino Nano 2040 microcontroller is connected (/dev/ttyACM0 or /dev/ttyUSB0)
 
-_-o <stepNumber>_ (optional) Start with given stepNumber (2-7): this omits the initial steps and starts with the given step
+  _-o <stepNumber>_ (optional) Start with given stepNumber (2-7): this omits the initial steps and starts with the given step
 
 
 # Running the script (if working under Windows)
 
 1. Open a shell window (press Windows key and type `cmd<enter>`, then use cd to change to the folder where the script is located)
 2. Call the script: `python3 rp2040_preparation_win.py -d <FM/FP>`
-_-d_ Select the firmware to be flashed. Use FM for FLipMouse. (FP for FlipPad and FB for FABI are not finished yet)
-Note that no serial COM Port name needs to be specified, the determines the COM port during the process.
-3. Attach the Arduino Nano RP2040 Connect to the computer. The process should finish after 7 steps. If the scrpit fails or hangs, Press Ctrl+C, unplug the Arduino and restart the script.
+
+  _-d_ Select the firmware to be flashed. Use FM for FLipMouse. (FP for FlipPad and FB for FABI are not finished yet)
+
+  Note that no serial COM Port name needs to be specified, the determines the COM port during the process.
+  
+3. Attach the Arduino Nano RP2040 Connect to the computer. The process should start and finish automatically after 7 steps. If the scrpit fails or hangs, Press Ctrl+C, unplug the Arduino and restart the script.
   
 
 # Testing

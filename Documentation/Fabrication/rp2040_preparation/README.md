@@ -1,4 +1,4 @@
-# FLipMouse/Pad Arduino Initialisation
+# FLipMouse V3 - Arduino Nano RP2040 Connect Initialisation
 
 **Fabrication Note v1.0, AsTeRICS Foundation**
 
@@ -6,11 +6,11 @@
 
 # Scope
 
-FLipMouse and FLipPad use from version 3 onward an __Arduino Nano RP2040 Connect__ platform.
+The FLipMouse Version 3 uses an __Arduino Nano RP2040 Connect__ platform. (Maybe in the future there will be also FlipPad/FABI versions using the Arduino Nano RP2040 Connect).
 
-The big advantage over the TeensyLC from version 2, this controller has much more RAM & ROM and already contains the ESP32, which is used for the Bluetooth connectivity.
+This controller has much more RAM & ROM and already contains the ESP32, which is used for the Bluetooth connectivity.
 
-To fully use the update procedures from the WebGUI, the Arduino needs to be programmed initially:
+To fully use the update procedures from the WebGUI, the Arduino Nano RP2040 Connect needs to be programmed initially:
 
 * __esp32_addon_bootloader:__ Bootloader Code to update the ESP32 BLE Mouse/Keyboard firmware without esptool.py
 * __esp32_mouse_keyboard:__ Program the BLE HID over GATT firmware
@@ -24,43 +24,49 @@ To fully use the update procedures from the WebGUI, the Arduino needs to be prog
 | ---- | ---------------------------------- | ------------------------------------------------------------ | ------------------------------------------------------------ |
 | 1    | Arduino Nano RP2040 Connect        | https://store.arduino.cc/products/arduino-nano-rp2040-connect | ![A new Arduino Nano RP2040 connect](./img/rp2040_unmarked.png) |
 
-__Note: Material will be referenced in square brackets: []__
 
 ## Tools / Requirements
 
 | Nr.  | Description                       | Source                                                       |
 | ---- | --------------------------------- | ------------------------------------------------------------ |
-| 1    | Terminal + Python3                | Install python according to your OS                          |
-| 2    | esptool                           | Install via pip: `pip3 install esptool --break-system-packages` (if it cannot be executed from a terminal, run this command as root) |
-| 2    | Permanent marker (red/blue/green) | DYI store, paper store (possibly any store)                  |
+| 1    | Python3                           | Open an command shell window and check your python/python3 version: `python3 --version'. The recommended version is python3.8 or newer! Install python according to your OS   |
+| 2    | PySerial library                  | Install via pip: `pip3 install pyserial` |
+| 3    | esptool utility software          | Install via pip: `pip3 install esptool` (if it cannot be executed from a terminal, run this command as root) |
+| 4    | this script (rp2040_preparation)  | located in this folder, linux and windows versions available. |
 
-__Note: Tools will be referenced in curly brackets: {}__
+
 
 <div style="page-break-after: always; break-after: page;"></div>
-# Procedure
+# Running the script (if working under Linux)
 
-1. Attach the Arduino Nano RP2040 Connect _[1]_ to the computer
-2. Open a terminal
-3. Call the script: `rp2040_prepare.py -t <FM/FP> -p <serial port>`
+1. Attach the Arduino Nano RP2040 Connect to the computer
+2. Open a shell window 
+3. Call the script: `python3 rp2040_preparation.py -d <FM/FP/FB> -s <serial port> [-o<step number>]`
 
-_-t_ Select the firmware to be flashed, either FP for FLipPad, FM for FLipMouse of FB for FABI (FP & FB are not finished yet)
+_-d <FM/FP/FB>_ Select the device firmware to be flashed. Use FM for FLipMouse. (FP for FlipPad and FB for FABI are not finished yet)
 
-_-p_ Select a serial port which should be flashed (normally COMxx on Windows, /dev/ttyxxx on Linux)
+_-s <serial port>_ Select a serial port where the Arduino Nano 2040 microcontroller is connected (/dev/ttyACM0 or /dev/ttyUSB0)
+
+_-o <stepNumber>_ (optional) Start with given stepNumber (2-7): this omits the initial steps and starts with the given step
+
+
+# Running the script (if working under Windows)
+
+1. Open a shell window (press Windows key and type `cmd<enter>`, then use cd to change to the folder where the script is located)
+2. Call the script: `python3 rp2040_preparation_win.py -d <FM/FP>`
+_-d_ Select the firmware to be flashed. Use FM for FLipMouse. (FP for FlipPad and FB for FABI are not finished yet)
+Note that no serial COM Port name needs to be specified, the determines the COM port during the process.
+3. Attach the Arduino Nano RP2040 Connect to the computer. The process should finish after 7 steps. If the scrpit fails or hangs, Press Ctrl+C, unplug the Arduino and restart the script.
+  
 
 # Testing
 
-Not available, if procedure is followed, the software is flashed correctly:
-
-* __Blue blinking__ LED for a flashed Bluetooth firmware
-
-## Documentation
-
-For each produced batch, fill out one document __template_arduino_init_production.ots__ and save it as: `arduino_init_<date>.ods`(e.g.: arduino_init_20221118.ods)
+If everything worked, the __Blue LED should blink__ indicating a running Bluetooth firmware
 
 
-## Updating the firmware builds to be flashed
+## Updating the firmware files
 
-
+If new firmware (.bin, .uf2) files exist in the repositories of FlipMouse3 and/or ESP32_mouse_keyboard:
 
 1. Replace `bootloader.bin`,`esp32_addon_bootloader.bin`, `ota_initial_data.bin` and `partition-table.bin`with a current build from: _esp32_addon_bootloader/build/esp32_addon_bootloader.bin_
 2. Replace `mousekeyboard.bin` with a current build from: _esp32_mouse_keyboard/build/esp32_mouse_keyboard.bin_
@@ -71,9 +77,7 @@ For each produced batch, fill out one document __template_arduino_init_productio
 
 
 
-## Insights
-
-
+## Background and operation of this tool
 
 This tool performs following steps:
 

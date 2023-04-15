@@ -60,7 +60,8 @@ To fully use the update procedures from the WebGUI, the Arduino Nano RP2040 Conn
 
   __Note__ that no serial COM Port name needs to be specified, the COM port is determined during the process.
   
-3. Attach the Arduino Nano RP2040 Connect to the computer. The process should start and finish automatically after 7 steps. If the scrpit fails or hangs, Press Ctrl+C, unplug the Arduino and restart the script.
+3. Attach the Arduino Nano RP2040 Connect to the computer. The process should start and finish automatically after 7 steps. 
+4. If the script fails or hangs (can not open a COM port etc.), press Ctrl+C, unplug the Arduino and repeat from 2)
   
 
 # Did it work?

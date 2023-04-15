@@ -38,7 +38,7 @@ To fully use the update procedures from the WebGUI, the Arduino Nano RP2040 Conn
 
 <div style="page-break-after: always; break-after: page;"></div>
 
-# Running the script (if working under Linux)
+# Running the script under Linux
 
 1. Attach the Arduino Nano RP2040 Connect to the computer
 2. Open a shell window 
@@ -51,14 +51,14 @@ To fully use the update procedures from the WebGUI, the Arduino Nano RP2040 Conn
   _-o <stepNumber>_ (optional) Start with given stepNumber (2-7): this omits the initial steps and starts with the given step
 
 
-# Running the script (if working under Windows)
+# Running the script under Windows
 
 1. Open a shell window (press Windows key and type `cmd<enter>`, then use cd to change to the folder where the script is located)
 2. Call the script: `python3 rp2040_preparation_win.py -d <FM/FP>`
 
   _-d_ Select the firmware to be flashed. Use FM for FLipMouse. (FP for FlipPad and FB for FABI are not finished yet)
 
-  Note that no serial COM Port name needs to be specified, the determines the COM port during the process.
+  __Note__ that no serial COM Port name needs to be specified, the COM port is determined during the process.
   
 3. Attach the Arduino Nano RP2040 Connect to the computer. The process should start and finish automatically after 7 steps. If the scrpit fails or hangs, Press Ctrl+C, unplug the Arduino and restart the script.
   

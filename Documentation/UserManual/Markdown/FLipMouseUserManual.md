@@ -104,7 +104,7 @@ Put the transparent acrylic tube which is provided with the FLipMouse on the fro
 The picture shows a “[Manfrotto Gelenkarm](https://www.manfrotto.com/global/single-arm-2-section-196ab-2/)” + ”[SuperClamp](https://www.manfrotto.com/global/super-photo-clamp-without-stud-aluminium-035/)” mount combination. You could also use the [Manfrotto Magic Arm](https://www.manfrotto.com/global/magic-photo-arm-smart-centre-lever-and-flexible-extension-143n/) or any other kind of mounting solution which fits to the 3/8”-HotShoe-Adapter of the FLipMouse.  
 
 *Usage as Mouth Joystick*
-![Usage as Mouth Controller](./Bilder/f2.png)
+![Usage as Mouth Controller](./Bilder/f2.PNG)
 *Figure 3*: Using the FLipMouse with Mouth/Lips
 
 Ensure that the head of the user rests comfortably. The mouthpiece should gently touch the lips. It is not useful to insert the mouthpiece into the mouth  - this could be uncomfortable and make it harder to control the lateral movement.

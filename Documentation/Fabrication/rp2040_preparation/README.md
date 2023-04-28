@@ -31,7 +31,7 @@ To fully use the update procedures from the WebGUI, the Arduino Nano RP2040 Conn
 | ---- | --------------------------------- | ------------------------------------------------------------ |
 | 1    | Python3                           | Open an command shell window and check your python/python3 version: `python3 --version'. The recommended version is python3.8 or newer! Install python according to your OS   |
 | 2    | PySerial library                  | Install via pip: `pip3 install pyserial` |
-| 3    | esptool utility software          | Install via pip: `pip3 install esptool` (if it cannot be executed from a terminal, run this command as root) |
+| 3    | esptool utility software          | Install via pip: `pip3 install esptool` (if it cannot be executed from a terminal, run this command as root, or copy the executable from https://github.com/espressif/esptool/releases into a folder which is in the system path! ) |
 | 4    | this script (rp2040_preparation)  | located in this folder, linux and windows versions available. |
 
 

@@ -13,9 +13,15 @@
 #include "sensors.h"
 #include "modes.h"
 #include "utils.h"
+#include "DFRobot_DF2301Q.h"   // DF2301Q speech recognition module
+
 
 Adafruit_NAU7802 nau;
 LoadcellSensor XS,YS,PS;
+
+DFRobot_DF2301Q_I2C DF2301Q(&Wire1, (uint8_t) 0x64);
+
+
 int sensorWatchdog=-1;
 
 #define MPRLS_READ_TIMEOUT (20)     ///< millis
@@ -40,7 +46,7 @@ uint8_t channel, newData=0;
 int32_t nau_x=0, nau_y=0;
 uint32_t mprls_rawval=512;
 uint8_t reportXValues=0,reportYValues=0;
-
+uint8_t DF2301_available=0;
 
 /**
  * @brief Used force sensor type. We can use the FSR sensors or possibly
@@ -204,6 +210,28 @@ void initSensors()
     Serial.println("SEN: Calibrated internal offset");
   #endif
 
+  // Try to init the voice recognition sensor
+  if( !( DF2301Q.begin() ) ) {
+    Serial.println("initialisation of DF2301 voice recognition module failed, assuming that not available!");
+  } else {
+    DF2301_available=1;
+    DF2301Q.setVolume(7);
+    DF2301Q.setMuteMode(0);
+    DF2301Q.setWakeTime(10);
+    // DF2301Q.playByCMDID(1);   // Wake-up command
+  }
+}
+
+
+/**
+   @name getVoiceCommand
+   @brief checks, if a voice command has been recognized by the DR2301 module
+   @return ID of the recognized command (0 if none)
+*/
+int getVoiceCommand()
+{
+  if (DF2301_available) return(DF2301Q.getCMDID());
+  return(0);
 }
 
 /**

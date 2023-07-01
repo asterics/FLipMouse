@@ -241,6 +241,7 @@ void setup1() {
 */
 void loop1() {
   static unsigned long lastUpdate=0;     
+  static unsigned long lastVoiceCommandUpdate=0;     
   
   // check if there is a message from the other core (sensorboard change, profile ID)
   if (rp2040.fifo.available()) {
@@ -273,6 +274,43 @@ void loop1() {
     // update calibration counter (if calibration running)
     if (sensorValues.calib_now) sensorValues.calib_now--;
     
+  }
+
+  if (millis() >= lastVoiceCommandUpdate + VOICECOMMAND_UPDATE_INTERVAL)  {
+    lastVoiceCommandUpdate = millis();
+    uint8_t cmd=getVoiceCommand();
+
+    switch (cmd) {
+       case 0:
+       case 255:
+          break;
+       case 1: // Serial.println("hotword detected!");
+          break;
+       case 5: readFromEEPROMSlotNumber(0,  true); 
+               // Serial.println("Slot1 activated");
+           break;
+       case 6: readFromEEPROMSlotNumber(1,  true); 
+               // Serial.println("Slot2 activated");
+           break;
+       case 7: readFromEEPROMSlotNumber(2,  true); 
+               // Serial.println("Slot3 activated");
+           break;
+       case 8: readFromEEPROMSlotNumber(3,  true); 
+               // Serial.println("Slot4 activated");
+           break;
+       case 9: performCommand (CMD_CL, 0,0,0);
+              // Serial.println("click left");
+           break;
+       case 10: performCommand (CMD_CR, 0,0,0);
+              // Serial.println("click right");
+           break;
+       case 11: performCommand (CMD_CD, 0,0,0);
+              // Serial.println("double click");
+           break;
+       default: 
+           // Serial.print("unknown CMD, ID=");Serial.println(cmd);
+           break;
+    }
   }
   delay(1);  // core1: sleep a bit ...  
 }

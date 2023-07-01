@@ -121,4 +121,12 @@ uint8_t checkSensorWatchdog();
 */
 void getSensorValues();
 
+
+/**
+   @name getVoiceCommand
+   @brief checks, if a voice command has been recognized by the DR2301 module
+   @return ID of the recognized command (0 if none)
+*/
+int getVoiceCommand();
+
 #endif /* _SENSORS_H_ */

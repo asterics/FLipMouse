@@ -39,8 +39,9 @@
 #include "bluetooth.h"
 #include "hid_hal.h"
 
-#define VERSION_STRING "v3.3.1"
+#define VERSION_STRING "v3.3.2"
 
+//  V3.3.2:  evaluated voice recognition module DR2301Q (optional feature)
 //  V3.3.1:  fixed IR-command name bug
 //  V3.3:  added Bluetooth Joystick
 //  V3.2:  changed pinning to PCB v3.2
@@ -85,6 +86,7 @@
 #define UPDATE_INTERVAL     5    // update interval for performing HID actions (in milliseconds)
 #define DEFAULT_CLICK_TIME  8    // time for mouse click (loop iterations from press to release)
 #define CALIBRATION_PERIOD  200  // approx. 200*UPDATE_INTERVAL = 1sec calibration time
+#define VOICECOMMAND_UPDATE_INTERVAL    200    // update interval for voice command checks
 
 // RAM buffers and memory constraints
 #define WORKINGMEM_SIZE         300    // reserved RAM for working memory (command parser, IR-rec/play)

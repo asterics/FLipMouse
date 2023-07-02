@@ -279,17 +279,19 @@ void loop1() {
   if (millis() >= lastVoiceCommandUpdate + VOICECOMMAND_UPDATE_INTERVAL)  {
     lastVoiceCommandUpdate = millis();
     uint8_t cmd=getVoiceCommand();
-
-    switch (cmd) {
+    if (cmd) {Serial.print("cmd id detected: "); Serial.println(cmd);}
+    switch (cmd) { 
        case 0:
        case 255:
           break;
        case 1: // Serial.println("hotword detected!");
           break;
-       case 5: readFromEEPROMSlotNumber(0,  true); 
+       case 5: play_IR_command("licht_ein");
+               //readFromEEPROMSlotNumber(0,  true); 
                // Serial.println("Slot1 activated");
            break;
-       case 6: readFromEEPROMSlotNumber(1,  true); 
+       case 6: play_IR_command("licht_aus");
+               //readFromEEPROMSlotNumber(1,  true); 
                // Serial.println("Slot2 activated");
            break;
        case 7: readFromEEPROMSlotNumber(2,  true); 
@@ -308,7 +310,7 @@ void loop1() {
               // Serial.println("double click");
            break;
        default: 
-           // Serial.print("unknown CMD, ID=");Serial.println(cmd);
+           Serial.print("unknown CMD, ID=");Serial.println(cmd);
            break;
     }
   }

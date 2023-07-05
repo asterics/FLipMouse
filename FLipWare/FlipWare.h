@@ -41,6 +41,7 @@
 
 #define VERSION_STRING "v3.3.1"
 
+//  V3.4:  improved MPRLS pressure sensor processing
 //  V3.3.1:  fixed IR-command name bug
 //  V3.3:  added Bluetooth Joystick
 //  V3.2:  changed pinning to PCB v3.2
@@ -84,7 +85,7 @@
 */
 #define UPDATE_INTERVAL     5    // update interval for performing HID actions (in milliseconds)
 #define DEFAULT_CLICK_TIME  8    // time for mouse click (loop iterations from press to release)
-#define CALIBRATION_PERIOD  200  // approx. 200*UPDATE_INTERVAL = 1sec calibration time
+#define CALIBRATION_PERIOD  1000  // approx. 1000ms calibration time
 
 // RAM buffers and memory constraints
 #define WORKINGMEM_SIZE         300    // reserved RAM for working memory (command parser, IR-rec/play)
@@ -152,6 +153,7 @@ struct I2CSensorValues {
   int xRaw,yRaw;
   int pressure;
   uint16_t calib_now;
+  mutex_t sensorDataMutex; // for synchronization of data access between cores
 };
 
 /**

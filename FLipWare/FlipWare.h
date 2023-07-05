@@ -39,7 +39,7 @@
 #include "bluetooth.h"
 #include "hid_hal.h"
 
-#define VERSION_STRING "v3.3.1"
+#define VERSION_STRING "v3.4"
 
 //  V3.4:  improved MPRLS pressure sensor processing
 //  V3.3.1:  fixed IR-command name bug

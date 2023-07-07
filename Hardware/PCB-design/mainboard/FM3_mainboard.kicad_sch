@@ -2173,6 +2173,10 @@
     (uuid 11ff9cea-7261-462b-9bc9-d1b9ee577a55)
   )
 
+  (wire (pts (xy 130.81 86.36) (xy 134.62 86.36))
+    (stroke (width 0) (type default))
+    (uuid 143f01f9-51e8-4d89-a3b3-9b05e1562b05)
+  )
   (wire (pts (xy 292.1 30.48) (xy 309.88 30.48))
     (stroke (width 0) (type default))
     (uuid 15572e82-e2f2-49b9-9d92-ba58d6f5b8c6)
@@ -2203,10 +2207,6 @@
     (uuid 23eb340e-419b-4696-8636-5c0b5fb21722)
   )
 
-  (wire (pts (xy 130.81 86.36) (xy 133.985 86.36))
-    (stroke (width 0) (type default))
-    (uuid 26c1c43c-bd1e-46e8-89d4-3a6c6a2d3f7b)
-  )
   (wire (pts (xy 69.85 218.44) (xy 69.85 219.71))
     (stroke (width 0) (type default))
     (uuid 2d915e73-8943-4c99-ae93-2c59c6853636)
@@ -2270,7 +2270,7 @@
     (uuid 46d48f64-bbb1-4b37-98be-d535cae9cdaf)
   )
 
-  (wire (pts (xy 140.97 83.82) (xy 130.81 83.82))
+  (wire (pts (xy 138.43 83.82) (xy 130.81 83.82))
     (stroke (width 0) (type default))
     (uuid 4a54c707-7b6f-4a3d-a74d-5e3526114aba)
   )
@@ -2393,7 +2393,7 @@
     (uuid 7a5dd689-74f4-483d-a6d4-0e522c073ec4)
   )
 
-  (wire (pts (xy 130.81 81.28) (xy 133.985 81.28))
+  (wire (pts (xy 130.81 81.28) (xy 134.62 81.28))
     (stroke (width 0) (type default))
     (uuid 7bdcf4d1-08a9-4152-b0f0-a95ce4e3749b)
   )
@@ -2724,7 +2724,7 @@
     (effects (font (size 2.54 2.54)) (justify left bottom))
     (uuid 101df8b0-13fe-4860-981b-9c0a9567e1e1)
   )
-  (text "Extension" (at 21.59 203.2 0)
+  (text "AVCC" (at 21.59 203.2 0)
     (effects (font (size 2.54 2.54) (thickness 0.508) bold) (justify left bottom))
     (uuid 1c4c6d42-7fc4-457c-b276-8dfbfd42d87c)
   )
@@ -3293,31 +3293,6 @@
       (project "FM3_mainboard"
         (path "/37f31dec-63fc-4634-a141-5dc5d2b60fe4"
           (reference "D8") (unit 1)
-        )
-      )
-    )
-  )
-
-  (symbol (lib_id "power:VCC") (at 140.97 83.82 270) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
-    (uuid 00000000-0000-0000-0000-00005fc54cce)
-    (property "Reference" "#PWR033" (at 137.16 83.82 0)
-      (effects (font (size 1.27 1.27)) hide)
-    )
-    (property "Value" "VCC" (at 145.3642 84.201 0)
-      (effects (font (size 1.27 1.27)))
-    )
-    (property "Footprint" "" (at 140.97 83.82 0)
-      (effects (font (size 1.27 1.27)) hide)
-    )
-    (property "Datasheet" "" (at 140.97 83.82 0)
-      (effects (font (size 1.27 1.27)) hide)
-    )
-    (pin "1" (uuid 6e1d5745-44f1-4070-80c5-a008769e02dd))
-    (instances
-      (project "FM3_mainboard"
-        (path "/37f31dec-63fc-4634-a141-5dc5d2b60fe4"
-          (reference "#PWR033") (unit 1)
         )
       )
     )
@@ -4508,6 +4483,56 @@
     )
   )
 
+  (symbol (lib_id "power:+3.3VADC") (at 138.43 83.82 270) (unit 1)
+    (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
+    (uuid 6fc2efac-e752-484f-9a53-e1aa50e090e1)
+    (property "Reference" "#PWR04" (at 137.16 87.63 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "Value" "+3.3VADC" (at 141.605 83.82 90)
+      (effects (font (size 1.27 1.27)) (justify left))
+    )
+    (property "Footprint" "" (at 138.43 83.82 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "Datasheet" "" (at 138.43 83.82 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (pin "1" (uuid 94523a2d-63c2-4270-a8c0-e7ffbc3af3a8))
+    (instances
+      (project "FM3_mainboard"
+        (path "/37f31dec-63fc-4634-a141-5dc5d2b60fe4"
+          (reference "#PWR04") (unit 1)
+        )
+      )
+    )
+  )
+
+  (symbol (lib_id "power:GNDA") (at 134.62 81.28 90) (unit 1)
+    (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
+    (uuid 6fe98d78-e095-4ee4-aacc-73e37fa498c4)
+    (property "Reference" "#PWR014" (at 140.97 81.28 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "Value" "GNDA" (at 137.795 81.28 90)
+      (effects (font (size 1.27 1.27)) (justify right))
+    )
+    (property "Footprint" "" (at 134.62 81.28 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "Datasheet" "" (at 134.62 81.28 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (pin "1" (uuid 245338e2-c98d-49be-9c56-72ffeb7568df))
+    (instances
+      (project "FM3_mainboard"
+        (path "/37f31dec-63fc-4634-a141-5dc5d2b60fe4"
+          (reference "#PWR014") (unit 1)
+        )
+      )
+    )
+  )
+
   (symbol (lib_id "Mechanical:Fiducial") (at 332.74 112.395 0) (unit 1)
     (in_bom no) (on_board yes) (dnp no) (fields_autoplaced)
     (uuid 712bac7f-a2ab-4b51-b7da-a9171b2dce1f)
@@ -4615,31 +4640,6 @@
       (project "FM3_mainboard"
         (path "/37f31dec-63fc-4634-a141-5dc5d2b60fe4"
           (reference "LOGO4") (unit 1)
-        )
-      )
-    )
-  )
-
-  (symbol (lib_id "power:GND") (at 133.985 81.28 90) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
-    (uuid 7b26c902-6bee-4054-b6ba-140da93176ce)
-    (property "Reference" "#PWR04" (at 140.335 81.28 0)
-      (effects (font (size 1.27 1.27)) hide)
-    )
-    (property "Value" "GND" (at 138.3792 81.153 0)
-      (effects (font (size 1.27 1.27)))
-    )
-    (property "Footprint" "" (at 133.985 81.28 0)
-      (effects (font (size 1.27 1.27)) hide)
-    )
-    (property "Datasheet" "" (at 133.985 81.28 0)
-      (effects (font (size 1.27 1.27)) hide)
-    )
-    (pin "1" (uuid 08a99f7c-7ef1-4b4e-bdc7-031cdbb4c266))
-    (instances
-      (project "FM3_mainboard"
-        (path "/37f31dec-63fc-4634-a141-5dc5d2b60fe4"
-          (reference "#PWR04") (unit 1)
         )
       )
     )
@@ -4765,31 +4765,6 @@
       (project "FM3_mainboard"
         (path "/37f31dec-63fc-4634-a141-5dc5d2b60fe4"
           (reference "JP2") (unit 1)
-        )
-      )
-    )
-  )
-
-  (symbol (lib_id "power:GND") (at 133.985 86.36 90) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
-    (uuid 826c7dd8-504b-4bf8-a556-ccaea5f559b0)
-    (property "Reference" "#PWR0107" (at 140.335 86.36 0)
-      (effects (font (size 1.27 1.27)) hide)
-    )
-    (property "Value" "GND" (at 138.3792 86.233 0)
-      (effects (font (size 1.27 1.27)))
-    )
-    (property "Footprint" "" (at 133.985 86.36 0)
-      (effects (font (size 1.27 1.27)) hide)
-    )
-    (property "Datasheet" "" (at 133.985 86.36 0)
-      (effects (font (size 1.27 1.27)) hide)
-    )
-    (pin "1" (uuid f39f8e01-2643-439d-86cd-821c0d6bdabe))
-    (instances
-      (project "FM3_mainboard"
-        (path "/37f31dec-63fc-4634-a141-5dc5d2b60fe4"
-          (reference "#PWR0107") (unit 1)
         )
       )
     )
@@ -5545,6 +5520,31 @@
       (project "FM3_mainboard"
         (path "/37f31dec-63fc-4634-a141-5dc5d2b60fe4"
           (reference "D9") (unit 1)
+        )
+      )
+    )
+  )
+
+  (symbol (lib_id "power:GNDA") (at 134.62 86.36 90) (unit 1)
+    (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
+    (uuid dc485b6c-660e-4bac-b434-7bc6edde07fa)
+    (property "Reference" "#PWR015" (at 140.97 86.36 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "Value" "GNDA" (at 137.795 86.36 90)
+      (effects (font (size 1.27 1.27)) (justify right))
+    )
+    (property "Footprint" "" (at 134.62 86.36 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "Datasheet" "" (at 134.62 86.36 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (pin "1" (uuid 8fe74e97-e9ff-4a0a-a386-9d2c42a0498c))
+    (instances
+      (project "FM3_mainboard"
+        (path "/37f31dec-63fc-4634-a141-5dc5d2b60fe4"
+          (reference "#PWR015") (unit 1)
         )
       )
     )

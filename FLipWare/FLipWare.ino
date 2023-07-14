@@ -89,12 +89,11 @@ struct SensorData sensorData {
 };
 
 struct I2CSensorValues sensorValues {        
-  .xRaw=0, .yRaw=0, .pressure=0, 
+  .xRaw=0, .yRaw=0, .pressure=512, 
   .calib_now=CALIBRATION_PERIOD     // calibrate sensors after startup !
 };
 
 
-mutex_t sensorDataMutex;                      // for synchronizsation of data access between cores
 struct SlotSettings slotSettings;             // contains all slot settings
 uint8_t workingmem[WORKINGMEM_SIZE];          // working memory (command parser, IR-rec/play)
 uint8_t actSlot = 0;                          // number of current slot
@@ -110,7 +109,7 @@ uint8_t addonUpgrade = BTMODULE_UPGRADE_IDLE; // if not "idle": we are upgrading
 void setup() {
 
   // prepare synchronizsation of sensor data exchange between cores
-  mutex_init(&sensorDataMutex);
+  mutex_init(&(sensorValues.sensorDataMutex));
 
  //load slotSettings
   memcpy(&slotSettings,&defaultSlotSettings,sizeof(struct SlotSettings));
@@ -181,11 +180,11 @@ void loop() {
     lastInteractionUpdate = millis();
 
     // get current sensor data from core1
-    mutex_enter_blocking(&sensorDataMutex);
+    mutex_enter_blocking(&(sensorValues.sensorDataMutex));
     sensorData.xRaw=sensorValues.xRaw;
     sensorData.yRaw=sensorValues.yRaw;
     sensorData.pressure=sensorValues.pressure;
-    mutex_exit(&sensorDataMutex);
+    mutex_exit(&(sensorValues.sensorDataMutex));
 
     if (StandAloneMode) {
 
@@ -240,19 +239,33 @@ void setup1() {
    @return none
 */
 void loop1() {
-  static unsigned long lastUpdate=0;     
-  
+  static uint32_t lastMPRLS_ts=0;
+
   // check if there is a message from the other core (sensorboard change, profile ID)
   if (rp2040.fifo.available()) {
       setSensorBoard(rp2040.fifo.pop());  
   }
 
-
-  // check if the Data Ready Pin of the NAU chip signals new data, if yes: get sensor values!
-  if (digitalRead(DRDY_PIN) == HIGH)
-  { 
-    getSensorValues();
+  // if the Data Ready Pin of NAU chip signals new data: get force sensor values
+  if (digitalRead(DRDY_PIN) == HIGH)  { 
+    readForce(&sensorValues);    
   }
+
+  // if desired sampling period for MPRLS pressure sensor passed: get pressure sensor value
+  if (millis()-lastMPRLS_ts >= 1000/MPRLS_SAMPLINGRATE) {
+    lastMPRLS_ts=millis();
+    readPressure(&sensorValues);
+  }
+
+  // if calibration running: update calibration counter
+  if (sensorValues.calib_now) {
+    sensorValues.calib_now--;  
+    // calibrate sensors in the middle of the calibration period
+    if(sensorValues.calib_now==CALIBRATION_PERIOD/2) {
+      calibrateSensors();
+    }     
+  }
+
 
   // reset FlipMouse if sensors don't deliver data for several seconds (interface hangs?)
   if (!checkSensorWatchdog()) {
@@ -260,19 +273,6 @@ void loop1() {
     watchdog_reboot(0, 0, 10);
     while(1);
   }
-
-  if (millis() >= lastUpdate + UPDATE_INTERVAL)  {
-    lastUpdate = millis();
-
-    // get current sensor values
-    mutex_enter_blocking(&sensorDataMutex);
-    readPressure(&sensorValues);
-    readForce(&sensorValues);
-    mutex_exit(&sensorDataMutex);
-
-    // update calibration counter (if calibration running)
-    if (sensorValues.calib_now) sensorValues.calib_now--;
-    
-  }
+  
   delay(1);  // core1: sleep a bit ...  
 }

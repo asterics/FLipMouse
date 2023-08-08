@@ -704,7 +704,7 @@
   )
 
   (symbol (lib_id "Connector_Generic:Conn_01x01") (at 156.21 73.66 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
+    (in_bom no) (on_board yes) (dnp no) (fields_autoplaced)
     (uuid 020f5d69-5324-4b70-a155-fa1503cc7043)
     (property "Reference" "J1" (at 158.75 72.39 0)
       (effects (font (size 1.27 1.27)) (justify left))
@@ -830,7 +830,7 @@
   )
 
   (symbol (lib_id "Connector_Generic:Conn_01x01") (at 156.21 88.9 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
+    (in_bom no) (on_board yes) (dnp no) (fields_autoplaced)
     (uuid 5c31d1fc-066d-486f-b541-76f2ac4c49f4)
     (property "Reference" "J4" (at 158.75 87.63 0)
       (effects (font (size 1.27 1.27)) (justify left))
@@ -855,7 +855,7 @@
   )
 
   (symbol (lib_id "Connector_Generic:Conn_01x01") (at 156.21 83.82 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
+    (in_bom no) (on_board yes) (dnp no) (fields_autoplaced)
     (uuid 71e258ca-6cbf-4036-af34-2c26d99f7c50)
     (property "Reference" "J3" (at 158.75 82.55 0)
       (effects (font (size 1.27 1.27)) (justify left))
@@ -906,7 +906,7 @@
   )
 
   (symbol (lib_id "Jumper:SolderJumper_3_Bridged12") (at 123.19 83.82 90) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
+    (in_bom no) (on_board yes) (dnp no) (fields_autoplaced)
     (uuid 8679ec92-dd81-4ba8-baf3-f7c4b71f4b5b)
     (property "Reference" "JP1" (at 120.65 83.82 90)
       (effects (font (size 1.27 1.27)) (justify left))
@@ -1216,7 +1216,7 @@
   )
 
   (symbol (lib_id "Connector_Generic:Conn_01x01") (at 156.21 78.74 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
+    (in_bom no) (on_board yes) (dnp no) (fields_autoplaced)
     (uuid c19d52ec-ebaa-48c3-9337-7da0387249ba)
     (property "Reference" "J2" (at 158.75 77.47 0)
       (effects (font (size 1.27 1.27)) (justify left))
@@ -1266,7 +1266,7 @@
   )
 
   (symbol (lib_id "Connector_Generic:Conn_01x01") (at 156.21 93.98 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
+    (in_bom no) (on_board yes) (dnp no) (fields_autoplaced)
     (uuid c8885845-9c0e-4ebb-a8e4-688789eef22d)
     (property "Reference" "J5" (at 158.75 92.71 0)
       (effects (font (size 1.27 1.27)) (justify left))
@@ -1291,12 +1291,12 @@
   )
 
   (symbol (lib_id "Device:C") (at 104.14 138.43 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
+    (in_bom yes) (on_board yes) (dnp yes) (fields_autoplaced)
     (uuid d5a6eb71-554c-494b-b69d-7ac15d5f0093)
     (property "Reference" "C4" (at 107.95 137.16 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
-    (property "Value" "1u" (at 107.95 139.7 0)
+    (property "Value" "1u (optional, filter)" (at 107.95 139.7 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
     (property "Footprint" "Capacitor_SMD:C_0603_1608Metric" (at 105.1052 142.24 0)

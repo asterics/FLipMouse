@@ -18,6 +18,16 @@ Adafruit_NAU7802 nau;
 LoadcellSensor XS, YS, PS;
 int sensorWatchdog = -1;
 
+// #define PRINT_RAWVALUES
+
+#ifdef PRINT_RAWVALUES
+ uint32_t ts=0;
+ uint8_t calibRawValue=1;
+ int sr=0;
+ int32_t raw_mid=0;
+#endif
+
+
 #define MPRLS_READ_TIMEOUT (20)     ///< millis
 #define MPRLS_STATUS_POWERED (0x40) ///< Status SPI powered bit
 #define MPRLS_STATUS_BUSY (0x20)    ///< Status busy bit
@@ -82,12 +92,24 @@ void configureNAU() {
 */
 void initSensors()
 {
+  //first: switch on LDO for sensors
+  pinMode(LDO_ENABLE_PIN, OUTPUT);
+  digitalWrite(LDO_ENABLE_PIN, HIGH);
+  delay(10);
+
   //detect if there is an MPRLS sensor connected to I2C (Wire)
   Wire1.setClock(400000);  // use 400kHz I2C clock
   Wire1.beginTransmission(MPRLS_ADDR);
   uint8_t result = Wire1.endTransmission();
-  //we found the MPRLS sensor, start the initialization
-  if (result == 0) sensor_pressure = MPRLS;
+  if (result == 0) {
+#ifdef DEBUG_OUTPUT_SENSORS
+    Serial.println("SEN: found MPRLS");
+#endif
+    // we found the MPRLS sensor, so use it!
+    sensor_pressure = MPRLS;
+  } else {
+    Serial.println("SEN: cannot find MPRLS");
+  }
 
   //NAU7802 init
   if (!nau.begin(&Wire1)) {
@@ -112,7 +134,7 @@ void initSensors()
     PS.setGain(1.0);  // adjust gain for pressure sensor
     PS.enableOvershootCompensation(false);
     PS.setSampleRate(MPRLS_SAMPLINGRATE);
-    PS.setMovementThreshold(2500);
+    PS.setMovementThreshold(5800);
     PS.setBaselineLowpass(0.4);
     PS.setNoiseLowpass(10.0);
 
@@ -153,6 +175,9 @@ void calibrateSensors()
   XS.calib();
   YS.calib();
   PS.calib();
+  #ifdef PRINT_RAWVALUES
+    calibRawValue=1;
+  #endif
 }
 
 
@@ -226,9 +251,6 @@ void getNAUValues(int32_t * actX, int32_t * actY) {
 */
 void readPressure(struct I2CSensorValues *data)
 {
-  //static uint32_t ts=0;
-  //static int32_t raw_mid=0;
-  //int sr=0;
   int actPressure = 512;
 
   switch (sensor_pressure)
@@ -239,20 +261,18 @@ void readPressure(struct I2CSensorValues *data)
         // get new value from MPRLS chip
         int mprlsStatus = getMPRLSValue(&mprls_rawval);
 
-        // any errors?  - just indicate them via orange LED!
+#ifdef DEBUG_OUTPUT_SENSORS
+        // any errors?  - just indicate them via serial message
         if (mprlsStatus & MPRLS_STATUS_BUSY) {
-          //Serial.println("MPRLS: busy");
-          digitalWrite (6, HIGH);
+          Serial.println("MPRLS: busy");
         }
-        else if (mprlsStatus & MPRLS_STATUS_FAILED) {
-          //Serial.println("MPRLS:failed");
-          digitalWrite (6, HIGH);
+        if (mprlsStatus & MPRLS_STATUS_FAILED) {
+          Serial.println("MPRLS:failed");
         }
-        else if (mprlsStatus & MPRLS_STATUS_MATHSAT) {
-          //Serial.println("MPRLS:saturated");
-          digitalWrite (6, HIGH);
+        if (mprlsStatus & MPRLS_STATUS_MATHSAT) {
+          Serial.println("MPRLS:saturated");
         }
-        else digitalWrite (6, LOW);
+#endif
 
         int med = calculateMedian(mprls_rawval);
         if (abs(med - mprls_rawval) >  SPIKE_DETECTION_THRESHOLD) {
@@ -264,15 +284,19 @@ void readPressure(struct I2CSensorValues *data)
         if (mprls_filtered > 0) mprls_filtered = sqrt(mprls_filtered);
         if (mprls_filtered < 0) mprls_filtered = -sqrt(-mprls_filtered);
 
-        /*
-              // raw_mid=mprls_rawval;
+        #ifdef PRINT_RAWVALUES
+            if (calibRawValue) { 
+              calibRawValue=0; raw_mid=mprls_rawval;
+            }
+            else {
               Serial.print (mprls_rawval-raw_mid); Serial.print(" ");
-              Serial.print (mprls_filtered); Serial.print(" ");
-              sr= 1000000 / (micros()-ts);
-              ts=micros();
-              Serial.print (sr); Serial.print(" ");
+              Serial.print (mprls_filtered*100); Serial.print(" ");
+              //sr= 1000000 / (micros()-ts);
+              //ts=micros();
+              //Serial.print (sr); Serial.print(" ");
               Serial.println(" ");
-        */
+            }
+        #endif
 
         actPressure = 512 + mprls_filtered / MPRLS_DIVIDER;
 

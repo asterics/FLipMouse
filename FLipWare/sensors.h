@@ -19,6 +19,9 @@
 #include <Adafruit_NAU7802.h>  //NAU7802 library (Benjamin Aigner's fork with channel change feature)
 
 
+
+#define LDO_ENABLE_PIN 7         // Enable pin for the MIC5504 LDO for NAU7802 & MPRLS sensors
+
 #define DRDY_PIN        21       // Data ready pin of NAU chip
 #define PRESSURE_SENSOR_PIN A3   // Analog input pin if a analog pressure sensor is used 
 #define MPRLS_ADDR 0x18          // I2C address of the MPRLS pressure sensor 

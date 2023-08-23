@@ -14,6 +14,9 @@
 #include "modes.h"
 #include "utils.h"
 
+/// Enable pin for the MIC5504 LDO for NAU7802 & MPRLS sensors
+#define LDO_ENABLE_PIN 7
+
 Adafruit_NAU7802 nau;
 LoadcellSensor XS,YS,PS;
 int sensorWatchdog=-1;
@@ -104,6 +107,10 @@ void getValueMPRLS() {
     Wire1.requestFrom(MPRLS_ADDR,4);
     for(uint8_t i = 0; i<4; i++) buffer[i] = Wire1.read();
     mprls_rawval = (uint32_t(buffer[1]) << 16) | (uint32_t(buffer[2]) << 8) | (uint32_t(buffer[3]));
+    #ifdef DEBUG_OUTPUT_SENSORS
+      //Serial.println(mprls_rawval);
+      //heavy output...
+    #endif
   }
   //trigger new conversion
   Wire1.beginTransmission(MPRLS_ADDR);
@@ -151,12 +158,24 @@ void getSensorValues() {
 */
 void initSensors()
 {
+  //first: switch on LDO for sensors
+  pinMode(LDO_ENABLE_PIN,OUTPUT);
+  digitalWrite(LDO_ENABLE_PIN,HIGH);
+  delay(10);
+  
   //detect if there is an MPRLS sensor connected to I2C (Wire)
   Wire1.beginTransmission(MPRLS_ADDR);
   uint8_t result = Wire1.endTransmission();
   //we found the MPRLS sensor, start the initialization
-  if(result == 0) sensor_pressure = MPRLS;
-
+  if(result == 0) {
+    #ifdef DEBUG_OUTPUT_SENSORS
+      Serial.println("SEN: found MPRLS");
+    #endif
+    sensor_pressure = MPRLS;
+  } else {
+    Serial.println("SEN: cannot find MPRLS");
+  }
+    
   //NAU7802 init
   if (!nau.begin(&Wire1)) {
     Serial.println("SEN: no force sensor found");

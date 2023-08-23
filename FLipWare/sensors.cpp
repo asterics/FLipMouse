@@ -19,12 +19,13 @@ LoadcellSensor XS, YS, PS;
 int sensorWatchdog = -1;
 
 // #define PRINT_RAWVALUES
+#define PRINT_MPRLS_ERRORFLAGS
 
 #ifdef PRINT_RAWVALUES
- uint32_t ts=0;
- uint8_t calibRawValue=1;
- int sr=0;
- int32_t raw_mid=0;
+uint32_t ts = 0;
+uint8_t calibRawValue = 1;
+int sr = 0;
+int32_t raw_mid = 0;
 #endif
 
 
@@ -134,7 +135,7 @@ void initSensors()
     PS.setGain(1.0);  // adjust gain for pressure sensor
     PS.enableOvershootCompensation(false);
     PS.setSampleRate(MPRLS_SAMPLINGRATE);
-    PS.setMovementThreshold(5800);
+    PS.setMovementThreshold(2500);
     PS.setBaselineLowpass(0.4);
     PS.setNoiseLowpass(10.0);
 
@@ -175,9 +176,9 @@ void calibrateSensors()
   XS.calib();
   YS.calib();
   PS.calib();
-  #ifdef PRINT_RAWVALUES
-    calibRawValue=1;
-  #endif
+#ifdef PRINT_RAWVALUES
+  calibRawValue = 1;
+#endif
 }
 
 
@@ -261,7 +262,7 @@ void readPressure(struct I2CSensorValues *data)
         // get new value from MPRLS chip
         int mprlsStatus = getMPRLSValue(&mprls_rawval);
 
-#ifdef DEBUG_OUTPUT_SENSORS
+#ifdef PRINT_MPRLS_ERRORFLAGS
         // any errors?  - just indicate them via serial message
         if (mprlsStatus & MPRLS_STATUS_BUSY) {
           Serial.println("MPRLS: busy");
@@ -284,19 +285,19 @@ void readPressure(struct I2CSensorValues *data)
         if (mprls_filtered > 0) mprls_filtered = sqrt(mprls_filtered);
         if (mprls_filtered < 0) mprls_filtered = -sqrt(-mprls_filtered);
 
-        #ifdef PRINT_RAWVALUES
-            if (calibRawValue) { 
-              calibRawValue=0; raw_mid=mprls_rawval;
-            }
-            else {
-              Serial.print (mprls_rawval-raw_mid); Serial.print(" ");
-              Serial.print (mprls_filtered*100); Serial.print(" ");
-              //sr= 1000000 / (micros()-ts);
-              //ts=micros();
-              //Serial.print (sr); Serial.print(" ");
-              Serial.println(" ");
-            }
-        #endif
+#ifdef PRINT_RAWVALUES
+        if (calibRawValue) {
+          calibRawValue = 0; raw_mid = mprls_rawval;
+        }
+        else {
+          Serial.print (mprls_rawval - raw_mid); Serial.print(" ");
+          Serial.print (mprls_filtered * 100); Serial.print(" ");
+          //sr= 1000000 / (micros()-ts);
+          //ts=micros();
+          //Serial.print (sr); Serial.print(" ");
+          Serial.println(" ");
+        }
+#endif
 
         actPressure = 512 + mprls_filtered / MPRLS_DIVIDER;
 

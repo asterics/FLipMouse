@@ -39,8 +39,9 @@
 #include "bluetooth.h"
 #include "hid_hal.h"
 
-#define VERSION_STRING "v3.4"
+#define VERSION_STRING "v3.5"
 
+//  V3.5:  reduced USB HID report frequency (fixes lost keyboard reports)
 //  V3.4:  improved MPRLS pressure sensor processing
 //  V3.3.1:  fixed IR-command name bug
 //  V3.3:  added Bluetooth Joystick
@@ -83,7 +84,7 @@
 /**
    global constant definitions
 */
-#define UPDATE_INTERVAL     5    // update interval for performing HID actions (in milliseconds)
+#define UPDATE_INTERVAL     8    // update interval for performing HID actions (in milliseconds)
 #define DEFAULT_CLICK_TIME  8    // time for mouse click (loop iterations from press to release)
 #define CALIBRATION_PERIOD  1000  // approx. 1000ms calibration time
 

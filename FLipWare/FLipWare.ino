@@ -226,7 +226,11 @@ void loop() {
    @return none
 */
 void setup1() {
-
+  
+  #ifdef DEBUG_DELAY_STARTUP
+    delay(3000);  // allow some time for serial interface to come up
+  #endif
+  
   Wire1.begin();
   Wire1.setClock(400000);  // use 400kHz I2C clock
   initSensors();
@@ -239,7 +243,7 @@ void setup1() {
    @return none
 */
 void loop1() {
-  static uint32_t lastMPRLS_ts=0;
+  static uint32_t lastPressure_ts=0;
 
   // check if there is a message from the other core (sensorboard change, profile ID)
   if (rp2040.fifo.available()) {
@@ -252,8 +256,8 @@ void loop1() {
   }
 
   // if desired sampling period for MPRLS pressure sensor passed: get pressure sensor value
-  if (millis()-lastMPRLS_ts >= 1000/MPRLS_SAMPLINGRATE) {
-    lastMPRLS_ts=millis();
+  if (millis()-lastPressure_ts >= 1000/PRESSURE_SAMPLINGRATE) {
+    lastPressure_ts=millis();
     readPressure(&sensorValues);
   }
 

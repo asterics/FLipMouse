@@ -184,7 +184,7 @@ void initSensors()
     PS.setGain(1.0);  // adjust gain for pressure sensor
     PS.enableOvershootCompensation(false);
     PS.setSampleRate(PRESSURE_SAMPLINGRATE);
-    PS.setMovementThreshold(2500);
+    
     PS.setBaselineLowpass(0.4);
     PS.setNoiseLowpass(10.0);
 
@@ -390,6 +390,7 @@ void readPressure(struct I2CSensorValues *data)
       {
         // get new value from DPS chip
         getDPSValue(&pressure_rawval);
+        pressure_rawval *= DPS_SCALEFACTOR;
         
         int med = calculateMedian(pressure_rawval);
         if (abs(med - pressure_rawval) >  DPS_SPIKE_DETECTION_THRESHOLD) {

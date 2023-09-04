@@ -31,8 +31,9 @@
 #define SPIKE_DETECTION_THRESHOLD 1000  // distance from median value which classifies a spike
 
 /**** DPS310 related signal shaping parameters */
-#define DPS_DIVIDER 2             //raw value divider for DPS310
-#define DPS_SPIKE_DETECTION_THRESHOLD 1000  // distance from median value which classifies a spike
+#define DPS_SCALEFACTOR  -20            // scale factor for aligning DPS with MPRLS raw values
+#define DPS_DIVIDER  3                  // divider for the DPS310 values
+#define DPS_SPIKE_DETECTION_THRESHOLD 150  // distance from median value which classifies a spike
 #define DPS_MEDIAN_VALUES 5                 // number of values used for median-based spike filter (for MPRLS sensor)
 
 /**** NAU7802 related signal shaping parameters */

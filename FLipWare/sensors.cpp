@@ -44,7 +44,7 @@ int32_t raw_mid = 0;
 
 /**
    @brief Used pressure sensor type. We can use either the MPXV7007GP
-   sensor connected to an analog pin or the MPRLS sensor board with I2C
+   sensor connected to an analog pin or the DPS310 / MPRLS sensor boards with I2C
 */
 typedef enum {MPXV, DPS310, MPRLS, NO_PRESSURE} pressure_type_t;
 pressure_type_t sensor_pressure = NO_PRESSURE;
@@ -115,7 +115,7 @@ void configureDPS() {
 
 /**
    @name initSensors
-   @brief initialises I2C interface, prepares NAU and MPRLS readouts. [called from core 1]
+   @brief initialises I2C interface, prepares NAU and MPRLS/DPS310 readouts. [called from core 1]
    @return none
 */
 void initSensors()
@@ -142,7 +142,9 @@ void initSensors()
         Serial.println("SEN: setup DPS310 finished");
     #endif
   } else {
-    Serial.println("SEN: cannot find DPS310");
+    #ifdef DEBUG_OUTPUT_SENSORS
+        Serial.println("SEN: cannot find DPS310");
+    #endif
   }
   
   Wire1.beginTransmission(MPRLS_ADDR);
@@ -154,7 +156,9 @@ void initSensors()
     // we found the MPRLS sensor, so use it!
     sensor_pressure = MPRLS;
   } else {
-    Serial.println("SEN: cannot find MPRLS");
+    #ifdef DEBUG_OUTPUT_SENSORS
+      Serial.println("SEN: cannot find MPRLS");
+    #endif
   }
 
   //NAU7802 init

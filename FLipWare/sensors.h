@@ -40,7 +40,7 @@
 
 /**** general sensor related settings */
 #define SENSOR_WATCHDOG_TIMEOUT 3000    // watchdog reset time (no NAU sensor data for x millsec. resets device)
-#define PRESSURE_SAMPLINGRATE   100        // sampling frequency of MPRLS sensor
+#define PRESSURE_SAMPLINGRATE   100        // sampling frequency of pressure sensor (MPRLS or DPS)
 
 
 /**

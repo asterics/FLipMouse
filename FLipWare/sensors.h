@@ -23,7 +23,7 @@
 #define DRDY_PIN        21       // Data ready pin of NAU chip
 #define PRESSURE_SENSOR_PIN A3   // Analog input pin if a analog pressure sensor is used 
 #define MPRLS_ADDR 0x18          // I2C address of the MPRLS pressure sensor 
-#define DPS310_ADDR 0x77
+#define DPS310_ADDR 0x77         // I2C address of the DPS310 pressure sensor 
 
 /**** MPRLS related signal shaping parameters */
 #define MPRLS_DIVIDER 2                 // divider for the MPRLS raw value.

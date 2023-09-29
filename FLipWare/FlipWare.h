@@ -39,8 +39,9 @@
 #include "bluetooth.h"
 #include "hid_hal.h"
 
-#define VERSION_STRING "v3.5"
+#define VERSION_STRING "v3.6"
 
+//  V3.6:  integrated support for DPS310 pressure sensor (new sip/puff daughter-board)
 //  V3.5:  reduced USB HID report frequency (fixes lost keyboard reports)
 //  V3.4:  improved MPRLS pressure sensor processing
 //  V3.3.1:  fixed IR-command name bug

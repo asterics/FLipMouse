@@ -94,6 +94,8 @@ The FLipMouse is also AsTeRICS compatible, so it is possible to use the raw inpu
 * FABI: [FABI: Flexible Assistive Button Interface GitHub](https://github.com/asterics/FABI): The Flexible Assistive Button Interface (FABI) provides basically the same control methods (mouse, clicking, keyboard,...), but the input
 is limited to simple buttons. Therefore, this interface is at a very low price (if you buy the Arduino Pro Micro from China, it can be under 5$).
 
+* FLipPad: [The FLipPad controller](https://github.com/asterics/FLipMouse): a flexible touchpad for controlling computers and mobile devices with minimal muscle movement.
+
 * AsTeRICS Grid: [Asterics Grid AAC Web-App](https://grid.asterics.eu): an open source, cross plattform communicator / talker for Augmented and Alternative Communication (AAC).
 
 

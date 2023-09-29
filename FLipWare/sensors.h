@@ -18,21 +18,30 @@
 #include <LoadcellSensor.h>  // for signal conditioning
 #include <Adafruit_NAU7802.h>  //NAU7802 library (Benjamin Aigner's fork with channel change feature)
 
-
-
+/**** sensor GPIOs & addresses */
 #define LDO_ENABLE_PIN 7         // Enable pin for the MIC5504 LDO for NAU7802 & MPRLS sensors
-
 #define DRDY_PIN        21       // Data ready pin of NAU chip
 #define PRESSURE_SENSOR_PIN A3   // Analog input pin if a analog pressure sensor is used 
 #define MPRLS_ADDR 0x18          // I2C address of the MPRLS pressure sensor 
+#define DPS310_ADDR 0x77         // I2C address of the DPS310 pressure sensor 
 
+/**** MPRLS related signal shaping parameters */
 #define MPRLS_DIVIDER 2                 // divider for the MPRLS raw value.
-#define MPRLS_SAMPLINGRATE   100        // sampling frequency of MPRLS sensor
 #define MEDIAN_VALUES 5                 // number of values used for median-based spike filter (for MPRLS sensor)
 #define SPIKE_DETECTION_THRESHOLD 1000  // distance from median value which classifies a spike
 
+/**** DPS310 related signal shaping parameters */
+#define DPS_SCALEFACTOR  -20            // scale factor for aligning DPS with MPRLS raw values
+#define DPS_DIVIDER  3                  // divider for the DPS310 values
+#define DPS_SPIKE_DETECTION_THRESHOLD 150  // distance from median value which classifies a spike
+#define DPS_MEDIAN_VALUES 5                 // number of values used for median-based spike filter (for MPRLS sensor)
+
+/**** NAU7802 related signal shaping parameters */
 #define NAU_DIVIDER 120                 // divider for the NAU raw values
+
+/**** general sensor related settings */
 #define SENSOR_WATCHDOG_TIMEOUT 3000    // watchdog reset time (no NAU sensor data for x millsec. resets device)
+#define PRESSURE_SAMPLINGRATE   100        // sampling frequency of pressure sensor (MPRLS or DPS)
 
 
 /**

@@ -18,10 +18,7 @@ Adafruit_NAU7802 nau;
 LoadcellSensor XS, YS, PS;
 int sensorWatchdog = -1;
 
-// #define PRINT_RAWVALUES
-#define PRINT_MPRLS_ERRORFLAGS
-
-#ifdef PRINT_RAWVALUES
+#ifdef DEBUG_PRESSURE_RAWVALUES
 uint32_t ts = 0;
 uint8_t calibRawValue = 1;
 int sr = 0;
@@ -36,11 +33,20 @@ int32_t raw_mid = 0;
 #define MPRLS_STATUS_MATHSAT (0x01) ///< Status bit for math saturation
 #define MPRLS_STATUS_MASK (0b01100101) ///< Sensor status mask: only these bits are set
 
+
+#define DPS_R_PSR_B2 0x00
+#define DPS_R_PSR_B1 0x01
+#define DPS_R_PSR_B0 0x02
+#define DPS_R_PRS_CFG 0x06
+#define DPS_R_MEAS_CFG 0x08
+#define DPS_R_CFG_REG 0x09
+#define DPS_R_RESET 0x0C
+
 /**
    @brief Used pressure sensor type. We can use either the MPXV7007GP
-   sensor connected to an analog pin or the MPRLS sensor board with I2C
+   sensor connected to an analog pin or the DPS310 / MPRLS sensor boards with I2C
 */
-typedef enum {MPXV, MPRLS, NO_PRESSURE} pressure_type_t;
+typedef enum {MPXV, DPS310, MPRLS, NO_PRESSURE} pressure_type_t;
 pressure_type_t sensor_pressure = NO_PRESSURE;
 
 
@@ -49,7 +55,7 @@ pressure_type_t sensor_pressure = NO_PRESSURE;
 */
 uint8_t channel, newData = 0;
 int32_t nau_x = 0, nau_y = 0;
-int32_t mprls_rawval = 512;
+int32_t pressure_rawval = 512;
 uint8_t reportXValues = 0, reportYValues = 0;
 
 
@@ -85,10 +91,31 @@ void configureNAU() {
   }
 }
 
+/**
+   @name configureDPS
+   @brief initialises the DPS310 chip for desired sampling rate and config
+   @return none
+*/
+void configureDPS() {
+  //set corresponding config bytes
+  Wire1.beginTransmission(DPS310_ADDR);
+  Wire1.write(DPS_R_PRS_CFG);
+  //128Hz measurements, no oversampling
+  Wire1.write( (0b111 << 4) | (0b0000) );
+  Wire1.endTransmission();
+  
+  
+  Wire1.beginTransmission(DPS310_ADDR);
+  Wire1.write(DPS_R_MEAS_CFG);
+  //start continous pressure measurement (background mode)
+  Wire1.write(0b101);
+  Wire1.endTransmission();
+}
+
 
 /**
    @name initSensors
-   @brief initialises I2C interface, prepares NAU and MPRLS readouts. [called from core 1]
+   @brief initialises I2C interface, prepares NAU and MPRLS/DPS310 readouts. [called from core 1]
    @return none
 */
 void initSensors()
@@ -100,8 +127,28 @@ void initSensors()
 
   //detect if there is an MPRLS sensor connected to I2C (Wire)
   Wire1.setClock(400000);  // use 400kHz I2C clock
-  Wire1.beginTransmission(MPRLS_ADDR);
+  Wire1.beginTransmission(DPS310_ADDR);
   uint8_t result = Wire1.endTransmission();
+  if (result == 0) {
+#ifdef DEBUG_OUTPUT_SENSORS
+    Serial.println("SEN: found DPS310");
+#endif
+    // we found the DPS310 sensor, so use it!
+    sensor_pressure = DPS310;
+    
+    configureDPS();
+    
+    #ifdef DEBUG_OUTPUT_SENSORS
+        Serial.println("SEN: setup DPS310 finished");
+    #endif
+  } else {
+    #ifdef DEBUG_OUTPUT_SENSORS
+        Serial.println("SEN: cannot find DPS310");
+    #endif
+  }
+  
+  Wire1.beginTransmission(MPRLS_ADDR);
+  result = Wire1.endTransmission();
   if (result == 0) {
 #ifdef DEBUG_OUTPUT_SENSORS
     Serial.println("SEN: found MPRLS");
@@ -109,7 +156,9 @@ void initSensors()
     // we found the MPRLS sensor, so use it!
     sensor_pressure = MPRLS;
   } else {
-    Serial.println("SEN: cannot find MPRLS");
+    #ifdef DEBUG_OUTPUT_SENSORS
+      Serial.println("SEN: cannot find MPRLS");
+    #endif
   }
 
   //NAU7802 init
@@ -134,8 +183,8 @@ void initSensors()
     // set signal processing parameters for sip/puff (MPRLS pressure sensor)
     PS.setGain(1.0);  // adjust gain for pressure sensor
     PS.enableOvershootCompensation(false);
-    PS.setSampleRate(MPRLS_SAMPLINGRATE);
-    PS.setMovementThreshold(2500);
+    PS.setSampleRate(PRESSURE_SAMPLINGRATE);
+    
     PS.setBaselineLowpass(0.4);
     PS.setNoiseLowpass(10.0);
 
@@ -176,7 +225,7 @@ void calibrateSensors()
   XS.calib();
   YS.calib();
   PS.calib();
-#ifdef PRINT_RAWVALUES
+#ifdef DEBUG_PRESSURE_RAWVALUES
   calibRawValue = 1;
 #endif
 }
@@ -212,6 +261,40 @@ int getMPRLSValue(int32_t * newVal) {
   Wire1.endTransmission();
 
   return (buffer[0]);
+}
+
+static int32_t twosComplement(int32_t val, uint8_t bits) {
+  if (val & ((uint32_t)0x01 << (bits - 1))) {
+    val -= (uint32_t)0x01 << bits;
+  }
+  return val;
+}
+
+/**
+   @name getDPSValue
+   @brief called periodically in order to read out DPS310 pressure data
+          expected sampling rate ca. 100 Hz
+   @param newVal: pointer where result will be stored
+   @return status byte of DPS310
+*/
+int getDPSValue(int32_t * newVal) {
+  //set address to first data register (Byte 2)
+  Wire1.beginTransmission(DPS310_ADDR);
+  Wire1.write(DPS_R_PSR_B2);
+  
+  //necessary?
+  Wire1.endTransmission();
+  
+  Wire1.requestFrom(DPS310_ADDR, 3);
+  uint8_t buffer[3]  = {0};
+  for (uint8_t i = 0; i < 3; i++) buffer[i] = Wire1.read();
+
+
+  // update value (ignore status byte errors but return the status byte!)
+  int32_t r_p = (uint32_t(buffer[0]) << 16) | (uint32_t(buffer[1]) << 8) | (uint32_t(buffer[2]));
+  *newVal = twosComplement(r_p,24);
+
+  return (0);
 }
 
 
@@ -260,9 +343,9 @@ void readPressure(struct I2CSensorValues *data)
       {
 
         // get new value from MPRLS chip
-        int mprlsStatus = getMPRLSValue(&mprls_rawval);
+        int mprlsStatus = getMPRLSValue(&pressure_rawval);
 
-#ifdef PRINT_MPRLS_ERRORFLAGS
+#ifdef DEBUG_MPRLS_ERRORFLAGS
         // any errors?  - just indicate them via serial message
         if (mprlsStatus & MPRLS_STATUS_BUSY) {
           Serial.println("MPRLS: busy");
@@ -275,22 +358,22 @@ void readPressure(struct I2CSensorValues *data)
         }
 #endif
 
-        int med = calculateMedian(mprls_rawval);
-        if (abs(med - mprls_rawval) >  SPIKE_DETECTION_THRESHOLD) {
-          mprls_rawval = med;
+        int med = calculateMedian(pressure_rawval);
+        if (abs(med - pressure_rawval) >  SPIKE_DETECTION_THRESHOLD) {
+          pressure_rawval = med;
         }
 
         // calculate filtered pressure value, apply signal conditioning
-        int mprls_filtered = PS.process(mprls_rawval);
+        int mprls_filtered = PS.process(pressure_rawval);
         if (mprls_filtered > 0) mprls_filtered = sqrt(mprls_filtered);
         if (mprls_filtered < 0) mprls_filtered = -sqrt(-mprls_filtered);
 
-#ifdef PRINT_RAWVALUES
+#ifdef DEBUG_PRESSURE_RAWVALUES
         if (calibRawValue) {
-          calibRawValue = 0; raw_mid = mprls_rawval;
+          calibRawValue = 0; raw_mid = pressure_rawval;
         }
         else {
-          Serial.print (mprls_rawval - raw_mid); Serial.print(" ");
+          Serial.print (pressure_rawval - raw_mid); Serial.print(" ");
           Serial.print (mprls_filtered * 100); Serial.print(" ");
           //sr= 1000000 / (micros()-ts);
           //ts=micros();
@@ -300,16 +383,43 @@ void readPressure(struct I2CSensorValues *data)
 #endif
 
         actPressure = 512 + mprls_filtered / MPRLS_DIVIDER;
-
-        // clamp to 1/1022 (allows disabling strong sip/puff)
-        if (actPressure < 1) actPressure = 1;
-        if (actPressure > 1022) actPressure = 1022;
-
-        // during calibration period: set pressure to center (bypass)
-        if (data->calib_now) actPressure = 512;
       }
       break;
 
+    case DPS310:
+      {
+        // get new value from DPS chip
+        getDPSValue(&pressure_rawval);
+        pressure_rawval *= DPS_SCALEFACTOR;
+        
+        int med = calculateMedian(pressure_rawval);
+        if (abs(med - pressure_rawval) >  DPS_SPIKE_DETECTION_THRESHOLD) {
+          pressure_rawval = med;
+        }
+
+        // calculate filtered pressure value, apply signal conditioning
+        int dps_filtered = PS.process(pressure_rawval);
+        if (dps_filtered > 0) dps_filtered = sqrt(dps_filtered);
+        if (dps_filtered < 0) dps_filtered = -sqrt(-dps_filtered);
+
+#ifdef DEBUG_PRESSURE_RAWVALUES
+        if (calibRawValue) {
+          calibRawValue = 0; raw_mid = pressure_rawval;
+        }
+        else {
+          Serial.print (pressure_rawval - raw_mid); Serial.print(" ");
+          Serial.print (dps_filtered * 100); Serial.print(" ");
+          //sr= 1000000 / (micros()-ts);
+          //ts=micros();
+          //Serial.print (sr); Serial.print(" ");
+          Serial.println(" ");
+        }
+#endif
+
+        actPressure = 512 + dps_filtered / DPS_DIVIDER;
+      }
+      break;
+    
     case NO_PRESSURE:
       actPressure = 512;
       break;
@@ -319,6 +429,13 @@ void readPressure(struct I2CSensorValues *data)
       actPressure = analogRead(PRESSURE_SENSOR_PIN);
       break;
   }
+  
+    // clamp to 1/1022 (allows disabling strong sip/puff)
+  if (actPressure < 1) actPressure = 1;
+  if (actPressure > 1022) actPressure = 1022;
+
+  // during calibration period: set pressure to center (bypass)
+  if (data->calib_now) actPressure = 512;
 
   // here we provide new pressure values for further processing by core 0 !
   mutex_enter_blocking(&(data->sensorDataMutex));

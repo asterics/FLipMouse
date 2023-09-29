@@ -82,11 +82,11 @@ In order to build the firmware following prerequisites and dependencies must be 
 
 # Links and Credits
 
-Most of the work for the FLipMouse has been accomplished at the UAS Technikum Wien in course of multiple research projects which have been supported by the City of Vienna (MA23, project numbers 18-04 and 26-02),
-see: [Torades Project Information](https://embsys.technikum-wien.at/projects/torades/index.php), [Webpage WBT project](https://wbt.wien).
+Most of the work for the FLipMouse has been accomplished at the UAS Technikum Wien in course of the R&D-projects *ToRaDes* (MA23 project 18-04) and *WBT* (MA23 project 26-02), which have been supported by the [City of Vienna](https://www.wien.gv.at/kontakte/ma23/index.html),
+see: [ToRaDes Project Information](https://embsys.technikum-wien.at/projects/torades/index.php), [Webpage WBT project](https://wbt.wien).
 
 
-Have a look at our the [AsTeRICS Foundation homepage](https://www.asterics-foundation.org) and our other Open Source AT projects:
+Have a look at the [AsTeRICS Foundation homepage](https://www.asterics-foundation.org) and our other Open Source AT projects:
 
 * AsTeRICS: [AsTeRICS framework homepage](http://www.asterics.eu), [AsTeRICS framework GitHub](https://github.com/asterics/AsTeRICS): The AsTeRICS framework provides a much higher flexibility for building assistive solutions. 
 The FLipMouse is also AsTeRICS compatible, so it is possible to use the raw input data for a different assistive solution.

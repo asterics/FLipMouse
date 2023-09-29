@@ -191,7 +191,7 @@ void loop() {
       // apply rotation if needed
       switch (slotSettings.ro) {
         int32_t tmp;
-        case 90: tmp=sensorData.xRaw;sensorData.xRaw=sensorData.yRaw;sensorData.yRaw=tmp;
+        case 90: tmp=sensorData.xRaw;sensorData.xRaw=-sensorData.yRaw;sensorData.yRaw=tmp;
                 break;
         case 180: sensorData.xRaw=-sensorData.xRaw;sensorData.yRaw=-sensorData.yRaw;
                   break;

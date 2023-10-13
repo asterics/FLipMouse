@@ -2388,6 +2388,11 @@
       (net 33 "GNDA") (pinfunction "Pin_5") (pintype "passive") (tstamp 2963415c-714f-4de5-8db1-bb56f2dc9256))
     (pad "6" smd rect (at 3.175 2.25) (size 1.5 3) (layers "F.Cu" "F.Paste" "F.Mask")
       (net 20 "/SDA") (pinfunction "Pin_6") (pintype "passive") (tstamp 7dde447a-9a46-449f-8f89-a8d529e24324))
+    (model "${KIPRJMOD}/step/690367280676.step"
+      (offset (xyz 0 0 2.5))
+      (scale (xyz 1 1 1))
+      (rotate (xyz 0 0 0))
+    )
   )
 
   (footprint "NetTie:NetTie-2_SMD_Pad0.5mm" (layer "F.Cu")
@@ -2699,7 +2704,7 @@
       (net 2 "/BUZZER") (pinfunction "-") (pintype "passive") (tstamp 7b84e6ab-326a-436a-af60-016a5d10171f))
     (pad "2" smd rect (at 4.35 0 180) (size 1.3 3.4) (layers "F.Cu" "F.Paste" "F.Mask")
       (net 4 "GND") (pinfunction "+") (pintype "passive") (tstamp 8daaed04-59b7-4d24-a515-da9d006af417))
-    (model "${KICAD6_3DMODEL_DIR}/Buzzer_Beeper.3dshapes/Buzzer_Murata_PKMCS0909E.wrl"
+    (model "${KICAD7_3DMODEL_DIR}/Buzzer_Beeper.3dshapes/Buzzer_Murata_PKMCS0909E4000-R1.wrl"
       (offset (xyz 0 0 0))
       (scale (xyz 1 1 1))
       (rotate (xyz 0 0 0))
@@ -2845,11 +2850,11 @@
     (property "ki_keywords" "connector")
     (path "/34d8e3e6-675b-43f8-996f-f11bfcdbff66")
     (attr smd)
-    (fp_text reference "J2" (at 0 6.2 -90) (layer "F.SilkS")
+    (fp_text reference "J2" (at 0 6.2 90) (layer "F.SilkS")
         (effects (font (size 0.7 0.7) (thickness 0.12)))
       (tstamp 8722f11b-ba78-410a-a900-99177d89d3aa)
     )
-    (fp_text value "SSM-104-L-SV" (at 0 6.68 -90) (layer "F.Fab")
+    (fp_text value "SSM-104-L-SV" (at 0 6.68 90) (layer "F.Fab")
         (effects (font (size 1 1) (thickness 0.15)))
       (tstamp c82091dc-1331-4de9-b1e6-d4b5f12285d3)
     )
@@ -2925,7 +2930,7 @@
       (net 19 "/SCL") (pinfunction "Pin_3") (pintype "passive") (tstamp f31862f9-9158-4730-84c2-4e9285c732eb))
     (pad "4" smd rect (at -1.65 3.81 270) (size 1.9 1) (layers "F.Cu" "F.Paste" "F.Mask")
       (net 20 "/SDA") (pinfunction "Pin_4") (pintype "passive") (tstamp f6de323a-abb5-4b49-83cc-04125b8d9bee))
-    (model "${KICAD6_3DMODEL_DIR}/Connector_PinSocket_2.54mm.3dshapes/PinSocket_1x04_P2.54mm_Vertical_SMD_Pin1Right.wrl"
+    (model "${KICAD6_3DMODEL_DIR}/Connector_PinSocket_2.54mm.3dshapes/PinSocket_1x04_P2.54mm_Vertical_SMD_Pin1Right.wrl" hide
       (offset (xyz 0 0 0))
       (scale (xyz 1 1 1))
       (rotate (xyz 0 0 0))

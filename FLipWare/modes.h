@@ -25,11 +25,11 @@
    constant definitions of sip/puff and stick modes
 */
 #define STRONGMODE_MOUSE_JOYSTICK_THRESHOLD  200
-#define STRONGMODE_STABLETIME        20
-#define STRONGMODE_EXIT_TIME        200
-#define STRONGMODE_IDLE_TIME         150
-#define SIP_PUFF_SETTLE_TIME         15
-#define MIN_HOLD_TIME                10
+#define STRONGMODE_STABLETIME        15
+#define STRONGMODE_EXIT_TIME         150
+#define STRONGMODE_IDLE_TIME         120
+#define SIP_PUFF_SETTLE_TIME         5
+#define MIN_HOLD_TIME                3
 
 #define SIP_PUFF_STATE_IDLE        0
 #define SIP_PUFF_STATE_STARTED     1

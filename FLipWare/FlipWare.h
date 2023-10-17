@@ -39,8 +39,11 @@
 #include "bluetooth.h"
 #include "hid_hal.h"
 
-#define VERSION_STRING "v3.3.1"
+#define VERSION_STRING "v3.6"
 
+//  V3.6:  integrated support for DPS310 pressure sensor (new sip/puff daughter-board)
+//  V3.5:  reduced USB HID report frequency (fixes lost keyboard reports)
+//  V3.4:  improved MPRLS pressure sensor processing
 //  V3.3.1:  fixed IR-command name bug
 //  V3.3:  added Bluetooth Joystick
 //  V3.2:  changed pinning to PCB v3.2
@@ -76,15 +79,17 @@
 //#define DEBUG_OUTPUT_SENSORS 	 // enable sensors.cpp debugging, showing whats happening on sensor reading & init
 //#define DEBUG_DELAY_STARTUP 	 // enable a 3s delay after Serial.begin and before all the other stuff.
 //#define DEBUG_NO_TONE          // disable tones, to avoid annoying other passengers when programming on the train :-)
+//#define DEBUG_PRESSURE_RAWVALUES // raw output of pressure values and filtered output
+//#define DEBUG_MPRLS_ERRORFLAGS // continously print error flags of MPRLS
 
 #define BUILD_FOR_RP2040        // enable a build for RP2040. There are differences in eeprom & infrared handling.
 
 /**
    global constant definitions
 */
-#define UPDATE_INTERVAL     5    // update interval for performing HID actions (in milliseconds)
+#define UPDATE_INTERVAL     8    // update interval for performing HID actions (in milliseconds)
 #define DEFAULT_CLICK_TIME  8    // time for mouse click (loop iterations from press to release)
-#define CALIBRATION_PERIOD  200  // approx. 200*UPDATE_INTERVAL = 1sec calibration time
+#define CALIBRATION_PERIOD  1000  // approx. 1000ms calibration time
 
 // RAM buffers and memory constraints
 #define WORKINGMEM_SIZE         300    // reserved RAM for working memory (command parser, IR-rec/play)
@@ -152,6 +157,7 @@ struct I2CSensorValues {
   int xRaw,yRaw;
   int pressure;
   uint16_t calib_now;
+  mutex_t sensorDataMutex; // for synchronization of data access between cores
 };
 
 /**
@@ -198,6 +204,12 @@ typedef char* uint_farptr_t_FM;
 #endif
 #ifdef DEBUG_NO_TONE
   #warning "DEBUG_NO_TONE is defined, do not release this way!"
+#endif
+#ifdef DEBUG_PRESSURE_RAWVALUES
+  #warning "DEBUG_PRESSURE_RAWVALUES is defined, do not release this way!"
+#endif
+#ifdef DEBUG_MPRLS_ERRORFLAGS
+  #warning "DEBUG_MPRLS_ERRORFLAGS is defined, do not release this way!"
 #endif
 
 #endif

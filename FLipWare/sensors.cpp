@@ -576,42 +576,42 @@ void setSensorBoard(int sensorBoardID)
       XS.enableOvershootCompensation(false); YS.enableOvershootCompensation(false);
       break;
     case SENSORBOARD_SENSITIVITY_MEDIUM:
-      XS.setGain(0.2);                    YS.setGain(0.2);
-      XS.setMovementThreshold(1000);      YS.setMovementThreshold(1000);
+      XS.setGain(0.25);                   YS.setGain(0.25);
+      XS.setMovementThreshold(1500);      YS.setMovementThreshold(1500);
       XS.setIdleDetectionPeriod(200);     YS.setIdleDetectionPeriod(200);
       XS.setIdleDetectionThreshold(250);  YS.setIdleDetectionThreshold(250);
       XS.enableOvershootCompensation(false); YS.enableOvershootCompensation(false);
       break;
     case SENSORBOARD_SENSITIVITY_LOW:
       XS.setGain(0.1);                    YS.setGain(0.1);
-      XS.setMovementThreshold(500);       YS.setMovementThreshold(500);
+      XS.setMovementThreshold(2000);      YS.setMovementThreshold(2000);
       XS.setIdleDetectionPeriod(200);     YS.setIdleDetectionPeriod(200);
       XS.setIdleDetectionThreshold(120);  YS.setIdleDetectionThreshold(120);
       XS.enableOvershootCompensation(false); YS.enableOvershootCompensation(false);
       break;
     case SENSORBOARD_SENSITIVITY_VERY_LOW:
       XS.setGain(0.05);                   YS.setGain(0.05);
-      XS.setMovementThreshold(300);       YS.setMovementThreshold(300);
+      XS.setMovementThreshold(2500);      YS.setMovementThreshold(2500);
       XS.setIdleDetectionPeriod(200);     YS.setIdleDetectionPeriod(200);
-      XS.setIdleDetectionThreshold(80);  YS.setIdleDetectionThreshold(80);
+      XS.setIdleDetectionThreshold(60);   YS.setIdleDetectionThreshold(60);
       XS.enableOvershootCompensation(false); YS.enableOvershootCompensation(false);
       break;
     case SENSORBOARD_NODMS_HIGH:
-      XS.setGain(2.5);                   YS.setGain(3.0);
-      XS.setMovementThreshold(1500);     YS.setMovementThreshold(1500);
-      XS.setCompensationFactor(0.10);    YS.setCompensationFactor(0.10);
+      XS.setGain(2.5);                    YS.setGain(3.0);
+      XS.setMovementThreshold(1500);      YS.setMovementThreshold(1500);
+      XS.setCompensationFactor(0.10);     YS.setCompensationFactor(0.10);
       XS.enableOvershootCompensation(true); YS.enableOvershootCompensation(true);
       break;
     case SENSORBOARD_NODMS_MEDIUM:
-      XS.setGain(1.8);                   YS.setGain(2.0);
+      XS.setGain(1.8);                    YS.setGain(2.0);
       XS.setMovementThreshold(1800);      YS.setMovementThreshold(1800);
-      XS.setCompensationFactor(0.15);    YS.setCompensationFactor(0.15);
+      XS.setCompensationFactor(0.15);     YS.setCompensationFactor(0.15);
       XS.enableOvershootCompensation(true); YS.enableOvershootCompensation(true);
       break;
     case SENSORBOARD_NODMS_LOW:
-      XS.setGain(1.3);                   YS.setGain(1.6);
-      XS.setMovementThreshold(2000);     YS.setMovementThreshold(2000);
-      XS.setCompensationFactor(0.20);    YS.setCompensationFactor(0.20);
+      XS.setGain(1.3);                    YS.setGain(1.6);
+      XS.setMovementThreshold(2000);      YS.setMovementThreshold(2000);
+      XS.setCompensationFactor(0.20);     YS.setCompensationFactor(0.20);
       XS.enableOvershootCompensation(true); YS.enableOvershootCompensation(true);
       break;
 

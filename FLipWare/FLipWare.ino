@@ -114,8 +114,8 @@ void setup() {
  //load slotSettings
   memcpy(&slotSettings,&defaultSlotSettings,sizeof(struct SlotSettings));
 
-  //initialise BT module, if available (must be done early!)
-  initBluetooth();
+  //initialise BT module, if not in Xbox Adaptive Controller compatibility mode
+  if (!getXACsupport()) initBluetooth();
 
   // initialize peripherals
   Serial.begin(115200);

@@ -61,4 +61,37 @@
 */
 void handleUserInteraction();
 
+
+/* 
+   Note regarding XBox Adaptive Controller (XAC) gamepad compatibility:
+   currently, the XAC does not correctly handle joystick reports for composite HID devices which include a Mouse 
+   (strange enough it works with Serial+Keyboard+Joystick!). Furthermore, the FlipMouse consumes too much current 
+   for the XAC wen BT is enabled.
+   A work-around is to decide during runtime if a XAC-compatible joystick is needed (and mouse / BT support should be dropped)
+
+   Prerequiste: patch RP2040USB.cpp (Arduino15/packages/rp2040/hardware/rp2040/3.0.0/cores/rp2040) in the following way:
+      - add declaration 'extern int getXACsupport();' at the beginning of the source file
+      - replace any occurance of  '__USBInstallMouse' with  '(__USBInstallMouse && !getXACsupport())'
+   
+   The XAC support state is stored in EEPROM (Flash) and can be queried/modifed using the following functions. 
+   (after a modification, a reboot is necessary, e.g. using the watchdog)
+*/
+
+/*
+   @name getXACsupport
+   @return int
+   returns true if USB HID Mouse reports shall excluded (this removed mouse support but adds XAC joystick compatibility)
+*/
+int getXACsupport();
+
+/*
+   @name setXACsupport
+   @param xacSupported int
+   sets the XAC compatibility mode (1 to remove mouse support but add XAC joystick compatibility / 0 otherwise)
+*/
+void setXACsupport(int xacSupported );
+
+
+
+
 #endif

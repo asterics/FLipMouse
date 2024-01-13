@@ -379,3 +379,25 @@ void handleMovement()
       break;
   }
 }
+
+int getXACsupport() {
+  static int needInit=1;
+  static int xacSupported=0;
+
+  if (needInit) {
+    needInit=0;
+    EEPROM.begin(4);
+    xacSupported=EEPROM.read(0);
+    if (xacSupported > 1) {  // only 0 or 1 are defined!
+      xacSupported=0;
+      EEPROM.write(0, xacSupported);
+    }
+  }
+  return (xacSupported);
+}
+
+void setXACsupport(int xacSupported ) {
+    int dummy=getXACsupport(); // make sure EEPROM was initialized
+    EEPROM.write(0, xacSupported);
+    EEPROM.commit();
+}

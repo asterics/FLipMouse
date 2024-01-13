@@ -56,7 +56,7 @@ const struct atCommandType atCommands[] PROGMEM = {
   {"HM"  , PARTYPE_NONE },  {"TL"  , PARTYPE_NONE }, {"TR"  , PARTYPE_NONE }, {"TM"  , PARTYPE_NONE },
   {"KT"  , PARTYPE_STRING }, {"IH"  , PARTYPE_STRING }, {"IS"  , PARTYPE_NONE }, {"UG", PARTYPE_NONE },
   {"BC"  , PARTYPE_STRING}, {"KL"  , PARTYPE_STRING }, {"BR"  , PARTYPE_UINT }, {"RE"  , PARTYPE_NONE },
-  {"SB"  , PARTYPE_UINT },  {"SC"  , PARTYPE_STRING },
+  {"SB"  , PARTYPE_UINT },  {"SC"  , PARTYPE_STRING }, {"XA"  , PARTYPE_UINT },
 };
 
 /**
@@ -502,6 +502,14 @@ void performCommand (uint8_t cmd, int16_t par1, char * keystring, int8_t periodi
       break;  
     case CMD_BR:
       resetBTModule (par1);
+      break;
+    case CMD_XA:
+      if ((par1 == 0) || (par1==1)) {
+        setXACsupport((uint8_t)(par1));
+        watchdog_reboot(0, 0, 0);  watchdog_enable(100, 0);
+        while (1);
+      }
+      else Serial.print("XA="); Serial.println(getXACsupport());
       break;
   }
 }

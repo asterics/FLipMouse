@@ -39,8 +39,9 @@
 #include "bluetooth.h"
 #include "hid_hal.h"
 
-#define VERSION_STRING "v3.6.1"
+#define VERSION_STRING "v3.6.2"
 
+//  V3.6.2:  added sensor information to AT ID reply, updated sensorboard profiles for piezoresistive SMD sensor board
 //  V3.6.1:  integrated support for DPS310 pressure sensor (new sip/puff daughter-board)
 //  V3.5:  reduced USB HID report frequency (fixes lost keyboard reports)
 //  V3.4:  improved MPRLS pressure sensor processing

@@ -14,6 +14,9 @@
 #include "modes.h"
 #include "utils.h"
 
+/// Enable pin for the MIC5504 LDO for NAU7802 & MPRLS sensors
+#define LDO_ENABLE_PIN 7
+
 Adafruit_NAU7802 nau;
 LoadcellSensor XS, YS, PS;
 int sensorWatchdog = -1;
@@ -74,6 +77,43 @@ void configureNAU() {
   for (uint8_t i = 0; i < 10; i++) {
     while (! nau.available()) delay(1);
     nau.read();
+  }  
+}
+
+/**
+   @name getValueMPRLS
+   @brief reads a current value from the MPRLS pressure sensor (polling)
+   @return nonw
+*/
+void getValueMPRLS() {
+  uint8_t buffer[4]  = {0};
+  Wire1.requestFrom(MPRLS_ADDR,1);
+  buffer[0] = Wire1.read();
+  //any errors? set pressure value to 512, convert otherwise...
+  if(buffer[0] & MPRLS_STATUS_BUSY)
+  {
+    //sensor is busy, cannot read data
+    #ifdef DEBUG_OUTPUT_SENSORS
+      Serial.println("MPRLS: busy");
+    #endif
+    return;
+  }
+  if((buffer[0] & MPRLS_STATUS_MATHSAT) || (buffer[0] & MPRLS_STATUS_FAILED))
+  {
+    //sensor failed or saturated
+    #ifdef DEBUG_OUTPUT_SENSORS
+      Serial.println("MPRLS:failed or saturated");
+    #endif
+    return;
+  } else {
+    //request all 4 bytes
+    Wire1.requestFrom(MPRLS_ADDR,4);
+    for(uint8_t i = 0; i<4; i++) buffer[i] = Wire1.read();
+    mprls_rawval = (uint32_t(buffer[1]) << 16) | (uint32_t(buffer[2]) << 8) | (uint32_t(buffer[3]));
+    #ifdef DEBUG_OUTPUT_SENSORS
+      //Serial.println(mprls_rawval);
+      //heavy output...
+    #endif
   }
 }
 
@@ -115,6 +155,7 @@ void initSensors()
   Wire1.setClock(400000);  // use 400kHz I2C clock
   Wire1.beginTransmission(DPS310_ADDR);
   uint8_t result = Wire1.endTransmission();
+
   if (result == 0) {
 #ifdef DEBUG_OUTPUT_SENSORS
     Serial.println("SEN: found DPS310");

@@ -1,0 +1,4 @@
+(sym_lib_table
+  (version 7)
+  (lib (name "mprl")(type "Legacy")(uri "${KIPRJMOD}/libs/mprl.lib")(options "")(descr ""))
+)

@@ -41,7 +41,9 @@ Furthermore, an IR-receiver module and a IR-LED allow recording and replay of ar
 The FLipMouse firmware is based on the Arduino framework. The firmware implements a composite USB HID device (mouse, keyboard, joystick and a serial port in one device).
 The mouse and keyboard device classes are used to transmit different keys or mouse actions to the host device. The serial port is used configure the FLipMouse (or even use it as a mouse simulator via AT commands).
 Multiple configuration settings can be saved (stored in an EEPROM module) and changed via desired user actions.
-For more information about (modifying) the FLipMouse firmware see https://github.com/asterics/FLipMouse/wiki/dev-firmware
+Since Version v3.7, the firmware development for the FlipMouse (and our other alternative input devices) happens in a dedicated repository, see [FabiWare](https://github.com/asterics/FabiWare).
+All firmware versions until v3.6.2 can be found in this repository by browsing the release section or by using the desired tags.
+For information about (modifying) the older FLipMouse V2 firmware (for the TeensyLC microcontroller), see https://github.com/asterics/FLipMouse/wiki/dev-firmware
 Please __note__ the COM-Port installation instructions for older Windows systems (Win7/8) [here](https://github.com/raspberrypi/pico-feedback/issues/118).
 
 
@@ -56,34 +58,17 @@ More Information can be found in the user manual:
 [user manual (german version)](https://github.com/asterics/FLipMouse/blob/master/Documentation/UserManual/Markdown/FLipMouseAnwendungsanleitung.md).
 
 
-## Building the firmware
-In order to build the firmware following prerequisites and dependencies must be installed:
-* the [Arduino IDE](https://www.arduino.cc/en/software) (v1.8.16 or above)
-* the [arduino-pico](https://github.com/earlephilhower/arduino-pico) Core (v3.0.0, can be installed using Arduino IDE's Arduino board-manager)
-* the [Adafruit Neopixel](https://github.com/adafruit/Adafruit_NeoPixel) library (v1.11.0, can be installed using Arduino IDE's library manager)
-* the [NAU7802-DualChannel](https://github.com/benjaminaigner/NAU7802-DualChannel) library (dual channel patch by Beni Aigner)
-* the [LoadcellSensor](https://github.com/ChrisVeigl/LoadcellSensor) library for sensor signal processing (by Chris Veigl)
-* the [SSD1306Ascii](https://github.com/greiman/SSD1306Ascii) library by Bill Greiman (v1.3.5, can be installed using Arduino IDE's library manager)
-* select the *board* 'Arduino Nano RP2040 Connect' in the Arduino IDE tools menu, and the *Flash Size* "16MB (Sketch: 15MB, FS: 1MB)"
-* select the correct *Port* after connecting the Arduino to your system
-* compile and upload the firmware 
-
-
-
 # Cleaning and Safety
 
 **IMPORTANT:** If the mouthpiece is exposed to saliva, please clean/replace the mouthpiece (or its filter) on a regular basis, see [Safety Instructions](https://github.com/asterics/FLipMouse/blob/master/Documentation/Cleaning_instructions.pdf)
 
 
-
 ![FlipMouse](./img/FLIPMOUSE_002.jpg)
 
 
-
 # Links and Credits
-
-Most of the work for the FLipMouse has been accomplished at the UAS Technikum Wien in course of the R&D-projects *ToRaDes* (MA23 project 18-04) and *WBT* (MA23 project 26-02), which have been supported by the [City of Vienna](https://www.wien.gv.at/kontakte/ma23/index.html),
-see: [ToRaDes Project Information](https://embsys.technikum-wien.at/projects/torades/index.php), [Webpage WBT project](https://wbt.wien).
+Most of this work has been accomplished at the UAS Technikum Wien in course of the R&D-projects [ToRaDes](https://embsys.technikum-wien.at/projects/torades/index.php) (MA23 project 18-04),
+[WBT](https://wbt.wien) (MA23 project 26-02) and [InDiKo](https://www.technikum-wien.at/en/research-projects/indiko/) (MA23 project 38-09), which have been supported by the [City of Vienna](https://www.wien.gv.at/kontakte/ma23/index.html).
 
 
 Have a look at the [AsTeRICS Foundation homepage](https://www.asterics-foundation.org) and our other Open Source AT projects:
@@ -99,9 +84,8 @@ is limited to simple buttons. Therefore, this interface is at a very low price (
 * AsTeRICS Grid: [Asterics Grid AAC Web-App](https://grid.asterics.eu): an open source, cross plattform communicator / talker for Augmented and Alternative Communication (AAC).
 
 
-
 # Support us
-Please support the development of FLipMouse by donating to the AsTeRICS Foundation:
+Please support the development of Open Source Assistive Technology projects by donating to the AsTeRICS Foundation:
 
 <div>
 <a title="Donate with PayPal" href="https://www.paypal.com/donate/?hosted_button_id=38AJJNS427MJ2" target="_blank" style="margin-right:3em">

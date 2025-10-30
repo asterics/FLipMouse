@@ -1,6 +1,6 @@
 # FLipMouse - Mouthpiece
 
-**Fabrication Note v1.0, AsTeRICS Foundation**
+**Fabrication Note v1.1, AsTeRICS Foundation**
 
 ![FLipMouseLogo](./img/flipmouseLogo.png)
 
@@ -26,7 +26,7 @@ The acryllic pipe (Ø10/6mm) is glued to the Luer Lock adapter with epoxy resin.
 
 | Nr.  | Description                                                  | Source                                                       | Image                                                        |
 | ---- | ------------------------------------------------------------ | ------------------------------------------------------------ | ------------------------------------------------------------ |
-| 1    | Male Luer Lock to M6 adapter                                 | https://www.droh.de/produkt/2836-luer-lock-adapter-mit-m6-gewinde-mannlich | ![A male Luer Lock to M6 thread adapter](./img/maleluer.png) |
+| 1    | Male Luer Lock to M6 adapter (metal or plastic)              | https://www.droh.de/produkt/2836-luer-lock-adapter-mit-m6-gewinde-mannlich | ![A male Luer Lock to M6 thread adapter](./img/maleluer.png) |
 | 2    | Female Luer Lock to pipe adapter. __Note:__ this part is either already in the holder OR it can be taken from the FLipMouse construction kit. | https://www.droh.de/produkt/1752-luer-lock-adapter-mit-m6-gewinde-fur-schlauche-mit-3-mm-id-und-zur-geratemontage-weiblich | ![A female Luer Lock to 3mm pipe adapter](./img/femaleluer.png) |
 | 3    | Acryllic pipe (Ø10/6mm)                                      | https://acrylhaus.com/Acrylglasrohr-rund-XT-transparent-R-10-6mm-Aussen-Innen-1000mm | ![Acryllic pipe, 10mm outer and 6mm inner diameter](./img/acryllic.png) |
 | 4    | Cigarette filters, 6mm diameter                              | Local tobacco store                                          | ![6mm cigarette filter](./img/filter.png)                    |
@@ -43,6 +43,7 @@ __Note: Material will be referenced in square brackets: []__
 | 3    | Heat gun               | DIY-store                              | ![A heat gun in an original case with different accessories](./img/heatgun.jpg) |
 | 4    | Mouthpiece holder      | 3D printed, "tools" subfolder.         | ![Holding tool with 15 places for Luer Lock adapters and 2 holes to screw the holder to a surface](./img/holder.png) |
 | 5    | Sand paper, 240grit    | DIY-store                              |                                                              |
+| 6    | Holder - Cap           | 3D printed, "tools" subfolder.         | |
 
 __Note: Tools will be referenced in curly brackets: {}__
 
@@ -71,7 +72,7 @@ __Glueing:__
 2. Push the acryllic pipe _[3]_ on the luer lock adapter _[1]_. __Note:__ make sure you have clean hands.
 3. Repeat for all luer lock adapters
 4. Use paper or a tissue to remove any surplus epoxy.
-
+5. Place the cap _{6}_ on top of the mouthpieces for a guaranteed straight angle
 
 
 `Wait for 12h`

@@ -12,7 +12,11 @@
 
 [TOC]
 
-____
+
+
+
+
+<div style="page-break-after: always;"></div>
 
 # Preface
 
@@ -32,7 +36,7 @@ The AsTeRICS Foundation
     <img width="33%" src="./Bilder/flip1.svg" alt="Flip, the vagabound grasshopper cartoon character">
 </p>
 
-
+<div style="page-break-after: always;"></div>
 # Hardware overview
 
 The FLipMouse is available with a 3d-printed enclosure. Design files for the 3d-printed case are provided in the [Github repository](https://github.com/asterics/FLipMouse/tree/master/Hardware/case-design/3D_printer). The primary method for interacting with the FLipMouse is the transparent stick ("mouthpiece" or "finger-joystick") which is attached to the front of the FLipMouse. Replacement sticks can be ordered via the  [Webshop](https://www.asterics-foundation.org/webshop). (Please note the cleaning instructions in the dedicated section of this manual.)
@@ -92,7 +96,7 @@ On the right side of the FLipMouse housing, the infrared (IR) receiver module is
 The front of the housing offers a connection possibility for the mouthpiece / finger joystick. The current operating mode is also indicated here by an adjustable light color.
 
 
-
+<div style="page-break-after: always;"></div>
 # Mounting and usage
 
 **1. Attach the mouthpiece / joystick**
@@ -143,7 +147,7 @@ The FLipMouse should work with any operating system which supports USB HID (Mous
 *Figure 6*: Using the FLipMouse with a Smartphone or Tablet via USB-OTG
 
 
-
+<div style="page-break-after: always;"></div>
 # The FLipMouse Configuration Manager
 
 The *FLipMouse Configuration Manager* offers a Graphical User Interface (GUI) for the adaptation of the FLipMouse device to personal preferences and needs.  The Configuration Manager is available via the website: [https://flipmouse.asterics.eu](https://flipmouse.asterics.eu). The FLipMouse Configuration Manager sends and receives information from/to the FLipMouse through a communication port (COM port). **Please note that currently supported Webbrowsers are: Chrome, Chromium, Edge and Safari**.
@@ -553,9 +557,7 @@ The FLipMouse stick is attached to four force sensors – one for each movement 
 *Figure 24: Left: Live display of force sensor values; Middle: current slot with the 3 buttons (if one button is pressed, the corresponding circle will get yellow; Right: Sip and Puff live value and current thresholds*
 
 
-
-
-
+<div style="page-break-after: always;"></div>
 # Instructions for cleaning and maintenance
 
 If the mouthpiece is used to actuate the cursor movements via lip/mouth movements, a careful cleaning procedure is essential to avoid bacteria and health problems! Read this section carefully and apply the needed cleaning procedures whenever necessary.
@@ -630,7 +632,7 @@ Several users reported that they would prefer a different shape of the mouthpiec
 Regardless of your desired mouthpiece modifications: Always take care for a hygienic operation and apply the cleaning procedures as described in this chapter!
 
 
-
+<div style="page-break-after: always;"></div>
 # Macro commands and Key codes
 
 ## Supported Macro commands:
@@ -699,16 +701,8 @@ Please note that certain commands for adjusting FLipMouse settings are not shown
 | KEYPAD_1  KEYPAD_2  KEYPAD_3  KEYPAD_4  KEYPAD_5  KEYPAD_6  KEYPAD_7  KEYPAD_8<br/>KEYPAD_9  KEYPAD_0  <br/>KEYPAD_SLASH  KEYPAD_ASTERIX  KEYPAD_MINUS  KEYPAD_PLUS  KEYPAD_ENTER  KEYPAD_PERIOD                                                                                                   |
 | **Keys for alternative functions**                                                                                                                                                                                                                                                                 |
 | KEY_SHIFT  KEY_CTRL  KEY_ALT  KEY_RIGHT_ALT  KEY_GUI  KEY_RIGHT_GUI                                                                                                                                                                                                                                |
-
-
-
+<div style="page-break-after: always;"></div>
 # Contact Information
-
-**University of Applied Sciences Technikum Wien**
-Department Electronic Engineering
-Höchstädtplatz 6
-A-1200 Wien
-AUSTRIA
 
 **AsTeRICS Foundation**
 Webpage: [www.asterics-foundation.org](http://www.asterics-foundation.org)
@@ -719,9 +713,9 @@ Email: <office@asterics-foundation.org>
 
 ## Disclaimer
 
-The University of Applied Sciences Technikum Wien and the AsTeRICS Foundation do not assume any warranty and liability for the functionality of the described devices, software and the correctness of the documents handed over.
+The AsTeRICS Foundation does not assume any warranty and liability for the functionality of the described devices, software and the correctness of the documents handed over.
 
-Additionally, the UAS TW is not liable for any damages to health due to the use of described hardware or software. The provided software applications and hardware modules are to be used at own risk!
+Additionally, the AsTeRICS Foundation is not liable for any damages to health due to the use of described hardware or software. The provided software applications and hardware modules are to be used at own risk!
 
 
 
@@ -729,8 +723,8 @@ Additionally, the UAS TW is not liable for any damages to health due to the use 
 
 This project was partly funded by the City of Vienna, 
 Municipal department of Economic Affairs, Labor and Statistics (MA 23), 
-in course of the projects AsTeRICS Academy (14-02), ToRaDes (18-04) 
-and Wissensdrehscheibe für Barrierefreie Technologien (26-02) 
+in course of the UAS Technikum Wien R&D-projects AsTeRICS Academy (14-02), ToRaDes (18-04) 
+and Wissensdrehscheibe für Barrierefreie Technologien (26-02)
 
 ![Logos](./Bilder/logo.svg)
 

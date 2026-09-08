@@ -18,9 +18,9 @@
 
 [TOC]
 
-____
 
 
+<div style="page-break-after: always;"></div>
 
 # Einleitung
 
@@ -39,7 +39,7 @@ Die AsTeRICS Foundation
 <p align="center" width="100%">
     <img width="33%" src="./Bilder/flip1.svg" alt="Flip, the vagabound grasshopper cartoon character">
 </p>
-
+<div style="page-break-after: always;"></div>
 
 # Hardware Übersicht
 
@@ -98,7 +98,7 @@ Auf der rechten Seite des FLipMouse-Gehäuses ist das Infrarot (IR) Empfängermo
 
 Die Frontseite des Gehäuses bietet eine Anschlussmöglichkeit für das Mundstück / den Finger-Joystick. Hier wird auch der aktuelle Betriebsmodus durch eine einstellbare Lichtfarbe angezeigt.
 
-
+<div style="page-break-after: always;"></div>
 
 # Montage und Verwendung
 
@@ -149,7 +149,7 @@ Die FLipMouse sollte mit jedem Betriebssystem funktionieren, das USB-HID-Geräte
 ![smartphone](./Bilder/f13.PNG)
 *Abbildung 6*: Verwendung der FLipMouse mit dem Smart Phone
 
-
+<div style="page-break-after: always;"></div>
 
 # FLipMouse-Konfigurationsmanager
 
@@ -547,7 +547,7 @@ Der FLipMouse-Stick ist mit vier Kraftsensoren verbunden - einer für jede Beweg
 
 
 
-
+<div style="page-break-after: always;"></div>
 
 # Hinweise zur Reinigung und Wartung
 
@@ -618,7 +618,7 @@ Mehrere Benutzer und Benutzerinnen berichteten, dass sie eine andere Form des Mu
 
 Unabhängig von den von Ihnen gewünschten Mundstückmodifikationen: Achten Sie stets auf einen hygienischen Betrieb und wenden Sie die im diesem Kapitel beschriebenen Reinigungsverfahren an!
 
-
+<div style="page-break-after: always;"></div>
 
 # Makrobefehle und Tastencodes
 
@@ -689,15 +689,9 @@ Bitte beachten Sie, dass bestimmte Befehle zur Anpassung der FLipMouse-Einstellu
 | **Tasten für alternative Funktionen**                                                                                                                                                                                                                                                              |
 | KEY_SHIFT  KEY_CTRL  KEY_ALT  KEY_RIGHT_ALT  KEY_GUI  KEY_RIGHT_GUI                                                                                                                                                                                                                                |
 
-
+<div style="page-break-after: always;"></div>
 
 # Kontakt
-
-**Fachhochschule Technikum Wien**
-Department Electronic Engineering
-Höchstädtplatz 6
-A-1200 Wien
-ÖSTERREICH
 
 **AsTeRICS Foundation**
 Webpage: [www.asterics-foundation.org](http://www.asterics-foundation.org)
@@ -707,9 +701,9 @@ Email: <office@asterics-foundation.org>
 
 ## Haftungsausschluss
 
-Die Fachhochschule Technikum Wien und die AsTeRICS Foundation übernehmen keine Gewährleistung und Haftung für die Funktionsfähigkeit der beschriebenen Geräte, Software und die Richtigkeit der übergebenen Unterlagen.
+Die AsTeRICS Foundation übernimmt keine Gewährleistung und Haftung für die Funktionsfähigkeit der beschriebenen Geräte, Software und die Richtigkeit der übergebenen Unterlagen.
 
-Weiters haftet die FH TW nicht für gesundheitliche Schäden, die durch die Verwendung der beschriebenen Hard- und Software entstehen. Die Nutzung der bereitgestellten Softwareanwendungen und Hardwaremodule erfolgt auf eigene Gefahr!
+Weiters haftet die AsTeRICS Foundation nicht für gesundheitliche Schäden, die durch die Verwendung der beschriebenen Hard- und Software entstehen. Die Nutzung der bereitgestellten Softwareanwendungen und Hardwaremodule erfolgt auf eigene Gefahr!
 
 
 
@@ -717,7 +711,7 @@ Weiters haftet die FH TW nicht für gesundheitliche Schäden, die durch die Verw
 
 Dieses Projekt wurde teilweise von der Stadt Wien finanziert, 
 Magistratsabteilung für Wirtschaft, Arbeit und Statistik (MA 23), 
-im Rahmen der Projekte AsTeRICS Academy (14-02), ToRaDes (18-04) 
+im Rahmen der FH Technikum Wien F&E-Projekte AsTeRICS Academy (14-02), ToRaDes (18-04) 
 und Wissensdrehscheibe für Barrierefreie Technologien (26-02)
 
 ![Logos](./Bilder/logo.svg)

@@ -1,5 +1,6 @@
 {
   "board": {
+    "3dviewports": [],
     "design_settings": {
       "defaults": {
         "board_outline_line_width": 0.049999999999999996,
@@ -135,6 +136,13 @@
       "zones_allow_external_fillets": false,
       "zones_use_no_outline": true
     },
+    "ipc2581": {
+      "dist": "",
+      "distpn": "",
+      "internal_id": "",
+      "mfg": "",
+      "mpn": ""
+    },
     "layer_presets": [
       {
         "activeLayer": -2,
@@ -213,7 +221,8 @@
           161
         ]
       }
-    ]
+    ],
+    "viewports": []
   },
   "boards": [],
   "cvpcb": {
@@ -435,7 +444,7 @@
   "net_settings": {
     "classes": [
       {
-        "bus_width": 12.0,
+        "bus_width": 12,
         "clearance": 0.2,
         "diff_pair_gap": 0.25,
         "diff_pair_via_gap": 0.25,
@@ -449,10 +458,10 @@
         "track_width": 0.25,
         "via_diameter": 0.8,
         "via_drill": 0.4,
-        "wire_width": 6.0
+        "wire_width": 6
       },
       {
-        "bus_width": 12.0,
+        "bus_width": 12,
         "clearance": 0.2,
         "diff_pair_gap": 0.25,
         "diff_pair_via_gap": 0.25,
@@ -461,32 +470,48 @@
         "microvia_diameter": 0.3,
         "microvia_drill": 0.1,
         "name": "vcc",
-        "nets": [
-          "/VIN",
-          "GND",
-          "Net-(D3-Pad1)",
-          "VCC"
-        ],
         "pcb_color": "rgba(0, 0, 0, 0.000)",
         "schematic_color": "rgba(0, 0, 0, 0.000)",
         "track_width": 0.4,
         "via_diameter": 0.8,
         "via_drill": 0.4,
-        "wire_width": 6.0
+        "wire_width": 6
       }
     ],
     "meta": {
-      "version": 2
+      "version": 3
     },
-    "net_colors": null
+    "net_colors": null,
+    "netclass_assignments": null,
+    "netclass_patterns": [
+      {
+        "netclass": "vcc",
+        "pattern": "/VIN"
+      },
+      {
+        "netclass": "vcc",
+        "pattern": "GND"
+      },
+      {
+        "netclass": "vcc",
+        "pattern": "Net-(D3-Pad1)"
+      },
+      {
+        "netclass": "vcc",
+        "pattern": "VCC"
+      }
+    ]
   },
   "pcbnew": {
     "last_paths": {
       "gencad": "",
       "idf": "",
       "netlist": "",
+      "plot": "",
+      "pos_files": "",
       "specctra_dsn": "",
       "step": "FM3_mainboard.step",
+      "svg": "",
       "vrml": "FM3_mainboard.wrl"
     },
     "page_layout_descr_file": ""
